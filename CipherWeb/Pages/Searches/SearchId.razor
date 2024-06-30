@@ -1,0 +1,99 @@
+﻿@page "/Search/Id/"
+
+@using Data
+@using System.Text
+
+@inject ICipherInfo _db
+@inject DialogService DialogService
+
+<PageTitle>חיפוש מספר סידורי</PageTitle>
+
+<CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px">
+    <HeaderContent>
+        <RadzenTextBox Value="111"></RadzenTextBox>
+    </HeaderContent>
+    <ChildContent>
+    <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
+        <Items>
+                <RadzenAccordionItem Text="@($"תעודות ({packages.Count()})")">
+                @foreach (Package pack in packages)
+                {
+                        <CipherButton Icon="@Icons.Package" Text="@($"{pack.SerialNumber}")" Click="@OpenPackage" />
+                }
+            </RadzenAccordionItem>
+                <RadzenAccordionItem Text="@($"כלים ({vessels.Count()})")">
+                @foreach (Vessel ves in vessels)
+                {
+                        <CipherButton Icon="@Icons.Vessel" Text="@($"{ves.Name} (111.{vessels.IndexOf(ves)})")" Click="@OpenVessel" />
+                }
+            </RadzenAccordionItem>
+                <RadzenAccordionItem Text="@($"מיקומים ({systems.Count()})")">
+                @foreach (StorageSystem sys in systems)
+                {
+                        <CipherButton Icon="@Icons.Location" Text="@($"{sys.Name} (111.{systems.IndexOf(sys)})")" Click="@OpenSystem" />
+                    }
+            </RadzenAccordionItem>
+        </Items>
+    </RadzenAccordion>
+    </ChildContent>
+</CipherComponentCard>
+
+@code {
+
+    IEnumerable<string> values = new string[] { };
+
+    List<string> objects = new List<string>() { "תעודה", "כלי", "מיקום", "יחידה", "חומר", "תהליך" };
+
+    List<Vessel> vessels = new List<Vessel> 
+    { 
+        new Vessel { Name = "V1" }, 
+        new Vessel { Name = "V2" } , 
+        new Vessel { Name = "V3" }
+    };
+
+    List<StorageSystem> systems = new List<StorageSystem> 
+    {
+        new StorageSystem { Name = "A" },
+        new StorageSystem { Name = "B" } ,
+        new StorageSystem { Name = "C" },
+        new StorageSystem { Name = "D" },
+        new StorageSystem { Name = "E" }
+    };
+    List<Package> packages = new List<Package> { new Package { SerialNumber = "111.1" }, new Package { SerialNumber = "111.2" } };
+
+    public  Task getVessels()
+    {
+        return _db.GetVessels();
+    }
+
+    public async Task OpenPackage()
+    {
+        await DialogService.OpenAsync("תעודה",
+        
+    ds =>
+    @<CipherPackageCard dir="rtl" WithCard=false></CipherPackageCard>,
+        new DialogOptions() { Width = "1000px", Height = "750px", Resizable = true, Draggable = true }
+        );
+    }
+
+    public async Task OpenVessel()
+    {
+        await DialogService.OpenAsync("כלי",
+
+    ds =>
+    @<CipherVesselCard dir="rtl" WithCard=false></CipherVesselCard>,
+    new DialogOptions() { Width = "1000px", Height = "750px", Resizable = true, Draggable = true }
+    );
+    }
+
+    public async Task OpenSystem()
+    {
+        await DialogService.OpenAsync("מיקום",
+
+        ds =>
+    @<CipherSystemCard dir="rtl" WithCard=false></CipherSystemCard>,
+    new DialogOptions() { Width = "1000px", Height="750px", Resizable = true, Draggable = true }
+        );
+    }
+
+}

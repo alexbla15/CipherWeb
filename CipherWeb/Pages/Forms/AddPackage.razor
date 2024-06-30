@@ -1,0 +1,41 @@
+﻿@page "/forms/addpackage"
+
+@using Data
+@using CipherData
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+@using CipherWeb.Shared.FormUtils
+
+@using Radzen
+@inject NotificationService NotificationService
+
+@using System.Text.Json
+
+@inject ICipherInfo _db
+
+<PageTitle>תעודה חדשה</PageTitle>
+
+<CipherSteps>
+    <RadzenStepsItem Text="פרטי הזנה">
+        <CipherStepDescription Text="וודאו את פרטי ההזנה" TextAlign="TextAlign.Right" />
+        <CipherFormInfo/>
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="תעודות מוסרות">
+        <CipherInputComponents />
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="פרטי תעודה">
+        <CipherStepDescription Text="הזינו את פרטי התעודה החדשה" TextAlign="TextAlign.Right" />
+        <CipherPackageInfo pack="new Package()" />
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="הערות">
+        <CipherStepDescription Text="כתבו הערות על התנועה" TextAlign="TextAlign.Right" />
+        <CipherComments />
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="שמירה וסיום" >
+         <CipherSubmit ActionText="תעודה 1111 נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם."></CipherSubmit>
+    </RadzenStepsItem>
+</CipherSteps>

@@ -1,0 +1,15 @@
+﻿@using Data
+
+<CipherFormRow Icon="@Icons.Time" Label="שעה">
+    <RadzenDatePicker Name="datePicker" Style="@Constants.textStyle" @bind-Value="Value" TimeOnly="true" DateFormat="HH:mm" ShowTime="true" />
+</CipherFormRow>
+
+@code {
+    [Parameter]
+    public DateTime Value { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Value = DateTime.Now;
+    }
+}

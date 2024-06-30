@@ -1,0 +1,75 @@
+﻿@page "/Information"
+
+@using CipherData
+@using CipherData.Models
+@using Radzen
+@using System.Text
+
+@using CipherWeb.Data
+@using CipherWeb.Shared.Components.Buttons
+@using CipherWeb.Shared.Components
+
+@inject ICipherInfo _db
+@inject ExcelService excelService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>מסך פתיחה</PageTitle>
+
+<CipherText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת CIPHER" TextAlign="TextAlign.Center" />
+
+<br />
+<br />
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+    <RadzenColumn>
+        <RadzenCard Variant="Variant.Outlined">
+            <div class="rz-text-wrap" style="width: 300px;">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.05rem">
+                    <RadzenRow Style="height: 70px">
+                        <CipherText TextStyle="TextStyle.H5" Text="איך משתמשים?" />
+                    </RadzenRow>
+                    <RadzenRow Style="height: 100px">
+                        <CipherText Wrap="true" TextStyle="TextStyle.H6" Text="CIPHER שמה לעצמה כמטרה לפשט את התהליכים ככל הניתן, כך שכל אחד יכול ללמוד איך להשתמש בה בקלות!" />
+                    </RadzenRow>
+                    <RadzenRow>
+                        <CipherButton Icon="@Icons.Learn" Size="ButtonSize.Large" Text="למדו בקלות כאן" />
+                    </RadzenRow>
+                </RadzenStack>
+            </div>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenCard Variant="Variant.Outlined">
+            <div class="rz-text-wrap" style="width: 300px;">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.05rem">
+                    <RadzenRow Style="height: 70px">
+                        <CipherText TextStyle="TextStyle.H5" Text="אפשר לשפר משהו?" />
+                    </RadzenRow>
+                    <RadzenRow Style="height: 100px">
+                        <CipherText Wrap="true" TextStyle="TextStyle.H6" Text="אנחנו מאמינים שתמיד יש לאן לשאוף. נשמח לקבל הצעות ייעול, תוספות וביקורת" />
+                    </RadzenRow>
+                    <RadzenRow>
+                        <CipherButton Icon="@Icons.Idea" ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Large" Text="הציעו רעיונות כאן" />
+                    </RadzenRow>
+                </RadzenStack>
+            </div>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenCard Variant="Variant.Outlined">
+            <div class="rz-text-wrap" style="width: 300px;">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.05rem">
+                    <RadzenRow Style="height: 70px">
+                        <CipherText TextStyle="TextStyle.H5" Text="רוצים לשאול משהו?" />
+                    </RadzenRow>
+                    <RadzenRow Style="height: 100px">
+                        <CipherText Wrap="true" TextStyle="TextStyle.H6" Text="ריכזנו כמות גדולה של שאלות ותשובות נפוצות. אם יש שאלה שלא נענתה, נשמח לעזור!" />
+                    </RadzenRow>
+                    <RadzenRow>
+                        <CipherButton Icon="@Icons.QA" ButtonStyle="ButtonStyle.Warning" Size="ButtonSize.Large" Text="מעבר לעמוד השאלות" />
+                    </RadzenRow>
+                </RadzenStack>
+            </div>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenStack>

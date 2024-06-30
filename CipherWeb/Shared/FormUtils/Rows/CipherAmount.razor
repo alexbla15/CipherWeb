@@ -1,0 +1,26 @@
+﻿@using Data
+@using Radzen
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+@using CipherWeb.Data
+
+
+<CipherFormRow Icon="@Icons.Mass" Label="@LabelText">
+    <RadzenNumeric Value="@Value" Style="@Constants.textStyle" Format="@Constants.decimalFormat()" />
+</CipherFormRow>
+
+@code {
+    [Parameter]
+    public decimal Value { get; set; }
+
+    [Parameter]
+    public string? LabelText { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (LabelText is null)
+        {
+            LabelText = "מסה [גר']";
+        }
+    }
+}

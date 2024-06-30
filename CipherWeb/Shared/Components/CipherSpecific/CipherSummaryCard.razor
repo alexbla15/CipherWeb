@@ -1,0 +1,28 @@
+﻿@inherits RadzenCard
+
+@inject ICipherInfo _db
+
+<CipherComponentCard Padding="10px" Width="200px" Style="margin: 0px">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0.5rem">
+        <RadzenIcon Icon="@Icon" Style="font-size: xxx-large; padding: 0" IconColor="@TextColor"></RadzenIcon>
+        <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0rem">
+
+            <CipherText Text="@Value" Bold="true" TextStyle="TextStyle.H4" TextColor="@TextColor"></CipherText>
+            <CipherText Text="@Title" TextStyle="TextStyle.H6" TextColor="black"></CipherText>
+        </RadzenStack>
+    </RadzenStack>
+</CipherComponentCard>
+
+@code {
+    [Parameter]
+    public string TextColor { get; set; } = Colors.Success;
+
+    [Parameter]
+    public string Icon { get; set; } = "flag_circle";
+
+    [Parameter]
+    public string Title { get; set; } = "כמות";
+
+    [Parameter]
+    public string Value { get; set; } = "500";
+}

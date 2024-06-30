@@ -1,0 +1,48 @@
+﻿@using Radzen
+
+@inherits RadzenText
+
+@code{
+    [Parameter]
+    public bool Bold { get; set; } = false;
+
+    [Parameter]
+    public bool Wrap { get; set; } = false;
+
+    [Parameter]
+    public string StyleClass { get; set; }
+
+    [Parameter]
+    public string Width { get; set; } = "100%";
+
+    [Parameter]
+    public string FontSize { get; set; }
+
+    [Parameter]
+    public string TextColor { get; set; }
+
+    [Parameter]
+    public string Height { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
+        //TextStyle = TextStyle.Body1;
+        Style = GetTextStyle();
+        Style = (Bold) ? Style + "font-weight: bold;" : Style;
+    }
+
+    public string GetTextStyle()
+    {
+        return $@"
+            width: {Width};
+            color: {TextColor};
+            font-size: {FontSize};
+            height: {Height};";
+    }
+}
+
+<RadzenText TextStyle="@TextStyle" TagName="@TagName" Text="@Text" class="@StyleClass" Style="@Style" 
+    TextAlign="@TextAlign">
+    @ChildContent
+</RadzenText>

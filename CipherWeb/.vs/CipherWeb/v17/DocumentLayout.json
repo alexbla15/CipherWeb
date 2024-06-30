@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|c:\\users\\user\\desktop\\version090624\\cipherweb\\shared\\components\\cipherspecific\\ciphersummarycard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherspecific\\ciphersummarycard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|c:\\users\\user\\desktop\\version090624\\cipherweb\\pages\\searches\\search.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\searches\\search.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|c:\\users\\user\\desktop\\version090624\\cipherweb\\wwwroot\\css\\cipherdesigns.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:wwwroot\\css\\cipherdesigns.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CipherSummaryCard.razor",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherSummaryCard.razor",
+              "RelativeDocumentMoniker": "Shared\\Components\\CipherSpecific\\CipherSummaryCard.razor",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherSummaryCard.razor",
+              "RelativeToolTip": "Shared\\Components\\CipherSpecific\\CipherSummaryCard.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-23T06:27:37.923Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Search.razor",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\Pages\\Searches\\Search.razor",
+              "RelativeDocumentMoniker": "Pages\\Searches\\Search.razor",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\Pages\\Searches\\Search.razor",
+              "RelativeToolTip": "Pages\\Searches\\Search.razor",
+              "ViewState": "AQIAADQAAAAAAAAAAAAAAEMAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-23T06:19:17.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CipherDesigns.css",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\CipherDesigns.css",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Version090624\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
+              "RelativeToolTip": "wwwroot\\css\\CipherDesigns.css",
+              "ViewState": "AQIAAD4AAAAAAAAAAAAAAEoAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-06-23T05:28:26.623Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

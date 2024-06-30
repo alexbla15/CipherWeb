@@ -1,0 +1,305 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = CipherWeb
+build_property.RootNamespace = CipherWeb
+build_property.ProjectDir = F:\Projects\Version230624\CipherWeb\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = F:\Projects\Version230624\CipherWeb
+build_property._RazorSourceGeneratorDebug = 
+
+[F:/Projects/Version230624/CipherWeb/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Forms/AddPackage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Forms/Forms.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcRm9ybXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Forms/Relocation.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVsb2NhdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Forms/TransferAmount.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVHJhbnNmZXJBbW91bnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Forms/UpdatePackage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Information.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5mb3JtYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Personal.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyc29uYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Reports/Categories.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xDYXRlZ29yaWVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Reports/Events.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xFdmVudHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Reports/EventsSchedule.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xFdmVudHNTY2hlZHVsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Reports/Packages.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xQYWNrYWdlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Reports/ProcessSummary.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xQcm9jZXNzU3VtbWFyeS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/Search.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/SearchDepartment.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoRGVwYXJ0bWVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/SearchId.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoSWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/SearchPackage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/SearchSystem.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoU3lzdGVtLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/Searches/SearchVessel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoVmVzc2VsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Buttons/CipherButton.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQnV0dG9uc1xDaXBoZXJCdXR0b24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Buttons/CipherExcelButton.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQnV0dG9uc1xDaXBoZXJFeGNlbEJ1dHRvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherComponentCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyQ29tcG9uZW50Q2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherDataGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YUdyaWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherDropDownDataGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRHJvcERvd25EYXRhR3JpZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherFormCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRm9ybUNhcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherScheduler.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU2NoZWR1bGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSiteHeader.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU2l0ZUhlYWRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherCategoriesTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyQ2F0ZWdvcmllc1RhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherEventsDataGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyRXZlbnRzRGF0YUdyaWQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherEventsScheduler.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyRXZlbnRzU2NoZWR1bGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherEventsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyRXZlbnRzVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherFooter.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyRm9vdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherLocationsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyTG9jYXRpb25zVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherPackagesTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUGFja2FnZXNUYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherProcessSummary.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUHJvY2Vzc1N1bW1hcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherRestriction.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzdHJpY3Rpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSpecific/CipherSummaryCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyU3VtbWFyeUNhcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherStepDescription.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcERlc2NyaXB0aW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherSteps.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherTableCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGFibGVDYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherText.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGV4dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/CipherTopNavBar.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVG9wTmF2QmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Images/CipherAccountImage.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSW1hZ2VzXENpcGhlckFjY291bnRJbWFnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Images/CipherLogo.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSW1hZ2VzXENpcGhlckxvZ28ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Layout/CipherBody.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcTGF5b3V0XENpcGhlckJvZHkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/Components/Layout/CipherLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcTGF5b3V0XENpcGhlckxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherComments.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJDb21tZW50cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherFormInfo.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJGb3JtSW5mby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherFormRow.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJGb3JtUm93LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherInputComponents.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJJbnB1dENvbXBvbmVudHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherLocations.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJMb2NhdGlvbnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherPackageInfo.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJQYWNrYWdlSW5mby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherSearchRow.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJTZWFyY2hSb3cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/CipherSubmit.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xDaXBoZXJTdWJtaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/ObjectCards/CipherPackageCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJQYWNrYWdlQ2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/ObjectCards/CipherProcessCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJQcm9jZXNzQ2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/ObjectCards/CipherSubCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJTdWJDYXRlZ29yeS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/ObjectCards/CipherSystemCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJTeXN0ZW1DYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/ObjectCards/CipherVesselCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJWZXNzZWxDYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/CipherAmount.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckFtb3VudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/CipherDatePicker.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckRhdGVQaWNrZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/CipherLocation.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckxvY2F0aW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/CipherPackageId.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclBhY2thZ2VJZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/CipherTimePicker.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclRpbWVQaWNrZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/FormUtils/Rows/WorkerName.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXFdvcmtlck5hbWUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-vmjs90qey9
+
+[F:/Projects/Version230624/CipherWeb/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ottuadmd90
+
+[F:/Projects/Version230624/CipherWeb/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/Version230624/CipherWeb/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,81 @@
+﻿@inherits RadzenButton
+
+@using Data
+@using Radzen
+@using CipherData
+@using CipherData.Models
+@using CipherWeb.Shared.Components.Buttons
+
+@using System.Text
+@using System.Collections
+
+@inject ExcelService excelService
+@inject IJSRuntime JSRuntime
+
+<CipherButton HelpText="ייצוא ל-EXCEL" Icon="@Icons.Excel" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default"
+              Click="@(args => ExportToCSV())" class="mb-4 me-2" Variant="Variant.Outlined"/>
+
+@code 
+{
+    [Parameter]
+    public string FileName { get; set; }
+
+
+    [Parameter]
+    public IEnumerable<object> Data { get; set; }
+
+    private async Task ExportToCSV()
+    {
+        var csvData = GenerateCSV(Data);
+        var fileName = $"{FileName}.csv"; // Change the file extension to .csv
+        var mimeType = "text/csv"; // Specify UTF-8 charset
+
+        var csvBytes = Encoding.UTF8.GetBytes(csvData);
+
+        // Convert CSV data to Base64
+        var base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes(csvData));
+
+        // Create data URL for download
+        var url = $"data:{mimeType};base64,{base64String}";
+
+        // Trigger download
+        await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", url, fileName);
+    }
+
+    private string GenerateCSV(IEnumerable<object> data)
+    {
+        using (MemoryStream stream = new MemoryStream())
+        {
+            using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+            {
+                // Write header row
+                Type modelType = data.First().GetType();
+                var properties = modelType.GetProperties();
+                // writer.WriteLine(string.Join(",", properties.Select(p => p.Name)));
+
+                List<string> heb_properties = new List<string>();
+                foreach (var prop in properties)
+                {
+                    // prop.Name
+                    foreach (Tuple<string, string> head in HebrewDictionary.Headers)
+                    {
+                        if (head.Item1 == prop.Name)
+                        {
+                            heb_properties.Add(head.Item2);
+                        }
+                    }
+                }
+                writer.WriteLine(string.Join(",", heb_properties));
+
+                // Write data rows
+                foreach (var item in data)
+                {
+                    var values = properties.Select(p => Convert.ToString(p.GetValue(item)));
+                    writer.WriteLine(string.Join(",", values));
+                }
+            }
+
+            return Encoding.UTF8.GetString(stream.ToArray());
+        }
+    }
+}

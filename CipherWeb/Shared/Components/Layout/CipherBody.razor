@@ -1,0 +1,44 @@
+﻿@inherits RadzenSidebar
+
+@code {
+        [Parameter]
+        public string Width { get; set; } = "100%";
+
+        [Parameter]
+        public string Height { get; set; } = "100%";
+
+        [Parameter]
+        public string BackgroundColor { get; set; } = Colors.PrimaryLighter;
+
+        [Parameter]
+        public string Right { get; set; } = "0 px";
+
+        [Parameter]
+        public string Margin { get; set; } = "0";
+
+        [Parameter]
+        public RenderFragment Body { get; set; }
+
+        string BodyStyle()
+        {
+            return $@"
+            background-color: {BackgroundColor};
+            right: {Right};
+            width: {Width};
+            height: {Height};
+            margin: {Margin};
+            padding-top: 1%;
+            padding-right: 1%;
+            padding-left: 1%;
+        ";    
+    }
+}
+
+<RadzenBody dir="rtl" Style="@BodyStyle()">
+    <article Style="@BodyStyle()">
+        @Body
+    </article>
+
+    <CipherFooter />
+
+</RadzenBody>

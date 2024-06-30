@@ -1,0 +1,62 @@
+﻿@page "/Personal"
+
+@using Radzen
+@using CipherWeb.Shared.Components;
+@using CipherWeb.Shared.Components.CipherSpecific
+@using CipherData.Models;
+@*Style="--rz-base-200: var(--rz-primary-lightest);"*@
+
+<RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client" >
+    <Tabs>
+        <RadzenTabsItem Text="פרטים אישיים">
+            <CipherFormCard Width="600px" Variant="Variant.Flat" Class="rz-my-12 rz-mx-auto" Style="max-width: 600px; float:right">
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem" Class="rz-p-4">
+                    <RadzenImage Path="Images/UserPic.jpg" Style="width: 100px; height: 100px; border-radius: 50%;" />
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Start" Gap="1rem" Class="rz-p-4">
+                        <RadzenStack Gap="@Gap">
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="שם מלא" TextAlign="TextAlign.Right"/>
+                            <CipherText TextStyle="@ValueStyle" Bold="true">אלכס בלחמן</CipherText>
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="תפקיד" TextAlign="TextAlign.Right" />
+                            <CipherText TextStyle="@ValueStyle" Bold="true">מזין ראשי</CipherText>
+                        </RadzenStack>
+                        <RadzenStack Gap="@Gap">
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="תאריך הצטרפות ל-Cipher" TextAlign="TextAlign.Right" />
+                            <CipherText TextStyle="@ValueStyle" Bold="true">@DateTime.Parse("1/1/2024")</CipherText>
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="תאריך חיבור אחרון ל-Cipher" TextAlign="TextAlign.Right"></CipherText>
+                            <CipherText TextStyle="@ValueStyle" Bold="true">@DateTime.Now</CipherText>
+                        </RadzenStack>
+                        <RadzenStack Gap="@Gap">
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="תנועות בהזנה" TextAlign="TextAlign.Right" />
+                            <CipherText TextStyle="@ValueStyle" Bold="true">
+                                <RadzenLink Path="Approval" Text="5" Style="@($"color: {Colors.Primary}")" />
+                            </CipherText>
+                            <CipherText TextStyle="@HeaderStyle" StyleClass="@HeaderClass" Text="התראות" TextAlign="TextAlign.Right" />
+                            <CipherText TextStyle="@ValueStyle" Bold="true">
+                                <RadzenLink Path="Approval" Text="1" Style="@($"color: {Colors.Primary}")" />
+                            </CipherText>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenStack>
+            </CipherFormCard>
+        </RadzenTabsItem>
+        
+        <RadzenTabsItem Text="תנועות שהזנתי">
+            <CipherEventsTable Title="" WithCard="false"/>
+        </RadzenTabsItem>
+
+        <RadzenTabsItem Text="תנועות שאישרתי">
+            <CipherEventsTable Title="" WithCard="false" />
+        </RadzenTabsItem>
+
+        <RadzenTabsItem Text="התראות">
+            בקרוב!
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    TextStyle HeaderStyle = TextStyle.Overline;
+    TextStyle ValueStyle = TextStyle.Body1;
+    string HeaderClass = "rz-display-flex rz-mt-2 rz-my-0";
+    string Gap = "1px";
+}

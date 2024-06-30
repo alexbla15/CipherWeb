@@ -1,0 +1,40 @@
+﻿@using Data
+@using CipherData
+@using CipherData.Models
+@using CipherWeb.Shared
+
+@using Radzen
+
+@using System.Text
+
+@inherits RadzenDropDownDataGrid<object>
+
+@code {
+    [Parameter]
+    public Type ModelType { get; set; }
+
+
+    [Parameter]
+    public IEnumerable<object> DataRows { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ModelType = DataRows.ToList().First().GetType();
+    }
+}
+
+<RadzenDropDownDataGrid Placeholder="חיפוש קטגוריה" TValue="object"
+                        Data=@DataRows TextProperty="SubName" ValueProperty="Id"
+                        AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+    <Columns>
+        @foreach (var prop in ModelType.GetProperties())
+        {
+            @* <RadzenDropDownDataGridColumn Property="prop.Name" Title
+            ="משנית" Width
+            ="@twiceColWidth" />
+            <RadzenDropDownDataGridColumn Property="MainName" Title="ראשית" Width="@twiceColWidth" />
+            <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@colWidth" /> *@
+        }
+    </Columns>
+</RadzenDropDownDataGrid>
