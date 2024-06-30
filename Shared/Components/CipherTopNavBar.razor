@@ -1,0 +1,103 @@
+﻿<RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" >
+    @foreach (MyMenuItem item in items)
+    {
+        <CipherNavButton Icon="@item.Icon" Text="@item.Title" Width="@ButtonWidth()" Path="@item.Href" ColorShade="Shade.Lighter" />
+    }
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public List<MyMenuItem> items { get; set; } = new List<MyMenuItem>()
+    {
+        new MyMenuItem(){
+            Title="סיכום", Icon=Icons.Summary, Href="/Reports/ProcessSummary"
+        },
+        new MyMenuItem(){
+            Title="חיפוש", Icon=Icons.Search, Href="/Search/Id"
+        },
+        new MyMenuItem(){
+            Title="גאנט", Icon=Icons.Calendar, Href="/Reports/Schedule"
+        },
+        new MyMenuItem(){
+            Title="הרכבת מנות", Icon=Icons.Package_Combine
+        },
+        new MyMenuItem(){
+            Title="מועדפים", Icon=Icons.Bookmark
+        }
+    };
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = "var(--cipher-header-hover-background-color)";
+
+    [Parameter]
+    public AlignItems Row_AlignItems { get; set; } = AlignItems.Center;
+
+    [Parameter]
+    public JustifyContent Row_JustifyContent { get; set; } = JustifyContent.Right;
+
+    [Parameter]
+    public string MenuItem_TextItems { get; set; } = "right";
+
+    [Parameter]
+    public string MenuItem_AlignItems { get; set; } = "center";
+
+    [Parameter]
+    public string MenuItem_TextIconGap { get; set; } = "5px";
+
+    [Parameter]
+    public string MenuItem_Width { get; set; } = "200px";
+
+    [Parameter]
+    public string BorderColor { get; set; } = Colors.PrimaryDarker;
+
+    [Parameter]
+    public string BorderWidth { get; set; } = "1px";
+
+    [Parameter]
+    public string Padding { get; set; } = "0 0";
+
+    [Parameter]
+    public string Margin { get; set; } = "0";
+
+    [Parameter]
+    public int ZIndex { get; set; } = 200;
+
+    public string ButtonWidth()
+    {
+        return $"{(100 / items.Count)}%";
+    }
+
+    public string RowStyle()
+    {
+        return $@"
+            background-color: {BackgroundColor};
+            padding: 0 0;";
+    }
+
+    public string MenuItemStyle()
+    {
+        return $@"
+            text-align: {MenuItem_TextItems};
+            text-indent: {MenuItem_TextIconGap}; 
+            background-color: {BackgroundColor};
+            width: {MenuItem_Width};
+            border-left: solid {BorderColor};
+            border-left-width: {BorderWidth};
+            align-item: {MenuItem_AlignItems};
+            z-index: {ZIndex};
+            ";
+    }
+
+    public string MenuStyle()
+    {
+        return $@"
+            background-color: {BackgroundColor};
+            padding: {Padding};
+            width: 100%;
+            position: fixed;
+            z-index: {ZIndex};
+            margin: 0 0;
+            flex-wrap:nowrap
+            ";
+    }
+}

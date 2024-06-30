@@ -1,0 +1,58 @@
+﻿@inherits RadzenRow
+
+@using Data
+@using CipherData
+@using CipherData.Models
+
+@using CipherWeb.Shared.Components.Buttons
+
+@using Radzen
+
+
+@code {
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string IconTextGap { get; set; } = "0.5rem";
+
+    [Parameter]
+    public string ButtonWidth { get; set; } = "200px";
+
+    [Parameter]
+    public string ButtonTextAlign { get; set; } = "right";
+
+    [Parameter]
+    public bool CheckBox { get; set; } = false;
+
+    [Parameter]
+    public bool Chosen { get; set; } = true;
+
+    [Parameter]
+    public string Display { get; set; } = "contents";
+
+    private void ToggleVisibility()
+    {
+        Display = Chosen ? "block" : "none";
+    }
+}
+
+<RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="padding: 5px">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0rem">
+        @if (CheckBox)
+        {
+            <RadzenCheckBox @bind-value=@Chosen TValue="bool" Change="@ToggleVisibility" />
+        }
+        <CipherButton Icon="@Icon" Text="@Label" Variant="Variant.Text" Disabled="true" Size="ButtonSize.Large" ColorShade="Shade.Darker"
+                      Width="@ButtonWidth" ButtonTextAlign="@ButtonTextAlign" Padding="2px" Style="opacity:inherit"></CipherButton>
+       <div style="@($"display: {Display}")">
+           <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="5px">
+
+            @ChildContent
+           </RadzenStack>
+        </div>
+    </RadzenStack>
+</RadzenRow>

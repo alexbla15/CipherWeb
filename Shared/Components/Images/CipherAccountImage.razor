@@ -1,0 +1,43 @@
+﻿@using Radzen
+@using CipherWeb.Data
+
+@inherits RadzenImage
+
+@code {
+    [Parameter]
+    public string Width { get; set; } = "50px";
+
+    [Parameter]
+    public string Height { get; set; } = "50px";
+
+    [Parameter]
+    public string BorderRadius { get; set; } = "50%";
+
+    [Parameter]
+    public string Border { get; set; } = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Path = "Images/UserPic.jpg";
+    }
+
+    // Inject JSRuntime
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+    private async Task OnMouseOver()
+    {
+        Border = $"1.5px solid var(--cipher-header-color)"; // Change border style on mouse over
+    }
+
+    private async Task OnMouseOut()
+    {
+        Border = ""; // Reset border style on mouse out
+    }
+}
+
+<RadzenImage Path="@Path"
+             Style="@($"width: {Width}; height: {Height}; border-radius: {BorderRadius}; border: {Border}")"
+             MouseEnter="OnMouseOver"
+             MouseLeave="OnMouseOut" />

@@ -1,0 +1,138 @@
+﻿@using Radzen
+@using CipherData.Models
+@using CipherWeb.Data
+@using CipherWeb.Shared.Components
+@using CipherWeb.Shared.Components.Buttons
+
+@inject ICipherInfo _db
+
+<CipherFormCard MaxWidth="@MaxWidth" Width="@Width">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+        <CipherText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5"/>
+        <CipherButton Icon="@Icons.Day" HelpText="תצוגה יומית"
+                      Size="ButtonSize.Medium" Variant="@DayVariant" 
+                      ColorShade="Shade.Darker"
+                      Click="@DayView" />
+        <CipherButton Icon="@Icons.Month" HelpText="תצוגה חודשית"
+                      Size="ButtonSize.Medium" Variant="@MonthVariant" ColorShade="Shade.Darker"
+                      Click="@MonthView" />
+        <CipherButton Icon="@Icons.Year" HelpText="תצוגה שנתית"
+                      Size="ButtonSize.Medium" Variant="@YearVariant" ColorShade="Shade.Darker"
+                      Click="@YearView" />
+    </RadzenStack>
+
+    <RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem">
+            @foreach (string key in CountProcesses().Keys)
+        {
+            <CipherFormCard Height="80px" Width="150px" Variant="Variant.Text">
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="0.5rem">
+                        <CipherButton Size="ButtonSize.Large" Width="50px" Icon="@Icons.Material" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary"></CipherButton>
+                        <RadzenStack Gap="0">
+                            <CipherText TextAlign="TextAlign.Right" TextColor="@Colors.PrimaryDark" Text="@CountProcesses()[key].ToString()" />
+                            <CipherText Wrap="true" TextStyle="TextStyle.Overline" StyleClass="TextStyle.Overline" Text="@key" TextAlign="TextAlign.Right" />
+                        </RadzenStack>
+                </RadzenStack>
+        </CipherFormCard>
+    }
+    </RadzenStack>
+    </RadzenRow>
+</CipherFormCard>
+
+@code {
+    [Parameter]
+    public string Width { get; set; } = "500px";
+
+    [Parameter]
+    public string MaxWidth { get; set; } = "1200px";
+
+    // initial view of the scheduler (upon entry)
+    [Parameter]
+    public string View { get; set; } = "month";
+
+    private string SummaryTitle;
+
+    private Variant DayVariant;
+    private Variant MonthVariant;
+    private Variant YearVariant;
+
+    List<Event> events = new List<Event>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        events = await _db.GetEvents();
+
+        MonthView();
+    }
+
+    private Dictionary<string, int> CountProcesses()
+    {
+        Dictionary<string, int> ProcessCounter = new Dictionary<string, int>();
+
+        foreach (Event ev in events)
+        {
+            if (AddProcess(ev))
+            {
+                if (ProcessCounter.ContainsKey(ev.Process))
+                {
+                    ProcessCounter[ev.Process] += 1;
+                }
+                else
+                {
+                    ProcessCounter[ev.Process] = 1;
+                }
+            }
+        }
+        return ProcessCounter;
+    }
+
+    private bool AddProcess(Event ev)
+    {
+        if (View=="day")
+        {
+            return (ev.EventDate == DateTime.Today);
+        }
+        else if (View=="month")
+        {
+            return (ev.EventDate.Month == DateTime.Today.Month);
+        }
+        else if (View == "year")
+        {
+            return (ev.EventDate.Year == DateTime.Today.Year);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void DayView()
+    {
+        View = "day"; 
+        SummaryTitle = "סיכום תהליכים יומי"; 
+
+        DayVariant = Variant.Filled;
+        MonthVariant = Variant.Outlined;
+        YearVariant = Variant.Outlined;
+    }
+
+    private void MonthView()
+    {
+        View = "month";
+        SummaryTitle = "סיכום תהליכים חודשי";
+
+        DayVariant = Variant.Outlined;
+        MonthVariant = Variant.Filled;
+        YearVariant = Variant.Outlined;
+    }
+
+    private void YearView()
+    {
+        View = "year";
+        SummaryTitle = "סיכום תהליכים שנתי";
+
+        DayVariant = Variant.Outlined;
+        MonthVariant = Variant.Outlined;
+        YearVariant = Variant.Filled;
+    }
+}

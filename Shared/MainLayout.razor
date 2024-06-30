@@ -1,0 +1,60 @@
+﻿@inherits LayoutComponentBase
+
+@inject TooltipService tooltipService
+
+<PageTitle>Cipher</PageTitle>
+
+<RadzenComponents />
+
+@code {
+
+    bool sidebarExpanded = false;
+
+    [Parameter]
+    public string Width { get; set; } = "250px";
+
+    [Parameter]
+    public string Description { get; set; } = "כל הזכויות שמורות לאלכס בלחמן ושחר פייט, היחידה להנדסת תהליך";
+
+    [Parameter]
+    public string SubDescription { get; set; } = "Ⓒ CIPHER 2024";
+
+    [Parameter]
+    public TextStyle DescriptionStyle { get; set; } = TextStyle.Body2;
+}
+
+<CipherLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem" dir="rtl">
+            <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+            <CipherSiteHeader Header_Width="500px" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
+        <RadzenPanelMenu dir="rtl">
+
+            @foreach (MyNavLink myLink in CipherNavLinks.links)
+            {
+                <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
+                    @if(myLink.SubLinks.Count > 0)
+                    {
+                        @foreach (MySubNavLink mySubLink in myLink.SubLinks)
+                        {
+                            <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
+                        }
+                    }
+                </RadzenPanelMenuItem>
+            }
+
+            <CipherText TextStyle="@DescriptionStyle" Text="@Description" Wrap="true" TextAlign="TextAlign.Center" 
+                Style="margin-top: 100px; border-top: 1px solid gray; padding-top: 10px;">
+            </CipherText>
+            <CipherText TextStyle="@DescriptionStyle" Text="@SubDescription" TextAlign="TextAlign.Center"
+                        Style="width: 100%; border-bottom: 1px solid gray; padding-bottom: 10px;">
+            </CipherText>
+
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+
+    <CipherBody Body="@Body"/>
+</CipherLayout>

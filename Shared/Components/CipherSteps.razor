@@ -1,0 +1,21 @@
+﻿@using Radzen
+
+@inherits RadzenSteps
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PreviousText = "שלב קודם";
+        NextText = "שלב הבא";
+        Style = "width:100%; max-width: 800px; float: right";
+    }
+}
+
+<RadzenSteps PreviousText="@PreviousText" NextText="@NextText" Style="@Style">
+    <Steps>
+        @ChildContent
+    </Steps>
+</RadzenSteps>

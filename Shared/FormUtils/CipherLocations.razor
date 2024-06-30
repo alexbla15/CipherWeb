@@ -1,0 +1,23 @@
+﻿@inherits RadzenFieldset
+
+@using Radzen
+
+@using Data
+@using CipherData.Models
+@using CipherWeb.Data
+@using CipherWeb.Shared.FormUtils.Rows
+@using CipherWeb.Shared.Components
+
+
+@code {
+    [Parameter]
+    public int initial_location { get; set; }
+
+    [Parameter]
+    public int final_location { get; set; }
+}
+
+<CipherFormCard>
+    <CipherLocation LabelText="מיקום התחלתי" Icon="@Icons.Location_Initial"/>
+    <CipherLocation LabelText="מיקום סופי" Icon="@Icons.Location_Final" />
+</CipherFormCard>

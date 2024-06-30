@@ -1,0 +1,35 @@
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+            <CipherComponentCard ContentPadding="0px" Padding="0px" Width="700px">
+            <RadzenStack Orientation="Orientation.Vertical" Gap="20px" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+
+                <div class="diagonal-line" ></div>
+
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="20px" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                            <RadzenIcon Icon="engineering" Style="font-size:300px" IconColor="orange"></RadzenIcon>
+                            <div style="padding-bottom:10px">
+                            <CipherText Text="בקרוב!" Bold="true" FontSize="100px" TextAlign="TextAlign.Center" TextColor="black"></CipherText>
+                        </div>
+                </RadzenStack>
+                <div class="diagonal-line"></div>
+            </RadzenStack>
+            </CipherComponentCard>
+            </RadzenStack>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+<style>
+    .diagonal-line {
+        width: 700px;
+        height: 50px; /* Adjust height as needed */
+        background: repeating-linear-gradient( 45deg, black, black 10px, orange 10px, orange 20px );
+    }
+</style>

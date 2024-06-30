@@ -1,0 +1,43 @@
+﻿@using Data
+@using Radzen
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+
+@inject ICipherInfo _db
+
+<CipherFormRow Icon="@Icon" Label="@LabelText">
+    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Id" Placeholder="בחירת מיקום" SearchTextPlaceholder="חיפוש..."
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="50px" />
+            <RadzenDropDownDataGridColumn Property="Storage" Title="מיקום" Width="50px" />
+        </Columns>
+    </RadzenDropDownDataGrid>
+</CipherFormRow>
+
+@code {
+    [Parameter]
+    public string sys { get; set; }
+
+    [Parameter]
+    public string LabelText { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    List<Vessel> vessels = new List<Vessel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        vessels = await _db.GetVessels();
+
+        if (LabelText is null)
+        {
+            LabelText = "מיקום";
+        }
+        if (Icon is null)
+        {
+            Icon = "room";
+        }
+    }
+}

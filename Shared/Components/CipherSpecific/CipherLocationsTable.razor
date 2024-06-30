@@ -1,0 +1,39 @@
+﻿@using Radzen
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+@using CipherWeb.Shared.Components.Buttons
+
+@inject ICipherInfo _db
+
+@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@systems" Height="@Height"
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath">
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@systems" RowsPerPage="@RowsPerPage"
+                        GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    [Parameter]
+    public bool AllowFilter { get; set; }
+
+    [Parameter]
+    public FilterMode GridFilterMode { get; set; }
+
+    [Parameter]
+    public bool AllowGroup { get; set; }
+
+    [Parameter]
+    public int RowsPerPage { get; set; } = 12;
+
+    List<StorageSystem> systems = new List<StorageSystem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        systems = await _db.GetSystems();
+
+        Title = (Title is null) ? "סיכום תשתיות" : null;
+    }
+}

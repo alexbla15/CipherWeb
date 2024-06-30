@@ -1,0 +1,65 @@
+﻿@using Data
+@using CipherData
+@using CipherData.Models
+
+@using CipherWeb.Shared.Components.Buttons
+@using Radzen
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        alertStyle = AlertStyle.Success;
+        condition = true;
+    }
+
+    public void Save()
+    {
+        alertVisible = true;
+        if (!condition)
+        {
+            alertStyle = AlertStyle.Warning;
+            alertText = "שגיאה בהזנת טופס";
+        }
+        else
+        {
+            alertStyle = AlertStyle.Success;
+            alertText = "טופס הוזן בהצלחה";
+        }
+    }
+
+    [Parameter]
+    public bool condition { get; set; }
+
+    [Parameter]
+    public bool alertVisible { get; set; }
+
+    [Parameter]
+    public string? alertText { get; set; }
+
+    [Parameter]
+    public AlertStyle alertStyle { get; set; }
+
+    [Parameter]
+    public string ActionText { get; set; }
+
+    string Text1 = Constants.SetUser.FirstName + ", " + "נא אשר/י את הפעולה הבאה:";
+
+}
+
+
+<CipherComponentCard Width="100%">
+    <ChildContent>
+        <RadzenStack Orientation="Orientation.Vertical" Style="padding-left:10px; padding-bottom:20px">
+            <RadzenText TextStyle="TextStyle.Subtitle1" Text="@Text1" Style="padding-bottom:10px"></RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ActionText"></RadzenText>
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10px">
+        <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium"/>
+        <CipherCancelButton Size="ButtonSize.Medium"></CipherCancelButton>
+        </RadzenStack>
+        <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" />
+
+    </ChildContent>
+</CipherComponentCard>

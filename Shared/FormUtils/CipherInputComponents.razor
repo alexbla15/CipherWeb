@@ -1,0 +1,125 @@
+﻿@using Data
+
+@code {
+    RadzenDataGrid<Package> CustomDataGrid;
+
+    List<Package> from_packs = new List<Package>();
+    Package old_pack = new Package();
+
+    int components = 0;
+
+    private void AddComponent()
+    {
+        if (components == from_packs.Count)
+        {
+            int next_id = components + 1;
+
+            Package new_pack = new Package() { Id = next_id };
+
+            // from_packs.Add(new_pack);
+
+            components += 1;
+            CustomDataGrid.InsertRow(new_pack);
+        }
+    }
+
+    public decimal GetTotal()
+    {
+        decimal Total = 0;
+
+        foreach (Package pack in from_packs)
+        {
+            Total += pack.BrutMass;
+        }
+        return Total;
+    }
+
+
+    async Task EditRow(Package pack)
+    {
+        // prevent editing of two rows in parallel
+        if (CustomDataGrid.Count == from_packs.Count)
+        {
+            old_pack.Id = pack.Id;
+            old_pack.BrutMass = pack.BrutMass;
+            old_pack.SerialNumber = pack.SerialNumber;
+
+            from_packs.Remove(pack);
+            await CustomDataGrid.EditRow(pack);
+        }
+    }
+
+    async Task CancelEdit(Package pack)
+    {
+        pack.Id = old_pack.Id;
+        pack.BrutMass = old_pack.BrutMass;
+        pack.SerialNumber = old_pack.SerialNumber;
+
+        await SaveRow(pack);
+    }
+
+    async Task DeleteRow(Package pack)
+    {
+        from_packs.Remove(pack);
+
+        foreach (Package p in from_packs)
+        {
+            p.Id = from_packs.IndexOf(p) + 1;
+        }
+
+        CustomDataGrid.Data = from_packs;
+
+        components -= 1;
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
+    async Task SaveRow(Package pack)
+    {
+        from_packs.Add(pack);
+
+        await CustomDataGrid.UpdateRow(pack);
+        await CustomDataGrid.RefreshDataAsync();
+    }
+}
+
+<RadzenStack Gap="1rem">
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn>
+            <CipherAddBtn Size="ButtonSize.Large" Click="@(args => AddComponent())" Text="הוספת תעודה מוסרת" MinHeight="0px"/>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+<br/>
+
+    <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
+    <Columns>
+        <RadzenDataGridColumn TItem="Package" Property="Id" Title="#" Width="25px" SortOrder="SortOrder.Descending" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn TItem="Package" Property="SerialNumber" Title="תעודה" Width="75px" TextAlign="TextAlign.Center">
+            <EditTemplate Context="pack">
+            <RadzenAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" @bind-Value="@pack.SerialNumber" />
+            </EditTemplate>
+            <FooterTemplate>
+                מסה כוללת:
+            </FooterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="50px" TextAlign="TextAlign.Center">
+            <EditTemplate Context="pack">
+                <RadzenNumeric @bind-Value="@pack.BrutMass" />
+            </EditTemplate>
+            <FooterTemplate>
+                @GetTotal()
+            </FooterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Width="50px" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+            <Template Context="pack">
+                <CipherEditButton Click="@(args => EditRow(pack))" @onclick:stopPropagation="true" />
+                <CipherDeleteButton Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
+            </Template>
+            <EditTemplate Context="pack">
+                <CipherSuccessButton Click="@((args) => SaveRow(pack))" />
+                <CipherCloseButton Click="@((args) => CancelEdit(pack))" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

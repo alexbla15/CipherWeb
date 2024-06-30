@@ -1,0 +1,15 @@
+﻿@using Radzen
+
+@inherits CipherText
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        TextStyle = TextStyle.H5;
+        TagName = TagName.H3;
+    }
+}
+
+<div style="padding-bottom: 10px">
+<CipherText TextStyle="@TextStyle" TagName="@TagName" StyleClass="rz-my-6" Text="@Text" TextAlign="@TextAlign" />
+</div>

@@ -1,0 +1,13 @@
+﻿@using Data
+
+<CipherFormRow Icon="@Icons.Date" Label="@Title">
+    <RadzenDatePicker Name="datePicker" @bind-Value="Value" DateFormat="dd/MM/yyyy" Style="@Constants.textStyle" />
+</CipherFormRow>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "תאריך";
+
+    [Parameter]
+    public DateTime Value { get; set; } = DateTime.Today;
+}

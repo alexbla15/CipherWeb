@@ -1,0 +1,35 @@
+﻿@using Radzen
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+@using CipherWeb.Shared.Components.Buttons
+
+@inject ICipherInfo _db
+
+<CipherTableCard Title="@Title">
+    <CipherDataGrid Cipher_TItem="SubCategory" DataSource="@subCategories"
+                    GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
+</CipherTableCard>
+
+@code {
+    [Parameter]
+    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    [Parameter]
+    public bool Filter { get; set; } = true;
+
+    [Parameter]
+    public bool Group { get; set; } = true;
+
+    [Parameter]
+    public string MaxWidth { get; set; } = "1200px";
+
+    [Parameter]
+    public string Title { get; set; } = "סוגים";
+
+    List<SubCategory> subCategories = new List<SubCategory>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        subCategories = await _db.GetSubCategories();
+    }
+}

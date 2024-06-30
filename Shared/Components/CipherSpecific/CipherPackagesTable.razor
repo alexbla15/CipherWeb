@@ -1,0 +1,34 @@
+﻿@using Radzen
+@using CipherData.Models
+@using CipherWeb.Shared.Components
+@using CipherWeb.Shared.Components.Buttons
+
+@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@TestedData.Packages" WithCard="@WithCard" WithButtons="@WithButtons"
+    FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height">
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="Package" DataSource="@TestedData.Packages" RowsPerPage="@RowsPerPage"
+                    GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    [Parameter]
+    public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    [Parameter]
+    public bool AllowFilter { get; set; } = true;
+
+    [Parameter]
+    public bool AllowGroup { get; set; } = true;
+
+    [Parameter]
+    public int RowsPerPage { get; set; } = 12;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = (Title is null) ? "דוח תעודות" : Title;
+        FileTitle = (FileTitle is null) ? "packages" : FileTitle;
+    }
+}

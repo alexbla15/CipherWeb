@@ -1,0 +1,109 @@
+﻿@using Data
+
+@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public string RowWidth { get; set; } = "width: 400px";
+
+    public class Analysis
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public decimal Value { get; set; }
+        public DateTime EventDate { get; set; }
+    }
+
+    List<Analysis> analysis = new();
+}
+
+<CipherComponentCard Title="@Title" WithCard="@WithCard">
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="פרטים">
+                <RadzenRow>
+                <RadzenColumn>
+                        @* -- System ID -- *@
+                        <CipherFormRow Label="מספר סידורי" Icon="@Icons.Id" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="מספר סידורי" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- SYSTEM DESCRIPTION -- *@
+                        <CipherFormRow Label="תיאור" Icon="@Icons.Description" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="תיאור" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- FATHER SYSTEM NAME -- *@
+                        <CipherFormRow Label="נמצא במיקום" Icon="@Icons.Location_Initial" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="שם מיקום" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- OPEN DATE -- *@
+                        <CipherDatePicker Title="תאריך פתיחה" />
+
+                        @* -- ZERO DATE -- *@
+                        <CipherDatePicker Title="תאריך איפוס" />
+
+                        @* -- RESTRICTIONS -- *@
+                        <CipherFormRow Label="מגבלות" Icon="@Icons.Restriction" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="מגבלות איחסון" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                </RadzenColumn>
+                <RadzenColumn>
+                        @* -- SYSTEM NAME -- *@
+                        <CipherFormRow Label="שם" Icon="@Icons.Location" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="שם מיקום" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- RESPONSIBLE WORKER -- *@
+                        <CipherFormRow Label="עובד אחראי" Icon="@Icons.Account" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="עובד אחראי" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- UNIT -- *@
+                        <CipherFormRow Label="יחידה" Icon="@Icons.Unit" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="יחידה" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- EXPIRATION DATE -- *@
+                        <CipherDatePicker Title="תאריך תפוגה" />
+
+                        @* -- LEFTOVERS -- *@
+                        <CipherFormRow Label="שאריות" Icon="@Icons.Date" Style="position:fixed">
+                            <RadzenNumeric TValue="decimal" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                        </CipherFormRow>
+
+                        @* -- COMMENTS -- *@
+                        <CipherFormRow Label="הערות" Icon="@Icons.Comment" Style="position:fixed">
+                            <RadzenTextArea Placeholder="הערות" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                        </CipherFormRow>
+                </RadzenColumn>
+                </RadzenRow>
+        </RadzenTabsItem>
+
+                    <RadzenTabsItem Text="תעודות">
+                <CipherPackagesTable Title="" WithCard="false" />
+            </RadzenTabsItem>
+            
+            <RadzenTabsItem Text="כלים">
+                <CipherPackagesTable Title="" WithCard="false" />
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="מערכות">
+                <div style="border-radius: 5px">
+                <CipherPackagesTable Title="" WithCard="false" />
+                </div>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="תחומים">
+                <CipherPackagesTable Title="" WithCard="false" />
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="תנועות">
+                <CipherEventsTable Title="" WithCard="false" />
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+
+</CipherComponentCard>

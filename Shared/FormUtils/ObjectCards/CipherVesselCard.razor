@@ -1,0 +1,77 @@
+﻿@using Data
+
+@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public string RowWidth { get; set; } = "width: 400px";
+
+    public class Analysis
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public decimal Value { get; set; }
+        public DateTime EventDate { get; set; }
+    }
+
+    List<Analysis> analysis = new();
+}
+
+<CipherComponentCard Title="@Title" WithCard="@WithCard">
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="פרטים">
+                <RadzenRow>
+                <RadzenColumn>
+                        @* -- Vessels ID -- *@
+                        <CipherFormRow Label="מספר סידורי" Icon="@Icons.Id" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="מספר סידורי" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- VESSEL NAME -- *@
+                        <CipherFormRow Label="שם הכלי" Icon="@Icons.Vessel" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="כלי" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- OPEN DATE -- *@
+                        <CipherDatePicker Title="תאריך פתיחה" />
+
+                        @* -- RESTRICTIONS -- *@
+                        <CipherFormRow Label="מגבלות" Icon="@Icons.Restriction" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="מגבלות איחסון" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                </RadzenColumn>
+                <RadzenColumn>
+                    @* -- VESSEL TYPE -- *@
+                        <CipherFormRow Label="סוג כלי" Icon="@Icons.Type" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="סוג כלי" Style="@RowWidth" />
+                    </CipherFormRow>
+
+                        @* -- LOCATION -- *@
+                        <CipherFormRow Label="מיקום" Icon="@Icons.Location" Style="position:fixed">
+                            <RadzenAutoComplete Placeholder="מיקום" Style="@RowWidth" />
+                        </CipherFormRow>
+
+                        @* -- EXPIRATION DATE -- *@
+                        <CipherDatePicker Title="תאריך תפוגה" />
+
+                        @* -- COMMENTS -- *@
+                        <CipherFormRow Label="הערות" Icon="@Icons.Comment" Style="position:fixed">
+                            <RadzenTextArea Placeholder="הערות" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                        </CipherFormRow>
+                </RadzenColumn>
+                </RadzenRow>
+        </RadzenTabsItem>
+
+        <RadzenTabsItem Text="תנועות">
+                <CipherEventsTable Title="" WithCard="false" />
+        </RadzenTabsItem>
+
+            <RadzenTabsItem Text="תעודות">
+                <CipherPackagesTable Title="" WithCard="false" />
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+
+</CipherComponentCard>
