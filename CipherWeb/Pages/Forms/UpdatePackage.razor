@@ -6,23 +6,22 @@
 
 <CipherSteps>
     <RadzenStepsItem Text="פרטי הזנה">
-        <CipherStepDescription Text="וודאו את פרטי ההזנה" TextAlign="TextAlign.Right" />
-        <CipherFormInfo />
+        <CipherFormInfo Title="וודאו את פרטי ההזנה"/>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="פרטי התעודה">
-        <CipherStepDescription Text="חפשו את התעודה הרלוונטית, ועדכנו את הפרטים שלה בהתאם לצורך" TextAlign="TextAlign.Right" />
+        <CipherComponentCard Title="חפשו את התעודה הרלוונטית, ועדכנו את הפרטים שלה בהתאם לצורך">
         <CipherSearchRow />
         <br/>
-        <CipherPackageInfo pack="new Package()" />
+        <CipherPackageInfo WithCard="false" pack="new Package()" />
+        </CipherComponentCard>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="הערות">
-        <CipherStepDescription Text="כתבו הערות על התנועה" TextAlign="TextAlign.Right" />
-        <CipherComments />
+        <CipherComments Title="כתבו הערות על התנועה"/>
     </RadzenStepsItem>
 
-    <RadzenStepsItem Text="שמירה וסיום">
+    <RadzenStepsItem Text="סיכום ואישור">
         <CipherSubmit ActionText="אבי רון עדכן את מסת התעודה מ5 גרם ל4.9 גרם בתאריך 14.7.24."/>
     </RadzenStepsItem>
 </CipherSteps>

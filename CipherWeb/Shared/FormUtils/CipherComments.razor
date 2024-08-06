@@ -1,13 +1,13 @@
-﻿@inherits CipherFormCard
+﻿@inherits CipherComponentCard
 
 @code {
     [Parameter]
     public string? comments { get; set; }
 
-    CipherFormCard FormCard;
+    CipherComponentCard FormCard;
 }
 
-<CipherFormCard @ref=FormCard Width="@Width" WithCard="@WithCard">
+<CipherComponentCard Title="@Title" @ref=FormCard Width="@Width" WithCard="@WithCard">
 
 <RadzenRow>
     <RadzenColumn Size="1">
@@ -23,4 +23,4 @@
     </RadzenColumn>
 </RadzenRow>
 
-                    </CipherFormCard>
+                    </CipherComponentCard>

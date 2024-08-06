@@ -1,14 +1,15 @@
 ﻿@inject ICipherInfo _db
 
-<CipherFormRow Icon="@Icon" Label="@LabelText">
-    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="בחירת מיקום" SearchTextPlaceholder="חיפוש..."
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+    <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="@LabelText" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
         <Columns>
             <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="50px" />
             <RadzenDropDownDataGridColumn Property="Storage" Title="מיקום" Width="50px" />
         </Columns>
     </RadzenDropDownDataGrid>
-</CipherFormRow>
+</RadzenStack>
 
 @code {
     [Parameter]

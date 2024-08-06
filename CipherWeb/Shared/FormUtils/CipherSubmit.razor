@@ -1,4 +1,8 @@
-﻿@code {
+﻿@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public string CancelPath { get; set; } = CipherNavLinks.Forms.Href;
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +45,7 @@
 }
 
 
-<CipherComponentCard Width="100%">
+<CipherComponentCard Width="100%" Title="סיכום ואישור">
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Style="padding-left:10px; padding-bottom:20px">
             <RadzenText TextStyle="TextStyle.Subtitle1" Text="@Text1" Style="padding-bottom:10px"></RadzenText>
@@ -49,8 +53,8 @@
         </RadzenStack>
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10px">
-        <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium"/>
-        <CipherCancelButton Size="ButtonSize.Medium"></CipherCancelButton>
+            <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium"/>
+            <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium"></CipherNavButton>
         </RadzenStack>
         <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" />
 

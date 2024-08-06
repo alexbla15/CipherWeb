@@ -3,8 +3,10 @@
 @inject ICipherInfo _db
 
 @code {
-    string ButtonWidth = "400px";
-    string CardWidth = "";
+    static int componentWidth = 300;
+
+    string ButtonWidth = $"{componentWidth}px";
+    string CardWidth = $"{2.1 * componentWidth}px";
     string ButtonGap = "10px";
     string ButtonTextAlign = "right";
 }
@@ -12,41 +14,15 @@
 <PageTitle>טפסים</PageTitle>
 
 <CipherComponentCard Title="טפסי הזנה" Width="@CardWidth">
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-    <RadzenRow>
-
-            @foreach (MyNavLink myNavLink in CipherNavLinks.links)
+    @foreach (MyNavLink myNavLink in CipherNavLinks.links)
+    {
+        if (myNavLink.Name == "הזנה")
+        {
+            @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
             {
-                if (myNavLink.Name == "הזנה")
-                {
-                    
-                <RadzenColumn>
-                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-                    @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
-                    {
-                    if (myNavLink.SubLinks.Count()/2 <= myNavLink.SubLinks.IndexOf(mySubNavLink))
-                    {
-                                    <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" Text="@($"הזנת {mySubNavLink.Name}")" Path="@mySubNavLink.Href" />
-                    }
-
-                    }
-                    </RadzenStack>
-                </RadzenColumn>
-
-                <RadzenColumn>
-                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-                        @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
-                        {
-                            if (myNavLink.SubLinks.Count()/2 > myNavLink.SubLinks.IndexOf(mySubNavLink))
-                            {
-                                    <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" Text="@($"הזנת {mySubNavLink.Name}")" Path="@mySubNavLink.Href" />
-                            }
-
-                        }
-                    </RadzenStack>
-                </RadzenColumn>
-                }
+                <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" 
+                Text="@($"הזנת {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px"/>
             }
-    </RadzenRow>
-</RadzenStack>
+        }
+    }
 </CipherComponentCard>

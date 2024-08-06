@@ -15,6 +15,11 @@ namespace CipherWeb.Data
         public const string NotAccessible = "not_accessible";
 
         // ARROWS
+        public const string AltRout = "alt_rout";
+        public const string AssignmentReturn = "assignment_return";
+        public const string AssignmentReturned = "assignment_returned";
+        public const string CallMerge = "call_merge";
+        public const string CallSplit = "call_split";
         public const string DoubleArrow = "double_arrow";
         public const string Download = "download";
         public const string DownloadForOffline = "download_for_offline";
@@ -23,9 +28,11 @@ namespace CipherWeb.Data
         public const string FileUploadOff = "file_upload_off";
         public const string KeyboardTab = "keyboard_tab";
         public const string Publish = "publish";
+        public const string ScreenShare = "screen_share";
         public const string Shuffle = "shuffle";
         public const string ShuffleOn = "shuffle_on";
         public const string Start = "start";
+        public const string StopScreenShare = "stop_screen_share";
         public const string VerticalAlignBottom = "vertical_align_bottom";
         public const string VerticalAlignTop = "vertical_align_top";
         public const string Upgrade = "upgrade";

@@ -1,4 +1,4 @@
-﻿@inherits CipherFormCard
+﻿@inherits CipherComponentCard
 
 @inject ICipherInfo _db
 
@@ -21,16 +21,17 @@
 }
 
 
-<CipherFormCard>
+<CipherComponentCard Title="@Title">
     <CipherPackageId />
 
     @* -- MATERIAL -- *@
+
         <CipherAutoComplete Icon="@Icons.Material" @bind-Value="pack.Material" Label="בחרו סוג" Data="@TestedData.MaterialTypes"
                             Style="width:100%"></CipherAutoComplete>
 
     @* -- SUB CATEGORY -- *@
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
-    <RadzenIcon Icon="@Icons.Category" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+        <RadzenIcon Icon="@Icons.Category" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
         <RadzenDropDownDataGrid @bind-Value=@pack.SubCategory Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
                             Style="width:300px" 
                                 Data=@subCategories TextProperty="Name" ValueProperty="Name"
@@ -40,7 +41,7 @@
                 <RadzenDropDownDataGridColumn Property="MainCategory" Title="ראשית" Width="@twiceColWidth" />
                 <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@colWidth" />
             </Columns>
-            </RadzenDropDownDataGrid>
+        </RadzenDropDownDataGrid>
     </RadzenStack>
 
     @* -- VESSEL -- *@
@@ -54,4 +55,4 @@
             </Columns>
         </RadzenDropDownDataGrid>
     </RadzenStack>
-</CipherFormCard>
+</CipherComponentCard>
