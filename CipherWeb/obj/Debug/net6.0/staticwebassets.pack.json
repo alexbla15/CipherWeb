@@ -1,95 +1,95 @@
 {
   "Files": [
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\CipherWeb.bundle.scp.css",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\CipherWeb.bundle.scp.css",
       "PackagePath": "staticwebassets\\CipherWeb.bundle.scp.css"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_2.png",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_2.png",
       "PackagePath": "staticwebassets\\Images\\CIPHER_Logo_2.png"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_3.png",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_3.png",
       "PackagePath": "staticwebassets\\Images\\CIPHER_Logo_3.png"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_4.png",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_4.png",
       "PackagePath": "staticwebassets\\Images\\CIPHER_Logo_4.png"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\ComingSoon.jfif",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\ComingSoon.jfif",
       "PackagePath": "staticwebassets\\Images\\ComingSoon.jfif"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\ComingSoon2.jfif",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\ComingSoon2.jfif",
       "PackagePath": "staticwebassets\\Images\\ComingSoon2.jfif"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\HilatLogo.png",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\HilatLogo.png",
       "PackagePath": "staticwebassets\\Images\\HilatLogo.png"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\Images\\UserPic.jpg",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\UserPic.jpg",
       "PackagePath": "staticwebassets\\Images\\UserPic.jpg"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
       "PackagePath": "staticwebassets\\css\\CipherDesigns.css"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
       "PackagePath": "staticwebassets\\css\\open-iconic"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "PackagePath": "staticwebassets\\css\\open-iconic"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\README.md",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\README.md",
       "PackagePath": "staticwebassets\\css\\open-iconic\\README.md"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\css\\site.css",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\favicon.ico",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "D:\\Projects\\Version20240713\\CipherWeb\\wwwroot\\site.js",
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\site.js",
       "PackagePath": "staticwebassets\\site.js"
     },
     {

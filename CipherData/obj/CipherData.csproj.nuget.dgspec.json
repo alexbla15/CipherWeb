@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj": {}
+    "F:\\Projects\\CipherWeb\\CipherData\\CipherData.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj": {
+    "F:\\Projects\\CipherWeb\\CipherData\\CipherData.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
+        "projectUniqueName": "F:\\Projects\\CipherWeb\\CipherData\\CipherData.csproj",
         "projectName": "CipherData",
-        "projectPath": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
+        "projectPath": "F:\\Projects\\CipherWeb\\CipherData\\CipherData.csproj",
         "packagesPath": "C:\\Users\\TEST\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\Version20240713\\CipherData\\obj\\",
+        "outputPath": "F:\\Projects\\CipherWeb\\CipherData\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\TEST\\AppData\\Roaming\\NuGet\\NuGet.Config",
