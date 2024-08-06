@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rv3TAg9I0nH98E00hchPHgkeK6r1W5L2K8jWWV6ccQptl22LMr3EPSf4C+JgbGMWPhwqrltJTnWDjqK30PmsDw==",
+  "dgSpecHash": "ia0HlLgg42118eudPAkT8gAo/Jb9AmX+OhvVWs+BplK0Mxt2a98Ztm899h9zbS/ortCT7k2mMUbhi8GSHkJ/jw==",
   "success": true,
-  "projectFilePath": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj",
+  "projectFilePath": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\TEST\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",

@@ -1,0 +1,161 @@
+﻿@inherits CipherComponentCard
+
+@code {
+
+    [Parameter]
+    public List<Tuple<string,string>> AggregationFields { get; set; }
+
+    [Parameter]
+    public string TypeIncompatible { get; set; } = "פונקציה לא אפשרית לפרמטר זה";
+
+    [Parameter]
+    public List<Tuple<string, string>> AvailableFunctions { get; set; } = new List<Tuple<string, string>>() 
+    { 
+        new ("",""), 
+        new ("סכום","SUM"), 
+        new("מקסימום","MAX"), 
+        new("מינימום","MIN"), 
+        new("ממוצע", "AVG"), 
+        new("חציון","MED"), 
+        new("כמות","COUNT"), 
+        new("סטיית תקן","AVG") };
+
+
+    private int AggregationAmount = 0;
+
+    public class Aggregate
+    {
+        public int Id { get; set; }
+        public string Parameter { get; set; }
+        public string Function { get; set; }
+    }
+
+    RadzenDataGrid<Aggregate> CustomDataGrid;
+    List<Aggregate> chosenFuncs = new List<Aggregate>();
+    Aggregate old_agg = new Aggregate();
+
+    private bool typeIncompatibleAlertVisible = false;
+
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+    //     // AddRow();
+    // }
+
+    public List<Aggregate> GetData()
+    {
+        if (CustomDataGrid is null)
+        {
+            return new List<Aggregate>();
+        }
+        else
+        {
+            return CustomDataGrid.Data.ToList();
+        }
+    }
+
+    void AddRow()
+    {
+        int next_id = AggregationAmount + 1;
+        Aggregate new_agg = new Aggregate() { Id = next_id };
+
+        AggregationAmount += 1;
+        CustomDataGrid.InsertRow(new_agg);
+    }
+
+    async Task EditRow(Aggregate agg)
+    {
+        // prevent editing of two rows in parallel
+        if (CustomDataGrid.Count == AggregationAmount)
+        {
+            old_agg.Id = agg.Id;
+            old_agg.Parameter = agg.Parameter;
+            old_agg.Function = agg.Function;
+
+            chosenFuncs.Remove(agg);
+            await CustomDataGrid.EditRow(agg);
+        }
+    }
+
+    async Task CancelEdit(Aggregate agg)
+    {
+        agg.Id = old_agg.Id;
+        agg.Parameter = old_agg.Parameter;
+        agg.Function = old_agg.Function;
+
+        await SaveRow(agg);
+    }
+
+    async Task DeleteRow(Aggregate agg)
+    {
+        chosenFuncs.Remove(agg);
+
+        foreach (Aggregate p in chosenFuncs)
+        {
+            p.Id = chosenFuncs.IndexOf(p) + 1;
+        }
+
+        CustomDataGrid.Data = chosenFuncs;
+
+        AggregationAmount -= 1;
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
+    async Task SaveRow(Aggregate agg)
+    {
+        chosenFuncs.Add(agg);
+
+        await CustomDataGrid.UpdateRow(agg);
+        await CustomDataGrid.RefreshDataAsync();
+    }
+    void DeleteAggregation()
+    {
+        AggregationAmount = 0;
+        chosenFuncs = new List<Aggregate>();
+        CustomDataGrid.Data = chosenFuncs;
+    }
+
+    void CloseAlert()
+    {
+        typeIncompatibleAlertVisible = false;
+    }
+}
+
+<CipherComponentCard Title="@Title">
+    <Buttons>
+        <CipherAddBtn HelpText="הוספת פונקציה" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"></CipherAddBtn>
+        <CipherDeleteButton HelpText="מחיקת כל הפונקציות" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteButton>
+    </Buttons>
+
+    <ChildContent>
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenFuncs" TItem="Aggregate" AllowColumnResize="true" Visible="AggregationAmount>0">
+            <Columns>
+                <RadzenDataGridColumn TItem="Aggregate" Property="Id" Title="#" Width="25px" TextAlign="TextAlign.Center">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Aggregate" Property="Parameter" Title="פרמטר" Width="75px" TextAlign="TextAlign.Center">
+                    <EditTemplate Context="agg">
+                        <RadzenDropDown Data="@AggregationFields.Select(x=>x.Item2).ToList()" @bind-Value="@agg.Parameter" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Aggregate" Property="Function" Title="פונקציה" Width="75px" TextAlign="TextAlign.Center">
+                    <EditTemplate Context="agg">
+                        <RadzenDropDown Data="@AvailableFunctions.Select(x=>x.Item1).ToList()" @bind-Value="@agg.Function" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn Width="25px" TItem="Aggregate" Context="agg" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                    <Template Context="agg">
+                        <CipherEditButton Click="@(args => EditRow(agg))" @onclick:stopPropagation="true" />
+                        <CipherDeleteButton Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
+                    </Template>
+                    <EditTemplate Context="agg">
+                        <CipherSuccessButton Click="@((args) => SaveRow(agg))" />
+                        <CipherCloseButton Click="@((args) => CancelEdit(agg))" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+        <RadzenAlert Visible="@typeIncompatibleAlertVisible" Text="@TypeIncompatible" AlertStyle="AlertStyle.Danger"
+                     Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
+    </ChildContent>
+</CipherComponentCard>

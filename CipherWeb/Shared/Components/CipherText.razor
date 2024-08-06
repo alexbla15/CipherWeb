@@ -1,6 +1,4 @@
-﻿@using Radzen
-
-@inherits RadzenText
+﻿@inherits RadzenText
 
 @code{
     [Parameter]
@@ -19,9 +17,6 @@
     public string FontSize { get; set; }
 
     [Parameter]
-    public string TextColor { get; set; }
-
-    [Parameter]
     public string Height { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -36,7 +31,6 @@
     {
         return $@"
             width: {Width};
-            color: {TextColor};
             font-size: {FontSize};
             height: {Height};";
     }

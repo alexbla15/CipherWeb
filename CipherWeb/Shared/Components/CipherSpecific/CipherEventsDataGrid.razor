@@ -1,11 +1,5 @@
-﻿@using CipherData
-@using CipherData.Models
-@using Radzen
-@using System.Text
+﻿@using System.Text
 @using System.Reflection
-
-@using CipherWeb.Shared.Components
-@using CipherWeb.Shared.Components.Buttons
 
 @inject ICipherInfo _db
 @inherits RadzenDataGrid<Event>
@@ -89,22 +83,9 @@
     }
 }
 
-<RadzenDataGrid @ref="CustomDataGrid" TItem="Event"
-                Data="@events"
-                FilterMode="FilterMode.SimpleWithMenu" AllowFiltering="true" AllowColumnResize="true"
-                FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="12"
-                AllowSorting="true" ColumnWidth="200px"
-                SelectionMode="DataGridSelectionMode.Single" AllowColumnPicking="true"
-                AllowGrouping="true" HideGroupedColumn="true" Density="@Density.Compact"
-                ClearFilterText="מחק" IsNullText="חסר" IsNotNullText="לא חסר"
-                StartsWithText="מתחיל ב" EndsWithText="מסתיים ב" IsEmptyText="ריק" IsNotEmptyText="לא ריק"
-                AllColumnsText="הכל"
-                ColumnsShowingText="עמודות מוצגות" GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם"
-                ContainsText="מכיל" DoesNotContainText="לא מכיל" EqualsText="זהה ל" NotEqualsText="שונה מ"
-                LessThanOrEqualsText="קטן / שווה ל" LessThanText="קטן מ" GreaterThanOrEqualsText="גדול / שווה ל" GreaterThanText="גדול מ"
-               >
-    <Columns>
+<CipherDataGrid @ref="CustomDataGrid" Cipher_TItem="Event"
+                Data="@events" PageSize="12" WithCustomColumns="true">
+    <CustomColumns>
         <RadzenDataGridColumn TItem="Event" Property="Numerator" Title="מספר" Width="75px" />
         <RadzenDataGridColumn TItem="Event" Property="Type" Title="סוג" Width="75px" />
         <RadzenDataGridColumn TItem="Event" Property="Process" Title="תהליך" Width="75px" />
@@ -140,5 +121,5 @@
                 <CipherCloseButton Click="@((args) => CancelEdit(ev))" />
             </EditTemplate>
         </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+    </CustomColumns>
+</CipherDataGrid>

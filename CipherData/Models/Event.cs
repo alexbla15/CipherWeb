@@ -65,5 +65,10 @@ namespace CipherData.Models
         /// Date when event data was approved
         /// </summary>
         public DateTime ApprovingDate { get; set; }
+
+        /// <summary>
+        /// Approvement Status Of Event
+        /// </summary>
+        public string Status { get; set; }
     }
 }

@@ -1,14 +1,13 @@
-﻿@using Data
-@using Microsoft.AspNetCore.Components.Forms
+﻿@using Microsoft.AspNetCore.Components.Forms
 
-<CipherFormRow Label="@LabelText" Icon="@Icons.Account">
-    <RadzenAutoComplete Name="NameChoosing" @bind-Value="Worker" Placeholder="בחירת שם" Data="@TestedData.Workers"
-                        Style="@Constants.textStyle" Disabled="@Disabled" />
-</CipherFormRow>
+@inherits CipherFormRow
+
+<CipherAutoComplete @ref=cipherAutoComplete Icon="@Icons.Person" Label="@LabelText" Data="@TestedData.Workers"  />
+
 
 @code {
     [Parameter]
-    public string? Worker { get; set; }
+    public string? Worker { get; set; } = Constants.SetUser.FullName();
 
     [Parameter]
     public string? LabelText { get; set; }
@@ -16,7 +15,7 @@
     [Parameter]
     public bool Disabled { get; set; }
 
-    string value = "";
+    CipherAutoComplete cipherAutoComplete = new CipherAutoComplete();
 
     protected override async Task OnInitializedAsync()
     {

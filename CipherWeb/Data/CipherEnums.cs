@@ -14,4 +14,12 @@
             return new List<string>() { Manager, SysManager, Authorizer, Engineer};
         }
     }
+
+    public class EventStatus
+    {
+        public readonly static string Pending = "מחכה לאישור";
+        public readonly static string Warning = "תנועה תקולה";
+        public readonly static string Accepted = "תנועה מאושרת";
+        public readonly static string Denied = "תנועה נדחתה";
+    }
 }

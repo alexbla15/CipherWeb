@@ -30,7 +30,13 @@ namespace CipherData.Models
         /// Vessel name which contains the package
         /// </summary>
         public string Vessel { get; set; }
-        
+
+
+        /// <summary>
+        /// Location name which contains the package
+        /// </summary>
+        public string Location { get; set; }
+
         /// <summary>
         /// Brut-mass of this package
         /// </summary>

@@ -1,57 +1,40 @@
-﻿<CipherFormCard style="@FooterStyle()" BackgroundColor="@Colors.PrimaryLight">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-    <RadzenStack Orientation="Orientation.Vertical">
-    <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" Text="@Description" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-    <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" Text="@Description2" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-    <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" Text="@SubDescription" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-    </RadzenStack>
+﻿@inherits CipherFormCard
 
-        <CipherLogo LogoPath="Images/HilatLogo.png" Height="12vh"></CipherLogo>
+<CipherFormCard Width="" MaxWidth="@MaxWidth" Padding="@Padding" 
+    MarginLeft="@MarginLeft" MarginRight="@MarginRight"
+                BackgroundColor="@BackgroundColor" Variant="Variant.Filled">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" 
+    JustifyContent="JustifyContent.Center" Gap="0">
+
+        <CipherLogo LogoPath="Images/HilatLogo.png" Height="@LogoHeight"></CipherLogo>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" 
+            Text="@Description" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" 
+            Text="@SubDescription" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+        </RadzenStack>
+
     </RadzenStack>
 </CipherFormCard>
 
 @code {
-    // FOOTER STYLE 
+        // FOOTER PROPERTIES
 
     [Parameter]
-    public string Bottom { get; set; } = "0";
+    public string Description { get; set; } = "פותח על ידי " + Constants.CompanyName;
 
     [Parameter]
-    public string Position { get; set; } = "absolute";
-
-    [Parameter]
-    public string Width { get; set; } = "100%";
-
-    // FOOTER PROPERTIES
-
-    [Parameter]
-    public string Description { get; set; } = "פותח על ידי " + Constants.DeveloperNames;
-
-    [Parameter]
-    public string Description2 { get; set; } = Constants.CompanyName;
-
-    [Parameter]
-    public string SubDescription { get; set; } = "CIPHER 2024 ©";
-
-    [Parameter]
-    public string TextColor { get; set; } = Colors.SecondaryLight;
+    public string SubDescription { get; set; } = "CIPHER 07/2024";
 
     [Parameter]
     public TextStyle DescriptionStyle { get; set; } = TextStyle.Body2;
 
     [Parameter]
-    public bool Wrap { get; set; } = false;
+    public bool Wrap { get; set; } = true;
 
-    public string FooterStyle()
-    {
-        return $@"
-            bottom: {Bottom};
-            position: {Position};
-            width: {Width};
-            width:100%;
-            background-color: gray;
-            margin: 0
-        ";
-        
-    }
+    [Parameter]
+    public string TextColor { get; set; } = "black";
+
+    [Parameter]
+    public string LogoHeight { get; set; } = "8vh";
 }

@@ -1,6 +1,4 @@
-﻿@using Data
-
-@code {
+﻿@code {
     RadzenDataGrid<Package> CustomDataGrid;
 
     List<Package> from_packs = new List<Package>();
@@ -97,7 +95,7 @@
         <RadzenDataGridColumn TItem="Package" Property="Id" Title="#" Width="25px" SortOrder="SortOrder.Descending" TextAlign="TextAlign.Center" />
         <RadzenDataGridColumn TItem="Package" Property="SerialNumber" Title="תעודה" Width="75px" TextAlign="TextAlign.Center">
             <EditTemplate Context="pack">
-            <RadzenAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" @bind-Value="@pack.SerialNumber" />
+                <CipherAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" />
             </EditTemplate>
             <FooterTemplate>
                 מסה כוללת:
@@ -111,7 +109,7 @@
                 @GetTotal()
             </FooterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Width="50px" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+        <RadzenDataGridColumn Width="25px" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
             <Template Context="pack">
                 <CipherEditButton Click="@(args => EditRow(pack))" @onclick:stopPropagation="true" />
                 <CipherDeleteButton Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />

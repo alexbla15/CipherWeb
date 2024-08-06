@@ -1,0 +1,133 @@
+﻿@inherits CipherComponentCard
+
+@typeparam Cipher_TItem
+
+@code {
+
+    [Parameter]
+    public List<string> GroupFields { get; set; } = CommonFuncs.GetTranslatedFields(typeof(Cipher_TItem)).Select(x => x.Item2).ToList();
+
+    [Parameter]
+    public int maxGroupLevels { get; set; } = 4;
+
+    [Parameter]
+    public string EmptyGroupAlertText { get; set; } = "יש למלא את המקבץ הקודם לפני הוספת מקבץ חדש";
+
+    [Parameter]
+    public string DuplicityGroupsAlertText { get; set; } = "אין לבחור 2 מקבצים זהים";
+
+    [Parameter]
+    public Dictionary<int, string> chosenGroups { get; set; } = new Dictionary<int, string>();
+
+    [Parameter]
+    public int groupLevels { get; set; } = 0;
+
+    private bool emptyGroupsAlertVisible = false;
+    private bool limitedGroupsAlertVisible = false;
+    private bool duplicityAlertVisible = false;
+    private string limitedGroupsAlertText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        limitedGroupsAlertText = GetLimitedGroupsAlertText();
+        chosenGroups = SetChosenGroups();
+    }
+
+    private string GetLimitedGroupsAlertText()
+    {
+        return "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
+    }
+
+    private Dictionary<int, string> SetChosenGroups()
+    {
+        Dictionary<int, string> initialGroups = new Dictionary<int, string>();
+
+        for (int i = 0; i < maxGroupLevels; i++)
+        {
+            initialGroups[i] = string.Empty;
+        }
+
+        return initialGroups;
+    }
+
+    void AddGroup()
+    {
+        if (!chosenGroups.Where(x => x.Key < groupLevels).Any(x => string.IsNullOrEmpty(x.Value)))
+        {
+            if (groupLevels < maxGroupLevels)
+            {
+                groupLevels += 1;
+            }
+            else
+            {
+                limitedGroupsAlertVisible = true;
+            }
+        }
+        else
+        {
+            emptyGroupsAlertVisible = true;
+        }
+    }
+
+    void CheckDuplicity(int index)
+    {
+        HashSet<string> hashed_groups = new HashSet<string>();
+
+        foreach (string group in chosenGroups.Values)
+        {
+            if (!string.IsNullOrEmpty(group))
+            {
+                if (!hashed_groups.Add(group))
+                {
+                    duplicityAlertVisible = true;
+                    chosenGroups[index] = string.Empty;
+                }
+                else
+                {
+                    hashed_groups.Add(group);
+                }
+            }
+        }
+    }
+
+    void DeleteGroup()
+    {
+        if (groupLevels > 0)
+        {
+            chosenGroups[groupLevels - 1] = string.Empty;
+            groupLevels -= 1;
+        }
+    }
+
+    void CloseAlert()
+    {
+        emptyGroupsAlertVisible = false;
+        limitedGroupsAlertVisible = false;
+        duplicityAlertVisible = false;
+    }
+}
+
+<CipherComponentCard Title="@Title">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" HelpText="הוספת מקבץ" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"></CipherAddBtn>
+        <CipherDeleteButton Variant="Variant.Outlined" HelpText="הורדת מקבץ" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default"></CipherDeleteButton>
+    </Buttons>
+
+    <ChildContent>
+        <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap">
+            @for (int i = 0; i < groupLevels; i++)
+            {
+                int index = i;
+                <CipherFormRow Icon="@($"filter_{index+1}")" Label="@($"רמה {index+1}")" Width="240px">
+                    <RadzenDropDown @bind-Value="@chosenGroups[index]" TValue="string" Change="@(args => CheckDuplicity(index))"
+                                    Data="@GroupFields"></RadzenDropDown>
+                </CipherFormRow>
+            }
+        </RadzenStack>
+
+        <RadzenAlert Visible="@emptyGroupsAlertVisible" Text="@EmptyGroupAlertText" AlertStyle="AlertStyle.Danger"
+                     Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
+        <RadzenAlert Visible="@limitedGroupsAlertVisible" Text="@limitedGroupsAlertText" AlertStyle="AlertStyle.Danger" Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
+        <RadzenAlert Visible="@duplicityAlertVisible" Text="@DuplicityGroupsAlertText" AlertStyle="AlertStyle.Danger" Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
+    </ChildContent>
+</CipherComponentCard>

@@ -1,0 +1,59 @@
+﻿@typeparam Cipher_TItem
+
+@inject ICipherInfo _db
+@using System.Reflection
+
+@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public IEnumerable<Cipher_TItem> GeneralDataSource { get; set; } = new List<Cipher_TItem>();
+
+    [Parameter]
+    public List<Tuple<string, string>> FilterFields { get; set; } = CommonFuncs.GetTranslatedFields(typeof(Cipher_TItem));
+
+    [Parameter]
+    public bool WithCustomDataGrid { get; set; } = false;
+
+    [Parameter]
+    public RenderFragment CustomDataGrid { get; set; }
+
+    private CipherDataFilter<Cipher_TItem> dataFilter;
+
+    IQueryable<Cipher_TItem> filteredRows;
+    CipherDataGrid<Cipher_TItem> rowsGrid;
+
+    async void ViewChanged(IQueryable<Cipher_TItem> view)
+    {
+        filteredRows = view;
+    }
+}
+
+<CipherComponentCard Title="@Title">
+    <Buttons>
+        @Buttons
+    </Buttons>
+    <ChildContent>
+        <CipherDataFilter @ref=dataFilter Data="@GeneralDataSource" Cipher_TItem="Cipher_TItem" FilterFields="@FilterFields" ViewChanged=@ViewChanged>
+            <FilterProperties>
+                @foreach (Tuple<string, string> field in FilterFields)
+                    {
+                    <RadzenDataFilterProperty TItem="Cipher_TItem" Property="@field.Item1"
+                            Title="@field.Item2" />
+                    }
+            </FilterProperties>
+        </CipherDataFilter>
+        
+        <div style="padding-top:20px">
+            @if (WithCustomDataGrid)
+            {
+                @CustomDataGrid
+            }
+            else
+            {
+                <CipherDataGrid Cipher_TItem="@Cipher_TItem" @ref=rowsGrid DataSource="@(filteredRows ?? GeneralDataSource)"></CipherDataGrid>
+
+            }
+        </div>
+    </ChildContent>
+</CipherComponentCard>

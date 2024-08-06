@@ -1,7 +1,6 @@
-﻿@using Data
-
-<CipherFormRow Icon="@Icons.Date" Label="@Title">
-    <RadzenDatePicker Name="datePicker" @bind-Value="Value" DateFormat="dd/MM/yyyy" Style="@Constants.textStyle" />
+﻿@*<CipherFormRow Icon="@Icons.Date" Label="@Title">
+    <RadzenDatePicker Name="datePicker" @bind-Value="Value" DateFormat="dd/MM/yyyy" Style="@Constants.textStyle" 
+    Disabled="@Disabled"/>
 </CipherFormRow>
 
 @code {
@@ -10,4 +9,92 @@
 
     [Parameter]
     public DateTime Value { get; set; } = DateTime.Today;
+
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+}*@
+
+@using System.Text.RegularExpressions;
+
+@code {
+    [Parameter]
+    public string Width { get; set; } = "300px";
+
+    [Parameter]
+    public string Label { get; set; } = "תאריך";
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool Popup { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; } = Icons.Date;
+
+    //
+
+    private DateTime _value = DateTime.Today;
+
+    [Parameter]
+    public DateTime Value
+    {
+        get => _value;
+        set
+        {
+            if (_value != value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    } 
+
+    [Parameter]
+    public EventCallback<DateTime> ValueChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<object> Data { get; set; }
+
+    // LENGTH VALIDATOR
+
+    [Parameter]
+    public DateTime Min { get; set; } = DateTime.MinValue;
+
+    [Parameter]
+    public DateTime Max { get; set; } = DateTime.MaxValue;
+
+    // REQUIRED VALIDATOR
+    [Parameter]
+    public bool Required { get; set; } = true;
+
+    class Model
+    {
+        public DateTime value;
+    }
+
+    Model model = new Model() { value = DateTime.Today };
+    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+
+    public bool Check()
+    {
+        return RequiredValidator.IsValid;
+    }
 }
+
+<RadzenTemplateForm TItem="Model" Data=@model>
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="dd/MM/yyyy" Style="@Constants.textStyle"
+                                  Disabled="@Disabled" Min="@Min" Max="@Max" />
+            </RadzenFormField>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+        </RadzenStack>
+    </RadzenStack>
+</RadzenTemplateForm>

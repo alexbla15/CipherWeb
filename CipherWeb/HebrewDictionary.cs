@@ -22,6 +22,7 @@ namespace CipherWeb
             new("ApprovingDate", "תאריך אישור"),
             new("EventDate", "תאריך תנועה"),
             new("Comments", "הערות"),
+            new("Status", "סטטוס"),
 
             // PACKAGES
             new("SerialNumber", "מספר סידורי"),
@@ -33,6 +34,7 @@ namespace CipherWeb
             new("Vessel", "כלי"),
             new("BrutMass", "מסה ברוטו"),
             new("NetMass", "מסה נטו"),
+            new("Location", "מיקום"),
 
 
             // SUB-CATEGORIES

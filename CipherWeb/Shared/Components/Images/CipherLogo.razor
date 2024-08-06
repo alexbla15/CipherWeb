@@ -1,6 +1,4 @@
-﻿@using Radzen
-
-@inherits RadzenImage
+﻿@inherits RadzenImage
 
 @code {
     [Parameter]
@@ -9,13 +7,20 @@
     [Parameter]
     public string Height { get; set; } = "13vh";
 
+    [Parameter]
+    public string Width { get; set; }
+    [Parameter]
+    public string BorderRadius { get; set; } = "0px";
+
     public string LogoStyle()
     {
         return $@"
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: {Height}";
+                height: {Height};
+                width: {Width};
+                border-radius: {BorderRadius}";
     }
 }
 

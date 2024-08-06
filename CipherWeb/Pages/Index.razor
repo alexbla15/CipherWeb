@@ -10,19 +10,14 @@
 
 <CipherTopNavBar/>
 
-<br />
-
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
     <RadzenRow>
         <CipherEventsScheduler />
     </RadzenRow>
     <RadzenRow>
-        <RadzenColumn Size="6">
-            <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" Height="230px" RowsPerPage="3"/>
-        </RadzenColumn>
-        <RadzenColumn Size="6">
-            <CipherLocationsTable AllowFilter="false" AllowGroup="false" Height="230px" RowsPerPage="3" />
+        <RadzenColumn Size="12">
+            <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" Height="@cardHeight" RowsPerPage=@rowsPerPage />
         </RadzenColumn>
     </RadzenRow>
 }
@@ -34,5 +29,6 @@ else
 }
 
 @code {
-    int EventsInSlot = 3;
+    string cardHeight = "240px";
+    int rowsPerPage = 3;
 }

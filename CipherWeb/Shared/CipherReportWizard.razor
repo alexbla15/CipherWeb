@@ -1,0 +1,130 @@
+﻿@inject ICipherInfo _db
+
+<CipherSteps>
+    <RadzenStepsItem Text="אובייקטים לתצוגה">
+        <CipherWeb.Pages.Searches.SearchAdvanced />
+        
+    </RadzenStepsItem>
+
+
+    <RadzenStepsItem Text="בניית תצוגה">
+        <CipherDataGrouper Cipher_TItem="Package" Title="בחירת קבוצות" groupLevels=1 @ref=dataGrouper></CipherDataGrouper>
+
+        <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות"
+                              AggregationFields="@dataFilterPackages.FilterFields.ToList()"></CipherDataAggregater>
+
+        <CipherComponentCard Title="תצוגה מקדימה">
+            <Buttons>
+                <CipherButton Icon="@Icons.Refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
+                <CipherExcelButton Data="@db_events"></CipherExcelButton>
+                <CipherPDFButton></CipherPDFButton>
+            </Buttons>
+            <ChildContent>
+                <CipherDataGrid ColumnNames="@GetColumns()" DataSource="@rows" ColumnsOrder="@rowsColumnsOrder" />
+            </ChildContent>
+        </CipherComponentCard>
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="גרף מלווה">
+    </RadzenStepsItem>
+</CipherSteps>
+
+@code {
+    [Parameter]
+    public int objectId { get; set; }
+
+    [Parameter]
+    public List<string> objectTypes { get; set; } =
+    new List<string> { "תעודות", "כלים", "מערכות", "תחומים", "מבנים", "תנועות", "תהליכים", "קווים", "סוגים" };
+
+    List<Event> db_events = new List<Event>();
+
+    CipherDataGrouper<Package> dataGrouper = new CipherDataGrouper<Package>();
+    CipherDataFilter_WithDataGrid<Event> dataFilter = new CipherDataFilter_WithDataGrid<Event>();
+    CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
+    CipherDataAggregater dataAggregater = new CipherDataAggregater();
+
+    List<Package> rows = Constants.packages;
+    Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        db_events = await _db.GetEvents();
+    }
+
+    List<Tuple<string,string>> GetColumns()
+    {
+        if (dataGrouper.chosenGroups.Keys.Count() == 0 && dataAggregater.GetData().Count() == 0)
+        {
+            return HebrewDictionary.Headers;
+        }
+        else
+        {
+            return HebrewDictionary.Headers.Where(x =>
+                dataGrouper.chosenGroups.ContainsValue(x.Item2) ||
+                dataAggregater.GetData().Select(x => x.Parameter).ToList().Contains(x.Item2)
+            ).ToList();
+        }
+    }
+
+    void GetColumnsOrder()
+    {
+        rowsColumnsOrder.Clear();
+
+        // first columns must be the grouped-by columns
+        foreach (int order in dataGrouper.chosenGroups.Keys)
+        {
+            if (!string.IsNullOrEmpty(dataGrouper.chosenGroups[order]))
+            {
+                rowsColumnsOrder.Add(CommonFuncs.DeTranslateField(dataGrouper.chosenGroups[order]), order);
+            }
+        }
+
+        int counter = dataGrouper.groupLevels;
+
+        // next columns according to the order of the aggregation
+        List<CipherDataAggregater.Aggregate> aggregates = dataAggregater.GetData();
+
+        foreach (CipherDataAggregater.Aggregate agg in aggregates)
+        {
+            if (!rowsColumnsOrder.ContainsKey(agg.Parameter))
+            {
+                rowsColumnsOrder.Add(agg.Parameter, agg.Id);
+            }
+            counter += 1;
+        }
+    }
+
+    class ExampleSummary
+    {
+        public string Location { get; set; }
+        public string Vessel { get; set; }
+        public decimal BrutMass { get; set; }
+        public decimal NetMass { get; set; }
+    }
+
+    public void OnRefresh()
+    {
+        rows = new List<Package>();
+
+        List<string> locations = Constants.packages.Select(x => x.Location).Distinct().ToList();
+        List<string> vessels = Constants.packages.Select(x => x.Vessel).Distinct().ToList();
+
+        foreach (string loc in locations)
+        {
+            foreach (string ves in vessels)
+            {
+                rows.Add(new Package()
+                    {
+                        Location = loc,
+                        Vessel = ves,
+                        BrutMass = Constants.packages.Where(x=>x.Location == loc && x.Vessel == ves).Select(x => x.BrutMass).Sum(),
+                        NetMass = Constants.packages.Where(x => x.Location == loc && x.Vessel == ves).Select(x => x.NetMass).Sum()
+                    });
+            }
+        }
+
+        GetColumnsOrder();
+    }
+}

@@ -1,0 +1,169 @@
+﻿@using System.Text.RegularExpressions;
+
+@code {
+    [Parameter]
+    public string Width { get; set; } = "300px";
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool Popup { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public bool ShowErrors { get; set; } = true;
+
+    //
+
+    private string _value;
+
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (_value != value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<object> Data { get; set; }
+
+    [Parameter]
+    public string TextProperty { get; set; }
+
+    // LENGTH VALIDATOR
+
+    [Parameter]
+    public int MinLength { get; set; } = 0;
+
+    [Parameter]
+    public int MaxLength { get; set; } = int.MaxValue;
+
+    // REQUIRED VALIDATOR
+    [Parameter]
+    public bool Required { get; set; } = true;
+
+    private string LengthValidatorText()
+    {
+        return $"{MinLength}-{MaxLength} תווים. ";
+    }
+
+    class Model
+    {
+        public string value;
+    }
+
+    Model model = new Model() {value= ""};
+    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+    RadzenLengthValidator LengthValidator = new RadzenLengthValidator();
+    RadzenRegexValidator ImproperCharsValidator = new RadzenRegexValidator();
+    RadzenCustomValidator SqlInjectionValidator = new RadzenCustomValidator();
+    RadzenCustomValidator ValueExistsValidator = new RadzenCustomValidator();
+
+    public string ImproperCharsValidatorText()
+    {
+        Regex regex = new Regex(@"[a-z0-9א-ת.]", RegexOptions.IgnoreCase);
+        var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
+
+        if (invalidChars.Any())
+        {
+            return "לא ניתן להשתמש בתו " + invalidChars[0] + ". ";
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    public bool SqlInjectionValidate()
+    {
+        string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
+        string pattern = string.Join("|", unwantedWords);
+        Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+        return !regex.IsMatch(model.value);
+    }
+
+    public string SqlInjectionValidatorText()
+    {
+        string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
+        string pattern = string.Join("|", unwantedWords);
+        Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+        if (regex.IsMatch(model.value))
+        {
+            Match match = regex.Match(model.value);
+            return "אסור להשתמש במילה " + match.Value + ". ";
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    public bool Check()
+    {
+        // required Validator
+        return RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+    }
+}
+
+
+<RadzenTemplateForm TItem="Model" Data=@model >
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0" Style="padding-bottom:5px">
+
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <style>
+                    .rz-messages-error {
+                        display: flex;
+                        font-size: small;
+                        padding-right: 2.5rem;
+                    }
+                </style>
+                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+            }
+            @if(string.IsNullOrEmpty(Label))
+            {
+                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
+                                    Data="@Data" TextProperty="@TextProperty" />
+            }
+            else
+            {
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
+                                        Data="@Data" TextProperty="@TextProperty" />
+            </RadzenFormField>
+            }
+        </RadzenStack>
+    <RadzenStack Orientation="Orientation.Vertical">
+        @if (Required)
+        {
+            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+        }
+        <RadzenLengthValidator @ref=LengthValidator Component="value" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
+                                Visible="@(RequiredValidator.IsValid && ShowErrors)" />
+        <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת.]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
+            <RadzenCustomValidator @ref=SqlInjectionValidator Component="value" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate())" Visible=@(ShowErrors) />
+    </RadzenStack>      
+    </RadzenStack>
+</RadzenTemplateForm>

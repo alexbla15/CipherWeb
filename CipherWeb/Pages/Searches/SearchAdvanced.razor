@@ -1,0 +1,87 @@
+﻿@page "/Search/Advanced"
+
+@using System.Text
+
+@inject ICipherInfo _db
+
+<PageTitle>חיפוש מתקדם</PageTitle>
+
+<CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
+    <RadzenSelectBar @bind-Value="@objectId" Multiple="false" TValue="int">
+        <Items>
+            @foreach (string objType in objectTypes)
+            {
+                <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
+            }
+        </Items>
+    </RadzenSelectBar>
+</CipherComponentCard>
+
+
+@if (objectId == 0)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Package" Title="סינון נתונים"
+                                   GeneralDataSource="@Constants.packages" />
+}
+@if (objectId == 1)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Vessel" Title="סינון נתונים"
+                                   GeneralDataSource="@Constants.vessels" />
+}
+@if (objectId == 2)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
+                                   GeneralDataSource="@Constants.systems" />
+}
+@if (objectId == 3)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
+                                   GeneralDataSource="@Constants.systems" />
+}
+@if (objectId == 4)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
+                                   GeneralDataSource="@Constants.systems" />
+}
+@if (objectId == 5)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
+                                   GeneralDataSource="@db_events" />
+}
+@if (objectId == 6)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
+                                   GeneralDataSource="@db_events" />
+}
+@if (objectId == 7)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
+                                   GeneralDataSource="@db_events" />
+}
+@if (objectId == 8)
+{
+    <CipherDataFilter_WithDataGrid Cipher_TItem="SubCategory" Title="סינון נתונים"
+                                   GeneralDataSource="@db_subcategories" />
+}
+
+@code {
+    [Parameter]
+    public int objectId { get; set; }
+
+    [Parameter]
+    public List<string> objectTypes { get; set; } =
+    new List<string> { "תעודות", "כלים", "מערכות", "תחומים", "מבנים", "תנועות", "תהליכים", "קווים", "סוגים" };
+
+
+    string width = "width: 200px";
+
+
+    List<Event> db_events;
+    List<SubCategory> db_subcategories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        db_events = await _db.GetEvents();
+        db_subcategories = await _db.GetSubCategories();
+    }
+}

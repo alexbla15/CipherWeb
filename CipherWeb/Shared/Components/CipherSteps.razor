@@ -1,16 +1,17 @@
-﻿@using Radzen
-
-@inherits RadzenSteps
+﻿@inherits RadzenSteps
 
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
+    [Parameter]
+    public string Width { get; set; } = "800px";
+
     protected override async Task OnInitializedAsync()
     {
         PreviousText = "שלב קודם";
         NextText = "שלב הבא";
-        Style = "width:100%; max-width: 800px; float: right";
+        Style = $"width:{Width}; max-width: 1000px; ";
     }
 }
 

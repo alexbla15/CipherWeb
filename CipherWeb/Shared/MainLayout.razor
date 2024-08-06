@@ -11,9 +11,6 @@
     bool sidebarExpanded = false;
 
     [Parameter]
-    public string Width { get; set; } = "250px";
-
-    [Parameter]
     public string Description { get; set; } = "כל הזכויות שמורות לאלכס בלחמן ושחר פייט, היחידה להנדסת תהליך";
 
     [Parameter]
@@ -25,9 +22,9 @@
 
 <CipherLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem" dir="rtl">
-            <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
-            <CipherSiteHeader Header_Width="500px" />
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem" dir="rtl" Style="width:100%">
+            <RadzenSidebarToggle Style="font-size:large; width:5%" Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+            <CipherSiteHeader Header_Width="95%" />
         </RadzenStack>
     </RadzenHeader>
     <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
@@ -46,12 +43,9 @@
                 </RadzenPanelMenuItem>
             }
 
-            <CipherText TextStyle="@DescriptionStyle" Text="@Description" Wrap="true" TextAlign="TextAlign.Center" 
-                Style="margin-top: 100px; border-top: 1px solid gray; padding-top: 10px;">
-            </CipherText>
-            <CipherText TextStyle="@DescriptionStyle" Text="@SubDescription" TextAlign="TextAlign.Center"
-                        Style="width: 100%; border-bottom: 1px solid gray; padding-bottom: 10px;">
-            </CipherText>
+            <RadzenStack Style="position:relative;" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+                <CipherFooter Padding=0 MaxWidth="80%" LogoHeight="5vh" BackgroundColor="@Colors.PrimaryLighter"></CipherFooter>
+            </RadzenStack>
 
         </RadzenPanelMenu>
     </RadzenSidebar>

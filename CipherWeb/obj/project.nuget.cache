@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rXvy47txpuhyjVvJijA3ZAw+wihmLaWfsowogFuCDPQwFHVqHAg2v5OomxvSWUH1EGwUujPgiuEZK6IwQ/m0SA==",
+  "dgSpecHash": "g57vI0orRJKsSuGMta2/ErL/OGyFRPffzbeIiayNSFS0ot42Qgx8RaMgrzMb0xI4/l3vzF9qRUiAUT1NU4xnxQ==",
   "success": true,
-  "projectFilePath": "F:\\Projects\\Version230624\\CipherWeb\\CipherWeb.csproj",
+  "projectFilePath": "F:\\Projects\\Version20240713\\CipherWeb\\CipherWeb.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\TEST\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\dartsassbuilder\\1.0.0\\dartsassbuilder.1.0.0.nupkg.sha512",

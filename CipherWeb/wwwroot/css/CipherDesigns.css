@@ -1,62 +1,151 @@
 :root {
     /* ------------------ PRIMARY (BROWN) ------------------ */
-    --rz-primary: #F68C24;
-    --rz-primary-light: #fcde97;
-    --rz-primary-lighter: #fdefcf;
+    --rz-primary: #F8AF12;
+    --rz-primary-light: #FAD075;
+    --rz-primary-lighter: #FEF2D8;
     --rz-primary-lightest: #FFFCF7;
-    --rz-primary-dark: #bf8406;
-    --rz-primary-darker: #7F5804;
+    --rz-primary-dark: #B27B06;
+    --rz-primary-darker: #775204;
     --rz-on-primary-lighter: #7F5804;
     /* ------------------ DANGER (RED) ------------------ */
-    --rz-danger: #EC5F21;
-    --rz-danger-light: #fbcca1;
-    --rz-danger-lighter: #fde5d0;
-    --rz-danger-dark: #be5f09;
-    --rz-danger-darker: #7f3f06;
+    --rz-danger: #bc2020;
+    --rz-danger-light: #dc3030;
+    --rz-on-danger-light: white;
+    --rz-danger-lighter: #f04040;
+    --rz-on-danger-lighter: white;
+    --rz-danger-dark: #a21010;
+    --rz-danger-darker: #880000;
     /* ------------------ SUCCESS (GREEN) ------------------ */
-    --rz-success: forestgreen;
-    /*--rz-success: #018840;*/
-    --rz-success-light: #d1e9b2;
-    --rz-success-lighter: #e8f4d9;
-    --rz-success-dark: #6a982c;
-    --rz-success-darker: #47651e;
+    --rz-success: #26cc00;
+    --rz-success-light: #7be382;
+    --rz-success-lighter: #d2f2d4;
+    --rz-on-success-lighter: white;
+    --rz-success-dark: #22b600;
+    --rz-success-darker: #009c1a;
     /* ------------------ SECONDARY (GRAY) ------------------ */
     --rz-secondary: #404041;
     --rz-secondary-light: #AEAEAE;
     --rz-secondary-lighter: #D9D9D9;
     --rz-secondary-dark: #303031;
     --rz-secondary-darker: #202020;
+    /* ------------------ WARNING (YELLOW) ------------------ */
+    --rz-warning: #FFFB12;
+    --rz-on-warning: black;
+    --rz-warning-light: #FFFD85;
+    --rz-on-warning-light: black;
+    --rz-warning-lighter: #FFFEAD;
+    --rz-on-warning-lighter: black;
+    --rz-warning-dark: #B8B500;
+    --rz-warning-darker: #8F8C00;
     /* ------------------ SERIES ------------------ */
     --rz-series-1: var(--rz-primary);
     --rz-series-2: var(--rz-success);
     --rz-series-3: var(--rz-danger);
     /* ------------------ CIPHER ------------------ */
     --cipher-header-background-color: var(--rz-primary-lightest);
-    --cipher-header-hover-background-color: var(--rz-primary-lighter);
+    --cipher-header-hover-background-color: var(--rz-primary-lightest);
     --cipher-header-color: var(--rz-primary-darker);
     /* ------------------ GENERAL ------------------ */
 
+    --rz-border-radius: 5px;
     --rz-body-font-size: 1rem;
     --rz-header-background-color: var(--cipher-header-background-color);
-    --cipher-border-radius: 10px;
-    --cipher-border-radius-half: 5px;
-    --rz-grid-foot-background-color: var(--rz-primary-lighter);
-    --rz-grid-header-cell-border: 0;
     --rz-scrollbar-color: var(--rz-primary-dark);
+    /*--rz-form-field-filled-height: 0;*/
 }
 
-    /* ------------------ BUTTON ------------------ */
+/* ------------------ DATA FILTER ------------------ */
 
-    : root {
+.rz-datafilter {
+    /*flex-direction: row-reverse;*/
+}
+
+    .rz-datafilter .rz-datafilter-item {
+        padding: var(--rz-datafilter-item-padding-y) calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation));
+        var(--rz-datafilter-item-padding-y) 0;
+    }
+
+        .rz-datafilter .rz-datafilter-item:after {
+            right: calc(var(--rz-datafilter-item-padding-left) / 2);
+            left: 0;
+            border-right: 2px solid var(--rz-primary-dark);
+            border-left: none;
+            border-bottom: 2px solid var(--rz-primary-dark);
+        }
+
+    .rz-datafilter .rz-datafilter-item:before {
+        right: calc(var(--rz-datafilter-item-padding-left) / 2);
+        left: 0;
+        border-right: 2px solid var(--rz-primary-dark);
+        border-left: none;
+    }
+.rz-datafilter .rz-selectbutton {
+    direction: ltr;
+}
+
+.rz-datafilter .rz-datafilter-bar .rz-splitbutton {
+    direction: ltr;
+}
+
+    .rz-datafilter .rz-datafilter-bar:after {
+         border-bottom-left-radius: 0; 
+    }
+
+.rz-splitbutton .rz-button.rz-splitbutton-menubutton {
+    background-color: var(--rz-primary-light);
+}
+
+.rz-splitbutton .rz-button:not(.rz-splitbutton-menubutton) {
+    background-color: var(--rz-primary-light);
+}
+
+.rz-datafilter .rz-datafilter-bar {
+    padding: 0 calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation)) 0 0;
+}
+
+.rz-splitbutton-menu {
+    border: none;
+}
+
+.rz-menuitem:hover{
+    color:var(--rz-primary);
+}
+
+/* ------------------ GRID ------------------ */
+
+:root {
+    --rz-grid-foot-background-color: var(--rz-primary-lighter);
+    --rz-grid-foot-background-color: var(--rz-primary-dark);
+    --rz-grid-header-cell-border: 0;
+    --rz-grid-header-filter-icon-hover-color: var(--rz-primary-dark);
+    --rz-grid-filter-color: var(--rz-primary-lighter);
+}
+
+.rz-grid-filter {
+    background-color: var(--rz-primary-lighter);
+}
+
+.rz-grid-filter .rz-grid-filter-label {
+    text-align: right;
+}
+
+.rz-grid-filter-buttons {
+    background-color: var(--rz-primary-lighter);
+}
+
+.rz-grid-filter .rz-dropdown, .rz-grid-filter .rz-spinner, .rz-grid-filter .rz-textbox, .rz-grid-filter .rz-grid-filter-label {
+    direction: rtl;
+}
+
+ /* ------------------ BUTTON ------------------ */
+
+:root {
     --rz-button-disabled-opacity: 1;
-}
-
-.rz-button {
-    border-radius: var(--cipher-border-radius-half);
 }
 
 .rz-button-text {
     padding-right: 5px;
+    text-wrap: nowrap;
 }
 
 .rz-button.rz-light.rz-variant-flat {
@@ -67,8 +156,14 @@
      opacity: 1; 
 }
 
-/* ------------------ SELECT BUTTON ------------------ */
+.rz-button.rz-light.rz-variant-flat {
+    background-color: var(--rz-primary-light);
+}
 
+.rz-state-disabled.rz-paginator-element, .rz-button.rz-state-disabled {
+    opacity: 1;
+}
+/* ------------------ SELECT BUTTON ------------------ */
 .rz-selectbutton .rz-button.rz-button-md:first-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -104,10 +199,20 @@
     border-left: 0.1px solid lightgray;
 }
 
+.rz-selectbutton .rz-button.rz-button-sm {
+    border: 1px solid var(--rz-primary);
+}
+
+    .rz-selectbutton .rz-button.rz-button-sm.rz-state-active {
+        background-color: var(--rz-primary);
+        color: var(--rz-selectbar-selected-color);
+        border: 1px solid var(--rz-primary);
+    }
+
 /* ------------------ CARD ------------------ */
 
 .rz-card {
-    border-radius: var(--cipher-border-radius);
+    border-radius: calc(2*var(--rz-border-radius));
     background-color: white;
 }
 
@@ -118,21 +223,14 @@
 /* ------------------ DATA GRID ------------------ */
 
 .rz-data-grid {
-    border-radius: var(--cipher-border-radius);
+    border-radius: calc(2*var(--rz-border-radius));
     border-width: 0;
 }
 
 /* ------------------ DATA TABLE ------------------ */
 
-:root {
-    --rz-grid-foot-background-color: var(--rz-primary-light);
-}
-
-.rz-datatable-tfoot td:not(:last-child), .rz-grid-table tfoot td:not(:last-child) {
-    border-right: 0;
-}
-
-    .rz-datatable-data td:not(:last-child), .rz-grid-table td:not(:last-child) {
+.rz-datatable-tfoot td:not(:last-child), .rz-grid-table tfoot td:not(:last-child),
+.rz-datatable-data td:not(:last-child), .rz-grid-table td:not(:last-child) {
     border-right: 0;
 }
 
@@ -141,34 +239,73 @@
     font-weight: bolder;
 }
 
-.rz-datatable-data td .rz-cell-data, .rz-grid-table td .rz-cell-data {
-    text-align: center;
+.rz-datatable-data td:last-child:not(.rz-composite-cell) .rz-cell-data, 
+.rz-grid-table td .rz-cell-data {
+    text-align: right;
 }
 
-
-.rz-datatable-thead th > div:not(.rz-cell-filter), .rz-grid-table thead th > div:not(.rz-cell-filter) {
-    background-color: var(--rz-series-5);
-}
-
-.rz-datatable-thead th .rz-column-title, .rz-grid-table thead th .rz-column-title {
-    padding: 0;
-    text-align: center;
-    justify-content: center;
-    color: var(--rz-primary-darker);
-    font-size: medium;
+.rz-grid-table td .rz-cell-data {
+    text-wrap: balance;
 }
 
 .rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(even) > td {
     background-color: var(--rz-primary-lightest);
 }
 
-    .rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(even) > td .rz-cell-data {
-        /*color: var(--rz-primary);*/
-    }
+.rz-datatable .rzi-chevron-circle-right, .rz-datatable .rzi-chevron-circle-down {
+    vertical-align: middle;
+    color: var(--rz-primary-darker);
+}
 
-/* ------------------ GROUP HEADER ------------------ */
+.rz-datatable .rzi-chevron-circle-right:hover, .rz-datatable .rzi-chevron-circle-down:hover {
+    color: var(--rz-primary);
+    cursor: pointer;
+}
 
-.rz-group-header {
+.rz-datatable .rzi-chevron-circle-right:before {
+    content: "arrow_circle_down";
+}
+
+.rz-datatable .rzi-chevron-circle-down:before {
+    content: "arrow_circle_up";
+}
+
+.rz-datatable .rz-col-icon{
+    background-color: var(--rz-primary-light);
+    width:30px;
+}
+
+.rz-datatable-tfoot td:not(:last-child), .rz-grid-table tfoot td:not(:last-child) {
+    background-color: var(--rz-primary-dark);
+}
+
+
+.rz-datatable-thead th > div:not(.rz-cell-filter),
+.rz-grid-table thead th > div:not(.rz-cell-filter) {
+    background-color: var(--rz-series-5);
+}
+
+.rz-grid-table thead th {
+    background-color: var(--rz-primary-light);
+}
+
+.rz-datatable-thead th .rz-column-title, 
+.rz-grid-table thead th .rz-column-title {
+    padding: 0;
+    text-align: right;
+    justify-content: right;
+    color: var(--rz-primary-darker);
+    font-size: medium;
+    display: block;
+    padding-right:0.5rem;
+}
+
+.rz-datatable-thead th .rz-column-title-content, 
+.rz-grid-table thead th .rz-column-title-content {
+    text-wrap: wrap;
+}
+    /* ------------------ GROUP HEADER ------------------ */
+    .rz-group-header {
     background-color: var(--rz-series-5);
 }
 
@@ -184,7 +321,7 @@
 /* ------------------ CELL FILTER ------------------ */
 
 .rz-cell-filter {
-    background-color: var(--rz-primary-lighter)
+    background-color: var(--rz-primary-lighter);
 }
 
 /* ------------------ COLUMN ------------------ */
@@ -212,7 +349,6 @@
 .rz-text-h5 {
     line-height: normal;
     margin-bottom: 0px;
-    /* justify-content: center; */
 }
 
 .rz-text-body2 {
@@ -275,19 +411,23 @@
 }
 
 
-.rz-accordion-toggle-icon.rzi-chevron-right:hover {
+.rz-accordion-toggle-icon.rzi-chevron-right:hover, .rz-accordion-toggle-icon.rzi-chevron-down:hover {
     color: var(--rz-primary)
 }
 
-.rz-accordion-toggle-icon.rzi-chevron-down:hover {
-    color: var(--rz-primary)
+.rz-accordion-content {
+    display:flex
 }
 
-:root {
+: root {
     --rz-accordion-item-background-color: var(--rz-primary-lightest);
 }
 
 /* ------------------ TABVIEW ------------------ */
+
+:root {
+    --rz-tabs-tab-hover-color: var(--rz-primary-lightest);
+}
 
 .rz-tabview-nav li {
     border: 0px;
@@ -329,6 +469,10 @@
     background-color: transparent;
 }
 
+.rz-tabview-top > .rz-tabview-panels {
+    border-radius: calc(2*var(--rz-border-radius)) 0 calc(2*var(--rz-border-radius)) calc(2*var(--rz-border-radius));
+}
+
 /* ------------------ DIALOG ------------------ */
 .rz-dialog-content {
     direction: rtl;
@@ -336,7 +480,7 @@
 
 .rz-dialog-titlebar {
     direction: rtl;
-    background-color: var(--rz-primary-dark);
+    background-color: var(--rz-primary);
 }
 
 .rz-dialog-titlebar-close {
@@ -366,6 +510,42 @@
     background-color: var(--cipher-header-hover-background-color);
 }
 
+.rz-panel-menu a.rz-navigation-item-link {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: var(--rz-primary-darker);
+}
+
+    .rz-panel-menu a.rz-navigation-item-link:after {
+        content: " ";
+        width: 0%;
+        height: 100%;
+        background: var(--rz-primary-light);
+        position: absolute;
+        transition: all 0.4s ease-in-out;
+        right: 0;
+        color: var(--rz-primary-darker);
+    }
+
+    .rz-panel-menu a.rz-navigation-item-link:hover::after {
+        right: auto;
+        right: 0;
+        width: 100%;
+    }
+
+    .rz-panel-menu a.rz-navigation-item-link span {
+        color: var(--rz-primary-darker);
+        z-index: 20;
+    }
+
+.rz-panel-menu .rz-navigation-item-icon
+{
+    z-index:30;
+}
+
 :root {
     --rz-panel-menu-padding: 0px;
     --rz-panel-menu-font-size: 20;
@@ -378,14 +558,30 @@
     --rz-panel-menu-item-padding: 10px;
     --rz-panel-menu-item-border: hidden;
     --rz-panel-menu-item-background-color: var(--cipher-header-background-color);
-    --rz-panel-menu-item-active-background-color: var(--cipher-header-hover-background-color);
+    --rz-panel-menu-item-active-background-color: var(--rz-primary-lighter);
     --rz-panel-menu-item-active-indicator: var(--cipher-header-hover-background-color);
     --rz-panel-menu-item-2nd-level-color: var(--cipher-header-color);
     --rz-panel-menu-item-2rd-level-background-color: var(--cipher-header-background-color);
     --rz-panel-menu-item-2nd-level-font-size: 0.9rem;
 }
 
+.rz-menuitem, .rz-autocomplete-list-item, .rz-multiselect-item,
+.rz-autocomplete-items li, .rz-dropdown-items li, .rz-multiselect-items li, .rz-dropdown-item {
+    text-align: right;
+    cursor: pointer;
+}
 
+/* ------------------ MENU ------------------ */
+
+.rz-menuitem .rz-menuitem-link {
+    direction: rtl;
+}
+
+.rz-menu-list {
+    background-color: var(--rz-primary-lighter);
+    border: 1px solid var(--rz-primary-light);
+    border-radius: var(--rz-border-radius);
+}
 /* ------------------ SIDEBAR ------------------ */
 
 :root {
@@ -400,6 +596,13 @@
     --rz-sidebar-border-right: hidden;
 }
 
+.rz-sidebar-toggle .rzi {
+    font-size: 2rem;
+}
+
+.rz-sidebar-toggle .rzi:hover {
+   color: var(--rz-primary);
+}
 /* ------------------ SCHEDULER ------------------ */
 
 :root {
@@ -407,6 +610,7 @@
     --rz-scheduler-toolbar-title-color: var(--cipher-header-color);
     --rz-scheduler-header-background-color: var(--rz-primary-lightest);
     --rz-scheduler-header-color: var(--rz-primary-dark);
+    --rz-scheduler-header-font-size: 0.9rem;
     --rz-scheduler-view-button-color: var(--rz-primary-darker);
     --rz-scheduler-view-button-border: hidden;
     --rz-scheduler-view-selected-background-color: var(--rz-primary-light);
@@ -421,7 +625,7 @@
 }
 
 .rz-scheduler {
-    border-radius: 10px;
+    border-radius: calc(2*var(--rz-border-radius));
     border-width: 0;
 }
 
@@ -429,17 +633,9 @@
     font-weight: 700;
 }
 
-    .rz-scheduler-nav-prev-next .rz-button.rz-today:hover {
+    .rz-scheduler-nav-prev-next :hover {
         color: var(--cipher-scheduler-hover-color)
     }
-
-.rz-scheduler-nav-prev-next .rz-button.rz-next:hover {
-    color: var(--cipher-scheduler-hover-color)
-}
-
-.rz-scheduler-nav-prev-next .rz-button.rz-prev:hover {
-    color: var(--cipher-scheduler-hover-color)
-}
 
 .rz-planner-view .rz-view-header .rz-slot-header {
     visibility: hidden;
@@ -449,6 +645,17 @@
     color: var(--cipher-scheduler-hover-color)
 }
 
+.rz-view {
+    direction: rtl;
+}
+
+.rz-day-view .rz-view-header {
+    padding-right: 0px;
+}
+
+.rz-view-header .rz-slot-header {
+    font-weight: 600;
+}
 /* ------------------ LAYOUT ------------------ */
 
 :root {
@@ -481,6 +688,12 @@
     --rz-steps-button-color: var(--rz-primary-dark);
 }
 
+.rz-steps ul 
+{
+    display: flex;
+    justify-content: space-between;
+}
+
 .rz-steps-number {
     background-color: var(--rz-primary-lightest);
 }
@@ -489,6 +702,16 @@
     font-size: var(--rz-icon-size);
     /*flip the direction of the icon*/
     transform: rotate(180deg);
+}
+
+.rz-steps .rz-state-highlight .rz-steps-title {
+    color: var(--rz-primary-dark);
+    font-weight: 700;
+}
+
+.rz-steps .rz-state-highlight .rz-steps-number {
+    background: var(--rz-primary-dark);
+    color: white;
 }
 
 /* ------------------ DROPDOWN ------------------ */
@@ -512,6 +735,14 @@ rz-multiselect-trigger, .rz-dropdown-trigger {
     margin: 0;
 }
 
+.rz-multiselect-label-container, .rz-dropdown-label {
+    text-align: right;
+}
+
+.rz-dropdown-items-wrapper, .rz-multiselect-items-wrapper {
+    direction: rtl;
+}
+
 /* ------------------ LOOKUP ------------------ */
 .rz-lookup-search {
     display: flex;
@@ -533,5 +764,164 @@ rz-multiselect-trigger, .rz-dropdown-trigger {
 
 /* ------------------ NUMERIC ------------------ */
 .rz-spinner input[type=number], .rz-spinner input[type=text] {
-    text-align: center;
+    text-align: right;
+}
+
+.rz-autocomplete {
+    background-color: white;
+    border: 1px solid var(--rz-secondary-light);
+}
+
+    .rz-autocomplete:focus-within:not(.rz-state-disabled) {
+        box-shadow: none;
+        border: 1px solid var(--rz-primary-dark);
+        outline: var(--rz-input-focus-outline);
+        outline-offset: var(--rz-input-focus-outline-offset);
+    }
+/* ------------------ LEGEND ------------------ */
+
+.rz-legend-items {
+    padding: 10px;
+    margin: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 100%;
+    background-color: white;
+    border-radius: calc(2*var(--rz-border-radius));
+    border: 1px solid var(--rz-primary-darker);
+}
+
+/* ------------------ FORM FIELD ------------------ */
+
+/*.rz-form-field-content, .rz-colorpicker, .rz-lookup-search input, .rz-spinner, .rz-calendar .rz-inputtext, .rz-multiselect, .rz-dropdown, .mask, .rz-textarea, .rz-textbox {*/
+     /*border: none;*/ 
+/*}*/
+
+.rz-form-field-content > *, .rz-form-field-content > .rz-autocomplete, .rz-form-field-content input, .rz-form-field-content .rz-inputtext {
+    background-color: white;
+    border-radius: var(--rz-border-radius);
+}
+/*.rz-form-field.rz-variant-text .rz-form-field-content {
+    --rz-input-padding: 3rem 1rem;
+}*/
+
+.rz-form-field:not(.rz-floating-label) .rz-form-field-label, .rz-textbox:focus ~ .rz-form-field-label, .rz-textarea:focus ~ .rz-form-field-label, .rz-spinner:focus-within ~ .rz-form-field-label, .rz-autocomplete:focus-within ~ .rz-form-field-label, .rz-textbox:not(:placeholder-shown) ~ .rz-form-field-label, :not(.rz-state-empty) ~ .rz-form-field-label, .rz-variant-filled .rz-textarea:focus ~ .rz-form-field-label, .rz-variant-flat .rz-textarea:focus ~ .rz-form-field-label, .rz-variant-filled :not(.rz-state-empty) ~ .rz-form-field-label, .rz-variant-flat :not(.rz-state-empty) ~ .rz-form-field-label, .rz-radio-button-list-vertical ~ .rz-form-field-label, .rz-radio-button-list-horizontal ~ .rz-form-field-label, .rz-checkbox-list-vertical ~ .rz-form-field-label, .rz-checkbox-list-horizontal ~ .rz-form-field-label, .rz-chkbox ~ .rz-form-field-label, .rz-state-empty:has(.rz-placeholder) ~ .rz-form-field-label {
+    direction: rtl;
+    right: 2px;  /*label position*/
+    background-size: auto;
+    width: auto;
+    max-width: 10rem;
+    /*background-color: transparent;*/
+    font-size:14px;
+}
+
+.rz-form-field:hover .rz-form-field-content {
+    box-shadow: none;
+}
+
+.rz-form-field.rz-variant-flat:not(.rz-state-disabled).rz-state-focused .rz-form-field-content {
+    border: var(--rz-input-focus-border);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+/*/*rz-form-field.rz-variant-filled .rz-form-field-content .rz-form-field-start, .rz-form-field.rz-variant-filled .rz-form-field-content .rz-form-field-end, .rz-form-field.rz-variant-flat .rz-form-field-content .rz-form-field-start, .rz-form-field.rz-variant-flat .rz-form-field-content .rz-form-field-end {
+    padding-top: 0rem;
+}
+
+.rz-form-field.rz-variant-outlined .rz-form-field-start, .rz-form-field.rz-variant-filled .rz-form-field-start, .rz-form-field.rz-variant-flat .rz-form-field-start {
+    padding-right: 0.5rem;*/ /*start-padding*/
+/*}
+
+.rz-form-field-start {
+    background-color: var(--rz-primary-dark);
+    height:5rem;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+.rz-form-field-content > *, .rz-form-field-content > .rz-autocomplete, .rz-form-field-content input, .rz-form-field-content .rz-inputtext {*/
+    /*padding-right: 0.4rem;*/
+    /*height:100%;*/
+/*}*/
+
+/*.rz-form-field:not(.rz-variant-outlined):not(.rz-floating-label) .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) *:focus ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) *:focus-within ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) :not(.rz-state-empty) ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-radio-button-list-vertical ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-radio-button-list-horizontal ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-checkbox-list-vertical ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-checkbox-list-horizontal ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-chkbox ~ .rz-form-field-label, .rz-form-field:not(.rz-variant-outlined) .rz-state-empty:has(.rz-placeholder) ~ .rz-form-field-label {*/
+    /*background-color: transparent;*/
+/*}*/
+
+.rz-form-field-label {
+    color: var(--rz-secondary-light);
+    transform: translate(5%, -50%);
+}
+
+.rz-form-field.rz-variant-filled .rz-form-field-content, .rz-form-field.rz-variant-flat .rz-form-field-content {
+    border-radius: var(--rz-border-radius)
+}
+
+
+.rz-form-field.rz-variant-outlined .rz-form-field-start, .rz-form-field.rz-variant-filled .rz-form-field-start, .rz-form-field.rz-variant-flat .rz-form-field-start {
+    padding-right: 10px;
+}
+
+/* ------------------ CALANDER / DATEPICKER ------------------ */
+.rz-calendar .rz-inputtext {
+    padding-right: 0.7rem;
+}
+
+.rz-datepicker-trigger {
+    right: auto;
+    left: 0.625rem;
+}
+
+    .rz-datepicker-trigger .rzi-calendar:before {
+        content: "edit_calendar";
+        color: var(--rz-primary-dark);
+        padding: 2px;
+        border: 1px solid var(--rz-primary-dark);
+        border-radius: calc(2*var(--rz-border-radius));
+    }
+
+    .rz-datepicker-trigger .rzi-time:before {
+        content: "update";
+        color: var(--rz-primary-dark);
+        padding: 2px;
+        border: 1px solid var(--rz-primary-dark);
+        border-radius: calc(2*var(--rz-border-radius));
+    }
+
+    .rz-datepicker-header {
+        background-color: var(--rz-primary-light);
+    }
+
+.rz-datepicker-calendar th
+{
+    background-color: var(--rz-primary-lighter);
+    color: var(--rz-primary-darker);
+    font-size:medium;
+}
+
+.rz-datepicker-title {
+    direction: rtl;
+}
+/* ------------------ LOOKUP PANEL ------------------ */
+.rz-lookup-panel {
+    border-radius: calc(2*var(--rz-border-radius));
+}
+
+/* ------------------ VALIDATION ------------------ */
+.rz-messages-error {
+    display: flex;
+    font-size: small;
+    padding-right:0rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    /*outline: 1px solid var(--rz-success);*/
+    outline: none;
+    border-radius: var(--rz-border-radius);
+}
+
+.invalid {
+    /*outline: 1px solid var(--rz-danger);*/
+    outline: none;
+    border-radius: var(--rz-border-radius);
 }

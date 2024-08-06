@@ -1,4 +1,7 @@
-﻿@inherits RadzenSidebar
+﻿@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
 
 <RadzenLayout >
     @ChildContent

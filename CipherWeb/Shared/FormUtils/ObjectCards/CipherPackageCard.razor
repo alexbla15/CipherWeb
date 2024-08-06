@@ -1,10 +1,14 @@
-﻿@using Data
-
-@inherits CipherComponentCard
+﻿@inherits CipherComponentCard
 
 @code {
     [Parameter]
     public string RowWidth { get; set; } = "width: 400px";
+
+    [Parameter]
+    public string RowWidth2 { get; set; } = "400px";
+
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
 
     public class Analysis
     {
@@ -24,49 +28,39 @@
                 <RadzenRow>
                 <RadzenColumn>
                     @* -- PACKAGE ID -- *@
-                    <CipherFormRow Label="מספר סידורי" Icon="@Icons.Id" Style="position:fixed">
-                        <RadzenAutoComplete Placeholder="מספר סידורי" Style="@RowWidth" />
-                    </CipherFormRow>
+                    <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Id" Width="@RowWidth2" Disabled="@ReadOnly" />
 
                         @* -- VESSEL -- *@
-                        <CipherFormRow Label="כלי" Icon="@Icons.Vessel" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="כלי" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="כלי" Icon="@Icons.Vessel" Width="@RowWidth2" Disabled="@ReadOnly" />
 
                         @* -- PACKAGE BRUT MASS -- *@
                         <CipherFormRow Label="מסה ברוטו" Icon="@Icons.Mass" Style="position:fixed">
-                            <RadzenNumeric TValue="decimal" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                            <RadzenNumeric TValue="decimal" Style="@($"{Constants.textStyle}; {RowWidth}")" Disabled="@ReadOnly" />
                         </CipherFormRow>
 
                         @* -- PACKAGE DESCRIPTION -- *@
-                        <CipherFormRow Label="תיאור" Icon="@Icons.Description" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="תיאור" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="תיאור" Icon="@Icons.Description" Width="@RowWidth2" Disabled="@ReadOnly" />
 
                         @* -- OPEN DATE -- *@
-                        <CipherDatePicker Title="תאריך פתיחה" />
+                        <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth2" />
 
                 </RadzenColumn>
                 <RadzenColumn>
-                    @* -- PACKAGE TYPE -- *@
-                        <CipherFormRow Label="סוג תעודה" Icon="@Icons.Description" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="סוג תעודה" Style="@RowWidth" />
-                    </CipherFormRow>
+                        @* -- PACKAGE TYPE -- *@
+                        <CipherAutoComplete Label="סוג תעודה" Icon="@Icons.Description" Width="@RowWidth2" Disabled="@ReadOnly" />
 
                         @* -- LOCATION -- *@
-                        <CipherFormRow Label="מיקום" Icon="@Icons.Location" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="מיקום" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="מיקום" Icon="@Icons.Location" Width="@RowWidth2" Disabled="@ReadOnly" />
 
                         @* -- PACKAGE NET MASS -- *@
 
                         <CipherFormRow Label="מסה נטו" Icon="@Icons.Mass" Style="position:fixed">
-                            <RadzenNumeric TValue="decimal" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                            <RadzenNumeric TValue="decimal" Style="@($"{Constants.textStyle}; {RowWidth}")" Disabled="@ReadOnly" />
                         </CipherFormRow>
 
                         @* -- COMMENTS -- *@
                         <CipherFormRow Label="הערות" Icon="@Icons.Comment" Style="position:fixed">
-                            <RadzenTextArea Placeholder="הערות" Style="@($"{Constants.textStyle}; {RowWidth}")" />
+                            <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; {RowWidth}")" Disabled="@ReadOnly" />
                         </CipherFormRow>
                 </RadzenColumn>
                 </RadzenRow>

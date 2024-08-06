@@ -1,10 +1,4 @@
-﻿@inherits RadzenFieldset
-
-@using Data
-@using Radzen
-@using CipherData
-@using CipherData.Models
-@using CipherWeb.Shared.Components
+﻿@inherits CipherFormCard
 
 @code {
     [Parameter]
@@ -13,7 +7,20 @@
     CipherFormCard FormCard;
 }
 
-<CipherFormCard @ref=FormCard>
-    <RadzenTextArea Placeholder="הערות" Value=@comments
-                    Style="@($"width: {FormCard.Width}; max-width: {FormCard}; float: {FormCard.Float}")" />
-</CipherFormCard>
+<CipherFormCard @ref=FormCard Width="@Width" WithCard="@WithCard">
+
+<RadzenRow>
+    <RadzenColumn Size="1">
+            <RadzenIcon Icon="@Icons.Comment" IconColor="white" 
+            Style="background-color:var(--rz-primary-dark); width:100%; height:100%; border-top-right-radius: 10px; border-bottom-right-radius:10px;"></RadzenIcon>
+        
+    </RadzenColumn>
+        <RadzenColumn Size="11">
+        
+    <RadzenTextArea Placeholder="הערות" Value=@comments 
+                    Style="@($"height:{Height}; width: {FormCard.Width}; background-color: white; align-content: center; max-width: {FormCard.Width}; float: {FormCard.Float}")" />
+                    
+    </RadzenColumn>
+</RadzenRow>
+
+                    </CipherFormCard>

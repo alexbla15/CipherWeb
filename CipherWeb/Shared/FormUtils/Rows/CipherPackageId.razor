@@ -1,12 +1,4 @@
-﻿@using Data
-@using Radzen
-@using CipherData.Models
-@using CipherWeb.Shared.Components
-
-
-<CipherFormRow Icon="@Icon" Label="@LabelText">
-    <RadzenAutoComplete Placeholder="@LabelText" Style="@Constants.textStyle" @bind-Value=@PackId />
-</CipherFormRow>
+﻿<CipherAutoComplete Label="@LabelText" Icon="@Icon" Style="@Constants.textStyle" @bind-Value=@PackId />
 
 @code {
     [Parameter]

@@ -4,69 +4,134 @@ namespace CipherWeb.Data
 {
     public class Icons
     {
-        // GENERAL ACTIONS
-        public static string Account = "account_circle";
-        public static string Account_Old = "person_outline";
-        public static string Account_New = "person";
+        // ACCESSIBILITY
+        public const string Accessible = "accessible";
+        public const string AccessibleForward = "accessible_forward";
+        public const string AssistWalker = "assist_walker";
+        public const string Blind = "blind";
+        public const string Elderly = "elderly";
+        public const string ElderlyWoman = "elderly_woman";
+        public const string EventSeat = "event_seat";
+        public const string NotAccessible = "not_accessible";
 
-        public static string Add = "add_circle_outline";
-        public static string Bookmark = "star";
-        public static string Calendar = "calendar_today";
-        public static string Cancel = "cancel";
-        public static string Close = "close";
-        public static string Comment = "comment";
-        public static string Done = "done";
-        public static string Delete = "delete";
-        public static string Edit = "edit";
-        public static string Excel = "grid_on";
-        public static string Expand = "launch";
-        public static string Home = "home";
-        public static string Help = "question_mark";
-        public static string Idea = "lightbulb";
-        public static string Input = "input";
-        public static string Learn = "school";
-        public static string Output = "output";
-        public static string PDF = "picture_as_pdf";
-        public static string Refresh = "refresh";
-        public static string Save = "save";
-        public static string Search = "search";
-        public static string Settings = "settings";
-        public static string Summary = "leaderboard";
-        public static string Table = "table_view";
-        public static string QA = "question_answer";
+        // ARROWS
+        public const string DoubleArrow = "double_arrow";
+        public const string Download = "download";
+        public const string DownloadForOffline = "download_for_offline";
+        public const string Downloading = "downloading";
+        public const string FileDownloadOff = "file_download_off";
+        public const string FileUploadOff = "file_upload_off";
+        public const string Publish = "publish";
+        public const string Shuffle = "shuffle";
+        public const string ShuffleOn = "shuffle_on";
+        public const string Upgrade = "upgrade";
+        public const string Upload = "upload";
 
-        // TIME
-        public static string Date = "event";
-        public static string Day = "calendar_view_day";
-        public static string Month = "calendar_view_month";
-        public static string Year = "calendar_month";
-        public static string Time = "schedule";
+        public const string AccountCircle = "account_circle";
+        public const string AddCircleOutline = "add_circle_outline";
+        public const string Architecture = "architecture";
+        public const string Article = "article";
+        public const string Apartment = "apartment";
+        public const string Category = "category";
+        public const string Cancel = "cancel";
+        public const string CalanderMonth = "calendar_month";
+        public const string CalendarToday = "calendar_today";
+        public const string CalendarViewDay = "calendar_view_day";
+        public const string CalendarViewMonth = "calendar_view_month";
+        public const string Check = "check";
+        public const string Close = "close";
+        public const string Comment = "comment";
+        public const string Dangerous = "dangerous";
+        public const string DeleteSweep = "delete_sweep";
+        public const string Description = "description";
+        public const string Done = "done";
+        public const string DoneAll = "done_all";
+        public const string Delete = "delete";
+        public const string DeviceHub = "device_hub";
+        public const string Domain = "domain";
+        public const string Edit = "edit";
+        public const string Event = "event";
+        public const string Flag = "flag";
+        public const string GridOn = "grid_on";
+        public const string GroupWork = "group_work";
+        public const string Groups = "groups";
+        public const string Home = "home";
+        public const string Info = "info";
+        public const string Interests = "interests";
+        public const string Input = "input";
+        public const string School = "school";
+        public const string Launch = "launch";
+        public const string Leaderboard = "leaderboard";
+        public const string Lightbulb = "lightbulb";
+        public const string LinearScale = "linear_scale";
+        public const string LocalCafe = "local_cafe";
+        public const string MultipleStop = "multiple_stop";
+        public const string MyLocation = "my_location";
+        public const string OtherHouses = "other_houses";
+        public const string Output = "output";
+        public const string Passwork = "password";
+        public const string PDF = "picture_as_pdf";
+        public const string Pending = "pending";
+        public const string Person = "person";
+        public const string PersonOutline = "person_outline";
+        public const string PregnantWoman = "pregnant_woman";
+        public const string QA = "question_answer";
+        public const string QuestionMark = "question_mark";
+        public const string Refresh = "refresh";
+        public const string Save = "save";
+        public const string Scale = "scale";
+        public const string Science = "science";
+        public const string Schedule = "schedule";
+        public const string Search = "search";
+        public const string Settings = "settings";
+        public const string Star = "star";
+        public const string StickyNote2 = "sticky_note_2";
+        public const string TableView = "table_view";
+        public const string Timeline = "timeline";
+        public const string Warning = "warning";
+        public const string Window = "window";
+        public const string Wysiwyg = "wysiwyg";
 
-        // CIPHER PROPERTIES
-        public static string Category = "category";
-        public static string Description = "description";
-        public static string Id = "info";
+        // CIPHER DEFINITIONS
 
-        // LOCATIONS
-        public static string Building = "apartment";
-        public static string Department = "other_houses";
-        public static string Unit = "groups";
-        public static string Location = "domain";
-        public static string Location_Initial = "my_location";
-        public static string Location_Final = "flag";
-
-        public static string Mask = "password";
-        public static string Material = "science";
-        public static string Mass = "scale";
-            
-        // PACKAGE
-        public static string Package_Combine = "group_work";
-        public static string Package = "sticky_note_2";
-
-        public static string Process = "timeline";
-        public static string Properties = "window";
-        public static string Restriction = "dangerous";
-        public static string Type = "interests";
-        public static string Vessel = "local_cafe";
+        public static string Account = AccountCircle;
+        public static string Account_New = Person;
+        public static string Account_Old = PersonOutline;
+        public static string Add = AddCircleOutline;
+        public static string Advanced = Wysiwyg;
+        public static string Analysis = Architecture;
+        public static string Calendar = CalendarToday;
+        public static string Department = OtherHouses;
+        public static string Date = Event;
+        public static string Day = CalendarViewDay;
+        public static string Document = Article;
+        public static string Excel = GridOn;
+        public static string Expand = Launch;
+        public static string Help = QuestionMark;
+        public static string Id = Info;
+        public static string Idea = Lightbulb;
+        public static string Learn = School;
+        public static string Line = LinearScale;
+        public static string Location = Domain;
+        public static string Location_Initial = MyLocation;
+        public static string Location_Final = Flag;
+        public static string Mask = Passwork;
+        public static string Mass = Scale;
+        public static string Material = Science;
+        public static string Month = CalendarViewMonth;
+        public static string Package = StickyNote2;
+        public static string PackageCombine = GroupWork;
+        public static string Process = Timeline;
+        public static string Properties = Window;
+        public static string Status = Pending;
+        public static string Restriction = Dangerous;
+        public static string Summary = Leaderboard;
+        public static string Table = TableView;
+        public static string Time = Schedule;
+        public static string Transfer = MultipleStop;
+        public static string Type = Interests;
+        public static string Unit = Groups;
+        public static string Vessel = LocalCafe;
+        public static string Year = CalanderMonth;
     }
 }

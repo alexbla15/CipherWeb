@@ -1,12 +1,7 @@
-﻿@using Data
-@using Radzen
-@using CipherData.Models
-@using CipherWeb.Shared.Components
-
-@inject ICipherInfo _db
+﻿@inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icon" Label="@LabelText">
-    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Id" Placeholder="בחירת מיקום" SearchTextPlaceholder="חיפוש..."
+    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="בחירת מיקום" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
         <Columns>
             <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="50px" />
@@ -17,7 +12,7 @@
 
 @code {
     [Parameter]
-    public string sys { get; set; }
+    public string? sys { get; set; }
 
     [Parameter]
     public string LabelText { get; set; }
@@ -37,7 +32,7 @@
         }
         if (Icon is null)
         {
-            Icon = "room";
+            Icon = Icons.Location;
         }
     }
 }

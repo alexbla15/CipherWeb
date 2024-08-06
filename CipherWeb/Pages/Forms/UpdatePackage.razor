@@ -1,13 +1,5 @@
 ﻿@page "/Forms/UpdatePackage"
 
-@using Data
-@using CipherData
-@using CipherData.Models
-@using CipherWeb.Shared.Components
-@using CipherWeb.Shared.FormUtils
-
-@using Radzen
-
 @inject ICipherInfo _db
 
 <PageTitle>עדכון תעודה</PageTitle>
@@ -21,6 +13,7 @@
     <RadzenStepsItem Text="פרטי התעודה">
         <CipherStepDescription Text="חפשו את התעודה הרלוונטית, ועדכנו את הפרטים שלה בהתאם לצורך" TextAlign="TextAlign.Right" />
         <CipherSearchRow />
+        <br/>
         <CipherPackageInfo pack="new Package()" />
     </RadzenStepsItem>
 

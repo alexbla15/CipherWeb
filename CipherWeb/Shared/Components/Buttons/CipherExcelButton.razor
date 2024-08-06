@@ -1,18 +1,12 @@
 ﻿@inherits RadzenButton
 
-@using Data
-@using Radzen
-@using CipherData
-@using CipherData.Models
-@using CipherWeb.Shared.Components.Buttons
-
 @using System.Text
 @using System.Collections
 
 @inject ExcelService excelService
 @inject IJSRuntime JSRuntime
 
-<CipherButton HelpText="ייצוא ל-EXCEL" Icon="@Icons.Excel" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default"
+<CipherButton HelpText="ייצוא ל-EXCEL" Icon="@Icons.Excel" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
               Click="@(args => ExportToCSV())" class="mb-4 me-2" Variant="Variant.Outlined"/>
 
 @code 
@@ -20,12 +14,16 @@
     [Parameter]
     public string FileName { get; set; }
 
-
     [Parameter]
     public IEnumerable<object> Data { get; set; }
 
     private async Task ExportToCSV()
     {
+        if (Data == null || !Data.Any())
+        {
+            return; // Exit if there's no data
+        }
+
         var csvData = GenerateCSV(Data);
         var fileName = $"{FileName}.csv"; // Change the file extension to .csv
         var mimeType = "text/csv"; // Specify UTF-8 charset
@@ -70,7 +68,7 @@
                 // Write data rows
                 foreach (var item in data)
                 {
-                    var values = properties.Select(p => Convert.ToString(p.GetValue(item)));
+                    var values = properties.Select(p => Convert.ToString(p.GetValue(item)).Replace(",", ";"));
                     writer.WriteLine(string.Join(",", values));
                 }
             }

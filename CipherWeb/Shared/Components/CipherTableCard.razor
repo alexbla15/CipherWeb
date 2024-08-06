@@ -1,12 +1,9 @@
-﻿@using Radzen
-@using CipherData.Models
-@using CipherWeb.Data
-@using CipherWeb.Shared.Components
-@using CipherWeb.Shared.Components.Buttons
-
-@inherits CipherComponentCard
+﻿@inherits CipherComponentCard
 
 <CipherComponentCard MaxWidth="@MaxWidth" Width="@Width" Title="@Title" WithCard="@WithCard" WithButtons="@WithButtons" Height="@Height">
+    <HeaderContent>
+        @HeaderContent
+    </HeaderContent>
     <Buttons>
         @if(ExcelExport)
         {

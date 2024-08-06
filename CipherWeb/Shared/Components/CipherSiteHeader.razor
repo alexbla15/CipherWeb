@@ -4,47 +4,45 @@
 @inject DialogService DialogService
 @inject NavigationManager NavigationManager
 
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
+AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
     @* -- LOGO BLOCK --*@
-    <RadzenColumn Size="1" Offset="0">
-        <RadzenLink Path="" Text="מסך הבית">
+    <RadzenLink Path="" Text="מסך הבית" Style="@($"width:{Logo_Width}")">
         <CipherLogo />
-        </RadzenLink>
-    </RadzenColumn>
+    </RadzenLink>
 
-        @* -- SEARCH BLOCK --*@
-        <RadzenColumn Size="4" Offset="1">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" >
-                <RadzenTextBox Placeholder="חיפוש תעודה / מיקום / סוג / ..." Style="width: 400px; " />
-                <CipherNavButton Icon="@Icons.Search" Path="/Search/Id"/>
-            </RadzenStack>
-        </RadzenColumn>
+    @* -- SEARCH BLOCK --*@
+    @*<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+    <CipherAutoComplete Label="חיפוש תעודה / מיקום / סוג / ..."
+                        Style="@($"width:{Search_Width}; justify-content:center")" Data="@Constants.packages" TextProperty="SerialNumber" Required="false" />
+    <CipherNavButton Icon="@Icons.Search" Path="/Search/FreeSearch"/>
+    </RadzenStack>
+*@
+    <CipherSearchRow Width="@Search_Width"></CipherSearchRow>
 
-        @* -- ACCOUNT DETAILS -- *@
-        <RadzenColumn Size="2">
-            <RadzenCard Variant="Variant.Text" Style="@AccountStyle()">
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                    <RadzenLink Path="Personal" Text="אזור אישי">
-                        <CipherAccountImage />
-                    </RadzenLink>
-                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
-                        <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6"/>
-                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
-                            <CipherButton Icon="@Icons.Account" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
-                                          Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined" 
-                                          Width="100%" MaxWidth="180px" ButtonTextAlign="right"/>
+    @* -- ACCOUNT BLOCK --*@
+    <RadzenCard Variant="Variant.Text" Style="@($"{AccountStyle()}; width:{Account_Width};")">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+            <RadzenLink Path="Personal" Text="אזור אישי">
+                <CipherAccountImage />
+            </RadzenLink>
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
+                <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6"/>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
+                    <CipherButton Icon="@Icons.Account" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
+                                    Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
+                                  Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
 
-                            @* -- FAST ACTIONS -- *@
-                            <CipherNavButton Icon="@Icons.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                          Path="/Settings" />
+                    @* -- FAST ACTIONS -- *@
+                    <CipherNavButton Icon="@Icons.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
+                                    Path="/Settings" HelpTextPosition="TooltipPosition.Bottom"/>
                     <CipherNavButton Icon="@Icons.Help" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                                    Path="/Information" />
-                        </RadzenStack>
-                    </RadzenStack>
+                                     Path="/Information" HelpTextPosition="TooltipPosition.Bottom" />
                 </RadzenStack>
-            </RadzenCard>
-        </RadzenColumn>
-
-
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+</RadzenStack>
 @code {
     // HEADER PROPERTIES
 
@@ -63,13 +61,26 @@
     [Parameter]
     public string Header_Top { get; set; } = "0";
 
+    // LOGO PROPERTIES
+    
+    [Parameter]
+    public string Logo_Width { get; set; } = "25%";
+
     // ACCOUNT PROPERTIES
 
     [Parameter]
-    public string Account_Padding { get; set; } = "2% 0";
+    public string Account_Width { get; set; } = "40%";
+
+    [Parameter]
+    public string Account_Padding { get; set; } = "0";
 
     [Parameter]
     public int ZIndex { get; set; } = 100;
+
+    // SEARCH ID
+
+    [Parameter]
+    public string Search_Width { get; set; } = "30%";
 
     public string NewRole;
 
@@ -78,22 +89,18 @@
         var result = await DialogService.OpenAsync("", ds =>
         @<RadzenStack Gap="1rem" Style="text-align:right" dir="rtl" AlignItems="AlignItems.Center">
                 <CipherFormRow Label="תצוגה נוכחית" Icon="@Icons.Account_Old" Style="width: 200px; text-align:right">
-                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Gap="0.2rem">
-                <RadzenTextBox Value="@Roles.CurrnetRole" Style="width: 200px" ReadOnly="true" />
-                    </RadzenStack>
+                        <RadzenTextBox Value="@Roles.CurrnetRole" Style="width: 200px" ReadOnly="true" />
                 </CipherFormRow>
 
         <CipherFormRow Label="תצוגה חדשה" Icon="@Icons.Account_New" Style="width: 200px; text-align:right">
-                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Gap="0.2rem">
-                <RadzenAutoComplete Placeholder="תצוגה חדשה" Style="width: 200px" Data="@Roles.Get()" @bind-Value=@NewRole />
-                    </RadzenStack>
+                        <RadzenAutoComplete Placeholder="תצוגה חדשה" Style="width: 200px" Data="@Roles.Get()" @bind-Value=@NewRole />
                 </CipherFormRow>
             <br/>
             <br/>
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenStack Orientation="Orientation.Horizontal">
-                <CipherButton Icon="@Icons.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" Width="100px" />
-                <CipherButton Icon="@Icons.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" Width="100px" />
+                <CipherButton Icon="@Icons.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
+                <CipherButton Icon="@Icons.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
                 </RadzenStack>
             </RadzenStack>
         </RadzenStack>
@@ -104,20 +111,6 @@
     {
         Roles.CurrnetRole = NewRole;
         return true;
-    }
-
-    public string HeaderStyle()
-    {
-        return $@"
-                background-color: var(--cipher-header-background-color); 
-                padding: {Header_Padding}; 
-                text-align: {Header_AlignText};
-                width: {Header_Width};
-                position: {Header_Position};
-                top: {Header_Top};
-                z-index: {ZIndex};
-                height: 13%
-                ";
     }
 
     public string AccountStyle()

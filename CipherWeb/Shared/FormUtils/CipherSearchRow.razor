@@ -1,11 +1,4 @@
-﻿@using Data
-@using CipherData
-@using CipherData.Models
-@using CipherWeb.Data
-@using CipherWeb.Shared.Components.Buttons
-
-@using Radzen
-
+﻿@inject NavigationManager navigationManager
 
 @code {
     [Parameter]
@@ -17,18 +10,25 @@
     [Parameter]
     public bool Disabled { get; set; }
 
-    public static bool FoundData;
+    [Parameter]
+    public string Width { get; set; } = "300px";
 
     protected override async Task OnInitializedAsync()
     {
         LabelText = (LabelText is null)? "חיפוש תעודה" : LabelText;
         PlaceHolderText = (PlaceHolderText is null) ? "מספר תעודה" : PlaceHolderText;
     }
+
+    private void SearchFunc(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            navigationManager.NavigateTo("/Search/FreeSearch");
+        }
+    }
 }
 
-<CipherFormRow Label="@LabelText" Icon="@Icons.Search">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.2rem">
-        <RadzenTextBox Placeholder=@PlaceHolderText Style=@Constants.textStyle />
-        <CipherSearchButton />
-    </RadzenStack>
+<CipherFormRow Icon="@Icons.Search" Width="@Width" HeaderMaxWidth="" HeaderWidth="">
+    <RadzenAutoComplete Placeholder="@PlaceHolderText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:100%")" onkeydown="@SearchFunc"
+                        Data="@Constants.packages" TextProperty="SerialNumber"></RadzenAutoComplete>
 </CipherFormRow>

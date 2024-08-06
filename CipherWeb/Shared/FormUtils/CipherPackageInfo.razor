@@ -1,13 +1,5 @@
 ﻿@inherits CipherFormCard
 
-@using Radzen
-
-@using Data
-@using CipherData.Models
-@using CipherWeb.Shared.FormUtils.Rows
-@using CipherWeb.Shared.Components
-@using CipherWeb.Data
-
 @inject ICipherInfo _db
 
 @code {
@@ -33,32 +25,33 @@
     <CipherPackageId />
 
     @* -- MATERIAL -- *@
-    <CipherFormRow Icon="@Icons.Material" Label="סוג החומר">
-        <RadzenAutoComplete @bind-Value="pack.Material" Placeholder="בחרו סוג" Data="@TestedData.MaterialTypes"
-                            Style="@Constants.textStyle"></RadzenAutoComplete>
-    </CipherFormRow>
+        <CipherAutoComplete Icon="@Icons.Material" @bind-Value="pack.Material" Label="בחרו סוג" Data="@TestedData.MaterialTypes"
+                            Style="width:100%"></CipherAutoComplete>
 
     @* -- SUB CATEGORY -- *@
-    <CipherFormRow Icon="@Icons.Category" Label="קטגוריה" >
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+    <RadzenIcon Icon="@Icons.Category" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
         <RadzenDropDownDataGrid @bind-Value=@pack.SubCategory Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
+                            Style="width:300px" 
                                 Data=@subCategories TextProperty="Name" ValueProperty="Name"
-                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
             <Columns>
                 <RadzenDropDownDataGridColumn Property="Name" Title="משנית" Width="@twiceColWidth" />
                 <RadzenDropDownDataGridColumn Property="MainCategory" Title="ראשית" Width="@twiceColWidth" />
                 <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@colWidth" />
             </Columns>
-        </RadzenDropDownDataGrid>
-    </CipherFormRow>
+            </RadzenDropDownDataGrid>
+    </RadzenStack>
 
     @* -- VESSEL -- *@
-    <CipherFormRow Icon="@Icons.Vessel" Label="כלי">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+            <RadzenIcon Icon="@Icons.Vessel" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
         <RadzenDropDownDataGrid @bind-Value=@pack.Vessel Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
-                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="width:300px">
             <Columns>
                 <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="@colWidth" />
                 <RadzenDropDownDataGridColumn Property="Id" Title="מספר" Width="@halfColWidth" />
             </Columns>
         </RadzenDropDownDataGrid>
-    </CipherFormRow>
+    </RadzenStack>
 </CipherFormCard>

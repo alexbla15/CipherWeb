@@ -1,0 +1,151 @@
+﻿@page "/Approval"
+
+@using System.Reflection
+
+@inject ICipherInfo _db
+@inject ExcelService excelService
+@inject IJSRuntime JSRuntime
+@inject DialogService DialogService
+
+@code {
+    TextStyle HeaderTextStyle = TextStyle.H5;
+}
+
+<PageTitle>אישור תנועות</PageTitle>
+
+<CipherDataFilter_WithDataGrid Title="סינון תנועות לאישור" Cipher_TItem="Event" WithCustomDataGrid=true>
+    <Buttons>
+        <CipherButton Icon="@Icons.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined"></CipherButton>
+        <CipherButton Icon="@Icons.DeleteSweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
+        <CipherExcelButton Data="@DataSource"></CipherExcelButton>
+        <CipherPDFButton></CipherPDFButton>
+    </Buttons>
+    <CustomDataGrid>
+        <CipherDataGrid @ref="CustomDataGrid" RenderFunc="@OnRender" WithCustomColumns="true"
+                        GridFilterMode="FilterMode.Simple" AllowFilter="false"
+                        AllowSort="false" Cipher_TItem="Event" AllowGroup="false" HideGroupedColumn="true"
+                        AllGroupsExpanded="false"
+                        DataSource="@DataSource">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Event" Title="אישור" Width="100px">
+                    <Template>
+                        <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Check"
+                                      Variant="Variant.Flat" ColorShade="Shade.Default"
+                                      Size="ButtonSize.Medium" />
+                        <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Cancel"
+                                      Variant="Variant.Flat" ColorShade="Shade.Default"
+                                      Size="ButtonSize.Medium" />
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="Event" Property="EventDate" Title="תאריך תנועה" />
+                <RadzenDataGridColumn TItem="Event" Property="Process" Title="תהליך" />
+                <RadzenDataGridColumn TItem="Event" Property="Type" Title="סוג" />
+                <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
+                    <Template>
+                        <RadzenText Text="111"></RadzenText>
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מערכת מוסרת">
+                    <Template>
+                        <RadzenText Text="A"></RadzenText>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="תעודה מקבלת">
+                    <Template>
+                        <RadzenText Text="222"></RadzenText>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מערכת מקבלת">
+                    <Template>
+                        <RadzenText Text="B"></RadzenText>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מסת תנועה">
+                    <Template>
+                        <RadzenText Text="5"></RadzenText>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="Comments" Title="הערות" />
+
+                <RadzenDataGridColumn TItem="Event" Title="פרטי תנועה" Width="150px">
+                    <Template>
+                        <CipherButton Text="הרחבה" ButtonStyle="ButtonStyle.Primary" Icon="@Icons.Expand" Variant="Variant.Flat" Shade="Shade.Lighter"
+                                      Size="ButtonSize.Medium" Click="@OpenEvent" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Title="סטטוס" Width="200px">
+                    <Template Context="ev">
+                        <CipherButton Disabled="true" Width="150px" Text="@ev.Status" ColorStyle="@GetStatusColor(ev.Status)" ColorShade="Shade.Default" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
+    </CustomDataGrid>
+</CipherDataFilter_WithDataGrid>
+<CipherButton Icon="@Icons.Save" Text="שמירת אישורים" Variant="Variant.Outlined" Width="100%"></CipherButton>
+
+@code {
+    IEnumerable<Event> DataSource { get; set; } = new List<Event>();
+
+    RadzenDataGrid<Event> CustomDataGrid;
+
+    List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>
+    {
+        new ("EventDate", "תאריך תנועה"),
+        new ("DonatingSystem", "מערכת מוסרת"),
+        new ("AcceptingSystem", "מערכת מקבלת"),
+        new ("DonatingPackage", "תעודה מוסרת"),
+        new ("AcceptingPackage", "תעודה מקבלת"),
+        new ("EventMass", "מסת תנועה"),
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        DataSource = await _db.GetEvents();
+    }
+
+    void OnRender(DataGridRenderEventArgs<Event> args)
+    {
+        if (args.FirstRender)
+        {
+            args.Grid.Groups.Add(new GroupDescriptor() { Property = "EventDate", SortOrder = SortOrder.Ascending, Title = "תאריך תנועה" });
+            args.Grid.Groups.Add(new GroupDescriptor() { Property = "Process", SortOrder = SortOrder.Descending, Title="תהליך"});
+            StateHasChanged();
+        }
+    }
+
+    ButtonStyle GetStatusColor(string status)
+    {
+        if (status == EventStatus.Pending)
+        {
+            return ButtonStyle.Secondary;
+        }
+        else if (status == EventStatus.Accepted)
+        {
+            return ButtonStyle.Success;
+        }
+        else if (status == EventStatus.Denied)
+        {
+            return ButtonStyle.Danger;
+        }
+        else if (status == EventStatus.Warning)
+        {
+            return ButtonStyle.Warning;
+        }
+        else
+        {
+            return ButtonStyle.Primary;
+        }
+
+    }
+
+    public async Task OpenEvent()
+    {
+        await DialogService.OpenAsync("תנועה",
+
+    ds =>
+    @<CipherEventCard dir="rtl" WithCard=false ReadOnly=true></CipherEventCard>, Constants.SetDialogOptions);
+    }
+}

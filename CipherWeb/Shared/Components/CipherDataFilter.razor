@@ -1,0 +1,25 @@
+﻿@typeparam Cipher_TItem
+
+@inherits RadzenDataFilter<Cipher_TItem>
+
+@code {
+    [Parameter]
+    public RenderFragment FilterProperties { get; set; }
+}
+
+<RadzenDataFilter Auto=true ViewChanged=@ViewChanged
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                TItem="Cipher_TItem"
+                Data="@Data" Style="text-align: right" RemoveFilterText="הסרת מסנן"
+                AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
+                AndOperatorText="וגם" OrOperatorText="או" 
+                ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
+                StartsWithText="מתחיל ב" EndsWithText="מסתיים ב" IsEmptyText="ריק" IsNotEmptyText="לא ריק"
+                FilterText="סינון" ApplyFilterText="סינון"
+                ContainsText="מכיל" DoesNotContainText="לא מכיל" EqualsText="זהה ל" NotEqualsText="שונה מ"
+                LessThanOrEqualsText="קטן מ / שווה ל" LessThanText="קטן מ" GreaterThanOrEqualsText="גדול / שווה ל" GreaterThanText="גדול מ" 
+                >
+    <Properties>
+        @FilterProperties
+    </Properties>
+</RadzenDataFilter>

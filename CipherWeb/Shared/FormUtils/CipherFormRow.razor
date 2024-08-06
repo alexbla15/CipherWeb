@@ -1,14 +1,5 @@
 ﻿@inherits RadzenRow
 
-@using Data
-@using CipherData
-@using CipherData.Models
-
-@using CipherWeb.Shared.Components.Buttons
-
-@using Radzen
-
-
 @code {
     [Parameter]
     public string Icon { get; set; }
@@ -17,16 +8,10 @@
     public string Label { get; set; }
 
     [Parameter]
-    public string IconTextGap { get; set; } = "0.5rem";
+    public string Width { get; set; } = "500px";
 
     [Parameter]
-    public string ButtonWidth { get; set; } = "200px";
-
-    [Parameter]
-    public string ButtonTextAlign { get; set; } = "right";
-
-    [Parameter]
-    public bool CheckBox { get; set; } = false;
+    public string Padding { get; set; }
 
     [Parameter]
     public bool Chosen { get; set; } = true;
@@ -34,25 +19,49 @@
     [Parameter]
     public string Display { get; set; } = "contents";
 
+    [Parameter]
+    public string HelpText { get; set; }
+
+    [Parameter]
+    public string HeaderWidth { get; set; } = "100%";
+
+    [Parameter]
+    public string HeaderMaxWidth { get; set; } = "180px";
+
+    [Parameter]
+    public TooltipPosition HelpTextPosition { get; set; } = TooltipPosition.Bottom;
+
     private void ToggleVisibility()
     {
         Display = Chosen ? "block" : "none";
     }
 }
 
-<RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="padding: 5px">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0rem">
-        @if (CheckBox)
-        {
-            <RadzenCheckBox @bind-value=@Chosen TValue="bool" Change="@ToggleVisibility" />
-        }
-        <CipherButton Icon="@Icon" Text="@Label" Variant="Variant.Text" Disabled="true" Size="ButtonSize.Large" ColorShade="Shade.Darker"
-                      Width="@ButtonWidth" ButtonTextAlign="@ButtonTextAlign" Padding="2px" Style="opacity:inherit"></CipherButton>
-       <div style="@($"display: {Display}")">
-           <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="5px">
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0"
+Style="@($"border-radius:5px; width: {Width}")">
 
-            @ChildContent
-           </RadzenStack>
+    @ChildContent
+    <CipherButton Text="@Label" Icon="@Icon" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Dark" StyleClass="" HelpText="@HelpText" ButtonTextAlign="right"
+                  HelpTextPosition="@HelpTextPosition" Disabled="true" Width="@HeaderWidth" MaxWidth="@HeaderMaxWidth"
+                  Style="border: 1px solid var(--rz-primary-dark); padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0;" />
+</RadzenStack>
+
+@*<RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="padding: 5px">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0rem">
+        <div style="@($"display: {Display}")">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="5px">
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width}; padding:{Padding}")">
+                    <Start>
+                        <RadzenIcon Icon="@Icon" IconColor="white" Style="font-size: x-large"/>
+                    </Start>
+                    <ChildContent>
+                    @ChildContent
+                    </ChildContent>
+                </RadzenFormField>
+            </RadzenStack>
         </div>
     </RadzenStack>
-</RadzenRow>
+</RadzenRow>*@
+    
+
+

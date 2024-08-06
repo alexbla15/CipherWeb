@@ -1,0 +1,64 @@
+﻿@page "/Search/FreeSearch/"
+
+@inject ICipherInfo _db
+@inject DialogService DialogService
+
+<PageTitle>חיפוש חופשי</PageTitle>
+
+<CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px">
+    <HeaderContent>
+        <RadzenTextBox Value="111"></RadzenTextBox>
+    </HeaderContent>
+    <ChildContent>
+    <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
+        <Items>
+            <RadzenAccordionItem Text="@($"תעודות ({Constants.packages.Count()})")">
+                <CipherPackagesTable WithCard="false" WithTotalFooter=false Width="800px"></CipherPackagesTable>
+            </RadzenAccordionItem>
+            <br/>
+            <RadzenAccordionItem Text="@($"כלים ({Constants.vessels.Count()})")">
+                <CipherComponentCard>
+                    <CipherDataGrid DataSource="@Constants.vessels" WithTotalFooter=false></CipherDataGrid>
+                </CipherComponentCard>
+            </RadzenAccordionItem>
+            <RadzenAccordionItem Text="@($"מיקומים ({Constants.systems.Count()})")">
+                <CipherComponentCard>
+                    <CipherDataGrid DataSource="@Constants.systems" WithTotalFooter=false></CipherDataGrid>
+                </CipherComponentCard>
+            </RadzenAccordionItem>
+        </Items>
+    </RadzenAccordion>
+    </ChildContent>
+</CipherComponentCard>
+
+@code {
+    public  Task getVessels()
+    {
+        return _db.GetVessels();
+    }
+
+    public async Task OpenPackage()
+    {
+        await DialogService.OpenAsync("תעודה",
+        
+    ds =>
+    @<CipherPackageCard dir="rtl" WithCard=false ReadOnly=true></CipherPackageCard>, Constants.SetDialogOptions);
+    }
+
+    public async Task OpenVessel()
+    {
+        await DialogService.OpenAsync("כלי",
+
+    ds =>
+    @<CipherVesselCard dir="rtl" WithCard=false ReadOnly=true></CipherVesselCard>, Constants.SetDialogOptions);
+    }
+
+    public async Task OpenSystem()
+    {
+        await DialogService.OpenAsync("מיקום",
+
+        ds =>
+    @<CipherSystemCard dir="rtl" WithCard=false ReadOnly=true></CipherSystemCard>, Constants.SetDialogOptions);
+    }
+
+}

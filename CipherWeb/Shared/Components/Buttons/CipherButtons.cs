@@ -1,12 +1,8 @@
-﻿using CipherData;
-using CipherWeb.Data;
+﻿using CipherWeb.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using Radzen;
-
-using System.Text;
 
 namespace CipherWeb.Shared.Components.Buttons
 {
@@ -25,7 +21,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             Variant = Variant.Outlined;
             ColorStyle = ButtonStyle.Danger;
-            ColorShade = Shade.Default;
+            ColorShade = Shade.Dark;
             Size = ButtonSize.Large;
             Icon = Icons.Cancel;
             Text = "ביטול";
@@ -37,6 +33,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherCloseButton() : base()
         {
             ColorStyle = ButtonStyle.Danger;
+            ColorShade = Shade.Dark;
             Icon = Icons.Close;
         }
     }
@@ -46,6 +43,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherDeleteButton() : base()
         {
             ColorStyle = ButtonStyle.Danger;
+            ColorShade = Shade.Dark;
             Icon = Icons.Delete;
         }
     }
@@ -55,6 +53,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherEditButton() : base()
         {
             ColorStyle = ButtonStyle.Primary;
+            ColorShade = Shade.Default;
             Icon = Icons.Edit;
         }
     }
@@ -71,12 +70,13 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherSubmitButton() : base()
         {
+            Variant = Variant.Outlined;
             ButtonType = ButtonType.Submit;
             Size = ButtonSize.Large;
             Icon = Icons.Save;
             Text = "שמירה";
             ColorStyle = ButtonStyle.Success;
-            ColorShade = Shade.Default;
+            ColorShade = Shade.Dark;
         }
     }
 
@@ -86,6 +86,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             Icon = Icons.Done;
             ColorStyle = ButtonStyle.Success;
+            ColorShade = Shade.Default;
         }
     }
 
@@ -96,7 +97,7 @@ namespace CipherWeb.Shared.Components.Buttons
             HelpText = "ייצוא ל-PDF";
             Icon = Icons.PDF;
             ColorStyle = ButtonStyle.Danger;
-            ColorShade = Shade.Default;
+            ColorShade = Shade.Dark;
             Variant = Variant.Outlined;
         }
     }
@@ -108,11 +109,6 @@ namespace CipherWeb.Shared.Components.Buttons
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
 
         private void NavigateToPath(MouseEventArgs args)
         {
@@ -128,7 +124,11 @@ namespace CipherWeb.Shared.Components.Buttons
             builder.AddAttribute(4, "HelpText", HelpText);
             builder.AddAttribute(5, "Size", Size);
             builder.AddAttribute(6, "Variant", Variant);
-            builder.AddAttribute(8, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
+            builder.AddAttribute(7, "ButtonTextAlign", ButtonTextAlign);
+            builder.AddAttribute(8, "HelpTextPosition", HelpTextPosition);
+            builder.AddAttribute(9, "Height", Height);
+            builder.AddAttribute(10, "MarginBottom", MarginBottom);
+            builder.AddAttribute(11, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
             builder.CloseComponent();
         }
     }

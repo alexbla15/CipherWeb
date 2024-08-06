@@ -1,15 +1,16 @@
-﻿@using Radzen
-@using CipherData.Models
-@using CipherWeb.Shared.Components
-@using CipherWeb.Shared.Components.Buttons
-
-@inject ICipherInfo _db
+﻿@inject ICipherInfo _db
 
 @inherits CipherTableCard
 
 <CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@systems" Height="@Height"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath">
-    <ComponentContent>
+
+    <HeaderContent>
+        <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center">
+            <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+        </RadzenStack>
+    </HeaderContent>
+                 <ComponentContent>
         <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@systems" RowsPerPage="@RowsPerPage"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
     </ComponentContent>

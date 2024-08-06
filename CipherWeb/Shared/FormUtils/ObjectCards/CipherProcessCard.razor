@@ -1,10 +1,11 @@
-﻿@using Data
-
-@inherits CipherComponentCard
+﻿@inherits CipherComponentCard
 
 @code {
     [Parameter]
     public string RowWidth { get; set; } = "width: 400px";
+
+    [Parameter]
+    public string RowWidth2 { get; set; } = "400px";
 
     public class Analysis
     {
@@ -24,70 +25,48 @@
                 <RadzenRow>
                 <RadzenColumn>
                         @* -- ID -- *@
-                        <CipherFormRow Label="מספר סידורי" Icon="@Icons.Id" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="מספר סידורי" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Id" Width="@RowWidth2" />
 
                         @* -- TYPE -- *@
-                        <CipherFormRow Label="סוג תהליך" Icon="@Icons.Category" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="סוג תהליך" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="סוג תהליך" Icon="@Icons.Category" Width="@RowWidth2" />
 
                         @* -- IN PROCESSES -- *@
-                        <CipherFormRow Label="תהליכים יוצרים" Icon="@Icons.Input" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="תהליכים יוצרים" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="תהליכים יוצרים" Icon="@Icons.Input" Width="@RowWidth2" />
 
                         @* -- IN CATEGORIES -- *@
-                        <CipherFormRow Label="סוגים נצרכים" Icon="@Icons.Input" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="סוגים נצרכים" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="סוגים נצרכים" Icon="@Icons.Input" Width="@RowWidth2" />
 
                         @* -- UPDATE DATE -- *@
-                        <CipherDatePicker Title="תאריך עדכון" />
+                        <CipherDatePicker Label="תאריך עדכון" />
 
                         @* -- AUTHORIZING DATE -- *@
-                        <CipherDatePicker Title="תאריך אישור" />
+                        <CipherDatePicker Label="תאריך אישור" />
 
                         @* -- RESTRICTIONS -- *@
-                        <CipherFormRow Label="מגבלות" Icon="@Icons.Restriction" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="מגבלות איחסון" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="מגבלות" Icon="@Icons.Restriction" Width="@RowWidth2" />
 
                 </RadzenColumn>
                 <RadzenColumn>
-                    @* -- Name -- *@
-                        <CipherFormRow Label="שם תהליך" Icon="@Icons.QA" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="שם תהליך" Style="@RowWidth" />
-                    </CipherFormRow>
+                        @* -- Name -- *@
+                        <CipherAutoComplete Label="שם תהליך" Icon="@Icons.QA" Width="@RowWidth2" />
 
                         @* -- LOCATIONS -- *@
-                        <CipherFormRow Label="מיקומים" Icon="@Icons.Location" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="מיקום" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="מיקומים" Icon="@Icons.Location" Width="@RowWidth2" />
 
                         @* -- OUT PROCESSES -- *@
-                        <CipherFormRow Label="תהליכים צורכים" Icon="@Icons.Output" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="תהליכים צורכים" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="תהליכים צורכים" Icon="@Icons.Output" Width="@RowWidth2" />
 
                         @* -- OUT CATEGORIES -- *@
-                        <CipherFormRow Label="סוגים נוצרים" Icon="@Icons.Output" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="סוגים צורכים" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="סוגים צורכים" Icon="@Icons.Output" Width="@RowWidth2" />
 
                         @* -- UPDATING WORKER -- *@
-                        <CipherFormRow Label="עובד/ת מעדכנ/ת" Icon="@Icons.Account" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="שם עובד/ת" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="עובד/ת מעדכנ/ת" Icon="@Icons.Account" Width="@RowWidth2" />
                         
                         @* -- AUTHORIZING WORKER -- *@
-                        <CipherFormRow Label="עובד/ת מאשר/ת" Icon="@Icons.Account" Style="position:fixed">
-                            <RadzenAutoComplete Placeholder="שם מאשר/ת" Style="@RowWidth" />
-                        </CipherFormRow>
+                        <CipherAutoComplete Label="עובד/ת מאשר/ת" Icon="@Icons.Account" Width="@RowWidth2" />
 
                         @* -- EXPIRATION DATE -- *@
-                        <CipherDatePicker Title="תאריך תפוגה" />
+                        <CipherDatePicker Label="תאריך תפוגה" />
 
                         @* -- COMMENTS -- *@
                         <CipherFormRow Label="הערות" Icon="@Icons.Comment" Style="position:fixed">

@@ -6,26 +6,27 @@
 
 <CipherComponentCard Title="סיכום קו">
     <HeaderContent>
-        <RadzenAutoComplete Placeholder="AAA" Style="width:300px"></RadzenAutoComplete>
+        <RadzenAutoComplete Placeholder="הקלידו שם של קו" Style="width:300px" Data="@Constants.Lines"></RadzenAutoComplete>
     </HeaderContent>
     <ChildContent>
     <RadzenRow>
         <RadzenColumn>
         @foreach (SearchParameter p in searchParameters)
         {
-            <CipherFormRow Icon="@p.Icon" Label="@p.Label" Style="padding-left:20px">
-                <RadzenSelectBar @bind-Value="@p.BindValue" TValue="IEnumerable<string>" Size="ButtonSize.Medium" Multiple="true" Style="border-radius:10px" Change="@SelectionChanged">
+            <CipherFormRow Icon="@p.Icon" Label="@p.Label" Width="fit-content" >
+                <RadzenSelectBar @bind-Value="@p.BindValue" TValue="IEnumerable<string>"
+                                         Size="ButtonSize.Medium" Multiple="true" Style="border-radius:10px; padding-left:10px; padding-top:20px" Change="@SelectionChanged">
                     <Items>
                         @foreach (string option in p.Options)
                         {
-                            <RadzenSelectBarItem Value="@option" Text="@option" />
+                            <RadzenSelectBarItem Value="@option" Text="@option"/>
                         }
                     </Items>
                 </RadzenSelectBar>
             </CipherFormRow>
         }
-            <CipherDatePicker Title="מתאריך"/>
-            <CipherDatePicker Title="עד תאריך"/>
+                <CipherDatePicker Label="מתאריך" />
+                <CipherDatePicker Label="עד תאריך" />
         </RadzenColumn>
     </RadzenRow>
 
@@ -71,15 +72,13 @@
 </CipherComponentCard>
 
 @code{
-    string ButtonWidth = "120px";
-
     bool showDataLabels = false;
 
     string summaryView = "graph";
 
-    public static readonly List<string> proc_options = new List<string> { "תהליך א", "תהליך ב", "תהליך ג" };
-    public static readonly List<string> input_options = new List<string> { "מגיב א", "מגיב ב", "מגיב ג" };
-    public static readonly List<string> output_options = new List<string> { "תוצר א", "תוצר ב", "תוצר ג" };
+    public static readonly List<string> proc_options = Constants.Processes;
+    public static readonly List<string> input_options = Constants.Reactants;
+    public static readonly List<string> output_options = Constants.Products; 
 
     public static IEnumerable<string> selectedProcs = proc_options;
     public static IEnumerable<string> selectedReagents = input_options;
@@ -199,30 +198,45 @@
             }
         }
 
+        List<string> monthOrder = new List<string>
+        {
+            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+        };
+
+        // Order by months
+        var orderedValues = values.ToDictionary(
+            product => product.Key,
+            product => product.Value.OrderBy(month => monthOrder.IndexOf(month.Key)).ToDictionary(pair => pair.Key, pair => pair.Value)
+        );
+
+
+
         ProdA.Clear();
         ProdB.Clear();
         ProdC.Clear();
 
-        foreach (string proc in values.Keys)
+        foreach (string proc in orderedValues.Keys)
         {
-            foreach (string month in values[proc].Keys)
+            foreach (string month in orderedValues[proc].Keys)
             {
                 if (proc == "תוצר א")
                 {
-                    ProdA.Add(new DataItem { Month = month, Mass = values[proc][month] });
+                    ProdA.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
                 }
 
                 if (proc == "תוצר ב")
                 {
-                    ProdB.Add(new DataItem { Month = month, Mass = values[proc][month] });
+                    ProdB.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
                 }
 
                 if (proc == "תוצר ג")
                 {
-                    ProdC.Add(new DataItem { Month = month, Mass = values[proc][month] });
+                    ProdC.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
                 }
             }
         }
+
+        values = orderedValues;
     }
 
     public Production production = new Production { 

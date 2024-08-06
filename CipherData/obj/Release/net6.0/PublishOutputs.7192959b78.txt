@@ -1,0 +1,12 @@
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\CipherData.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\CipherData.deps.json
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\CipherData.pdb
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\Dapper.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\Microsoft.Extensions.Primitives.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\System.Data.SqlClient.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\runtimes\win-arm64\native\sni.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\runtimes\win-x64\native\sni.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\runtimes\win-x86\native\sni.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\.repos\CipherWeb\CipherData\bin\Release\net6.0\publish\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

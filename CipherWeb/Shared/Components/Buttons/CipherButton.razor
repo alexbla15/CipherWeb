@@ -1,7 +1,4 @@
-﻿@using Radzen
-@using CipherWeb.Data
-
-@inject TooltipService tooltipService
+﻿@inject TooltipService tooltipService
 @inject NavigationManager NavigationManager
 
 @inherits RadzenButton
@@ -43,28 +40,31 @@
     [Parameter]
     public string Padding { get; set; }
 
+    [Parameter]
+    public string MarginBottom { get; set; }
+
+    [Parameter]
+    public TooltipPosition HelpTextPosition { get; set; } = TooltipPosition.Top;
+
 
     protected override async Task OnInitializedAsync()
     {
-        StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
+        StyleClass = Wrap ? "rz-text-wrap" : "rz-text-nowrap";
     }
 
     void ShowTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
     {
-        if (HelpText != "")
+        if (!string.IsNullOrWhiteSpace(HelpText))
         {
             tooltipService.Open(elementReference, ds =>
-            @<div dir="rtl">
-                @HelpText
-            </div>
-    , options);
+            @<div dir="rtl"> @HelpText </div>, options);
         }
     }
 
 
     void HideTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
     {
-        if (HelpText != "")
+        if (!string.IsNullOrWhiteSpace(HelpText))
         {
             tooltipService.Close();
         }
@@ -79,13 +79,110 @@
                 padding: {Padding};
                 height: {Height};
                 min-height: {MinHeight};
+                margin-bottom: {MarginBottom};
                 ";
     }
 
+    private string GetButtonClass()
+    {
+        string btn_cls = "CipherButton ";
+        if (Disabled)
+        {
+
+            btn_cls += " Disabled";
+        }
+        else
+        {
+            btn_cls += ColorStyle.GetDisplayDescription();
+
+            if (ColorShade == Shade.Darker && Variant != Variant.Outlined)
+            {
+                btn_cls += "Darker";
+            }
+            else if ((ColorShade == Shade.Dark && Variant != Variant.Outlined) || (ColorShade == Shade.Darker && Variant == Variant.Outlined))
+    {
+                btn_cls += "Dark";
+            }
+            else if ((ColorShade == Shade.Default && Variant != Variant.Outlined) || (ColorShade == Shade.Dark && Variant == Variant.Outlined))
+            {
+                btn_cls += "Default";
+            }
+            else if ((ColorShade == Shade.Light && Variant != Variant.Outlined) || (ColorShade == Shade.Default && Variant == Variant.Outlined))
+            {
+                btn_cls += "Light";
+            }
+            else if ((ColorShade == Shade.Lighter && Variant != Variant.Outlined) || (ColorShade == Shade.Light && Variant == Variant.Outlined))
+            {
+                btn_cls += "Lighter";
+            }
+        }
+        return btn_cls;
+    }
 }
 
-<RadzenButton Text="@Text" Icon="@Icon" ButtonStyle="@ColorStyle" Shade="@ColorShade" Click="@Click" Style="@CustomStyle()"
-              Size="@Size" Variant="@Variant" Disabled="@Disabled" class="@StyleClass"
+<style>
+    .CipherButton {
+        border: unset;
+        z-index: 1;
+        position: relative;
+        transition: all 250ms;
+        overflow: hidden;
+    }
+
+    .CipherButton.Disabled {}
+
+    .CipherButton::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 0; /*start the new-background width at 0, and enlarge it*/
+        z-index: -1;
+        transition: all 250ms
+    }
+
+    .CipherButton:hover::before {
+            width: 100%;
+    }
+
+    .CipherButton.PrimaryDarker::before { background-color: var(--rz-primary-dark); }
+    .CipherButton.PrimaryDark::before { background-color: var(--rz-primary); }
+    .CipherButton.PrimaryDefault::before { background-color: var(--rz-primary-light); }
+
+    .CipherButton.SuccessDarker::before { background-color: var(--rz-success-dark); }
+    .CipherButton.SuccessDark::before { background-color: var(--rz-success); }
+    .CipherButton.SuccessDefault::before { background-color: var(--rz-success-light); }
+    .CipherButton.SuccessLight::before { background-color: var(--rz-success-lighter); }
+    .CipherButton.SuccessLighter::before { background-color: var(--rz-success-light); }
+
+    .CipherButton.DangerDarker::before { background-color: var(--rz-danger-dark); }
+    .CipherButton.DangerDark::before { background-color: var(--rz-danger); }
+    .CipherButton.DangerDefault::before { background-color: var(--rz-danger-light); }
+    .CipherButton.DangerLight::before { background-color: var(--rz-danger-lighter); }
+    .CipherButton.DangerLighter::before { background-color: var(--rz-danger-light); }
+
+    .CipherButton.SecondaryDarker::before { background-color: var(--rz-secondary-dark); }
+    .CipherButton.SecondaryDark::before { background-color: var(--rz-secondary); }
+    .CipherButton.SecondaryDefault::before { background-color: var(--rz-secondary-light); }
+    .CipherButton.SecondaryLight::before { background-color: var(--rz-secondary-lighter); }
+
+    .CipherButton.WarningDarker::before { background-color: var(--rz-warning-dark); }
+    .CipherButton.WarningDark::before { background-color: var(--rz-warning); } 
+    .CipherButton.WarningDefault::before { background-color: var(--rz-warning-light); }
+    .CipherButton.WarningLight::before { background-color: var(--rz-warning); }
+</style>
+
+
+<RadzenButton Text="@Text" BusyText="@BusyText" Visible="@Visible" 
+              Icon="@Icon" IconColor="@IconColor" 
+              ButtonStyle="@ColorStyle" Shade="@ColorShade" Click="@Click" Style="@($"{CustomStyle()};{Style}")"
+              Size="@Size" Variant="@Variant" Disabled="@Disabled" class="@GetButtonClass()"
               MouseEnter="@(args => ShowTooltipWithHtml(args, new TooltipOptions(){ 
-                    Style = $"background: {Colors.Warning}; color: var(--rz-text-color)", Duration = null }))"
-              MouseLeave="@(args => HideTooltipWithHtml(args))"/>
+                Style = $@"
+                    background: var(--rz-{ColorStyle.GetDisplayDescription().ToLower()}); 
+                    color: var(--rz-on-{ColorStyle.GetDisplayDescription().ToLower()})",
+                Duration = null,
+                Position = HelpTextPosition}))"
+              MouseLeave="@(args => HideTooltipWithHtml(args))"
+/>

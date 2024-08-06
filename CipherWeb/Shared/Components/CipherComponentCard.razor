@@ -1,12 +1,9 @@
-﻿@using Radzen
-@using CipherWeb.Data
+﻿@inherits CipherFormCard
 
-@inherits CipherFormCard
-
-<CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height" Visible="@Visible">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+<CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height" Visible="@Visible" Float="@Float">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
         <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content"/>
-        <div style="@($"width:100%;padding-right:{HeaderContentPaddingRight}")">
+        <div style="@($"width:100%;padding-right:{HeaderContentPaddingRight}; display: flex; justify-content: {ContentJustify};")">
         @HeaderContent
         </div>
         @if (WithButtons)
@@ -14,8 +11,8 @@
             @Buttons
         }
     </RadzenStack>
-    <div style="@($"padding: {ContentPadding}")">
-    @ChildContent
+    <div style="@($"padding: {ContentPadding}; display:{ContentDisplay}; justify-content: {ContentJustify}")">
+        @ChildContent
     </div>
 </CipherFormCard>
 
@@ -36,7 +33,13 @@
     public string ContentPadding { get; set; } = "5px 0";
 
     [Parameter]
-    public string HeaderContentPaddingRight { get; set; } = "50px";
+    public string HeaderContentPaddingRight { get; set; } = "20px";
+
+    [Parameter]
+    public string ContentJustify { get; set; } = "right";
+
+    [Parameter]
+    public string ContentDisplay { get; set; }
 
     [Parameter]
     public TextAlign Align { get; set; } = TextAlign.Right;

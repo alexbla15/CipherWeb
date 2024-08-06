@@ -650,11 +650,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj",
+      "projectUniqueName": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
       "projectName": "CipherData",
-      "projectPath": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj",
+      "projectPath": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
       "packagesPath": "C:\\Users\\TEST\\.nuget\\packages\\",
-      "outputPath": "F:\\Projects\\Version230624\\CipherData\\obj\\",
+      "outputPath": "F:\\Projects\\Version20240713\\CipherData\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\TEST\\AppData\\Roaming\\NuGet\\NuGet.Config",

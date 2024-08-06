@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\Version230624\\CipherWeb\\CipherWeb.csproj": {}
+    "F:\\Projects\\Version20240713\\CipherWeb\\CipherWeb.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj": {
+    "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj",
+        "projectUniqueName": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
         "projectName": "CipherData",
-        "projectPath": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj",
+        "projectPath": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj",
         "packagesPath": "C:\\Users\\TEST\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\Version230624\\CipherData\\obj\\",
+        "outputPath": "F:\\Projects\\Version20240713\\CipherData\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\TEST\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -73,14 +73,14 @@
         }
       }
     },
-    "F:\\Projects\\Version230624\\CipherWeb\\CipherWeb.csproj": {
+    "F:\\Projects\\Version20240713\\CipherWeb\\CipherWeb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\Version230624\\CipherWeb\\CipherWeb.csproj",
+        "projectUniqueName": "F:\\Projects\\Version20240713\\CipherWeb\\CipherWeb.csproj",
         "projectName": "CipherWeb",
-        "projectPath": "F:\\Projects\\Version230624\\CipherWeb\\CipherWeb.csproj",
+        "projectPath": "F:\\Projects\\Version20240713\\CipherWeb\\CipherWeb.csproj",
         "packagesPath": "C:\\Users\\TEST\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\Version230624\\CipherWeb\\obj\\",
+        "outputPath": "F:\\Projects\\Version20240713\\CipherWeb\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\TEST\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -98,8 +98,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj": {
-                "projectPath": "F:\\Projects\\Version230624\\CipherData\\CipherData.csproj"
+              "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj": {
+                "projectPath": "F:\\Projects\\Version20240713\\CipherData\\CipherData.csproj"
               }
             }
           }
