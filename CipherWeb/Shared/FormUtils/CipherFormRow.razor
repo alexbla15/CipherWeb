@@ -41,9 +41,9 @@
 Style="@($"border-radius:5px; width: {Width}")">
 
     @ChildContent
-    <CipherButton Text="@Label" Icon="@Icon" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Dark" StyleClass="" HelpText="@HelpText" ButtonTextAlign="right"
+    <CipherButton Text="@Label" Icon="@Icon" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" StyleClass="" HelpText="@HelpText" ButtonTextAlign="right"
                   HelpTextPosition="@HelpTextPosition" Disabled="true" Width="@HeaderWidth" MaxWidth="@HeaderMaxWidth"
-                  Style="border: 1px solid var(--rz-primary-dark); padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0;" />
+                  Style="@($"border: 1px solid {Colors.PrimaryDarker}; padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>
 
 @*<RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="padding: 5px">

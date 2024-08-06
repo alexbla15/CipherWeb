@@ -620,8 +620,7 @@
     --rz-scheduler-prev-next-button-hover-background-color: var(--rz-primary);
     --rz-scheduler-today-button-font-size: 1rem;
     --rz-scheduler-event-list-button-color: var(--rz-primary-dark);
-
-    --cipher-scheduler-hover-color: var(--rz-primary)
+    --rz-scheduler-other-month-background-color: var(--rz-primary-lighter);
 }
 
 .rz-scheduler {
@@ -640,10 +639,31 @@
 .rz-planner-view .rz-view-header .rz-slot-header {
     visibility: hidden;
 }
+.rz-scheduler-nav-views {
+    direction: rtl;
+}
+
+.rz-scheduler-nav-views .rz-button.rz-primary {
+    direction: rtl;
+}
 
 .rz-scheduler-nav-views .rz-button.rz-primary:hover {
     color: var(--cipher-scheduler-hover-color)
 }
+
+.rz-scheduler-nav-views .rz-button.rz-primary:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: var(--rz-scheduler-border-radius);
+    border-bottom-left-radius:0;
+    border-bottom-right-radius: var(--rz-scheduler-border-radius);
+}
+
+    .rz-scheduler-nav-views .rz-button.rz-primary:last-child {
+        border-top-right-radius: 0;
+        border-top-left-radius: var(--rz-scheduler-border-radius);
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: var(--rz-scheduler-border-radius);
+    }
 
 .rz-view {
     direction: rtl;
