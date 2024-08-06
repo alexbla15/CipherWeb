@@ -1,5 +1,11 @@
 ﻿namespace CipherWeb.Data
 {
+    public enum Language
+    {
+        English,
+        Hebrew
+    }
+
     public class Roles
     {
         public readonly static string Manager = "מנהל/ת";

@@ -5,6 +5,8 @@ namespace CipherWeb.Data
 {
     public class Constants
     {
+        public static Language SetLanguage = Language.English;
+
         public class Button
         {
             public static ButtonStyle Color = ButtonStyle.Primary;

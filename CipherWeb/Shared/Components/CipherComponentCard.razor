@@ -4,7 +4,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
         <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content"/>
         <div style="@($"width:100%;padding-right:{HeaderContentPaddingRight}; display: flex; justify-content: {ContentJustify};")">
-        @HeaderContent
+            @HeaderContent
         </div>
         @if (WithButtons)
         {

@@ -24,10 +24,10 @@
 
     //
 
-    private decimal? _value;
+    private decimal _value;
 
     [Parameter]
-    public decimal? Value
+    public decimal Value
     {
         get => _value;
         set
@@ -41,7 +41,7 @@
     }
 
     [Parameter]
-    public EventCallback<decimal?> ValueChanged { get; set; }
+    public EventCallback<decimal> ValueChanged { get; set; }
 
     // LENGTH VALIDATOR
 
@@ -57,7 +57,7 @@
 
     class Model
     {
-        public decimal? value;
+        public decimal value = 0;
     }
 
     Model model = new Model() {};
@@ -67,6 +67,29 @@
     {
         // required Validator
         return RequiredValidator.IsValid;
+    }
+
+
+    private void OnValueChanged(decimal value)
+    {
+        model.value = value;
+        Value = value; // Update the Value parameter
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        model.value = Value; // Initialize model's value with the parameter value
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+
+        if (parameters.TryGetValue<decimal>(nameof(Value), out var newValue))
+        {
+            model.value = newValue; // Synchronize model's value with the new parameter value
+        }
     }
 }
 
@@ -88,12 +111,14 @@
             }
             @if(string.IsNullOrEmpty(Label))
             {
-                <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" />
+                <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" 
+                Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
             }
             else
             {
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                    <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" />
+                <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" 
+                Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
             </RadzenFormField>
             }
         </RadzenStack>

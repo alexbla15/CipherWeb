@@ -1,10 +1,10 @@
-﻿using CipherData.Models;
-using static CipherWeb.Pages.Forms.AddPackage;
+﻿using CipherWeb.Data;
 
 namespace CipherWeb
 {
     public class HebrewDictionary
     {
+
         public static List<Tuple<string, string>> Headers = new List<Tuple<string, string>> ()
         {
             // EVENTS

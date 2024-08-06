@@ -691,11 +691,17 @@
 .rz-steps ul 
 {
     display: flex;
-    justify-content: space-between;
 }
 
 .rz-steps-number {
-    background-color: var(--rz-primary-lightest);
+    background-color: var(--rz-primary-dark);
+    color:white;
+    opacity: 50%;
+}
+
+.rz-steps-title {
+    color: var(--rz-primary-dark);
+    opacity: 50%;
 }
 
 .rz-steps-next .rzi, .rz-steps-prev .rzi {
@@ -706,13 +712,33 @@
 
 .rz-steps .rz-state-highlight .rz-steps-title {
     color: var(--rz-primary-dark);
+    opacity: 100%;
     font-weight: 700;
+    font-size: large;
 }
 
 .rz-steps .rz-state-highlight .rz-steps-number {
     background: var(--rz-primary-dark);
+    opacity: 100%;
     color: white;
 }
+
+.rz-steps .rz-steps-item:not(:last-child) {
+    flex: auto;
+    display: flex;
+    align-items: center;
+}
+
+    .rz-steps .rz-steps-item:not(:last-child):after {
+        display: block;
+        content: "";
+        flex: auto;
+        height: 1px;
+        margin-inline-end: 16px;
+        background-color: var(--rz-primary-dark);
+        opacity: 50%;
+    }
+
 
 /* ------------------ DROPDOWN ------------------ */
 rz-multiselect-trigger, .rz-dropdown-trigger {

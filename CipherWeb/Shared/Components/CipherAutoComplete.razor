@@ -24,7 +24,7 @@
 
     //
 
-    private string _value;
+    private string _value = "";
 
     [Parameter]
     public string Value
@@ -61,6 +61,9 @@
     [Parameter]
     public bool Required { get; set; } = true;
 
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
     private string LengthValidatorText()
     {
         return $"{MinLength}-{MaxLength} תווים. ";
@@ -68,7 +71,7 @@
 
     class Model
     {
-        public string value;
+        public string value = "";
     }
 
     Model model = new Model() {value= ""};
@@ -80,17 +83,22 @@
 
     public string ImproperCharsValidatorText()
     {
-        Regex regex = new Regex(@"[a-z0-9א-ת.]", RegexOptions.IgnoreCase);
-        var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
+        if (!string.IsNullOrEmpty(model.value))
+        {
+            Regex regex = new Regex(@"[a-z0-9א-ת.]", RegexOptions.IgnoreCase);
+            var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
 
-        if (invalidChars.Any())
-        {
-            return "לא ניתן להשתמש בתו " + invalidChars[0] + ". ";
+            if (invalidChars.Any())
+            {
+                return "לא ניתן להשתמש בתו " + invalidChars[0] + ". ";
+            }
+            else
+            {
+                return "";
+            }
+
         }
-        else
-        {
-            return "";
-        }
+        return "";
     }
 
     public bool SqlInjectionValidate()
@@ -108,14 +116,21 @@
         string pattern = string.Join("|", unwantedWords);
         Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
-        if (regex.IsMatch(model.value))
+        if (string.IsNullOrEmpty(model.value))
         {
-            Match match = regex.Match(model.value);
-            return "אסור להשתמש במילה " + match.Value + ". ";
+            return "";
         }
         else
         {
-            return "";
+            if (regex.IsMatch(model.value))
+            {
+                Match match = regex.Match(model.value);
+                return "אסור להשתמש במילה " + match.Value + ". ";
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 
@@ -124,10 +139,35 @@
         // required Validator
         return RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
     }
+
+    private void OnValueChanged(object value)
+    {
+        if (value is string stringValue)
+        {
+            model.value = stringValue;
+            Value = stringValue;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        model.value = Value; // Initialize model's value with the parameter value
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+
+        if (parameters.TryGetValue<string>(nameof(Value), out var newValue))
+        {
+            model.value = newValue; // Synchronize model's value with the new parameter value
+        }
+    }
 }
 
 
-<RadzenTemplateForm TItem="Model" Data=@model >
+<RadzenTemplateForm TItem="Model" Data=@model>
     <RadzenStack Orientation="Orientation.Vertical" Gap="0" Style="padding-bottom:5px">
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
@@ -145,13 +185,13 @@
             @if(string.IsNullOrEmpty(Label))
             {
                 <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
-                                    Data="@Data" TextProperty="@TextProperty" />
+                                    Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
             }
             else
             {
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
                 <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
-                                        Data="@Data" TextProperty="@TextProperty" />
+                                        Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
             </RadzenFormField>
             }
         </RadzenStack>

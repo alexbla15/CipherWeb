@@ -9,13 +9,6 @@ namespace CipherData
         Task<List<StorageSystem>> GetSystems();
         Task<List<SubCategory>> GetSubCategories();
         Task<List<Vessel>> GetVessels();
-        //Task<List<Movement>> GetTodayMovements();
-        //Task<List<int>> GetFirstYear();
-        //Task<List<string>> GetDistinctProperties(string property);
-        //Task<List<int>> GetIds();
-        //Task Remove(Movement mov);
-        //Task<List<SummaryModel>> GetLastSummaryRow();
-        //Task<int> GetNextId();
     }
     
     public class ExcelService

@@ -1,7 +1,5 @@
 ﻿@page "/forms/addpackage"
 
-@using System.Text.Json
-
 @inject NotificationService NotificationService
 @inject ICipherInfo _db
 
@@ -9,8 +7,7 @@
 
 <CipherSteps>
     <RadzenStepsItem Text="פרטי הזנה">
-        <CipherStepDescription Text="וודאו את פרטי ההזנה" TextAlign="TextAlign.Right" />
-        <CipherFormInfo/>
+        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="תעודות מוסרות">
@@ -18,12 +15,12 @@
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="פרטי תעודה">
-        <CipherStepDescription Text="הזינו את פרטי התעודה החדשה" TextAlign="TextAlign.Right" />
+        <CipherStepDescription Text="הזינו את פרטי התעודה החדשה" TextAlign="@SetTextAlign" />
         <CipherPackageInfo pack="new Package()" />
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="הערות">
-        <CipherStepDescription Text="כתבו הערות על התנועה" TextAlign="TextAlign.Right" />
+        <CipherStepDescription Text="כתבו הערות על התנועה" TextAlign="@SetTextAlign" />
         <CipherComments />
     </RadzenStepsItem>
 
@@ -31,3 +28,7 @@
          <CipherSubmit ActionText="תעודה 1111 נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם."></CipherSubmit>
     </RadzenStepsItem>
 </CipherSteps>
+
+@code{
+    TextAlign SetTextAlign = TextAlign.Right;
+}

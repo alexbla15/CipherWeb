@@ -4,7 +4,7 @@
 Style="@($"padding-bottom:{PaddingBottom}")">
     @foreach (MyMenuItem item in items)
     {
-        <CipherNavButton Icon="@item.Icon" Text="@item.Title" Width="@ButtonWidth()" Path="@item.Href" ColorShade="Shade.Lighter" />
+        <CipherNavButton Icon="@item.Icon" Text="@item.Title" Width="@ButtonWidth()" Path="@item.Href" ColorShade="@ColorShade" ColorStyle="@ColorStyle"/>
     }
 </RadzenStack>
 
@@ -13,16 +13,22 @@ Style="@($"padding-bottom:{PaddingBottom}")">
     public string PaddingBottom { get; set; } = "20px";
 
     [Parameter]
+    public Shade ColorShade { get; set; } = Shade.Darker;
+
+    [Parameter]
+    public ButtonStyle ColorStyle { get; set; } = ButtonStyle.Primary;
+
+    [Parameter]
     public List<MyMenuItem> items { get; set; } = new List<MyMenuItem>()
     {
         new MyMenuItem(){
-            Title="סיכום", Icon=Icons.Summary, Href="/Reports/ProcessSummary"
+            Title="סיכום", Icon=Icons.Summary, Href=CipherNavLinks.ProcessesReport.Href
         },
         new MyMenuItem(){
-            Title="חיפוש", Icon=Icons.Search, Href="/Search/Advanced"
+            Title="חיפוש", Icon=Icons.Search, Href=CipherNavLinks.AdvancedSearch.Href
         },
         new MyMenuItem(){
-            Title="דוחות", Icon=Icons.Document, Href="/Reports"
+            Title="דוחות", Icon=Icons.Document, Href=CipherNavLinks.Reports.Href
         }
     };
 

@@ -21,9 +21,13 @@ namespace CipherWeb.Data
         public const string Downloading = "downloading";
         public const string FileDownloadOff = "file_download_off";
         public const string FileUploadOff = "file_upload_off";
+        public const string KeyboardTab = "keyboard_tab";
         public const string Publish = "publish";
         public const string Shuffle = "shuffle";
         public const string ShuffleOn = "shuffle_on";
+        public const string Start = "start";
+        public const string VerticalAlignBottom = "vertical_align_bottom";
+        public const string VerticalAlignTop = "vertical_align_top";
         public const string Upgrade = "upgrade";
         public const string Upload = "upload";
 

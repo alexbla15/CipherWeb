@@ -1,4 +1,9 @@
-﻿@code {
+﻿@inject DialogService DialogService
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
     RadzenDataGrid<Package> CustomDataGrid;
 
     List<Package> from_packs = new List<Package>();
@@ -71,6 +76,15 @@
         await CustomDataGrid.RefreshDataAsync();
     }
 
+    async Task DeleteAll()
+    {
+        from_packs = new List<Package>();
+        components = 0;
+        CustomDataGrid.Data = from_packs;
+
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
     async Task SaveRow(Package pack)
     {
         from_packs.Add(pack);
@@ -80,44 +94,40 @@
     }
 }
 
-<RadzenStack Gap="1rem">
-    <RadzenRow AlignItems="AlignItems.Center">
-        <RadzenColumn>
-            <CipherAddBtn Size="ButtonSize.Large" Click="@(args => AddComponent())" Text="הוספת תעודה מוסרת" MinHeight="0px"/>
-        </RadzenColumn>
-    </RadzenRow>
-</RadzenStack>
+<CipherComponentCard Title="תעודות מוסרות">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="הוספת תעודה מוסרת" />
+        <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="מחיקת תעודות" />
+    </Buttons>
 
-<br/>
-
-    <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
-    <Columns>
-        <RadzenDataGridColumn TItem="Package" Property="Id" Title="#" Width="25px" SortOrder="SortOrder.Descending" TextAlign="TextAlign.Center" />
-        <RadzenDataGridColumn TItem="Package" Property="SerialNumber" Title="תעודה" Width="75px" TextAlign="TextAlign.Center">
-            <EditTemplate Context="pack">
-                <CipherAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" />
-            </EditTemplate>
-            <FooterTemplate>
-                מסה כוללת:
-            </FooterTemplate>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="50px" TextAlign="TextAlign.Center">
-            <EditTemplate Context="pack">
-                <RadzenNumeric @bind-Value="@pack.BrutMass" />
-            </EditTemplate>
-            <FooterTemplate>
-                @GetTotal()
-            </FooterTemplate>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn Width="25px" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
-            <Template Context="pack">
-                <CipherEditButton Click="@(args => EditRow(pack))" @onclick:stopPropagation="true" />
-                <CipherDeleteButton Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
-            </Template>
-            <EditTemplate Context="pack">
-                <CipherSuccessButton Click="@((args) => SaveRow(pack))" />
-                <CipherCloseButton Click="@((args) => CancelEdit(pack))" />
-            </EditTemplate>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+    <ChildContent>
+        <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)" >
+            <Columns>
+                <RadzenDataGridColumn TItem="Package" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
+                <RadzenDataGridColumn TItem="Package" Property="SerialNumber" Title="תעודה" Width="37%" TextAlign="@TdTextAlign">
+                        <EditTemplate Context="pack">
+                            <CipherAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" @bind-Value="@pack.SerialNumber"  />
+                        </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="37%" TextAlign="@TdTextAlign">
+                    <EditTemplate Context="pack">
+                        <CipherNumeric @bind-Value="@pack.BrutMass" />
+                    </EditTemplate>
+                    <FooterTemplate>
+                        מסה כוללת: @GetTotal()
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn Width="14%" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="pack">
+                        <CipherEditButton Click="@(args => EditRow(pack))" @onclick:stopPropagation="true" />
+                        <CipherDeleteButton Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
+                    </Template>
+                    <EditTemplate Context="pack">
+                        <CipherSuccessButton Click="@((args) => SaveRow(pack))" />
+                        <CipherCloseButton Click="@((args) => CancelEdit(pack))" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>
