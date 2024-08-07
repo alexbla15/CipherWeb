@@ -21,9 +21,9 @@
         <CipherPDFButton></CipherPDFButton>
     </Buttons>
     <CustomDataGrid>
-        <CipherDataGrid @ref="CustomDataGrid" RenderFunc="@OnRender" WithCustomColumns="true"
+        <CipherDataGrid @ref="CustomDataGrid" WithCustomColumns="true"
                         GridFilterMode="FilterMode.Simple" AllowFilter="false"
-                        AllowSort="false" Cipher_TItem="Event" AllowGroup="false" HideGroupedColumn="true"
+                        AllowSort="true" Cipher_TItem="Event" AllowGroup="false" HideGroupedColumn="true"
                         AllGroupsExpanded="false"
                         DataSource="@DataSource">
             <CustomColumns>
@@ -38,8 +38,8 @@
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="Event" Property="EventDate" Title="תאריך תנועה" />
-                <RadzenDataGridColumn TItem="Event" Property="Process" Title="תהליך" />
+                <RadzenDataGridColumn TItem="Event" Property="EventDate" Title="תאריך תנועה" OrderIndex="1" SortOrder="SortOrder.Ascending" />
+                <RadzenDataGridColumn TItem="Event" Property="Process" Title="תהליך" OrderIndex="2" SortOrder="SortOrder.Ascending" />
                 <RadzenDataGridColumn TItem="Event" Property="Type" Title="סוג" />
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
                     <Template>
@@ -106,16 +106,6 @@
         DataSource = await _db.GetEvents();
     }
 
-    void OnRender(DataGridRenderEventArgs<Event> args)
-    {
-        if (args.FirstRender)
-        {
-            args.Grid.Groups.Add(new GroupDescriptor() { Property = "EventDate", SortOrder = SortOrder.Ascending, Title = "תאריך תנועה" });
-            args.Grid.Groups.Add(new GroupDescriptor() { Property = "Process", SortOrder = SortOrder.Descending, Title="תהליך"});
-            StateHasChanged();
-        }
-    }
-
     ButtonStyle GetStatusColor(string status)
     {
         if (status == EventStatus.Pending)
@@ -146,6 +136,6 @@
         await DialogService.OpenAsync("תנועה",
 
     ds =>
-    @<CipherEventCard dir="rtl" WithCard=false ReadOnly=true></CipherEventCard>, Constants.SetDialogOptions);
+    @<CipherEventCard dir="rtl" WithCard=false ReadOnly=false></CipherEventCard>, Constants.SetDialogOptions);
     }
 }

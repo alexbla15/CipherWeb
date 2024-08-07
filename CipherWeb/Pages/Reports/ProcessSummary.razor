@@ -6,29 +6,29 @@
 
 <CipherComponentCard Title="סיכום קו">
     <HeaderContent>
-        <RadzenAutoComplete Placeholder="הקלידו שם של קו" Style="width:300px" Data="@Constants.Lines"></RadzenAutoComplete>
+        <CipherAutoComplete Label="שם הקו" Width="300px" Data="@Constants.Lines"></CipherAutoComplete>
     </HeaderContent>
     <ChildContent>
-    <RadzenRow>
-        <RadzenColumn>
-        @foreach (SearchParameter p in searchParameters)
-        {
-            <CipherFormRow Icon="@p.Icon" Label="@p.Label" Width="fit-content" >
-                <RadzenSelectBar @bind-Value="@p.BindValue" TValue="IEnumerable<string>"
-                                         Size="ButtonSize.Medium" Multiple="true" Style="border-radius:10px; padding-left:10px; padding-top:20px" Change="@SelectionChanged">
-                    <Items>
-                        @foreach (string option in p.Options)
-                        {
-                            <RadzenSelectBarItem Value="@option" Text="@option"/>
-                        }
-                    </Items>
-                </RadzenSelectBar>
-            </CipherFormRow>
-        }
+        <RadzenRow>
+            <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Start" Gap="20px">
+                @foreach (SearchParameter p in searchParameters)
+                {
+                        <CipherFormRow Label="@p.Label" Icon="@p.Icon">
+                        <RadzenSelectBar @bind-Value="@p.BindValue" TValue="IEnumerable<string>"
+                                         Size="ButtonSize.Medium" Multiple="true" Style="border-radius:10px;" Change="@SelectionChanged">
+                            <Items>
+                                @foreach (string option in p.Options)
+                                {
+                                    <RadzenSelectBarItem Value="@option" Text="@option" />
+                                }
+                            </Items>
+                        </RadzenSelectBar>
+                        </CipherFormRow>
+                }
                 <CipherDatePicker Label="מתאריך" />
                 <CipherDatePicker Label="עד תאריך" />
-        </RadzenColumn>
-    </RadzenRow>
+            </RadzenStack>
+        </RadzenRow>
 
     </ChildContent>
 
@@ -36,10 +36,10 @@
 
 <CipherComponentCard Title="תפוקה שנתית">
     <Buttons>
-        <CipherButton Icon="@Icons.Table" HelpText="תצוגת טבלה" Variant="Variant.Outlined" Click="@SwitchView"/>
+        <CipherButton Icon="@Icons.Table" HelpText="תצוגת טבלה" Variant="Variant.Outlined" Click="@SwitchView" />
         <CipherButton Icon="@Icons.Summary" HelpText="תצוגת גרף" Variant="Variant.Outlined" Click="@SwitchView" />
-        <CipherExcelButton Data="@GetProductionData()" FileName="yearly_output"/>
-        <CipherPDFButton/>
+        <CipherExcelButton Data="@GetProductionData()" FileName="yearly_output" />
+        <CipherPDFButton />
     </Buttons>
     <ChildContent>
         @if (summaryView == "graph")
@@ -49,7 +49,7 @@
                 {
                     @if (searchParameters[2].BindValue.Contains(output_options[production.dataItems.IndexOf(series)]))
                     {
-                        <RadzenStackedColumnSeries Data="@series" CategoryProperty="Month" Title="@output_options[production.dataItems.IndexOf(series)]" ValueProperty="Mass" >
+                        <RadzenStackedColumnSeries Data="@series" CategoryProperty="Month" Title="@output_options[production.dataItems.IndexOf(series)]" ValueProperty="Mass">
                             <RadzenColumnOptions Width="60" />
                             <RadzenSeriesDataLabels Visible="@showDataLabels" />
                         </RadzenStackedColumnSeries>
@@ -71,14 +71,14 @@
 
 </CipherComponentCard>
 
-@code{
+@code {
     bool showDataLabels = false;
 
     string summaryView = "graph";
 
     public static readonly List<string> proc_options = Constants.Processes;
     public static readonly List<string> input_options = Constants.Reactants;
-    public static readonly List<string> output_options = Constants.Products; 
+    public static readonly List<string> output_options = Constants.Products;
 
     public static IEnumerable<string> selectedProcs = proc_options;
     public static IEnumerable<string> selectedReagents = input_options;
@@ -239,11 +239,12 @@
         values = orderedValues;
     }
 
-    public Production production = new Production { 
-        dataItems = new List<List<DataItem>> { ProdA, ProdB, ProdC },
-        Titles = output_options,
-        ShowDataItems = new bool[] {true, true, true}
-    };
+    public Production production = new Production
+        {
+            dataItems = new List<List<DataItem>> { ProdA, ProdB, ProdC },
+            Titles = output_options,
+            ShowDataItems = new bool[] { true, true, true }
+        };
 
     public class SearchParameter
     {
@@ -266,7 +267,7 @@
 
     void SelectionChanged()
     {
-        foreach(string title in production.Titles)
+        foreach (string title in production.Titles)
         {
             production.ShowDataItems[production.Titles.IndexOf(title)] = selectedProducts.Contains(title);
         }

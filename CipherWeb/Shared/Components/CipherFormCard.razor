@@ -10,7 +10,7 @@
 }
 else
 {
-    <RadzenStack Gap="@Gap" JustifyContent="JustifyContent.Center" >
+    <RadzenStack Gap="@Gap" JustifyContent="JustifyContent.Center" Style="@($"width: {Width}; max-width:{MaxWidth}")" >
         @ChildContent
     </RadzenStack>
 }

@@ -10,13 +10,14 @@
 
 <PageTitle>מסך פתיחה</PageTitle>
 
-<CipherText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת CIPHER" TextAlign="TextAlign.Center" />
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
+    <CipherText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת" TextAlign="TextAlign.Center" Width="" />
 
-<br />
-<br />
+    <CipherLogo Height="25vh"></CipherLogo>
+</RadzenStack>
 
-<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
-AlignItems="AlignItems.Center" Style="width:100%">
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+             AlignItems="AlignItems.Center" Style="width:100%">
     @foreach (InfoBox infoBox in infoBoxes)
     {
         <CipherComponentCard Variant="Variant.Outlined" Width="33%">
@@ -38,10 +39,10 @@ AlignItems="AlignItems.Center" Style="width:100%">
 @code {
     class InfoBox
     {
-        public string Title{ get; set; }
-        public string Description{ get; set; }
-        public string ButtonText{ get; set; }
-        public string ButtonIcon{ get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string ButtonText { get; set; }
+        public string ButtonIcon { get; set; }
     }
 
     List<InfoBox> infoBoxes = new List<InfoBox>

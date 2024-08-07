@@ -1,18 +1,20 @@
 ﻿@inherits CipherTableCard
 
 <CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@Constants.packages" WithCard="@WithCard" WithButtons="@WithButtons"
-    FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height">
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height">
 
     <HeaderContent>
-        <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-            <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
-        </RadzenStack>
+        @if (WithHeaderContent)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+            </RadzenStack>
+        }
     </HeaderContent>
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Package" DataSource="@Constants.packages" RowsPerPage="@RowsPerPage"
-                    GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" 
-                    WithTotalFooter="@WithTotalFooter"
-                    />
+                        GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
+                        WithTotalFooter="@WithTotalFooter" />
     </ComponentContent>
 </CipherTableCard>
 
@@ -28,6 +30,9 @@
 
     [Parameter]
     public bool WithTotalFooter { get; set; } = true;
+
+    [Parameter]
+    public bool WithHeaderContent { get; set; } = true;
 
     [Parameter]
     public int RowsPerPage { get; set; } = 12;

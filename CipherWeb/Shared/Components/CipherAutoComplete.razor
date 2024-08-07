@@ -22,8 +22,6 @@
     [Parameter]
     public bool ShowErrors { get; set; } = true;
 
-    //
-
     private string _value = "";
 
     [Parameter]
@@ -64,6 +62,9 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
+    [Parameter]
+    public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
     private string LengthValidatorText()
     {
         return $"{MinLength}-{MaxLength} תווים. ";
@@ -74,7 +75,7 @@
         public string value = "";
     }
 
-    Model model = new Model() {value= ""};
+    Model model = new Model() { value = "" };
     RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
     RadzenLengthValidator LengthValidator = new RadzenLengthValidator();
     RadzenRegexValidator ImproperCharsValidator = new RadzenRegexValidator();
@@ -168,7 +169,7 @@
 
 
 <RadzenTemplateForm TItem="Model" Data=@model>
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0" Style="padding-bottom:5px">
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
@@ -182,28 +183,28 @@
                 </style>
                 <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
             }
-            @if(string.IsNullOrEmpty(Label))
+            @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
+                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                     Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
             }
             else
             {
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled"
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+                    <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                         Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
-            </RadzenFormField>
+                </RadzenFormField>
             }
         </RadzenStack>
-    <RadzenStack Orientation="Orientation.Vertical">
-        @if (Required)
-        {
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
-        }
-        <RadzenLengthValidator @ref=LengthValidator Component="value" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
-                                Visible="@(RequiredValidator.IsValid && ShowErrors)" />
-        <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת.]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
+        <RadzenStack Orientation="Orientation.Vertical">
+            @if (Required)
+            {
+                <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+            }
+            <RadzenLengthValidator @ref=LengthValidator Component="value" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
+                                   Visible="@(RequiredValidator.IsValid && ShowErrors)" />
+            <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת.]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
             <RadzenCustomValidator @ref=SqlInjectionValidator Component="value" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate())" Visible=@(ShowErrors) />
-    </RadzenStack>      
+        </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

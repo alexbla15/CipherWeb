@@ -1,6 +1,8 @@
 ﻿@inherits CipherComponentCard
 
 <CipherComponentCard Title="@Title">
-    <CipherLocation LabelText="מיקום התחלתי" Icon="@Icons.Location_Initial"/>
-    <CipherLocation LabelText="מיקום סופי" Icon="@Icons.Location_Final" />
+    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="10px">
+        <CipherLocation LabelText="מיקום התחלתי" Icon="@Icons.Location_Initial" />
+        <CipherLocation LabelText="מיקום סופי" Icon="@Icons.Location_Final" />
+    </RadzenStack>
 </CipherComponentCard>

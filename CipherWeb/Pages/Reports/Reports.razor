@@ -1,50 +1,5 @@
 ﻿@page "/Reports"
 
-@inject ICipherInfo _db
-
-@code {
-    string ButtonWidth = "400px";
-    string CardWidth = "";
-    string ButtonGap = "10px";
-    string ButtonTextAlign = "right";
-}
-
 <PageTitle>דוחות</PageTitle>
 
-<CipherComponentCard Title="דוחות" Width="@CardWidth">
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-    <RadzenRow>
-
-            @foreach (MyNavLink myNavLink in CipherNavLinks.links)
-            {
-                if (myNavLink.Name == "דוחות")
-                {
-                    
-                <RadzenColumn>
-                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-                    @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
-                    {
-                        if (myNavLink.SubLinks.Count()/2 <= myNavLink.SubLinks.IndexOf(mySubNavLink))
-                        {
-                            <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" Text="@($"דוח {mySubNavLink.Name}")" Path="@mySubNavLink.Href" />
-                        }
-                    }
-                    </RadzenStack>
-                </RadzenColumn>
-
-                <RadzenColumn>
-                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="@ButtonGap">
-                        @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
-                        {
-                            if (myNavLink.SubLinks.Count()/2 > myNavLink.SubLinks.IndexOf(mySubNavLink))
-                            {
-                                 <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" Text="@($"דוח {mySubNavLink.Name}")" Path="@mySubNavLink.Href" />
-                            }
-                        }
-                    </RadzenStack>
-                </RadzenColumn>
-                }
-            }
-    </RadzenRow>
-</RadzenStack>
-</CipherComponentCard>
+<CipherPointers Title="דוחות" LabelInitialText="דוח" NavLinkType="דוחות"></CipherPointers>

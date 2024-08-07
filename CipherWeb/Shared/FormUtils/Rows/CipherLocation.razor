@@ -1,6 +1,6 @@
 ﻿@inject ICipherInfo _db
 
-<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="@LabelText" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">

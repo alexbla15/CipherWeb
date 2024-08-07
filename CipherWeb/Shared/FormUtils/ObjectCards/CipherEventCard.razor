@@ -2,73 +2,63 @@
 
 @code {
     [Parameter]
-    public string RowWidth { get; set; } = "400px";
+    public string EnlargedRowWidth { get; set; } = "677px";
+
+    [Parameter]
+    public string RowWidth { get; set; } = "300px";
+
+    [Parameter]
+    public string ReducedRowWidth { get; set; } = "279px";
+
+    [Parameter]
+    public string EnlargedReducedRowWidth { get; set; } = "558px";
 
     [Parameter]
     public bool ReadOnly { get; set; } = false;
 }
 
-<CipherComponentCard Title="@Title" WithCard="@WithCard">
+<CipherComponentCard Title="@Title" WithCard="@WithCard" Width="1000px" MaxWidth="1000px">
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="פרטים">
-                <RadzenRow>
-                <RadzenColumn>
-                        @* -- Numerator -- *@
-                        @*<CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Id" Width="@RowWidth" />*@
-                        <CipherFormRow Label="מספר סידורי" Icon="@Icons.Id" Style="position:fixed">
-                            <CipherAutoComplete Label="מספר סידורי" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- Numerator -- *@
+                <CipherAutoComplete Icon="@Icons.Id" Label="מספר סידורי" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                        @* -- PROCESS -- *@
-                        <CipherFormRow Label="תהליך" Icon="@Icons.Process" Style="position:fixed">
-                            <CipherAutoComplete Label="תהליך" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- EVENT TYPE -- *@
+                <CipherAutoComplete Icon="@Icons.Type" Label="סוג תנועה" Width="@RowWidth" Disabled="@ReadOnly" />
 
+                @* -- PROCESS -- *@
+                <CipherAutoComplete Icon="@Icons.Process" Label="תהליך" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                        @* -- UPDATING WORKER -- *@
-                        <CipherFormRow Label="עובד מעדכן" Icon="@Icons.Account_Old" Style="position:fixed">
-                            <CipherAutoComplete Label="עובד מעדכן" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- EVENT DATE -- *@
+                <CipherDatePicker Label="תאריך תנועה" Disabled="@ReadOnly" Width="@RowWidth" />
 
-                        @* -- AUTHORIZING WORKER -- *@
-                        <CipherFormRow Label="עובד מאשר" Icon="@Icons.Account_New" Style="position:fixed">
-                            <CipherAutoComplete Label="עובד מאשר" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- UPDATING WORKER -- *@
+                <CipherAutoComplete Icon="@Icons.Account_Old" Label="עובד מעדכן" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                        @* -- PARAMETERS -- *@
-                        <CipherFormRow Label="פרמטרים" Icon="@Icons.Settings" Style="position:fixed">
-                            <CipherAutoComplete Label="פרמטרים" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- UPDATING DATE -- *@
+                <CipherDatePicker Label="תאריך עדכון" Disabled="@ReadOnly" Width="@RowWidth" />
 
-                        @* -- COMMENTS -- *@
-                        <CipherFormRow Label="הערות" Icon="@Icons.Comment" Style="position:fixed">
-                            <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; {RowWidth}")" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- AUTHORIZING WORKER -- *@
+                <CipherAutoComplete Icon="@Icons.Account_New" Label="עובד מאשר" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                </RadzenColumn>
-                <RadzenColumn>
-                        @* -- EVENT TYPE -- *@
-                        <CipherFormRow Label="סוג תנועה" Icon="@Icons.Type" Style="position:fixed">
-                            <CipherAutoComplete Label="סוג תנועה" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
+                @* -- AUTHORIZING DATE -- *@
+                <CipherDatePicker Label="תאריך אישור" Disabled="@ReadOnly" Width="@RowWidth" />
 
-                        @* -- EVENT DATE -- *@
-                        <CipherDatePicker Label="תאריך תנועה" Disabled="@ReadOnly" />
+                @* -- PARAMETERS -- *@
+                <CipherAutoComplete Icon="@Icons.Settings" Label="פרמטרים" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                        @* -- UPDATING DATE -- *@
-                        <CipherDatePicker Label="תאריך עדכון" Disabled="@ReadOnly" />
+                @* -- STATUS -- *@
+                <CipherAutoComplete Icon="@Icons.Status" Label="סטטוס" Width="@RowWidth" Disabled="@ReadOnly" />
 
-                        @* -- AUTHORIZING DATE -- *@
-                        <CipherDatePicker Label="תאריך אישור" Disabled="@ReadOnly" />
+                @* -- COMMENTS -- *@
+                <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@EnlargedRowWidth">
+                    <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {EnlargedReducedRowWidth}")" Disabled="@ReadOnly" />
+                </CipherFormRow>
 
-                        @* -- STATUS -- *@
-                        <CipherFormRow Label="סטטוס" Icon="@Icons.Status" Style="position:fixed">
-                            <CipherAutoComplete Label="סטטוס" Width="@RowWidth" Disabled="@ReadOnly" />
-                        </CipherFormRow>
-                </RadzenColumn>
-                </RadzenRow>
-        </RadzenTabsItem>
+                <br/>
+                <br/>
+            </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
 

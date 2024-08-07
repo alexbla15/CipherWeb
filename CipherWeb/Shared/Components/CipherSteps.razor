@@ -5,13 +5,16 @@
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    public string Width { get; set; } = "800px";
+    public string Width { get; set; } = "100%";
+
+    [Parameter]
+    public string MaxWidth { get; set; } = "100%";
 
     protected override async Task OnInitializedAsync()
     {
         PreviousText = "שלב קודם";
         NextText = "שלב הבא";
-        Style = $"width:{Width}; max-width: 1000px; ";
+        Style = $"width:{Width}; max-width: {MaxWidth}; ";
     }
 }
 

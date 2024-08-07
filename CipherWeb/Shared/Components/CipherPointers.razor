@@ -1,0 +1,52 @@
+﻿@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public int componentWidth { get; set; } = 300;
+
+    [Parameter]
+    public string ButtonGap { get; set; } = "10px";
+
+    [Parameter]
+    public string ButtonTextAlign { get; set; } = "right";
+
+    [Parameter]
+    public string NavLinkType { get; set; } = "הזנה";
+
+    [Parameter]
+    public string LabelInitialText { get; set; } = "הזנת";
+
+    [Parameter]
+    public int AmountPerRow { get; set; } = 3;
+
+    public string ButtonWidth()
+    {
+        return $"{componentWidth}px";
+    }
+
+    public string ComponentWidth()
+    {
+        //return $"{2.1 * componentWidth}px";
+        return $"{100 / AmountPerRow}%";
+    }
+
+    public string CardWidth()
+    {
+        //return $"{2.1 * componentWidth}px";
+        return $"100%";
+    }
+}
+
+<CipherComponentCard Title=@Title Width="@CardWidth()">
+    @foreach (MyNavLink myNavLink in CipherNavLinks.links)
+    {
+        if (myNavLink.Name == NavLinkType)
+        {
+            @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
+            {
+                <CipherNavButton ButtonTextAlign="right" Width="@ComponentWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
+                                 Text="@(mySubNavLink.Name.Contains(LabelInitialText) ? mySubNavLink.Name: $"{LabelInitialText} {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px" />
+            }
+        }
+    }
+</CipherComponentCard>

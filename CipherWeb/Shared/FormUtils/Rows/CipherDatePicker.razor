@@ -2,6 +2,9 @@
 
 @code {
     [Parameter]
+    public string PaddingBottom { get; set; } = "10px";
+
+    [Parameter]
     public string Width { get; set; } = "300px";
 
     [Parameter]
@@ -69,10 +72,10 @@
 <RadzenTemplateForm TItem="Model" Data=@model>
     <RadzenStack Orientation="Orientation.Vertical" Gap="0">
 
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="dd/MM/yyyy" Style="@Constants.textStyle"
+                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="dd/MM/yyyy"
                                   Disabled="@Disabled" Min="@Min" Max="@Max" />
             </RadzenFormField>
         </RadzenStack>

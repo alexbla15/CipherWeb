@@ -7,32 +7,34 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px">
     <HeaderContent>
-        <RadzenTextBox Value="111"></RadzenTextBox>
+        <CipherAutoComplete Data="@Constants.packages" TextProperty="SerialNumber" Value="111"></CipherAutoComplete>
     </HeaderContent>
     <ChildContent>
-    <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
-        <Items>
-            <RadzenAccordionItem Text="@($"תעודות ({Constants.packages.Count()})")">
-                <CipherPackagesTable WithCard="false" WithTotalFooter=false Width="800px"></CipherPackagesTable>
-            </RadzenAccordionItem>
-            <br/>
-            <RadzenAccordionItem Text="@($"כלים ({Constants.vessels.Count()})")">
-                <CipherComponentCard>
-                    <CipherDataGrid DataSource="@Constants.vessels" WithTotalFooter=false></CipherDataGrid>
-                </CipherComponentCard>
-            </RadzenAccordionItem>
-            <RadzenAccordionItem Text="@($"מיקומים ({Constants.systems.Count()})")">
-                <CipherComponentCard>
-                    <CipherDataGrid DataSource="@Constants.systems" WithTotalFooter=false></CipherDataGrid>
-                </CipherComponentCard>
-            </RadzenAccordionItem>
-        </Items>
-    </RadzenAccordion>
+        <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
+            <Items>
+                <RadzenAccordionItem Text="@($"תעודות ({Constants.packages.Count()})")">
+                    <CipherComponentCard>
+                        <CipherDataGrid DataSource="@Constants.packages" WithTotalFooter=false></CipherDataGrid>
+                    </CipherComponentCard>
+                </RadzenAccordionItem>
+                <br />
+                <RadzenAccordionItem Text="@($"כלים ({Constants.vessels.Count()})")">
+                    <CipherComponentCard>
+                        <CipherDataGrid DataSource="@Constants.vessels" WithTotalFooter=false></CipherDataGrid>
+                    </CipherComponentCard>
+                </RadzenAccordionItem>
+                <RadzenAccordionItem Text="@($"מיקומים ({Constants.systems.Count()})")">
+                    <CipherComponentCard>
+                        <CipherDataGrid DataSource="@Constants.systems" WithTotalFooter=false></CipherDataGrid>
+                    </CipherComponentCard>
+                </RadzenAccordionItem>
+            </Items>
+        </RadzenAccordion>
     </ChildContent>
 </CipherComponentCard>
 
 @code {
-    public  Task getVessels()
+    public Task getVessels()
     {
         return _db.GetVessels();
     }
@@ -40,8 +42,8 @@
     public async Task OpenPackage()
     {
         await DialogService.OpenAsync("תעודה",
-        
-    ds =>
+
+        ds =>
     @<CipherPackageCard dir="rtl" WithCard=false ReadOnly=true></CipherPackageCard>, Constants.SetDialogOptions);
     }
 
@@ -49,7 +51,7 @@
     {
         await DialogService.OpenAsync("כלי",
 
-    ds =>
+        ds =>
     @<CipherVesselCard dir="rtl" WithCard=false ReadOnly=true></CipherVesselCard>, Constants.SetDialogOptions);
     }
 
@@ -57,7 +59,7 @@
     {
         await DialogService.OpenAsync("מיקום",
 
-        ds =>
+    ds =>
     @<CipherSystemCard dir="rtl" WithCard=false ReadOnly=true></CipherSystemCard>, Constants.SetDialogOptions);
     }
 

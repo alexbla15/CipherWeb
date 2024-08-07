@@ -130,7 +130,8 @@ namespace CipherWeb.Shared.Components.Buttons
             builder.AddAttribute(10, "MarginBottom", MarginBottom);
             builder.AddAttribute(11, "ColorShade", ColorShade);
             builder.AddAttribute(12, "ColorStyle", ColorStyle);
-            builder.AddAttribute(13, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
+            builder.AddAttribute(13, "Style", Style);
+            builder.AddAttribute(14, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
             builder.CloseComponent();
         }
     }

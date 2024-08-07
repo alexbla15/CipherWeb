@@ -1,28 +1,5 @@
 ﻿@page "/Forms"
 
-@inject ICipherInfo _db
-
-@code {
-    static int componentWidth = 300;
-
-    string ButtonWidth = $"{componentWidth}px";
-    string CardWidth = $"{2.1 * componentWidth}px";
-    string ButtonGap = "10px";
-    string ButtonTextAlign = "right";
-}
-
 <PageTitle>טפסים</PageTitle>
 
-<CipherComponentCard Title="טפסי הזנה" Width="@CardWidth">
-    @foreach (MyNavLink myNavLink in CipherNavLinks.links)
-    {
-        if (myNavLink.Name == "הזנה")
-        {
-            @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
-            {
-                <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large" 
-                Text="@($"הזנת {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px"/>
-            }
-        }
-    }
-</CipherComponentCard>
+<CipherPointers Title="טפסי הזנה" LabelInitialText="הזנת" NavLinkType="הזנה"></CipherPointers>

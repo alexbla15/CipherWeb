@@ -4,21 +4,15 @@
 @inject DialogService DialogService
 @inject NavigationManager NavigationManager
 
-<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
-AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
-    @* -- LOGO BLOCK --*@
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+             AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
+    @* -- LOGO BLOCK -- *@
     <RadzenLink Path="" Text="מסך הבית" Style="@($"width:{Logo_Width}")">
         <CipherLogo />
     </RadzenLink>
 
-    @* -- SEARCH BLOCK --*@
-    @*<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-    <CipherAutoComplete Label="חיפוש תעודה / מיקום / סוג / ..."
-                        Style="@($"width:{Search_Width}; justify-content:center")" Data="@Constants.packages" TextProperty="SerialNumber" Required="false" />
-    <CipherNavButton Icon="@Icons.Search" Path="/Search/FreeSearch"/>
-    </RadzenStack>
-*@
-    <CipherSearchRow Width="@Search_Width"></CipherSearchRow>
+    @* -- SEARCH BLOCK -- *@
+    <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"></CipherSearchRow>
 
     @* -- ACCOUNT BLOCK --*@
     <RadzenCard Variant="Variant.Text" Style="@($"{AccountStyle()}; width:{Account_Width};")">
@@ -27,15 +21,15 @@ AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
                 <CipherAccountImage />
             </RadzenLink>
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
-                <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6"/>
+                <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
                     <CipherButton Icon="@Icons.Account" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
-                                    Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
+                                  Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
                                   Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
 
                     @* -- FAST ACTIONS -- *@
                     <CipherNavButton Icon="@Icons.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                    Path="/Settings" HelpTextPosition="TooltipPosition.Bottom"/>
+                                     Path="/Settings" HelpTextPosition="TooltipPosition.Bottom" />
                     <CipherNavButton Icon="@Icons.Help" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
                                      Path="/Information" HelpTextPosition="TooltipPosition.Bottom" />
                 </RadzenStack>
@@ -43,6 +37,7 @@ AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
         </RadzenStack>
     </RadzenCard>
 </RadzenStack>
+
 @code {
     // HEADER PROPERTIES
 
@@ -62,7 +57,7 @@ AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
     public string Header_Top { get; set; } = "0";
 
     // LOGO PROPERTIES
-    
+
     [Parameter]
     public string Logo_Width { get; set; } = "25%";
 
@@ -87,23 +82,21 @@ AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
     public async Task ChangeRole()
     {
         var result = await DialogService.OpenAsync("", ds =>
-        @<RadzenStack Gap="1rem" Style="text-align:right" dir="rtl" AlignItems="AlignItems.Center">
-                <CipherFormRow Label="תצוגה נוכחית" Icon="@Icons.Account_Old" Style="width: 200px; text-align:right">
-                        <RadzenTextBox Value="@Roles.CurrnetRole" Style="width: 200px" ReadOnly="true" />
-                </CipherFormRow>
+    @<RadzenStack Gap="1rem" Style="text-align:right;" dir="rtl" AlignItems="AlignItems.Center">
+            <CipherAutoComplete Icon="@Icons.Account_Old" Label="תצוגה נוכחית" Value="@Roles.CurrnetRole" Style="width: 200px" Disabled="true"/>
+        <CipherAutoComplete Icon="@Icons.Account_New" Label="תצוגה חדשה" Style="width: 200px" @bind-Value=@NewRole Data="@Roles.Get()" />
 
-        <CipherFormRow Label="תצוגה חדשה" Icon="@Icons.Account_New" Style="width: 200px; text-align:right">
-                        <RadzenAutoComplete Placeholder="תצוגה חדשה" Style="width: 200px" Data="@Roles.Get()" @bind-Value=@NewRole />
-                </CipherFormRow>
-            <br/>
-            <br/>
+
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
-                <RadzenStack Orientation="Orientation.Horizontal">
-                <CipherButton Icon="@Icons.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
-                <CipherButton Icon="@Icons.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
-                </RadzenStack>
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                            <CipherButton Icon="@Icons.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
+                            <CipherButton Icon="@Icons.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
+                
             </RadzenStack>
+            
         </RadzenStack>
+    </RadzenStack>
+
     );
     }
 

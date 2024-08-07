@@ -31,7 +31,7 @@ namespace CipherWeb.Data
         public static MySubNavLink UnitsReport = new MySubNavLink() { Href = "Reports/Units", Name = "יחידות", Icon = Icons.Unit };
         public static MySubNavLink LocationsReport = new MySubNavLink() { Href = "Reports/Locations", Name = "מיקומים", Icon = Icons.Location };
         public static MySubNavLink LinesReport = new MySubNavLink() { Href = "Reports/Lines", Name = "קוים", Icon = Icons.Line };
-        public static MySubNavLink ProcessesReport = new MySubNavLink() { Href = "Reports/Processes", Name = "תהליכים", Icon = Icons.Process };
+        public static MySubNavLink ProcessesReport = new MySubNavLink() { Href = "/Reports/ProcessSummary", Name = "תהליכים", Icon = Icons.Process };
         public static MyNavLink Reports = new MyNavLink()
         {
             Href = "Reports",
@@ -49,7 +49,7 @@ namespace CipherWeb.Data
         public static MySubNavLink LocationSearch = new MySubNavLink() { Href = "Search/System", Name = "מיקום", Icon = Icons.Location };
         public static MyNavLink Search = new MyNavLink()
         {
-            Href = "Search",
+            Href = "Searches",
             Icon = Icons.Search,
             Name = "חיפוש",
             SubLinks = new List<MySubNavLink>()

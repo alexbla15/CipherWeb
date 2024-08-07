@@ -42,7 +42,7 @@
 
     [Parameter]
     public bool WithCustomColumns { get; set; } = false;
-    
+
     [Parameter]
     public bool WithTotalFooter { get; set; } = true;
 
@@ -50,7 +50,7 @@
     public string SetColumnWidth { get; set; } = "200px";
 
     [Parameter]
-    public Dictionary<string,int> ColumnsOrder { get; set; }
+    public Dictionary<string, int> ColumnsOrder { get; set; }
 
     [Parameter]
     public Action<DataGridRenderEventArgs<Cipher_TItem>> RenderFunc { get; set; }
@@ -62,7 +62,7 @@
     Cipher_TItem originalRow;
 
     // dynamic row
-    Dictionary<string, object> dynamicRow = new Dictionary<string, object> ();
+    Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
     DateTime dynamicDate;
 
     protected override async Task OnInitializedAsync()
@@ -138,64 +138,62 @@
 {
     <p><em>טוען...</em></p>
 }
-<RadzenDataGrid 
-    @ref="CustomDataGrid"
-    TItem="Cipher_TItem" 
-    Data="@DataSource"
-    Render="@RenderFunc"
-    FilterMode="@GridFilterMode" 
-    AllowFiltering="@AllowFilter" 
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowColumnResize="true"
-    FilterPopupRenderMode="PopupRenderMode.OnDemand"
-    AllowPaging="true" 
-    PageSize="@RowsPerPage"
-    AllowSorting="@AllowSort"
-    SelectionMode="DataGridSelectionMode.Single" 
-    AllowColumnPicking="@AllowColumnPick" 
-    AllGroupsExpanded="@AllGroupsExpanded" 
-    AllowGrouping="@AllowGroup" 
-    HideGroupedColumn="@HideGroupedColumn" 
-    Density="@Density.Compact"
-    Style="text-align: right"
-    AndOperatorText="וגם" 
-    OrOperatorText="או" 
-    ClearFilterText="ביטול" 
-    IsNullText="חסר" 
-    IsNotNullText="לא חסר"
-    StartsWithText="מתחיל ב" 
-    EndsWithText="מסתיים ב" 
-    IsEmptyText="ריק" 
-    IsNotEmptyText="לא ריק"
-    ContainsText="מכיל"
-    DoesNotContainText="לא מכיל" 
-    EqualsText="זהה ל" 
-    NotEqualsText="שונה מ"
-    LessThanOrEqualsText="קטן / שווה ל" 
-    LessThanText="קטן מ" 
-    GreaterThanOrEqualsText="גדול / שווה ל" 
-    GreaterThanText="גדול מ"
-    AllColumnsText="הכל" 
-    FilterText="סינון" 
-    ApplyFilterText="סינון"
-    ColumnsShowingText="עמודות מוצגות" 
-    GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם"
-    >
+<RadzenDataGrid @ref="CustomDataGrid"
+                TItem="Cipher_TItem"
+                Data="@DataSource"
+                Render="@RenderFunc"
+                FilterMode="@GridFilterMode"
+                AllowFiltering="@AllowFilter"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowColumnResize="true"
+                FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                AllowPaging="true"
+                PageSize="@RowsPerPage"
+                AllowSorting="@AllowSort"
+                SelectionMode="DataGridSelectionMode.Single"
+                AllowColumnPicking="@AllowColumnPick"
+                AllGroupsExpanded="@AllGroupsExpanded"
+                AllowGrouping="@AllowGroup"
+                HideGroupedColumn="@HideGroupedColumn"
+                Density="@Density.Compact"
+                Style="text-align: right"
+                AndOperatorText="וגם"
+                OrOperatorText="או"
+                ClearFilterText="ביטול"
+                IsNullText="חסר"
+                IsNotNullText="לא חסר"
+                StartsWithText="מתחיל ב"
+                EndsWithText="מסתיים ב"
+                IsEmptyText="ריק"
+                IsNotEmptyText="לא ריק"
+                ContainsText="מכיל"
+                DoesNotContainText="לא מכיל"
+                EqualsText="זהה ל"
+                NotEqualsText="שונה מ"
+                LessThanOrEqualsText="קטן / שווה ל"
+                LessThanText="קטן מ"
+                GreaterThanOrEqualsText="גדול / שווה ל"
+                GreaterThanText="גדול מ"
+                AllColumnsText="הכל"
+                FilterText="סינון"
+                ApplyFilterText="סינון"
+                ColumnsShowingText="עמודות מוצגות"
+                GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם">
 
     <EmptyTemplate>
-        <p style="color: lightgrey; font-size: 24px; 
+        <p style="color: lightgrey; font-size: 24px;
             text-align: center; margin: 2rem;">לא נמצאו נתונים</p>
     </EmptyTemplate>
-    <Columns >
+    <Columns>
         @* IT PAGE USES CUSTOMIZED COLUMNS, RATHER THAN THOSE CREATED BY DEFAULT *@
         @if (!WithCustomColumns)
         {
-            @foreach (Tuple<string,string> col in ColumnNames)
+            @foreach (Tuple<string, string> col in ColumnNames)
             {
                 @if (col.Item2 == "תאריך")
                 {
                     <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth"
-                                            SortOrder="SortOrder.Descending" style="text-align:center" OrderIndex="@GetOrder(col.Item1)"/>
+                                          SortOrder="SortOrder.Descending" style="text-align:center" OrderIndex="@GetOrder(col.Item1)" />
                 }
                 // first column
                 else if (ColumnNames.IndexOf(col) == 0 && !(typeof(Cipher_TItem).GetProperty(col.Item1) is null) && WithTotalFooter)
@@ -209,22 +207,37 @@
                 else if (!(typeof(Cipher_TItem).GetProperty(col.Item1) is null))
                 {
                     @if (typeof(decimal).IsAssignableFrom(typeof(Cipher_TItem).GetProperty(col.Item1).PropertyType))
-                    {
-                        <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth" OrderIndex="@GetOrder(col.Item1)">
-                            <Template Context="item">
-                                @string.Format("{0:0.00;0.00-}", item.GetType().GetProperty(col.Item1).GetValue(item, null))
-                            </Template>
-                            <EditTemplate Context="item">
-                                <RadzenDropDown @bind-Value="@dynamicRow[col.Item1]" Data="@DataSource" TextProperty="CompanyName" ValueProperty="@col.Item1" 
-                                Style="width:100%; text-align: right" />
-                            </EditTemplate>
-                            <FooterTemplate>
-                                @if (DataSource != null)
-                                {
-                                    @string.Format("{0:0.00;0.00-}", DataSource.Sum(s => (decimal?)s.GetType().GetProperty(col.Item1)?.GetValue(s)))
-                                }
+                {
+                        @if (WithTotalFooter)
+                        {
+                            <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth" OrderIndex="@GetOrder(col.Item1)">
+                                <Template Context="item">
+                                    @string.Format("{0:0.00;0.00-}", item.GetType().GetProperty(col.Item1).GetValue(item, null))
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenDropDown @bind-Value="@dynamicRow[col.Item1]" Data="@DataSource" TextProperty="CompanyName" ValueProperty="@col.Item1"
+                                    Style="width:100%; text-align: right" />
+                                </EditTemplate>
+                                <FooterTemplate>
+                                    @if (DataSource != null)
+                                    {
+                                        @string.Format("{0:0.00;0.00-}", DataSource.Sum(s => (decimal?)s.GetType().GetProperty(col.Item1)?.GetValue(s)))
+                                    }
                             </FooterTemplate>
-                        </RadzenDataGridColumn>
+                            </RadzenDataGridColumn>
+                        }
+                        else
+                        {
+                            <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth" OrderIndex="@GetOrder(col.Item1)">
+                                <Template Context="item">
+                                    @string.Format("{0:0.00;0.00-}", item.GetType().GetProperty(col.Item1).GetValue(item, null))
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenDropDown @bind-Value="@dynamicRow[col.Item1]" Data="@DataSource" TextProperty="CompanyName" ValueProperty="@col.Item1"
+                                                    Style="width:100%; text-align: right" />
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+                        }
                     }
                     else
                     {

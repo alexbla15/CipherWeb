@@ -17,7 +17,17 @@
     public string FontSize { get; set; }
 
     [Parameter]
+    public string FontWeight { get; set; }
+
+    [Parameter]
     public string Height { get; set; }
+
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public string PaddingBottom { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,7 +42,11 @@
         return $@"
             width: {Width};
             font-size: {FontSize};
-            height: {Height};";
+            font-weight: {FontWeight};
+            height: {Height};
+            color: {Color};
+            padding-bottom: {PaddingBottom}"
+        ;
     }
 }
 

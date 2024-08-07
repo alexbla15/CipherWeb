@@ -1,5 +1,7 @@
 ﻿@inject NavigationManager navigationManager
 
+@inherits RadzenStack
+
 @code {
     [Parameter]
     public string? LabelText { get; set; }
@@ -13,22 +15,42 @@
     [Parameter]
     public string Width { get; set; } = "300px";
 
+    [Parameter]
+    public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
+
+    [Parameter]
+    public JustifyContent JustifyRow { get; set; } = JustifyContent.Center;
+
+    [Parameter]
+    public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         LabelText = (LabelText is null)? "חיפוש תעודה" : LabelText;
         PlaceHolderText = (PlaceHolderText is null) ? "מספר תעודה" : PlaceHolderText;
+
+        // Set default OnKeyDown if not provided
+        if (!OnKeyDown.HasDelegate)
+        {
+            OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, SearchFunc);
+        }
     }
 
     private void SearchFunc(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
-            navigationManager.NavigateTo("/Search/FreeSearch");
+            navigationManager.NavigateTo(SearchPath);
         }
     }
+
+
 }
 
-<CipherFormRow Icon="@Icons.Search" Width="@Width" HeaderMaxWidth="" HeaderWidth="">
-    <RadzenAutoComplete Placeholder="@PlaceHolderText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:100%")" onkeydown="@SearchFunc"
-                        Data="@Constants.packages" TextProperty="SerialNumber"></RadzenAutoComplete>
-</CipherFormRow>
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Center" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
+    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:100%")" ShowErrors="false"
+                        Data="@Constants.packages" TextProperty="SerialNumber" OnKeyDown="@(args => OnKeyDown.InvokeAsync(args))"></CipherAutoComplete>
+
+    <CipherNavButton Icon="@Icons.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" Path="@SearchPath"
+              Style="@($"border: 1px solid {Colors.PrimaryDarker}; padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0; border: 1px solid {Colors.PrimaryDarker}")" />
+</RadzenStack>

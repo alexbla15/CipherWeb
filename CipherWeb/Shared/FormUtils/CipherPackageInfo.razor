@@ -22,16 +22,15 @@
 
 
 <CipherComponentCard Title="@Title">
+    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="10px">
     <CipherPackageId />
 
     @* -- MATERIAL -- *@
 
-        <CipherAutoComplete Icon="@Icons.Material" @bind-Value="pack.Material" Label="בחרו סוג" Data="@TestedData.MaterialTypes"
-                            Style="width:100%"></CipherAutoComplete>
+    <CipherAutoComplete Icon="@Icons.Material" @bind-Value="pack.Material" Label="בחרו סוג" Data="@TestedData.MaterialTypes" Style="width:100%" />
 
     @* -- SUB CATEGORY -- *@
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
-        <RadzenIcon Icon="@Icons.Category" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    <CipherFormRow Icon="@Icons.Category">
         <RadzenDropDownDataGrid @bind-Value=@pack.SubCategory Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
                             Style="width:300px" 
                                 Data=@subCategories TextProperty="Name" ValueProperty="Name"
@@ -42,11 +41,10 @@
                 <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@colWidth" />
             </Columns>
         </RadzenDropDownDataGrid>
-    </RadzenStack>
+    </CipherFormRow>
 
     @* -- VESSEL -- *@
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
-            <RadzenIcon Icon="@Icons.Vessel" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    <CipherFormRow Icon="@Icons.Vessel">
         <RadzenDropDownDataGrid @bind-Value=@pack.Vessel Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
                                 AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="width:300px">
             <Columns>
@@ -54,5 +52,6 @@
                 <RadzenDropDownDataGridColumn Property="Id" Title="מספר" Width="@halfColWidth" />
             </Columns>
         </RadzenDropDownDataGrid>
+    </CipherFormRow>
     </RadzenStack>
 </CipherComponentCard>

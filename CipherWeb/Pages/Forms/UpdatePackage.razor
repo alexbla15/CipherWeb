@@ -11,7 +11,7 @@
 
     <RadzenStepsItem Text="פרטי התעודה">
         <CipherComponentCard Title="חפשו את התעודה הרלוונטית, ועדכנו את הפרטים שלה בהתאם לצורך">
-        <CipherSearchRow />
+            <CipherSearchRow JustifyRow="JustifyContent.Start" OnKeyDown="@SearchFunc" />
         <br/>
         <CipherPackageInfo WithCard="false" pack="new Package()" />
         </CipherComponentCard>
@@ -25,3 +25,10 @@
         <CipherSubmit ActionText="אבי רון עדכן את מסת התעודה מ5 גרם ל4.9 גרם בתאריך 14.7.24."/>
     </RadzenStepsItem>
 </CipherSteps>
+
+@code
+{
+    private void SearchFunc(KeyboardEventArgs args)
+    {
+    }
+}

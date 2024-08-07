@@ -8,10 +8,10 @@
 
     public class Roles
     {
-        public readonly static string Manager = "מנהל/ת";
-        public readonly static string SysManager = "מנהל/ת מערכת";
-        public readonly static string Authorizer = "מאשר/ת";
-        public readonly static string Engineer = "מהנדס/ת";
+        public readonly static string Manager = "מנהל";
+        public readonly static string SysManager = "מנהל מערכת";
+        public readonly static string Authorizer = "מאשר";
+        public readonly static string Engineer = "מהנדס";
 
         public static string CurrnetRole { get; set; } = SysManager;
 

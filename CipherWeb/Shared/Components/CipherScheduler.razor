@@ -7,10 +7,10 @@
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
                  style="@SchedulerStyle()" TItem="Event" AppointmentSelect="@SelectEvent"
                  Data=@events StartProperty="EventDate" EndProperty="ApprovingDate" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
-    TextProperty="Process" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
-    <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt"/>
+                 TextProperty="Process" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
+    <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt" />
     <CipherWeekView StartTime="@startTime" EndTime="@endTime" />
-    <CipherMonthView MoreText="תהליכים נוספים" MaxAppointmentsInSlot="@EventsInSlot"  />
+    <CipherMonthView MoreText="תהליכים נוספים" MaxAppointmentsInSlot="@EventsInSlot" />
     <CipherYearPlannerView />
 
 </RadzenScheduler>
@@ -44,12 +44,12 @@
     List<Event> events = new List<Event>();
 
     Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
-    {
-            ["יצירה"] = Colors.Primary,
-            ["דגימה"] = Colors.Danger,
-            ["העברה"] = Colors.Success,
-            ["עדכון"] = Colors.Secondary
-    };
+            {
+                ["יצירה"] = Colors.Primary,
+                ["דגימה"] = Colors.Danger,
+                ["העברה"] = Colors.Success,
+                ["עדכון"] = Colors.Secondary
+            };
 
     RadzenScheduler<Event> scheduler;
 
@@ -98,7 +98,7 @@
             if (args.Data.Process == proc)
             {
                 args.Attributes["style"] = $@"
-                    background: {ProcessColoring[proc]}; 
+                    background: {ProcessColoring[proc]};
                     color: black;
                     text-align: {TextAlign}";
             }
@@ -107,34 +107,29 @@
 
     async Task SelectEvent(SchedulerAppointmentSelectEventArgs<Event> args)
     {
-        await DialogService.OpenAsync<CipherProcessCard>(args.Data.Process);
+        await DialogService.OpenAsync("תנועה",
+
+        ds =>
+    @<CipherProcessCard dir="rtl" WithCard=false ReadOnly=false></CipherProcessCard>, Constants.SetDialogOptions);
     }
 
 
     void OnAppointmentMouseEnter(SchedulerAppointmentMouseEventArgs<Event> args)
     {
         TooltipService.Open(args.Element, ts =>
-    @<RadzenStack Orientation="Orientation.Vertical" Gap="0" Class="rz-p-6" Style="min-width: 250px; max-width: 500px;" dir="rtl">
-        <RadzenText TextStyle="TextStyle.H6" Class="rz-mb-4" Style="color: var(--rz-tooltip-color);">
-            @args.Data.Process
-        </RadzenText>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Right" Gap="30px">
-            <RadzenText TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color); width: 44px;">
-                <strong>סוג</strong>
-            </RadzenText>
-            <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-tooltip-color);">
-                @args.Data.Type
-            </RadzenText>
+    @<RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center"
+                      Style="min-width: 250px; max-width: 500px;" dir="rtl">
+        <CipherText Text="@args.Data.Process" TextStyle="TextStyle.H6" Color="var(--rz-tooltip-color);" />
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="30px">
+
+            <CipherText Text="סוג" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
+            <CipherText Text="@args.Data.Type" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Right" Gap="30px">
-            <RadzenText TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color); width: 44px;">
-                <strong>עודכן ב</strong>
-            </RadzenText>
-            <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-tooltip-color);">
-                @args.Data.UpdatingDate
-            </RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="30px">
+            <CipherText Text="עודכן ב" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
+            <CipherText Text="@args.Data.UpdatingDate.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
-    </RadzenStack>, new TooltipOptions { Position = TooltipPosition.Right, Duration = null });
+    </RadzenStack>, new TooltipOptions { Position = TooltipPosition.Bottom, Duration = null });
     }
 
     void OnAppointmentMouseLeave(SchedulerAppointmentMouseEventArgs<Event> args)
