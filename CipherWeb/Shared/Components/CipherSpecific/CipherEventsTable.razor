@@ -10,16 +10,25 @@
 </CipherTableCard>
 
 @code {
+    /// <summary>
+    /// Filter mode of the datagrid. Must be a FilterMode-enum.
+    /// </summary>
     [Parameter]
     public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
+    /// <summary>
+    /// Is the datagrid filterable.
+    /// </summary>
     [Parameter]
     public bool AllowFilter { get; set; } = false;
 
+    /// <summary>
+    /// Is the datagrid groupable.
+    /// </summary>
     [Parameter]
     public bool AllowGroup { get; set; } = false;
 
-    List<Event> events = new List<Event>();
+    private List<Event> events = new List<Event>();
 
     protected override async Task OnInitializedAsync()
     {

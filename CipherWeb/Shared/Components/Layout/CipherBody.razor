@@ -1,24 +1,69 @@
 ﻿@inherits RadzenBody
 
 @code {
+    /// <summary>
+    /// Width of page-body.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "100%";
 
+    /// <summary>
+    /// Minimal height of page-body.
+    /// </summary>
     [Parameter]
     public string MinHeight { get; set; } = "80%";
 
+    /// <summary>
+    /// Height of page body.
+    /// </summary>
     [Parameter]
     public string Height { get; set; }
 
+    /// <summary>
+    /// Background color of the page-body.
+    /// </summary>
     [Parameter]
     public string BackgroundColor { get; set; } = Colors.PrimaryLighter;
 
+    /// <summary>
+    /// Distance from the right-edge of page.
+    /// </summary>
     [Parameter]
-    public string Right { get; set; } = "0 px";
+    public string Right { get; set; } = "0px";
 
+    /// <summary>
+    /// Space Outside page-body.
+    /// </summary>
     [Parameter]
     public string Margin { get; set; } = "0";
 
+    /// <summary>
+    /// Space outside page-body content (Top).
+    /// </summary>
+    [Parameter]
+    public string PaddingTop { get; set; } = "1%";
+
+    /// <summary>
+    /// Space outside page-body content (Bottom).
+    /// </summary>
+    [Parameter]
+    public string PaddingBottom { get; set; }
+
+    /// <summary>
+    /// Space outside page-body content (Right).
+    /// </summary>
+    [Parameter]
+    public string PaddingRight { get; set; } = "1%";
+
+    /// <summary>
+    /// Space outside page-body content (Left).
+    /// </summary>
+    [Parameter]
+    public string PaddingLeft { get; set; } = "1%";
+
+    /// <summary>
+    /// Page-body content.
+    /// </summary>
     [Parameter]
     public RenderFragment Body { get; set; }
 
@@ -31,9 +76,10 @@
             min-height: {MinHeight};
             height: {Height};
             margin: {Margin};
-            padding-top: 1%;
-            padding-right: 1%;
-            padding-left: 1%;
+            padding-top: {PaddingTop};
+            padding-bottom: {PaddingBottom};
+            padding-right: {PaddingRight};
+            padding-left: {PaddingLeft};
         ";
     }
 }
@@ -44,5 +90,4 @@
     </article>
 
     <CipherFooter BackgroundColor="@Colors.PrimaryLight" MarginRight="1%" Width="98%" MarginTop="20px" />
-
 </RadzenBody>

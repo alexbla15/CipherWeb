@@ -3,8 +3,18 @@
 @inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Text alignment. Must be a TextAlign-enum.
+    /// </summary>
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Text that will be shown if there are no parameters in memory.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "במסך זה ניתן להוסיף פרמטרים אותם יצטרך להזין המשתמש. להוספה לחצו על כפתור ההוספה למעלה";
+
 
     public class Parameter
     {
@@ -27,12 +37,11 @@
         }
     }
 
-    List<Attribute> OptionalTypes = new List<Attribute>();
+    private RadzenDataGrid<Parameter> CustomDataGrid = new RadzenDataGrid<Parameter>();
 
-    RadzenDataGrid<Parameter> CustomDataGrid = new RadzenDataGrid<Parameter>();
-
-    List<Parameter> set_params = new List<Parameter>() { };
-    Parameter old_param = new Parameter();
+    private List<Attribute> OptionalTypes = new List<Attribute>();
+    private List<Parameter> set_params = new List<Parameter>() { };
+    private Parameter old_param = new Parameter();
 
     private bool ShowHelpText = true;
     int components = 0;
@@ -47,6 +56,11 @@
         AddTypeAttributes(typeof(Process), "תהליך");
     }
 
+    /// <summary>
+    /// Adds all available attributes of a specific data-model.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="type_heb_name"></param>
     private void AddTypeAttributes(Type type, string type_heb_name)
     {
         List<Tuple<string, string>> typeAttributes = CommonFuncs.GetTranslatedFields(type);
@@ -57,6 +71,9 @@
         }
     }
 
+    /// <summary>
+    /// Add a parameter to the memory.
+    /// </summary>
     private void AddComponent()
     {
         if (components == set_params.Count)
@@ -74,6 +91,11 @@
         }
     }
 
+    /// <summary>
+    /// Edits a parameter.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns></returns>
     async Task EditRow(Parameter param)
     {
         // prevent editing of two rows in parallel
@@ -88,6 +110,11 @@
         }
     }
 
+    /// <summary>
+    /// Cancels edit of a parameter.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns></returns>
     async Task CancelEdit(Parameter param)
     {
         param.Id = old_param.Id;
@@ -97,6 +124,11 @@
         await SaveRow(param);
     }
 
+    /// <summary>
+    /// Deletes a parameter from memory & view.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns></returns>
     async Task DeleteRow(Parameter param)
     {
         set_params.Remove(param);
@@ -117,6 +149,10 @@
         }
     }
 
+    /// <summary>
+    /// Clears all parameters from memory & view.
+    /// </summary>
+    /// <returns></returns>
     async Task DeleteAll()
     {
         set_params = new List<Parameter>();
@@ -128,6 +164,11 @@
         ShowHelpText = true;
     }
 
+    /// <summary>
+    /// Saves a parameter to the memory.
+    /// </summary>
+    /// <param name="param"></param>
+    /// <returns></returns>
     async Task SaveRow(Parameter param)
     {
         set_params.Add(param);
@@ -136,7 +177,6 @@
         await CustomDataGrid.RefreshDataAsync();
     }
 }
-
 
 <CipherComponentCard Title="פרמטרי משתמש">
     <Buttons>
@@ -147,7 +187,7 @@
     <ChildContent>
         @if (ShowHelpText)
         {
-            <CipherText Text="במסך זה ניתן להוסיף פרמטרים אותם יצטרך להזין המשתמש. להוספה לחצו על כפתור ההוספה למעלה"></CipherText>
+            <CipherText Text="@HelpText"></CipherText>
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>

@@ -1,27 +1,45 @@
 ﻿@inherits CipherComponentCard
 
 @code {
-
+    /// <summary>
+    /// Fields available for aggregation
+    /// </summary>
     [Parameter]
-    public List<Tuple<string,string>> AggregationFields { get; set; }
+    public List<Tuple<string, string>> AggregationFields { get; set; }
 
+    /// <summary>
+    /// Mathematical / Logical functions for aggregation.
+    /// </summary>
+    [Parameter]
+    public List<Tuple<string, string>> AvailableFunctions { get; set; } = new List<Tuple<string, string>>()
+    {
+        new ("",""),
+        new ("סכום","SUM"),
+        new("מקסימום","MAX"),
+        new("מינימום","MIN"),
+        new("ממוצע", "AVG"),
+        new("חציון","MED"),
+        new("כמות","COUNT"),
+        new("סטיית תקן","AVG") };
+
+    /// <summary>
+    /// Text to be shown when type cannot accept the selected aggregation function.
+    /// </summary>
     [Parameter]
     public string TypeIncompatible { get; set; } = "פונקציה לא אפשרית לפרמטר זה";
 
+    /// <summary>
+    /// Add an aggregation function to the table - text.
+    /// </summary>
     [Parameter]
-    public List<Tuple<string, string>> AvailableFunctions { get; set; } = new List<Tuple<string, string>>() 
-    { 
-        new ("",""), 
-        new ("סכום","SUM"), 
-        new("מקסימום","MAX"), 
-        new("מינימום","MIN"), 
-        new("ממוצע", "AVG"), 
-        new("חציון","MED"), 
-        new("כמות","COUNT"), 
-        new("סטיית תקן","AVG") };
+    public string AddAggregateText { get; set; } = "הוספת פונקציה";
 
+    /// <summary>
+    /// Delete all aggregation functions - text.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllAggregatesText { get; set; } = "מחיקת כל הפונקציות";
 
-    private int AggregationAmount = 0;
 
     public class Aggregate
     {
@@ -30,30 +48,17 @@
         public string Function { get; set; }
     }
 
-    RadzenDataGrid<Aggregate> CustomDataGrid;
-    List<Aggregate> chosenFuncs = new List<Aggregate>();
-    Aggregate old_agg = new Aggregate();
+    private RadzenDataGrid<Aggregate> CustomDataGrid;
+    private List<Aggregate> chosenFuncs = new List<Aggregate>();
+    private Aggregate old_agg = new Aggregate();
 
+    private int AggregationAmount = 0;
     private bool typeIncompatibleAlertVisible = false;
 
-    // protected override void OnAfterRender(bool firstRender)
-    // {
-    //     // AddRow();
-    // }
-
-    public List<Aggregate> GetData()
-    {
-        if (CustomDataGrid is null)
-        {
-            return new List<Aggregate>();
-        }
-        else
-        {
-            return CustomDataGrid.Data.ToList();
-        }
-    }
-
-    void AddRow()
+    /// <summary>
+    /// Add an aggregation row.
+    /// </summary>
+    private void AddRow()
     {
         int next_id = AggregationAmount + 1;
         Aggregate new_agg = new Aggregate() { Id = next_id };
@@ -62,7 +67,12 @@
         CustomDataGrid.InsertRow(new_agg);
     }
 
-    async Task EditRow(Aggregate agg)
+    /// <summary>
+    /// Edit a selected aggregation
+    /// </summary>
+    /// <param name="agg"></param>
+    /// <returns></returns>
+    private async Task EditRow(Aggregate agg)
     {
         // prevent editing of two rows in parallel
         if (CustomDataGrid.Count == AggregationAmount)
@@ -76,7 +86,12 @@
         }
     }
 
-    async Task CancelEdit(Aggregate agg)
+    /// <summary>
+    /// Revert to original aggregation row.
+    /// </summary>
+    /// <param name="agg"></param>
+    /// <returns></returns>
+    private async Task CancelEdit(Aggregate agg)
     {
         agg.Id = old_agg.Id;
         agg.Parameter = old_agg.Parameter;
@@ -85,7 +100,12 @@
         await SaveRow(agg);
     }
 
-    async Task DeleteRow(Aggregate agg)
+    /// <summary>
+    /// Delete selected aggregation.
+    /// </summary>
+    /// <param name="agg"></param>
+    /// <returns></returns>
+    private async Task DeleteRow(Aggregate agg)
     {
         chosenFuncs.Remove(agg);
 
@@ -100,30 +120,58 @@
         await CustomDataGrid.RefreshDataAsync();
     }
 
-    async Task SaveRow(Aggregate agg)
+    /// <summary>
+    /// Save changes to the aggregation selected.
+    /// </summary>
+    /// <param name="agg"></param>
+    /// <returns></returns>
+    private async Task SaveRow(Aggregate agg)
     {
         chosenFuncs.Add(agg);
 
         await CustomDataGrid.UpdateRow(agg);
         await CustomDataGrid.RefreshDataAsync();
     }
-    void DeleteAggregation()
+
+    /// <summary>
+    /// Delete the selected aggregation.
+    /// </summary>
+    private void DeleteAggregation()
     {
         AggregationAmount = 0;
         chosenFuncs = new List<Aggregate>();
         CustomDataGrid.Data = chosenFuncs;
     }
 
-    void CloseAlert()
+    /// <summary>
+    /// Close the shown alert.
+    /// </summary>
+    private void CloseAlert()
     {
         typeIncompatibleAlertVisible = false;
+    }
+
+    /// <summary>
+    /// Get list of all chosen aggregates.
+    /// </summary>
+    /// <returns></returns>
+    public List<Aggregate> GetData()
+    {
+        if (CustomDataGrid is null)
+        {
+            return new List<Aggregate>();
+        }
+        else
+        {
+            return CustomDataGrid.Data.ToList();
+        }
     }
 }
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherAddBtn HelpText="הוספת פונקציה" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"></CipherAddBtn>
-        <CipherDeleteButton HelpText="מחיקת כל הפונקציות" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteButton>
+        <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"></CipherAddBtn>
+        <CipherDeleteButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteButton>
     </Buttons>
 
     <ChildContent>

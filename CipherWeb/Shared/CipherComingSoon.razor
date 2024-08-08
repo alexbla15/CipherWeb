@@ -1,4 +1,30 @@
-﻿<style>
+﻿@code {
+    [Parameter]
+    public string BackgroundColor { get; set; } = "#AC6E35";
+
+    [Parameter]
+    public string CardBorderRadius { get; set; } = "5px";
+
+    [Parameter]
+    public string LogoBorderRadius { get; set; } = "50px";
+
+    [Parameter]
+    public string Padding { get; set; } = "0px";
+
+    [Parameter]
+    public string Width { get; set; } = "100%";
+
+    [Parameter]
+    public string LogoSize { get; set; } = "50%";
+
+    [Parameter]
+    public string Title { get; set; } = "חזרה למסך הבית";
+
+    [Parameter]
+    public string PicPath { get; set; } = "Images/ComingSoon2.jfif";
+}
+
+<style>
     .image-container {
         position: relative;
         display: flex;
@@ -33,13 +59,12 @@
     }
 </style>
 
-<div style="background-color:#AC6E35; border-radius:5px; padding: 0px; width:100%">
+<div style="@($"background-color:{BackgroundColor}; border-radius:{CardBorderRadius}; padding: {Padding}; width:{Width}")">
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-        <a href="@CipherNavLinks.Home.Href" title="חזרה למסך הבית">
-
+        <a href="@CipherNavLinks.Home.Href" title="@Title">
             <div class="image-container">
-                <CipherLogo LogoPath="Images/ComingSoon2.jfif" Height="50%" Width="50%" BorderRadius="50px"></CipherLogo>
-                <div class="overlay">חזרה למסך הבית</div>
+                <CipherLogo LogoPath="@PicPath" Height="@LogoSize" Width="@LogoSize" BorderRadius="@LogoBorderRadius"></CipherLogo>
+                <div class="overlay">@Title</div>
             </div>
         </a>
     </RadzenStack>

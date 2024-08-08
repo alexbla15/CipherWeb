@@ -8,15 +8,28 @@
 </CipherTableCard>
 
 @code {
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// Defaults to SimpleWithMenu.
+    /// </summary>
     [Parameter]
     public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
+    /// <summary>
+    /// Allows/disabled filtering.
+    /// </summary>
     [Parameter]
     public bool Filter { get; set; } = false;
 
+    /// <summary>
+    /// Allows/disables grouping.
+    /// </summary>
     [Parameter]
     public bool Group { get; set; } = false;
 
+    /// <summary>
+    /// Card title
+    /// </summary>
     [Parameter]
     public string Title { get; set; } = "סוגים";
 

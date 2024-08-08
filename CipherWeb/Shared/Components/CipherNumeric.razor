@@ -1,31 +1,59 @@
 ﻿@using System.Text.RegularExpressions;
 
 @code {
+    /// <summary>
+    /// Component's width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "300px";
 
+    /// <summary>
+    /// Place-holder text.
+    /// </summary>
     [Parameter]
     public string Label { get; set; }
 
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public bool Popup { get; set; }
-
+    /// <summary>
+    /// Set style of component
+    /// </summary>
     [Parameter]
     public string Style { get; set; }
 
+    /// <summary>
+    /// Set component's icon.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; }
 
+    /// <summary>
+    /// Is the component enabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Decide if error-message is a popup.
+    /// </summary>
+    [Parameter]
+    public bool Popup { get; set; }
+
+    /// <summary>
+    /// Enable / disable error-messages.
+    /// </summary>
     [Parameter]
     public bool ShowErrors { get; set; } = true;
 
-    //
+    /// <summary>
+    /// Is value required for form.
+    /// </summary>
+    [Parameter]
+    public bool Required { get; set; } = true;
 
     private decimal _value;
 
+    /// <summary>
+    /// Numeric value of component.
+    /// </summary>
     [Parameter]
     public decimal Value
     {
@@ -43,33 +71,39 @@
     [Parameter]
     public EventCallback<decimal> ValueChanged { get; set; }
 
-    // LENGTH VALIDATOR
-
+    /// <summary>
+    /// Minimal allowed value.
+    /// </summary>
     [Parameter]
     public int Min { get; set; } = 0;
 
+    /// <summary>
+    /// Maximal allowed value.
+    /// </summary>
     [Parameter]
     public int Max { get; set; } = int.MaxValue;
-
-    // REQUIRED VALIDATOR
-    [Parameter]
-    public bool Required { get; set; } = true;
 
     class Model
     {
         public decimal value = 0;
     }
 
-    Model model = new Model() {};
-    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+    private Model model = new Model() {};
+    private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
 
+    /// <summary>
+    /// Check all requirements from value.
+    /// </summary>
+    /// <returns></returns>
     public bool Check()
     {
-        // required Validator
         return RequiredValidator.IsValid;
     }
 
-
+    /// <summary>
+    /// Behavior upon value - change.
+    /// </summary>
+    /// <param name="value"></param>
     private void OnValueChanged(decimal value)
     {
         model.value = value;

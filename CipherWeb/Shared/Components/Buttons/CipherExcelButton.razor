@@ -1,4 +1,4 @@
-﻿@inherits RadzenButton
+﻿@inherits CipherButton
 
 @using System.Text
 @using System.Collections
@@ -7,13 +7,19 @@
 @inject IJSRuntime JSRuntime
 
 <CipherButton HelpText="ייצוא ל-EXCEL" Icon="@Icons.Excel" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
-              Click="@(args => ExportToCSV())" class="mb-4 me-2" Variant="Variant.Outlined"/>
+              Click="@(args => ExportToCSV())" Variant="Variant.Outlined" />
 
-@code 
+@code
 {
+    /// <summary>
+    /// Name of output file.
+    /// </summary>
     [Parameter]
     public string FileName { get; set; }
 
+    /// <summary>
+    /// Data that will be exported to Excel.
+    /// </summary>
     [Parameter]
     public IEnumerable<object> Data { get; set; }
 

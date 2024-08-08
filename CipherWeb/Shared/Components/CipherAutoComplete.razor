@@ -1,29 +1,65 @@
 ﻿@using System.Text.RegularExpressions;
 
 @code {
+    /// <summary>
+    /// Component width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "300px";
 
+    /// <summary>
+    /// Component's label. Acts as Placeholder as well.
+    /// </summary>
     [Parameter]
     public string Label { get; set; }
 
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public bool Popup { get; set; }
-
+    /// <summary>
+    /// Component's style.
+    /// </summary>
     [Parameter]
     public string Style { get; set; }
 
+    /// <summary>
+    /// Component's side icon.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; }
 
+    /// <summary>
+    /// Property of @Data to show as text-value within AutoComplete.
+    /// </summary>
+    [Parameter]
+    public string TextProperty { get; set; }
+
+    /// <summary>
+    /// Is the component disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Is the error message a popup / regular underline text.
+    /// </summary>
+    [Parameter]
+    public bool Popup { get; set; }
+
+    /// <summary>
+    /// Is the value required for the form.
+    /// </summary>
+    [Parameter]
+    public bool Required { get; set; } = true;
+
+    /// <summary>
+    /// Allow/disable error-messages.
+    /// </summary>
     [Parameter]
     public bool ShowErrors { get; set; } = true;
 
     private string _value = "";
 
+    /// <summary>
+    /// Component's value.
+    /// </summary>
     [Parameter]
     public string Value
     {
@@ -38,30 +74,33 @@
         }
     }
 
+    /// <summary>
+    /// AutoComplete options.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<object> Data { get; set; }
+
+    /// <summary>
+    /// Minimal amount of chars.
+    /// </summary>
+    [Parameter]
+    public int MinLength { get; set; } = 0;
+
+    /// <summary>
+    /// Maximal amount of chars.
+    /// </summary>
+    [Parameter]
+    public int MaxLength { get; set; } = int.MaxValue;
+
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
-    public IEnumerable<object> Data { get; set; }
-
-    [Parameter]
-    public string TextProperty { get; set; }
-
-    // LENGTH VALIDATOR
-
-    [Parameter]
-    public int MinLength { get; set; } = 0;
-
-    [Parameter]
-    public int MaxLength { get; set; } = int.MaxValue;
-
-    // REQUIRED VALIDATOR
-    [Parameter]
-    public bool Required { get; set; } = true;
-
-    [Parameter]
     public EventCallback<object> Change { get; set; }
 
+    /// <summary>
+    /// Key pressed event.
+    /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
@@ -81,6 +120,8 @@
     RadzenRegexValidator ImproperCharsValidator = new RadzenRegexValidator();
     RadzenCustomValidator SqlInjectionValidator = new RadzenCustomValidator();
     RadzenCustomValidator ValueExistsValidator = new RadzenCustomValidator();
+
+    private string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
 
     public string ImproperCharsValidatorText()
     {
@@ -104,7 +145,6 @@
 
     public bool SqlInjectionValidate()
     {
-        string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
         string pattern = string.Join("|", unwantedWords);
         Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
@@ -113,7 +153,6 @@
 
     public string SqlInjectionValidatorText()
     {
-        string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
         string pattern = string.Join("|", unwantedWords);
         Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 

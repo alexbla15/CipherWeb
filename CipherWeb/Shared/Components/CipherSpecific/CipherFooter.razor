@@ -6,12 +6,12 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
                  JustifyContent="JustifyContent.Center" Gap="0">
 
-        <CipherLogo LogoPath="Images/HilatLogo.png" Height="@LogoHeight"></CipherLogo>
+        <CipherLogo LogoPath="@LogoPath" Height="@LogoHeight"></CipherLogo>
         <RadzenStack Orientation="Orientation.Vertical">
-            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")"
-                        Text="@Description" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")"
-                        Text="@SubDescription" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <CipherText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
+                        Text="@DevelopedByText" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <CipherText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
+                        Text="@ProgramVersionText" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
         </RadzenStack>
 
     </RadzenStack>
@@ -20,21 +20,45 @@
 @code {
     // FOOTER PROPERTIES
 
+    /// <summary>
+    /// Credit text for developers.
+    /// </summary>
     [Parameter]
-    public string Description { get; set; } = "פותח על ידי " + Constants.CompanyName;
+    public string DevelopedByText { get; set; } = "פותח על ידי " + Constants.CompanyName;
 
+    /// <summary>
+    /// Specified the current version of the program
+    /// </summary>
     [Parameter]
-    public string SubDescription { get; set; } = "CIPHER 07/2024";
+    public string ProgramVersionText { get; set; } = "CIPHER 07/2024";
 
-    [Parameter]
-    public TextStyle DescriptionStyle { get; set; } = TextStyle.Body2;
-
-    [Parameter]
-    public bool Wrap { get; set; } = true;
-
+    /// <summary>
+    /// Footer text color.
+    /// </summary>
     [Parameter]
     public string TextColor { get; set; } = "black";
 
+    /// <summary>
+    /// Path to the Logo file.
+    /// </summary>
+    [Parameter]
+    public string LogoPath { get; set; } = "Images/HilatLogo.png";
+
+    /// <summary>
+    /// Logo's height. Must be in "vh" units.
+    /// </summary>
     [Parameter]
     public string LogoHeight { get; set; } = "8vh";
+
+    /// <summary>
+    /// Text style of the footer. Must be a TextStyle-enum.
+    /// </summary>
+    [Parameter]
+    public TextStyle FooterTextStyle { get; set; } = TextStyle.Body2;
+
+    /// <summary>
+    /// Is the footer-text wrappable.
+    /// </summary>
+    [Parameter]
+    public bool Wrap { get; set; } = true;
 }

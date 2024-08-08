@@ -2,7 +2,24 @@
 
 @code {
     [Parameter]
+    public bool condition { get; set; }
+
+    [Parameter]
+    public bool alertVisible { get; set; }
+
+    [Parameter]
+    public string? alertText { get; set; }
+
+    [Parameter]
+    public string ActionText { get; set; }
+
+    [Parameter]
     public string CancelPath { get; set; } = CipherNavLinks.Forms.Href;
+
+    [Parameter]
+    public AlertStyle alertStyle { get; set; }
+
+    private string ResultSummaryText = Constants.SetUser.FirstName + ", " + "נא אשר/י את הפעולה הבאה:";
 
     protected override async Task OnInitializedAsync()
     {
@@ -13,47 +30,20 @@
     public void Save()
     {
         alertVisible = true;
-        if (!condition)
-        {
-            alertStyle = AlertStyle.Warning;
-            alertText = "שגיאה בהזנת טופס";
-        }
-        else
-        {
-            alertStyle = AlertStyle.Success;
-            alertText = "טופס הוזן בהצלחה";
-        }
+        alertStyle = (condition) ? AlertStyle.Success : AlertStyle.Warning;
+        alertText = (condition) ? "טופס הוזן בהצלחה" : "שגיאה בהזנת טופס";
     }
-
-    [Parameter]
-    public bool condition { get; set; }
-
-    [Parameter]
-    public bool alertVisible { get; set; }
-
-    [Parameter]
-    public string? alertText { get; set; }
-
-    [Parameter]
-    public AlertStyle alertStyle { get; set; }
-
-    [Parameter]
-    public string ActionText { get; set; }
-
-    string Text1 = Constants.SetUser.FirstName + ", " + "נא אשר/י את הפעולה הבאה:";
-
 }
 
-
-<CipherComponentCard Width="100%" Title="סיכום ואישור">
+<CipherComponentCard Title="סיכום ואישור">
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Style="padding-left:10px; padding-bottom:20px">
-            <RadzenText TextStyle="TextStyle.Subtitle1" Text="@Text1" Style="padding-bottom:10px"></RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ResultSummaryText" Style="padding-bottom:10px"></RadzenText>
             <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ActionText"></RadzenText>
         </RadzenStack>
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="10px">
-            <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium"/>
+            <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
             <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium"></CipherNavButton>
         </RadzenStack>
         <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" />

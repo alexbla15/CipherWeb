@@ -7,62 +7,102 @@
 @inherits RadzenDataGrid<Cipher_TItem>
 
 @code {
+    /// <summary>
+    /// Translator from (english, hebrew) of column names.
+    /// </summary>
     [Parameter]
     public List<Tuple<string, string>> ColumnNames { get; set; }
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
-
+    /// <summary>
+    /// Customized columns to be used within datagrid.
+    /// </summary>
     [Parameter]
     public RenderFragment CustomColumns { get; set; }
 
+    /// <summary>
+    /// Data of datagrid.
+    /// </summary>
     [Parameter]
     public IEnumerable<Cipher_TItem> DataSource { get; set; }
 
+    /// <summary>
+    /// Function to fetch the data for the datagrid.
+    /// </summary>
     [Parameter]
     public Func<Task<IEnumerable<Cipher_TItem>>> FetchDataFunc { get; set; } = null;
 
+    /// <summary>
+    /// Selected filteration mode. Must be a FilterMode-enum.
+    /// </summary>
     [Parameter]
     public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
+    /// <summary>
+    /// Is filteration allowed. 
+    /// </summary>
     [Parameter]
     public bool AllowFilter { get; set; } = false;
 
+    /// <summary>
+    /// Is grouping allowed.
+    /// </summary>
     [Parameter]
     public bool AllowGroup { get; set; } = false;
 
+    /// <summary>
+    /// Is sorting allowed.
+    /// </summary>
     [Parameter]
     public bool AllowSort { get; set; } = true;
 
+    /// <summary>
+    /// Is column picking allowed.
+    /// </summary>
     [Parameter]
     public bool AllowColumnPick { get; set; } = false;
 
+    /// <summary>
+    /// Are customized columns used.
+    /// </summary>
     [Parameter]
     public bool WithCustomColumns { get; set; } = false;
 
+    /// <summary>
+    /// Is total footer of decimal values (such as mass) allowed.
+    /// </summary>
     [Parameter]
     public bool WithTotalFooter { get; set; } = true;
 
+    ///  <summary>
+    /// Decide if to show datagrid only if it's full
+    /// </summary>
     [Parameter]
     public bool OnlyFull { get; set; } = true;
 
+    /// <summary>
+    /// Maximal amount of rows per page of datagrid.
+    /// </summary>
     [Parameter]
     public int RowsPerPage { get; set; } = Constants.RowsPerPage;
 
+    /// <summary>
+    /// Width of each column
+    /// </summary>
     [Parameter]
     public string SetColumnWidth { get; set; } = "200px";
 
+    /// <summary>
+    /// Ordering dictionary of the columns within the data grid (name, place).
+    /// </summary>
     [Parameter]
     public Dictionary<string, int> ColumnsOrder { get; set; }
 
     [Parameter]
     public Action<DataGridRenderEventArgs<Cipher_TItem>> RenderFunc { get; set; }
 
-    RadzenDataGrid<Cipher_TItem> CustomDataGrid;
-
-    // dynamic row
-    Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
-    DateTime dynamicDate;
+    private RadzenDataGrid<Cipher_TItem> CustomDataGrid;
+    private Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
+    private DateTime dynamicDate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,6 +113,11 @@
         ColumnNames = ColumnNames ?? HebrewDictionary.Headers;
     }
 
+    /// <summary>
+    /// Gets the order of a specific column-nameaccording to ColumnsOrder dictionary.
+    /// </summary>
+    /// <param name="columnName"></param>
+    /// <returns></returns>
     int? GetOrder(string columnName)
     {
         if (ColumnsOrder is null)

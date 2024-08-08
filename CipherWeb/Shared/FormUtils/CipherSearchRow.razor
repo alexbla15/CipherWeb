@@ -10,13 +10,13 @@
     public string? PlaceHolderText { get; set; }
 
     [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
     public string Width { get; set; } = "300px";
 
     [Parameter]
     public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     [Parameter]
     public JustifyContent JustifyRow { get; set; } = JustifyContent.Center;
@@ -26,7 +26,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LabelText = (LabelText is null)? "חיפוש תעודה" : LabelText;
+        LabelText = (LabelText is null) ? "חיפוש תעודה" : LabelText;
         PlaceHolderText = (PlaceHolderText is null) ? "מספר תעודה" : PlaceHolderText;
 
         // Set default OnKeyDown if not provided
@@ -43,8 +43,6 @@
             navigationManager.NavigateTo(SearchPath);
         }
     }
-
-
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Center" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
@@ -52,5 +50,5 @@
                         Data="@Constants.packages" TextProperty="SerialNumber" OnKeyDown="@(args => OnKeyDown.InvokeAsync(args))"></CipherAutoComplete>
 
     <CipherNavButton Icon="@Icons.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" Path="@SearchPath"
-              Style="@($"border: 1px solid {Colors.PrimaryDarker}; padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0; border: 1px solid {Colors.PrimaryDarker}")" />
+                     Style="@($"border: 1px solid {Colors.PrimaryDarker}; padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0; border: 1px solid {Colors.PrimaryDarker}")" />
 </RadzenStack>

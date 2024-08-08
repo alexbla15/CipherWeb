@@ -1,9 +1,9 @@
 ﻿@inherits CipherFormCard
 
-<CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height" 
-    Visible="@Visible" Float="@Float" MarginRight="@MarginRight" MarginTop="@MarginTop" MarginBottom="@MarginBottom" BackgroundColor="@BackgroundColor">
+<CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height"
+                Visible="@Visible" Float="@Float" MarginRight="@MarginRight" MarginTop="@MarginTop" MarginBottom="@MarginBottom" BackgroundColor="@BackgroundColor">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
-        <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content"/>
+        <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" />
         <div style="@($"width:100%;padding-right:{HeaderContentPaddingRight}; display: flex; justify-content: {ContentJustify};")">
             @HeaderContent
         </div>
@@ -17,31 +17,58 @@
     </div>
 </CipherFormCard>
 
-@code{
+@code {
+    /// <summary>
+    /// Card title.
+    /// </summary>
     [Parameter]
     public string Title { get; set; }
 
-    [Parameter]
-    public RenderFragment Buttons { get; set; }
-
-    [Parameter]
-    public RenderFragment HeaderContent { get; set; }
-
-    [Parameter]
-    public bool WithButtons { get; set; } = true;
-
+    /// <summary>
+    /// Space outside of content within card.
+    /// </summary>
     [Parameter]
     public string ContentPadding { get; set; } = "5px 0";
 
+    /// <summary>
+    /// Space right to header-content.
+    /// </summary>
     [Parameter]
     public string HeaderContentPaddingRight { get; set; } = "20px";
 
+    /// <summary>
+    /// Align the content within a card.
+    /// </summary>
     [Parameter]
     public string ContentJustify { get; set; } = "right";
 
+    /// <summary>
+    /// Specify display type of the content within the card.
+    /// </summary>
     [Parameter]
     public string ContentDisplay { get; set; }
 
+    /// <summary>
+    /// Card's side buttons.
+    /// </summary>
+    [Parameter]
+    public RenderFragment Buttons { get; set; }
+
+    /// <summary>
+    /// Card's header content. Usually a CipherAutoComplete.
+    /// </summary>
+    [Parameter]
+    public RenderFragment HeaderContent { get; set; }
+
+    /// <summary>
+    /// Align title. Must be a TextAlign-enum.
+    /// </summary>
     [Parameter]
     public TextAlign Align { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Control side-buttons visibility.
+    /// </summary>
+    [Parameter]
+    public bool WithButtons { get; set; } = true;
 }

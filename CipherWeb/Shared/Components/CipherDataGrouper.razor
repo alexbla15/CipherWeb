@@ -3,24 +3,52 @@
 @typeparam Cipher_TItem
 
 @code {
-
+    /// <summary>
+    /// Available fields for grouping.
+    /// </summary>
     [Parameter]
     public List<string> GroupFields { get; set; } = CommonFuncs.GetTranslatedFields(typeof(Cipher_TItem)).Select(x => x.Item2).ToList();
 
+    /// <summary>
+    /// Max amount of grouping levels.
+    /// </summary>
     [Parameter]
     public int maxGroupLevels { get; set; } = 4;
 
+    /// <summary>
+    /// Current amount of group levels
+    /// </summary>
+    [Parameter]
+    public int groupLevels { get; set; } = 0;
+
+    /// <summary>
+    /// Alert text for an empty group.
+    /// </summary>
     [Parameter]
     public string EmptyGroupAlertText { get; set; } = "יש למלא את המקבץ הקודם לפני הוספת מקבץ חדש";
 
+    /// <summary>
+    /// Alert text for duplicity of groups.
+    /// </summary>
     [Parameter]
     public string DuplicityGroupsAlertText { get; set; } = "אין לבחור 2 מקבצים זהים";
 
+    /// <summary>
+    /// Add group - text.
+    /// </summary>
+    [Parameter]
+    public string AddGroupText { get; set; } = "הוספת מקבץ";
+    /// <summary>
+    /// Delete group - text.
+    /// </summary>
+    [Parameter]
+    public string DeleteGroupText { get; set; } = "מחיקת מקבץ";
+
+    /// <summary>
+    /// User-chosen groups (place, property)
+    /// </summary>
     [Parameter]
     public Dictionary<int, string> chosenGroups { get; set; } = new Dictionary<int, string>();
-
-    [Parameter]
-    public int groupLevels { get; set; } = 0;
 
     private bool emptyGroupsAlertVisible = false;
     private bool limitedGroupsAlertVisible = false;
@@ -33,6 +61,10 @@
         chosenGroups = SetChosenGroups();
     }
 
+    /// <summary>
+    /// Alert-text for reached limit of groups
+    /// </summary>
+    /// <returns></returns>
     private string GetLimitedGroupsAlertText()
     {
         return "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
@@ -46,11 +78,13 @@
         {
             initialGroups[i] = string.Empty;
         }
-
         return initialGroups;
     }
 
-    void AddGroup()
+    /// <summary>
+    /// Add a grouping parameter
+    /// </summary>
+    private void AddGroup()
     {
         if (!chosenGroups.Where(x => x.Key < groupLevels).Any(x => string.IsNullOrEmpty(x.Value)))
         {
@@ -69,7 +103,11 @@
         }
     }
 
-    void CheckDuplicity(int index)
+    /// <summary>
+    /// Validate if there are two identical groups.
+    /// </summary>
+    /// <param name="index"></param>
+    private void CheckDuplicity(int index)
     {
         HashSet<string> hashed_groups = new HashSet<string>();
 
@@ -90,7 +128,10 @@
         }
     }
 
-    void DeleteGroup()
+    /// <summary>
+    /// Delete last-inserted group.
+    /// </summary>
+    private void DeleteGroup()
     {
         if (groupLevels > 0)
         {
@@ -99,7 +140,10 @@
         }
     }
 
-    void CloseAlert()
+    /// <summary>
+    /// Close the current visible alert. Reset all alerts.
+    /// </summary>
+    private void CloseAlert()
     {
         emptyGroupsAlertVisible = false;
         limitedGroupsAlertVisible = false;
@@ -109,8 +153,8 @@
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherAddBtn Variant="Variant.Outlined" HelpText="הוספת מקבץ" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"></CipherAddBtn>
-        <CipherDeleteButton Variant="Variant.Outlined" HelpText="הורדת מקבץ" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default"></CipherDeleteButton>
+        <CipherAddBtn Variant="Variant.Outlined" HelpText="@AddGroupText" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"></CipherAddBtn>
+        <CipherDeleteButton Variant="Variant.Outlined" HelpText="@DeleteGroupText" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default"></CipherDeleteButton>
     </Buttons>
 
     <ChildContent>

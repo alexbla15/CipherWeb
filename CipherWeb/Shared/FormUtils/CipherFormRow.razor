@@ -14,9 +14,6 @@
     public string Padding { get; set; }
 
     [Parameter]
-    public bool Chosen { get; set; } = true;
-
-    [Parameter]
     public string Display { get; set; } = "contents";
 
     [Parameter]
@@ -36,6 +33,9 @@
 
     [Parameter]
     public string PaddingBottom { get; set; } = "10px";
+
+    [Parameter]
+    public bool Chosen { get; set; } = true;
 
     [Parameter]
     public TooltipPosition HelpTextPosition { get; set; } = TooltipPosition.Bottom;

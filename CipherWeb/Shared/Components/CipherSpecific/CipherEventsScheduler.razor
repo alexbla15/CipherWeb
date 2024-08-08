@@ -9,12 +9,12 @@
         </RadzenStack>
     </HeaderContent>
     <Buttons>
-        <CipherButton Icon="@Icons.Table" HelpText="הצגה כטבלה" Size="ButtonSize.Medium"
+        <CipherButton Icon="@Icons.Table" HelpText="@TableViewText" Size="ButtonSize.Medium"
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
-        <CipherButton Icon="@Icons.Calendar" HelpText="הצגה כלוח שנה"
+        <CipherButton Icon="@Icons.Calendar" HelpText="@CalendarViewText"
                       Size="ButtonSize.Medium" Variant="Variant.Outlined"
                       Click="@CalendarView" />
-        <CipherExcelButton FileName="events" Data="@events" />
+        <CipherExcelButton FileName="@FileName" Data="@events" />
         <CipherPDFButton />
     </Buttons>
     <ChildContent>
@@ -30,15 +30,41 @@
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Display role of Cipher. Must be a Role-enum.
+    /// </summary>
     [Parameter]
     public Role SetRole { get; set; } = Role.Manager;
+    
+    /// <summary>
+    /// initial view of the scheduler (upon entry). Must be a View-enum.
+    /// </summary>
+    [Parameter]
+    public View SetView { get; set; } = View.Calendar;
 
+    /// <summary>
+    /// Scheduler events height
+    /// </summary>
     [Parameter]
     public string EventsHeight { get; set; } = "600px";
 
-    // initial view of the scheduler (upon entry)
+    /// <summary>
+    /// View as table - text.
+    /// </summary>
     [Parameter]
-    public View SetView { get; set; } = View.Calendar;
+    public string TableViewText { get; set; } = "הצגה כטבלה";
+
+    /// <summary>
+    /// View as table - text.
+    /// </summary>
+    [Parameter]
+    public string CalendarViewText { get; set; } = "הצגה כטבלה";
+
+    /// <summary>
+    /// File name for exporting as EXCEL.
+    /// </summary>
+    [Parameter]
+    public string FileName { get; set; } = "events";
 
     public enum View
     {
@@ -54,7 +80,7 @@
         Authorizer
     }
 
-    List<Event> events = new List<Event>();
+    private List<Event> events = new List<Event>();
 
     protected override async Task OnInitializedAsync()
     {

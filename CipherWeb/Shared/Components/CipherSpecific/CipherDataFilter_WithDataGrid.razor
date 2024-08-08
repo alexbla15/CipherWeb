@@ -1,27 +1,45 @@
-﻿@typeparam Cipher_TItem
+﻿@using System.Reflection
+
+@typeparam Cipher_TItem
 
 @inject ICipherInfo _db
-@using System.Reflection
 
 @inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Data source for both the datagrid, and the datafilter
+    /// </summary>
     [Parameter]
     public IEnumerable<Cipher_TItem> GeneralDataSource { get; set; } = new List<Cipher_TItem>();
 
+    /// <summary>
+    /// List of all the available filter fields. Every field is a tuple of (enlish name, hebrew name)
+    /// </summary>
     [Parameter]
     public List<Tuple<string, string>> FilterFields { get; set; } = CommonFuncs.GetTranslatedFields(typeof(Cipher_TItem));
 
-    [Parameter]
-    public bool WithCustomDataGrid { get; set; } = false;
-
+    /// <summary>
+    /// Customized datagrid
+    /// </summary>
     [Parameter]
     public RenderFragment CustomDataGrid { get; set; }
 
-    private CipherDataFilter<Cipher_TItem> dataFilter;
+    /// <summary>
+    /// Set if the component utilizes a customized datagrid, rather than using the suggested default.
+    /// </summary>
+    [Parameter]
+    public bool WithCustomDataGrid { get; set; } = false;
 
-    IQueryable<Cipher_TItem> filteredRows;
-    CipherDataGrid<Cipher_TItem> rowsGrid;
+    /// <summary>
+    /// Gap between datafilter and datagrid.
+    /// </summary>
+    [Parameter]
+    public string GridFilterGap { get; set; } = "20px";
+
+    private CipherDataFilter<Cipher_TItem> dataFilter;
+    private CipherDataGrid<Cipher_TItem> rowsGrid;
+    private IQueryable<Cipher_TItem> filteredRows;
 
     async void ViewChanged(IQueryable<Cipher_TItem> view)
     {
@@ -37,14 +55,13 @@
         <CipherDataFilter @ref=dataFilter Data="@GeneralDataSource" Cipher_TItem="Cipher_TItem" FilterFields="@FilterFields" ViewChanged=@ViewChanged>
             <FilterProperties>
                 @foreach (Tuple<string, string> field in FilterFields)
-                    {
-                    <RadzenDataFilterProperty TItem="Cipher_TItem" Property="@field.Item1"
-                            Title="@field.Item2" />
-                    }
+                {
+                    <RadzenDataFilterProperty TItem="Cipher_TItem" Property="@field.Item1" Title="@field.Item2" />
+                }
             </FilterProperties>
         </CipherDataFilter>
-        
-        <div style="padding-top:20px">
+
+        <div style="@($"padding-top:{GridFilterGap}")">
             @if (WithCustomDataGrid)
             {
                 @CustomDataGrid
@@ -52,7 +69,6 @@
             else
             {
                 <CipherDataGrid Cipher_TItem="@Cipher_TItem" @ref=rowsGrid DataSource="@(filteredRows ?? GeneralDataSource)"></CipherDataGrid>
-
             }
         </div>
     </ChildContent>

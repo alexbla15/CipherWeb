@@ -17,19 +17,31 @@
 </CipherTableCard>
 
 @code {
+    /// <summary>
+    /// Is datagrid filterable.
+    /// </summary>
     [Parameter]
     public bool AllowFilter { get; set; }
 
-    [Parameter]
-    public FilterMode GridFilterMode { get; set; }
-
+    /// <summary>
+    /// Is datagrid groupable.
+    /// </summary>
     [Parameter]
     public bool AllowGroup { get; set; }
 
+    /// <summary>
+    /// Max amount of rows per page of datagrid.
+    /// </summary>
     [Parameter]
     public int RowsPerPage { get; set; } = 12;
 
-    List<StorageSystem> systems = new List<StorageSystem>();
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// </summary>
+    [Parameter]
+    public FilterMode GridFilterMode { get; set; }
+
+    private List<StorageSystem> systems = new List<StorageSystem>();
 
     protected override async Task OnInitializedAsync()
     {

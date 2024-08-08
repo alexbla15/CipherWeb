@@ -4,63 +4,121 @@
 @inherits RadzenButton
 
 @code {
+    /// <summary>
+    /// Background of color. Must be a ButtonStyle-enum.
+    /// </summary>
     [Parameter]
     public ButtonStyle ColorStyle { get; set; } = Constants.Button.Color;
 
+    /// <summary>
+    /// Background color shade. Must be a Shade-enum.
+    /// </summary>
     [Parameter]
     public Shade ColorShade { get; set; } = Constants.Button.Shade;
 
-    [Parameter]
-    public string HelpText { get; set; } = "";
-
-    [Parameter]
-    public TooltipService TipService { get; set; }
-
-    [Parameter]
-    public bool Wrap { get; set; } = false;
-
-    [Parameter]
-    public string StyleClass { get; set; }
-
-    [Parameter]
-    public string Width { get; set; }
-
-    [Parameter]
-    public string MaxWidth { get; set; }
-
-    [Parameter]
-    public string Height { get; set; }
-
-    [Parameter]
-    public string MinHeight { get; set; }
-
-    [Parameter]
-    public string ButtonTextAlign { get; set; }
-
-    [Parameter]
-    public string Padding { get; set; }
-
-    [Parameter]
-    public string MarginBottom { get; set; }
-
+    /// <summary>
+    /// Help text position. Must be a TooltipPosition-enum. Defaults to top.
+    /// </summary>
     [Parameter]
     public TooltipPosition HelpTextPosition { get; set; } = TooltipPosition.Top;
 
+    /// <summary>
+    /// Text that will be shown within a popup to explain shortly the button's purpose.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "";
 
-    protected override async Task OnInitializedAsync()
-    {
-        StyleClass = Wrap ? "rz-text-wrap" : "rz-text-nowrap";
-    }
+    /// <summary>
+    /// Button's width. Units: px / %.
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; }
+
+    /// <summary>
+    /// Maximal width of button. 
+    /// Pay attention to match the units with the Width attribute.
+    /// </summary>
+    [Parameter]
+    public string MaxWidth { get; set; }
+
+    /// <summary>
+    /// 
+    // Minimal width of button.
+    /// Pay attention to match the units with the Width attribute.
+    /// </summary>
+    [Parameter]
+    public string MinWidth { get; set; }
+
+    /// <summary>
+    /// Button's height. Units: px / %.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; }
+
+    /// <summary>
+    /// Maximal height of button.
+    /// Pay attention to match the units with the Height attribute.
+    /// </summary>
+    [Parameter]
+    public string MaxHeight { get; set; }
+
+    /// <summary>
+    /// Minimal height of button.
+    /// Pay attention to match the units with the Height attribute.
+    /// </summary>
+    [Parameter]
+    public string MinHeight { get; set; }
+
+    /// <summary>
+    /// Alignment of the text within the button.
+    /// </summary>
+    [Parameter]
+    public string ButtonTextAlign { get; set; }
+
+    /// <summary>
+    /// Define amount of space at the right-outside the button.
+    /// </summary>
+    [Parameter]
+    public string MarginRight { get; set; }
+
+    /// <summary>
+    /// Define amount of space at the left-outside the button.
+    /// </summary>
+    [Parameter]
+    public string MarginLeft { get; set; }
+
+    /// <summary>
+    /// Define amount of space at the top-outside the button.
+    /// </summary>
+    [Parameter]
+    public string MarginTop { get; set; }
+
+    /// <summary>
+    /// Define amount of space at the bottom-outside the button.
+    /// </summary>
+    [Parameter]
+    public string MarginBottom { get; set; }
+
+    /// <summary>
+    /// Define amount of space outside the content of the button.
+    /// </summary>
+    [Parameter]
+    public string Padding { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private string StyleClass = "";
+    
 
     void ShowTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
     {
         if (!string.IsNullOrWhiteSpace(HelpText))
         {
             tooltipService.Open(elementReference, ds =>
-            @<div dir="rtl"> @HelpText </div>, options);
+    @<div dir="rtl"> @HelpText </div>, options);
         }
     }
-
 
     void HideTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
     {
@@ -70,19 +128,32 @@
         }
     }
 
+    /// <summary>
+    /// Define button's style according to parameters.
+    /// </summary>
+    /// <returns>Button's style</returns>
     private string CustomStyle()
     {
         return $@"
-                width: {Width}; 
-                max-width: {MaxWidth}; 
+                width: {Width};
+                max-width: {MaxWidth};
+                min-width: {MinWidth};
                 text-align: {ButtonTextAlign};
                 padding: {Padding};
                 height: {Height};
+                max-height: {MaxHeight};
                 min-height: {MinHeight};
+                margin-top: {MarginTop};
                 margin-bottom: {MarginBottom};
+                margin-right: {MarginRight};
+                margin-left: {MarginLeft};
                 ";
     }
 
+    /// <summary>
+    /// Get the button's class needed for its CSS transition effect.
+    /// </summary>
+    /// <returns>Button's class</returns>
     private string GetButtonClass()
     {
         string btn_cls = "CipherButton ";
@@ -100,7 +171,7 @@
                 btn_cls += "Darker";
             }
             else if ((ColorShade == Shade.Dark && Variant != Variant.Outlined) || (ColorShade == Shade.Darker && Variant == Variant.Outlined))
-    {
+            {
                 btn_cls += "Dark";
             }
             else if ((ColorShade == Shade.Default && Variant != Variant.Outlined) || (ColorShade == Shade.Dark && Variant == Variant.Outlined))
@@ -129,62 +200,125 @@
         overflow: hidden;
     }
 
-    .CipherButton.Disabled {}
+        .CipherButton.Disabled {
+        }
 
-    .CipherButton::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        width: 0; /*start the new-background width at 0, and enlarge it*/
-        z-index: -1;
-        transition: all 250ms
-    }
+        .CipherButton::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 0; /*start the new-background width at 0, and enlarge it*/
+            z-index: -1;
+            transition: all 250ms
+        }
 
-    .CipherButton:hover::before {
+        .CipherButton:hover::before {
             width: 100%;
-    }
+        }
 
-    .CipherButton.PrimaryDarker::before { background-color: var(--rz-primary-dark); }
-    .CipherButton.PrimaryDark::before { background-color: var(--rz-primary); }
-    .CipherButton.PrimaryDefault::before { background-color: var(--rz-primary-light); }
-    .CipherButton.PrimaryLight::before { background-color: var(--rz-primary-lighter); }
-    .CipherButton.PrimaryLighter::before { background-color: var(--rz-primary-light); }
+        .CipherButton.PrimaryDarker::before {
+            background-color: var(--rz-primary-dark);
+        }
 
-    .CipherButton.SuccessDarker::before { background-color: var(--rz-success-dark); }
-    .CipherButton.SuccessDark::before { background-color: var(--rz-success); }
-    .CipherButton.SuccessDefault::before { background-color: var(--rz-success-light); }
-    .CipherButton.SuccessLight::before { background-color: var(--rz-success-lighter); }
-    .CipherButton.SuccessLighter::before { background-color: var(--rz-success-light); }
+        .CipherButton.PrimaryDark::before {
+            background-color: var(--rz-primary);
+        }
 
-    .CipherButton.DangerDarker::before { background-color: var(--rz-danger-dark); }
-    .CipherButton.DangerDark::before { background-color: var(--rz-danger); }
-    .CipherButton.DangerDefault::before { background-color: var(--rz-danger-light); }
-    .CipherButton.DangerLight::before { background-color: var(--rz-danger-lighter); }
-    .CipherButton.DangerLighter::before { background-color: var(--rz-danger-light); }
+        .CipherButton.PrimaryDefault::before {
+            background-color: var(--rz-primary-light);
+        }
 
-    .CipherButton.SecondaryDarker::before { background-color: var(--rz-secondary-dark); }
-    .CipherButton.SecondaryDark::before { background-color: var(--rz-secondary); }
-    .CipherButton.SecondaryDefault::before { background-color: var(--rz-secondary-light); }
-    .CipherButton.SecondaryLight::before { background-color: var(--rz-secondary-lighter); }
+        .CipherButton.PrimaryLight::before {
+            background-color: var(--rz-primary-lighter);
+        }
 
-    .CipherButton.WarningDarker::before { background-color: var(--rz-warning-dark); }
-    .CipherButton.WarningDark::before { background-color: var(--rz-warning); } 
-    .CipherButton.WarningDefault::before { background-color: var(--rz-warning-light); }
-    .CipherButton.WarningLight::before { background-color: var(--rz-warning); }
+        .CipherButton.PrimaryLighter::before {
+            background-color: var(--rz-primary-light);
+        }
+
+        .CipherButton.SuccessDarker::before {
+            background-color: var(--rz-success-dark);
+        }
+
+        .CipherButton.SuccessDark::before {
+            background-color: var(--rz-success);
+        }
+
+        .CipherButton.SuccessDefault::before {
+            background-color: var(--rz-success-light);
+        }
+
+        .CipherButton.SuccessLight::before {
+            background-color: var(--rz-success-lighter);
+        }
+
+        .CipherButton.SuccessLighter::before {
+            background-color: var(--rz-success-light);
+        }
+
+        .CipherButton.DangerDarker::before {
+            background-color: var(--rz-danger-dark);
+        }
+
+        .CipherButton.DangerDark::before {
+            background-color: var(--rz-danger);
+        }
+
+        .CipherButton.DangerDefault::before {
+            background-color: var(--rz-danger-light);
+        }
+
+        .CipherButton.DangerLight::before {
+            background-color: var(--rz-danger-lighter);
+        }
+
+        .CipherButton.DangerLighter::before {
+            background-color: var(--rz-danger-light);
+        }
+
+        .CipherButton.SecondaryDarker::before {
+            background-color: var(--rz-secondary-dark);
+        }
+
+        .CipherButton.SecondaryDark::before {
+            background-color: var(--rz-secondary);
+        }
+
+        .CipherButton.SecondaryDefault::before {
+            background-color: var(--rz-secondary-light);
+        }
+
+        .CipherButton.SecondaryLight::before {
+            background-color: var(--rz-secondary-lighter);
+        }
+
+        .CipherButton.WarningDarker::before {
+            background-color: var(--rz-warning-dark);
+        }
+
+        .CipherButton.WarningDark::before {
+            background-color: var(--rz-warning);
+        }
+
+        .CipherButton.WarningDefault::before {
+            background-color: var(--rz-warning-light);
+        }
+
+        .CipherButton.WarningLight::before {
+            background-color: var(--rz-warning);
+        }
 </style>
 
-
-<RadzenButton Text="@Text" BusyText="@BusyText" Visible="@Visible" 
-              Icon="@Icon" IconColor="@IconColor" 
+<RadzenButton Text="@Text" BusyText="@BusyText" Visible="@Visible"
+              Icon="@Icon" IconColor="@IconColor"
               ButtonStyle="@ColorStyle" Shade="@ColorShade" Click="@Click" Style="@($"{CustomStyle()};{Style}")"
               Size="@Size" Variant="@Variant" Disabled="@Disabled" class="@GetButtonClass()"
-              MouseEnter="@(args => ShowTooltipWithHtml(args, new TooltipOptions(){ 
+              MouseEnter="@(args => ShowTooltipWithHtml(args, new TooltipOptions(){
                 Style = $@"
-                    background: var(--rz-{ColorStyle.GetDisplayDescription().ToLower()}); 
+                    background: var(--rz-{ColorStyle.GetDisplayDescription().ToLower()});
                     color: var(--rz-on-{ColorStyle.GetDisplayDescription().ToLower()})",
                 Duration = null,
                 Position = HelpTextPosition}))"
-              MouseLeave="@(args => HideTooltipWithHtml(args))"
-/>
+              MouseLeave="@(args => HideTooltipWithHtml(args))" />

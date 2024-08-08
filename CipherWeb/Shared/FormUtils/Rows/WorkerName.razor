@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
-
+﻿
 @inherits CipherAutoComplete
 
 <CipherAutoComplete Icon="@Icons.Person" Label="@LabelText" Data="@TestedData.Workers" Disabled="@Disabled" />
@@ -7,13 +6,5 @@
 
 @code {
     [Parameter]
-    public string? Worker { get; set; } = Constants.SetUser.FullName();
-
-    [Parameter]
-    public string? LabelText { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        LabelText = "ממלא הטופס";
-    }
+    public string? LabelText { get; set; } = "ממלא הטופס";
 }

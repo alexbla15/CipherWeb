@@ -11,15 +11,22 @@
     public string Label { get; set; } = "תאריך";
 
     [Parameter]
+    public string Icon { get; set; } = Icons.Date;
+
+    [Parameter]
     public bool Disabled { get; set; }
 
     [Parameter]
     public bool Popup { get; set; }
 
     [Parameter]
-    public string Icon { get; set; } = Icons.Date;
+    public bool Required { get; set; } = true;
 
-    //
+    [Parameter]
+    public DateTime Min { get; set; } = DateTime.MinValue;
+
+    [Parameter]
+    public DateTime Max { get; set; } = DateTime.MaxValue;
 
     private DateTime _value = DateTime.Today;
 
@@ -42,18 +49,6 @@
 
     [Parameter]
     public IEnumerable<object> Data { get; set; }
-
-    // LENGTH VALIDATOR
-
-    [Parameter]
-    public DateTime Min { get; set; } = DateTime.MinValue;
-
-    [Parameter]
-    public DateTime Max { get; set; } = DateTime.MaxValue;
-
-    // REQUIRED VALIDATOR
-    [Parameter]
-    public bool Required { get; set; } = true;
 
     class Model
     {

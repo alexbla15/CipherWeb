@@ -14,26 +14,44 @@
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Package" DataSource="@Constants.packages" RowsPerPage="@RowsPerPage"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
-                        WithTotalFooter="@WithTotalFooter" />
+                        WithTotalFooter="@AllowTotalFooter" />
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// </summary>
     [Parameter]
     public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
+    /// <summary>
+    /// Is datagrid filterable
+    /// </summary>
     [Parameter]
     public bool AllowFilter { get; set; }
 
+    /// <summary>
+    /// Is datagrid groupable.
+    /// </summary>
     [Parameter]
     public bool AllowGroup { get; set; }
 
+    /// <summary>
+    /// Is total footer of decimal values (such as sum of mass) allowed.
+    /// </summary>
     [Parameter]
-    public bool WithTotalFooter { get; set; } = true;
+    public bool AllowTotalFooter { get; set; } = true;
 
+    /// <summary>
+    /// Is a CipherAutoComplete header is needed.
+    /// </summary>
     [Parameter]
     public bool WithHeaderContent { get; set; } = true;
 
+    /// <summary>
+    /// Max amount of rows per page of datagrid.
+    /// </summary>
     [Parameter]
     public int RowsPerPage { get; set; } = 12;
 

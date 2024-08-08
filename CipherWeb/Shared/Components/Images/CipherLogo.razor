@@ -1,14 +1,27 @@
 ﻿@inherits RadzenImage
 
 @code {
+    /// <summary>
+    /// Path to the image.
+    /// </summary>
     [Parameter]
     public string LogoPath { get; set; } = "Images/CIPHER_Logo_4.png";
 
+    /// <summary>
+    /// Image height.
+    /// </summary>
     [Parameter]
     public string Height { get; set; } = "13vh";
 
+    /// <summary>
+    /// Image width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; }
+
+    /// <summary>
+    /// Border radius of the logo.
+    /// </summary>
     [Parameter]
     public string BorderRadius { get; set; } = "0px";
 

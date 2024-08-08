@@ -2,45 +2,67 @@
 
 <CipherFormCard MaxWidth="@MaxWidth" Width="@Width">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-        <CipherText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5"/>
-        <CipherButton Icon="@Icons.Day" HelpText="תצוגה יומית"
-                      Size="ButtonSize.Medium" Variant="@DayVariant" 
-                      ColorShade="Shade.Darker"
-                      Click="@DayView" />
-        <CipherButton Icon="@Icons.Month" HelpText="תצוגה חודשית"
-                      Size="ButtonSize.Medium" Variant="@MonthVariant" ColorShade="Shade.Darker"
-                      Click="@MonthView" />
-        <CipherButton Icon="@Icons.Year" HelpText="תצוגה שנתית"
-                      Size="ButtonSize.Medium" Variant="@YearVariant" ColorShade="Shade.Darker"
-                      Click="@YearView" />
+        <CipherText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5" />
+        <CipherButton Icon="@Icons.Day" HelpText="@DayViewText" Size="@ButtonsSize" Variant="@DayVariant"
+                      ColorShade="Shade.Darker" Click="@DayView" />
+        <CipherButton Icon="@Icons.Month" HelpText="@MonthViewText" Size="@ButtonsSize" Variant="@MonthVariant"
+                      ColorShade="Shade.Darker" Click="@MonthView" />
+        <CipherButton Icon="@Icons.Year" HelpText="@YearViewText" Size="@ButtonsSize" Variant="@YearVariant"
+                      ColorShade="Shade.Darker" Click="@YearView" />
     </RadzenStack>
 
     <RadzenRow>
-    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem">
             @foreach (string key in CountProcesses().Keys)
-        {
-            <CipherFormCard Height="80px" Width="150px" Variant="Variant.Text">
-                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="0.5rem">
+            {
+                <CipherFormCard Height="80px" Width="150px" Variant="Variant.Text">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="0.5rem">
                         <CipherButton Size="ButtonSize.Large" Width="50px" Icon="@Icons.Material" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary"></CipherButton>
                         <RadzenStack Gap="0">
                             <CipherText TextAlign="TextAlign.Right" TextColor="@Colors.PrimaryDark" Text="@CountProcesses()[key].ToString()" />
                             <CipherText Wrap="true" TextStyle="TextStyle.Overline" StyleClass="TextStyle.Overline" Text="@key" TextAlign="TextAlign.Right" />
                         </RadzenStack>
-                </RadzenStack>
-        </CipherFormCard>
-    }
-    </RadzenStack>
+                    </RadzenStack>
+                </CipherFormCard>
+            }
+        </RadzenStack>
     </RadzenRow>
 </CipherFormCard>
 
 @code {
+    /// <summary>
+    /// Size of buttons next to data-view.
+    /// </summary>
+    [Parameter]
+    public ButtonSize ButtonsSize { get; set; } = ButtonSize.Medium;
+
     [Parameter]
     public string Width { get; set; } = "500px";
 
     [Parameter]
     public string MaxWidth { get; set; } = "1200px";
 
-    // initial view of the scheduler (upon entry)
+    /// <summary>
+    /// Show day view.
+    /// </summary>
+    [Parameter]
+    public string DayViewText { get; set; } = "תצוגה יומית";
+
+    /// <summary>
+    /// Show month view.
+    /// </summary>
+    [Parameter]
+    public string MonthViewText { get; set; } = "תצוגה חודשית";
+
+    /// <summary>
+    /// Show year view.
+    /// </summary>
+    [Parameter]
+    public string YearViewText { get; set; } = "תצוגה שנתית";
+
+    /// <summary>
+    /// initial view of the scheduler (upon entry)
+    /// </summary>
     [Parameter]
     public string View { get; set; } = "month";
 
@@ -82,11 +104,11 @@
 
     private bool AddProcess(Event ev)
     {
-        if (View=="day")
+        if (View == "day")
         {
             return (ev.EventDate == DateTime.Today);
         }
-        else if (View=="month")
+        else if (View == "month")
         {
             return (ev.EventDate.Month == DateTime.Today.Month);
         }
@@ -102,8 +124,8 @@
 
     private void DayView()
     {
-        View = "day"; 
-        SummaryTitle = "סיכום תהליכים יומי"; 
+        View = "day";
+        SummaryTitle = "סיכום תהליכים יומי";
 
         DayVariant = Variant.Filled;
         MonthVariant = Variant.Outlined;

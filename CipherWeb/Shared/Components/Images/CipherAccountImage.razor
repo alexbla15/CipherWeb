@@ -1,36 +1,57 @@
 ﻿@inherits RadzenImage
 
 @code {
+    /// <summary>
+    /// Image width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "50px";
 
+    /// <summary>
+    /// Image height.
+    /// </summary>
     [Parameter]
     public string Height { get; set; } = "50px";
 
+    /// <summary>
+    /// Border-radius of image.
+    /// </summary>
     [Parameter]
     public string BorderRadius { get; set; } = "50%";
 
+    /// <summary>
+    /// Border of image.
+    /// </summary>
     [Parameter]
     public string Border { get; set; } = "";
 
+    /// <summary>
+    /// Inject JSRuntime
+    /// </summary>
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         Path = "Images/UserPic.jpg";
     }
 
-    // Inject JSRuntime
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; }
-
+    /// <summary>
+    /// Change border style on mouse over
+    /// </summary>
+    /// <returns></returns>
     private async Task OnMouseOver()
     {
-        Border = $"1.5px solid var(--cipher-header-color)"; // Change border style on mouse over
+        Border = $"1.5px solid var(--cipher-header-color)";
     }
 
+    /// <summary>
+    /// Reset border style on mouse out
+    /// </summary>
+    /// <returns></returns>
     private async Task OnMouseOut()
     {
-        Border = ""; // Reset border style on mouse out
+        Border = "";
     }
 }
 

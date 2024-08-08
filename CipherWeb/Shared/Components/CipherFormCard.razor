@@ -15,43 +15,79 @@ else
     </RadzenStack>
 }
 
-@code{
+@code {
+    /// <summary>
+    /// Is component-card visible.
+    /// </summary>
     [Parameter]
     public bool WithCard { get; set; } = true;
 
+    /// <summary>
+    /// Component card background color
+    /// </summary>
     [Parameter]
     public string BackgroundColor { get; set; } = "var(--cipher-header-background-color)";
 
+    /// <summary>
+    /// Component's width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "100%";
 
-    [Parameter]
-    public string Height { get; set; }
-
+    /// <summary>
+    /// Component's max width.
+    /// </summary>
     [Parameter]
     public string MaxWidth { get; set; } = "100%";
 
+    /// <summary>
+    /// Component's height.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; }
+
+    /// <summary>
+    /// Component's max height.
+    /// </summary>
     [Parameter]
     public string MaxHeigth { get; set; } = "800px";
 
+    /// <summary>
+    /// Float direction of the card
+    /// </summary>
     [Parameter]
     public string Float { get; set; } = "right";
 
     [Parameter]
     public string Gap { get; set; } = "0.2rem";
 
+    /// <summary>
+    /// Space outside of card. (Top)
+    /// </summary>
     [Parameter]
     public string MarginTop { get; set; }
 
+    /// <summary>
+    /// Space outside of card. (Bottom)
+    /// </summary>
     [Parameter]
     public string MarginBottom { get; set; } = "20px";
 
+    /// <summary>
+    /// Space outside of card. (Right)
+    /// </summary>
     [Parameter]
     public string MarginRight { get; set; }
 
+    /// <summary>
+    /// Space outside of card. (Left)
+    /// </summary>
     [Parameter]
     public string MarginLeft { get; set; }
 
+    /// <summary>
+    /// Space inside of card, outside of content.
+    /// </summary>
     [Parameter]
     public string Padding { get; set; } = "10px";
 
