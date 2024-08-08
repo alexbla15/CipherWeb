@@ -22,10 +22,11 @@
 
 <CipherLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem" dir="rtl" Style="width:100%">
-            <RadzenSidebarToggle Style="font-size:large; width:5%" Click="@(() => sidebarExpanded = !sidebarExpanded)" />
-            <CipherSiteHeader Header_Width="95%" />
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" dir="rtl">
+            <RadzenSidebarToggle Style="font-size:large;" Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+            <CipherSiteHeader />
         </RadzenStack>
+
     </RadzenHeader>
     <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
         <RadzenPanelMenu dir="rtl">
@@ -33,7 +34,7 @@
             @foreach (MyNavLink myLink in CipherNavLinks.links)
             {
                 <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
-                    @if(myLink.SubLinks.Count > 0)
+                    @if (myLink.SubLinks.Count > 0)
                     {
                         @foreach (MySubNavLink mySubLink in myLink.SubLinks)
                         {
@@ -50,5 +51,5 @@
         </RadzenPanelMenu>
     </RadzenSidebar>
 
-    <CipherBody Body="@Body"/>
+    <CipherBody Body="@Body" />
 </CipherLayout>

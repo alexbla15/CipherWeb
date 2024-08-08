@@ -1,45 +1,8 @@
-﻿@code {
-    [Parameter]
-    public string TextColor { get; set; } = "red";
+﻿@inherits CipherText
 
+@code {
     [Parameter]
-    public string BackgroundColor { get; set; } = "var(--cipher-header-background-color)";
-
-    [Parameter]
-    public string TextAlign { get; set; } = "center";
-
-    [Parameter]
-    public string JustifyContent { get; set; } = "center";
-
-    [Parameter]
-    public string Width { get; set; } = "100%";
-
-    [Parameter]
-    public int ZIndex { get; set; } = 150;
-
-    [Parameter]
-    public string Margin { get; set; } = "0 0";
-
-    [Parameter]
-    public string Position { get; set; } = "fixed";
-
-    public string MyStyle()
-    {
-        return $@"
-            position: {Position}; 
-            z-index: {ZIndex}; 
-            width: {Width}; 
-            justify-content: {JustifyContent}; 
-            text-align: {TextAlign}; 
-            background-color: {BackgroundColor};
-            margin: {Margin};
-            padding: 0 0;
-            flex-wrap:nowrap;
-        ";
-        
-    }
+    public string Restriction { get; set; } = "מוגבל";
 }
 
-<RadzenCard Variant="Variant.Text" Style="@MyStyle()">
-    <CipherText TextStyle="TextStyle.H6" Text="-- מוגבל --" Style="@MyStyle()" TextColor="@TextColor"/>
-</RadzenCard>
+<CipherText Text="@Restriction" TextAlign="TextAlign.Center" Color="@Colors.Danger" FontSize="large" FontWeight="700" MarginBottom="0px"></CipherText>

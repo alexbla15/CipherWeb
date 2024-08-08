@@ -197,7 +197,7 @@
             }
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical">
-            @if (Required)
+            @if (Required && ShowErrors)
             {
                 <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
             }

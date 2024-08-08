@@ -1,27 +1,27 @@
 ﻿@inherits RadzenBody
 
 @code {
-        [Parameter]
-        public string Width { get; set; } = "100%";
+    [Parameter]
+    public string Width { get; set; } = "100%";
 
-        [Parameter]
-        public string Height { get; set; } = "100%";
+    [Parameter]
+    public string Height { get; set; } = "100%";
 
-        [Parameter]
-        public string BackgroundColor { get; set; } = Colors.PrimaryLighter;
+    [Parameter]
+    public string BackgroundColor { get; set; } = Colors.PrimaryLighter;
 
-        [Parameter]
-        public string Right { get; set; } = "0 px";
+    [Parameter]
+    public string Right { get; set; } = "0 px";
 
-        [Parameter]
-        public string Margin { get; set; } = "0";
+    [Parameter]
+    public string Margin { get; set; } = "0";
 
-        [Parameter]
-        public RenderFragment Body { get; set; }
+    [Parameter]
+    public RenderFragment Body { get; set; }
 
-        string BodyStyle()
-        {
-            return $@"
+    string BodyStyle()
+    {
+        return $@"
             background-color: {BackgroundColor};
             right: {Right};
             width: {Width};
@@ -30,8 +30,8 @@
             padding-top: 1%;
             padding-right: 1%;
             padding-left: 1%;
-        ";    
-        }
+        ";
+    }
 }
 
 <RadzenBody dir="rtl" Style="@BodyStyle()">
@@ -39,6 +39,6 @@
         @Body
     </article>
 
-    <CipherFooter BackgroundColor="@Colors.PrimaryLight" MarginRight="1%" Width="98%"/>
+    <CipherFooter BackgroundColor="@Colors.PrimaryLight" MarginRight="1%" Width="98%" />
 
 </RadzenBody>

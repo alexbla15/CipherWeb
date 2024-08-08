@@ -13,7 +13,7 @@
             <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Start" Gap="20px">
                 @foreach (SearchParameter p in searchParameters)
                 {
-                        <CipherFormRow Label="@p.Label" Icon="@p.Icon">
+                    <CipherFormRow Label="@p.Label" Icon="@p.Icon">
                         <RadzenSelectBar @bind-Value="@p.BindValue" TValue="IEnumerable<string>"
                                          Size="ButtonSize.Medium" Multiple="true" Style="border-radius:10px;" Change="@SelectionChanged">
                             <Items>
@@ -23,7 +23,7 @@
                                 }
                             </Items>
                         </RadzenSelectBar>
-                        </CipherFormRow>
+                    </CipherFormRow>
                 }
                 <CipherDatePicker Label="מתאריך" />
                 <CipherDatePicker Label="עד תאריך" />
