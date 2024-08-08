@@ -1,0 +1,185 @@
+﻿@inject DialogService DialogService
+
+@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    public class Parameter
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string pType { get; set; }
+    }
+
+    public class Attribute
+    {
+        public string Class { get; set; }
+        public string ParameterName { get; set; }
+        public string Path { get; set; }
+
+        public Attribute(string att_class, string att_param_name)
+        {
+            Class = att_class;
+            ParameterName = att_param_name;
+            Path = $"{Class}.{ParameterName}";
+        }
+    }
+
+    List<Attribute> OptionalTypes = new List<Attribute>();
+
+    RadzenDataGrid<Parameter> CustomDataGrid = new RadzenDataGrid<Parameter>();
+
+    List<Parameter> set_params = new List<Parameter>() { };
+    Parameter old_param = new Parameter();
+
+    private bool ShowHelpText = true;
+    int components = 0;
+
+    protected override async void OnInitialized()
+    {
+        AddTypeAttributes(typeof(Package), "אריזה");
+        AddTypeAttributes(typeof(Vessel), "כלי");
+        AddTypeAttributes(typeof(StorageSystem), "מיקום");
+        AddTypeAttributes(typeof(SubCategory), "קטגוריה");
+        AddTypeAttributes(typeof(Event), "תנועה");
+        AddTypeAttributes(typeof(Process), "תהליך");
+    }
+
+    private void AddTypeAttributes(Type type, string type_heb_name)
+    {
+        List<Tuple<string, string>> typeAttributes = CommonFuncs.GetTranslatedFields(type);
+
+        foreach (Tuple<string, string> att in typeAttributes)
+        {
+            OptionalTypes.Add(new Attribute(type_heb_name, att.Item2));
+        }
+    }
+
+    private void AddComponent()
+    {
+        if (components == set_params.Count)
+        {
+
+            int next_id = components + 1;
+            Parameter new_param = new Parameter() { Id = next_id };
+
+            // from_packs.Add(new_pack);
+
+            components += 1;
+            CustomDataGrid.InsertRow(new_param);
+
+            ShowHelpText = false;
+        }
+    }
+
+    async Task EditRow(Parameter param)
+    {
+        // prevent editing of two rows in parallel
+        if (CustomDataGrid.Count == set_params.Count)
+        {
+            old_param.Id = param.Id;
+            old_param.Name = param.Name;
+            old_param.pType = param.pType;
+
+            set_params.Remove(param);
+            await CustomDataGrid.EditRow(param);
+        }
+    }
+
+    async Task CancelEdit(Parameter param)
+    {
+        param.Id = old_param.Id;
+        param.Name = old_param.Name;
+        param.pType = old_param.pType;
+
+        await SaveRow(param);
+    }
+
+    async Task DeleteRow(Parameter param)
+    {
+        set_params.Remove(param);
+
+        foreach (Parameter p in set_params)
+        {
+            p.Id = set_params.IndexOf(p) + 1;
+        }
+
+        CustomDataGrid.Data = set_params;
+
+        components -= 1;
+        await CustomDataGrid.RefreshDataAsync();
+
+        if (set_params.Count() == 0)
+        {
+            ShowHelpText = true;
+        }
+    }
+
+    async Task DeleteAll()
+    {
+        set_params = new List<Parameter>();
+        components = 0;
+        CustomDataGrid.Data = set_params;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+
+    async Task SaveRow(Parameter param)
+    {
+        set_params.Add(param);
+
+        await CustomDataGrid.UpdateRow(param);
+        await CustomDataGrid.RefreshDataAsync();
+    }
+}
+
+
+<CipherComponentCard Title="פרמטרי משתמש">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="הוספת פרמטר" />
+        <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="מחיקת פרמטרים" />
+    </Buttons>
+
+    <ChildContent>
+        @if (ShowHelpText)
+        {
+            <CipherText Text="במסך זה ניתן להוסיף פרמטרים אותם יצטרך להזין המשתמש. להוספה לחצו על כפתור ההוספה למעלה"></CipherText>
+        }
+        <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="!components.Equals(0)">
+            <Columns>
+                <RadzenDataGridColumn TItem="Parameter" Property="Id" Title="#" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" Width="5%" />
+                <RadzenDataGridColumn TItem="Parameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
+                    <EditTemplate Context="param">
+                        <CipherAutoComplete @bind-Value="@param.Name" Width="100%" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Parameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
+                    <EditTemplate Context="param">
+                        <RadzenDropDownDataGrid @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Path" ValueProperty="Path"
+                                                Placeholder="חיפוש פרמטר" SearchTextPlaceholder="חיפוש..."
+                                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Class" Title="קטגוריה" OrderIndex="1" />
+                                <RadzenDropDownDataGridColumn Property="ParameterName" Title="שם פרמטר" OrderIndex="2" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn Width="10%" TItem="Parameter" Context="param" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="param">
+                        <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(param))" @onclick:stopPropagation="true" />
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(param))" @onclick:stopPropagation="true" />
+                    </Template>
+                    <EditTemplate Context="param">
+                        <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(param))" />
+                        <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(param))" />
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>

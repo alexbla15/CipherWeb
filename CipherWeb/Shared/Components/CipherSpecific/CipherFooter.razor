@@ -1,24 +1,24 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Width="@Width" MaxWidth="@MaxWidth" Padding="@Padding" 
-    MarginLeft="@MarginLeft" MarginRight="@MarginRight"
-    BackgroundColor="@BackgroundColor" Variant="Variant.Filled">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" 
-    JustifyContent="JustifyContent.Center" Gap="0">
+<CipherComponentCard Width="@Width" MaxWidth="@MaxWidth" Padding="@Padding" ContentPadding="0"
+                     MarginLeft="@MarginLeft" MarginRight="@MarginRight" MarginTop="@MarginTop"
+                     BackgroundColor="@BackgroundColor" Variant="Variant.Filled">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+                 JustifyContent="JustifyContent.Center" Gap="0">
 
         <CipherLogo LogoPath="Images/HilatLogo.png" Height="@LogoHeight"></CipherLogo>
         <RadzenStack Orientation="Orientation.Vertical">
-            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" 
-            Text="@Description" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")" 
-            Text="@SubDescription" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")"
+                        Text="@Description" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <CipherText TextStyle="@DescriptionStyle" Style="@($"color: {TextColor}")"
+                        Text="@SubDescription" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
         </RadzenStack>
 
     </RadzenStack>
 </CipherComponentCard>
 
 @code {
-        // FOOTER PROPERTIES
+    // FOOTER PROPERTIES
 
     [Parameter]
     public string Description { get; set; } = "פותח על ידי " + Constants.CompanyName;

@@ -217,6 +217,10 @@
 
 /* ------------------ DATA TABLE ------------------ */
 
+.rz-data-grid {
+    direction:rtl;
+}
+
 .rz-datatable-data td:not(:last-child), 
 .rz-grid-table td:not(:last-child) {
     border-right: 0;

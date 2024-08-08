@@ -41,6 +41,9 @@ else
     public string Gap { get; set; } = "0.2rem";
 
     [Parameter]
+    public string MarginTop { get; set; }
+
+    [Parameter]
     public string MarginBottom { get; set; } = "20px";
 
     [Parameter]
@@ -61,6 +64,7 @@ else
             float: {Float};
             height: {Height};
             max-height: {MaxHeigth};
+            margin-top: {MarginTop};
             margin-bottom: {MarginBottom};
             margin-right: {MarginRight};
             margin-left: {MarginLeft};

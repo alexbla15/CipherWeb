@@ -38,13 +38,16 @@
     public bool AllowColumnPick { get; set; } = false;
 
     [Parameter]
-    public int RowsPerPage { get; set; } = Constants.RowsPerPage;
-
-    [Parameter]
     public bool WithCustomColumns { get; set; } = false;
 
     [Parameter]
     public bool WithTotalFooter { get; set; } = true;
+
+    [Parameter]
+    public bool OnlyFull { get; set; } = true;
+
+    [Parameter]
+    public int RowsPerPage { get; set; } = Constants.RowsPerPage;
 
     [Parameter]
     public string SetColumnWidth { get; set; } = "200px";
@@ -57,61 +60,17 @@
 
     RadzenDataGrid<Cipher_TItem> CustomDataGrid;
 
-    DataGridEditMode editMode = DataGridEditMode.Single;
-
-    Cipher_TItem originalRow;
-
     // dynamic row
     Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
     DateTime dynamicDate;
 
     protected override async Task OnInitializedAsync()
     {
-        if (FetchDataFunc is null)
+        if (FetchDataFunc != null)
         {
-            Data = DataSource;
-            ColumnNames = HebrewDictionary.Headers;
+            DataSource = (await FetchDataFunc()).ToList();
         }
-        else
-        {
-            IEnumerable<Cipher_TItem> ienum_data = await FetchDataFunc();
-            DataSource = ienum_data.ToList();
-        }
-    }
-
-    async Task EditRow(Cipher_TItem row)
-    {
-        foreach (PropertyInfo prop in row.GetType().GetProperties())
-        {
-            string name = prop.Name;
-            PropertyInfo valueProperty = row.GetType().GetProperty(name);
-            if (valueProperty != null)
-            {
-                object value = valueProperty.GetValue(row);
-                if (value != null)
-                {
-                    dynamicRow.Add(name, value);
-                }
-            }
-        }
-        dynamicDate = Convert.ToDateTime(dynamicRow["Date"]);
-
-        await CustomDataGrid.EditRow(row);
-    }
-
-    void CancelEdit(Cipher_TItem row)
-    {
-        CustomDataGrid.CancelEditRow(row);
-
-        if (!row.Equals(originalRow))
-        {
-            row = originalRow;
-        }
-    }
-
-    async Task SaveRow(Cipher_TItem row)
-    {
-        await CustomDataGrid.UpdateRow(row);
+        ColumnNames = ColumnNames ?? HebrewDictionary.Headers;
     }
 
     int? GetOrder(string columnName)
@@ -134,11 +93,12 @@
     }
 }
 
-@if (DataSource is null)
+@if (DataSource is null && OnlyFull)
 {
     <p><em>טוען...</em></p>
 }
 <RadzenDataGrid @ref="CustomDataGrid"
+                Visible="@Visible"
                 TItem="Cipher_TItem"
                 Data="@DataSource"
                 Render="@RenderFunc"

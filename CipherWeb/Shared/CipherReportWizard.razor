@@ -1,11 +1,13 @@
 ﻿@inject ICipherInfo _db
 
 <CipherSteps>
-    <RadzenStepsItem Text="אובייקטים לתצוגה">
-        <CipherWeb.Pages.Searches.SearchAdvanced />
-        
+    <RadzenStepsItem Text="קביעת פרמטרים">
+        <CipherParametrization></CipherParametrization>
     </RadzenStepsItem>
 
+    <RadzenStepsItem Text="אובייקטים לתצוגה">
+        <SearchAdvanced />
+    </RadzenStepsItem>
 
     <RadzenStepsItem Text="בניית תצוגה">
         <CipherDataGrouper Cipher_TItem="Package" Title="בחירת קבוצות" groupLevels=1 @ref=dataGrouper></CipherDataGrouper>
@@ -50,7 +52,7 @@
         db_events = await _db.GetEvents();
     }
 
-    List<Tuple<string,string>> GetColumns()
+    List<Tuple<string, string>> GetColumns()
     {
         if (dataGrouper.chosenGroups.Keys.Count() == 0 && dataAggregater.GetData().Count() == 0)
         {
@@ -116,7 +118,7 @@
                     {
                         Location = loc,
                         Vessel = ves,
-                        BrutMass = Constants.packages.Where(x=>x.Location == loc && x.Vessel == ves).Select(x => x.BrutMass).Sum(),
+                        BrutMass = Constants.packages.Where(x => x.Location == loc && x.Vessel == ves).Select(x => x.BrutMass).Sum(),
                         NetMass = Constants.packages.Where(x => x.Location == loc && x.Vessel == ves).Select(x => x.NetMass).Sum()
                     });
             }

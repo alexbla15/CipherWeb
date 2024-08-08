@@ -86,7 +86,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             Icon = Icons.Done;
             ColorStyle = ButtonStyle.Success;
-            ColorShade = Shade.Default;
+            ColorShade = Shade.Dark;
         }
     }
 

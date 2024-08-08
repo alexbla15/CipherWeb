@@ -5,7 +5,10 @@
     public string Width { get; set; } = "100%";
 
     [Parameter]
-    public string Height { get; set; } = "100%";
+    public string MinHeight { get; set; } = "80%";
+
+    [Parameter]
+    public string Height { get; set; }
 
     [Parameter]
     public string BackgroundColor { get; set; } = Colors.PrimaryLighter;
@@ -25,6 +28,7 @@
             background-color: {BackgroundColor};
             right: {Right};
             width: {Width};
+            min-height: {MinHeight};
             height: {Height};
             margin: {Margin};
             padding-top: 1%;
@@ -39,6 +43,6 @@
         @Body
     </article>
 
-    <CipherFooter BackgroundColor="@Colors.PrimaryLight" MarginRight="1%" Width="98%" />
+    <CipherFooter BackgroundColor="@Colors.PrimaryLight" MarginRight="1%" Width="98%" MarginTop="20px" />
 
 </RadzenBody>
