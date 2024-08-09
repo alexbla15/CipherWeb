@@ -82,7 +82,7 @@ namespace CipherWeb.Data
         public const string MyLocation = "my_location";
         public const string OtherHouses = "other_houses";
         public const string Output = "output";
-        public const string Passwork = "password";
+        public const string Password = "password";
         public const string PDF = "picture_as_pdf";
         public const string Pending = "pending";
         public const string Person = "person";
@@ -128,7 +128,7 @@ namespace CipherWeb.Data
         public static string Location = Domain;
         public static string Location_Initial = MyLocation;
         public static string Location_Final = Flag;
-        public static string Mask = Passwork;
+        public static string Mask = Password;
         public static string Mass = Scale;
         public static string Material = Science;
         public static string Month = CalendarViewMonth;

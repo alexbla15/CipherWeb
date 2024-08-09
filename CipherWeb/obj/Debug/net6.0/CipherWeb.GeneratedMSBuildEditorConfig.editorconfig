@@ -24,6 +24,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwcm92YWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkQ2F0ZWdvcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddDepartment.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkRGVwYXJ0bWVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -186,6 +190,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherCategoriesTable.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyQ2F0ZWdvcmllc1RhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherCategoryDropDown.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyQ2F0ZWdvcnlEcm9wRG93bi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherDataFilter_WithDataGrid.razor]

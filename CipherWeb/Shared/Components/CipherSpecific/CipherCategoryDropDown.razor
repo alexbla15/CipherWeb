@@ -1,0 +1,43 @@
+﻿@inherits CipherFormRow
+
+@inject ICipherInfo _db
+
+<CipherFormRow Icon="@Icons.Category" >
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string"
+                            Style="width:300px" Data=@subCategories TextProperty="@TextProperty" ValueProperty="@ValueProperty"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="Name" Title="משנית" Width="@($"{2*ColumnWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="MainCategory" Title="ראשית" Width="@($"{2*ColumnWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@($"{ColumnWidth}px")" />
+        </Columns>
+    </RadzenDropDownDataGrid>
+</CipherFormRow>
+
+@code {
+    /// <summary>
+    /// Name of SubCategory property to be shown in the HMI
+    /// </summary>
+    [Parameter]
+    public string TextProperty { get; set; } = "Name";
+
+    /// <summary>
+    /// Name of SubCategory property to be save in the backend
+    /// </summary>
+    [Parameter]
+    public string ValueProperty { get; set; } = "Name";
+
+    /// <summary>
+    /// Width of a column in a selectable datagrid.
+    /// </summary>
+    [Parameter]
+    public int ColumnWidth { get; set; } = 50;
+
+    private List<SubCategory> subCategories = new List<SubCategory>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "חיפוש קטגוריה";
+        subCategories = await _db.GetSubCategories();
+    }
+}

@@ -12,6 +12,7 @@ namespace CipherWeb.Data
         public static MySubNavLink Relocation = new MySubNavLink() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Location };
         public static MySubNavLink UpdatePackage = new MySubNavLink() { Href = "Forms/UpdatePackage", Name = "עדכון נתונים", Icon = Icons.Refresh };
         public static MySubNavLink Analysis = new MySubNavLink() { Href = "Forms/Analysis", Name = "מדידה", Icon = Icons.Analysis };
+        public static MySubNavLink AddCategory = new MySubNavLink() { Href = "Forms/AddCategory", Name = "קטגוריה חדשה", Icon = Icons.Category };
         public static MySubNavLink AddVessel = new MySubNavLink() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Vessel };
         public static MySubNavLink AddStorageSystem = new MySubNavLink() { Href = "Forms/AddStorageSystem", Name = "מערכת חדשה", Icon = Icons.Inventory };
         public static MySubNavLink AddDepartment = new MySubNavLink() { Href = "Forms/AddDepartment", Name = "תחום חדש", Icon = Icons.Department };
@@ -22,7 +23,8 @@ namespace CipherWeb.Data
             Icon = Icons.Edit,
             Name = "הזנה",
             SubLinks = new List<MySubNavLink>()
-                { AddPackage, TransferAmount, Relocation, UpdatePackage, Analysis, AddVessel, AddStorageSystem, AddDepartment, AddLocation }
+                { AddPackage, TransferAmount, Relocation, UpdatePackage, Analysis, 
+                AddCategory, AddVessel, AddStorageSystem, AddDepartment, AddLocation }
         };
 
         public static MyNavLink Approval = new MyNavLink() { Href = "Approval", Icon = Icons.Done, Name = "אישור", SubLinks = new List<MySubNavLink>() };

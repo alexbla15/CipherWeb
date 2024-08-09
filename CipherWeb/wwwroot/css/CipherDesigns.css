@@ -208,20 +208,20 @@
     margin-bottom: 0rem;
 }
 
-/* ------------------ DATA GRID ------------------ */
+/* ------------------ DATA TABLE ------------------ */
 
 .rz-data-grid {
     border-radius: calc(2*var(--rz-border-radius));
     border-width: 0;
+    direction: rtl;
 }
 
-/* ------------------ DATA TABLE ------------------ */
-
-.rz-data-grid {
-    direction:rtl;
+.rz-selectable
+{
+    direction: ltr;
 }
 
-.rz-datatable-data td:not(:last-child), 
+.rz-datatable-data td:not(:last-child),
 .rz-grid-table td:not(:last-child) {
     border-right: 0;
 }
