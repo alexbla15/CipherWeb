@@ -57,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Title = (Title is null) ? "דוח תעודות" : Title;
-        FileTitle = (FileTitle is null) ? "packages" : FileTitle;
+        Title ??= "דוח תעודות";
+        FileTitle ??= "packages";
     }
 }

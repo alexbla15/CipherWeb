@@ -1,6 +1,6 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Icon="@Icons.Person" Label="@Label" Data="@TestedData.Workers" Disabled="@Disabled" />
+<CipherAutoComplete Icon="@Icons.Person" Label="@Label" Data="@TestedData.Workers" Disabled="@Disabled" Value="@Constants.SetUser.FullName()" Width="@Width"/>
 
 @code {
     protected override void OnInitialized()

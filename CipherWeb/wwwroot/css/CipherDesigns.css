@@ -781,6 +781,11 @@
 
 /* ------------------ DROPDOWN ------------------ */
 
+.rz-dropdown {
+    height: 52px;
+    justify-content: center
+}
+
 rz-multiselect-trigger, 
 .rz-dropdown-trigger {
     position: absolute;
@@ -860,6 +865,11 @@ rz-multiselect-trigger,
 
 /* ------------------ FORM FIELD ------------------ */
 
+:root {
+    /*--cipher-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
+    --cipher-shadow: none;
+}
+
 .rz-form-field-content > *, 
 .rz-form-field-content > .rz-autocomplete, 
 .rz-form-field-content input, 
@@ -900,7 +910,7 @@ rz-multiselect-trigger,
 
 .rz-form-field.rz-variant-flat:not(.rz-state-disabled).rz-state-focused .rz-form-field-content {
     border: var(--rz-input-focus-border);
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    box-shadow: var(--cipher-shadow);
 }
 
 .rz-form-field-label {
@@ -918,6 +928,10 @@ rz-multiselect-trigger,
 .rz-form-field.rz-variant-filled .rz-form-field-start, 
 .rz-form-field.rz-variant-flat .rz-form-field-start {
     padding-right: 10px;
+}
+
+.rz-form-field.rz-state-focused .rz-form-field-content, .rz-spinner:focus-within:not(.rz-state-disabled), .rz-autocomplete:focus-within:not(.rz-state-disabled), .rz-colorpicker:not(:disabled):not(.rz-state-disabled):focus, .rz-lookup-search input:not(:disabled):not(.rz-state-disabled):focus, .rz-spinner:not(:disabled):not(.rz-state-disabled):focus, .rz-calendar .rz-inputtext:not(:disabled):not(.rz-state-disabled):focus, .rz-multiselect:not(:disabled):not(.rz-state-disabled):focus, .rz-dropdown:not(:disabled):not(.rz-state-disabled):focus, .mask:not(:disabled):not(.rz-state-disabled):focus, .rz-textarea:not(:disabled):not(.rz-state-disabled):focus, .rz-textbox:not(:disabled):not(.rz-state-disabled):focus {
+    box-shadow: var(--cipher-shadow);
 }
 
 /* ------------------ CALANDER / DATEPICKER ------------------ */

@@ -5,7 +5,7 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")">
         <Columns>
             <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="50px" />
             <RadzenDropDownDataGridColumn Property="Storage" Title="מיקום" Width="50px" />
@@ -31,6 +31,12 @@
     /// </summary>
     [Parameter]
     public string Icon { get; set; }
+
+    /// <summary>
+    /// Component's width.
+    /// </summary>
+    [Parameter]
+    public string Width { get; set; } = "300px";
 
     private List<Vessel> vessels = new List<Vessel>();
 

@@ -40,6 +40,8 @@
             align-content: center;
             max-width: {Card.Width};
             float: {Card.Float};
+            border-top-left-radius:10px;
+            border-bottom-left-radius:10px;
             border-top-right-radius:0;
             border-bottom-right-radius:0";
     }
@@ -47,12 +49,11 @@
 
 <CipherComponentCard Title="@Title" @ref=Card Width="@Width" WithCard="@WithCard">
     <RadzenRow>
-        <RadzenColumn Size="1">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0px" Style="width:100%">
             <RadzenIcon Icon="@Icons.Comment" IconColor="white"
-                        Style="@($"background-color:{IconBackgroundColor}; width:100%; height:100%; border-top-right-radius: 10px; border-bottom-right-radius:10px;")"></RadzenIcon>
-        </RadzenColumn>
-        <RadzenColumn Size="11">
+                        Style="@($@"background-color:{IconBackgroundColor}; width:37px; height:100%; border-top-right-radius: 10px; 
+                        border-bottom-right-radius:10px; font-size:x-large")"></RadzenIcon>
             <RadzenTextArea Placeholder="@Placeholder" Value="@comments" Style="@TextAreaStyle()" />
-        </RadzenColumn>
+        </RadzenStack>
     </RadzenRow>
 </CipherComponentCard>

@@ -46,7 +46,6 @@
     protected override async Task OnInitializedAsync()
     {
         systems = await _db.GetSystems();
-
-        Title = (Title is null) ? "סיכום תשתיות" : null;
+        Title ??= "סיכום תשתיות";
     }
 }

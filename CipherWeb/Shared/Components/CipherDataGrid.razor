@@ -120,21 +120,7 @@
     /// <returns></returns>
     int? GetOrder(string columnName)
     {
-        if (ColumnsOrder is null)
-        {
-            return null;
-        }
-        else
-        {
-            if (ColumnsOrder.ContainsKey(columnName))
-            {
-                return ColumnsOrder[columnName];
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return ColumnsOrder?.TryGetValue(columnName, out var order) == true ? order : null;
     }
 }
 

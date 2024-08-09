@@ -24,17 +24,9 @@
     /// </summary>
     [Parameter]
     public string FinalLocationIcon { get; set; } = Icons.Location_Final;
-
-    /// <summary>
-    /// Content gap.
-    /// </summary>
-    [Parameter]
-    public string ContentGap { get; set; } = "10px";
 }
 
-<CipherComponentCard Title="@Title">
-    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="@ContentGap">
-        <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" />
-        <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" />
-    </RadzenStack>
+<CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" />
+    <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" />
 </CipherComponentCard>

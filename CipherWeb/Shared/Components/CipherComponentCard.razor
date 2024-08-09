@@ -12,7 +12,10 @@
             @Buttons
         }
     </RadzenStack>
-    <div style="@($"padding: {ContentPadding}; display:{ContentDisplay}; justify-content: {ContentJustify}")">
+    <div style="@($@"
+    padding: {ContentPadding}; display:{ContentDisplay}; 
+    justify-content: {ContentJustify}; flex-wrap: {ContentFlexWrap}; 
+    column-gap: {ContentColumnGap}; row-Gap: {ContentRowGap}")">
         @ChildContent
     </div>
 </CipherFormCard>
@@ -47,6 +50,24 @@
     /// </summary>
     [Parameter]
     public string ContentDisplay { get; set; }
+
+    /// <summary>
+    /// Controls wrapping of content. Must set ContentDisplay accordingly for it to work.
+    /// </summary>
+    [Parameter]
+    public string ContentFlexWrap { get; set; }
+
+    /// <summary>
+    /// Controls gap between elements of content when there is a flexible display. Must set ContentDisplay accordingly for it to work.
+    /// </summary>
+    [Parameter]
+    public string ContentColumnGap { get; set; } = "100px";
+
+    /// <summary>
+    /// Controls gap between rows of content when there is a flexible display. Must set ContentDisplay accordingly for it to work.
+    /// </summary>
+    [Parameter]
+    public string ContentRowGap { get; set; } = "10px";
 
     /// <summary>
     /// Card's side buttons.

@@ -157,14 +157,7 @@
     /// <returns></returns>
     public List<Aggregate> GetData()
     {
-        if (CustomDataGrid is null)
-        {
-            return new List<Aggregate>();
-        }
-        else
-        {
-            return CustomDataGrid.Data.ToList();
-        }
+        return CustomDataGrid?.Data?.ToList() ?? new List<Aggregate>();
     }
 }
 

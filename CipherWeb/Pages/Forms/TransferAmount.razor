@@ -7,19 +7,12 @@
 <CipherSteps>
     <RadzenStepsItem Text="פרטי הזנה">
         <CipherFormInfo Title="וודאו את פרטי ההזנה" />
-    </RadzenStepsItem>
-
-    <RadzenStepsItem Text="פרטי תנועה">
-        <CipherComponentCard Title="הזינו פרטים על תעודה מוסרת ומקבלת">
-            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="10px">
+        <CipherComponentCard Title="הזינו פרטים על תעודה מוסרת ומקבלת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
                 <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Input" />
                 <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Output" />
                 <CipherAmount LabelText="מסה מועברת" />
-            </RadzenStack>
         </CipherComponentCard>
-    </RadzenStepsItem>
 
-    <RadzenStepsItem Text="הערות">
         <CipherComments Title="כתבו הערות על התנועה" />
     </RadzenStepsItem>
 
