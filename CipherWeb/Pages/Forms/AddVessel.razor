@@ -8,25 +8,35 @@
 <CipherSteps>
     <RadzenStepsItem Text="פרטי הזנה">
         <CipherFormInfo Title="וודאו את פרטי ההזנה" />
-    </RadzenStepsItem>
 
-    <RadzenStepsItem Text="תעודות מוסרות">
-        <CipherInputComponents />
-    </RadzenStepsItem>
+        <CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            @* -- Name -- *@
+            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="ves.Name" Label="שם הכלי" />
 
-    <RadzenStepsItem Text="פרטי תעודה">
-        <CipherPackageInfo Title="הזינו את פרטי התעודה החדשה" pack="new Package()" />
-    </RadzenStepsItem>
+            @* -- Type -- *@
+            <CipherAutoComplete Label="סוג הכלי" Icon="@Icons.Type" />
 
-    <RadzenStepsItem Text="הערות">
-        <CipherComments Title="כתבו הערות על התנועה" />
+            @* -- Location -- *@
+            <CipherLocation Label="מיקום הכלי" />
+
+            @* -- Material -- *@
+            <CipherAutoComplete Label="סוג החומר" Icon="@Icons.Material"/>
+
+            @* -- Category -- *@
+            <CipherAutoComplete Label="קטגוריית החומר" Icon="@Icons.Category" />
+
+            @* -- MaxAmount -- *@
+            <CipherAmount Label="מגבלת כמות" Icon="@Icons.Mass" />
+        </CipherComponentCard>
+
+        <CipherComments Title="כתבו הערות על הכלי" />
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="סיכום ואישור">
-         <CipherSubmit ActionText="תעודה 1111 נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם."></CipherSubmit>
+        <CipherSubmit ActionText="כלי בשם A1 נפתח במעבדה B. הכלי יכיל עד 5 גרם מגנזיום מסוג תמיסת מגנזיום."></CipherSubmit>
     </RadzenStepsItem>
 </CipherSteps>
 
-@code{
-    TextAlign SetTextAlign = TextAlign.Right;
+@code {
+    private Vessel ves = new Vessel();
 }

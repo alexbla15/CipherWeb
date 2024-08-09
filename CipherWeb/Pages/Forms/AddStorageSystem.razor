@@ -1,0 +1,258 @@
+﻿@page "/forms/AddStorageSystem"
+
+@inject NotificationService NotificationService
+@inject ICipherInfo _db
+
+<PageTitle>מערכת חדשה</PageTitle>
+
+<CipherSteps>
+    <RadzenStepsItem Text="פרטי הזנה">
+        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
+
+        <CipherComponentCard Title="@($"פרטי ה{ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            @* -- Name -- *@
+            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="sys.Name" Label="@($"שם ה{ObjectName}")" />
+            
+            @if(ObjectName == "מערכת")
+            {
+                @* -- Type -- *@
+                <CipherAutoComplete Label="@($"סוג ה{ObjectName}")" Icon="@Icons.Type" />
+            }
+
+            @if (ObjectName != "מבנה")
+            {
+                @* -- Department -- *@
+                <CipherLocation Label="מיקום" />
+            }
+
+            @* -- Responsible Worker -- *@
+            <CipherAutoComplete Label="@($"אחראי {ObjectName}")" Icon="@Icons.Person" />
+
+            @* -- Opening Date -- *@
+            <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Start" />
+
+            @if(ObjectName == "מערכת")
+            {
+                @* -- Cleaning Date -- *@
+                <CipherDatePicker Label="תאריך איפוס" Icon="@Icons.Mop" />
+
+                @* -- Expiration Date -- *@
+                <CipherDatePicker Label="תאריך תפוגה" Icon="@Icons.Delete" />
+            }
+        </CipherComponentCard>
+
+        <CipherComponentCard Title="@($"מגבלות {ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            <Buttons>
+                <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+                <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+            </Buttons>
+
+            <ChildContent>
+                @if (ShowHelpText)
+                {
+                    <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
+                }
+                <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="!components.Equals(0)">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Restriction" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
+                        <RadzenDataGridColumn TItem="Restriction" Property="Material" Title="חומר" Width="37%" TextAlign="@TdTextAlign">
+                            <EditTemplate Context="restriction">
+                                <CipherAutoComplete @bind-Value="@restriction.Material" Data="@Constants.packages" TextProperty="Material" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Restriction" Property="Category" Title="קטגוריה" Width="37%" TextAlign="@TdTextAlign">
+                            <EditTemplate Context="restriction">
+                                <CipherAutoComplete @bind-Value="@restriction.Category" Data="@Constants.packages" TextProperty="SubCategory" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Restriction" Property="MaxAmount" Title="מגבלת כמות [גר']" Width="37%" TextAlign="@TdTextAlign">
+                            <EditTemplate Context="restriction">
+                                <CipherNumeric @bind-Value="@restriction.MaxAmount" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="14%" TItem="Restriction" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                            <Template Context="restriction">
+                                <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(restriction))" @onclick:stopPropagation="true" />
+                                <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(restriction))" @onclick:stopPropagation="true" />
+                            </Template>
+                            <EditTemplate Context="restriction">
+                                <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(restriction))" />
+                                <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(restriction))" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </ChildContent>
+        </CipherComponentCard>
+
+        <CipherComments Title="@($"הערות על ה{ObjectName}")" />
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="סיכום ואישור">
+        <CipherSubmit ActionText="כלי בשם A1 נפתח במעבדה B. הכלי יכיל עד 5 גרם מגנזיום מסוג תמיסת מגנזיום."></CipherSubmit>
+    </RadzenStepsItem>
+</CipherSteps>
+
+@code {
+    [Parameter]
+    public string ObjectName { get; set; } = "פרטי";
+
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; }
+
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת מגבלה";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת תעודות";
+
+    public class Restriction
+    {
+        public int Id { get; set; }
+        public string Material { get; set; }
+        public string Category { get; set; }
+        public decimal MaxAmount { get; set; }
+    }
+
+    private RadzenDataGrid<Restriction> CustomDataGrid;
+    private List<Restriction> restrictions = new List<Restriction>();
+    private Restriction old_restriction = new Restriction();
+
+    private bool ShowHelpText = true;
+    private int components = 0;
+
+    private StorageSystem sys = new StorageSystem();
+
+    protected override void OnInitialized()
+    {
+        HelpText = GetHelpText();
+    }
+
+    private string GetHelpText()
+    {
+        return $"במסך זה ניתן להוסיף מגבלות אחסון ל{ObjectName}. להוספה לחצו על כפתור ההוספה למעלה";
+    }
+
+    /// <summary>
+    /// Add a component to the memory.
+    /// </summary>
+    private void AddComponent()
+    {
+        if (components == restrictions.Count)
+        {
+            Restriction new_restriction = new Restriction() { Id = components + 1 };
+
+            // from_packs.Add(new_pack);
+
+            components += 1;
+            CustomDataGrid.InsertRow(new_restriction);
+
+            ShowHelpText = false;
+        }
+    }
+
+    /// <summary>
+    /// Edits a package-component.
+    /// </summary>
+    /// <param name="restriction"></param>
+    /// <returns></returns>
+    async Task EditRow(Restriction restriction)
+    {
+        // prevent editing of two rows in parallel
+        if (CustomDataGrid.Count == restrictions.Count)
+        {
+            old_restriction = new Restriction
+                {
+                    Id = restriction.Id,
+                    Material = restriction.Material,
+                    Category = restriction.Category,
+                    MaxAmount = restriction.MaxAmount
+                };
+
+            restrictions.Remove(restriction);
+            await CustomDataGrid.EditRow(restriction);
+        }
+    }
+
+    /// <summary>
+    /// Cancels edit of a package-component.
+    /// </summary>
+    /// <param name="restriction"></param>
+    /// <returns></returns>
+    async Task CancelEdit(Restriction restriction)
+    {
+        restriction.Id = old_restriction.Id;
+        restriction.Material = old_restriction.Material;
+        restriction.Category = old_restriction.Category;
+        restriction.MaxAmount = old_restriction.MaxAmount;
+
+        await SaveRow(restriction);
+    }
+
+    /// <summary>
+    /// Deletes a package-component from memory & view.
+    /// </summary>
+    /// <param name="restriction"></param>
+    /// <returns></returns>
+    async Task DeleteRow(Restriction restriction)
+    {
+        restrictions.Remove(restriction);
+
+        // Reassign IDs after deletion
+        for (int i = 0; i < restrictions.Count; i++)
+        {
+            restrictions[i].Id = i + 1;
+        }
+
+        CustomDataGrid.Data = restrictions;
+
+        components--;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        if (restrictions.Count() == 0)
+        {
+            ShowHelpText = true;
+        }
+    }
+
+    /// <summary>
+    /// Clears all package-components from memory & view.
+    /// </summary>
+    /// <returns></returns>
+    async Task DeleteAll()
+    {
+        restrictions.Clear();
+        components = 0;
+        CustomDataGrid.Data = restrictions;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+
+    /// <summary>
+    /// Saves a package-component to the memory.
+    /// </summary>
+    /// <param name="restriction"></param>
+    /// <returns></returns>
+    async Task SaveRow(Restriction restriction)
+    {
+        restrictions.Add(restriction);
+
+        await CustomDataGrid.UpdateRow(restriction);
+        await CustomDataGrid.RefreshDataAsync();
+    }
+}

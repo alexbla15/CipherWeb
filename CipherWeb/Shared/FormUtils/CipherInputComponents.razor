@@ -166,7 +166,7 @@
 
         @if (ShowHelpText)
         {
-            <CipherText Text="@HelpText"></CipherText>
+            <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>

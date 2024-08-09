@@ -70,12 +70,14 @@ namespace CipherWeb.Data
         public const string Info = "info";
         public const string Interests = "interests";
         public const string Input = "input";
+        public const string Inventory = "inventory";
         public const string School = "school";
         public const string Launch = "launch";
         public const string Leaderboard = "leaderboard";
         public const string Lightbulb = "lightbulb";
         public const string LinearScale = "linear_scale";
         public const string LocalCafe = "local_cafe";
+        public const string Mop = "mop";
         public const string MultipleStop = "multiple_stop";
         public const string MyLocation = "my_location";
         public const string OtherHouses = "other_houses";

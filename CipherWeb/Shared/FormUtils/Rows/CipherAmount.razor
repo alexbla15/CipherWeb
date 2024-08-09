@@ -1,11 +1,10 @@
 ﻿@inherits CipherNumeric
 
-<CipherNumeric Icon="@Icons.Mass" Label="@LabelText"/>
+<CipherNumeric Icon="@Icons.Mass" Label="@Label"/>
 
 @code {
-    /// <summary>
-    /// Label of component.
-    /// </summary>
-    [Parameter]
-    public string? LabelText { get; set; } = "מסה [גר']";
+    protected override void OnInitialized()
+    {
+        Label ??= "מסה [גר']";
+    }
 }

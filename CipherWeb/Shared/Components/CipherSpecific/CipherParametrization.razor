@@ -15,7 +15,6 @@
     [Parameter]
     public string HelpText { get; set; } = "במסך זה ניתן להוסיף פרמטרים אותם יצטרך להזין המשתמש. להוספה לחצו על כפתור ההוספה למעלה";
 
-
     public class Parameter
     {
         public int Id { get; set; }
@@ -48,6 +47,8 @@
 
     protected override async void OnInitialized()
     {
+        Title ??= "פרמטרי משתמש";
+
         AddTypeAttributes(typeof(Package), "אריזה");
         AddTypeAttributes(typeof(Vessel), "כלי");
         AddTypeAttributes(typeof(StorageSystem), "מיקום");
@@ -179,7 +180,7 @@
     }
 }
 
-<CipherComponentCard Title="פרמטרי משתמש">
+<CipherComponentCard Title="@Title">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="הוספת פרמטר" />
         <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="מחיקת פרמטרים" />

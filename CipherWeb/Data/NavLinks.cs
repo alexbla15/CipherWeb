@@ -12,13 +12,17 @@ namespace CipherWeb.Data
         public static MySubNavLink Relocation = new MySubNavLink() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Location };
         public static MySubNavLink UpdatePackage = new MySubNavLink() { Href = "Forms/UpdatePackage", Name = "עדכון נתונים", Icon = Icons.Refresh };
         public static MySubNavLink Analysis = new MySubNavLink() { Href = "Forms/Analysis", Name = "מדידה", Icon = Icons.Analysis };
+        public static MySubNavLink AddVessel = new MySubNavLink() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Vessel };
+        public static MySubNavLink AddStorageSystem = new MySubNavLink() { Href = "Forms/AddStorageSystem", Name = "מערכת חדשה", Icon = Icons.Inventory };
+        public static MySubNavLink AddDepartment = new MySubNavLink() { Href = "Forms/AddDepartment", Name = "תחום חדש", Icon = Icons.Department };
+        public static MySubNavLink AddLocation = new MySubNavLink() { Href = "Forms/AddLocation", Name = "מבנה חדש", Icon = Icons.Home };
         public static MyNavLink Forms = new MyNavLink()
         {
             Href = "Forms",
             Icon = Icons.Edit,
             Name = "הזנה",
             SubLinks = new List<MySubNavLink>()
-                { AddPackage, TransferAmount, Relocation, UpdatePackage, Analysis }
+                { AddPackage, TransferAmount, Relocation, UpdatePackage, Analysis, AddVessel, AddStorageSystem, AddDepartment, AddLocation }
         };
 
         public static MyNavLink Approval = new MyNavLink() { Href = "Approval", Icon = Icons.Done, Name = "אישור", SubLinks = new List<MySubNavLink>() };

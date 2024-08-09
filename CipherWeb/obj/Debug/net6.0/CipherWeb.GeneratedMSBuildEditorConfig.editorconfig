@@ -24,8 +24,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwcm92YWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddDepartment.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkRGVwYXJ0bWVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddLocation.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkTG9jYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddPackage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddStorageSystem.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkU3RvcmFnZVN5c3RlbS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddVessel.razor]

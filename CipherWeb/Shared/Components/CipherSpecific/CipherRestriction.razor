@@ -1,11 +1,10 @@
 ﻿@inherits CipherText
 
 @code {
-    /// <summary>
-    /// Type of page classification / restriction.
-    /// </summary>
-    [Parameter]
-    public string Restriction { get; set; } = "מוגבל";
+    protected override void OnInitialized()
+    {
+        Text ??= "מוגבל";
+    }
 }
 
-<CipherText Text="@Restriction" TextAlign="TextAlign.Center" Color="@Colors.Danger" FontSize="large" FontWeight="700" MarginBottom="0px"></CipherText>
+<CipherText Text="@Text" TextAlign="TextAlign.Center" Color="@Colors.Danger" FontSize="large" FontWeight="700" MarginBottom="0px"></CipherText>
