@@ -3,15 +3,18 @@
 @inject ICipherInfo _db
 
 @code {
+    /// <summary>
+    /// Set Packge-object value.
+    /// </summary>
     [Parameter]
     public Package pack { get; set; }
 
-    string twiceColWidth = "100px";
-    string colWidth = "50px";
-    string halfColWidth = "25px";
+    private string twiceColWidth = "100px";
+    private string colWidth = "50px";
+    private string halfColWidth = "25px";
 
-    List<SubCategory> subCategories = new List<SubCategory>();
-    List<Vessel> vessels = new List<Vessel>();
+    private List<SubCategory> subCategories = new List<SubCategory>();
+    private List<Vessel> vessels = new List<Vessel>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -19,7 +22,6 @@
         vessels = await _db.GetVessels();
     }
 }
-
 
 <CipherComponentCard Title="@Title">
     <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="10px">

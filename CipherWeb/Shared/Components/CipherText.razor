@@ -1,44 +1,112 @@
 ﻿@inherits RadzenText
 
 @code {
+    /// <summary>
+    /// Decide if the text should be bold. Default is not.
+    /// </summary>
     [Parameter]
     public bool Bold { get; set; } = false;
 
+    /// <summary>
+    /// Decide if the text is wrappable to more than one line. Default is not.
+    /// </summary>
     [Parameter]
     public bool Wrap { get; set; } = false;
 
+    /// <summary>
+    /// Controls the CSS-class of the component's text.
+    /// </summary>
     [Parameter]
     public string StyleClass { get; set; }
 
+    /// <summary>
+    /// Text-width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "100%";
 
-    [Parameter]
-    public string FontSize { get; set; }
-
-    [Parameter]
-    public string FontWeight { get; set; }
-
+    /// <summary>
+    /// Text height.
+    /// </summary>
     [Parameter]
     public string Height { get; set; }
 
+    /// <summary>
+    /// Text size.
+    /// </summary>
+    [Parameter]
+    public string FontSize { get; set; }
+
+    /// <summary>
+    /// Text boldness.
+    /// </summary>
+    [Parameter]
+    public string FontWeight { get; set; }
+
+    /// <summary>
+    /// Color of text.
+    /// </summary>
     [Parameter]
     public string Color { get; set; }
 
+    /// <summary>
+    /// Background color of component.
+    /// </summary>
     [Parameter]
     public string BackgroundColor { get; set; }
 
+    /// <summary>
+    /// Space outside of text, inside of component. (Bottom)
+    /// </summary>
     [Parameter]
     public string PaddingBottom { get; set; }
 
+    /// <summary>
+    /// Space outside of text, inside of component. (Top)
+    /// </summary>
+    [Parameter]
+    public string PaddingTop { get; set; }
+
+    /// <summary>
+    /// Space outside of text, inside of component. (Right)
+    /// </summary>
+    [Parameter]
+    public string PaddingRight { get; set; }
+
+    /// <summary>
+    /// Space outside of text, inside of component. (Left)
+    /// </summary>
+    [Parameter]
+    public string PaddingLeft { get; set; }
+
+    /// <summary>
+    /// Space outside of component. (Bottom)
+    /// </summary>
     [Parameter]
     public string MarginBottom { get; set; }
+
+    /// <summary>
+    /// Space outside of component. (Top)
+    /// </summary>
+    [Parameter]
+    public string MarginTop { get; set; }
+
+    /// <summary>
+    /// Space outside of component. (Right)
+    /// </summary>
+    [Parameter]
+    public string MarginRight { get; set; }
+
+    /// <summary>
+    /// Space outside of component. (Left)
+    /// </summary>
+    [Parameter]
+    public string MarginLeft { get; set; }
 
 
     protected override async Task OnInitializedAsync()
     {
         StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
-        //TextStyle = TextStyle.Body1;
         Style = GetTextStyle();
         Style = (Bold) ? Style + "font-weight: bold;" : Style;
     }
@@ -52,8 +120,14 @@
             height: {Height};
             color: {Color};
             padding-bottom: {PaddingBottom};
+            padding-top: {PaddingTop};
+            padding-right: {PaddingRight};
+            padding-left: {PaddingLeft};
             background-color: {BackgroundColor};
-            margin-bottom: {MarginBottom}";
+            margin-bottom: {MarginBottom};
+            margin-top: {MarginTop};
+            margin-right: {MarginRight};
+            margin-left: {MarginLeft};";
         ;
     }
 }

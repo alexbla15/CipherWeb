@@ -1,83 +1,20 @@
 ﻿@using System.Text.RegularExpressions;
 
+@inherits CipherDatePicker
+
 @code {
+    /// <summary>
+    /// Minimal hour to choose.
+    /// </summary>
     [Parameter]
-    public string Width { get; set; } = "300px";
+    public DateTime MinTime { get; set; } = Convert.ToDateTime("00:00");
 
+    /// <summary>
+    /// Maximal hour to choose.
+    /// </summary>
     [Parameter]
-    public string Label { get; set; } = "שעה";
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public bool Popup { get; set; }
-
-    [Parameter]
-    public string Icon { get; set; } = Icons.Time;
-
-    //
-
-    private DateTime _value = DateTime.Now;
-
-    [Parameter]
-    public DateTime Value
-    {
-        get => _value;
-        set
-        {
-            if (_value != value)
-            {
-                _value = value;
-                ValueChanged.InvokeAsync(value);
-            }
-        }
-    }
-
-    [Parameter]
-    public EventCallback<DateTime> ValueChanged { get; set; }
-
-    [Parameter]
-    public IEnumerable<object> Data { get; set; }
-
-    // LENGTH VALIDATOR
-
-    [Parameter]
-    public DateTime Min { get; set; } = Convert.ToDateTime("00:00");
-
-    [Parameter]
-    public DateTime Max { get; set; } = Convert.ToDateTime("23:59");
-
-    // REQUIRED VALIDATOR
-    [Parameter]
-    public bool Required { get; set; } = true;
-
-    class Model
-    {
-        public DateTime value;
-    }
-
-    Model model = new Model() { value = DateTime.Now };
-    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
-
-    public bool Check()
-    {
-        return RequiredValidator.IsValid;
-    }
+    public DateTime MaxTime { get; set; } = Convert.ToDateTime("23:59");
 }
 
-<RadzenTemplateForm TItem="Model" Data=@model>
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
-
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" Style="padding-bottom:5px">
-            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenDatePicker Name="value" @bind-Value="model.value" TimeOnly="true" DateFormat="HH:mm" ShowTime="true" 
-                Min="@Min" Max="@Max" ShowTimeOkButton="false"/>
-            </RadzenFormField>
-        </RadzenStack>
-        <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
-        </RadzenStack>
-    </RadzenStack>
-</RadzenTemplateForm>
+<CipherDatePicker Icon="@Icons.Time" Label="שעה" ShowTime="true" DateFormat="HH:mm" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
+                  Width="@Width" Disabled="@Disabled" Popup="@Popup"></CipherDatePicker>

@@ -1,25 +1,17 @@
-﻿<CipherAutoComplete Label="@LabelText" Icon="@Icon" Style="@Constants.textStyle" @bind-Value=@PackId />
+﻿@inherits CipherAutoComplete
 
 @code {
+    /// <summary>
+    /// Value of the component.
+    /// </summary>
     [Parameter]
     public string? PackId { get; set; }
 
-    [Parameter]
-    public string? LabelText { get; set; }
-
-    [Parameter]
-    public string? Icon { get; set; }
-
-
     protected override async Task OnInitializedAsync()
     {
-        if (LabelText is null)
-        {
-            LabelText = "מספר תעודה";
-        }
-        if (Icon is null)
-        {
-            Icon = "tag";
-        }
+        Label ??= "מספר תעודה";
+        Icon ??= "tag";
     }
 }
+
+<CipherAutoComplete Label="@Label" Icon="@Icon" Style="@Constants.textStyle" @bind-Value=@PackId S/>

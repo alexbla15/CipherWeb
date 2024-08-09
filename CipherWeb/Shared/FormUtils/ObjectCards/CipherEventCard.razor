@@ -1,23 +1,44 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Width of FormRow surrounding the text box.
+    /// </summary>
     [Parameter]
-    public string EnlargedRowWidth { get; set; } = "677px";
+    public string TextBoxFrameWidth { get; set; } = "677px";
 
+    /// <summary>
+    /// Width of text box (comments).
+    /// </summary>
+    [Parameter]
+    public string TextBoxWidth { get; set; } = "558px";
+
+    /// <summary>
+    /// Width of each row within card.
+    /// </summary>
     [Parameter]
     public string RowWidth { get; set; } = "300px";
 
+    /// <summary>
+    /// Width of component card.
+    /// </summary>
     [Parameter]
-    public string ReducedRowWidth { get; set; } = "279px";
+    public string CardWidth { get; set; } = "1000px";
 
+    /// <summary>
+    /// Maximal width of component card.
+    /// </summary>
     [Parameter]
-    public string EnlargedReducedRowWidth { get; set; } = "558px";
+    public string CardMaxWidth { get; set; } = "1000px";
 
+    /// <summary>
+    /// Set editability of each row.
+    /// </summary>
     [Parameter]
     public bool ReadOnly { get; set; } = false;
 }
 
-<CipherComponentCard Title="@Title" WithCard="@WithCard" Width="1000px" MaxWidth="1000px">
+<CipherComponentCard Title="@Title" WithCard="@WithCard" Width="@CardWidth" MaxWidth="@CardMaxWidth">
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="פרטים">
@@ -52,8 +73,8 @@
                 <CipherAutoComplete Icon="@Icons.Status" Label="סטטוס" Width="@RowWidth" Disabled="@ReadOnly" />
 
                 @* -- COMMENTS -- *@
-                <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@EnlargedRowWidth">
-                    <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {EnlargedReducedRowWidth}")" Disabled="@ReadOnly" />
+                <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@TextBoxFrameWidth">
+                    <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {TextBoxWidth}")" Disabled="@ReadOnly" />
                 </CipherFormRow>
 
                 <br/>

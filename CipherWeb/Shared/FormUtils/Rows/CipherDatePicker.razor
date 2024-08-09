@@ -1,35 +1,83 @@
 ﻿@using System.Text.RegularExpressions;
 
 @code {
+    /// <summary>
+    /// Width of the component.
+    /// </summary>
     [Parameter]
-    public string PaddingBottom { get; set; } = "10px";
+    public string DateFormat { get; set; } = "dd/MM/yyyy";
 
+    /// <summary>
+    /// Width of the component.
+    /// </summary>
     [Parameter]
     public string Width { get; set; } = "300px";
 
+    /// <summary>
+    /// Label of the component.
+    /// </summary>
     [Parameter]
     public string Label { get; set; } = "תאריך";
 
+    /// <summary>
+    /// Icon aside the component.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; } = Icons.Date;
 
+    /// <summary>
+    /// Is the date-picker enabled.
+    /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <summary>
+    /// Are the error-messages visible as popup or plain text.
+    /// </summary>
     [Parameter]
     public bool Popup { get; set; }
 
+    /// <summary>
+    /// Force user to enter a value for this component in a form.
+    /// </summary>
     [Parameter]
     public bool Required { get; set; } = true;
 
+    /// <summary>
+    /// Show only the time, without date.
+    /// </summary>
+    [Parameter]
+    public bool TimeOnly { get; set; } = false;
+
+    /// <summary>
+    /// Show the time along with the date.
+    /// </summary>
+    [Parameter]
+    public bool ShowTime { get; set; } = false;
+
+    /// <summary>
+    /// Show OK buttons upon picking the time.
+    /// </summary>
+    [Parameter]
+    public bool ShowTimeOkButton { get; set; } = false;
+
+    /// <summary>
+    /// Minimal allowed date.
+    /// </summary>
     [Parameter]
     public DateTime Min { get; set; } = DateTime.MinValue;
 
+    /// <summary>
+    /// Maximal allowed date.
+    /// </summary>
     [Parameter]
     public DateTime Max { get; set; } = DateTime.MaxValue;
 
     private DateTime _value = DateTime.Today;
 
+    /// <summary>
+    /// Set value of component.
+    /// </summary>
     [Parameter]
     public DateTime Value
     {
@@ -42,21 +90,18 @@
                 ValueChanged.InvokeAsync(value);
             }
         }
-    } 
+    }
 
     [Parameter]
     public EventCallback<DateTime> ValueChanged { get; set; }
-
-    [Parameter]
-    public IEnumerable<object> Data { get; set; }
 
     class Model
     {
         public DateTime value;
     }
 
-    Model model = new Model() { value = DateTime.Today };
-    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+    private Model model = new Model() { value = DateTime.Today };
+    private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
 
     public bool Check()
     {
@@ -70,12 +115,12 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="dd/MM/yyyy"
-                                  Disabled="@Disabled" Min="@Min" Max="@Max" />
+                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="@DateFormat" ShowTime="@ShowTime"
+                                  Disabled="@Disabled" Min="@Min" Max="@Max" ShowTimeOkButton="@ShowTimeOkButton" TimeOnly="@TimeOnly"/>
             </RadzenFormField>
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup Visible=@Required />
         </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

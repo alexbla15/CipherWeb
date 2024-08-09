@@ -8,6 +8,11 @@ namespace CipherWeb
 {
     public class CommonFuncs
     {
+        /// <summary>
+        /// Get a list of all available field within a Cipher data model.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static string[] GetFields(Type a)
         {
             FieldInfo[] fields = a.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
@@ -19,6 +24,11 @@ namespace CipherWeb
             return fields_names.ToArray();
         }   
 
+        /// <summary>
+        /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static List<Tuple<string, string>> GetTranslatedFields(Type a)
         {
             string[] fields = GetFields(a);
@@ -33,7 +43,12 @@ namespace CipherWeb
             return hebFields;
         }
 
-        public static string DeTranslateField(string heb_field)
+        /// <summary>
+        /// Get english-translation of a hebrew word.
+        /// </summary>
+        /// <param name="heb_field"></param>
+        /// <returns></returns>
+        public static string? DeTranslateField(string heb_field)
         {
             foreach (Tuple<string, string> h in HebrewDictionary.Headers)
             {
@@ -45,6 +60,11 @@ namespace CipherWeb
             return null;
         }
 
+        /// <summary>
+        /// Find an improper char within a string.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string? FindImproperChar(string value)
         {
             string foundChar = (value.ToCharArray().Any(x => Constants.ImproperChars.Contains(x))) ? value.ToCharArray().

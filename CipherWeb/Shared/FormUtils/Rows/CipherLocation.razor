@@ -1,8 +1,10 @@
 ﻿@inject ICipherInfo _db
 
+@inherits RadzenStack
+
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="@LabelText" SearchTextPlaceholder="חיפוש..."
+    <RadzenDropDownDataGrid @bind-Value=@sys Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
         <Columns>
             <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="50px" />
@@ -12,28 +14,31 @@
 </RadzenStack>
 
 @code {
+    /// <summary>
+    /// Value of the component.
+    /// </summary>
     [Parameter]
     public string? sys { get; set; }
 
+    /// <summary>
+    /// Label and placeholder of component.
+    /// </summary>
     [Parameter]
-    public string LabelText { get; set; }
+    public string? Label { get; set; }
 
+    /// <summary>
+    /// Icon aside the component.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; }
 
-    List<Vessel> vessels = new List<Vessel>();
+    private List<Vessel> vessels = new List<Vessel>();
 
     protected override async Task OnInitializedAsync()
     {
         vessels = await _db.GetVessels();
 
-        if (LabelText is null)
-        {
-            LabelText = "מיקום";
-        }
-        if (Icon is null)
-        {
-            Icon = Icons.Location;
-        }
+        Label ??= "מיקום"; 
+        Icon ??= Icons.Location;
     }
 }

@@ -1,17 +1,44 @@
 ﻿@inject DialogService DialogService
 
+@inherits CipherComponentCard
+
 @code {
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
-    RadzenDataGrid<Package> CustomDataGrid;
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "במסך זה ניתן להוסיף תעודות מוסרות. להוספה לחצו על כפתור ההוספה למעלה";
 
-    List<Package> from_packs = new List<Package>();
-    Package old_pack = new Package();
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת תעודה מוסרת";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת תעודות";
+
+    private RadzenDataGrid<Package> CustomDataGrid;
+    private List<Package> from_packs = new List<Package>();
+    private Package old_pack = new Package();
 
     private bool ShowHelpText = true;
     private int components = 0;
 
+    protected override void OnInitialized()
+    {
+        Title ??= "תעודות מוסרות";
+    }
+
+    /// <summary>
+    /// Add a component to the memory.
+    /// </summary>
     private void AddComponent()
     {
         if (components == from_packs.Count)
@@ -27,12 +54,21 @@
         }
     }
 
+    /// <summary>
+    /// Get total sum of masses of package-components.
+    /// </summary>
+    /// <returns></returns>
     public decimal GetTotal()
     {
         return from_packs.Sum(pack => pack.BrutMass);
     }
 
 
+    /// <summary>
+    /// Edits a package-component.
+    /// </summary>
+    /// <param name="pack"></param>
+    /// <returns></returns>
     async Task EditRow(Package pack)
     {
         // prevent editing of two rows in parallel
@@ -50,6 +86,11 @@
         }
     }
 
+    /// <summary>
+    /// Cancels edit of a package-component.
+    /// </summary>
+    /// <param name="pack"></param>
+    /// <returns></returns>
     async Task CancelEdit(Package pack)
     {
         pack.Id = old_pack.Id;
@@ -59,6 +100,11 @@
         await SaveRow(pack);
     }
 
+    /// <summary>
+    /// Deletes a package-component from memory & view.
+    /// </summary>
+    /// <param name="pack"></param>
+    /// <returns></returns>
     async Task DeleteRow(Package pack)
     {
         from_packs.Remove(pack);
@@ -70,7 +116,9 @@
         }
 
         CustomDataGrid.Data = from_packs;
+
         components--;
+
         await CustomDataGrid.RefreshDataAsync();
 
         if (from_packs.Count() == 0)
@@ -79,6 +127,10 @@
         }
     }
 
+    /// <summary>
+    /// Clears all package-components from memory & view.
+    /// </summary>
+    /// <returns></returns>
     async Task DeleteAll()
     {
         from_packs.Clear();
@@ -90,6 +142,11 @@
         ShowHelpText = true;
     }
 
+    /// <summary>
+    /// Saves a package-component to the memory.
+    /// </summary>
+    /// <param name="pack"></param>
+    /// <returns></returns>
     async Task SaveRow(Package pack)
     {
         from_packs.Add(pack);
@@ -99,17 +156,17 @@
     }
 }
 
-<CipherComponentCard Title="תעודות מוסרות">
+<CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="הוספת תעודה מוסרת" />
-        <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="מחיקת תעודות" />
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+        <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
 
     <ChildContent>
 
         @if (ShowHelpText)
         {
-            <CipherText Text="במסך זה ניתן להוסיף תעודות מוסרות. להוספה לחצו על כפתור ההוספה למעלה"></CipherText>
+            <CipherText Text="@HelpText"></CipherText>
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>

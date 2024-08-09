@@ -1,15 +1,27 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Width of each row within card.
+    /// </summary>
     [Parameter]
     public string RowWidth { get; set; } = "400px";
 
+    /// <summary>
+    /// Width of FormRow surrounding the text box.
+    /// </summary>
     [Parameter]
-    public string EnlargedRowWidth { get; set; } = "875px";
+    public string TextBoxFrameWidth { get; set; } = "875px";
 
+    /// <summary>
+    /// Width of text box (comments).
+    /// </summary>
     [Parameter]
-    public string EnlargedReducedRowWidth { get; set; } = "784px";
+    public string TextBoxWidth { get; set; } = "784px";
 
+    /// <summary>
+    /// Set editability of each row.
+    /// </summary>
     [Parameter]
     public bool ReadOnly { get; set; } = false;
 
@@ -21,11 +33,10 @@
         public DateTime EventDate { get; set; }
     }
 
-    List<Analysis> analysis = new();
+    private List<Analysis> analysis = new();
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
-
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
             <CipherAutoComplete TextProperty="Name" Label="שם המיקום" Data="@Constants.vessels"></CipherAutoComplete>
@@ -42,7 +53,7 @@
                     <CipherAutoComplete Label="שם" Icon="@Icons.Location" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- SYSTEM DESCRIPTION -- *@
-                    <CipherAutoComplete Label="תיאור" Icon="@Icons.Description" Width="@RowWidth"  Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="תיאור" Icon="@Icons.Description" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- RESPONSIBLE WORKER -- *@
                     <CipherAutoComplete Label="עובד אחראי" Icon="@Icons.Account" Width="@RowWidth" Disabled="@ReadOnly" />
@@ -69,8 +80,8 @@
                     <CipherAutoComplete Label="מגבלות" Icon="@Icons.Restriction" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- COMMENTS -- *@
-                    <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@EnlargedRowWidth">
-                        <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {EnlargedReducedRowWidth}")" Disabled="@ReadOnly" />
+                    <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@TextBoxFrameWidth">
+                        <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {TextBoxWidth}")" Disabled="@ReadOnly" />
                     </CipherFormRow>
                 </RadzenTabsItem>
 
@@ -83,9 +94,7 @@
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="מערכות">
-                    <div style="border-radius: 5px">
-                        <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
-                    </div>
+                    <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="תחומים">

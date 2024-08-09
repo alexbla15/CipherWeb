@@ -1,5 +1,7 @@
 ﻿@inject ICipherInfo _db
 
+@inherits CipherSteps
+
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherParametrization></CipherParametrization>
@@ -30,29 +32,34 @@
 </CipherSteps>
 
 @code {
-    [Parameter]
-    public int objectId { get; set; }
+    private List<Event> db_events = new List<Event>();
 
-    [Parameter]
-    public List<string> objectTypes { get; set; } =
-    new List<string> { "תעודות", "כלים", "מערכות", "תחומים", "מבנים", "תנועות", "תהליכים", "קווים", "סוגים" };
+    private CipherDataGrouper<Package> dataGrouper = new CipherDataGrouper<Package>();
+    private CipherDataFilter_WithDataGrid<Event> dataFilter = new CipherDataFilter_WithDataGrid<Event>();
+    private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
+    private CipherDataAggregater dataAggregater = new CipherDataAggregater();
 
-    List<Event> db_events = new List<Event>();
+    private List<Package> rows = Constants.packages;
+    private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
-    CipherDataGrouper<Package> dataGrouper = new CipherDataGrouper<Package>();
-    CipherDataFilter_WithDataGrid<Event> dataFilter = new CipherDataFilter_WithDataGrid<Event>();
-    CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
-    CipherDataAggregater dataAggregater = new CipherDataAggregater();
-
-    List<Package> rows = Constants.packages;
-    Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
+    class ExampleSummary
+    {
+        public string Location { get; set; }
+        public string Vessel { get; set; }
+        public decimal BrutMass { get; set; }
+        public decimal NetMass { get; set; }
+    }
 
     protected override async Task OnInitializedAsync()
     {
         db_events = await _db.GetEvents();
     }
 
-    List<Tuple<string, string>> GetColumns()
+    /// <summary>
+    /// Get translation between (english, hebrew) column names for table.
+    /// </summary>
+    /// <returns></returns>
+    private List<Tuple<string, string>> GetColumns()
     {
         if (dataGrouper.chosenGroups.Keys.Count() == 0 && dataAggregater.GetData().Count() == 0)
         {
@@ -67,7 +74,10 @@
         }
     }
 
-    void GetColumnsOrder()
+    /// <summary>
+    ///  Set the columns order within datagrid.
+    /// </summary>
+    void SetColumnsOrder()
     {
         rowsColumnsOrder.Clear();
 
@@ -95,14 +105,9 @@
         }
     }
 
-    class ExampleSummary
-    {
-        public string Location { get; set; }
-        public string Vessel { get; set; }
-        public decimal BrutMass { get; set; }
-        public decimal NetMass { get; set; }
-    }
-
+    /// <summary>
+    /// Updating datagrid table to show results.
+    /// </summary>
     public void OnRefresh()
     {
         rows = new List<Package>();
@@ -123,7 +128,6 @@
                     });
             }
         }
-
-        GetColumnsOrder();
+        SetColumnsOrder();
     }
 }

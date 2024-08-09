@@ -3,31 +3,45 @@
 @inherits RadzenStack
 
 @code {
+    /// <summary>
+    /// Placeholder and label of search row.
+    /// </summary>
     [Parameter]
     public string? LabelText { get; set; }
 
+    /// <summary>
+    /// AutoComplete width
+    /// </summary>
     [Parameter]
-    public string? PlaceHolderText { get; set; }
+    public string Width { get; set; } = "100%";
 
-    [Parameter]
-    public string Width { get; set; } = "300px";
-
+    /// <summary>
+    /// Path to be searched in case on Enter pressed / search-button clicked.
+    /// </summary>
     [Parameter]
     public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
 
+    /// <summary>
+    /// Background color of search button.
+    /// </summary>
     [Parameter]
-    public bool Disabled { get; set; }
+    public string ButtonColor { get; set; } = Colors.PrimaryDarker;
 
+    /// <summary>
+    /// Alignment of row.
+    /// </summary>
     [Parameter]
     public JustifyContent JustifyRow { get; set; } = JustifyContent.Center;
 
+    /// <summary>
+    /// Event in case a key was pressed within AutoComplete box.
+    /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        LabelText = (LabelText is null) ? "חיפוש תעודה" : LabelText;
-        PlaceHolderText = (PlaceHolderText is null) ? "מספר תעודה" : PlaceHolderText;
+        LabelText ??= "חיפוש תעודה";
 
         // Set default OnKeyDown if not provided
         if (!OnKeyDown.HasDelegate)
@@ -36,6 +50,10 @@
         }
     }
 
+    /// <summary>
+    /// Function taking place upon clicking Enter.s
+    /// </summary>
+    /// <param name="args"></param>
     private void SearchFunc(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
@@ -46,9 +64,9 @@
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Center" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
-    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:100%")" ShowErrors="false"
+    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" ShowErrors="false"
                         Data="@Constants.packages" TextProperty="SerialNumber" OnKeyDown="@(args => OnKeyDown.InvokeAsync(args))"></CipherAutoComplete>
 
     <CipherNavButton Icon="@Icons.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" Path="@SearchPath"
-                     Style="@($"border: 1px solid {Colors.PrimaryDarker}; padding-left:10px;border-top-right-radius:0; border-bottom-right-radius:0; border: 1px solid {Colors.PrimaryDarker}")" />
+                     Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>

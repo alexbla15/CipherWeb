@@ -16,42 +16,90 @@
 </RadzenScheduler>
 
 @code {
+    /// <summary>
+    /// Scheduler's height.
+    /// </summary>
     [Parameter]
     public string Height { get; set; } = "400px";
 
+    /// <summary>
+    /// Scheduler's maximal height.
+    /// </summary>
+    [Parameter]
+    public string MaxHeight { get; set; } = "400px";
+
+    /// <summary>
+    /// Scheduler's minimal height.
+    /// </summary>
     [Parameter]
     public string MinHeight { get; set; } = "400px";
 
+    /// <summary>
+    /// Text alignment of event in a scheduler.
+    /// </summary>
     [Parameter]
     public string TextAlign { get; set; } = "right";
 
+    /// <summary>
+    /// Text color of an event slot within a month / week / day view.
+    /// </summary>
+    [Parameter]
+    public string EventTextColor { get; set; } = "black";
+
+    /// <summary>
+    /// Title of event-dialog which opens upon clicking an event.
+    /// </summary>
+    [Parameter]
+    public string EventDialogTitle { get; set; } = "תנועה";
+
+    /// <summary>
+    /// Starting time of day / week view.
+    /// </summary>
     [Parameter]
     public TimeSpan startTime { get; set; } = new TimeSpan(0, 0, 0);
 
+    /// <summary>
+    /// Ending time of day / week view.
+    /// </summary>
     [Parameter]
     public TimeSpan endTime { get; set; } = new TimeSpan(23, 59, 59);
 
+    /// <summary>
+    /// Starting time of a working day within a week / day view.
+    /// </summary>
     [Parameter]
     public int StartHour { get; set; } = 8;
 
+    /// <summary>
+    /// Ending time of a working day within a week / day view.
+    /// </summary>
     [Parameter]
     public int EndHour { get; set; } = 16;
 
+    /// <summary>
+    /// Maximal amount of events visible in a month's view slot. Others are accesable using a More-button.
+    /// </summary>
     [Parameter]
     public int EventsInSlot { get; set; } = 2;
 
+    /// <summary>
+    /// Controls location of a tooltip when hovering on an event. Must be a TooltipPosition-enum.
+    /// </summary>
+    [Parameter]
+    public TooltipPosition EventTooltipPosition { get; set; } = TooltipPosition.Bottom;
 
-    List<Event> events = new List<Event>();
 
-    Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
+    private List<Event> events = new List<Event>();
+
+    private RadzenScheduler<Event> scheduler;
+
+    private Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
             {
                 ["יצירה"] = Colors.Primary,
                 ["דגימה"] = Colors.Danger,
                 ["העברה"] = Colors.Success,
                 ["עדכון"] = Colors.Secondary
             };
-
-    RadzenScheduler<Event> scheduler;
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,6 +114,10 @@
             ";
     }
 
+    /// <summary>
+    /// Change slot's appearane in each view, according to set of rules.
+    /// </summary>
+    /// <param name="args"></param>
     void OnSlotRender(SchedulerSlotRenderEventArgs args)
     {
         // Highlight today in month view
@@ -87,6 +139,10 @@
         }
     }
 
+    /// <summary>
+    /// Controls the appearance of each event within a certain view.
+    /// </summary>
+    /// <param name="args"></param>
     void OnEventRender(SchedulerAppointmentRenderEventArgs<Event> args)
     {
         // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
@@ -99,21 +155,30 @@
             {
                 args.Attributes["style"] = $@"
                     background: {ProcessColoring[proc]};
-                    color: black;
+                    color: {EventTextColor};
                     text-align: {TextAlign}";
             }
         }
     }
 
+    /// <summary>
+    /// Opens a dialog with extra details of an event upon clicking on it.
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
     async Task SelectEvent(SchedulerAppointmentSelectEventArgs<Event> args)
     {
-        await DialogService.OpenAsync("תנועה",
+        await DialogService.OpenAsync(EventDialogTitle,
 
-        ds =>
-    @<CipherProcessCard dir="rtl" WithCard=false ReadOnly=false></CipherProcessCard>, Constants.SetDialogOptions);
+    ds =>
+    @<CipherProcessCard dir="rtl" WithCard=false ReadOnly=false></CipherProcessCard>,
+        Constants.SetDialogOptions);
     }
 
-
+    /// <summary>
+    /// Shows a tooltip upon hovering on an event.
+    /// </summary>
+    /// <param name="args"></param>
     void OnAppointmentMouseEnter(SchedulerAppointmentMouseEventArgs<Event> args)
     {
         TooltipService.Open(args.Element, ts =>
@@ -129,9 +194,14 @@
             <CipherText Text="עודכן ב" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
             <CipherText Text="@args.Data.UpdatingDate.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
-    </RadzenStack>, new TooltipOptions { Position = TooltipPosition.Bottom, Duration = null });
+        </RadzenStack>
+    , new TooltipOptions { Position = EventTooltipPosition, Duration = null });
     }
 
+    /// <summary>
+    /// Closes tooltip at the end of the hovering on an event.
+    /// </summary>
+    /// <param name="args"></param>
     void OnAppointmentMouseLeave(SchedulerAppointmentMouseEventArgs<Event> args)
     {
         TooltipService.Close();

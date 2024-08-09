@@ -1,21 +1,39 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Is submission acceptable.
+    /// </summary>
     [Parameter]
     public bool condition { get; set; }
 
+    /// <summary>
+    /// Is alert visible under submission button.
+    /// </summary>
     [Parameter]
     public bool alertVisible { get; set; }
 
+    /// <summary>
+    /// Alert text according to the submission.
+    /// </summary>
     [Parameter]
     public string? alertText { get; set; }
 
+    /// <summary>
+    /// Summerizes the action that user tries to do with this form.
+    /// </summary>
     [Parameter]
     public string ActionText { get; set; }
 
+    /// <summary>
+    /// Path to go to when user cancels the form.
+    /// </summary>
     [Parameter]
     public string CancelPath { get; set; } = CipherNavLinks.Forms.Href;
 
+    /// <summary>
+    /// Background styling of alert. Must be AlertStyle-enum.
+    /// </summary>
     [Parameter]
     public AlertStyle alertStyle { get; set; }
 
@@ -23,10 +41,14 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Title ??= "סיכום ואישור";
         alertStyle = AlertStyle.Success;
         condition = true;
     }
 
+    /// <summary>
+    /// Control alert upon saving.
+    /// </summary>
     public void Save()
     {
         alertVisible = true;
@@ -35,7 +57,7 @@
     }
 }
 
-<CipherComponentCard Title="סיכום ואישור">
+<CipherComponentCard Title="@Title">
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Style="padding-left:10px; padding-bottom:20px">
             <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ResultSummaryText" Style="padding-bottom:10px"></RadzenText>

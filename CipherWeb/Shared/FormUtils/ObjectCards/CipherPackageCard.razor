@@ -1,15 +1,27 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Width of each row within the component
+    /// </summary>
     [Parameter]
     public string RowWidth { get; set; } = "400px";
 
+    /// <summary>
+    /// Width of FormRow surrounding the text box.
+    /// </summary>
     [Parameter]
-    public string EnlargedRowWidth { get; set; } = "875px";
+    public string TextBoxFrameWidth { get; set; } = "875px";
 
+    /// <summary>
+    /// Width of text box (comments).
+    /// </summary>
     [Parameter]
-    public string EnlargedReducedRowWidth { get; set; } = "784px";
+    public string TextBoxWidth { get; set; } = "784px";
 
+    /// <summary>
+    /// Set editability of each row.
+    /// </summary>
     [Parameter]
     public bool ReadOnly { get; set; } = false;
 
@@ -21,7 +33,7 @@
         public DateTime EventDate { get; set; }
     }
 
-    List<Analysis> analysis = new();
+    private List<Analysis> analysis = new();
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
@@ -59,8 +71,8 @@
                     <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
 
                     @* -- COMMENTS -- *@
-                    <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@EnlargedRowWidth">
-                        <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {EnlargedReducedRowWidth}")" Disabled="@ReadOnly" />
+                    <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@TextBoxFrameWidth">
+                        <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {TextBoxWidth}")" Disabled="@ReadOnly" />
                     </CipherFormRow>
                 </RadzenTabsItem>
 

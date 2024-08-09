@@ -1,8 +1,40 @@
 ﻿@inherits CipherComponentCard
 
+@code {
+    /// <summary>
+    /// Label of initial location.
+    /// </summary>
+    [Parameter]
+    public string InitialLocationText { get; set; } = "מיקום התחלתי";
+
+    /// <summary>
+    /// Label of final location.
+    /// </summary>
+    [Parameter]
+    public string FinalLocationText { get; set; } = "מיקום סופי";
+
+    /// <summary>
+    /// Icon of initial location.
+    /// </summary>
+    [Parameter]
+    public string InitialLocationIcon { get; set; } = Icons.Location_Initial;
+
+    /// <summary>
+    /// Icon of final location.
+    /// </summary>
+    [Parameter]
+    public string FinalLocationIcon { get; set; } = Icons.Location_Final;
+
+    /// <summary>
+    /// Content gap.
+    /// </summary>
+    [Parameter]
+    public string ContentGap { get; set; } = "10px";
+}
+
 <CipherComponentCard Title="@Title">
-    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="10px">
-        <CipherLocation LabelText="מיקום התחלתי" Icon="@Icons.Location_Initial" />
-        <CipherLocation LabelText="מיקום סופי" Icon="@Icons.Location_Final" />
+    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="@ContentGap">
+        <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" />
+        <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" />
     </RadzenStack>
 </CipherComponentCard>

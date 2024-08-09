@@ -1,53 +1,57 @@
 ﻿@inherits RadzenStack
 
 @code {
+    /// <summary>
+    /// Icon aside the row.
+    /// </summary>
     [Parameter]
     public string Icon { get; set; }
 
+    /// <summary>
+    /// Label and placeholder of the row.
+    /// </summary>
     [Parameter]
-    public string Label { get; set; }
+    public string? Label { get; set; }
 
+    /// <summary>
+    /// Form field width.
+    /// </summary>
     [Parameter]
     public string Width { get; set; }
 
+    /// <summary>
+    /// Form field height.
+    /// </summary>
     [Parameter]
-    public string Padding { get; set; }
+    public string Height { get; set; } = "60px";
 
-    [Parameter]
-    public string Display { get; set; } = "contents";
-
-    [Parameter]
-    public string HelpText { get; set; }
-
-    [Parameter]
-    public string HeaderWidth { get; set; } = "100%";
-
-    [Parameter]
-    public string HeaderMaxWidth { get; set; } = "180px";
-
+    /// <summary>
+    /// Space inside component, outside content (Right & Left).
+    /// </summary>
     [Parameter]
     public string PaddingHorizontal { get; set; } = "10px";
 
+    /// <summary>
+    /// Space inside component, outside content (Top).
+    /// </summary>
     [Parameter]
     public string PaddingTop { get; set; } = "20px";
 
+    /// <summary>
+    /// Space inside component, outside content (Bottom).
+    /// </summary>
     [Parameter]
     public string PaddingBottom { get; set; } = "10px";
 
+    /// <summary>
+    /// Icon Size.
+    /// </summary>
     [Parameter]
-    public bool Chosen { get; set; } = true;
-
-    [Parameter]
-    public TooltipPosition HelpTextPosition { get; set; } = TooltipPosition.Bottom;
-
-    private void ToggleVisibility()
-    {
-        Display = Chosen ? "block" : "none";
-    }
+    public string IconFontSize { get; set; } = "xx-large";
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px" >
-    <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="@($"font-size: {IconFontSize};")" />
 
     @if(string.IsNullOrEmpty(Label))
     {
@@ -56,7 +60,7 @@
     else
     {
         <RadzenTemplateForm TItem="object">
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height:60px")">
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height: {Height}")">
                 <div style="@($"padding-right:{PaddingHorizontal}; padding-left:{PaddingHorizontal}; padding-top:{PaddingTop}; padding-bottom:{PaddingBottom}; width: {Width}")">
                     @ChildContent
                 </div>

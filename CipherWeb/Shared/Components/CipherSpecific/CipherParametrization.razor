@@ -140,7 +140,8 @@
 
         CustomDataGrid.Data = set_params;
 
-        components -= 1;
+        components --;
+
         await CustomDataGrid.RefreshDataAsync();
 
         if (set_params.Count() == 0)

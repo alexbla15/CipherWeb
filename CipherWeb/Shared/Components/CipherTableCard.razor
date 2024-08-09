@@ -13,7 +13,7 @@
         {
             <CipherPDFButton />
         }
-        @if (ExpandPath != null)
+        @if (!string.IsNullOrEmpty(ExpandPath))
         {
             <CipherNavButton Icon="@Icons.Expand" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
         }
@@ -24,21 +24,39 @@
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Content within the card.
+    /// </summary>
     [Parameter]
     public RenderFragment ComponentContent { get; set; }
 
+    /// <summary>
+    /// Data needed for Excel-export.
+    /// </summary>
     [Parameter]
     public IEnumerable<object> DataSource { get; set; }
 
+    /// <summary>
+    /// File name for excel export.
+    /// </summary>
     [Parameter]
     public string FileTitle { get; set; }
+    
+    /// <summary>
+    /// Path for the expanded version of a table.
+    /// </summary>
+    [Parameter]
+    public string? ExpandPath { get; set; } = null;
 
+    /// <summary>
+    /// Allow exporting the data to EXCEL.
+    /// </summary>
     [Parameter]
     public bool ExcelExport { get; set; } = true;
 
+    /// <summary>
+    /// Allow exporting the data to PDF.
+    /// </summary>
     [Parameter]
     public bool PDFExport { get; set; } = true;
-
-    [Parameter]
-    public string? ExpandPath { get; set; } = null;
 }

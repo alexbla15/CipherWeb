@@ -1,10 +1,10 @@
-﻿
-@inherits CipherAutoComplete
+﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Icon="@Icons.Person" Label="@LabelText" Data="@TestedData.Workers" Disabled="@Disabled" />
-
+<CipherAutoComplete Icon="@Icons.Person" Label="@Label" Data="@TestedData.Workers" Disabled="@Disabled" />
 
 @code {
-    [Parameter]
-    public string? LabelText { get; set; } = "ממלא הטופס";
+    protected override void OnInitialized()
+    {
+        Label ??= "ממלא הטופס";
+    }
 }

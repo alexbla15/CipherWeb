@@ -1,17 +1,42 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Value of component.
+    /// </summary>
     [Parameter]
     public string? comments { get; set; }
 
-    CipherComponentCard Card;
+    /// <summary>
+    /// Placeholder of the comments' text box.
+    /// </summary>
+    [Parameter]
+    public string? Placeholder { get; set; } = "הערות";
 
+    /// <summary>
+    /// Background color of the text box containing the comments.
+    /// </summary>
+    [Parameter]
+    public string TextBoxBackgroundColor { get; set; } = "white";
+
+    /// <summary>
+    /// Background color of the icon aside the comments.
+    /// </summary>
+    [Parameter]
+    public string IconBackgroundColor { get; set; } = Colors.PrimaryDark;
+
+    private CipherComponentCard Card;
+
+    /// <summary>
+    /// Style of text-box.
+    /// </summary>
+    /// <returns></returns>
     public string TextAreaStyle()
     {
         return $@"
             height:{Height};
             width: {Card.Width};
-            background-color: white;
+            background-color: {TextBoxBackgroundColor};
             align-content: center;
             max-width: {Card.Width};
             float: {Card.Float};
@@ -24,10 +49,10 @@
     <RadzenRow>
         <RadzenColumn Size="1">
             <RadzenIcon Icon="@Icons.Comment" IconColor="white"
-                        Style="@($"background-color:{Colors.PrimaryDark}; width:100%; height:100%; border-top-right-radius: 10px; border-bottom-right-radius:10px;")"></RadzenIcon>
+                        Style="@($"background-color:{IconBackgroundColor}; width:100%; height:100%; border-top-right-radius: 10px; border-bottom-right-radius:10px;")"></RadzenIcon>
         </RadzenColumn>
         <RadzenColumn Size="11">
-            <RadzenTextArea Placeholder="הערות" Value=@comments Style="@TextAreaStyle()" />
+            <RadzenTextArea Placeholder="@Placeholder" Value="@comments" Style="@TextAreaStyle()" />
         </RadzenColumn>
     </RadzenRow>
 </CipherComponentCard>
