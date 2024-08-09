@@ -1,0 +1,35 @@
+﻿@page "/forms/AddProcess"
+
+@inject NotificationService NotificationService
+@inject ICipherInfo _db
+
+<PageTitle>תהליך חדש</PageTitle>
+
+<CipherSteps>
+    <RadzenStepsItem Text="פרטי הזנה">
+        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
+
+        <CipherComponentCard Title="פרטי התהליך" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            @* -- Name -- *@
+            <CipherAutoComplete Icon="@Icons.Id" Label="שם תהליך" />
+
+            @* -- Material -- *@
+            <CipherAutoComplete Label="סוג החומר" Icon="@Icons.Material" />
+
+            @* -- Main Category -- *@
+            <CipherCategoryDropDown Label="שם קטגוריה ראשית" TextProperty="MainCategory" ValueProperty="MainCategory"></CipherCategoryDropDown>
+
+            @* -- Mask -- *@
+            <CipherAutoComplete Label="סדרה (***)" Icon="@Icons.Password" MinLength="1" MaxLength="3" />
+
+            @* -- Default destination -- *@
+            <CipherAutoComplete Label="ייעוד" Icon="@Icons.Process" />
+        </CipherComponentCard>
+
+        <CipherComments Title="הערות על הקטגוריה" />
+    </RadzenStepsItem>
+
+    <RadzenStepsItem Text="סיכום ואישור">
+        <CipherSubmit ActionText="נפתחה קטגוריה תמיסה לחומר מגנזיום. קטגוריה זו תקבל את הסדרה 111."></CipherSubmit>
+    </RadzenStepsItem>
+</CipherSteps>

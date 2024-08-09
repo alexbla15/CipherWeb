@@ -55,6 +55,12 @@
     [Parameter]
     public bool ShowErrors { get; set; } = true;
 
+    /// <summary>
+    /// Allow/disable multiline autocomplete
+    /// </summary>
+    [Parameter]
+    public bool Multiline { get; set; } = false;
+
     private string _value = "";
 
     /// <summary>
@@ -127,7 +133,7 @@
     {
         if (!string.IsNullOrEmpty(model.value))
         {
-            Regex regex = new Regex(@"[a-z0-9א-ת. ]", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"[a-z0-9א-ת. \n]", RegexOptions.IgnoreCase);
             var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
 
             if (invalidChars.Any())
@@ -223,13 +229,15 @@
             @if (string.IsNullOrEmpty(Label))
             {
                 <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
-                                    Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
+                                    Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
+                                    Multiline="@Multiline"/>
             }
             else
             {
                 <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
                     <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Label" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
-                                        Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" />
+                                        Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
+                                        Multiline="@Multiline" />
                 </RadzenFormField>
             }
         </RadzenStack>
@@ -240,7 +248,7 @@
             }
             <RadzenLengthValidator @ref=LengthValidator Component="value" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
                                    Visible="@(RequiredValidator.IsValid && ShowErrors)" />
-            <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת. ]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
+            <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת. \n]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
             <RadzenCustomValidator @ref=SqlInjectionValidator Component="value" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate())" Visible=@(ShowErrors) />
         </RadzenStack>
     </RadzenStack>

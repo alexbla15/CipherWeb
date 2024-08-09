@@ -17,6 +17,10 @@
         {
             <CipherNavButton Icon="@Icons.Expand" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
         }
+        @if (Sharable)
+        {
+            <CipherButton Icon="@Icons.Mail" HelpText="שיתוף" Variant="Variant.Outlined" />
+        }
     </Buttons>
     <ChildContent>
         @ComponentContent
@@ -59,4 +63,10 @@
     /// </summary>
     [Parameter]
     public bool PDFExport { get; set; } = true;
+
+    /// <summary>
+    /// Allow report to be sharable.
+    /// </summary>
+    [Parameter]
+    public bool Sharable { get; set; } = false;
 }

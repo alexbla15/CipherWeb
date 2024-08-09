@@ -8,18 +8,6 @@
     public string RowWidth { get; set; } = "400px";
 
     /// <summary>
-    /// Width of FormRow surrounding the text box.
-    /// </summary>
-    [Parameter]
-    public string TextBoxFrameWidth { get; set; } = "875px";
-
-    /// <summary>
-    /// Width of text box (comments).
-    /// </summary>
-    [Parameter]
-    public string TextBoxWidth { get; set; } = "784px";
-
-    /// <summary>
     /// Set editability of each row.
     /// </summary>
     [Parameter]
@@ -71,9 +59,7 @@
                     <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
 
                     @* -- COMMENTS -- *@
-                    <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@TextBoxFrameWidth">
-                        <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {TextBoxWidth}")" Disabled="@ReadOnly" />
-                    </CipherFormRow>
+                    <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="תנועות">

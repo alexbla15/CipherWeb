@@ -1,6 +1,8 @@
 ﻿@inject ICipherInfo _db
 
-<CipherTableCard Title="@Title">
+@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" Sharable="@Sharable">
     <ComponentContent>
     <CipherDataGrid Cipher_TItem="SubCategory" DataSource="@subCategories"
                     GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
@@ -27,16 +29,11 @@
     [Parameter]
     public bool Group { get; set; } = false;
 
-    /// <summary>
-    /// Card title
-    /// </summary>
-    [Parameter]
-    public string Title { get; set; } = "סוגים";
-
     List<SubCategory> subCategories = new List<SubCategory>();
 
     protected override async Task OnInitializedAsync()
     {
+        Title ??= "סוגים";
         subCategories = await _db.GetSubCategories();
     }
 }

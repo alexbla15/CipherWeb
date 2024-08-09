@@ -232,7 +232,7 @@
     background-color: var(--rz-primary-dark);
 }
 
-.rz-datatable-data tr td:last-child:not(.rz-composite-cell), 
+.rz-datatable-data tr td:last-child:not(.rz-composite-cell),
 .rz-grid-table tr td:last-child:not(.rz-composite-cell) {
     border-right: none;
     font-weight: bolder;
@@ -325,7 +325,7 @@
 /* ------------------ COLUMN ------------------ */
 
 .rz-sortable-column .rzi-sort {
-    color: var(--rz-primary-darker);
+    color: var(--rz-grid-filter-color);
     padding-right: 5px;
 }
 
@@ -575,6 +575,7 @@
 .rz-dropdown-item {
     text-align: right;
     cursor: pointer;
+    direction:rtl;
 }
 
     /* ------------------ MENU ------------------ */

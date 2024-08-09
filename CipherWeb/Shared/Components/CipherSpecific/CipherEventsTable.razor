@@ -2,7 +2,15 @@
 
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" DataSource="@events" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons">
+<CipherTableCard Title="@Title" DataSource="@events" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable">
+    <HeaderContent>
+        @if (WithHeaderContent)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+            </RadzenStack>
+        }
+    </HeaderContent>
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Event" DataSource="@events"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
@@ -27,6 +35,12 @@
     /// </summary>
     [Parameter]
     public bool AllowGroup { get; set; } = false;
+
+    /// <summary>
+    /// Is a CipherAutoComplete header is needed.
+    /// </summary>
+    [Parameter]
+    public bool WithHeaderContent { get; set; } = true;
 
     private List<Event> events = new List<Event>();
 

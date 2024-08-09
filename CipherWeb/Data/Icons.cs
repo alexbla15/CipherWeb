@@ -77,6 +77,7 @@ namespace CipherWeb.Data
         public const string Lightbulb = "lightbulb";
         public const string LinearScale = "linear_scale";
         public const string LocalCafe = "local_cafe";
+        public const string Mail = "mail";
         public const string Mop = "mop";
         public const string MultipleStop = "multiple_stop";
         public const string MyLocation = "my_location";

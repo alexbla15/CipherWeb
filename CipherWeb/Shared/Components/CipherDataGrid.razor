@@ -68,6 +68,12 @@
     public bool WithCustomColumns { get; set; } = false;
 
     /// <summary>
+    /// Are additional columns used.
+    /// </summary>
+    [Parameter]
+    public bool WithAddedColumns { get; set; } = false;
+
+    /// <summary>
     /// Is total footer of decimal values (such as mass) allowed.
     /// </summary>
     [Parameter]
@@ -235,6 +241,10 @@
                         <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="200px" OrderIndex="@GetOrder(col.Item1)" />
                     }
                 }
+            }
+            @if (WithAddedColumns)
+            {
+                @CustomColumns
             }
         }
         else

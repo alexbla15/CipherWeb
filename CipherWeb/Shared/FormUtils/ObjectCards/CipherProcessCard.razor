@@ -2,18 +2,6 @@
 
 @code {
     /// <summary>
-    /// Width of FormRow surrounding the text box.
-    /// </summary>
-    [Parameter]
-    public string TextBoxFrameWidth { get; set; } = "677px";
-
-    /// <summary>
-    /// Width of text box (comments).
-    /// </summary>
-    [Parameter]
-    public string TextBoxWidth { get; set; } = "558px";
-
-    /// <summary>
     /// Width of each row within card.
     /// </summary>
     [Parameter]
@@ -77,9 +65,7 @@
                 <CipherDatePicker Label="תאריך תפוגה" />
 
                 @* -- COMMENTS -- *@
-                <CipherFormRow Label="הערות" Icon="@Icons.Comment" Width="@TextBoxFrameWidth">
-                    <RadzenTextBox Placeholder="הערות" Style="@($"{Constants.textStyle}; width: {TextBoxWidth}")" />
-                </CipherFormRow>
+                <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Comment" Width="@RowWidth"/>
 
                 <br />
                 <br />

@@ -2,4 +2,46 @@
 
 <PageTitle>דוחות</PageTitle>
 
-<CipherPointers Title="דוחות" LabelInitialText="דוח" NavLinkType="דוחות"></CipherPointers>
+<CipherPointers Title="דוחות שמורים" LabelInitialText="דוח" NavLinkType="דוחות"></CipherPointers>
+
+<CipherTableCard Title="חיפוש דוח">
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="Report" DataSource="@AllReports" WithAddedColumns="true"
+                        GridFilterMode="FilterMode.Advanced" AllowFilter="true">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Report" Title="פעולות" Width="15%">
+                    <Template Context="report">
+                    <CipherNavButton ColorStyle="ButtonStyle.Primary" Icon="@Icons.Expand" HelpText="פתיחה בחלון חדש" Path="@report.Path"></CipherNavButton>
+                    <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Star" HelpText="הוספה למועדפים" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    public class Report
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreationDate { get; set; }
+        public string Path { get; set; }
+    }
+
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    [Parameter]
+    public List<Report> AllReports { get; set; } = new List<Report>()
+    {
+        new Report(){Id=1, Name="דוח תעודות", Creator="אבי", CreationDate=DateTime.Today, Path=CipherNavLinks.PackagesReport.Href},
+        new Report(){Id=2, Name="דוח תנועות", Creator="אבי", CreationDate=DateTime.Today.AddDays(1), Path=CipherNavLinks.EventsReport.Href},
+        new Report(){Id=3, Name="דוח סוגים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddMonths(1), Path=CipherNavLinks.CategoriesReport.Href},
+        new Report(){Id=4, Name="דוח מיקומים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href},
+        new Report(){Id=5, Name="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href}
+    };
+
+    private RadzenDataGrid<Report> CustomDataGrid;
+}

@@ -55,7 +55,9 @@ namespace CipherWeb
             new ("Month", "חודש"),
             new ("Mass", "מסה"),
             new ("Reagent", "חומר גלם"),
-            new ("Product", "תוצר")
+            new ("Product", "תוצר"),
+            new ("Creator", "יוצר/ת"),
+            new ("CreationDate", "תאריך יצירה")
         };
     }
 }
