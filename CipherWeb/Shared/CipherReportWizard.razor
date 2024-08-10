@@ -29,6 +29,27 @@
             </ChildContent>
         </CipherComponentCard>
     </RadzenStepsItem>
+    <RadzenStepsItem Text="תצוגה מקדימה ושמירה">
+
+        <CipherComponentCard BackgroundColor="@Colors.PrimaryLight">
+            <CipherRestriction></CipherRestriction>
+            <br />
+            <CipherComponentCard Title="פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                <CipherDatePicker Label="תאריך התחלה"></CipherDatePicker>
+                <CipherDatePicker Label="תאריך סיום"></CipherDatePicker>
+            </CipherComponentCard>
+            <CipherEventsTable WithHeaderContent="false" WithCard="true"></CipherEventsTable>
+            <CipherComponentCard Title="סיום" >
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
+                    <CipherSubmitButton Size="ButtonSize.Medium" />
+                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Cancel" 
+                    Text="ביטול" Path="@CipherNavLinks.Reports.Href" Size="ButtonSize.Medium"></CipherNavButton>
+                    <CipherButton Variant="Variant.Outlined" Icon="@Icons.Star" Text="הוספה למועדפים"></CipherButton>
+                    <CipherButton Variant="Variant.Outlined" Icon="@Icons.Mail" Text="שיתוף"></CipherButton>
+                </RadzenStack>
+            </CipherComponentCard>
+        </CipherComponentCard>
+    </RadzenStepsItem>
 </CipherSteps>
 
 @code {
