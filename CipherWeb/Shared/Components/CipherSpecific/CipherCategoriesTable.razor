@@ -4,7 +4,7 @@
 
 <CipherTableCard Title="@Title" Sharable="@Sharable">
     <ComponentContent>
-    <CipherDataGrid Cipher_TItem="SubCategory" DataSource="@subCategories"
+    <CipherDataGrid Cipher_TItem="Category" DataSource="@subCategories"
                     GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
@@ -29,11 +29,11 @@
     [Parameter]
     public bool Group { get; set; } = false;
 
-    List<SubCategory> subCategories = new List<SubCategory>();
+    List<Category> subCategories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
         Title ??= "סוגים";
-        subCategories = await _db.GetSubCategories();
+        //subCategories = await _db.GetSubCategories();
     }
 }

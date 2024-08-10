@@ -7,47 +7,46 @@
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public Package pack { get; set; }
+    public Package pack { get; set; } = new Package();
 
     private string twiceColWidth = "100px";
     private string colWidth = "50px";
     private string halfColWidth = "25px";
 
-    private List<SubCategory> subCategories = new List<SubCategory>();
+    private List<Category> subCategories = new List<Category>();
     private List<Vessel> vessels = new List<Vessel>();
 
     protected override async Task OnInitializedAsync()
     {
-        subCategories = await _db.GetSubCategories();
-        vessels = await _db.GetVessels();
+        //subCategories = await _db.GetSubCategories();
+        //vessels = await _db.GetVessels();
     }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherPackageId />
-    <CipherMaterialType @bind-Value="pack.Material"/>
+    <CipherMaterialType @bind-Value="pack.Category.MaterialType"/>
 
     @* -- SUB CATEGORY -- *@
     <CipherFormRow Icon="@Icons.Category">
-        <RadzenDropDownDataGrid @bind-Value=@pack.SubCategory Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
+        <RadzenDropDownDataGrid @bind-Value=@pack.Category.Name Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
                                 Style="width:300px"
                                 Data=@subCategories TextProperty="Name" ValueProperty="Name"
                                 AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
             <Columns>
-                <RadzenDropDownDataGridColumn Property="Name" Title="משנית" Width="@twiceColWidth" />
-                <RadzenDropDownDataGridColumn Property="MainCategory" Title="ראשית" Width="@twiceColWidth" />
-                <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@colWidth" />
+                <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="@twiceColWidth" />
+                <RadzenDropDownDataGridColumn Property="Id" Title="מספר" Width="@colWidth" />
             </Columns>
         </RadzenDropDownDataGrid>
     </CipherFormRow>
 
     @* -- VESSEL -- *@
     <CipherFormRow Icon="@Icons.Vessel">
-        <RadzenDropDownDataGrid @bind-Value=@pack.Vessel Data=@vessels TextProperty="Name" ValueProperty="Name" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
+        <RadzenDropDownDataGrid @bind-Value=@pack.Vessel.Id Data=@vessels TextProperty="Id" ValueProperty="Id" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
                                 AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="width:300px">
             <Columns>
-                <RadzenDropDownDataGridColumn Property="Name" Title="שם" Width="@colWidth" />
-                <RadzenDropDownDataGridColumn Property="Id" Title="מספר" Width="@halfColWidth" />
+                <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="@colWidth" />
+                <RadzenDropDownDataGridColumn Property="Uuid" Title="מספר" Width="@halfColWidth" />
             </Columns>
         </RadzenDropDownDataGrid>
     </CipherFormRow>

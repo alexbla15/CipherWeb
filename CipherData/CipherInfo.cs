@@ -29,18 +29,18 @@ namespace CipherData
             return _db.LoadData<Event, dynamic>(sql, new { });
         }
 
-        public Task<List<StorageSystem>> GetSystems()
+        public Task<List<Models.StorageSystem>> GetSystems()
         {
             string sql = "SELECT * FROM StorageSystem";
 
-            return _db.LoadData<StorageSystem, dynamic>(sql, new { });
+            return _db.LoadData<Models.StorageSystem, dynamic>(sql, new { });
         }
 
-        public Task<List<SubCategory>> GetSubCategories()
+        public Task<List<Category>> GetSubCategories()
         {
             string sql = "SELECT * FROM SubCategory";
 
-            return _db.LoadData<SubCategory, dynamic>(sql, new { });
+            return _db.LoadData<Category, dynamic>(sql, new { });
         }
 
         public Task<List<Vessel>> GetVessels()

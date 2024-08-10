@@ -6,8 +6,8 @@ namespace CipherData
     public interface ICipherInfo
     {
         Task<List<Event>> GetEvents();
-        Task<List<StorageSystem>> GetSystems();
-        Task<List<SubCategory>> GetSubCategories();
+        Task<List<Models.StorageSystem>> GetSystems();
+        Task<List<Category>> GetSubCategories();
         Task<List<Vessel>> GetVessels();
     }
     

@@ -133,19 +133,18 @@
     {
         rows = new List<Package>();
 
-        List<string> locations = Constants.packages.Select(x => x.Location).Distinct().ToList();
-        List<string> vessels = Constants.packages.Select(x => x.Vessel).Distinct().ToList();
+        List<string> vessels = Constants.packages.Select(x => x.Vessel.Id).Distinct().ToList();
 
-        foreach (string loc in locations)
+        foreach (StorageSystem sys in Constants.systems)
         {
-            foreach (string ves in vessels)
+            foreach (Vessel ves in Constants.vessels)
             {
                 rows.Add(new Package()
                     {
-                        Location = loc,
+                        System = sys,
                         Vessel = ves,
-                        BrutMass = Constants.packages.Where(x => x.Location == loc && x.Vessel == ves).Select(x => x.BrutMass).Sum(),
-                        NetMass = Constants.packages.Where(x => x.Location == loc && x.Vessel == ves).Select(x => x.NetMass).Sum()
+                        BrutMass = Constants.packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum(),
+                        NetMass = Constants.packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum()
                     });
             }
         }

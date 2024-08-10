@@ -11,7 +11,7 @@
 
         <CipherComponentCard Title="@($"פרטי ה{ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
             @* -- Name -- *@
-            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="sys.Name" Label="@($"שם ה{ObjectName}")" />
+            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="sys.Description" Label="@($"שם ה{ObjectName}")" />
             
             @if(ObjectName == "מערכת")
             {
@@ -50,12 +50,12 @@
                         <RadzenDataGridColumn TItem="Restriction" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
                         <RadzenDataGridColumn TItem="Restriction" Property="Material" Title="חומר" Width="37%" TextAlign="@TdTextAlign">
                             <EditTemplate Context="restriction">
-                                <CipherAutoComplete @bind-Value="@restriction.Material" Data="@Constants.packages" TextProperty="Material" />
+                                <CipherAutoComplete @bind-Value="@restriction.Material"/>
                             </EditTemplate>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Restriction" Property="Category" Title="קטגוריה" Width="37%" TextAlign="@TdTextAlign">
                             <EditTemplate Context="restriction">
-                                <CipherAutoComplete @bind-Value="@restriction.Category" Data="@Constants.packages" TextProperty="SubCategory" />
+                                <CipherAutoComplete @bind-Value="@restriction.Category"  />
                             </EditTemplate>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="Restriction" Property="MaxAmount" Title="מגבלת כמות [גר']" Width="37%" TextAlign="@TdTextAlign">

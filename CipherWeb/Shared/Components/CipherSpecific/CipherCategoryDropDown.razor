@@ -33,11 +33,11 @@
     [Parameter]
     public int ColumnWidth { get; set; } = 50;
 
-    private List<SubCategory> subCategories = new List<SubCategory>();
+    private List<Category> subCategories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
         Label ??= "חיפוש קטגוריה";
-        subCategories = await _db.GetSubCategories();
+        //subCategories = await _db.GetSubCategories();
     }
 }

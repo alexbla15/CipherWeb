@@ -89,13 +89,13 @@
         {
             if (AddProcess(ev))
             {
-                if (ProcessCounter.ContainsKey(ev.Process))
+                if (ProcessCounter.ContainsKey(ev.ProcessId.ToString()))
                 {
-                    ProcessCounter[ev.Process] += 1;
+                    ProcessCounter[ev.ProcessId.ToString()] += 1;
                 }
                 else
                 {
-                    ProcessCounter[ev.Process] = 1;
+                    ProcessCounter[ev.ProcessId.ToString()] = 1;
                 }
             }
         }
@@ -106,15 +106,15 @@
     {
         if (View == "day")
         {
-            return (ev.EventDate == DateTime.Today);
+            return (ev.Timestamp == DateTime.Today);
         }
         else if (View == "month")
         {
-            return (ev.EventDate.Month == DateTime.Today.Month);
+            return (ev.Timestamp.Month == DateTime.Today.Month);
         }
         else if (View == "year")
         {
-            return (ev.EventDate.Year == DateTime.Today.Year);
+            return (ev.Timestamp.Year == DateTime.Today.Year);
         }
         else
         {

@@ -6,8 +6,8 @@
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
                  style="@SchedulerStyle()" TItem="Event" AppointmentSelect="@SelectEvent"
-                 Data=@events StartProperty="EventDate" EndProperty="ApprovingDate" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
-                 TextProperty="Process" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
+                 Data=@events StartProperty="Timestamp" EndProperty="Timestamp" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
+                 TextProperty="Id" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
     <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt" />
     <CipherWeekView StartTime="@startTime" EndTime="@endTime" />
     <CipherMonthView MoreText="תהליכים נוספים" MaxAppointmentsInSlot="@EventsInSlot" />
@@ -151,7 +151,7 @@
 
         foreach (string proc in ProcessColoring.Keys)
         {
-            if (args.Data.Process == proc)
+            if (args.Data.ProcessId.ToString() == proc)
             {
                 args.Attributes["style"] = $@"
                     background: {ProcessColoring[proc]};
@@ -184,15 +184,15 @@
         TooltipService.Open(args.Element, ts =>
     @<RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center"
                       Style="min-width: 250px; max-width: 500px;" dir="rtl">
-        <CipherText Text="@args.Data.Process" TextStyle="TextStyle.H6" Color="var(--rz-tooltip-color);" />
+        <CipherText Text="@args.Data.ProcessId.ToString()" TextStyle="TextStyle.H6" Color="var(--rz-tooltip-color);" />
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="30px">
 
             <CipherText Text="סוג" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="@args.Data.Type" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
+            <CipherText Text="@args.Data.EventType.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="30px">
             <CipherText Text="עודכן ב" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="@args.Data.UpdatingDate.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
+            <CipherText Text="@args.Data.Timestamp.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
         </RadzenStack>
     , new TooltipOptions { Position = EventTooltipPosition, Duration = null });

@@ -52,7 +52,7 @@
         @Buttons
     </Buttons>
     <ChildContent>
-        <CipherDataFilter @ref=dataFilter Data="@GeneralDataSource" Cipher_TItem="Cipher_TItem" FilterFields="@FilterFields" ViewChanged=@ViewChanged>
+        <CipherDataFilter @ref=dataFilter Data="@GeneralDataSource" FilterFields="@FilterFields" ViewChanged="@(EventCallback.Factory.Create<IQueryable<Cipher_TItem>>(this, ViewChanged))">
             <FilterProperties>
                 @foreach (Tuple<string, string> field in FilterFields)
                 {
@@ -68,7 +68,7 @@
             }
             else
             {
-                <CipherDataGrid Cipher_TItem="@Cipher_TItem" @ref=rowsGrid DataSource="@(filteredRows ?? GeneralDataSource)"></CipherDataGrid>
+                <CipherDataGrid @ref=rowsGrid DataSource="@(filteredRows ?? GeneralDataSource)"></CipherDataGrid>
             }
         </div>
     </ChildContent>

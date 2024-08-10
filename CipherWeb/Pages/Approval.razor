@@ -23,7 +23,7 @@
     <CustomDataGrid>
         <CipherDataGrid @ref="CustomDataGrid" WithCustomColumns="true"
                         GridFilterMode="FilterMode.Simple" AllowFilter="false"
-                        AllowSort="true" Cipher_TItem="Event" AllowGroup="false" HideGroupedColumn="true"
+                        AllowSort="true" AllowGroup="false" HideGroupedColumn="true"
                         AllGroupsExpanded="false"
                         DataSource="@DataSource">
             <CustomColumns>
@@ -38,31 +38,31 @@
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="Event" Property="EventDate" Title="תאריך תנועה" OrderIndex="1" SortOrder="SortOrder.Ascending" />
-                <RadzenDataGridColumn TItem="Event" Property="Process" Title="תהליך" OrderIndex="2" SortOrder="SortOrder.Ascending" />
-                <RadzenDataGridColumn TItem="Event" Property="Type" Title="סוג" />
+                <RadzenDataGridColumn TItem="Event" Property="Timestamp" Title="תאריך תנועה" OrderIndex="1" SortOrder="SortOrder.Ascending" />
+                <RadzenDataGridColumn TItem="Event" Property="ProcessId" Title="תהליך" OrderIndex="2" SortOrder="SortOrder.Ascending" />
+                <RadzenDataGridColumn TItem="Event" Property="EventType" Title="סוג" />
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
                     <Template>
                         <RadzenText Text="111"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מערכת מוסרת">
+                <RadzenDataGridColumn TItem="Event" Title="מערכת מוסרת">
                     <Template>
                         <RadzenText Text="A"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="תעודה מקבלת">
+                <RadzenDataGridColumn TItem="Event" Title="תעודה מקבלת">
                     <Template>
                         <RadzenText Text="222"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מערכת מקבלת">
+                <RadzenDataGridColumn TItem="Event" Title="מערכת מקבלת">
                     <Template>
                         <RadzenText Text="B"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="Parameters" Title="מסת תנועה">
+                <RadzenDataGridColumn TItem="Event" Title="מסת תנועה">
                     <Template>
                         <RadzenText Text="5"></RadzenText>
                     </Template>
@@ -77,7 +77,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Title="סטטוס" Width="200px">
                     <Template Context="ev">
-                        <CipherButton Disabled="true" Width="150px" Text="@ev.Status" ColorStyle="@GetStatusColor(ev.Status)" ColorShade="Shade.Default" />
+                        <CipherButton Disabled="true" Width="150px" Text="@ev.Valid.ToString()" ColorStyle="@GetStatusColor(ev.Valid.ToString())" ColorShade="Shade.Default" />
                     </Template>
                 </RadzenDataGridColumn>
             </CustomColumns>
@@ -93,7 +93,7 @@
 
     List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>
     {
-        new ("EventDate", "תאריך תנועה"),
+        new ("Timestamp", "תאריך תנועה"),
         new ("DonatingSystem", "מערכת מוסרת"),
         new ("AcceptingSystem", "מערכת מקבלת"),
         new ("DonatingPackage", "תעודה מוסרת"),

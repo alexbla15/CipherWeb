@@ -7,59 +7,71 @@ using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
-    public class Package
+    public class Package: Resource
     {
         /// <summary>
-        /// Unique identifier (running number)
+        /// Free-text comment on the package
         /// </summary>
-        public int Id { get; set; }
+        public string Comments { get; set; } = string.Empty;
 
         /// <summary>
-        /// Unique serial number of this package
+        /// JSON-like additional properties of the package
         /// </summary>
-        public string SerialNumber { get; set; }
-
-        public string? Material { get; set; }
+        public string Properties { get; set; } = string.Empty;
 
         /// <summary>
-        /// Sub category name of this package
+        /// Vessel which contains the package
         /// </summary>
-        public string SubCategory { get; set; }
-
-        /// <summary>
-        /// Vessel name which contains the package
-        /// </summary>
-        public string Vessel { get; set; }
+        public Vessel Vessel { get; set; } = new Vessel();
 
 
         /// <summary>
-        /// Location name which contains the package
+        /// Location which contains the package
         /// </summary>
-        public string Location { get; set; }
+        public StorageSystem System { get; set; } = new StorageSystem();
 
         /// <summary>
-        /// Brut-mass of this package
+        /// Total mass of the package
         /// </summary>
         public decimal BrutMass { get; set; }
 
         /// <summary>
-        /// Net-mass of this package
+        /// Net mass of the package
         /// </summary>
         public decimal NetMass { get; set; }
-        
-        /// <summary>
-        /// Date when package was opened
-        /// </summary>
-        public DateTime OpenDate { get; set; }  
 
         /// <summary>
-        /// Full-text comments
+        /// Timestamp when the package was created
         /// </summary>
-        public string Comments { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// Specific properties of package (e.g. color...)
+        /// Packages contained in this one
         /// </summary>
-        public Dictionary<string, object> Properties { get; set; }
+        public List<Package>? ContainingPackages { get; set; }
+
+        /// <summary>
+        /// Category of package
+        /// </summary>
+        public Category Category { get; set; } = new Category();
+
+        /// <summary>
+        /// Hebrew-english translation
+        /// </summary>
+        public static List<Tuple<string, string>> Headers()
+        {
+            List<Tuple<string, string>> result = BasicHeaders;
+
+            result.Add(new("Properties", "תכונות"));
+            result.Add(new("Vessel", "כלי"));
+            result.Add(new("System", "מערכת"));
+            result.Add(new("BrutMass", "מסה ברוטו"));
+            result.Add(new("NetMass", "מסה נטו"));
+            result.Add(new("CreatedAt", "תאריך פתיחה"));
+            result.Add(new("ContainingPackages", "תעודות מוכלות"));
+            result.Add(new("Category", "קטגוריה"));
+
+            return result;
+        }
     }
 }

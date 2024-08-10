@@ -43,7 +43,7 @@
     {
         if (components == from_packs.Count)
         {
-            Package new_pack = new Package() { Id = components + 1 };
+            Package new_pack = new Package() { Uuid = components + 1 };
 
             // from_packs.Add(new_pack);
 
@@ -76,9 +76,9 @@
         {
             old_pack = new Package
                 {
-                    Id = pack.Id,
+                    Uuid = pack.Uuid,
                     BrutMass = pack.BrutMass,
-                    SerialNumber = pack.SerialNumber
+                    Id = pack.Id
                 };
 
             from_packs.Remove(pack);
@@ -93,9 +93,9 @@
     /// <returns></returns>
     async Task CancelEdit(Package pack)
     {
-        pack.Id = old_pack.Id;
+        pack.Uuid = old_pack.Uuid;
         pack.BrutMass = old_pack.BrutMass;
-        pack.SerialNumber = old_pack.SerialNumber;
+        pack.Id = old_pack.Id;
 
         await SaveRow(pack);
     }
@@ -112,7 +112,7 @@
         // Reassign IDs after deletion
         for (int i = 0; i < from_packs.Count; i++)
         {
-            from_packs[i].Id = i + 1;
+            from_packs[i].Uuid = i + 1;
         }
 
         CustomDataGrid.Data = from_packs;
@@ -170,10 +170,10 @@
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>
-                <RadzenDataGridColumn TItem="Package" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
-                <RadzenDataGridColumn TItem="Package" Property="SerialNumber" Title="תעודה" Width="37%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Property="Uuid" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
+                <RadzenDataGridColumn TItem="Package" Property="Id" Title="תעודה" Width="37%" TextAlign="@TdTextAlign">
                     <EditTemplate Context="pack">
-                        <CipherAutoComplete Data="TestedData.Packages" TextProperty="SerialNumber" @bind-Value="@pack.SerialNumber" />
+                        <CipherAutoComplete Data="TestedData.Packages" TextProperty="Id" @bind-Value="@pack.Id" />
                     </EditTemplate>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="37%" TextAlign="@TdTextAlign">

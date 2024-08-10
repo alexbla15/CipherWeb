@@ -69,31 +69,34 @@ namespace CipherWeb.Data
 
         public static List<Vessel> vessels = new List<Vessel>
     {
-        new Vessel { Name = "V1", Id=1110},
-        new Vessel { Name = "V2", Id=1112 } ,
-        new Vessel { Name = "V3", Id=1113 }
+        new Vessel { Id = "V1", Uuid=1110},
+        new Vessel { Id = "V2", Uuid=1112 } ,
+        new Vessel { Id = "V3", Uuid=1113 },
+        new Vessel { Id = "V4", Uuid=1114 }
     };
+
+        public static StorageSystem sysA = new StorageSystem { Description = "A", Uuid = 1110 };
+        public static StorageSystem sysB = new StorageSystem { Description = "B", Uuid = 1111 };
+        public static StorageSystem sysC = new StorageSystem { Description = "C", Uuid = 1112 };
+        public static StorageSystem sysD = new StorageSystem { Description = "D", Uuid = 1113 };
+        public static StorageSystem sysE = new StorageSystem { Description = "E", Uuid = 1114 };
 
         public static List<StorageSystem> systems = new List<StorageSystem>
     {
-        new StorageSystem { Name = "A", Id=1110 },
-        new StorageSystem { Name = "B", Id=1111} ,
-        new StorageSystem { Name = "C", Id=1112},
-        new StorageSystem { Name = "D", Id=1113 },
-        new StorageSystem { Name = "E", Id=1114 }
+            sysA, sysB, sysC, sysD, sysE
     };
-        public static List<Package> packages = new List<Package> 
-        { 
-            new Package { Id=1, SerialNumber = "111.1", BrutMass=10M, NetMass=9M, Vessel="V1", Location="A"}, 
-            new Package { Id=2, SerialNumber = "111.2", BrutMass=10.5M, NetMass=0.5M, Vessel="V1", Location="A" } ,
-            new Package { Id=3, SerialNumber = "321.3", BrutMass=9.5M, NetMass=0.5M , Vessel = "V2", Location="A"},
-            new Package { Id=4, SerialNumber = "145.4", BrutMass=0.5M, NetMass=0.5M , Vessel = "V3", Location="A"},
-            new Package { Id=5, SerialNumber = "987.6", BrutMass=0.5M, NetMass=0.5M , Vessel = "V4", Location="B"},
-            new Package { Id=6, SerialNumber = "1234.2", BrutMass=10.5M, NetMass=10M, Vessel="V4", Location="C" }
+        public static List<Package> packages = new List<Package>
+        {
+            new Package { Uuid=1, Id = "111.1", BrutMass=10M, NetMass=9M, Vessel=vessels[0], System=sysA},
+            new Package { Uuid=2, Id = "111.2", BrutMass=10.5M, NetMass=0.5M, Vessel=vessels[0], System=sysA } ,
+            new Package { Uuid=3, Id = "321.3", BrutMass=9.5M, NetMass=0.5M , Vessel = vessels[1], System=sysA},
+            new Package { Uuid=4, Id = "145.4", BrutMass=0.5M, NetMass=0.5M , Vessel = vessels[2], System=sysA},
+            new Package { Uuid=5, Id = "987.6", BrutMass=0.5M, NetMass=0.5M , Vessel = vessels[3], System=sysA},
+            new Package { Uuid=6, Id = "1234.2", BrutMass=10.5M, NetMass=10M, Vessel=vessels[3], System=sysA }
         };
 
 
-        public static List<char> ImproperChars = 
+        public static List<char> ImproperChars =
             new List<char>() { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '_', '<', '>', '?', '/', '\\', '|', '{', '}', '~', ':' };
     }
 }

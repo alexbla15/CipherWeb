@@ -6,22 +6,24 @@ using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
-    public class Process
+    /// <summary>
+    /// An instance of a specific processes
+    /// </summary>
+    public class Process: Resource
     {
-        /// <summary>
-        /// Unique identifier
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// Unique name of process
         /// </summary>
-        public string Name { get; set; }
+        //public string Name { get; set; }
+
+        public ProcessDefinition Definition { get; set; }
+
+        public List<Event> Events { get; set; }
 
         /// <summary>
-        /// Specific type of event
+        /// Uncompleted steps for completing the process
         /// </summary>
-        public string Type { get; set; }
+        public List<ProcessStepDefinition> UncompletedSteps { get; set; }
 
         /// <summary>
         /// List of systems in which the process takes (or may take) place
@@ -31,33 +33,11 @@ namespace CipherData.Models
         /// <summary>
         /// Name of worker that added the data
         /// </summary>
-        public string UpdatingWorker { get; set; }
+        //public string UpdatingWorker { get; set; }
         
         /// <summary>
         /// Name of worker that authorized the data
         /// </summary>
-        public string AuthorizingWorker { get; set; }
-
-        /// <summary>
-        /// List of sub categories which can be used in the process
-        /// </summary>
-        public List<string> InSubCategories { get; set; }
-
-
-        /// <summary>
-        /// List of sub categories which can be produced in the process
-        /// </summary>
-        public List<string> OutSubCategories { get; set; }
-
-        /// <summary>
-        /// Nodes of processes leading to this specific process
-        /// </summary>
-        public List<string> InProcesses { get; set; }
-
-
-        /// <summary>
-        /// Nodes of processes continuing this specific process
-        /// </summary>
-        public List<string> OutProcesses { get; set; }
+        //public string AuthorizingWorker { get; set; }
     }
 }

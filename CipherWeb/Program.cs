@@ -16,8 +16,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<ISqlDataAcess, SqlDataAcess>();
 builder.Services.AddTransient<ICipherInfo, CipherInfo>(); 
 builder.Services.AddScoped<ExcelService>();
-builder.Services.AddScoped<NotificationService>();
-//builder.Services.AddScoped<TooltipService>();
+builder.Services.AddScoped<NotificationService>(); 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("F:\\Projects\\CipherAPI\\") });
 
 var app = builder.Build();
 

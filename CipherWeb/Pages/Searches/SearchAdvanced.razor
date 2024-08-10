@@ -60,7 +60,7 @@
 }
 @if (objectId == 8)
 {
-    <CipherDataFilter_WithDataGrid Cipher_TItem="SubCategory" Title="סינון נתונים"
+    <CipherDataFilter_WithDataGrid Cipher_TItem="Category" Title="סינון נתונים"
                                    GeneralDataSource="@db_subcategories" />
 }
 
@@ -76,12 +76,12 @@
     string width = "width: 200px";
 
 
-    List<Event> db_events;
-    List<SubCategory> db_subcategories;
+    List<Event> db_events = new List<Event>();
+    List<Category> db_subcategories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
-        db_events = await _db.GetEvents();
-        db_subcategories = await _db.GetSubCategories();
+        //db_events = await _db.GetEvents();
+        //db_subcategories = await _db.GetSubCategories();
     }
 }
