@@ -336,6 +336,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckxvY2F0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherMainCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlck1haW5DYXRlZ29yeS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherMask.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlck1hc2sucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherMaterialType.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlck1hdGVyaWFsVHlwZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherPackageId.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclBhY2thZ2VJZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -344,8 +356,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclRpbWVQaWNrZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/WorkerName.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXFdvcmtlck5hbWUucmF6b3I=
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherVesselType.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclZlc3NlbFR5cGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherWorker.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlcldvcmtlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/_Imports.razor]

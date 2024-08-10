@@ -13,20 +13,11 @@
             @* -- Name -- *@
             <CipherAutoComplete Icon="@Icons.Id" @bind-Value="ves.Name" Label="שם הכלי" />
 
-            @* -- Type -- *@
-            <CipherAutoComplete Label="סוג הכלי" Icon="@Icons.Type" />
-
-            @* -- Location -- *@
+            <CipherVesselType/>
             <CipherLocation Label="מיקום הכלי" />
-
-            @* -- Material -- *@
-            <CipherAutoComplete Label="סוג החומר" Icon="@Icons.Material" />
-
-            @* -- Category -- *@
+            <CipherMaterialType />
             <CipherCategoryDropDown></CipherCategoryDropDown>
-
-            @* -- MaxAmount -- *@
-            <CipherAmount Label="מגבלת כמות" Icon="@Icons.Mass" />
+            <CipherAmount Label="מגבלת כמות" Icon="@Icons.Scale" />
         </CipherComponentCard>
 
         <CipherComments Title="כתבו הערות על הכלי" />

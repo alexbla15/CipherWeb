@@ -1,0 +1,10 @@
+﻿@inherits CipherAutoComplete
+
+<CipherAutoComplete Label="@Label" Icon="@Icons.Password" MinLength="1" MaxLength="3" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= " (***)";
+    }
+}

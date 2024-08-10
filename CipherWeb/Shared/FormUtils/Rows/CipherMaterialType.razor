@@ -1,0 +1,11 @@
+﻿@inherits CipherAutoComplete
+
+<CipherAutoComplete Label="@Label" Icon="@Icons.Material" Data="@TestedData.MaterialTypes" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "סוג החומר";
+        Icon ??= Icons.Material;
+    }
+}

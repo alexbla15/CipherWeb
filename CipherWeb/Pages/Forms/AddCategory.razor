@@ -10,17 +10,13 @@
         <CipherFormInfo Title="וודאו את פרטי ההזנה" />
 
         <CipherComponentCard Title="פרטי הקטגוריה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            @* -- Material -- *@
-            <CipherAutoComplete Label="סוג החומר" Icon="@Icons.Material" />
-
-            @* -- Main Category -- *@
-            <CipherCategoryDropDown Label="שם קטגוריה ראשית" TextProperty="MainCategory" ValueProperty="MainCategory"></CipherCategoryDropDown>
+            <CipherMaterialType/>
+            <CipherMainCategory/>
 
             @* -- Name -- *@
             <CipherAutoComplete Icon="@Icons.Id" Label="שם קטגוריה" />
 
-            @* -- Mask -- *@
-            <CipherAutoComplete Label="סדרה (***)" Icon="@Icons.Password" MinLength="1" MaxLength="3" />
+            <CipherMask />
 
             @* -- Default destination -- *@
             <CipherAutoComplete Label="ייעוד" Icon="@Icons.Process" />

@@ -1,0 +1,10 @@
+﻿@inherits CipherAutoComplete
+
+<CipherCategoryDropDown Label="@Label" TextProperty="MainCategory" ValueProperty="MainCategory" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "שם קטגוריה ראשית";
+    }
+}

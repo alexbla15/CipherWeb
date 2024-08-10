@@ -5,9 +5,9 @@ namespace CipherWeb.Data
     public class CipherNavLinks
     {
         public static MyNavLink Home = new MyNavLink() { Href = "", Icon = Icons.Home, Name = "מסך הבית", SubLinks = new List<MySubNavLink>() };
-        public static MyNavLink Personal = new MyNavLink() { Href = "Personal", Icon = Icons.Account, Name = "אזור אישי", SubLinks = new List<MySubNavLink>() };
+        public static MyNavLink Personal = new MyNavLink() { Href = "Personal", Icon = Icons.AccountCircle, Name = "אזור אישי", SubLinks = new List<MySubNavLink>() };
 
-        public static MySubNavLink AddPackage = new MySubNavLink() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.Add };
+        public static MySubNavLink AddPackage = new MySubNavLink() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.AddCircleOutline };
         public static MySubNavLink TransferAmount = new MySubNavLink() { Href = "Forms/TransferAmount", Name = "העברת כמות", Icon = Icons.Transfer };
         public static MySubNavLink Relocation = new MySubNavLink() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Location };
         public static MySubNavLink UpdatePackage = new MySubNavLink() { Href = "Forms/UpdatePackage", Name = "עדכון נתונים", Icon = Icons.Refresh };

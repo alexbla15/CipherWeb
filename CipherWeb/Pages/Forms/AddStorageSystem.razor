@@ -21,22 +21,15 @@
 
             @if (ObjectName != "מבנה")
             {
-                @* -- Department -- *@
                 <CipherLocation Label="מיקום" />
             }
 
-            @* -- Responsible Worker -- *@
-            <CipherAutoComplete Label="@($"אחראי {ObjectName}")" Icon="@Icons.Person" />
-
-            @* -- Opening Date -- *@
+            <CipherWorker Label="@($"אחראי {ObjectName}")" />
             <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Start" />
 
             @if(ObjectName == "מערכת")
             {
-                @* -- Cleaning Date -- *@
                 <CipherDatePicker Label="תאריך איפוס" Icon="@Icons.Mop" />
-
-                @* -- Expiration Date -- *@
                 <CipherDatePicker Label="תאריך תפוגה" Icon="@Icons.Delete" />
             }
         </CipherComponentCard>
@@ -95,7 +88,7 @@
 
 @code {
     [Parameter]
-    public string ObjectName { get; set; } = "פרטי";
+    public string ObjectName { get; set; } = "מערכת";
 
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;

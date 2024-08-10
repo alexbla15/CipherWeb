@@ -25,9 +25,7 @@
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherPackageId />
-
-    @* -- MATERIAL -- *@
-    <CipherAutoComplete Icon="@Icons.Material" @bind-Value="pack.Material" Label="בחרו סוג" Data="@TestedData.MaterialTypes" />
+    <CipherMaterialType @bind-Value="pack.Material"/>
 
     @* -- SUB CATEGORY -- *@
     <CipherFormRow Icon="@Icons.Category">

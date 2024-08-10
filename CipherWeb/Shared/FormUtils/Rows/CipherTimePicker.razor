@@ -16,5 +16,5 @@
     public DateTime MaxTime { get; set; } = Convert.ToDateTime("23:59");
 }
 
-<CipherDatePicker Icon="@Icons.Time" Label="שעה" ShowTime="true" DateFormat="HH:mm" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
+<CipherDatePicker Icon="@Icons.Schedule" Label="שעה" ShowTime="true" DateFormat="HH:mm" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
                   Width="@Width" Disabled="@Disabled" Popup="@Popup" Value="@DateTime.Now"></CipherDatePicker>

@@ -13,14 +13,9 @@
             @* -- Name -- *@
             <CipherAutoComplete Icon="@Icons.Id" Label="שם תהליך" />
 
-            @* -- Material -- *@
-            <CipherAutoComplete Label="סוג החומר" Icon="@Icons.Material" />
-
-            @* -- Main Category -- *@
-            <CipherCategoryDropDown Label="שם קטגוריה ראשית" TextProperty="MainCategory" ValueProperty="MainCategory"></CipherCategoryDropDown>
-
-            @* -- Mask -- *@
-            <CipherAutoComplete Label="סדרה (***)" Icon="@Icons.Password" MinLength="1" MaxLength="3" />
+            <CipherMaterialType />
+            <CipherMainCategory />
+            <CipherMask/>
 
             @* -- Default destination -- *@
             <CipherAutoComplete Label="ייעוד" Icon="@Icons.Process" />
