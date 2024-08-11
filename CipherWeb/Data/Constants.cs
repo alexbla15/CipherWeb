@@ -85,15 +85,6 @@ namespace CipherWeb.Data
     {
             sysA, sysB, sysC, sysD, sysE
     };
-        public static List<Package> packages = new List<Package>
-        {
-            new Package { Uuid=1, Id = "111.1", BrutMass=10M, NetMass=9M, Vessel=vessels[0], System=sysA},
-            new Package { Uuid=2, Id = "111.2", BrutMass=10.5M, NetMass=0.5M, Vessel=vessels[0], System=sysA } ,
-            new Package { Uuid=3, Id = "321.3", BrutMass=9.5M, NetMass=0.5M , Vessel = vessels[1], System=sysA},
-            new Package { Uuid=4, Id = "145.4", BrutMass=0.5M, NetMass=0.5M , Vessel = vessels[2], System=sysA},
-            new Package { Uuid=5, Id = "987.6", BrutMass=0.5M, NetMass=0.5M , Vessel = vessels[3], System=sysA},
-            new Package { Uuid=6, Id = "1234.2", BrutMass=10.5M, NetMass=10M, Vessel=vessels[3], System=sysA }
-        };
 
 
         public static List<char> ImproperChars =

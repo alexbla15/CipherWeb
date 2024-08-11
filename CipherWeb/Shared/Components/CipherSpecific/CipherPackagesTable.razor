@@ -1,6 +1,6 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@Constants.packages" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@TestedData.Packages" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
 
@@ -13,7 +13,7 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Package" DataSource="@Constants.packages" RowsPerPage="@RowsPerPage"
+        <CipherDataGrid Cipher_TItem="Package" DataSource="@TestedData.Packages" RowsPerPage="@RowsPerPage"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" />
     </ComponentContent>

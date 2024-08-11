@@ -60,7 +60,7 @@
     private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
     private CipherDataAggregater dataAggregater = new CipherDataAggregater();
 
-    private List<Package> rows = Constants.packages;
+    private List<Package> rows = TestedData.Packages;
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
     class ExampleSummary
@@ -133,7 +133,7 @@
     {
         rows = new List<Package>();
 
-        List<string> vessels = Constants.packages.Select(x => x.Vessel.Id).Distinct().ToList();
+        List<string> vessels = TestedData.Packages.Select(x => x.Vessel.Id).Distinct().ToList();
 
         foreach (StorageSystem sys in Constants.systems)
         {
@@ -143,8 +143,8 @@
                     {
                         System = sys,
                         Vessel = ves,
-                        BrutMass = Constants.packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum(),
-                        NetMass = Constants.packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum()
+                        BrutMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum(),
+                        NetMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum()
                     });
             }
         }
