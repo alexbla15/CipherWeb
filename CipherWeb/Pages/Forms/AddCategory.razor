@@ -1,26 +1,17 @@
 ﻿@page "/forms/AddCategory"
 
-@inject NotificationService NotificationService
-@inject ICipherInfo _db
-
 <PageTitle>קטגוריה חדשה</PageTitle>
 
 <CipherComponentCard Underline="true" WithCard="false" Title="הזנת קטגוריה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherFormInfo Title="וודאו את פרטי ההזנה" />
-
     <CipherComponentCard Title="פרטי הקטגוריה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherMaterialType />
         <CipherMainCategory />
-
-        @* -- Name -- *@
-        <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="שם קטגוריה" />
-
+        <CipherCategory />
         <CipherMask />
-
-        @* -- Default destination -- *@
-        <CipherAutoComplete Label="ייעוד" Icon="@Icons.Cipher.Process" />
+        <CipherDestination/>
     </CipherComponentCard>
 
-    <CipherComments Title="הערות על הקטגוריה" />
+    <CipherComments />
     <CipherSubmit ActionText="נפתחה קטגוריה תמיסה לחומר מגנזיום. קטגוריה זו תקבל את הסדרה 111."></CipherSubmit>
 </CipherComponentCard>

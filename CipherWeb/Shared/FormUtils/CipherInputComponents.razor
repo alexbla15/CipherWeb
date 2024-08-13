@@ -39,19 +39,31 @@
     /// <summary>
     /// Add a component to the memory.
     /// </summary>
-    private void AddComponent()
+    async Task AddComponent()
     {
-        if (components == from_packs.Count)
-        {
-            Package new_pack = new Package() { Uuid = components + 1 };
+        // Create a new Restriction object with a unique ID
+        Package pack = new Package()
+            {
+                Uuid = from_packs.Count + 1
+            };
 
-            // from_packs.Add(new_pack);
+        // Add the new restriction to the existing list
+        from_packs.Add(pack);
 
-            components += 1;
-            CustomDataGrid.InsertRow(new_pack);
+        // Ensure the grid is properly bound by reassigning the list
+        //from_packs = new List<Package>(from_packs);
 
-            ShowHelpText = false;
-        }
+
+        //CustomDataGrid.Data = from_packs;
+        StateHasChanged();
+        //await CustomDataGrid.RefreshDataAsync();
+
+        components = from_packs.Count;
+
+        ShowHelpText = false;
+
+
+        await CustomDataGrid.RefreshDataAsync();
     }
 
     /// <summary>
@@ -61,43 +73,6 @@
     public decimal GetTotal()
     {
         return from_packs.Sum(pack => pack.BrutMass);
-    }
-
-
-    /// <summary>
-    /// Edits a package-component.
-    /// </summary>
-    /// <param name="pack"></param>
-    /// <returns></returns>
-    async Task EditRow(Package pack)
-    {
-        // prevent editing of two rows in parallel
-        if (CustomDataGrid.Count == from_packs.Count)
-        {
-            old_pack = new Package
-                {
-                    Uuid = pack.Uuid,
-                    BrutMass = pack.BrutMass,
-                    Id = pack.Id
-                };
-
-            from_packs.Remove(pack);
-            await CustomDataGrid.EditRow(pack);
-        }
-    }
-
-    /// <summary>
-    /// Cancels edit of a package-component.
-    /// </summary>
-    /// <param name="pack"></param>
-    /// <returns></returns>
-    async Task CancelEdit(Package pack)
-    {
-        pack.Uuid = old_pack.Uuid;
-        pack.BrutMass = old_pack.BrutMass;
-        pack.Id = old_pack.Id;
-
-        await SaveRow(pack);
     }
 
     /// <summary>
@@ -141,19 +116,6 @@
 
         ShowHelpText = true;
     }
-
-    /// <summary>
-    /// Saves a package-component to the memory.
-    /// </summary>
-    /// <param name="pack"></param>
-    /// <returns></returns>
-    async Task SaveRow(Package pack)
-    {
-        from_packs.Add(pack);
-
-        await CustomDataGrid.UpdateRow(pack);
-        await CustomDataGrid.RefreshDataAsync();
-    }
 }
 
 <CipherComponentCard Title="@Title">
@@ -168,31 +130,26 @@
         {
             <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>
-                <RadzenDataGridColumn TItem="Package" Property="Uuid" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
-                <RadzenDataGridColumn TItem="Package" Property="Id" Title="תעודה" Width="37%" TextAlign="@TdTextAlign">
-                    <EditTemplate Context="pack">
-                        <CipherAutoComplete Data="TestedData.Packages" TextProperty="Id" @bind-Value="@pack.Id" />
-                    </EditTemplate>
+                <RadzenDataGridColumn Width="10%" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="pack">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
+                    </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="37%" TextAlign="@TdTextAlign">
-                    <EditTemplate Context="pack">
+                <RadzenDataGridColumn TItem="Package" Property="Uuid" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
+                <RadzenDataGridColumn TItem="Package" Property="Id" Title="תעודה" Width="40%" TextAlign="@TdTextAlign">
+                    <Template Context="pack">
+                        <CipherAutoComplete Data="TestedData.Packages" TextProperty="Id" @bind-Value="@pack.Id" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="40%" TextAlign="@TdTextAlign">
+                    <Template Context="pack">
                         <CipherNumeric @bind-Value="@pack.BrutMass" />
-                    </EditTemplate>
+                    </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()
                     </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn Width="14%" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                    <Template Context="pack">
-                        <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(pack))" @onclick:stopPropagation="true" />
-                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
-                    </Template>
-                    <EditTemplate Context="pack">
-                        <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(pack))" />
-                        <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(pack))" />
-                    </EditTemplate>
                 </RadzenDataGridColumn>
             </Columns>
         </RadzenDataGrid>

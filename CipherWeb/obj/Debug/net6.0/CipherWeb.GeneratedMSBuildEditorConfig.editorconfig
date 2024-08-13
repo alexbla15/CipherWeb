@@ -172,6 +172,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YUdyb3VwZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherEditableDataGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRWRpdGFibGVEYXRhR3JpZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherFormCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRm9ybUNhcmQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -234,6 +238,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherRestriction.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzdHJpY3Rpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherSystemRestictions.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyU3lzdGVtUmVzdGljdGlvbnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherStepDescription.razor]
@@ -328,8 +336,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckFtb3VudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckNhdGVnb3J5LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherDatePicker.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckRhdGVQaWNrZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherDestination.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlckRlc3RpbmF0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherLocation.razor]
@@ -350,6 +366,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherPackageId.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclBhY2thZ2VJZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherSystemType.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclN5c3RlbVR5cGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherTimePicker.razor]

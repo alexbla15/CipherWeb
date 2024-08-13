@@ -45,6 +45,11 @@
             border-top-right-radius:0;
             border-bottom-right-radius:0";
     }
+
+    protected override void OnInitialized()
+    {
+        Title ??= "הערות";
+    }
 }
 
 <CipherComponentCard Title="@Title" @ref=Card Width="@Width" WithCard="@WithCard">

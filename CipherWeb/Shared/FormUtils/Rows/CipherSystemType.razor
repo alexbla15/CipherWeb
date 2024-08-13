@@ -1,0 +1,10 @@
+﻿@inherits CipherAutoComplete
+
+<CipherAutoComplete Label="@Label" Icon="@Icon" />
+@code {
+    protected override void OnInitialized()
+    {
+        Label ??= "סוג המערכת";
+        Icon ??= @Icons.Cipher.Type;
+    }
+}

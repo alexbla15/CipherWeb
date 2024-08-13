@@ -47,6 +47,14 @@ namespace CipherWeb.Shared.Components.Buttons
             Icon = Icons.Documents.Delete._Delete;
         }
     }
+    public partial class CipherDeleteAllButton : CipherButton
+    {
+        public CipherDeleteAllButton() : base()
+        {
+            Variant = Variant.Outlined;
+            Icon = Icons.Documents.Delete.DeleteSweep;
+        }
+    }
 
     public partial class CipherEditButton : CipherButton
     {

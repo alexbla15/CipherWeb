@@ -1,0 +1,159 @@
+﻿@inherits CipherComponentCard
+
+<CipherComponentCard Title="@Title">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+        <CipherDeleteAllButton Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+    </Buttons>
+
+    <ChildContent>
+        @if (ShowHelpText)
+        {
+            <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
+        }
+        <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="!components.Equals(0)">
+            <Columns>
+                <RadzenDataGridColumn Width="10%" TItem="Restriction" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="restriction">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(restriction))" @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Restriction" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
+                <RadzenDataGridColumn TItem="Restriction" Property="Material" Title="חומר" Width="40%" TextAlign="@TdTextAlign">
+                    <Template Context="restriction">
+                        <CipherAutoComplete @bind-Value="@restriction.Material" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Restriction" Property="Category" Title="קטגוריה" Width="40%" TextAlign="@TdTextAlign">
+                    <Template Context="restriction">
+                        <CipherAutoComplete @bind-Value="@restriction.Category" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    [Parameter]
+    public string ObjectName { get; set; } = "מערכת";
+
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; }
+
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת מגבלה";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת מגבלות";
+
+    public class Restriction
+    {
+        public int Id { get; set; }
+        public string Material { get; set; }
+        public string Category { get; set; }
+        public decimal MaxAmount { get; set; }
+    }
+
+    private RadzenDataGrid<Restriction> CustomDataGrid;
+    private List<Restriction> restrictions = new List<Restriction>();
+
+    private bool ShowHelpText = true;
+    private int components = 0;
+
+    protected override void OnInitialized()
+    {
+        Title ??= $"מגבלות {ObjectName}";
+        HelpText = GetHelpText();
+    }
+
+    private string GetHelpText()
+    {
+        return $"במסך זה ניתן להוסיף מגבלות אחסון ל{ObjectName}. להוספה לחצו על כפתור ההוספה למעלה";
+    }
+
+    /// <summary>
+    /// Add a component to the memory.
+    /// </summary>
+    private void AddComponent()
+    {
+        // Create a new Restriction object with a unique ID
+        Restriction newRestriction = new Restriction()
+            {
+                Id = restrictions.Count + 1,
+                Material = string.Empty,
+                Category = string.Empty,
+                MaxAmount = 0
+            };
+
+        // Add the new restriction to the existing list
+        restrictions.Add(newRestriction);
+
+        // Ensure the grid is properly bound by reassigning the list
+        restrictions = new List<Restriction>(restrictions);
+
+        components = restrictions.Count;
+        ShowHelpText = false;
+
+        // Trigger the UI to re-render with the updated data
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Deletes a package-component from memory & view.
+    /// </summary>
+    /// <param name="restriction"></param>
+    /// <returns></returns>
+    async Task DeleteRow(Restriction restriction)
+    {
+        // Create a new list without the item to be removed
+        restrictions = restrictions.Where(r => r.Id != restriction.Id).Select(r => new Restriction
+            {
+                Id = r.Id,
+                Material = r.Material,
+                Category = r.Category,
+                MaxAmount = r.MaxAmount
+            }).ToList();
+
+        // Reassign IDs after deletion
+        for (int i = 0; i < restrictions.Count; i++)
+        {
+            restrictions[i].Id = i + 1;
+        }
+
+        components = restrictions.Count;
+
+        // Fully reload the grid
+        await CustomDataGrid.Reload();
+
+        // Update visibility of the help text
+        ShowHelpText = restrictions.Count == 0;
+    }
+
+    /// <summary>
+    /// Clears all package-components from memory & view.
+    /// </summary>
+    /// <returns></returns>
+    async Task DeleteAll()
+    {
+        restrictions.Clear();
+        components = 0;
+        CustomDataGrid.Data = restrictions;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+}
