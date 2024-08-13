@@ -10,7 +10,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherAddBtn() : base()
         {
-            Icon = Icons.AddCircleOutline;
+            Icon = Icons.Symbols.Plus.AddCircleOutline;
             Padding = "5px";
         }
     }
@@ -23,7 +23,7 @@ namespace CipherWeb.Shared.Components.Buttons
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
             Size = ButtonSize.Large;
-            Icon = Icons.Cancel;
+            Icon = Icons.Documents.Delete.Cancel;
             Text = "ביטול";
         }
     }
@@ -34,7 +34,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
-            Icon = Icons.Close;
+            Icon = Icons.Documents.Delete.Close;
         }
     }
 
@@ -44,7 +44,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
-            Icon = Icons.Delete;
+            Icon = Icons.Documents.Delete._Delete;
         }
     }
 
@@ -54,7 +54,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Primary;
             ColorShade = Shade.Default;
-            Icon = Icons.Edit;
+            Icon = Icons.Documents.Edit._Edit;
         }
     }
 
@@ -62,7 +62,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherSearchButton() : base()
         { 
-            Icon = Icons.Search;
+            Icon = Icons.SearchAndFilter.Search;
         }
     }
 
@@ -73,7 +73,7 @@ namespace CipherWeb.Shared.Components.Buttons
             Variant = Variant.Outlined;
             ButtonType = ButtonType.Submit;
             Size = ButtonSize.Large;
-            Icon = Icons.Save;
+            Icon = Icons.Documents.Edit.Save;
             Text = "שמירה";
             ColorStyle = ButtonStyle.Success;
             ColorShade = Shade.Dark;
@@ -84,7 +84,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherSuccessButton() : base()
         {
-            Icon = Icons.Done;
+            Icon = Icons.Symbols.V.Done;
             ColorStyle = ButtonStyle.Success;
             ColorShade = Shade.Dark;
         }
@@ -95,7 +95,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherPDFButton() : base()
         {
             HelpText = "ייצוא ל-PDF";
-            Icon = Icons.PDF;
+            Icon = Icons.Documents.PDF;
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
             Variant = Variant.Outlined;

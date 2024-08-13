@@ -5,86 +5,66 @@
 
 <PageTitle>מערכת חדשה</PageTitle>
 
-<CipherSteps>
-    <RadzenStepsItem Text="פרטי הזנה">
-        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
+<CipherComponentCard Underline="true" WithCard="false" Title="@($"הוספת {ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherComponentCard Title="@($"פרטי ה{ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        @* -- Name -- *@
+        <CipherAutoComplete Icon="@Icons.Cipher.Id" @bind-Value="sys.Description" Label="@($"שם ה{ObjectName}")" />
 
-        <CipherComponentCard Title="@($"פרטי ה{ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            @* -- Name -- *@
-            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="sys.Description" Label="@($"שם ה{ObjectName}")" />
-            
-            @if(ObjectName == "מערכת")
+        @if (ObjectName == "מערכת")
+        {
+            @* -- Type -- *@
+            <CipherAutoComplete Label="@($"סוג ה{ObjectName}")" Icon="@Icons.Cipher.Type" />
+        }
+
+        @if (ObjectName != "מבנה")
+        {
+            <CipherLocation Label="מיקום" />
+        }
+        <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Arrows.Start" />
+    </CipherComponentCard>
+
+    <CipherComponentCard Title="@($"מגבלות {ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <Buttons>
+            <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+            <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+        </Buttons>
+
+        <ChildContent>
+            @if (ShowHelpText)
             {
-                @* -- Type -- *@
-                <CipherAutoComplete Label="@($"סוג ה{ObjectName}")" Icon="@Icons.Type" />
+                <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
             }
+            <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="!components.Equals(0)">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Restriction" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
+                    <RadzenDataGridColumn TItem="Restriction" Property="Material" Title="חומר" Width="37%" TextAlign="@TdTextAlign">
+                        <EditTemplate Context="restriction">
+                            <CipherAutoComplete @bind-Value="@restriction.Material" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Restriction" Property="Category" Title="קטגוריה" Width="37%" TextAlign="@TdTextAlign">
+                        <EditTemplate Context="restriction">
+                            <CipherAutoComplete @bind-Value="@restriction.Category" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="14%" TItem="Restriction" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                        <Template Context="restriction">
+                            <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(restriction))" @onclick:stopPropagation="true" />
+                            <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(restriction))" @onclick:stopPropagation="true" />
+                        </Template>
+                        <EditTemplate Context="restriction">
+                            <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(restriction))" />
+                            <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(restriction))" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </ChildContent>
+    </CipherComponentCard>
 
-            @if (ObjectName != "מבנה")
-            {
-                <CipherLocation Label="מיקום" />
-            }
-
-            <CipherWorker Label="@($"אחראי {ObjectName}")" />
-            <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Start" />
-
-            @if(ObjectName == "מערכת")
-            {
-                <CipherDatePicker Label="תאריך איפוס" Icon="@Icons.Mop" />
-                <CipherDatePicker Label="תאריך תפוגה" Icon="@Icons.Delete" />
-            }
-        </CipherComponentCard>
-
-        <CipherComponentCard Title="@($"מגבלות {ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            <Buttons>
-                <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
-                <CipherButton Icon="@Icons.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
-            </Buttons>
-
-            <ChildContent>
-                @if (ShowHelpText)
-                {
-                    <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
-                }
-                <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="!components.Equals(0)">
-                    <Columns>
-                        <RadzenDataGridColumn TItem="Restriction" Property="Id" Title="#" Width="10%" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" />
-                        <RadzenDataGridColumn TItem="Restriction" Property="Material" Title="חומר" Width="37%" TextAlign="@TdTextAlign">
-                            <EditTemplate Context="restriction">
-                                <CipherAutoComplete @bind-Value="@restriction.Material"/>
-                            </EditTemplate>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Restriction" Property="Category" Title="קטגוריה" Width="37%" TextAlign="@TdTextAlign">
-                            <EditTemplate Context="restriction">
-                                <CipherAutoComplete @bind-Value="@restriction.Category"  />
-                            </EditTemplate>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="Restriction" Property="MaxAmount" Title="מגבלת כמות [גר']" Width="37%" TextAlign="@TdTextAlign">
-                            <EditTemplate Context="restriction">
-                                <CipherNumeric @bind-Value="@restriction.MaxAmount" />
-                            </EditTemplate>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn Width="14%" TItem="Restriction" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                            <Template Context="restriction">
-                                <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(restriction))" @onclick:stopPropagation="true" />
-                                <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(restriction))" @onclick:stopPropagation="true" />
-                            </Template>
-                            <EditTemplate Context="restriction">
-                                <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(restriction))" />
-                                <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(restriction))" />
-                            </EditTemplate>
-                        </RadzenDataGridColumn>
-                    </Columns>
-                </RadzenDataGrid>
-            </ChildContent>
-        </CipherComponentCard>
-
-        <CipherComments Title="@($"הערות על ה{ObjectName}")" />
-    </RadzenStepsItem>
-
-    <RadzenStepsItem Text="סיכום ואישור">
-        <CipherSubmit ActionText="@($"נפתחה {ObjectName} בשם A. ה{ObjectName} ללא מגבלות.")"></CipherSubmit>
-    </RadzenStepsItem>
-</CipherSteps>
+    <CipherComments Title="@($"הערות על ה{ObjectName}")" />
+    <CipherSubmit ActionText="@($"{ObjectName} בשם A. ה{ObjectName} ללא מגבלות.")"></CipherSubmit>
+</CipherComponentCard>
 
 @code {
     [Parameter]

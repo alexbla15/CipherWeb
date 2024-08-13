@@ -1,32 +1,23 @@
 ﻿@page "/forms/addvessel"
 
 @inject NotificationService NotificationService
-@inject ICipherInfo _db
 
 <PageTitle>כלי חדש</PageTitle>
 
-<CipherSteps>
-    <RadzenStepsItem Text="פרטי הזנה">
-        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
+<CipherComponentCard Underline="true" WithCard="false" Title="הזנת כלי חדש" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        @* -- Name -- *@
+        <CipherAutoComplete Icon="@Icons.Cipher.Id" @bind-Value="ves.Id" Label="שם הכלי" />
 
-        <CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            @* -- Name -- *@
-            <CipherAutoComplete Icon="@Icons.Id" @bind-Value="ves.Id" Label="שם הכלי" />
+        <CipherVesselType />
+        <CipherLocation Label="מיקום הכלי" />
+        <CipherMaterialType />
+        <CipherCategoryDropDown></CipherCategoryDropDown>
+    </CipherComponentCard>
 
-            <CipherVesselType/>
-            <CipherLocation Label="מיקום הכלי" />
-            <CipherMaterialType />
-            <CipherCategoryDropDown></CipherCategoryDropDown>
-            <CipherAmount Label="מגבלת כמות" Icon="@Icons.Scale" />
-        </CipherComponentCard>
-
-        <CipherComments Title="כתבו הערות על הכלי" />
-    </RadzenStepsItem>
-
-    <RadzenStepsItem Text="סיכום ואישור">
-        <CipherSubmit ActionText="כלי בשם A1 נפתח במעבדה B. הכלי יכיל עד 5 גרם מגנזיום מסוג תמיסת מגנזיום."></CipherSubmit>
-    </RadzenStepsItem>
-</CipherSteps>
+    <CipherComments Title="כתבו הערות על הכלי" />
+    <CipherSubmit ActionText="כלי בשם A1 נפתח במעבדה B. הכלי יכיל עד 5 גרם מגנזיום מסוג תמיסת מגנזיום."></CipherSubmit>
+</CipherComponentCard>
 
 @code {
     private Vessel ves = new Vessel();

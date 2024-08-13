@@ -145,3 +145,16 @@ F:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.dll
 F:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\refint\CipherData.dll
 F:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.pdb
 F:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\ref\CipherData.dll
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.dll
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\refint\CipherData.dll
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.pdb
+D:\Projects\CipherWeb\CipherData\bin\Debug\net6.0\CipherData.deps.json
+D:\Projects\CipherWeb\CipherData\bin\Debug\net6.0\CipherData.dll
+D:\Projects\CipherWeb\CipherData\bin\Debug\net6.0\CipherData.pdb
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.csproj.AssemblyReference.cache
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.AssemblyInfoInputs.cache
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.AssemblyInfo.cs
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.csproj.CoreCompileInputs.cache
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\CipherData.sourcelink.json
+D:\Projects\CipherWeb\CipherData\obj\Debug\net6.0\ref\CipherData.dll

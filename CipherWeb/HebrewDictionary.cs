@@ -19,6 +19,7 @@ namespace CipherWeb
             BuildHeaders.Add(new("Product", "תוצר"));
             BuildHeaders.Add(new("Creator", "יוצר/ת"));
             BuildHeaders.Add(new("CreationDate", "תאריך יצירה"));
+            BuildHeaders.Add(new("Uid", "מספר סידורי"));
             return BuildHeaders;
         }
 

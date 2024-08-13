@@ -2,6 +2,12 @@
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherWorker />
-    <CipherDatePicker />
-    <CipherTimePicker />
+    <CipherDatePicker ShowTime="true" TimeOnly="false"/>
 </CipherComponentCard>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי ההזנה";
+    }
+}

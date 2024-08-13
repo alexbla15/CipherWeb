@@ -1,10 +1,11 @@
 ﻿@inherits CipherNumeric
 
-<CipherNumeric Icon="@Icons.Scale" Label="@Label"/>
+<CipherNumeric Icon="@Icon" Label="@Label"/>
 
 @code {
     protected override void OnInitialized()
     {
         Label ??= "מסה [גר']";
+        Icon ??= Icons.Professions.Construction.Scale;
     }
 }

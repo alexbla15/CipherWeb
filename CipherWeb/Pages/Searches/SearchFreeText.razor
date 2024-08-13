@@ -18,9 +18,9 @@
                     </CipherComponentCard>
                 </RadzenAccordionItem>
                 <br />
-                <RadzenAccordionItem Text="@($"כלים ({Constants.vessels.Count()})")">
+                <RadzenAccordionItem Text="@($"כלים ({TestedData.Vessels.Count()})")">
                     <CipherComponentCard>
-                        <CipherDataGrid DataSource="@Constants.vessels" WithTotalFooter=false></CipherDataGrid>
+                        <CipherDataGrid DataSource="@TestedData.Vessels" WithTotalFooter=false></CipherDataGrid>
                     </CipherComponentCard>
                 </RadzenAccordionItem>
                 <RadzenAccordionItem Text="@($"מיקומים ({Constants.systems.Count()})")">
@@ -34,11 +34,6 @@
 </CipherComponentCard>
 
 @code {
-    public Task getVessels()
-    {
-        return _db.GetVessels();
-    }
-
     public async Task OpenPackage()
     {
         await DialogService.OpenAsync("תעודה",

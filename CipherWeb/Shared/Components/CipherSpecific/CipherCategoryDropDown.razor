@@ -2,7 +2,7 @@
 
 @inject ICipherInfo _db
 
-<CipherFormRow Icon="@Icons.Category" >
+<CipherFormRow Icon="@Icon" >
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string"
                             Style="width:300px" Data=@subCategories TextProperty="@TextProperty" ValueProperty="@ValueProperty"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
@@ -38,6 +38,6 @@
     protected override async Task OnInitializedAsync()
     {
         Label ??= "חיפוש קטגוריה";
-        //subCategories = await _db.GetSubCategories();
+        Icon ??= Icons.Symbols.Category;
     }
 }

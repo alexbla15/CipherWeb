@@ -1,19 +1,12 @@
 ﻿@page "/forms/addpackage"
 
 @inject NotificationService NotificationService
-@inject ICipherInfo _db
 
 <PageTitle>תעודה חדשה</PageTitle>
-
-<CipherSteps>
-    <RadzenStepsItem Text="פרטי הזנה">
-        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
-        <CipherInputComponents />
-        <CipherPackageInfo Title="הזינו את פרטי התעודה החדשה" pack="new Package()" />
-        <CipherComments Title="כתבו הערות על התנועה" />
-    </RadzenStepsItem>
-
-    <RadzenStepsItem Text="סיכום ואישור">
-         <CipherSubmit ActionText="תעודה 1111 נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם."></CipherSubmit>
-    </RadzenStepsItem>
-</CipherSteps>
+<CipherComponentCard Underline="true" WithCard="false" Title="תעודה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherFormInfo />
+    <CipherInputComponents />
+    <CipherPackageInfo Title="הזינו את פרטי התעודה החדשה" pack="new Package()" />
+    <CipherComments Title="כתבו הערות על התנועה" />
+    <CipherSubmit ActionText="תעודה 1111 נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם."></CipherSubmit>
+</CipherComponentCard>

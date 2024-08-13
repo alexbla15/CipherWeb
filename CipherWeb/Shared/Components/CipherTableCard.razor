@@ -15,11 +15,11 @@
         }
         @if (!string.IsNullOrEmpty(ExpandPath))
         {
-            <CipherNavButton Icon="@Icons.OpenInNew" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
+            <CipherNavButton Icon="@Icons.Arrows.Squared.OpenInNew" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
         }
         @if (Sharable)
         {
-            <CipherButton Icon="@Icons.Mail" HelpText="שיתוף" Variant="Variant.Outlined" />
+            <CipherButton Icon="@Icons.Communication.Mail._Mail" HelpText="שיתוף" Variant="Variant.Outlined" />
         }
     </Buttons>
     <ChildContent>

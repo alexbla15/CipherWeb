@@ -14,7 +14,14 @@
     /// </summary>
     [Parameter]
     public DateTime MaxTime { get; set; } = Convert.ToDateTime("23:59");
+
+    protected override void OnInitialized()
+    {
+        Label ??= "שעה";
+        DateFormat ??= "HH:mm";
+        Icon ??= Icons.Time.Clock.Schedule;
+    }
 }
 
-<CipherDatePicker Icon="@Icons.Schedule" Label="שעה" ShowTime="true" DateFormat="HH:mm" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
-                  Width="@Width" Disabled="@Disabled" Popup="@Popup" Value="@DateTime.Now"></CipherDatePicker>
+<CipherDatePicker Icon="@Icon" Label="@Label" ShowTime="true" DateFormat="@DateFormat" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
+                  Width="@Width" Disabled="@Disabled" Popup="@Popup" Value="@DateTime.Now"/>

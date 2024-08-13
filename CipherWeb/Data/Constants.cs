@@ -66,15 +66,6 @@ namespace CipherWeb.Data
         public static List<string> Reactants = new List<string> { "מגיב א", "מגיב ב", "מגיב ג" };
         public static List<string> Products = new List<string> { "תוצר א", "תוצר ב", "תוצר ג" };
 
-
-        public static List<Vessel> vessels = new List<Vessel>
-    {
-        new Vessel { Id = "V1", Uuid=1110},
-        new Vessel { Id = "V2", Uuid=1112 } ,
-        new Vessel { Id = "V3", Uuid=1113 },
-        new Vessel { Id = "V4", Uuid=1114 }
-    };
-
         public static StorageSystem sysA = new StorageSystem { Description = "A", Uuid = 1110 };
         public static StorageSystem sysB = new StorageSystem { Description = "B", Uuid = 1111 };
         public static StorageSystem sysC = new StorageSystem { Description = "C", Uuid = 1112 };

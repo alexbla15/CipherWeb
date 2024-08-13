@@ -32,14 +32,14 @@
                 <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
                     <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
-                        <CipherButton Icon="@Icons.AccountCircle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
+                        <CipherButton Icon="@Icons.Social.SinglePerson.AccountCircle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
                                       Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
                                       Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
 
                         @* -- FAST ACTIONS -- *@
-                        <CipherNavButton Icon="@Icons.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
+                        <CipherNavButton Icon="@Icons.UiComponents.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
                                          Path="/Settings" HelpTextPosition="TooltipPosition.Bottom" />
-                        <CipherNavButton Icon="@Icons.QuestionMark" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
+                        <CipherNavButton Icon="@Icons.Symbols.QuestionMark._QuestionMark" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
                                          Path="@CipherNavLinks.Information.Href" HelpTextPosition="TooltipPosition.Bottom" />
                     </RadzenStack>
                 </RadzenStack>
@@ -87,12 +87,12 @@
     {
         var result = await DialogService.OpenAsync("", ds =>
     @<RadzenStack Gap="1rem" Style="text-align:right;" dir="rtl" AlignItems="AlignItems.Center">
-        <CipherAutoComplete Icon="@Icons.Account_Old" Label="תצוגה נוכחית" Value="@Roles.CurrnetRole" Style="width: 200px" Disabled="true" />
-        <CipherAutoComplete Icon="@Icons.Account_New" Label="תצוגה חדשה" Style="width: 200px" @bind-Value=@NewRole Data="@Roles.Get()" />
+        <CipherAutoComplete Icon="@Icons.Cipher.Account_Old" Label="תצוגה נוכחית" Value="@Roles.CurrnetRole" Style="width: 200px" Disabled="true" />
+        <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="תצוגה חדשה" Style="width: 200px" @bind-Value=@NewRole Data="@Roles.Get()" />
         <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenStack Orientation="Orientation.Horizontal">
-                <CipherButton Icon="@Icons.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
-                <CipherButton Icon="@Icons.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
+                <CipherButton Icon="@Icons.Symbols.V.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
+                <CipherButton Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
             </RadzenStack>
         </RadzenStack>
         </RadzenStack>

@@ -4,6 +4,10 @@
 
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
+        <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Value="@ReportId.ToString()" Disabled="true"></CipherAutoComplete>
+                <CipherAutoComplete Label="שם הדוח" Icon="@Icons.Documents.Edit._Edit"></CipherAutoComplete>
+        </CipherComponentCard>
         <CipherParametrization></CipherParametrization>
     </RadzenStepsItem>
 
@@ -19,8 +23,8 @@
 
         <CipherComponentCard Title="תצוגה מקדימה">
             <Buttons>
-                <CipherButton Icon="@Icons.Refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
-                <CipherButton Icon="@Icons.Save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Arrows.Rounded.Refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Documents.Edit.Save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
                 <CipherExcelButton Data="@db_events"></CipherExcelButton>
                 <CipherPDFButton></CipherPDFButton>
             </Buttons>
@@ -42,10 +46,8 @@
             <CipherComponentCard Title="סיום" >
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
                     <CipherSubmitButton Size="ButtonSize.Medium" />
-                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Cancel" 
+                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" 
                     Text="ביטול" Path="@CipherNavLinks.Reports.Href" Size="ButtonSize.Medium"></CipherNavButton>
-                    <CipherButton Variant="Variant.Outlined" Icon="@Icons.Star" Text="הוספה למועדפים"></CipherButton>
-                    <CipherButton Variant="Variant.Outlined" Icon="@Icons.Mail" Text="שיתוף"></CipherButton>
                 </RadzenStack>
             </CipherComponentCard>
         </CipherComponentCard>
@@ -63,6 +65,8 @@
     private List<Package> rows = TestedData.Packages;
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
+    private int ReportId;
+
     class ExampleSummary
     {
         public string Location { get; set; }
@@ -74,6 +78,9 @@
     protected override async Task OnInitializedAsync()
     {
         db_events = await _db.GetEvents();
+
+        Random random = new Random();
+        ReportId = random.Next(1000,9999);
     }
 
     /// <summary>
@@ -133,11 +140,11 @@
     {
         rows = new List<Package>();
 
-        List<string> vessels = TestedData.Packages.Select(x => x.Vessel.Id).Distinct().ToList();
+        List<string> vessels = TestedData.Vessels.Select(x => x.Id).Distinct().ToList();
 
         foreach (StorageSystem sys in Constants.systems)
         {
-            foreach (Vessel ves in Constants.vessels)
+            foreach (Vessel ves in TestedData.Vessels)
             {
                 rows.Add(new Package()
                     {

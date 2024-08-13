@@ -36,8 +36,8 @@
 
 <CipherComponentCard Title="תפוקה שנתית">
     <Buttons>
-        <CipherButton Icon="@Icons.TableView" HelpText="תצוגת טבלה" Variant="Variant.Outlined" Click="@SwitchView" />
-        <CipherButton Icon="@Icons.Summary" HelpText="תצוגת גרף" Variant="Variant.Outlined" Click="@SwitchView" />
+        <CipherButton Icon="@Icons.UiComponents.Table.TableView" HelpText="תצוגת טבלה" Variant="Variant.Outlined" Click="@SwitchView" />
+        <CipherButton Icon="@Icons.Cipher.Summary" HelpText="תצוגת גרף" Variant="Variant.Outlined" Click="@SwitchView" />
         <CipherExcelButton Data="@GetProductionData()" FileName="yearly_output" />
         <CipherPDFButton />
     </Buttons>
@@ -255,9 +255,9 @@
     }
 
     List<SearchParameter> searchParameters = new List<SearchParameter> {
-        new SearchParameter {Icon=Icons.Process, Label="תהליכים", Options=proc_options, BindValue=selectedProcs},
-        new SearchParameter {Icon=Icons.Input, Label="חומרי הגלם", Options=input_options, BindValue=selectedReagents},
-        new SearchParameter {Icon=Icons.Output, Label="תוצרים", Options=output_options, BindValue=selectedProducts }
+        new SearchParameter {Icon=Icons.Cipher.Process, Label="תהליכים", Options=proc_options, BindValue=selectedProcs},
+        new SearchParameter {Icon=Icons.Arrows.Squared.Input, Label="חומרי הגלם", Options=input_options, BindValue=selectedReagents},
+        new SearchParameter {Icon=Icons.Arrows.Squared.Output, Label="תוצרים", Options=output_options, BindValue=selectedProducts }
     };
 
     void SwitchView()

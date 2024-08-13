@@ -3,7 +3,7 @@
 <CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height"
                 Visible="@Visible" Float="@Float" MarginRight="@MarginRight" MarginTop="@MarginTop" MarginBottom="@MarginBottom" BackgroundColor="@BackgroundColor">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
-        <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" />
+        <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" Underline="@Underline" />
         <div style="@($"width:100%;padding-right:{HeaderContentPaddingRight}; display: flex; justify-content: {ContentJustify};")">
             @HeaderContent
         </div>
@@ -92,4 +92,10 @@
     /// </summary>
     [Parameter]
     public bool WithButtons { get; set; } = true;
+
+    /// <summary>
+    /// Decide if title is underlined.
+    /// </summary>
+    [Parameter]
+    public bool Underline { get; set; } = false;
 }

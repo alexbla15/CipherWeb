@@ -6,7 +6,7 @@
 @inject ExcelService excelService
 @inject IJSRuntime JSRuntime
 
-<CipherButton HelpText="ייצוא ל-EXCEL" Icon="@Icons.Excel" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
+<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
               Click="@(args => ExportToCSV())" Variant="Variant.Outlined" />
 
 @code
@@ -22,6 +22,12 @@
     /// </summary>
     [Parameter]
     public IEnumerable<object> Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HelpText ??= "ייצוא ל-EXCEL";
+        Icon ??= Icons.Cipher.Excel;
+    }
 
     private async Task ExportToCSV()
     {

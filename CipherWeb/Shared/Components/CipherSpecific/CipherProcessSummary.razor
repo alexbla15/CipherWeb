@@ -3,11 +3,11 @@
 <CipherFormCard MaxWidth="@MaxWidth" Width="@Width">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
         <CipherText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5" />
-        <CipherButton Icon="@Icons.CalendarViewDay" HelpText="@DayViewText" Size="@ButtonsSize" Variant="@DayVariant"
+        <CipherButton Icon="@Icons.UiComponents.Layout.CalendarViewDay" HelpText="@DayViewText" Size="@ButtonsSize" Variant="@DayVariant"
                       ColorShade="Shade.Darker" Click="@DayView" />
-        <CipherButton Icon="@Icons.CalendarViewMonth" HelpText="@MonthViewText" Size="@ButtonsSize" Variant="@MonthVariant"
+        <CipherButton Icon="@Icons.UiComponents.Table.CalendarViewMonth" HelpText="@MonthViewText" Size="@ButtonsSize" Variant="@MonthVariant"
                       ColorShade="Shade.Darker" Click="@MonthView" />
-        <CipherButton Icon="@Icons.Year" HelpText="@YearViewText" Size="@ButtonsSize" Variant="@YearVariant"
+        <CipherButton Icon="@Icons.Cipher.Year" HelpText="@YearViewText" Size="@ButtonsSize" Variant="@YearVariant"
                       ColorShade="Shade.Darker" Click="@YearView" />
     </RadzenStack>
 
@@ -17,7 +17,7 @@
             {
                 <CipherFormCard Height="80px" Width="150px" Variant="Variant.Text">
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="0.5rem">
-                        <CipherButton Size="ButtonSize.Large" Width="50px" Icon="@Icons.Material" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary"></CipherButton>
+                        <CipherButton Size="ButtonSize.Large" Width="50px" Icon="@Icons.Cipher.Material" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary"></CipherButton>
                         <RadzenStack Gap="0">
                             <CipherText TextAlign="TextAlign.Right" TextColor="@Colors.PrimaryDark" Text="@CountProcesses()[key].ToString()" />
                             <CipherText Wrap="true" TextStyle="TextStyle.Overline" StyleClass="TextStyle.Overline" Text="@key" TextAlign="TextAlign.Right" />

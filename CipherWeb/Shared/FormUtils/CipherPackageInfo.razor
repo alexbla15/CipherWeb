@@ -14,12 +14,10 @@
     private string halfColWidth = "25px";
 
     private List<Category> subCategories = new List<Category>();
-    private List<Vessel> vessels = new List<Vessel>();
 
     protected override async Task OnInitializedAsync()
     {
         //subCategories = await _db.GetSubCategories();
-        //vessels = await _db.GetVessels();
     }
 }
 
@@ -28,7 +26,7 @@
     <CipherMaterialType @bind-Value="pack.Category.MaterialType"/>
 
     @* -- SUB CATEGORY -- *@
-    <CipherFormRow Icon="@Icons.Category">
+    <CipherFormRow Icon="@Icons.Symbols.Category">
         <RadzenDropDownDataGrid @bind-Value=@pack.Category.Name Placeholder="חיפוש קטגוריה" SearchTextPlaceholder="חיפוש..."
                                 Style="width:300px"
                                 Data=@subCategories TextProperty="Name" ValueProperty="Name"
@@ -41,8 +39,8 @@
     </CipherFormRow>
 
     @* -- VESSEL -- *@
-    <CipherFormRow Icon="@Icons.Vessel">
-        <RadzenDropDownDataGrid @bind-Value=@pack.Vessel.Id Data=@vessels TextProperty="Id" ValueProperty="Id" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
+    <CipherFormRow Icon="@Icons.Cipher.Vessel">
+        <RadzenDropDownDataGrid @bind-Value=@pack.Vessel.Id Data=@TestedData.Vessels TextProperty="Id" ValueProperty="Id" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
                                 AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="width:300px">
             <Columns>
                 <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="@colWidth" />

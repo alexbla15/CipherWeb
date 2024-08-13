@@ -8,6 +8,12 @@
     public bool Bold { get; set; } = false;
 
     /// <summary>
+    /// Decide if the text should be underlined. Default is not.
+    /// </summary>
+    [Parameter]
+    public bool Underline { get; set; } = false;
+
+    /// <summary>
     /// Decide if the text is wrappable to more than one line. Default is not.
     /// </summary>
     [Parameter]
@@ -103,10 +109,17 @@
     [Parameter]
     public string MarginLeft { get; set; }
 
+    /// <summary>
+    /// Text decoration of text
+    /// </summary>
+    [Parameter]
+    public string TextDecoration { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
         StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
+        TextDecoration = (Underline) ? "underline" : TextDecoration;
         Style = GetTextStyle();
         Style = (Bold) ? Style + "font-weight: bold;" : Style;
     }
@@ -127,7 +140,8 @@
             margin-bottom: {MarginBottom};
             margin-top: {MarginTop};
             margin-right: {MarginRight};
-            margin-left: {MarginLeft};";
+            margin-left: {MarginLeft};
+            text-decoration: {TextDecoration};";
         ;
     }
 }

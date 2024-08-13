@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Projects\\Version20240713\\CipherWeb\\",
+  "WorkspaceRootPath": "D:\\Projects\\CipherWeb\\CipherWeb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\version20240713\\cipherweb\\pages\\forms\\updatepackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updatepackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\transferamount.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\transferamount.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\version20240713\\cipherweb\\shared\\components\\ciphernumeric.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\ciphernumeric.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\relocation.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\relocation.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\version20240713\\cipherweb\\shared\\components\\cipherautocomplete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherautocomplete.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addpackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addpackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\version20240713\\cipherweb\\shared\\formutils\\ciphersearchrow.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\formutils\\ciphersearchrow.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\version20240713\\cipherweb\\shared\\components\\ciphersiteheader.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\ciphersiteheader.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\formutils\\cipherforminfo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\formutils\\cipherforminfo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,66 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UpdatePackage.razor",
-              "DocumentMoniker": "D:\\Projects\\Version20240713\\CipherWeb\\Pages\\Forms\\UpdatePackage.razor",
-              "RelativeDocumentMoniker": "Pages\\Forms\\UpdatePackage.razor",
-              "ToolTip": "D:\\Projects\\Version20240713\\CipherWeb\\Pages\\Forms\\UpdatePackage.razor",
-              "RelativeToolTip": "Pages\\Forms\\UpdatePackage.razor",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAANAAAA",
+              "Title": "TransferAmount.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\TransferAmount.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\TransferAmount.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\TransferAmount.razor",
+              "RelativeToolTip": "Pages\\Forms\\TransferAmount.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-04T12:57:17.924Z",
+              "WhenOpened": "2024-08-12T11:37:46.569Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CipherNumeric.razor",
-              "DocumentMoniker": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherNumeric.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherNumeric.razor",
-              "ToolTip": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherNumeric.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherNumeric.razor",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAowF8AAAAvAAAA",
+              "Title": "Relocation.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\Relocation.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\Relocation.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\Relocation.razor",
+              "RelativeToolTip": "Pages\\Forms\\Relocation.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-04T12:41:50.113Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CipherAutoComplete.razor",
-              "DocumentMoniker": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherAutoComplete.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherAutoComplete.razor",
-              "ToolTip": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherAutoComplete.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherAutoComplete.razor",
-              "ViewState": "AQIAAIoAAAAAAAAAAAAAAJgAAABJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-04T06:33:27.219Z",
+              "WhenOpened": "2024-08-12T11:35:36.688Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "CipherSearchRow.razor",
-              "DocumentMoniker": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\FormUtils\\CipherSearchRow.razor",
-              "RelativeDocumentMoniker": "Shared\\FormUtils\\CipherSearchRow.razor",
-              "ToolTip": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\FormUtils\\CipherSearchRow.razor",
-              "RelativeToolTip": "Shared\\FormUtils\\CipherSearchRow.razor",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAA9AAAA",
+              "Title": "CipherFormInfo.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\FormUtils\\CipherFormInfo.razor",
+              "RelativeDocumentMoniker": "Shared\\FormUtils\\CipherFormInfo.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\FormUtils\\CipherFormInfo.razor",
+              "RelativeToolTip": "Shared\\FormUtils\\CipherFormInfo.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-04T06:29:41.129Z",
+              "WhenOpened": "2024-08-12T11:34:43.415Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CipherSiteHeader.razor",
-              "DocumentMoniker": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherSiteHeader.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherSiteHeader.razor",
-              "ToolTip": "D:\\Projects\\Version20240713\\CipherWeb\\Shared\\Components\\CipherSiteHeader.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherSiteHeader.razor",
-              "ViewState": "AQIAABUAAAAAAAAAAAAAABQAAAAUAAAA",
+              "DocumentIndex": 2,
+              "Title": "AddPackage.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddPackage.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddPackage.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddPackage.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddPackage.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-04T06:27:02.584Z",
+              "WhenOpened": "2024-08-12T11:27:15.242Z",
               "EditorCaption": ""
             }
           ]

@@ -4,19 +4,13 @@
 
 <PageTitle>העברה בין תעודות</PageTitle>
 
-<CipherSteps>
-    <RadzenStepsItem Text="פרטי הזנה">
-        <CipherFormInfo Title="וודאו את פרטי ההזנה" />
-        <CipherComponentCard Title="הזינו פרטים על תעודה מוסרת ומקבלת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-                <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Input" />
-                <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Output" />
-                <CipherAmount Label="מסה מועברת" />
-        </CipherComponentCard>
-
-        <CipherComments Title="כתבו הערות על התנועה" />
-    </RadzenStepsItem>
-
-    <RadzenStepsItem Text="סיכום ואישור">
-        <CipherSubmit ActionText="תעודה 111 מסרה 5 גרם לתעודה 222. הפעולה נעשתה על ידי אבי רון בתאריך 14.7.24." />
-    </RadzenStepsItem>
-</CipherSteps>
+<CipherComponentCard Underline="true" WithCard="false" Title="העברה בין תעודות" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherFormInfo />
+    <CipherComponentCard Title="הזינו פרטים על תעודה מוסרת ומקבלת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Arrows.Squared.Input" />
+        <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Arrows.Squared.Output" />
+        <CipherAmount Label="מסה מועברת" />
+    </CipherComponentCard>
+    <CipherComments Title="כתבו הערות על התנועה" />
+    <CipherSubmit ActionText="תעודה 111 מסרה 5 גרם לתעודה 222. הפעולה נעשתה על ידי אבי רון בתאריך 14.7.24." />
+</CipherComponentCard>

@@ -27,7 +27,7 @@
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="Name" Label="שם המיקום" Data="@Constants.vessels"></CipherAutoComplete>
+            <CipherAutoComplete TextProperty="Name" Label="שם המיקום" Data="@TestedData.Vessels"></CipherAutoComplete>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>
@@ -35,22 +35,22 @@
             <Tabs>
                 <RadzenTabsItem Text="פרטים">
                     @* -- System ID -- *@
-                    <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- SYSTEM NAME -- *@
-                    <CipherAutoComplete Label="שם" Icon="@Icons.Location" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="שם" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- SYSTEM DESCRIPTION -- *@
-                    <CipherAutoComplete Label="תיאור" Icon="@Icons.Description" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="תיאור" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- RESPONSIBLE WORKER -- *@
-                    <CipherAutoComplete Label="עובד אחראי" Icon="@Icons.AccountCircle" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="עובד אחראי" Icon="@Icons.Social.SinglePerson.AccountCircle" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- FATHER SYSTEM NAME -- *@
-                    <CipherAutoComplete Label="נמצא במיקום" Icon="@Icons.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="נמצא במיקום" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- UNIT -- *@
-                    <CipherAutoComplete Label="יחידה" Icon="@Icons.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="יחידה" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- OPEN DATE -- *@
                     <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
@@ -62,13 +62,13 @@
                     <CipherDatePicker Label="תאריך איפוס" Disabled="@ReadOnly" Width="@RowWidth" />
 
                     @* -- LEFTOVERS -- *@
-                    <CipherNumeric Label="שאריות" Icon="@Icons.Delete" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- RESTRICTIONS -- *@
-                    <CipherAutoComplete Label="מגבלות" Icon="@Icons.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
 
                     @* -- COMMENTS -- *@
-                    <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="תעודות">
