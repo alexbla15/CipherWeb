@@ -60,7 +60,7 @@
     else
     {
         <RadzenTemplateForm TItem="object">
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height: {Height}")">
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height: {Height}")" AllowFloatingLabel="true">
                 <div style="@($"padding-right:{PaddingHorizontal}; padding-left:{PaddingHorizontal}; padding-top:{PaddingTop}; padding-bottom:{PaddingBottom}; width: {Width}")">
                     @ChildContent
                 </div>

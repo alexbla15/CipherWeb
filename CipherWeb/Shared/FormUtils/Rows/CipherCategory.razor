@@ -1,11 +1,19 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits CipherFormRow
 
 @code {
+    private List<Category> subCategories = new() {new Category(){Name="A"}};
+
     protected override void OnInitialized()
     {
         Label ??= "שם קטגוריה";
-        Icon ??= Icons.Cipher.Id;
+        Icon ??= Icons.Symbols.Category;
     }
 }
 
-<CipherAutoComplete Icon="@Icon" Label="@Label" />
+<CipherFormRow Icon="@Icon">
+    <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false" TextProperty="Name" ValueProperty="Name" AllowClear="true" TValue="string" Style="@($"width: {Width}")">
+        <Template>
+            @Label: @((context as Category).Name)
+        </Template>
+    </RadzenDropDown>
+</CipherFormRow>

@@ -583,6 +583,26 @@
     direction:rtl;
 }
 
+.rz-listbox-filter-container, 
+.rz-dropdown-filter-container, 
+.rz-multiselect-filter-container {
+    direction: rtl;
+}
+
+.rz-listbox-filter-container .rz-inputtext, 
+.rz-dropdown-filter-container .rz-inputtext, 
+.rz-multiselect-filter-container .rz-inputtext {
+    padding-right: 0.5rem;
+}
+
+.rz-clear .rz-multiselect-label-container, .rz-clear .rz-dropdown-label {
+    padding-right: 0;
+}
+
+.rz-dropdown-clear-icon {
+    right: auto;
+    left: calc(var(--rz-dropdown-trigger-icon-width) + 0.5rem);
+}
     /* ------------------ MENU ------------------ */
 
 .rz-menuitem .rz-menuitem-link {
