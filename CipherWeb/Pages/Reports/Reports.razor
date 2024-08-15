@@ -7,16 +7,7 @@
 <CipherTableCard Title="חיפוש דוח">
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Report" DataSource="@AllReports" WithAddedColumns="true"
-                        GridFilterMode="FilterMode.Advanced" AllowFilter="true">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Report" Title="פעולות" Width="15%">
-                    <Template Context="report">
-                        <CipherNavButton ColorStyle="ButtonStyle.Primary" Icon="@Icons.Arrows.Squared.OpenInNew" HelpText="פתיחה בחלון חדש" Path="@report.Path"></CipherNavButton>
-                        <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Awards.Star" HelpText="הוספה למועדפים" />
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+                        GridFilterMode="FilterMode.Advanced" AllowFilter="true"/>
     </ComponentContent>
 </CipherTableCard>
 

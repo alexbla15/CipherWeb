@@ -2,7 +2,7 @@
 
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" Sharable="@Sharable">
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
     <ComponentContent>
     <CipherDataGrid Cipher_TItem="Category" DataSource="@subCategories"
                     GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>

@@ -1,11 +1,13 @@
-﻿@inherits CipherComponentCard
+﻿@inject TooltipService tooltipService
+
+@inherits CipherComponentCard
 
 <CipherComponentCard MaxWidth="@MaxWidth" Width="@Width" Title="@Title" WithCard="@WithCard" WithButtons="@WithButtons" Height="@Height">
     <HeaderContent>
         @HeaderContent
     </HeaderContent>
     <Buttons>
-        @if(ExcelExport)
+        @if (ExcelExport)
         {
             <CipherExcelButton FileName="@FileTitle" Data="@DataSource" />
         }
@@ -20,6 +22,12 @@
         @if (Sharable)
         {
             <CipherButton Icon="@Icons.Communication.Mail._Mail" HelpText="שיתוף" Variant="Variant.Outlined" />
+        }
+        @if (IsReport)
+        {
+            <CipherButton @bind-Value=@IsFavourite Variant="@(IsFavourite ? Variant.Filled : Variant.Outlined)" 
+            ColorStyle="@(IsFavourite ? ButtonStyle.Primary : ButtonStyle.Danger)" ColorShade=Shade.Default
+                          Icon="@Icons.Awards.Star" HelpText="@(IsFavourite ? "הסרה ממועדפים" : "הוספה למועדפים" )" Click="@Toggle" />
         }
     </Buttons>
     <ChildContent>
@@ -45,7 +53,7 @@
     /// </summary>
     [Parameter]
     public string FileTitle { get; set; }
-    
+
     /// <summary>
     /// Path for the expanded version of a table.
     /// </summary>
@@ -69,4 +77,40 @@
     /// </summary>
     [Parameter]
     public bool Sharable { get; set; } = false;
+
+    /// <summary>
+    /// If true, this is a report created with CustomReport.
+    /// </summary>
+    [Parameter]
+    public bool IsReport { get; set; } = false;
+
+    /// <summary>
+    /// Is the report saved into favourites of user?
+    /// </summary>
+    [Parameter]
+    public bool IsFavourite { get; set; } = false;
+
+
+    void ShowTooltipWithHtml(ElementReference elementReference, string HelpText, TooltipOptions options = null)
+    {
+        if (!string.IsNullOrWhiteSpace(HelpText))
+        {
+            tooltipService.Open(elementReference, ds =>
+    @<div dir="rtl"> @HelpText </div>, options);
+        }
+    }
+
+    void HideTooltipWithHtml(ElementReference elementReference, string HelpText, TooltipOptions options = null)
+    {
+        if (!string.IsNullOrWhiteSpace(HelpText))
+        {
+            tooltipService.Close();
+        }
+    }
+
+    public void Toggle()
+    {
+        IsFavourite = !IsFavourite;
+        tooltipService.Close();
+    }
 }

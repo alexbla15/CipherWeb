@@ -26,7 +26,7 @@
     /// Text that will be shown within a popup to explain shortly the button's purpose.
     /// </summary>
     [Parameter]
-    public string HelpText { get; set; } = "";
+    public string HelpText { get; set; }
 
     /// <summary>
     /// Button's width. Units: px / %.
@@ -227,7 +227,7 @@
         }
 
         .CipherButton.PrimaryDefault::before {
-            background-color: var(--rz-primary-light);
+            background-color: var(--rz-primary-dark);
         }
 
         .CipherButton.PrimaryLight::before {

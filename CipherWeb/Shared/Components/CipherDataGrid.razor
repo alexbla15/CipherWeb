@@ -110,6 +110,8 @@
     private Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
     private DateTime dynamicDate;
 
+    private IList<Cipher_TItem> selectedRow;
+
     protected override async Task OnInitializedAsync()
     {
         if (FetchDataFunc != null)
@@ -135,6 +137,7 @@
     <p><em>טוען...</em></p>
 }
 <RadzenDataGrid @ref="CustomDataGrid"
+                @bind-Value=@selectedRow
                 Visible="@Visible"
                 TItem="Cipher_TItem"
                 Data="@DataSource"

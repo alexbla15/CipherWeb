@@ -226,25 +226,35 @@
     direction: ltr;
 }
 
+    .rz-selectable tbody tr.rz-data-row.rz-state-highlight > td {
+        background-color: var(--rz-primary-lighter);
+    }
+
+    .rz-selectable tbody tr.rz-data-row.rz-state-highlight .rz-cell-data {
+        color: var(--rz-primary);
+        font-weight: 700;
+    }
+
 .rz-grid-table {
     direction: rtl;
 }
-.rz-datatable-data td:not(:last-child),
-.rz-grid-table td:not(:last-child) {
-    border-right: 0;
-}
 
-.rz-datatable-tfoot td:not(:last-child),
-.rz-grid-table tfoot td:not(:last-child) {
-    border-right: 0;
-    background-color: var(--rz-primary-dark);
-}
+    .rz-datatable-data td:not(:last-child),
+    .rz-grid-table td:not(:last-child) {
+        border-right: 0;
+    }
 
-.rz-datatable-data tr td:last-child:not(.rz-composite-cell),
-.rz-grid-table tr td:last-child:not(.rz-composite-cell) {
-    border-right: none;
-    font-weight: bolder;
-}
+    .rz-datatable-tfoot td:not(:last-child),
+    .rz-grid-table tfoot td:not(:last-child) {
+        border-right: 0;
+        background-color: var(--rz-primary-dark);
+    }
+
+    .rz-datatable-data tr td:last-child:not(.rz-composite-cell),
+    .rz-grid-table tr td:last-child:not(.rz-composite-cell) {
+        border-right: none;
+        font-weight: bolder;
+    }
 
 .rz-datatable-data td:last-child:not(.rz-composite-cell) .rz-cell-data {
     text-align: right;
@@ -310,7 +320,6 @@
     }
 
 /* ------------------ GROUP HEADER ------------------ */
-
 .rz-group-header {
     background-color: var(--rz-series-5);
 }
@@ -384,25 +393,25 @@
     direction: rtl;
 }
 
-.rz-paginator .rzi-caret-left:before {
-    /*DUE TO RTL DIRECTIONALITY*/
-    content: "navigate_next";
-}
+    .rz-paginator .rzi-caret-left:before {
+        /*DUE TO RTL DIRECTIONALITY*/
+        content: "navigate_next";
+    }
 
-.rz-paginator .rzi-caret-right:before {
-    /*DUE TO RTL DIRECTIONALITY*/
-    content: "navigate_before";
-}
+    .rz-paginator .rzi-caret-right:before {
+        /*DUE TO RTL DIRECTIONALITY*/
+        content: "navigate_before";
+    }
 
-.rz-paginator .rzi-step-backward:before {
-    /*DUE TO RTL DIRECTIONALITY*/
-    content: "last_page";
-}
+    .rz-paginator .rzi-step-backward:before {
+        /*DUE TO RTL DIRECTIONALITY*/
+        content: "last_page";
+    }
 
-.rz-paginator .rzi-step-forward:before {
-    /*DUE TO RTL DIRECTIONALITY*/
-    content: "first_page";
-}
+    .rz-paginator .rzi-step-forward:before {
+        /*DUE TO RTL DIRECTIONALITY*/
+        content: "first_page";
+    }
 
 /* ------------------ ACCORDION ------------------ */
 
