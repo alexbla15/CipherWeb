@@ -36,7 +36,8 @@
                 <RadzenTabsItem Text="פרטים">
                     <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
                         <Buttons>
-                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddStorageSystem.Href" />
+                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddStorageSystem.Href" Variant="Variant.Outlined" />
+                            <CipherButton Icon="@Icons.Security.Shield" HelpText="אישור בטיחות" Variant="Variant.Outlined" />
                         </Buttons>
                         <ChildContent>
                             <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />

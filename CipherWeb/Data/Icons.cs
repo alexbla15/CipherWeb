@@ -394,6 +394,7 @@ namespace CipherWeb.Data
         {
             public const string Lock = "lock";
             public const string Password = "password";
+            public const string Shield = "shield";
         }
 
         public class Social
