@@ -4,7 +4,9 @@
 
 <CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@systems" Height="@Height"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath">
-
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddStorageSystem.Href" HelpText="הוספת מערכת" Variant="Variant.Outlined" />
+    </AdditionalButtons>
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center">
             <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>

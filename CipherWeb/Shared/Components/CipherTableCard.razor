@@ -7,6 +7,7 @@
         @HeaderContent
     </HeaderContent>
     <Buttons>
+        @AdditionalButtons
         @if (ExcelExport)
         {
             <CipherExcelButton FileName="@FileTitle" Data="@DataSource" />
@@ -89,6 +90,12 @@
     /// </summary>
     [Parameter]
     public bool IsFavourite { get; set; } = false;
+
+    /// <summary>
+    /// More buttons for table card
+    /// </summary>
+    [Parameter]
+    public RenderFragment AdditionalButtons { get; set; }
 
 
     void ShowTooltipWithHtml(ElementReference elementReference, string HelpText, TooltipOptions options = null)

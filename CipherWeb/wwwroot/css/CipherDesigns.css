@@ -51,6 +51,7 @@
     --rz-body-font-size: 1rem;
     --rz-header-background-color: var(--cipher-header-background-color);
     --rz-scrollbar-color: var(--rz-primary-dark);
+    --rz-input-disabled-background-color: transparent;
 }
 
 * {

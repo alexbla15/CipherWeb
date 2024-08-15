@@ -34,29 +34,24 @@
         <RadzenTabs>
             <Tabs>
                 <RadzenTabsItem Text="פרטים">
-                    @* -- Vessels ID -- *@
-                    <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                        <Buttons>
+                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddVessel.Href" />
+                        </Buttons>
+                        <ChildContent>
+                            <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Icon="@Icons.Cipher.Type" Label="סוג כלי" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="שם כלי" Icon="@Icons.Cipher.Vessel" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Icon="@Icons.Cipher.Location" Label="מיקום" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
+                            <CipherAutoComplete Label="מגבלות איחסון" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                        </ChildContent>
+                    </CipherComponentCard>
+                </RadzenTabsItem>
 
-                    @* -- VESSEL TYPE -- *@
-                    <CipherAutoComplete Icon="@Icons.Cipher.Type" Label="סוג כלי" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- VESSEL NAME -- *@
-                    <CipherAutoComplete Label="כלי" Icon="@Icons.Cipher.Vessel" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- LOCATION -- *@
-                    <CipherAutoComplete Icon="@Icons.Cipher.Location" Label="מיקום" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- OPEN DATE -- *@
-                    <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                    @* -- EXPIRATION DATE -- *@
-                    <CipherDatePicker Label="תאריך תפוגה" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                    @* -- RESTRICTIONS -- *@
-                    <CipherAutoComplete Label="מגבלות איחסון" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- COMMENTS -- *@
-                    <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                <RadzenTabsItem Text="תעודות מוכלות">
+                    <CipherPackagesTable WithCard="false" WithHeaderContent="false" Title="" />
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="תנועות">

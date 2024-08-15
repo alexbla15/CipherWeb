@@ -34,35 +34,22 @@
         <RadzenTabs>
             <Tabs>
                 <RadzenTabsItem Text="פרטים">
-                    @* -- System ID -- *@
-                    <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- SYSTEM NAME -- *@
-                    <CipherAutoComplete Label="שם" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- SYSTEM DESCRIPTION -- *@
-                    <CipherAutoComplete Label="תיאור" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- RESPONSIBLE WORKER -- *@
-                    <CipherAutoComplete Label="עובד אחראי" Icon="@Icons.Social.SinglePerson.AccountCircle" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- FATHER SYSTEM NAME -- *@
-                    <CipherAutoComplete Label="נמצא במיקום" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- UNIT -- *@
-                    <CipherAutoComplete Label="יחידה" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- OPEN DATE -- *@
-                    <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                    @* -- LEFTOVERS -- *@
-                    <CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- RESTRICTIONS -- *@
-                    <CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                    @* -- COMMENTS -- *@
-                    <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                    <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                        <Buttons>
+                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddStorageSystem.Href" />
+                        </Buttons>
+                        <ChildContent>
+                            <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="שם" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="תיאור" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="נמצא במיקום" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="יחידה" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
+                            <CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                        </ChildContent>
+                    </CipherComponentCard>
                 </RadzenTabsItem>
 
                 <RadzenTabsItem Text="תעודות">

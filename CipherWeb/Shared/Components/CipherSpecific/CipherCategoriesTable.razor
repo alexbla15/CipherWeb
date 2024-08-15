@@ -3,9 +3,12 @@
 @inherits CipherTableCard
 
 <CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
+    </AdditionalButtons>
     <ComponentContent>
-    <CipherDataGrid Cipher_TItem="Category" DataSource="@subCategories"
-                    GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
+        <CipherDataGrid Cipher_TItem="Category" DataSource="@subCategories"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group" />
     </ComponentContent>
 </CipherTableCard>
 

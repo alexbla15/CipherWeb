@@ -3,7 +3,9 @@
 <CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@TestedData.Packages" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
-
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined"/>
+    </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
         {
