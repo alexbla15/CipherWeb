@@ -68,13 +68,6 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Property="Comments" Title="הערות" />
-
-                <RadzenDataGridColumn TItem="Event" Title="פרטי תנועה" Width="150px">
-                    <Template>
-                        <CipherButton Text="הרחבה" ButtonStyle="ButtonStyle.Primary" Icon="@Icons.Arrows.Squared.OpenInNew" Variant="Variant.Flat" Shade="Shade.Lighter"
-                                      Size="ButtonSize.Medium" Click="@OpenEvent" />
-                    </Template>
-                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Title="סטטוס" Width="200px">
                     <Template Context="ev">
                         <CipherButton Disabled="true" Width="150px" Text="@ev.Valid.ToString()" ColorStyle="@GetStatusColor(ev.Valid.ToString())" ColorShade="Shade.Default" />

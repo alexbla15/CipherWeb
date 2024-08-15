@@ -4,6 +4,9 @@
 @typeparam Cipher_TItem
 
 @inject ICipherInfo _db
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
 @inherits RadzenDataGrid<Cipher_TItem>
 
 @code {
@@ -111,6 +114,7 @@
     private DateTime dynamicDate;
 
     private IList<Cipher_TItem> selectedRow;
+    private NavigationManager Navigation;
 
     protected override async Task OnInitializedAsync()
     {
@@ -129,6 +133,35 @@
     int? GetOrder(string columnName)
     {
         return ColumnsOrder?.TryGetValue(columnName, out var order) == true ? order : null;
+    }
+
+    public async void Navigate(string path)
+    {
+        await JSRuntime.InvokeAsync<object>("open", path, "_blank");
+    }
+
+    async void OnCellDoubleClick(DataGridCellMouseEventArgs<Cipher_TItem> args)
+    {
+        if (args.Column.Title.Contains("מערכת"))
+        {
+            Navigate(CipherNavLinks.LocationSearch.Href);
+        }
+        else if (args.Column.Title.Contains("כלי"))
+        {
+            Navigate(CipherNavLinks.VesselSearch.Href);
+        }
+        else if (args.Column.Title.Contains("תעודה") || args.Column.Title.Contains("תעודות"))
+        {
+            Navigate(CipherNavLinks.PackageSearch.Href);
+        }
+        else if (args.Column.Title.Contains("תחום"))
+        {
+            Navigate(CipherNavLinks.DepartmentSearch.Href);
+        }
+        else if (args.Column.Title.Contains("מבנה"))
+        {
+            Navigate(CipherNavLinks.LocationSearch.Href);
+        }
     }
 }
 
@@ -157,6 +190,7 @@
                 HideGroupedColumn="@HideGroupedColumn"
                 Density="@Density.Compact"
                 Style="text-align: right"
+                CellDoubleClick="OnCellDoubleClick"
                 AndOperatorText="וגם"
                 OrOperatorText="או"
                 ClearFilterText="ביטול"

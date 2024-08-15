@@ -1,8 +1,5 @@
-﻿using CipherData;
-using CipherData.Models;
-using CipherWeb.Data;
+﻿using CipherWeb.Data;
 using System.Reflection;
-using System.Security.Cryptography;
 
 namespace CipherWeb
 {
@@ -71,6 +68,5 @@ namespace CipherWeb
                 Where(x => Constants.ImproperChars.Contains(x)).ToList()[0].ToString() : null;
             return foundChar;
         }
-
     }
 }
