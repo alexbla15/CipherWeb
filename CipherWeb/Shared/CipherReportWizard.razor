@@ -1,4 +1,5 @@
 ﻿@inject ICipherInfo _db
+@inject DialogService DialogService
 
 @inherits CipherSteps
 
@@ -45,7 +46,7 @@
             <CipherEventsTable WithHeaderContent="false" WithCard="true"></CipherEventsTable>
             <CipherComponentCard Title="סיום" >
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
-                    <CipherSubmitButton Size="ButtonSize.Medium" />
+                    <CipherSubmitButton Size="ButtonSize.Medium" Click="@OpenSavingDialog"/>
                     <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" 
                     Text="ביטול" Path="@CipherNavLinks.Reports.Href" Size="ButtonSize.Medium"></CipherNavButton>
                 </RadzenStack>
@@ -156,5 +157,24 @@
             }
         }
         SetColumnsOrder();
+    }
+
+
+    public async Task OpenSavingDialog()
+    {
+        await DialogService.OpenAsync("דוח חדש",
+
+        ds =>
+    @<CipherComponentCard WithCard="false">
+        <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            <CipherAutoComplete Label="מספר הדוח" Value="111111"/>
+            <CipherAutoComplete Label="שם הדוח" Value="הדוח שלי"/>
+            <CipherAutoComplete Label="מידור" Value="מוגבל"/>
+        </CipherComponentCard>
+        <br/>
+        <CipherButton Text="קישור לדוח" Icon="@Icons.Arrows.Squared.OpenInNew" Width="100%" />
+    </CipherComponentCard>
+    
+    , Constants.SetDialogOptions);
     }
 }
