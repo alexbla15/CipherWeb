@@ -268,6 +268,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSW1hZ2VzXENpcGhlckFjY291bnRJbWFnZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/Images/CipherIconsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSW1hZ2VzXENpcGhlckljb25zVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/Images/CipherLogo.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSW1hZ2VzXENpcGhlckxvZ28ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -366,6 +370,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherPackageId.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclBhY2thZ2VJZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherProcesses.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xSb3dzXENpcGhlclByb2Nlc3Nlcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/Rows/CipherSystemType.razor]

@@ -1,0 +1,16 @@
+﻿@inherits CipherFormRow
+
+<CipherFormRow Icon="@Icon" Label="@Label" Width="@Width">
+    <RadzenDropDown TValue="List<string>" Data=@Constants.Processes Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
+                    AllowFiltering="true"
+                    Chips=true Style="width: 100%;" />
+</CipherFormRow>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Label ??= "תהליכים";
+        Icon ??= Icons.Cipher.Process;
+        Width ??= "100%";
+    }
+}

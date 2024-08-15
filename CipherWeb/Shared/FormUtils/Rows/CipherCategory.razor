@@ -5,13 +5,15 @@
 
     protected override void OnInitialized()
     {
+        Width ??= "300px";
         Label ??= "שם קטגוריה";
         Icon ??= Icons.Symbols.Category;
     }
 }
 
-<CipherFormRow Icon="@Icon">
-    <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false" TextProperty="Name" ValueProperty="Name" AllowClear="true" TValue="string" Style="@($"width: {Width}")">
+<CipherFormRow Icon="@Icon" Width="@Width">
+    <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false" TextProperty="Name" ValueProperty="Name" 
+        AllowClear="true" TValue="string" Style="@($"width: {Width}")">
         <Template>
             @Label: @((context as Category).Name)
         </Template>

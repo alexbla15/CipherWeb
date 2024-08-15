@@ -3,13 +3,17 @@
 <PageTitle>קטגוריה חדשה</PageTitle>
 
 <CipherComponentCard Underline="true" WithCard="false" Title="הזנת קטגוריה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherFormInfo Title="וודאו את פרטי ההזנה" />
     <CipherComponentCard Title="פרטי הקטגוריה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherMaterialType />
-        <CipherMainCategory />
-        <CipherCategory />
+        <CipherAutoComplete Label="שם קטגוריה" Icon="@Icons.Symbols.Category"/>
         <CipherMask />
         <CipherDestination/>
+    </CipherComponentCard>
+
+    <CipherComponentCard Title="תהליכים">
+        <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
+            <CipherProcesses Icon="@Icons.Arrows.Squared.Input" Label="תהליכים יוצרים"/>
+            <CipherProcesses Icon="@Icons.Arrows.Squared.Output" Label="תהליכים צורכים"/>
+        </RadzenStack>
     </CipherComponentCard>
 
     <CipherComments />

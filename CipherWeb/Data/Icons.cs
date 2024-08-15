@@ -20,7 +20,7 @@ namespace CipherWeb.Data
         public class Arrows
         {
             public const string AirlineStops = "airline_stops";
-            public const string AltRout = "alt_rout";
+            public const string AltRoute = "alt_route";
             public const string Archive = "archive";
             public const string AssignmentReturn = "assignment_return";
             public const string AssignmentReturned = "assignment_returned";
@@ -80,7 +80,7 @@ namespace CipherWeb.Data
 
             public class Circled
             {
-                public const string ArrowCircle = "arrow_circle";
+                public const string ArrowCircleDown = "arrow_circle_down";
                 public const string ArrowCircleLeft = "arrow_circle_left";
                 public const string ArrowCircleRight = "arrow_circle_right";
                 public const string ArrowCircleUp = "arrow_circle_up";
@@ -104,8 +104,8 @@ namespace CipherWeb.Data
                 public const string Replay10 = "replay_10";
                 public const string Replay30 = "replay_30";
                 public const string ReplayCircleFilled = "replay_circle_filled";
-                public const string Reply = "replay";
-                public const string ReplyAll = "replay_all";
+                public const string Reply = "reply";
+                public const string ReplyAll = "reply_all";
                 public const string RestartAlt = "restart_alt";
                 public const string Rotate90DegreesCw = "rotate_90_degrees_cw";
                 public const string Rotate90DegreesCcw = "rotate_90_degrees_ccw";
@@ -130,9 +130,8 @@ namespace CipherWeb.Data
                 public const string ArrowDownward = "arrow_downward";
                 public const string ArrowDropDown = "arrow_drop_down";
                 public const string ArrowDropUp = "arrow_drop_up";
+                public const string ArrowBackIOsNew = "arrow_back_ios_new";
                 public const string ArrowForward = "arrow_forward";
-                public const string ArrowForwardIOs = "arrow_forward_iOS";
-                public const string ArrowForwardIOsNew = "arrow_forward_iOS_new";
                 public const string ArrowLeft = "arrow_left";
                 public const string ArrowOutward = "arrow_outward";
                 public const string ArrowRight = "arrow_right";
@@ -140,7 +139,7 @@ namespace CipherWeb.Data
                 public const string ArrowUpward = "arrow_upward";
                 public const string East = "east";
                 public const string Forward = "forward";
-                public const string KeyboardArrowDown = "keyboard_arrow_Down";
+                public const string KeyboardArrowDown = "keyboard_arrow_down";
                 public const string KeyboardArrowLeft = "keyboard_arrow_left";
                 public const string KeyboardArrowRight = "keyboard_arrow_right";
                 public const string KeyboardArrowUp = "keyboard_arrow_up";
@@ -158,7 +157,7 @@ namespace CipherWeb.Data
             {
                 public const string ExitToApp = "exit_to_app";
                 public const string Input = "input";
-                public const string IOsShare = "iOS_share";
+                public const string IOsShare = "ios_share";
                 public const string Login = "login";
                 public const string Logout = "logout";
                 public const string OpenInBrowser = "open_in_browser";
@@ -175,7 +174,7 @@ namespace CipherWeb.Data
             {
                 public const string Autorenew = "autorenew";
                 public const string Cached = "cached";
-                public const string ChanceCircle = "chance_circle";
+                public const string ChangeCircle = "change_circle";
                 public const string CompareArrows = "compare_arrows";
                 public const string FlipCameraAndroid = "flip_camera_android";
                 public const string MobiledataOff = "mobiledata_off";
@@ -218,7 +217,7 @@ namespace CipherWeb.Data
             public const string StarPurple500 = "star_outline";
             public const string StarRate = "star_rate";
             public const string Tour = "tour";
-            public const string WorkplacePrimium = "workplace_premium";
+            public const string WorkspacePrimium = "workspace_premium";
         }
 
         public class Communication
@@ -228,18 +227,18 @@ namespace CipherWeb.Data
             public const string Contactless = "contactless";
             public const string NoSim = "no_sim";
             public const string Share = "share";
-            public const string SignLanguage = "signLanguage";
+            public const string SignLanguage = "sign_language";
             public const string SimCard = "sim_card";
             public const string SimCardAlert = "sim_card_alert";
             public const string SimCardDownload = "sim_card_download";
             public const string Sip = "sip";
-            public const string Voicemail = "voicmail";
+            public const string Voicemail = "voicemail";
 
             public class Call
             {
                 public const string AddCall = "add_call";
                 public const string CallEnd = "call_end";
-                public const string DialPad = "dial_pad";
+                public const string DialPad = "dialpad";
                 public const string DialerSip = "dialer_sip";
                 public const string PermPhoneMsg = "perm_phone_msg";
                 public const string PhoneBluetoothSpeaker = "phone_bluetooth_speaker";
@@ -258,8 +257,30 @@ namespace CipherWeb.Data
 
             public class Chat
             {
+                public const string AddComment = "add_comment";
+                public const string Assistant = "assistant";
+                public const string _Chat = "chat";
+                public const string ChatBubble = "chat_bubble";
+                public const string ChatBubbleOutline = "chat_bubble_outline";
                 public const string Comment = "comment";
+                public const string CommentBank = "comment_bank";
+                public const string CommentsDisabled = "comments_disabled";
+                public const string Feedback = "feedback";
+                public const string Lyrics = "lyrics";
+                public const string MapsUgc = "maps_ugc";
+                public const string MarkUnreadChatAlt = "mark_unread_chat_alt";
+                public const string MarkChatRead = "mark_chat_read";
+                public const string Message = "message";
+                public const string ModeComment = "mode_comment";
+                public const string Mms = "mms";
                 public const string QA = "question_answer";
+                public const string QuickReply = "quickreply";
+                public const string RateReview = "rate_review";
+                public const string Reviews = "reviews";
+                public const string Sms = "sms";
+                public const string SpeakerNotes = "speaker_notes";
+                public const string SpeakerNotesOff = "speaker_notes_off";
+                public const string VoiceChat = "voice_chat";
             }
 
             public class Mail
@@ -350,7 +371,7 @@ namespace CipherWeb.Data
 
         public class Professions
         {
-            public const string Mop = "mop";
+            public const string CleaningServices = "cleaning_services";
 
             public class Construction
             {

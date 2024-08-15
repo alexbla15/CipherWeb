@@ -426,7 +426,10 @@
 }
 
 .rz-accordion-content {
-    display: flex
+    display: flex;
+    flex-wrap:wrap;
+    row-gap:5px;
+    column-gap:5px;
 }
 
 /* ------------------ TABVIEW ------------------ */
@@ -602,6 +605,14 @@
 .rz-dropdown-clear-icon {
     right: auto;
     left: calc(var(--rz-dropdown-trigger-icon-width) + 0.5rem);
+}
+
+.rz-dropdown-chips .rz-dropdown-chips-wrapper {
+     margin-right: 0; 
+    margin-left: 3rem;
+}
+.rz-multiselect-header {
+    direction: rtl;
 }
     /* ------------------ MENU ------------------ */
 
