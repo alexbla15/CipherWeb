@@ -1,12 +1,15 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits CipherFormRow
 
-<CipherAutoComplete Label="@Label" Icon="@Icon" Data="@Data" />
+<CipherFormRow Icon="@Icon">
+    <RadzenDropDown Placeholder="@Label" TValue="string" AllowFiltering="true"
+                            Style="width:300px" Data=@TestedData.MaterialTypes>
+    </RadzenDropDown>
+</CipherFormRow>
 
 @code {
     protected override async Task OnInitializedAsync()
     {
         Label ??= "סוג החומר";
         Icon ??= Icons.Cipher.Material;
-        Data ??= TestedData.MaterialTypes;
     }
 }

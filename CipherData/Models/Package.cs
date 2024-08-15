@@ -24,7 +24,6 @@ namespace CipherData.Models
         /// </summary>
         public Vessel Vessel { get; set; } = new Vessel();
 
-
         /// <summary>
         /// Location which contains the package
         /// </summary>

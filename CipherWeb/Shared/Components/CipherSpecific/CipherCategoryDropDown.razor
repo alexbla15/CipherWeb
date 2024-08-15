@@ -2,19 +2,25 @@
 
 @inject ICipherInfo _db
 
-<CipherFormRow Icon="@Icon" >
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string"
-                            Style="width:300px" Data=@subCategories TextProperty="@TextProperty" ValueProperty="@ValueProperty"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
+<CipherFormRow Icon="@Icon">
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string" Disabled="@Disabled"
+                            Data=@subCategories TextProperty="@TextProperty" ValueProperty="@ValueProperty"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="Name" Title="משנית" Width="@($"{2*ColumnWidth}px")" />
-            <RadzenDropDownDataGridColumn Property="MainCategory" Title="ראשית" Width="@($"{2*ColumnWidth}px")" />
-            <RadzenDropDownDataGridColumn Property="Id" Title="מספר קטגוריה" Width="@($"{ColumnWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="Id" Title="#" Width="@($"{ColumnWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="MaterialType" Title="סוג החומר" Width="@($"{2*ColumnWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="Name" Title="שם הקטגוריה" Width="@($"{2*ColumnWidth}px")" />
         </Columns>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
 
 @code {
+    /// <summary>
+    /// Is the drop down disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     /// <summary>
     /// Name of SubCategory property to be shown in the HMI
     /// </summary>
@@ -37,7 +43,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Label ??= "חיפוש קטגוריה";
+        Label ??= "קטגוריה";
         Icon ??= Icons.Symbols.Category;
     }
 }

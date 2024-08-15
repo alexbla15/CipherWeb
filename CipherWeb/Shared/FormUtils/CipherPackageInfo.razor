@@ -1,39 +1,17 @@
 ﻿@inherits CipherComponentCard
 
-@inject ICipherInfo _db
-
 @code {
     /// <summary>
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
     public Package pack { get; set; } = new Package();
-
-    private string twiceColWidth = "100px";
-    private string colWidth = "50px";
-    private string halfColWidth = "25px";
-
-    private List<Category> subCategories = new List<Category>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        //subCategories = await _db.GetSubCategories();
-    }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherPackageId />
-    <CipherMaterialType @bind-Value="pack.Category.MaterialType"/>
-    <CipherCategory Width="300px"></CipherCategory>
-
-    @* -- VESSEL -- *@
-    <CipherFormRow Icon="@Icons.Cipher.Vessel">
-        <RadzenDropDownDataGrid @bind-Value=@pack.Vessel.Id Data=@TestedData.Vessels TextProperty="Id" ValueProperty="Id" Placeholder="חיפוש כלי" SearchTextPlaceholder="חיפוש..."
-                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="width:300px">
-            <Columns>
-                <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="@colWidth" />
-                <RadzenDropDownDataGridColumn Property="Uuid" Title="מספר" Width="@halfColWidth" />
-            </Columns>
-        </RadzenDropDownDataGrid>
-    </CipherFormRow>
+    <CipherMaterialType />
+    <CipherCategoryDropDown />
+    <CipherVesselDropDown/>
+    <CipherLocation/>
 </CipherComponentCard>

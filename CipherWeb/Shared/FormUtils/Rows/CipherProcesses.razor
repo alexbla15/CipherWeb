@@ -1,16 +1,24 @@
 ﻿@inherits CipherFormRow
 
-<CipherFormRow Icon="@Icon" Label="@Label" Width="@Width">
+<CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
     <RadzenDropDown TValue="List<string>" Data=@Constants.Processes Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
-                    AllowFiltering="true"
+                    AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
                     Chips=true Style="width: 100%;" />
 </CipherFormRow>
 
 @code {
+    /// <summary>
+    /// Max amount of labels that will be shown upon choosing. Afterwards, it will be shown as "X labels were selected".
+    /// Initially set to max.
+    /// </summary>
+    [Parameter]
+    public int MaxShownLabels { get; set; } = int.MaxValue;
+
     protected override void OnInitialized()
     {
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
+        MinWidth ??= "300px";
     }
 }

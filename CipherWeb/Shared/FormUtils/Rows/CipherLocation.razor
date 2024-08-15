@@ -5,7 +5,7 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     <RadzenDropDownDataGrid @bind-Value=@sys Data=@TestedData.Vessels TextProperty="Id" ValueProperty="Id" Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")">
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="50px" />
             <RadzenDropDownDataGridColumn Property="System" Title="מיקום" Width="50px" />
@@ -37,6 +37,12 @@
     /// </summary>
     [Parameter]
     public string Width { get; set; } = "300px";
+
+    /// <summary>
+    /// Is dropdown disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {

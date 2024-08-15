@@ -1,0 +1,24 @@
+﻿@inherits CipherFormRow
+
+@code {
+    /// <summary>
+    /// Max amount of labels that will be shown upon choosing. Afterwards, it will be shown as "X labels were selected"
+    /// </summary>
+    [Parameter]
+    public int MaxShownLabels { get; set; } = int.MaxValue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "תעודות";
+        Icon ??= Icons.Cipher.Package;
+        Width ??= "100%";
+        MinWidth ??= "300px";
+    }
+}
+
+<CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
+    <RadzenDropDown TValue="List<string>" Data=@TestedData.Packages TextProperty="Id" ValueProperty="Id"
+                    Multiple=true AllowClear=true Placeholder="@Label" SelectedItemsText="אפשרויות נבחרו" SelectAllText="בחירת כל האפשרויות"
+                    AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
+                    Chips=true Style="width: 100%;" />
+</CipherFormRow>

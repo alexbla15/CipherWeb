@@ -20,6 +20,18 @@
     public string Width { get; set; }
 
     /// <summary>
+    /// Form field min width.
+    /// </summary>
+    [Parameter]
+    public string MinWidth { get; set; }
+
+    /// <summary>
+    /// Form field max width.
+    /// </summary>
+    [Parameter]
+    public string MaxWidth { get; set; }
+
+    /// <summary>
     /// Form field height.
     /// </summary>
     [Parameter]
@@ -61,7 +73,8 @@
     {
         <RadzenTemplateForm TItem="object">
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height: {Height}")" AllowFloatingLabel="true">
-                <div style="@($"padding-right:{PaddingHorizontal}; padding-left:{PaddingHorizontal}; padding-top:{PaddingTop}; padding-bottom:{PaddingBottom}; width: {Width}")">
+                <div style="@($@"padding-right:{PaddingHorizontal}; padding-left:{PaddingHorizontal}; padding-top:{PaddingTop}; padding-bottom:{PaddingBottom}; 
+                width: {Width}; min-width: {MinWidth}; max-width: {MaxWidth}")">
                     @ChildContent
                 </div>
             </RadzenFormField>

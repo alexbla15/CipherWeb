@@ -1,0 +1,29 @@
+﻿@inherits CipherFormRow
+
+@inject ICipherInfo _db
+
+<CipherFormRow Icon="@Icons.Cipher.Vessel">
+    <RadzenDropDownDataGrid TValue=Vessel Data=@TestedData.Vessels TextProperty="Id" ValueProperty="Id" Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="@($"{colWidth}px")" />
+            <RadzenDropDownDataGridColumn Property="Uuid" Title="מספר" Width="@($"{colWidth/2}px")" />
+        </Columns>
+    </RadzenDropDownDataGrid>
+</CipherFormRow>
+
+@code {
+    /// <summary>
+    /// Is the drop down disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    private int colWidth = 50;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "כלי";
+        Icon ??= Icons.Cipher.Vessel;
+    }
+}

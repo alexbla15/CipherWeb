@@ -66,9 +66,11 @@ namespace CipherWeb
             Random random = new Random();
 
             decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M ;
+            int uuid = GetUuid();
+
             return new Package()
             {
-                Uuid = GetUuid(),
+                Uuid = uuid,
                 Id = GetPackageId(),
                 ClearenceLevel = GetRandomString(Globals.clearences),
                 Comments = GetRandomString(Globals.PackageComments),
