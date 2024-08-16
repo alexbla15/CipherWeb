@@ -1,10 +1,6 @@
-﻿using CipherData;
-using CipherData.Models;
-using CipherWeb.Data;
-using System;
-using System.Diagnostics.Metrics;
+﻿using CipherData.Models;
 
-namespace CipherWeb
+namespace CipherData.Requests
 {
     public static class Globals
     {

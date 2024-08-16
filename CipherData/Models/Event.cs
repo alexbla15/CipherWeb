@@ -19,41 +19,14 @@ namespace CipherData.Models
         public int ProcessId { get; set; }
 
         /// <summary>
-        /// Name of worker that added the data
-        /// </summary>
-        //public string UpdatingWorker { get; set; }
-
-        /// <summary>
-        /// Name of worker that authorized the data
-        /// </summary>
-        //public string AuthorizingWorker { get; set; }
-
-        /// <summary>
-        /// List of package-parameters which were changed in this event in the format
-        /// (package serial number, param, initial value, final value)
-        /// </summary>
-        //public string Parameters { get ; set; }
-
-        /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
         public DateTime Timestamp { get; set; }
-
-
-        /// <summary>
-        /// Date when event was updated within the HMI
-        /// </summary>
-        //public DateTime UpdatingDate { get; set; }
-
-        /// <summary>
-        /// Date when event data was approved
-        /// </summary>
-        //public DateTime ApprovingDate { get; set; }
 
         /// <summary>
         /// Whether the event has been validated appropriately
