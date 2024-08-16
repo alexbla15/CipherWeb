@@ -285,39 +285,216 @@ namespace CipherWeb.Data
 
             public class Mail
             {
+                public const string AllInbox = "all_inbox";
+                public const string AlternateEmail = "alternate_email";
+                public const string AttachEmail = "attach_email";
+                public const string ContactMail = "contact_mail";
+                public const string Drafts = "drafts";
+                public const string ForwardToInbox = "forward_to_inbox";
+                public const string Inbox = "inbox";
                 public const string _Mail = "mail";
+                public const string MailLock = "mail_lock";
+                public const string MailOutline = "mail_outline";
+                public const string MarkAsUnread = "mark_as_unread";
+                public const string MarkEmailread = "mark_email_read";
+                public const string MarkEmailUnread = "mark_email_unread";
+                public const string MarkunreadMailbox = "markunread_mailbox";
+                public const string MoveToInbox = "move_to_inbox";
+                public const string OutgoingMail = "outgoing_mail";
+                public const string Upcoming = "upcoming";
+                public const string Unsubscribe = "unsubscribe";
             }
         }
 
         public class Creative
         {
+            public const string BatchPrediction = "batch_prediction";
+            public const string EmojiObjects = "emoji_objects";
+            public const string Extension = "extension";
+            public const string ExtensionOff = "extension_off";
             public const string Lightbulb = "lightbulb";
+            public const string LightbulbCircle = "lightbulb_circle";
+            public const string LightbulbOutline = "lightbulb_outline";
+            public const string ModelTraining = "model_training";
+            public const string OnlinePrediction = "online_prediction";
+            public const string Psychology = "psychology";
+            public const string PsychologyAlt = "psychology_alt";
+            public const string SendTimeExtension = "send_time_extension";
+            public const string TipsAndUpdates = "tips_and_updates";
+            public const string Tungsten = "tungsten";
+            public const string WbIncandescent = "wb_incandescent";
         }
 
         public class Data
         {
+            public const string Abc = "abc";
+            public const string AccountTree = "account_tree";
+            public const string Calculate = "calculate";
+            public const string DataArray = "data_array";
+            public const string DataObject = "data_object";
+            public const string Dataset = "dataset";
+            public const string Dataset_linked = "dataset_linked";
             public const string DeviceHub = "device_hub";
+            public const string Exposure = "exposure";
+            public const string Flaky = "flaky";
+            public const string Functions = "functions";
+            public const string Hub = "hub";
+            public const string Iso = "iso";
+            public const string JoinFull = "join_full";
+            public const string JoinInner = "join_inner";
+            public const string JoinLeft = "join_left";
+            public const string JoinRight = "join_right";
+            public const string Lan = "lan";
             public const string LinearScale = "linear_scale";
+            public const string _Numbers = "numbers";
+            public const string Polyline = "polyline";
+            public const string ScatterPlot = "scatter_plot";
+            public const string Schema = "schema";
+            public const string Tag = "tag";
 
             public class BarChart
             {
+                public const string AddChart = "add_chart";
+                public const string Analytics = "analytics";
+                public const string _BarChart = "bar_chart";
+                public const string Equalizer = "equalizer";
+                public const string InsertChartOutlined = "insert_chart_outlined";
                 public const string Leaderboard = "leaderboard";
+                public const string Poll = "poll";
+                public const string StackedBarChart = "stacked_bar_chart";
+                public const string ViewKanban = "view_kanban";
             }
 
-            public class Charts { }
+            public class Charts 
+            {
+
+                public const string AreaChart = "area_chart";
+                public const string BubbleChart = "bubble_chart";
+                public const string CandlestickChart = "candlestick_chart";
+                public const string DataSaverOn = "data_saver_on";
+                public const string DataUsage = "data_usage";
+                public const string DonutLarge = "donut_large";
+                public const string DonutSmall = "donut_small";
+                public const string IncompleteCircle = "incomplete_circle";
+                public const string PieChart = "pie_chart";
+                public const string PieChartOutline = "pie_chart_outline";
+                public const string SsidChart = "ssid_chart";
+                public const string WaterfallChart = "waterfall_chart";
+            }
 
             public class LineChart
             {
+                public const string AutoGraph = "auto_graph";
+                public const string DataThresholding = "data_thresholding";
+                public const string Insights = "insights";
+                public const string LegendToggle = "legend_toggle";
+                public const string LineAxis = "line_axis";
+                public const string MultilineChart = "multiline_chart";
+                public const string QueryStats = "query_stats";
+                public const string Score = "score";
+                public const string ShowChart = "show_chart";
+                public const string StackedLineChart = "stacked_line_chart";
                 public const string Timeline = "timeline";
             }
 
-            public class Numbers { }
+            public class Numbers
+            {
+                public const string _123 = "123";
+                public const string _30fps = "30fps";
+                public const string _60fps = "60fps";
+                public const string ExposureNeg1 = "exposure_neg_1";
+                public const string ExposureNeg2 = "exposure_neg_2";
+                public const string ExposurePlus1 = "exposure_plus_2";
+                public const string ExposureZero = "exposure_zero";
+                public const string Filter1 = "filter_1";
+                public const string Filter2 = "filter_2";
+                public const string Filter3 = "filter_3";
+                public const string Filter4 = "filter_4";
+                public const string Filter5 = "filter_5";
+                public const string Filter6 = "filter_6";
+                public const string Filter7 = "filter_7";
+                public const string Filter8 = "filter_8";
+                public const string Filter9 = "filter_9";
+                public const string Filter9Plus = "filter_9_plus";
+                public const string Looks3 = "looks_3";
+                public const string Looks4 = "looks_4";
+                public const string Looks5 = "looks_5";
+                public const string Looks6 = "looks_6";
+                public const string LooksOne = "looks_one";
+                public const string LooksTwo = "looks_two";
+                public const string Pin = "pin";
+                public const string PlusOne = "plus_one";
+                public const string Timer3 = "timer_3";
+                public const string Timer10 = "timer_10";
+            }
         }
 
         public class Design
         {
-            public class Colors { }
-            public class Text { }
+            public const string _3dRotation = "3d_rotation";
+            public const string DensityLarge = "density_large";
+            public const string DensityMedium = "density_medium";
+            public const string DensitySmall = "density_small";
+            public const string Fluorescent = "fluorescent";
+            public const string PanoramaHorizontal = "panorama_horizontal";
+            public const string PanoramaHorizontalSelect = "panorama_horizontal_select";
+            public const string PanoramaPhotosphere = "panorama_photosphere";
+            public const string PanoramaPhotosphereSelect = "panorama_photosphere_select";
+            public const string PanoramaVertical = "panorama_vertical";
+            public const string PanoramaVerticalSelect = "panorama_vertical_select";
+            public const string PanoramaWideAngle = "panorama_wide_angle";
+            public const string PanoramaWideAngleSelect = "panorama_wide_angle_select";
+            public const string RebaseEdit = "rebase_edit";
+            public const string Tune = "tune";
+            public const string ViewComfyAlt = "view_comfy_alt";
+            public const string ViewCompactAlt = "view_compact_alt";
+            public const string ViewCozy = "view_cozy";
+
+            public class Colors 
+            {
+                public const string AutoFixHigh = "auto_fix_high";
+                public const string AutoFixNormal = "auto_fix_normal";
+                public const string AutoFixOff = "auto_fix_off";
+                public const string BlurCircular = "blur_circular";
+                public const string BlurLinear = "blur_linear";
+                public const string BlurOff = "blur_off";
+                public const string BlurOn = "blur_on";
+                public const string BrightnessAuto = "brightness_auto";
+                public const string Brush = "brush";
+                public const string Colorize = "colorize";
+                public const string Contrast = "contrast";
+                public const string Deblur = "deblur";
+                public const string Draw = "draw";
+                public const string FilterFrames = "filter_frames";
+                public const string FormatColorFill = "format_color_fill";
+                public const string FormatColorReset = "format_color_reset";
+                public const string FormatPaint = "format_paint";
+                public const string Gesture = "gesture";
+                public const string Gradient = "gradient";
+                public const string ImagesearchRoller = "imagesearch_roller";
+                public const string InvertColors = "invert_colors";
+                public const string InvertColorsOff = "invert_colors_off";
+                public const string Opacity = "opacity";
+                public const string Pallete = "pallete";
+                public const string Style = "style";
+                public const string Texture = "texture";
+                public const string Tonality = "tonality";
+            }
+            public class Text
+            {
+                public const string FontDownload = "font_download";
+                public const string FontDownloadOff = "font_download_off";
+                public const string FormatColorText = "format_color_text";
+                public const string Spellcheck = "spellcheck";
+                public const string TextFormat = "text_format";
+                public const string TextRotateUp = "text_rotate_up";
+                public const string TextRotateVertical = "text_rotate_vertical";
+                public const string TextRotationAngledown = "text_rotation_angledown";
+                public const string TextRotationAngleup = "text_rotation_angleup";
+                public const string TextRotationDown = "text_rotation_down";
+                public const string TextRotationNone = "text_rotation_none";
+                public const string TypeSpecimen = "type_specimen";
+            }
         }
 
         public class Documents
