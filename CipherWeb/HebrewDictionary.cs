@@ -6,9 +6,9 @@ namespace CipherWeb
 {
     public class HebrewDictionary
     {
-        public static List<Tuple<string, string>> BuildDictionary()
+        public static HashSet<Tuple<string, string>> BuildDictionary()
         {
-            List<Tuple<string, string>> BuildHeaders = Event.Headers();
+            List<Tuple<string, string>> BuildHeaders = Event.Headers().ToList();
             BuildHeaders.AddRange(Package.Headers());
             BuildHeaders.AddRange(Category.Headers());
 
@@ -20,7 +20,7 @@ namespace CipherWeb
             BuildHeaders.Add(new("Creator", "יוצר/ת"));
             BuildHeaders.Add(new("CreationDate", "תאריך יצירה"));
             BuildHeaders.Add(new("Uid", "מספר סידורי"));
-            return BuildHeaders;
+            return BuildHeaders.ToHashSet();
         }
 
         public static List<Tuple<string, string>> Headers = BuildDictionary().Distinct().ToList();

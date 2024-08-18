@@ -34,6 +34,23 @@ namespace CipherData.Models
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        public List<Package> Actions { get; set; }
+        public HashSet<Package> Actions { get; set; }
+
+        /// <summary>
+        /// Create new event
+        /// </summary>
+        /// <param name="eventType">Type of event. Required</param>
+        /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
+        /// <param name="comments">Free-text comments on the event</param>
+        /// <param name="timestamp">Timestamp when the event happend. Required</param>
+        /// <param name="actions">List of affected packages from actions, the items present the state of each package after the event</param>
+        public CreateEvent(DateTime timestamp, int eventType, HashSet<Package> actions, int? processId = null, string? comments = null)
+        {
+            EventType = eventType;
+            ProcessId = processId;
+            Comments = comments;
+            Timestamp = timestamp;
+            Actions = actions;
+        }
     }
 }

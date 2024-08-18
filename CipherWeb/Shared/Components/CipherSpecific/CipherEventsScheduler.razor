@@ -14,7 +14,7 @@
         <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText"
                       Size="ButtonSize.Medium" Variant="Variant.Outlined"
                       Click="@CalendarView" />
-        <CipherExcelButton FileName="@FileName" Data="@events" />
+        <CipherExcelButton FileName="@FileName" Data="@TestedData.Events" />
         <CipherPDFButton />
     </Buttons>
     <ChildContent>
@@ -80,12 +80,8 @@
         Authorizer
     }
 
-    private List<Event> events = new List<Event>();
-
     protected override async Task OnInitializedAsync()
     {
-        events = await _db.GetEvents();
-
         if (SetRole == Role.Manager)
         {
             SetView = View.Calendar;

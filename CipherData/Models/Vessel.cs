@@ -1,44 +1,73 @@
-﻿using System;
+﻿using CipherData.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
     public class Vessel: Resource
     {
         /// <summary>
-        /// Unique name
-        /// </summary>
-        //public string Name { get; set; }
-
-        /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         public string Type { get; set; }
 
-        public List<Package> ContainingPackages { get; set; }
+        /// <summary>
+        /// Packages within the vessel
+        /// </summary>
+        public HashSet<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
         public StorageSystem System { get; set; }
 
-        /// <summary>
-        /// Safety restrictions in a list of (MaterialType, SubCategory, Amount)
-        /// </summary>
-        public List<Tuple<string, string, decimal>> Restrictions { get; set; }
-                
-        /// <summary>
-        /// Date when it was opened
-        /// </summary>
-        //public DateTime OpenDate { get; set; }
 
+        private static int IdCounter { get; set; } = 0;
+
+        public static string GetId()
+        {
+            IdCounter += 1;
+            return $"C{IdCounter}";
+        }
 
         /// <summary>
-        /// Date when it will be expired (can't store any packages)
+        /// Vessel containing some packages, inside some system
         /// </summary>
-        //public DateTime ExpirationDate { get; set; }
+        /// <param name="type">User ID of user who made the action. Required.</param>
+        /// <param name="system">Full-text user comment on action.</param>
+        /// <param name="packages"> Safety restrictions in a list of (MaterialType, SubCategory, Amount)</param>
+        public Vessel(string type, StorageSystem system, HashSet<Package>? packages = null, string? id = null)
+        {
+            Id = id ?? GetId();
+            Type = type;
+            ContainingPackages = packages;
+            System = system;
+        }
+
+        /// <summary>
+        /// Hebrew-english translation
+        /// </summary>
+        public static HashSet<Tuple<string, string>> Headers()
+        {
+            HashSet<Tuple<string, string>> result = BasicHeaders;
+
+            result.Add(new("Type", "סוג"));
+            result.Add(new("ContainingPackages", "תעודות מוכלות"));
+            result.Add(new("System", "מערכת"));
+
+            return result;
+        }
+        public static Vessel Random(string? id = null)
+        {
+            return new Vessel(
+                id: id,
+                type: Globals.GetRandomString(Globals.VesselTypes),
+                system: StorageSystem.Random()
+                );
+        }
     }
 }

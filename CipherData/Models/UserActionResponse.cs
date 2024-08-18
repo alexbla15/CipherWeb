@@ -1,14 +1,28 @@
 ﻿namespace CipherData.Models
 {
     /// <summary>
-    /// Create a new process definition or update it
+    /// Get user actions contract
     /// </summary>
     public class UserActionResponse
     {
         /// <summary>
-        /// Description of system
+        /// List of all user actions found
         /// </summary>
-        public List<UserAction> UserActions { get; set; }
+        public HashSet<UserAction> UserActions { get; set; }
+
+        /// <summary>
+        /// Create a new process definition or update it
+        /// </summary>
+        /// <param name="userActions">List of all user actions found</param>
+        public UserActionResponse(HashSet<UserAction> userActions) 
+        { 
+            UserActions = userActions;
+        }
+
+        public static UserActionResponse Random()
+        {
+            return new UserActionResponse(new HashSet<UserAction>());
+        }
     }
 }
 

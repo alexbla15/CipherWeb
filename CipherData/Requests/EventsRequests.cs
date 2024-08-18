@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public Tuple<Event?,ErrorResponse> CreateEvent(CreateEvent ev)
         {
-            return GenericRequests.Request(new Event());
+            return GenericRequests.Request(Event.Random());
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public Tuple<GroupedBooleanCondition?, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition)
         {
-            return GenericRequests.Request(new GroupedBooleanCondition(), canBeNotFound:true);
+            return GenericRequests.Request(GroupedBooleanCondition.Random(), canBeNotFound:true);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace CipherData.Requests
         /// </summary>
         public Tuple<GroupedBooleanCondition?, ErrorResponse> GetEventConditions()
         {
-            return GenericRequests.Request(new GroupedBooleanCondition(), canBadRequest:false, canBeNotFound: true);
+            return GenericRequests.Request(GroupedBooleanCondition.Random(), canBadRequest:false, canBeNotFound: true);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CipherData.Requests
         /// </summary>
         public Tuple<Event?, ErrorResponse> GetEvent(UpdateEvent ev)
         {
-            return GenericRequests.Request(new Event(), canBeNotFound: true);
+            return GenericRequests.Request(Event.Random(), canBeNotFound: true);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace CipherData.Requests
         /// </summary>3
         public Tuple<Event?, ErrorResponse> UpdateEvent(string event_id)
         {
-            return GenericRequests.Request(new Event(), canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(Event.Random(event_id), canBadRequest: false, canBeNotFound: true);
         }
     }
 }

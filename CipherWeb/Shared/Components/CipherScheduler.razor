@@ -6,7 +6,7 @@
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
                  style="@SchedulerStyle()" TItem="Event" AppointmentSelect="@SelectEvent"
-                 Data=@events StartProperty="Timestamp" EndProperty="Timestamp" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
+                 Data=@TestedData.Events StartProperty="Timestamp" EndProperty="Timestamp" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
                  TextProperty="Id" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
     <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt" />
     <CipherWeekView StartTime="@startTime" EndTime="@endTime" />
@@ -88,9 +88,6 @@
     [Parameter]
     public TooltipPosition EventTooltipPosition { get; set; } = TooltipPosition.Bottom;
 
-
-    private List<Event> events = new List<Event>();
-
     private RadzenScheduler<Event> scheduler;
 
     private Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
@@ -103,7 +100,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        events = await _db.GetEvents();
     }
 
     private string SchedulerStyle()

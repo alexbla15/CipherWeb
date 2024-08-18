@@ -17,22 +17,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit?,ErrorResponse> CreateUnit(UnitRequest unit)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1) 
-            {
-                return new Tuple<Unit?, ErrorResponse>(new Unit(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Unit.Random());
         }
 
         /// <summary>
@@ -43,22 +28,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit?, ErrorResponse> GetUnit(string unit_id)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<Unit?, ErrorResponse>(new Unit(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound:true, canBadRequest:false);
         }
 
         /// <summary>
@@ -69,26 +39,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit?, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit)
         {
-            // an example for each of the 4 options
-            Random rand = new();
-
-            int result = rand.Next(1, 4);
-            if (result == 1)
-            {
-                return new Tuple<Unit?, ErrorResponse>(new Unit(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else if (result == 3)
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<Unit?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound: true);
         }
     }
 }

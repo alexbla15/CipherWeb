@@ -23,9 +23,9 @@
                         <CipherDataGrid DataSource="@TestedData.Vessels" WithTotalFooter=false></CipherDataGrid>
                     </CipherComponentCard>
                 </RadzenAccordionItem>
-                <RadzenAccordionItem Text="@($"מיקומים ({Constants.systems.Count()})")">
+                <RadzenAccordionItem Text="@($"מיקומים ({TestedData.Systems.Count()})")">
                     <CipherComponentCard>
-                        <CipherDataGrid DataSource="@Constants.systems" WithTotalFooter=false></CipherDataGrid>
+                        <CipherDataGrid DataSource="@TestedData.Systems" WithTotalFooter=false></CipherDataGrid>
                     </CipherComponentCard>
                 </RadzenAccordionItem>
             </Items>

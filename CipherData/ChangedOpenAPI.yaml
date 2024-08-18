@@ -40,10 +40,12 @@ components:
               description: System containing the package
               $ref: "#/components/schemas/System"
             vessel:
+              nullable: true
               description: Vessel containing the package
               $ref: "#/components/schemas/Vessel"
             containingPackages: 
               type: array
+              nullable: true
               items:
                 description: Packages contained in this one
                 $ref: "#/components/schemas/Package"
@@ -52,9 +54,11 @@ components:
               additionalProperties: true
               description: JSON-like additional properties of the package
             comments:
+              nullable: true
               type: string
               description: Free-text comment on the package
             category:
+              description: Category of package
               $ref: "#/components/schemas/Category"
     System:
       type: object
@@ -66,9 +70,11 @@ components:
               type: string
               description: Description of system
             parent:
+              nullable: true
               description: Parent system containing this one
               $ref: "#/components/schemas/System"
             children:
+              nullable: true
               description: Child systems contained in this one
               type: array
               items:
@@ -89,19 +95,23 @@ components:
               type: string
               description: Description of the unit
             parent:
+              nullable: true
               description: Parent unit above this one
               $ref: "#/components/schemas/Unit"
             children:
+              nullable: true
               description: Child units below this one
               type: array
               items:
                 $ref: "#/components/schemas/Unit"
             systems:
+              nullable: true
               description: System under this unit
               type: array
               items:
                 $ref: "#/components/schemas/System"
             properties:
+              nullable: true
               type: object
               additionalProperties: true
               description: JSON-like properties of the unit
@@ -111,9 +121,6 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            id: 
-              type: integer
-              description: Unique ID of an event
             timestamp: 
               type: string
               description: Timestamp when the event happend
@@ -124,6 +131,7 @@ components:
               type: integer
               description: Type of event
             comments:
+              nullable: false
               type: string
               description: Free-text comments on the event
             processId:
@@ -181,6 +189,40 @@ components:
             - and
             - any
             - or
+    OrderedItem:
+      type: object
+      properties:
+        attribute:
+          type: string
+          description: Attribute to order by
+          order:
+            type: string
+            description: Desired order on the attribute
+            enum:
+              - asc
+              - desc
+    AggregateItem:
+      type: object
+      required:
+        - attribute
+        - method
+      properties:
+        attribute: 
+          type: string
+          description: Attribute path to aggregate on
+        as:
+          type: string
+          nullable: true
+          description: New name to give to the aggregated field. if null, name is auto generated.
+        method:
+          type: string
+          description: Method to aggregate the field by
+          enum:
+            - sum
+            - avg
+            - count
+            - first
+            - last
     ObjectFactory:
       type: object
       description: Method to get desired objects by filtering and aggregating the database
@@ -193,17 +235,7 @@ components:
           nullable: true
           type: array
           items:
-            type: object
-            properties:
-              attribute:
-                type: string
-                description: Attribute to order by
-              order:
-                type: string
-                description: Desired order on the attribute
-                enum:
-                  - asc
-                  - desc
+            $ref: "#/components/schemas/OrderedItem"
         groupby:
           description: List of object attributes to group by. If null, aggregates all the objects to a single one.
           type: array
@@ -215,27 +247,7 @@ components:
           type: array
           nullable: true
           items:
-            type: object
-            required:
-              - attribute
-              - method
-            properties:
-              attribute: 
-                type: string
-                description: Attribute path to aggregate on
-              as:
-                type: string
-                nullable: true
-                description: New name to give to the aggregated field. if null, name is auto generated.
-              method:
-                type: string
-                description: Method to aggregate the field by
-                enum:
-                  - sum
-                  - avg
-                  - count
-                  - first
-                  - last
+            $ref: "#/components/schemas/AggregateItem"
     CustomObjectBooleanCondition:
       description: Complex boolean condition that is applied to custom objects created from an object factory
       type: object
@@ -265,9 +277,6 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            id: 
-              type: integer
-              description: Unique ID of the category
             name: 
               type: string
               description: Name of the category
@@ -289,6 +298,9 @@ components:
               description: List of ID masks to identify the category from the package ID
               items:
                 type: string
+            MaterialType:
+              type: string
+              description: Type of material of this category
     Process:
       type: object
       description: An instance of a specific processes
@@ -297,6 +309,7 @@ components:
         - type: object
           properties:
             definition: 
+              description: a collection of steps that make a single definition
               $ref: "#/components/schemas/ProcessDefinition"
             events:
               type: array
@@ -314,9 +327,6 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            id: 
-              type: integer
-              description: Unique ID of process definition
             name:
               type: string
               description: Name of the process
@@ -325,6 +335,7 @@ components:
               description: Description of process
             steps: 
               type: array
+              description: All steps that are associated with this process
               items:
                 $ref: "#/components/schemas/ProcessStepDefinition"
     ProcessStepDefinition:
@@ -334,9 +345,6 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            id: 
-              type: integer
-              description: Unique ID of process step definition
             name: 
               type: string
               description: Unique name of the process step, two steps in the same process should not have the same name.
@@ -351,14 +359,12 @@ components:
       required:
         - by
         - at
-        - objectId
+        - objectId  
+        - actionType
       allOf:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            id: 
-              type: integer
-              description: User action ID
             by: 
               type: string
               description: User ID of user who made the action
@@ -366,6 +372,7 @@ components:
               type: string
               description: Timestamp of when the action was made
             comments:
+              nullable: true
               type: string
               description: Full-text user comment on action
             objectId:
@@ -394,6 +401,8 @@ components:
               description: Vessel type
             containingPackages:
               type: array
+              description: Packages within the vessel
+              nullable: true
               items:
                 $ref: "#/components/schemas/Package"
             system:
@@ -540,6 +549,7 @@ components:
                 type: string
                 description: Description of system
               parentId:
+                nullable: true
                 description: ID of parent unit
                 type: string
               conditions:
@@ -559,6 +569,9 @@ components:
               type: 
                 type: string
                 description: Vessel type
+              systemId:
+                type: string
+                description: Id of system containing vessel
     ProcessDefinitionRequest:
       description: Create a new process definition or update it
       content:
@@ -574,13 +587,15 @@ components:
                 description: Description of process
               steps: 
                 type: array
+                description: Steps of the process
                 items:
                   $ref: "#/components/schemas/ProcessStepDefinition"
     UserActionResponse:
-      description: Create a new process definition or update it
+      description: Get user actions contract
       content:
         application/json:
           schema:
+            description: List of all user actions found
             type: array
             items:
               $ref: "#/components/schemas/UserAction"

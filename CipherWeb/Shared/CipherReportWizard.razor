@@ -143,17 +143,16 @@
 
         List<string> vessels = TestedData.Vessels.Select(x => x.Id).Distinct().ToList();
 
-        foreach (StorageSystem sys in Constants.systems)
+        foreach (StorageSystem sys in TestedData.Systems)
         {
             foreach (Vessel ves in TestedData.Vessels)
             {
-                rows.Add(new Package()
-                    {
-                        System = sys,
-                        Vessel = ves,
-                        BrutMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum(),
-                        NetMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum()
-                    });
+                Package pack = Package.Random();
+                pack.System = sys;
+                pack.Vessel = ves;
+                pack.BrutMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
+                pack.NetMass =  TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
+                rows.Add(pack);
             }
         }
         SetColumnsOrder();

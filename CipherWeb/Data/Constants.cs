@@ -39,17 +39,6 @@ namespace CipherWeb.Data
         public static readonly List<string> Reactants = new() { "מגיב א", "מגיב ב", "מגיב ג" };
         public static readonly List<string> Products = new() { "תוצר א", "תוצר ב", "תוצר ג" };
 
-        public static readonly StorageSystem sysA = new() { Description = "A", Uuid = 1110 };
-        public static readonly StorageSystem sysB = new() { Description = "B", Uuid = 1111 };
-        public static readonly StorageSystem sysC = new() { Description = "C", Uuid = 1112 };
-        public static readonly StorageSystem sysD = new() { Description = "D", Uuid = 1113 };
-        public static readonly StorageSystem sysE = new() { Description = "E", Uuid = 1114 };
-
-        public static readonly List<StorageSystem> systems = new()
-    {
-            sysA, sysB, sysC, sysD, sysE
-    };
-
 
         public static readonly List<char> ImproperChars =
             new () { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '_', '<', '>', '?', '/', '\\', '|', '{', '}', '~', ':' };

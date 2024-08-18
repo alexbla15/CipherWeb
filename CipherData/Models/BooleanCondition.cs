@@ -24,9 +24,11 @@ namespace CipherData.Models
         Or
     }
 
+    /// <summary>
+    /// Abstract class for union of BooleanCondition and GroupedBooleanCondition
+    /// </summary>
     public abstract class Condition
     {
-
     }
 
     /// <summary>
@@ -65,10 +67,7 @@ namespace CipherData.Models
         /// <param name="attributeRelation">Expected relation between attribute and a value.</param>
         /// <param name="operator">Operator used in case the attribute contains multiple values.</param>
         /// <param name="value">Target value for comparision. If null, the attributes are compared to themselves (all equal, any equal etc.)</param>
-        public BooleanCondition(
-            string attribute,
-            AttributeRelation attributeRelation, 
-            Operator @operator = Operator.And, 
+        public BooleanCondition(string attribute, AttributeRelation attributeRelation, Operator @operator = Operator.And, 
             string? value = null)
         {
             Attribute = attribute;

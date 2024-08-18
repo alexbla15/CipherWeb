@@ -17,22 +17,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel?,ErrorResponse> CreateVessel(VesselRequest vessel)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1) 
-            {
-                return new Tuple<Vessel?, ErrorResponse>(new Vessel(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Vessel.Random());
         }
 
         /// <summary>
@@ -43,22 +28,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel?, ErrorResponse> GetVessel(string vessel_id)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(new Vessel(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound:true, canBadRequest:false);
         }
 
         /// <summary>
@@ -68,26 +38,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel?, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
         {
-            // an example for each of the 4 options
-            Random rand = new();
-
-            int result = rand.Next(1, 4);
-            if (result == 1)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(new Vessel(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else if (result == 3)
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<Vessel?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound: true);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
 @code {
-    private List<Category> subCategories = new() {new Category(){Name="A"}};
+    private List<Category> subCategories = Enumerable.Range(0, 2).Select(_ => Category.Random()).ToList();
 
     protected override void OnInitialized()
     {
