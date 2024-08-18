@@ -11,20 +11,16 @@ namespace CipherData.Models
     /// <summary>
     /// Groups of boolean conditions on a single object
     /// </summary>
-    public class GroupedBooleanCondition
+    public class GroupedBooleanCondition : Condition
     {
-        public List<BooleanCondition> Conditions { get; set; }
-        public List<GroupedBooleanCondition> GroupedConditions { get; set; }
+        /// <summary>
+        /// Any of BooleanCondition / GroupedBooleadCondition
+        /// </summary>
+        public List<Condition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
         public Operator Operator { get; set; } = Operator.And;
-
-        /// <summary>
-        /// Target value for comparision. 
-        /// If null, the attributes are compared to 
-        /// themselves (all equal, any equal etc.)
-        /// </summary>
     }
 }

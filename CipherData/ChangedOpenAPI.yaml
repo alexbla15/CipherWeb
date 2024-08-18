@@ -1,0 +1,1098 @@
+openapi: '3.0.3'
+info:
+  title: CipherAPI
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+
+components:
+  schemas:
+    Resource:
+      type: object
+      description: Basic resource template for objects
+      properties:
+        id: 
+          type: string
+          description: Searchable ID for the object
+        uuid: 
+          type: string
+          description: Universal unique ID (UUID) for the object, unique over all objects
+          format: uuid
+        clearenceLevel:
+          type: integer
+          description: Required level of clearence to access this object
+    Package:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            createdAt: 
+              type: string
+              description: Timestamp when the package was created
+            brutMass:
+              type: number
+              description: Total mass of the package
+            netMass:
+              type: number
+              description: Net mass of the package
+            system:
+              description: System containing the package
+              $ref: "#/components/schemas/System"
+            vessel:
+              description: Vessel containing the package
+              $ref: "#/components/schemas/Vessel"
+            containingPackages: 
+              type: array
+              items:
+                description: Packages contained in this one
+                $ref: "#/components/schemas/Package"
+            properties:
+              type: object
+              additionalProperties: true
+              description: JSON-like additional properties of the package
+            comments:
+              type: string
+              description: Free-text comment on the package
+            category:
+              $ref: "#/components/schemas/Category"
+    System:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            description:
+              type: string
+              description: Description of system
+            parent:
+              description: Parent system containing this one
+              $ref: "#/components/schemas/System"
+            children:
+              description: Child systems contained in this one
+              type: array
+              items:
+                $ref: "#/components/schemas/System"
+            unit: 
+              $ref: "#/components/schemas/Unit"
+            properties:
+              type: object
+              additionalProperties: true
+              description: JSON-like properties of the system
+    Unit:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            description:
+              type: string
+              description: Description of the unit
+            parent:
+              description: Parent unit above this one
+              $ref: "#/components/schemas/Unit"
+            children:
+              description: Child units below this one
+              type: array
+              items:
+                $ref: "#/components/schemas/Unit"
+            systems:
+              description: System under this unit
+              type: array
+              items:
+                $ref: "#/components/schemas/System"
+            properties:
+              type: object
+              additionalProperties: true
+              description: JSON-like properties of the unit
+    Event:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: Unique ID of an event
+            timestamp: 
+              type: string
+              description: Timestamp when the event happend
+            valid:
+              type: boolean
+              description: Whether the event has been validated appropriately
+            eventType:
+              type: integer
+              description: Type of event
+            comments:
+              type: string
+              description: Free-text comments on the event
+            processId:
+              type: integer
+              description: Process ID of process containing to this event
+            packages: 
+              type: array
+              description: List of affected packages from actions, the items present the state of each package after the event
+              items:
+                $ref: "#/components/schemas/Package"
+    BooleanCondition:
+      type: object
+      description: Condition function on a single object
+      properties:
+        attribute:
+          type: string
+          description: Attribute's name in event's object. Can be chained to include sub-objects.
+          example: obj.eventType, obj.system.id, obj.packages.category
+        attribute-relation:
+          type: string
+          description: Expected relation between attribute and a value. Can be equal (eq), not equal (ne), less than (lt) or greater than (gt)
+          enum:
+            - eq
+            - ne
+            - gt
+            - lt
+        operator: 
+          type: string
+          default: and
+          description: Operator used in case the attribute contains multiple values.
+          enum:
+            - all
+            - and
+            - any
+            - or
+        value:
+          nullable: true
+          description: Target value for comparision. If null, the attributes are compared to themselves (all equal, any equal etc.)
+    GroupedBooleanCondition:
+      type: object
+      description: Groups of boolean conditions on a single object
+      properties:
+        conditions:
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/BooleanCondition"
+              - $ref: "#/components/schemas/GroupedBooleanCondition"
+        operator: 
+          type: string
+          default: and
+          description: Operator used to resolve the multiple condition results to a single boolean
+          enum:
+            - all
+            - and
+            - any
+            - or
+    ObjectFactory:
+      type: object
+      description: Method to get desired objects by filtering and aggregating the database
+      properties:
+        filter: 
+          description: Conditions to apply to get the desired objects. All conditions must have the same target object.
+          $ref: "#/components/schemas/GroupedBooleanCondition"
+        orderby: 
+          description: Define order to the filtered objects
+          nullable: true
+          type: array
+          items:
+            type: object
+            properties:
+              attribute:
+                type: string
+                description: Attribute to order by
+              order:
+                type: string
+                description: Desired order on the attribute
+                enum:
+                  - asc
+                  - desc
+        groupby:
+          description: List of object attributes to group by. If null, aggregates all the objects to a single one.
+          type: array
+          nullable: true
+          items:
+            type: string
+        aggregate:
+          description: List of aggregate methods defining the new object. by default returns the grouped by fields if they exist. If null, returns the filtered objects
+          type: array
+          nullable: true
+          items:
+            type: object
+            required:
+              - attribute
+              - method
+            properties:
+              attribute: 
+                type: string
+                description: Attribute path to aggregate on
+              as:
+                type: string
+                nullable: true
+                description: New name to give to the aggregated field. if null, name is auto generated.
+              method:
+                type: string
+                description: Method to aggregate the field by
+                enum:
+                  - sum
+                  - avg
+                  - count
+                  - first
+                  - last
+    CustomObjectBooleanCondition:
+      description: Complex boolean condition that is applied to custom objects created from an object factory
+      type: object
+      properties:
+        conditions:
+          type: array
+          description: List of object factory specifications and conditions on them
+          items:
+            type: object
+            properties:
+              factory:
+                $ref: "#/components/schemas/ObjectFactory"
+              objectConditions:
+                $ref: "#/components/schemas/GroupedBooleanCondition"
+        operator: 
+          type: string
+          default: and
+          description: Operator used to resolve the multiple condition results to a single boolean
+          enum:
+            - all
+            - and
+            - any
+            - or
+    Category:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: Unique ID of the category
+            name: 
+              type: string
+              description: Name of the category
+            description:
+              type: string
+              description: Free-text description of the category
+            creatingProcesses:
+              type: array
+              description: List of processes definitions creating this category
+              items:
+                $ref: "#/components/schemas/ProcessDefinition"
+            consumingProcesses:
+              type: array
+              description: List of processes defintions consuming this category
+              items:
+                $ref: "#/components/schemas/ProcessDefinition"
+            idMask:
+              type: array
+              description: List of ID masks to identify the category from the package ID
+              items:
+                type: string
+    Process:
+      type: object
+      description: An instance of a specific processes
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            definition: 
+              $ref: "#/components/schemas/ProcessDefinition"
+            events:
+              type: array
+              items:
+                $ref: "#/components/schemas/Event"
+            uncompletedSteps:
+              type: array
+              description: Uncompleted steps for completing the process
+              items:
+                $ref: "#/components/schemas/ProcessStepDefinition"
+    ProcessDefinition:
+      type: object
+      description: Definition of a process - a collection of steps that make a single definition
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: Unique ID of process definition
+            name:
+              type: string
+              description: Name of the process
+            description:
+              type: string
+              description: Description of process
+            steps: 
+              type: array
+              items:
+                $ref: "#/components/schemas/ProcessStepDefinition"
+    ProcessStepDefinition:
+      type: object
+      description: Definition of a process step. Step is a single event that should be associated with a process
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: Unique ID of process step definition
+            name: 
+              type: string
+              description: Unique name of the process step, two steps in the same process should not have the same name.
+            description:
+              type: string
+              description: Description of the process step
+            condition:
+              description: Condition on event to be associated with the process step 
+              $ref: "#/components/schemas/GroupedBooleanCondition"
+    UserAction:
+      type: object
+      required:
+        - by
+        - at
+        - objectId
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: User action ID
+            by: 
+              type: string
+              description: User ID of user who made the action
+            at:
+              type: string
+              description: Timestamp of when the action was made
+            comments:
+              type: string
+              description: Full-text user comment on action
+            objectId:
+              type: integer
+              description: UUID of object affected from the action
+            actionType: 
+              type: string
+              description: Type of action made by user
+              enum:
+                - created
+                - approved
+                - modified
+            actionParameters:
+              type: object
+              description: Parameters changed by the action. 
+              nullable: true
+              additionalProperties: true
+    Vessel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Resource"
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Vessel type
+            containingPackages:
+              type: array
+              items:
+                $ref: "#/components/schemas/Package"
+            system:
+              description: System in which vessel is at
+              $ref: "#/components/schemas/System"
+  responses:
+    ErrorResponse:
+      description: "Error"
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              code:
+                type: integer
+                description: Error code
+    UpdatePackage:
+      description: Update package details contract
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              packageComments:
+                type: string
+                nullable: true
+                description: New comment on the package
+              categoryId:
+                nullable: true
+                type: integer
+                description: Category ID of the package
+              actionComments:
+                type: string
+                nullable: true
+                description: Free text comments on update. Ideally contains reason for change
+    CreateEvent:
+      description: Create a new event
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - timestamp
+              - eventType
+              - actions
+            properties:
+              timestamp: 
+                type: string
+                description: Timestamp when the event happend
+              eventType:
+                type: integer
+                description: Type of event
+              comments:
+                type: string
+                nullable: true
+                description: Free-text comments on the event
+              processId:
+                type: integer
+                nullable: true
+                description: Process ID of process containing to this event. If null, tries to estimate it from event details
+              actions: 
+                type: array
+                description: List of affected packages from actions, the items present the state of each package after the event
+                items:
+                  $ref: "#/components/schemas/Package"
+    UpdateEvent:
+      description: Update event's process or comments
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              eventComment:
+                type: string
+                nullable: true
+                description: Updated comment for event
+              processId:
+                type: integer
+                nullable: true
+                description: New process ID for event
+              actionComments:
+                type: string
+                nullable: true
+                description: Free text comments on update. Ideally contains reason for change
+    CategoryRequest:
+      description: Create a new category or update it
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                description: Name of the category
+              description:
+                type: string
+                description: Free-text description of the category
+              creatingProcesses:
+                type: array
+                description: List of processes definition IDs creating this category
+                items:
+                  type: integer
+              consumingProcesses:
+                type: array
+                description: List of processes definition IDs consuming this category
+                items:
+                  type: integer
+              idMask:
+                type: array
+                description: List of ID masks to identify the category from the package ID
+                items:
+                  type: string
+    SystemRequest:
+      description: Create a new system or update it
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                description: Description of system
+              parentId:
+                description: ID of parent system containing this one
+                type: string
+              unitId: 
+                description: ID of unit responsible for this system
+                type: string
+              properties:
+                type: object
+                additionalProperties: true
+                description: JSON-like properties of the system
+    UnitRequest:
+      description: Create a new unit or update it
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                description: Description of system
+              parentId:
+                description: ID of parent unit
+                type: string
+              conditions:
+                description: Conditions on the system to make sure it is valid
+                $ref: "#/components/schemas/GroupedBooleanCondition"
+              properties:
+                type: object
+                additionalProperties: true
+                description: JSON-like properties of the system
+    VesselRequest:
+      description: Create a new unit or update it
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type: 
+                type: string
+                description: Vessel type
+    ProcessDefinitionRequest:
+      description: Create a new process definition or update it
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the process
+              description:
+                type: string
+                description: Description of process
+              steps: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProcessStepDefinition"
+    UserActionResponse:
+      description: Create a new process definition or update it
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/UserAction"
+paths:
+  /packages/{id}:
+    get:
+      summary: Get details about a single package given package ID
+      operationId: getPackage
+      responses:
+        '200':
+          $ref: "#/components/schemas/Package"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update comments or caterogy of package
+      operationId: updatePackage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/UpdatePackage"
+      responses:
+        '200':
+          $ref: "#/components/schemas/Package"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /events:
+    post:
+      summary: Create a new event
+      operationId: createEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/CreateEvent"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Event"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /events/conditions:
+    get:
+      summary: Get conditions for validating an event
+      operationId: getEventConditions
+      responses:
+        '200':
+          $ref: "#/components/schemas/GroupedBooleanCondition"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update event details
+      operationId: updateEventConditions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupedBooleanCondition"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/GroupedBooleanCondition"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /events/{id}:
+    get:
+      summary: Get details about a single event
+      operationId: getEvent
+      responses:
+        '200':
+          $ref: "#/components/schemas/Event"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update event details
+      operationId: updateEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/UpdateEvent"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Event"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /systems:
+    post:
+      summary: Create a new system
+      operationId: createSystem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/SystemRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/System"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /systems/{id}:
+    get:
+      summary: Get details about a single system
+      operationId: getSystem
+      responses:
+        '200':
+          $ref: "#/components/schemas/System"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update system's details
+      operationId: updateSystem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/SystemRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/System"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /systems/{id}/conditions:
+    get:
+      summary: Get conditions of a system
+      operationId: getSystemConditions
+      responses:
+        '200':
+          $ref: "#/components/schemas/CustomObjectBooleanCondition"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update system's conditions
+      operationId: updateSystemConditions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomObjectBooleanCondition"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/CustomObjectBooleanCondition"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /units:
+    post:
+      summary: Create a new unit
+      operationId: createUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/UnitRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Unit"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /units/{id}:
+    get:
+      summary: Get details about a single Unit
+      operationId: getUnit
+      responses:
+        '200':
+          $ref: "#/components/schemas/Unit"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update Unit's details
+      operationId: updateUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/UnitRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Unit"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /vessels:
+    post:
+      summary: Create a new vessel
+      operationId: createVessel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/VesselRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Vessel"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /vessels/{id}:
+    get:
+      summary: Get details about a single vessel
+      operationId: getVessel
+      responses:
+        '200':
+          $ref: "#/components/schemas/Vessel"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update vessel's details
+      operationId: updateVessel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/VesselRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Vessel"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /categories:
+    post:
+      summary: Create a new category
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - description
+                - creatingProcesses
+                - consumingProcesses
+                - idMask
+              $ref: "#/components/responses/CategoryRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Category"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /categories/{id}:
+    get:
+      summary: Get details about a single category
+      operationId: getCategory
+      responses:
+        '200':
+          $ref: "#/components/schemas/System"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update category's details
+      operationId: updateCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/CategoryRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/Category"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /processDefinitions:
+    post:
+      summary: Create a new process
+      operationId: createProcessDefinition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/ProcessDefinitionRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/ProcessDefinition"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /processDefinitions/{id}:
+    get:
+      summary: Get details about a process definition
+      operationId: getProcessDefinition
+      responses:
+        '200':
+          $ref: "#/components/schemas/ProcessDefinition"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+    put:
+      summary: Update process definition's details
+      operationId: updateProcessDefinition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/responses/ProcessDefinitionRequest"
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/schemas/ProcessDefinition"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /processes/{id}:
+    get:
+      summary: Get details about a process
+      operationId: getProcess
+      responses:
+        '200':
+          $ref: "#/components/schemas/Process"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+        '404':
+          description: Not found
+          $ref: "#/components/responses/ErrorResponse"
+  /query:
+    post:
+      summary: Query the database for specific objects or aggregations
+      operationId: queryObjects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ObjectFactory"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/Package"
+                    - $ref: "#/components/schemas/System"
+                    - $ref: "#/components/schemas/Unit"
+                    - $ref: "#/components/schemas/Event"
+                    - $ref: "#/components/schemas/Category"
+                    - $ref: "#/components/schemas/Process"
+                    - $ref: "#/components/schemas/ProcessDefinition"
+                    - $ref: "#/components/schemas/Vessel"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /logs/object/{uuid}:
+    get:
+      summary: Get change logs on a given object using its UUID
+      operationId: getObjectLogs
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/responses/UserActionResponse"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
+  /logs/users/{userid}:
+    get:
+      summary: Get change logs made by a specific user
+      operationId: getObjectLogs
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/responses/UserActionResponse"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"

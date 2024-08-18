@@ -30,37 +30,16 @@
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="פרטים">
-                @* -- Numerator -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="מספר סידורי" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- EVENT TYPE -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Type" Label="סוג תנועה" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- PROCESS -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Process" Label="תהליך" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- EVENT DATE -- *@
                 <CipherDatePicker Label="תאריך תנועה" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                @* -- UPDATING WORKER -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Account_Old" Label="עובד מעדכן" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- UPDATING DATE -- *@
                 <CipherDatePicker Label="תאריך עדכון" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                @* -- AUTHORIZING WORKER -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="עובד מאשר" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- AUTHORIZING DATE -- *@
                 <CipherDatePicker Label="תאריך אישור" Disabled="@ReadOnly" Width="@RowWidth" />
-
-                @* -- PARAMETERS -- *@
                 <CipherAutoComplete Icon="@Icons.UiComponents.Settings" Label="פרמטרים" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- STATUS -- *@
                 <CipherAutoComplete Icon="@Icons.Cipher.Status" Label="סטטוס" Width="@RowWidth" Disabled="@ReadOnly" />
-
-                @* -- COMMENTS -- *@
                 <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
 
                 <br/>

@@ -13,136 +13,45 @@ namespace CipherData.Requests
         /// Create a new event
         /// Path: POST /events
         /// </summary>
-        /// <param name="pack_id"></param>
-        /// <returns></returns>
         public Tuple<Event?,ErrorResponse> CreateEvent(CreateEvent ev)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1) 
-            {
-                return new Tuple<Event?, ErrorResponse>(new Event(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(new Event());
         }
 
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/conditions
         /// </summary>
-        /// <returns></returns>
         public Tuple<GroupedBooleanCondition?, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 4);
-            if (result == 1)
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(new GroupedBooleanCondition(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else if (result == 3)
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
-            else
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
+            return GenericRequests.Request(new GroupedBooleanCondition(), canBeNotFound:true);
         }
 
         /// <summary>
         /// Get conditions for validating an event. 
         /// Path: GET /events/conditions
         /// </summary>
-        /// <returns></returns>
         public Tuple<GroupedBooleanCondition?, ErrorResponse> GetEventConditions()
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(new GroupedBooleanCondition(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
-            else
-            {
-                return new Tuple<GroupedBooleanCondition?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(new GroupedBooleanCondition(), canBadRequest:false, canBeNotFound: true);
         }
 
         /// <summary>
         /// Get details about a single event.
         /// Path: GET /events/{id}
         /// </summary>
-        /// <param name="event_id"></param>
-        /// <returns></returns>
         public Tuple<Event?, ErrorResponse> GetEvent(UpdateEvent ev)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<Event?, ErrorResponse>(new Event(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
-            else
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
+            return GenericRequests.Request(new Event(), canBeNotFound: true);
         }
 
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/{id}
-        /// </summary>
-        /// <param name="event_id"></param>
-        /// <returns></returns>
+        /// </summary>3
         public Tuple<Event?, ErrorResponse> UpdateEvent(string event_id)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<Event?, ErrorResponse>(new Event(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
-            else
-            {
-                return new Tuple<Event?, ErrorResponse>(null, ErrorResponse.NotFound);
-            }
+            return GenericRequests.Request(new Event(), canBadRequest: false, canBeNotFound: true);
         }
     }
 }

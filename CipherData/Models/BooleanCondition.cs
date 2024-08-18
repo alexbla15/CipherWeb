@@ -24,10 +24,15 @@ namespace CipherData.Models
         Or
     }
 
+    public abstract class Condition
+    {
+
+    }
+
     /// <summary>
     /// Condition function on a single object
     /// </summary>
-    public class BooleanCondition
+    public class BooleanCondition : Condition
     {
         /// <summary>
         /// Attribute's name in event's object. 
@@ -37,7 +42,7 @@ namespace CipherData.Models
         public string Attribute { get; set; }
 
         /// <summary>
-        /// Expected relation between attribute and a value. =
+        /// Expected relation between attribute and a value.
         /// </summary>
         public AttributeRelation AttributeRelation { get; set; }
 
@@ -52,5 +57,24 @@ namespace CipherData.Models
         /// themselves (all equal, any equal etc.)
         /// </summary>
         public string? Value { get; set; }
+
+        /// <summary>
+        /// User's instanciation of a boolean condition.
+        /// </summary>
+        /// <param name="attribute">Attribute's name in event's object. Can be chained to include sub-objects. Example: obj.eventType, obj.system.id, obj.packages.category</param>
+        /// <param name="attributeRelation">Expected relation between attribute and a value.</param>
+        /// <param name="operator">Operator used in case the attribute contains multiple values.</param>
+        /// <param name="value">Target value for comparision. If null, the attributes are compared to themselves (all equal, any equal etc.)</param>
+        public BooleanCondition(
+            string attribute,
+            AttributeRelation attributeRelation, 
+            Operator @operator = Operator.And, 
+            string? value = null)
+        {
+            Attribute = attribute;
+            AttributeRelation = attributeRelation;
+            Operator = @operator;
+            Value = value;
+        }
     }
 }

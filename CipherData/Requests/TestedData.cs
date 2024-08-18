@@ -8,11 +8,9 @@ namespace CipherData.Requests
         public static int PackageIdCounter { get; set; } = 0;
         public static int VesselIdCounter { get; set; } = 0;
 
-        public static List<string> PackageComments = new List<string>() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
-        public static List<string> clearences = new List<string>() { "מוגבל", "מוגבל מאוד", "חופשי" };
-        public static List<string> VesselTypes = new List<string>() { "קופסה", "ארגז", "צנצנת" };
-
-        public static List<string> Workers = new() { "אבי", "בני", "גדי", "דני" };
+        public static readonly List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
+        public static readonly List<string> clearences = new() { "מוגבל", "מוגבל מאוד", "חופשי" };
+        public static readonly List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
     }
 
     public class TestedData

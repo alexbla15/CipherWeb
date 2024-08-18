@@ -30,7 +30,7 @@
                     <CipherAccountImage />
                 </RadzenLink>
                 <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
-                    <CipherText Text="@Constants.SetUser.FullName()" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
+                    <CipherText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
                         <CipherButton Icon="@Icons.Social.SinglePerson.AccountCircle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
                                       Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"

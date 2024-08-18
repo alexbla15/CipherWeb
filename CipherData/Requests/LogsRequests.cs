@@ -15,22 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<UserActionResponse?,ErrorResponse> GetObjectLogs(int uuid)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1) 
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(new UserActionResponse(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(new UserActionResponse());
         }
 
         /// <summary>
@@ -39,22 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<UserActionResponse?, ErrorResponse> GetUserLogs(int userid)
         {
-            // an example for each of the three options
-            Random rand = new();
-
-            int result = rand.Next(1, 3);
-            if (result == 1)
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(new UserActionResponse(), ErrorResponse.Success);
-            }
-            else if (result == 2)
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(null, ErrorResponse.BadRequest);
-            }
-            else
-            {
-                return new Tuple<UserActionResponse?, ErrorResponse>(null, ErrorResponse.Unauthorized);
-            }
+            return GenericRequests.Request(new UserActionResponse());
         }
     }
 }

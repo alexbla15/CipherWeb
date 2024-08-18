@@ -29,15 +29,5 @@ namespace CipherData.Models
         /// List of systems in which the process takes (or may take) place
         /// </summary>
         public List<string> StorageSystems { get; set; }
-        
-        /// <summary>
-        /// Name of worker that added the data
-        /// </summary>
-        //public string UpdatingWorker { get; set; }
-        
-        /// <summary>
-        /// Name of worker that authorized the data
-        /// </summary>
-        //public string AuthorizingWorker { get; set; }
     }
 }

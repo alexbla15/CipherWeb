@@ -1,12 +1,13 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Icon="@Icon" Label="@Label" Data="@Data" Disabled="@Disabled" Value="@Constants.SetUser.FullName()" Width="@Width"/>
+<CipherAutoComplete Icon="@Icon" Label="@Label" Data="@Data" Disabled="@Disabled" Value="@Constants.SetUser.Name" Width="@Width"
+                    TextProperty="Name"/>
 
 @code {
     protected override void OnInitialized()
     {
         Label ??= "מבצע הפעולה";
         Icon ??= Icons.Social.SinglePerson.Person;
-        Data ??= Globals.Workers;
+        Data ??= Worker.AllWorkers;
     }
 }
