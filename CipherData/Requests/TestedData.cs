@@ -26,6 +26,22 @@ namespace CipherData.Requests
 
     public class TestedData
     {
+        public static DateTime RandomDateTime()
+        {
+            Random random = new();
+            int range = (DateTime.Now.AddYears(1) - DateTime.Now.AddYears(-1)).Days;  // Calculate the total number of days between the two dates
+                                                                                      // Generate random hours, minutes, and seconds
+            int hours = random.Next(0, 24);
+            int minutes = random.Next(0, 60);
+            int seconds = random.Next(0, 60);
+
+            // Generate a random date
+            DateTime randomDate = DateTime.Now.AddYears(-1).AddDays(random.Next(range));
+
+            return randomDate.AddHours(hours)
+                         .AddMinutes(minutes)
+                         .AddSeconds(seconds);
+        }
 
         public static List<T> FillRandomObjects<T>(int amount, Func<string?, T> randomFunc)
         {

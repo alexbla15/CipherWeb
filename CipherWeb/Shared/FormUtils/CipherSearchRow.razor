@@ -39,6 +39,8 @@
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
+    private string SearchText = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         LabelText ??= "חיפוש תעודה";
@@ -54,19 +56,26 @@
     /// Function taking place upon clicking Enter.s
     /// </summary>
     /// <param name="args"></param>
-    private void SearchFunc(KeyboardEventArgs args)
+    private async Task SearchFunc(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
-            navigationManager.NavigateTo(SearchPath);
+            // Wait for a short duration to ensure SearchText is updated
+            await Task.Delay(1);
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                string url = $"{SearchPath}?search={SearchText}";
+                navigationManager.NavigateTo(url, forceLoad:true);
+            }
         }
     }
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Center" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
-    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" ShowErrors="false"
-                        Data="@TestedData.Packages" TextProperty="Id" OnKeyDown="@(args => OnKeyDown.InvokeAsync(args))"></CipherAutoComplete>
+    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" ShowErrors="false" @bind-value="SearchText"
+                        Data="@TestedData.Packages" TextProperty="Id" OnKeyDown="SearchFunc"></CipherAutoComplete>
 
-    <CipherNavButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" Path="@SearchPath"
+    <CipherNavButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" 
+                    Path="@($"{SearchPath}?search={SearchText}")"
                      Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>

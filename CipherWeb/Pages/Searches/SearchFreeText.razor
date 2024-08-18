@@ -1,4 +1,5 @@
 ﻿@page "/Search/FreeSearch/"
+@inject NavigationManager navigationManager
 
 @inject ICipherInfo _db
 @inject DialogService DialogService
@@ -7,38 +8,145 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px">
     <HeaderContent>
-        <CipherAutoComplete Data="@TestedData.Packages" TextProperty="Id" Value="111"></CipherAutoComplete>
+        <CipherAutoComplete Data="@TestedData.Packages" TextProperty="Id" Value="@searchQuery"></CipherAutoComplete>
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
             <Items>
-                <RadzenAccordionItem Text="@($"תעודות ({TestedData.Packages.Count()})")">
-                    <CipherComponentCard>
-                        <CipherDataGrid DataSource="@TestedData.Packages" WithTotalFooter=false></CipherDataGrid>
-                    </CipherComponentCard>
-                </RadzenAccordionItem>
+                @if (packs.Count() > 0)
+                {
+                    <RadzenAccordionItem Text="@($"תעודות ({packs.Count()})")">
+                        <CipherComponentCard>
+                            <CipherDataGrid DataSource="@packs" WithTotalFooter=false></CipherDataGrid>
+                        </CipherComponentCard>
+                    </RadzenAccordionItem>
+                }
                 <br />
-                <RadzenAccordionItem Text="@($"כלים ({TestedData.Vessels.Count()})")">
-                    <CipherComponentCard>
-                        <CipherDataGrid DataSource="@TestedData.Vessels" WithTotalFooter=false></CipherDataGrid>
-                    </CipherComponentCard>
-                </RadzenAccordionItem>
-                <RadzenAccordionItem Text="@($"מיקומים ({TestedData.Systems.Count()})")">
-                    <CipherComponentCard>
-                        <CipherDataGrid DataSource="@TestedData.Systems" WithTotalFooter=false></CipherDataGrid>
-                    </CipherComponentCard>
-                </RadzenAccordionItem>
+                @if (vessels.Count() > 0)
+                {
+                    <RadzenAccordionItem Text="@($"כלים ({vessels.Count()})")">
+                        <CipherComponentCard>
+                            <CipherDataGrid DataSource="@vessels" WithTotalFooter=false></CipherDataGrid>
+                        </CipherComponentCard>
+                    </RadzenAccordionItem>
+                }
+                @if (systems.Count() > 0)
+                {
+                    <RadzenAccordionItem Text="@($"מיקומים ({systems.Count()})")">
+                        <CipherComponentCard>
+                            <CipherDataGrid DataSource="@systems" WithTotalFooter=false></CipherDataGrid>
+                        </CipherComponentCard>
+                    </RadzenAccordionItem>
+                }
             </Items>
         </RadzenAccordion>
     </ChildContent>
 </CipherComponentCard>
 
 @code {
+    [Parameter]
+    public string searchQuery { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        var uri = new Uri(navigationManager.Uri);
+        var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        if (queryParameters.TryGetValue("search", out var searchValue))
+        {
+            searchQuery = searchValue;
+        }
+    }
+
+    private List<Package> packs = new List<Package>();
+    private List<Vessel> vessels = new List<Vessel>();
+    private List<StorageSystem> systems = new List<StorageSystem>();
+
+    protected override void OnInitialized()
+    {
+        packs = GetPackages();
+        vessels = GetVessels();
+        systems = GetSystems();
+    }
+
+    public List<Package> GetPackages()
+    {
+        ObjectFactory obj = new ObjectFactory(
+        filter: new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
+                    },
+            @operator: Operator.Or)
+    );
+        Tuple<List<Package>, ErrorResponse> results = QueryRequests.QueryObjects<Package>(obj);
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1;
+        }
+        else
+        {
+            return new List<Package>();
+        }
+    }
+
+    public List<Vessel> GetVessels()
+    {
+        ObjectFactory obj = new ObjectFactory(
+    filter: new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Vessel.Type", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Vessel.System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "Vessel.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
+                        },
+        @operator: Operator.Or)
+        );
+        Tuple<List<Vessel>, ErrorResponse> results = QueryRequests.QueryObjects<Vessel>(obj);
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1;
+        }
+        else
+        {
+            return new List<Vessel>();
+        }
+    }
+
+    public List<StorageSystem> GetSystems()
+    {
+        ObjectFactory obj = new ObjectFactory(
+        filter: new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
+                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or),
+                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
+                            },
+    @operator: Operator.Or)
+    );
+        Tuple<List<StorageSystem>, ErrorResponse> results = QueryRequests.QueryObjects<StorageSystem>(obj);
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1;
+        }
+        else
+        {
+            return new List<StorageSystem>();
+        }
+    }
+
     public async Task OpenPackage()
     {
         await DialogService.OpenAsync("תעודה",
 
-        ds =>
+    ds =>
     @<CipherPackageCard dir="rtl" WithCard=false ReadOnly=true></CipherPackageCard>, Constants.SetDialogOptions);
     }
 
@@ -46,7 +154,7 @@
     {
         await DialogService.OpenAsync("כלי",
 
-        ds =>
+    ds =>
     @<CipherVesselCard dir="rtl" WithCard=false ReadOnly=true></CipherVesselCard>, Constants.SetDialogOptions);
     }
 
@@ -54,7 +162,7 @@
     {
         await DialogService.OpenAsync("מיקום",
 
-    ds =>
+        ds =>
     @<CipherSystemCard dir="rtl" WithCard=false ReadOnly=true></CipherSystemCard>, Constants.SetDialogOptions);
     }
 

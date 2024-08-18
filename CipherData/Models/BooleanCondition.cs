@@ -10,10 +10,26 @@ namespace CipherData.Models
 {
     public enum AttributeRelation
     {
-        Eq, // equal
-        Ne, // not equal
-        Gt, // greater than
-        Lt // less than
+        /// <summary>
+        /// Equal
+        /// </summary>
+        Eq,
+        /// <summary>
+        /// Not equal
+        /// </summary>
+        Ne,
+        /// <summary>
+        /// Greater Than
+        /// </summary>
+        Gt,
+        /// <summary>
+        /// Less than
+        /// </summary>
+        Lt,
+        /// <summary>
+        /// Contains text
+        /// </summary>
+        Contains
     }
 
     public enum Operator

@@ -120,7 +120,7 @@ namespace CipherWeb.Shared.Components.Buttons
 
         private void NavigateToPath(MouseEventArgs args)
         {
-            NavigationManager.NavigateTo(Path);
+            NavigationManager.NavigateTo(Path, forceLoad:true);
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)

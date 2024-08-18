@@ -158,6 +158,7 @@ components:
             - ne
             - gt
             - lt
+            - contains  
         operator: 
           type: string
           default: and
