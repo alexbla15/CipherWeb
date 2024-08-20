@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public class ErrorResponse
     {
@@ -30,8 +24,8 @@ namespace CipherData.Models
         }
 
         public static readonly ErrorResponse Success = new("OK", 200);
-        public static readonly ErrorResponse BadRequest = new("Bad request", 400);
-        public static readonly ErrorResponse Unauthorized = new("Unauthorized", 401);
-        public static readonly ErrorResponse NotFound = new("Not found", 404);
+        public static readonly ErrorResponse BadRequest = new("שגיאה בבקשה", 400);
+        public static readonly ErrorResponse Unauthorized = new("אין הרשאה", 401);
+        public static readonly ErrorResponse NotFound = new("בעיה בכתובת המבוקשת", 404);
     }
 }

@@ -2,7 +2,7 @@
 
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" DataSource="@events" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" DataSource="@Events" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddProcess.Href" HelpText="הוספת תנועה" Variant="Variant.Outlined" />
     </AdditionalButtons>
@@ -15,7 +15,7 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Event" DataSource="@events"
+        <CipherDataGrid Cipher_TItem="Event" DataSource="@Events"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
     </ComponentContent>
 </CipherTableCard>
@@ -45,11 +45,14 @@
     [Parameter]
     public bool WithHeaderContent { get; set; } = true;
 
-    private List<Event> events = new List<Event>();
+    /// <summary>
+    /// All events for scheduler
+    /// </summary>
+    [Parameter]
+    public List<Event> Events { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        events = await _db.GetEvents();
         Title ??= "דוח תנועות";
     }
 }

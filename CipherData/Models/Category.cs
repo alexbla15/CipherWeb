@@ -17,11 +17,6 @@ namespace CipherData.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Name of a the main-category containing this sub-category
-        /// </summary>
-        //public string MainCategory { get; set; }
-
-        /// <summary>
         /// Free-text description of the category
         /// </summary>
         public string Description { get; set; }
@@ -46,6 +41,16 @@ namespace CipherData.Models
         /// </summary>
         public HashSet<ProcessDefinition> ConsumingProcesses { get; set; }
 
+        /// <summary>
+        /// Parent Category containing this one
+        /// </summary>
+        public Category? Parent { get; set; }
+
+        /// <summary>
+        /// Child categories contained in this one
+        /// </summary>
+        public HashSet<Category>? Children { get; set; }
+
         private static int IdCounter { get; set; } = 0;
 
         public static string GetId()
@@ -63,8 +68,12 @@ namespace CipherData.Models
         /// <param name="materialType">Type of material of this category</param>
         /// <param name="creatingProcesses">List of processes definitions creating this category</param>
         /// <param name="consumingProcesses">List of processes defintions consuming this category</param>
+        /// <param name="parent">Parent Category containing this one</param>
+        /// <param name="children">Child categories contained in this one</param>
         public Category(string name, string description, HashSet<string> idMask, string materialType, 
-            HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses, string? id = null)
+            HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses, 
+            Category? parent = null, HashSet<Category>? children = null,
+            string? id = null)
         {
             Id = id ?? GetId();
             Name = name;
@@ -73,6 +82,8 @@ namespace CipherData.Models
             MaterialType = materialType;
             CreatingProcesses = creatingProcesses;
             ConsumingProcesses = consumingProcesses;
+            Parent = parent;
+            Children = children;
         }
 
         /// <summary>

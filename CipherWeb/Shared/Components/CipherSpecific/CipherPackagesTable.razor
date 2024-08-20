@@ -1,6 +1,8 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@TestedData.Packages" WithCard="@WithCard" WithButtons="@WithButtons"
+@inject DialogService DialogService
+
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@packages" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
@@ -10,18 +12,24 @@
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+                <CipherLocation WithIcon=false Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc"/>
             </RadzenStack>
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Package" DataSource="@TestedData.Packages" RowsPerPage="@RowsPerPage"
+        <CipherDataGrid Cipher_TItem="Package" DataSource="@packages" RowsPerPage="@RowsPerPage"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" />
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    /// <summary>
+    /// Error result of events fetching.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
     /// </summary>
@@ -58,9 +66,61 @@
     [Parameter]
     public int RowsPerPage { get; set; } = 12;
 
+    /// <summary>
+    /// System name for data fetching events
+    /// </summary>
+    [Parameter]
+    public string SelectedSystem { get; set; } = "S1";
+
+    private List<Package> packages = new List<Package>();
+
     protected override async Task OnInitializedAsync()
     {
         Title ??= "דוח תעודות";
         FileTitle ??= "packages";
+    }
+
+    public List<Package> GetPackages()
+    {
+        ObjectFactory obj = new ObjectFactory(
+    filter: new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                                                    },
+        @operator: Operator.Or)
+        );
+        Tuple<List<Package>?, ErrorResponse> results = QueryRequests.QueryObjects<Package>(obj);
+
+        error = results.Item2;
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1;
+        }
+        else
+        {
+            ShowError();
+            return new List<Package>();
+        }
+    }
+
+
+
+    /// <summary>
+    /// Function taking place upon clicking Enter.s
+    /// </summary>
+    private async Task SearchFunc()
+    {
+        packages = GetPackages();
+    }
+
+    async Task ShowError()
+    {
+        await DialogService.OpenAsync("שגיאת מערכת",
+
+        ds =>
+    @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+
+,
+        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }
 }

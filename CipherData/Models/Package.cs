@@ -60,7 +60,7 @@ namespace CipherData.Models
         public static string GetId()
         {
             IdCounter += 1;
-            return $"C{IdCounter}";
+            return $"{DateTime.Now.Year}{new Random().Next(0,3)}{new Random().Next(0,999):D3}{IdCounter:D3}";
         }
 
         public Package(string properties, StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,

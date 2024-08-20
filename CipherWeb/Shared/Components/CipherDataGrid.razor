@@ -14,7 +14,7 @@
     /// Translator from (english, hebrew) of column names.
     /// </summary>
     [Parameter]
-    public List<Tuple<string, string>> ColumnNames { get; set; }
+    public HashSet<Tuple<string, string>> ColumnNames { get; set; }
 
     /// <summary>
     /// Customized columns to be used within datagrid.
@@ -41,7 +41,7 @@
     public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
     /// <summary>
-    /// Is filteration allowed. 
+    /// Is filteration allowed.
     /// </summary>
     [Parameter]
     public bool AllowFilter { get; set; } = false;
@@ -230,7 +230,7 @@
                                           SortOrder="SortOrder.Descending" style="text-align:center" OrderIndex="@GetOrder(col.Item1)" />
                 }
                 // first column
-                else if (ColumnNames.IndexOf(col) == 0 && !(typeof(Cipher_TItem).GetProperty(col.Item1) is null) && WithTotalFooter)
+                else if (ColumnNames.ToList().IndexOf(col) == 0 && !(typeof(Cipher_TItem).GetProperty(col.Item1) is null) && WithTotalFooter)
                 {
                     <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth" OrderIndex="@GetOrder(col.Item1)">
                         <FooterTemplate>
@@ -241,7 +241,7 @@
                 else if (!(typeof(Cipher_TItem).GetProperty(col.Item1) is null))
                 {
                     @if (typeof(decimal).IsAssignableFrom(typeof(Cipher_TItem).GetProperty(col.Item1).PropertyType))
-                {
+                    {
                         @if (WithTotalFooter)
                         {
                             <RadzenDataGridColumn TItem="Cipher_TItem" Property="@col.Item1" Title="@col.Item2" Width="@SetColumnWidth" OrderIndex="@GetOrder(col.Item1)">
@@ -250,14 +250,14 @@
                                 </Template>
                                 <EditTemplate Context="item">
                                     <RadzenDropDown @bind-Value="@dynamicRow[col.Item1]" Data="@DataSource" TextProperty="CompanyName" ValueProperty="@col.Item1"
-                                    Style="width:100%; text-align: right" />
+                                                    Style="width:100%; text-align: right" />
                                 </EditTemplate>
                                 <FooterTemplate>
                                     @if (DataSource != null)
                                     {
                                         @string.Format("{0:0.00;0.00-}", DataSource.Sum(s => (decimal?)s.GetType().GetProperty(col.Item1)?.GetValue(s)))
                                     }
-                            </FooterTemplate>
+                                </FooterTemplate>
                             </RadzenDataGridColumn>
                         }
                         else

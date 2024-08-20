@@ -302,6 +302,16 @@ components:
             MaterialType:
               type: string
               description: Type of material of this category
+            parent:
+              nullable: true
+              description: Parent Category containing this one
+              $ref: "#/components/schemas/Category"
+            children:
+              nullable: true
+              description: Child categories contained in this one
+              type: array
+              items:
+                $ref: "#/components/schemas/Category"
     Process:
       type: object
       description: An instance of a specific processes

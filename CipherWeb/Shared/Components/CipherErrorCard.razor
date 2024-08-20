@@ -1,0 +1,41 @@
+﻿@inherits CipherComponentCard
+
+@inject NavigationManager Navigation
+
+@code {
+    [Parameter]
+    public string ErrorType { get; set; }
+
+    [Parameter]
+    public string ErroredAction { get; set; }
+
+    protected override void OnInitialized()
+    {
+        MarginBottom ??= "0px";
+    }
+
+    public void Refresh()
+    {
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+}
+
+<CipherComponentCard Float="none" MarginBottom="@MarginBottom" MarginTop="@MarginTop" Visible=@Visible>
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="10px" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="10px" JustifyContent="JustifyContent.SpaceAround" AlignItems="AlignItems.Center">
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0px">
+                <RadzenIcon IconColor="@Colors.Danger" Icon="@Icons.Symbols.Notifications.Warning" Style="font-size:xxx-large" />
+                <div style="width: 1px; height: 100px; background-color: var(--rz-danger-darker); margin: 0 10px;"></div>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Vertical">
+                <CipherText FontWeight="600">
+                    <u>סוג שגיאה:</u> @ErrorType
+                </CipherText><CipherText FontWeight="600">
+                    <u>מטרה:</u> @ErroredAction
+                </CipherText>
+                <CipherText Text="נסו שוב מאוחר יותר או פנו לתמיכה" FontWeight="bold" />
+            </RadzenStack>
+        </RadzenStack>
+        <CipherButton Variant="Variant.Outlined" Icon="@Icons.Arrows.Rounded.Refresh" Text="רענון" Click="Refresh"></CipherButton>
+    </RadzenStack>
+</CipherComponentCard>

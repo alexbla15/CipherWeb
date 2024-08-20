@@ -90,7 +90,7 @@ namespace CipherData.Models
                 eventType: new Random().Next(21, 27),
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
-                timestamp: DateTime.Now.AddDays(new Random().Next(0, 30)),
+                timestamp: DateTime.Now.AddDays(new Random().Next(-30, 30)),
                 valid: Convert.ToBoolean(new Random().Next(0, 1)),
                 packages: new HashSet<Package>()
                 );

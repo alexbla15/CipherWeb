@@ -1,18 +1,16 @@
 ﻿@inherits CipherComponentCard
 
 @inject ICipherInfo _db
+@inject DialogService DialogService
 
 <CipherComponentCard Title="גאנט תהליכים" MaxWidth="@MaxWidth" Width="@Width" MarginBottom="@MarginBottom">
     <HeaderContent>
-        <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
-        </RadzenStack>
+        <CipherLocation WithIcon="false" Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc" />
     </HeaderContent>
     <Buttons>
-        <CipherButton Icon="@Icons.UiComponents.Table.TableView" HelpText="@TableViewText" Size="ButtonSize.Medium"
+        <CipherButton Icon="@Icons.UiComponents.Table.TableView" HelpText="@TableViewText"
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
-        <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText"
-                      Size="ButtonSize.Medium" Variant="Variant.Outlined"
+        <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
         <CipherExcelButton FileName="@FileName" Data="@TestedData.Events" />
         <CipherPDFButton />
@@ -20,22 +18,29 @@
     <ChildContent>
         @if (SetView == View.Table)
         {
-            <CipherEventsTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false" />
+            <CipherEventsTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
+                               WithHeaderContent="false" Events="@events" />
         }
         else
         {
-            <CipherScheduler Height="@EventsHeight" />
+            <CipherScheduler Height="@EventsHeight" SelectedSystem="@SelectedSystem" Events="@events" />
         }
     </ChildContent>
 </CipherComponentCard>
 
 @code {
     /// <summary>
+    /// Error result of events fetching.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
     /// Display role of Cipher. Must be a Role-enum.
     /// </summary>
     [Parameter]
     public Role SetRole { get; set; } = Role.Manager;
-    
+
     /// <summary>
     /// initial view of the scheduler (upon entry). Must be a View-enum.
     /// </summary>
@@ -58,13 +63,21 @@
     /// View as table - text.
     /// </summary>
     [Parameter]
-    public string CalendarViewText { get; set; } = "הצגה כטבלה";
+    public string CalendarViewText { get; set; } = "הצגה כלוח שנה";
 
     /// <summary>
     /// File name for exporting as EXCEL.
     /// </summary>
     [Parameter]
     public string FileName { get; set; } = "events";
+
+    /// <summary>
+    /// System name for data fetching events
+    /// </summary>
+    [Parameter]
+    public string SelectedSystem { get; set; } = "S1";
+
+    private List<Event> events = new List<Event>();
 
     public enum View
     {
@@ -90,6 +103,31 @@
         {
             SetView = View.Table;
         }
+
+        events = GetEvents();
+    }
+
+    public List<Event> GetEvents()
+    {
+        ObjectFactory obj = new ObjectFactory(
+    filter: new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Event.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                                                },
+        @operator: Operator.Or)
+        );
+        Tuple<List<Event>?, ErrorResponse> results = QueryRequests.QueryObjects<Event>(obj);
+
+        error = results.Item2;
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1;
+        }
+        else
+        {
+            ShowError();
+            return new List<Event>();
+        }
     }
 
     private void TableView()
@@ -100,5 +138,24 @@
     private void CalendarView()
     {
         SetView = View.Calendar;
+    }
+
+    /// <summary>
+    /// Function taking place upon clicking Enter.s
+    /// </summary>
+    private async Task SearchFunc()
+    {
+        events = GetEvents();
+    }
+
+    async Task ShowError()
+    {
+        await DialogService.OpenAsync("שגיאת מערכת",
+
+    ds =>
+    @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+  
+,
+        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }
 }

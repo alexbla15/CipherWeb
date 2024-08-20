@@ -6,14 +6,14 @@
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
                  style="@SchedulerStyle()" TItem="Event" AppointmentSelect="@SelectEvent"
-                 Data=@TestedData.Events StartProperty="Timestamp" EndProperty="Timestamp" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
+                 Data=@Events StartProperty="Timestamp" EndProperty="Timestamp" AppointmentMouseEnter=@OnAppointmentMouseEnter AppointmentMouseLeave=@OnAppointmentMouseLeave
                  TextProperty="Id" SelectedIndex="2" AppointmentRender=@OnEventRender TodayText="היום">
     <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt" />
     <CipherWeekView StartTime="@startTime" EndTime="@endTime" />
     <CipherMonthView MoreText="תהליכים נוספים" MaxAppointmentsInSlot="@EventsInSlot" />
     <CipherYearPlannerView />
-
 </RadzenScheduler>
+
 
 @code {
     /// <summary>
@@ -88,6 +88,18 @@
     [Parameter]
     public TooltipPosition EventTooltipPosition { get; set; } = TooltipPosition.Bottom;
 
+    /// <summary>
+    /// Schudler events are set by selected system.
+    /// </summary>
+    [Parameter]
+    public string SelectedSystem { get; set; }
+
+    /// <summary>
+    /// All events for scheduler
+    /// </summary>
+    [Parameter]
+    public List<Event> Events { get; set; }
+
     private RadzenScheduler<Event> scheduler;
 
     private Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
@@ -97,10 +109,6 @@
                 ["העברה"] = Colors.Success,
                 ["עדכון"] = Colors.Secondary
             };
-
-    protected override async Task OnInitializedAsync()
-    {
-    }
 
     private string SchedulerStyle()
     {
@@ -190,7 +198,7 @@
             <CipherText Text="עודכן ב" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
             <CipherText Text="@args.Data.Timestamp.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
         </RadzenStack>
-        </RadzenStack>
+    </RadzenStack>
     , new TooltipOptions { Position = EventTooltipPosition, Duration = null });
     }
 

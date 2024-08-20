@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager navigationManager
+@inject DialogService DialogService
 
 @inherits RadzenStack
 
@@ -39,6 +40,7 @@
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
+    private CipherAutoComplete autoComplete;
     private string SearchText = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -64,18 +66,21 @@
             await Task.Delay(1);
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
-                string url = $"{SearchPath}?search={SearchText}";
-                navigationManager.NavigateTo(url, forceLoad:true);
+                // if value is acceptable, do the search
+                if (autoComplete.Check())
+                {
+                    string url = $"{SearchPath}?search={SearchText}";
+                    navigationManager.NavigateTo(url, forceLoad: true);
+                }
             }
         }
     }
 }
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Center" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
-    <CipherAutoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" ShowErrors="false" @bind-value="SearchText"
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Start" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
+    <CipherAutoComplete @ref=autoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" @bind-value="SearchText"
                         Data="@TestedData.Packages" TextProperty="Id" OnKeyDown="SearchFunc"></CipherAutoComplete>
 
-    <CipherNavButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px" 
-                    Path="@($"{SearchPath}?search={SearchText}")"
-                     Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
+    <CipherButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px"
+                  Disabled="true" Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>

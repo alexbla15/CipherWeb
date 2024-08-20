@@ -1,40 +1,65 @@
 ﻿@page "/Search/FreeSearch/"
-@inject NavigationManager navigationManager
 
 @inject ICipherInfo _db
 @inject DialogService DialogService
+@inject NavigationManager navigationManager
 
 <PageTitle>חיפוש חופשי</PageTitle>
 
-<CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px">
+<CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete Data="@TestedData.Packages" TextProperty="Id" Value="@searchQuery"></CipherAutoComplete>
+        <CipherAutoComplete @ref=autoComplete Data="@TestedData.Packages" TextProperty="Id" @bind-value="SearchText" OnKeyDown="SearchFunc" />
     </HeaderContent>
     <ChildContent>
-        <RadzenAccordion Style="background-color: var(--rz-primary-lightest);" Multiple="true">
+        <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
             <Items>
-                @if (packs.Count() > 0)
+                @*<RadzenAccordionItem Text="@($"תעודות ({packs.Count()})")">
+                <CipherComponentCard>
+                <CipherDataGrid DataSource="@packs" WithTotalFooter=false></CipherDataGrid>
+                </CipherComponentCard>
+                </RadzenAccordionItem>
+
+                <RadzenAccordionItem Text="@($"מערכות ({systems.Count()})")">
+                <CipherComponentCard>
+                <CipherDataGrid DataSource="@systems" WithTotalFooter=false></CipherDataGrid>
+                </CipherComponentCard>
+                </RadzenAccordionItem>*@
+                @foreach (var data in AllData)
                 {
-                    <RadzenAccordionItem Text="@($"תעודות ({packs.Count()})")">
+                    <RadzenAccordionItem Text="@($"{data.Item1} ({data.Item2.Count()})")">
                         <CipherComponentCard>
-                            <CipherDataGrid DataSource="@packs" WithTotalFooter=false></CipherDataGrid>
-                        </CipherComponentCard>
-                    </RadzenAccordionItem>
-                }
-                <br />
-                @if (vessels.Count() > 0)
-                {
-                    <RadzenAccordionItem Text="@($"כלים ({vessels.Count()})")">
-                        <CipherComponentCard>
-                            <CipherDataGrid DataSource="@vessels" WithTotalFooter=false></CipherDataGrid>
-                        </CipherComponentCard>
-                    </RadzenAccordionItem>
-                }
-                @if (systems.Count() > 0)
-                {
-                    <RadzenAccordionItem Text="@($"מיקומים ({systems.Count()})")">
-                        <CipherComponentCard>
-                            <CipherDataGrid DataSource="@systems" WithTotalFooter=false></CipherDataGrid>
+                            @if (data.Item2 is List<Package>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@Package.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<Event>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@Event.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<StorageSystem>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@StorageSystem.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<Process>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@Process.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<ProcessDefinition>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@ProcessDefinition.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<Vessel>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@Vessel.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<Unit>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@Unit.Headers()"></CipherDataGrid>
+                            }
+                            else if (data.Item2 is List<Category>)
+                            {
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@Category.Headers()"></CipherDataGrid>
+                            }
                         </CipherComponentCard>
                     </RadzenAccordionItem>
                 }
@@ -44,126 +69,278 @@
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Searched text within autocomplete box
+    /// </summary>
     [Parameter]
-    public string searchQuery { get; set; } = string.Empty;
+    public string SearchText { get; set; } = string.Empty;
 
-    protected override void OnParametersSet()
+    /// <summary>
+    /// Event in case a key was pressed within AutoComplete box.
+    /// </summary>
+    [Parameter]
+    public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
+    /// <summary>
+    /// Path to be searched in case on Enter pressed.
+    /// </summary>
+    [Parameter]
+    public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
+
+    private static List<Package> packs = new List<Package>();
+    private static List<Vessel> vessels = new List<Vessel>();
+    private static List<StorageSystem> systems = new List<StorageSystem>();
+    private static List<Unit> units = new List<Unit>();
+    private static List<Category> categories = new List<Category>();
+    private static List<Event> events = new List<Event>();
+    private static List<Process> processes = new List<Process>();
+    private static List<ProcessDefinition> processes_definitions = new List<ProcessDefinition>();
+
+    private List<Tuple<string, IEnumerable<Resource>>> AllData = new(){
+        new("תעודות", packs),
+        new("מערכות", systems),
+        new("יחידות", units),
+        new("תנועות", events),
+        new("תהליכים", processes),
+        new("סוגי תהליכים", processes_definitions),
+        new("כלים", vessels),
+        new("קטגוריות", categories),
+                    };
+
+    private ErrorResponse error = ErrorResponse.Success;
+    private CipherAutoComplete autoComplete;
+
+    protected override async void OnParametersSet()
     {
+        // get current URI
         var uri = new Uri(navigationManager.Uri);
+        // get parameter from uri (the searched text in this case)
         var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
+        // only navigate there if parameter was successfuly recieved
         if (queryParameters.TryGetValue("search", out var searchValue))
         {
-            searchQuery = searchValue;
+            SearchText = searchValue;
         }
     }
-
-    private List<Package> packs = new List<Package>();
-    private List<Vessel> vessels = new List<Vessel>();
-    private List<StorageSystem> systems = new List<StorageSystem>();
 
     protected override void OnInitialized()
     {
+        // Collect needed results
         packs = GetPackages();
         vessels = GetVessels();
         systems = GetSystems();
+        units = GetUnits();
+        categories = GetCategories();
+        events = GetEvents();
+        processes = GetProcesses();
+        processes_definitions = GetProcessesDefinitions();
+
+        // Show error dialog if something went wrong fetching data
+        if (error != ErrorResponse.Success)
+        {
+            ShowError();
+        }
+
+        // Set default OnKeyDown if not provided
+        if (!OnKeyDown.HasDelegate)
+        {
+            OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, EnteredSearchFunc);
+        }
     }
 
+    /// <summary>
+    /// Function taking place upon clicking Enter.s
+    /// </summary>
+    public async Task EnteredSearchFunc(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await SearchFunc();
+        }
+    }
+
+    /// <summary>
+    /// Perform the search
+    /// </summary>
+    public async Task SearchFunc()
+    {
+        // Wait for a short duration to ensure SearchText is updated
+        await Task.Delay(1);
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            // if value is acceptable, do the search
+            if (autoComplete.Check())
+            {
+                // url to be shown upon searching
+                string url = $"{SearchPath}?search={SearchText}";
+
+                // if something went wrong, show error dialog
+                if (error != ErrorResponse.Success)
+                {
+                    await ShowError();
+                }
+                // else go to the desired path
+                else
+                {
+                    navigationManager.NavigateTo(url, forceLoad: true);
+                }
+            }
+        }
+    }
+
+    public List<T> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
+    {
+        ObjectFactory obj = new ObjectFactory(
+                filter: createCondition(searchText)
+            );
+
+        Tuple<List<T>?, ErrorResponse> results = QueryRequests.QueryObjects<T>(obj);
+
+        error = results.Item2;
+
+        if (results.Item2 == ErrorResponse.Success)
+        {
+            return results.Item1 ?? new List<T>();
+        }
+        else
+        {
+            return new List<T>();
+        }
+    }
+
+    /// <summary>
+    /// Fetch all packages which contain the searched text
+    /// </summary>
     public List<Package> GetPackages()
     {
-        ObjectFactory obj = new ObjectFactory(
-        filter: new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
-                    },
-            @operator: Operator.Or)
-    );
-        Tuple<List<Package>, ErrorResponse> results = QueryRequests.QueryObjects<Package>(obj);
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1;
-        }
-        else
-        {
-            return new List<Package>();
-        }
+        return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
+                }, @operator: Operator.Or));
     }
 
+
+    /// <summary>
+    /// Fetch all vessels which contain the searched text
+    /// </summary>
     public List<Vessel> GetVessels()
     {
-        ObjectFactory obj = new ObjectFactory(
-    filter: new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Vessel.Type", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Vessel.System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "Vessel.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
-                        },
-        @operator: Operator.Or)
-        );
-        Tuple<List<Vessel>, ErrorResponse> results = QueryRequests.QueryObjects<Vessel>(obj);
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1;
-        }
-        else
-        {
-            return new List<Vessel>();
-        }
+        return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Vessel.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Vessel.Type", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Vessel.System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Vessel.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                    }, @operator: Operator.Or));
     }
 
+    /// <summary>
+    /// Fetch all systems which contain the searched text
+    /// </summary>
     public List<StorageSystem> GetSystems()
     {
-        ObjectFactory obj = new ObjectFactory(
-        filter: new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery),
-                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or),
-                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: searchQuery, @operator:Operator.Or)
-                            },
-    @operator: Operator.Or)
-    );
-        Tuple<List<StorageSystem>, ErrorResponse> results = QueryRequests.QueryObjects<StorageSystem>(obj);
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1;
-        }
-        else
-        {
-            return new List<StorageSystem>();
-        }
+        return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                }, @operator: Operator.Or));
     }
 
-    public async Task OpenPackage()
+    /// <summary>
+    /// Fetch all units which contain the searched text
+    /// </summary>
+    public List<Unit> GetUnits()
     {
-        await DialogService.OpenAsync("תעודה",
-
-    ds =>
-    @<CipherPackageCard dir="rtl" WithCard=false ReadOnly=true></CipherPackageCard>, Constants.SetDialogOptions);
+        return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Unit.Systems.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                    }, @operator: Operator.Or));
     }
 
-    public async Task OpenVessel()
+    /// <summary>
+    /// Fetch all categories which contain the searched text
+    /// </summary>
+    public List<Category> GetCategories()
     {
-        await DialogService.OpenAsync("כלי",
-
-    ds =>
-    @<CipherVesselCard dir="rtl" WithCard=false ReadOnly=true></CipherVesselCard>, Constants.SetDialogOptions);
+        return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Category.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.IdMask", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.MaterialType", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.CreatingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Category.ConsumingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or),
+                new BooleanCondition(attribute: "Category.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                        }, @operator: Operator.Or));
     }
 
-    public async Task OpenSystem()
+    /// <summary>
+    /// Fetch all events which contain the searched text
+    /// </summary>
+    public List<Event> GetEvents()
     {
-        await DialogService.OpenAsync("מיקום",
-
-        ds =>
-    @<CipherSystemCard dir="rtl" WithCard=false ReadOnly=true></CipherSystemCard>, Constants.SetDialogOptions);
+        return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Event.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.EventType", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.ProcessId", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.Comments", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.Packages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                            }, @operator: Operator.Or));
     }
 
+    /// <summary>
+    /// Fetch all processes which contain the searched text
+    /// </summary>
+    public List<Process> GetProcesses()
+    {
+        return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Process.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Process.Definition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Process.Events.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Process.UncompletedSteps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                                                }, @operator: Operator.Or));
+    }
+
+    /// <summary>
+    /// Fetch all processes definitions which contain the searched text
+    /// </summary>
+    public List<ProcessDefinition> GetProcessesDefinitions()
+    {
+
+        return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "ProcessDefinition.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "ProcessDefinition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "ProcessDefinition.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "ProcessDefinition.Steps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                                                    }, @operator: Operator.Or));
+    }
+
+    /// <summary>
+    /// Method to show error-dialog when needed
+    /// </summary>
+    /// <returns></returns>
+    async Task ShowError()
+    {
+        await DialogService.OpenAsync("שגיאת מערכת",
+
+                ds =>
+        @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SearchText" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+
+,
+        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
+
+
+    }
 }

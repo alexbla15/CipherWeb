@@ -11,6 +11,10 @@ namespace CipherWeb
             List<Tuple<string, string>> BuildHeaders = Event.Headers().ToList();
             BuildHeaders.AddRange(Package.Headers());
             BuildHeaders.AddRange(Category.Headers());
+            BuildHeaders.AddRange(Process.Headers());
+            BuildHeaders.AddRange(ProcessDefinition.Headers());
+            BuildHeaders.AddRange(StorageSystem.Headers());
+            BuildHeaders.AddRange(Unit.Headers());
 
             BuildHeaders.Add(new("Value", "ערך"));
             BuildHeaders.Add(new("Month", "חודש"));
@@ -23,6 +27,6 @@ namespace CipherWeb
             return BuildHeaders.ToHashSet();
         }
 
-        public static List<Tuple<string, string>> Headers = BuildDictionary().Distinct().ToList();
+        public static HashSet<Tuple<string, string>> Headers = BuildDictionary().Distinct().ToHashSet();
     }
 }

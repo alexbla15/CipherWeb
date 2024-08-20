@@ -1,4 +1,8 @@
-﻿using CipherWeb.Data;
+﻿using CipherData.Models;
+using CipherWeb.Data;
+using CipherWeb.Shared.Components;
+using Radzen;
+using System;
 using System.Reflection;
 
 namespace CipherWeb
@@ -60,7 +64,7 @@ namespace CipherWeb
         /// <summary>
         /// Find an improper char within a string.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">desired text</param>
         /// <returns></returns>
         public static string? FindImproperChar(string value)
         {

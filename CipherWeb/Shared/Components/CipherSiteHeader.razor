@@ -91,8 +91,8 @@
         <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="תצוגה חדשה" Style="width: 200px" @bind-Value=@NewRole Data="@Roles.Get()" />
         <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenStack Orientation="Orientation.Horizontal">
-                <CipherButton Icon="@Icons.Symbols.V.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Default" Width="100px" />
-                <CipherButton Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
+                <CipherButton Variant="Variant.Outlined" Icon="@Icons.Symbols.V.Done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Width="100px" />
+                <CipherButton Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
             </RadzenStack>
         </RadzenStack>
     </RadzenStack>

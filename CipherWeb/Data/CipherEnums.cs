@@ -1,4 +1,6 @@
-﻿namespace CipherWeb.Data
+﻿using Radzen;
+
+namespace CipherWeb.Data
 {
     public enum Language
     {
@@ -27,5 +29,16 @@
         public readonly static string Warning = "תנועה תקולה";
         public readonly static string Accepted = "תנועה מאושרת";
         public readonly static string Denied = "תנועה נדחתה";
+    }
+
+    /// <summary>
+    /// Additional colors to Radzen.Colors
+    /// </summary>
+    public static class CipherColors
+    {
+        //
+        // Summary:
+        //     Primary lightest.
+        public const string PrimaryLightest = "var(--rz-primary-lightest)";
     }
 }

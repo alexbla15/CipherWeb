@@ -8,18 +8,25 @@ namespace CipherData.Requests
         /// Create a new category.
         /// Path: POST /categories
         /// </summary>
-        public static Tuple<T?, ErrorResponse> Request<T>(T successResult, bool canBadRequest=true, bool canBeNotFound = false)
+        public static Tuple<T?, ErrorResponse> Request<T>(T successResult, bool canBadRequest=true, bool canBeNotFound = false, bool canFail = true)
         {
             Random rand = new();
             int result = rand.Next(1, 4);
 
-            return result switch
+            if (canFail)
             {
-                1 => new (successResult, ErrorResponse.Success),
-                2 when canBadRequest => new (default, ErrorResponse.BadRequest),
-                3 when canBeNotFound => new (default, ErrorResponse.NotFound),
-                _ => new (default, ErrorResponse.Unauthorized)
-            };
+                return result switch
+                {
+                    1 => new(successResult, ErrorResponse.Success),
+                    2 when canBadRequest => new(default, ErrorResponse.BadRequest),
+                    3 when canBeNotFound => new(default, ErrorResponse.NotFound),
+                    _ => new(default, ErrorResponse.Unauthorized)
+                };
+            }
+            else
+            {
+                return new(successResult, ErrorResponse.Success);
+            }
         }
     }
 }

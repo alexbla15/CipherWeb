@@ -34,7 +34,7 @@ namespace CipherData.Models
         public static string GetId()
         {
             IdCounter += 1;
-            return $"C{IdCounter}";
+            return $"S{IdCounter}";
         }
 
         /// <summary>

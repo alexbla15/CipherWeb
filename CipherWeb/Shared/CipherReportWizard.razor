@@ -88,7 +88,7 @@
     /// Get translation between (english, hebrew) column names for table.
     /// </summary>
     /// <returns></returns>
-    private List<Tuple<string, string>> GetColumns()
+    private HashSet<Tuple<string, string>> GetColumns()
     {
         if (dataGrouper.chosenGroups.Keys.Count() == 0 && dataAggregater.GetData().Count() == 0)
         {
@@ -99,7 +99,7 @@
             return HebrewDictionary.Headers.Where(x =>
                 dataGrouper.chosenGroups.ContainsValue(x.Item2) ||
                 dataAggregater.GetData().Select(x => x.Parameter).ToList().Contains(x.Item2)
-            ).ToList();
+            ).ToHashSet();
         }
     }
 

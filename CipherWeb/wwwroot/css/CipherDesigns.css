@@ -967,7 +967,7 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
     right: 2px; /*label position*/
     background-size: auto;
     width: auto;
-    max-width: 10rem;
+    max-width: 12rem;
     /*background-color: transparent;*/
     font-size: 14px;
 }

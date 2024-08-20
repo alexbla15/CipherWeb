@@ -1,4 +1,6 @@
 ﻿using CipherData.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace CipherData.Requests
 {
@@ -9,24 +11,32 @@ namespace CipherData.Requests
         /// Can Be Any array of resources. 
         /// Path: POST /query
         /// </summary>
-        public static Tuple<List<T>?,ErrorResponse> QueryObjects<T>(ObjectFactory obj) where T: Resource
+        public static Tuple<List<T>?, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
         {
-            if (typeof(T) == typeof(Package))
+            // Get the type of T
+            Type type = typeof(T);
+
+            // Attempt to find the Random method on the type. Each Resource type needs to have this method
+            MethodInfo? randomMethod = type.GetMethod("Random", BindingFlags.Public | BindingFlags.Static);
+
+            if (randomMethod != null)
             {
-                return GenericRequests.Request(TestedData.FillRandomObjects(new Random().Next(1,20), Package.Random) as List<T>);
+                // Define the lambda to match the expected signature (string? -> T)
+                Func<string?, T> randomFunc = id =>
+                {
+                    // Call the Random method with a default argument
+                    return (T)randomMethod.Invoke(null, new object[] { id });
+                };
+
+                // Use the lambda in the FillRandomObjects method. Gets you a list of X random objected of the desired type.
+                List<T> list = TestedData.FillRandomObjects(new Random().Next(1, 20), randomFunc);
+
+                // return a successful result / error, according to logic set in Request()
+                return GenericRequests.Request(list, canBeNotFound: true, canFail: canFail);
             }
-            else if (typeof(T) == typeof(Vessel))
-            {
-                return GenericRequests.Request(TestedData.FillRandomObjects(new Random().Next(1, 20), Vessel.Random) as List<T>);
-            }
-            else if (typeof(T) == typeof(StorageSystem))
-            {
-                return GenericRequests.Request(TestedData.FillRandomObjects(new Random().Next(1, 20), StorageSystem.Random) as List<T>);
-            }
-            else
-            {
-                return GenericRequests.Request(new List<T>());
-            }
+
+            // If the type doesn't have a Random method, return an empty list.
+            return GenericRequests.Request(new List<T>(), canBeNotFound: true, canFail: canFail);
         }
     }
 }
