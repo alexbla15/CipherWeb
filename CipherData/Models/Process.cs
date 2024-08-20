@@ -40,7 +40,13 @@ namespace CipherData.Models
             Definition = definition;
             Events = events;
             UncompletedSteps = uncompletedSteps;
+
+            Start = Events.Select(x => x.Timestamp).Min();
+            End = Events.Select(x => x.Timestamp).Max();
         }
+
+        public DateTime Start;
+        public DateTime End;
 
         /// <summary>
         /// Counts how many packages were created.
@@ -81,9 +87,18 @@ namespace CipherData.Models
             return new Process(
                 id: id,
                 definition: ProcessDefinition.Random(),
-                events: new HashSet<Event>(),
+                events: Enumerable.Range(0, 3).Select(_ => Event.Random()).ToHashSet(),
                 uncompletedSteps: Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToHashSet()
                 );
+        }
+
+        public string Duration()
+        {
+            TimeSpan difference = End - Start;
+            int days = difference.Days;
+            int hours = difference.Hours;
+
+            return $"{days} ימים, {hours} שעות";
         }
 
         // API-RELATED FUNCTIONS

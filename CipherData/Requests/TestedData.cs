@@ -15,7 +15,7 @@ namespace CipherData.Requests
         public static readonly List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
         public static readonly List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
         public static readonly List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי" };
-        public static readonly List<string> ProcessesStepNames = new() { "התחלה", "אמצע", "סיום" };
+        public static readonly List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };
 
         public static string GetRandomString(List<string> values)
         {
@@ -29,14 +29,14 @@ namespace CipherData.Requests
         public static DateTime RandomDateTime()
         {
             Random random = new();
-            int range = (DateTime.Now.AddYears(1) - DateTime.Now.AddYears(-1)).Days;  // Calculate the total number of days between the two dates
+            int range = (DateTime.Now.AddDays(10) - DateTime.Now.AddDays(-10)).Days;  // Calculate the total number of days between the two dates
                                                                                       // Generate random hours, minutes, and seconds
             int hours = random.Next(0, 24);
             int minutes = random.Next(0, 60);
             int seconds = random.Next(0, 60);
 
             // Generate a random date
-            DateTime randomDate = DateTime.Now.AddYears(-1).AddDays(random.Next(range));
+            DateTime randomDate = DateTime.Now.AddDays(random.Next(range));
 
             return randomDate.AddHours(hours)
                          .AddMinutes(minutes)
@@ -53,5 +53,6 @@ namespace CipherData.Requests
         public static List<Vessel> Vessels = FillRandomObjects(20, Vessel.Random);
         public static List<StorageSystem> Systems = FillRandomObjects(20, StorageSystem.Random);
         public static List<Event> Events = FillRandomObjects(20, Event.Random);
+        public static List<Process> Processes = FillRandomObjects(20, Process.Random);
     }
 }

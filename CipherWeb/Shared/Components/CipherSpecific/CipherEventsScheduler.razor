@@ -12,7 +12,7 @@
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
         <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
-        <CipherExcelButton FileName="@FileName" Data="@TestedData.Events" />
+        <CipherExcelButton FileName="@FileName" Data="@procs" />
         <CipherPDFButton />
     </Buttons>
     <ChildContent>
@@ -23,7 +23,7 @@
         }
         else
         {
-            <CipherScheduler Height="@EventsHeight" SelectedSystem="@SelectedSystem" Events="@events" />
+            <CipherScheduler Height="@EventsHeight" SelectedSystem="@SelectedSystem" Processes="@procs" />
         }
     </ChildContent>
 </CipherComponentCard>
@@ -77,7 +77,8 @@
     [Parameter]
     public string SelectedSystem { get; set; } = "S1";
 
-    private List<Event> events = new List<Event>();
+    private List<Event>? events = new List<Event>();
+    private List<Process>? procs = new List<Process>();
 
     public enum View
     {
@@ -104,30 +105,8 @@
             SetView = View.Table;
         }
 
-        events = GetEvents();
-    }
-
-    public List<Event> GetEvents()
-    {
-        ObjectFactory obj = new ObjectFactory(
-    filter: new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Event.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-                                                },
-        @operator: Operator.Or)
-        );
-        Tuple<List<Event>?, ErrorResponse> results = QueryRequests.QueryObjects<Event>(obj);
-
-        error = results.Item2;
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1;
-        }
-        else
-        {
-            ShowError();
-            return new List<Event>();
-        }
+        (events, error) = Event.EventsOfSystem(SelectedSystem);
+        procs = TestedData.Processes;
     }
 
     private void TableView()
@@ -145,7 +124,7 @@
     /// </summary>
     private async Task SearchFunc()
     {
-        events = GetEvents();
+        (events, error) = Event.EventsOfSystem(SelectedSystem);
     }
 
     async Task ShowError()

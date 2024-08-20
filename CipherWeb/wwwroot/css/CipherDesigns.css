@@ -3,10 +3,10 @@
     --rz-primary: #F8AF12;
     --rz-primary-light: #FAD075;
     --rz-primary-lighter: #FEF2D8;
+    --rz-on-primary-lighter: #7F5804;
     --rz-primary-lightest: #FFFCF7;
     --rz-primary-dark: #B27B06;
     --rz-primary-darker: #775204;
-    --rz-on-primary-lighter: #7F5804;
     /* ------------------ DANGER (RED) ------------------ */
     --rz-danger: #bc2020;
     --rz-danger-light: #dc3030;

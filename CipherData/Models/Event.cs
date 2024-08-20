@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CipherData.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -102,7 +103,7 @@ namespace CipherData.Models
                 eventType: new Random().Next(21, 27),
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
-                timestamp: DateTime.Now.AddDays(new Random().Next(-30, 30)),
+                timestamp: TestedData.RandomDateTime(),
                 valid: Convert.ToBoolean(new Random().Next(0, 1)),
                 packages: new HashSet<Package>()
                 );
@@ -124,5 +125,12 @@ namespace CipherData.Models
                                             }, @operator: Operator.Or));
         }
 
+        public static Tuple<List<Event>?, ErrorResponse> EventsOfSystem(string SelectedSystem)
+        {
+            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            {
+                new BooleanCondition(attribute: "Event.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+            }, @operator: Operator.Or));
+        }
     }
 }
