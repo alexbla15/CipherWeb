@@ -54,5 +54,18 @@ namespace CipherData.Models
             new ("Uuid", "מספר סידורי"),
             new ("ClearenceLevel", "מידור")
         };
+
+        /// <summary>
+        /// Get resources which contain a certain text within one of their parameters
+        /// </summary>
+        /// <typeparam name="T">Type of resource</typeparam>
+        /// <param name="searchText">wanted text</param>
+        /// <param name="createCondition">how to create the GroupedBooleanCondition</param>
+        /// <returns></returns>
+        public static Tuple<List<T>?, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
+        {
+            ObjectFactory obj = new(filter: createCondition(searchText));
+            return QueryRequests.QueryObjects<T>(obj);
+        }
     }
 }

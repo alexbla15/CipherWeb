@@ -16,6 +16,9 @@ namespace CipherData.Models
         /// </summary>
         public ProcessDefinition Definition { get; set; }
 
+        /// <summary>
+        /// Events taking place during a process
+        /// </summary>
         public HashSet<Event> Events { get; set; }
 
         /// <summary>
@@ -23,27 +26,35 @@ namespace CipherData.Models
         /// </summary>
         public HashSet<ProcessStepDefinition> UncompletedSteps { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter}";
-        }
-
         /// <summary>
         /// An instance of a specific processes
         /// </summary>
         /// <param name="definition">a collection of steps that make a single definition</param>
-        /// <param name="events"></param>
-        /// <param name="uncompletedSteps"></param>
+        /// <param name="events">Events taking place during a process</param>
+        /// <param name="uncompletedSteps">Uncompleted steps for completing the process</param>
+        /// <param name="id">Only if you want process to have specific id</param>
         public Process(ProcessDefinition definition, HashSet<Event> events, HashSet<ProcessStepDefinition> uncompletedSteps,
             string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             Definition = definition;
             Events = events;
             UncompletedSteps = uncompletedSteps;
+        }
+
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new object
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"PR{IdCounter:D3}";
         }
 
         /// <summary>
@@ -61,6 +72,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static Process Random(string? id = null)
         {
             return new Process(
@@ -69,6 +84,21 @@ namespace CipherData.Models
                 events: new HashSet<Event>(),
                 uncompletedSteps: Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToHashSet()
                 );
+        }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all processes which contain the searched text
+        /// </summary>
+        public static Tuple<List<Process>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Process.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Process.Definition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Process.Events.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Process.UncompletedSteps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                                                }, @operator: Operator.Or));
         }
     }
 }

@@ -8,22 +8,11 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete @ref=autoComplete Data="@TestedData.Packages" TextProperty="Id" @bind-value="SearchText" OnKeyDown="SearchFunc" />
+        <CipherAutoComplete @ref=autoComplete Data="@TestedData.Packages" TextProperty="Id" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
             <Items>
-                @*<RadzenAccordionItem Text="@($"תעודות ({packs.Count()})")">
-                <CipherComponentCard>
-                <CipherDataGrid DataSource="@packs" WithTotalFooter=false></CipherDataGrid>
-                </CipherComponentCard>
-                </RadzenAccordionItem>
-
-                <RadzenAccordionItem Text="@($"מערכות ({systems.Count()})")">
-                <CipherComponentCard>
-                <CipherDataGrid DataSource="@systems" WithTotalFooter=false></CipherDataGrid>
-                </CipherComponentCard>
-                </RadzenAccordionItem>*@
                 @foreach (var data in AllData)
                 {
                     <RadzenAccordionItem Text="@($"{data.Item1} ({data.Item2.Count()})")">
@@ -87,16 +76,16 @@
     [Parameter]
     public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
 
-    private static List<Package> packs = new List<Package>();
-    private static List<Vessel> vessels = new List<Vessel>();
-    private static List<StorageSystem> systems = new List<StorageSystem>();
-    private static List<Unit> units = new List<Unit>();
-    private static List<Category> categories = new List<Category>();
-    private static List<Event> events = new List<Event>();
-    private static List<Process> processes = new List<Process>();
-    private static List<ProcessDefinition> processes_definitions = new List<ProcessDefinition>();
+    private static List<Package>? packs = new List<Package>();
+    private static List<Vessel>? vessels = new List<Vessel>();
+    private static List<StorageSystem>? systems = new List<StorageSystem>();
+    private static List<Unit>? units = new List<Unit>();
+    private static List<Category>? categories = new List<Category>();
+    private static List<Event>? events = new List<Event>();
+    private static List<Process>? processes = new List<Process>();
+    private static List<ProcessDefinition>? processes_definitions = new List<ProcessDefinition>();
 
-    private List<Tuple<string, IEnumerable<Resource>>> AllData = new(){
+    private List<Tuple<string, IEnumerable<Resource>?>> AllData = new(){
         new("תעודות", packs),
         new("מערכות", systems),
         new("יחידות", units),
@@ -124,22 +113,22 @@
         }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         // Collect needed results
-        packs = GetPackages();
-        vessels = GetVessels();
-        systems = GetSystems();
-        units = GetUnits();
-        categories = GetCategories();
-        events = GetEvents();
-        processes = GetProcesses();
-        processes_definitions = GetProcessesDefinitions();
+        (packs, error) = Package.Containing(SearchText);
+        (vessels, error) = Vessel.Containing(SearchText);
+        (systems, error) = StorageSystem.Containing(SearchText);
+        (units, error) = Unit.Containing(SearchText);
+        (categories, error) = Category.Containing(SearchText);
+        (events, error) = Event.Containing(SearchText);
+        (processes, error) = Process.Containing(SearchText);
+        (processes_definitions, error) = ProcessDefinition.Containing(SearchText);
 
         // Show error dialog if something went wrong fetching data
         if (error != ErrorResponse.Success)
         {
-            ShowError();
+            await ShowError();
         }
 
         // Set default OnKeyDown if not provided
@@ -207,124 +196,6 @@
         {
             return new List<T>();
         }
-    }
-
-    /// <summary>
-    /// Fetch all packages which contain the searched text
-    /// </summary>
-    public List<Package> GetPackages()
-    {
-        return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
-                }, @operator: Operator.Or));
-    }
-
-
-    /// <summary>
-    /// Fetch all vessels which contain the searched text
-    /// </summary>
-    public List<Vessel> GetVessels()
-    {
-        return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Vessel.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.Type", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                    }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all systems which contain the searched text
-    /// </summary>
-    public List<StorageSystem> GetSystems()
-    {
-        return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all units which contain the searched text
-    /// </summary>
-    public List<Unit> GetUnits()
-    {
-        return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Unit.Systems.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                    }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all categories which contain the searched text
-    /// </summary>
-    public List<Category> GetCategories()
-    {
-        return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Category.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.IdMask", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.MaterialType", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.CreatingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Category.ConsumingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or),
-                new BooleanCondition(attribute: "Category.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                        }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all events which contain the searched text
-    /// </summary>
-    public List<Event> GetEvents()
-    {
-        return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Event.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.EventType", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.ProcessId", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.Comments", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.Packages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                            }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all processes which contain the searched text
-    /// </summary>
-    public List<Process> GetProcesses()
-    {
-        return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Process.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Process.Definition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Process.Events.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Process.UncompletedSteps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
-                                                }, @operator: Operator.Or));
-    }
-
-    /// <summary>
-    /// Fetch all processes definitions which contain the searched text
-    /// </summary>
-    public List<ProcessDefinition> GetProcessesDefinitions()
-    {
-
-        return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "ProcessDefinition.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Steps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
-                                                    }, @operator: Operator.Or));
     }
 
     /// <summary>

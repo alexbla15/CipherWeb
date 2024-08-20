@@ -29,14 +29,6 @@ namespace CipherData.Models
         /// </summary>
         public Unit Unit { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"S{IdCounter}";
-        }
-
         /// <summary>
         /// Instanciation of StorageSystem
         /// </summary>
@@ -48,7 +40,7 @@ namespace CipherData.Models
         public StorageSystem(string description, string properties, Unit unit,
             StorageSystem? parent = null, HashSet<StorageSystem>? children = null, string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             Description = description;
             Properties = properties;
             Parent = parent;
@@ -56,6 +48,21 @@ namespace CipherData.Models
             Unit = unit;
         }
 
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new object
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"S{IdCounter:D3}";
+        }
+        
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
@@ -72,6 +79,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static StorageSystem Random(string? id = null)
         {
             return new(
@@ -80,6 +91,21 @@ namespace CipherData.Models
                 properties: "",
                 unit: Unit.Random()
                 );
+        }
+
+        /// <summary>
+        /// Fetch all systems which contain the searched text
+        /// </summary>
+        public static Tuple<List<StorageSystem>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                }, @operator: Operator.Or));
         }
 
     }

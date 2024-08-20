@@ -29,14 +29,6 @@ namespace CipherData.Models
         /// </summary>
         public HashSet<StorageSystem>? Systems { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter}";
-        }
-
         /// <summary>
         /// Instanciation of new unit.
         /// </summary>
@@ -48,12 +40,27 @@ namespace CipherData.Models
         public Unit(string description, Unit? parent = null, HashSet<Unit>? children = null, HashSet<StorageSystem>? systems = null, string? properties = null,
             string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             Description = description;
             Parent = parent;
             Children = children;
             Systems = systems;
             Properties = properties;
+        }
+
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new object
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"U{IdCounter:D3}";
         }
 
         /// <summary>
@@ -72,6 +79,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static Unit Random(string? id = null)
         {
             return new Unit(
@@ -79,6 +90,24 @@ namespace CipherData.Models
                     description: Globals.GetRandomString(Globals.UnitDescriptions)
                 );
         }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all units which contain the searched text
+        /// </summary>
+        public static Tuple<List<Unit>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Unit.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Unit.Systems.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                    }, @operator: Operator.Or));
+        }
+
     }
 }
 

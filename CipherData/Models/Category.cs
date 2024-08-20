@@ -22,14 +22,14 @@ namespace CipherData.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// List of ID masks to identify the category from the package ID
-        /// </summary>
-        public HashSet<string> IdMask { get; set; }
-
-        /// <summary>
         /// Type of material of this category
         /// </summary>
         public string MaterialType { get; set; }
+
+        /// <summary>
+        /// List of ID masks to identify the category from the package ID
+        /// </summary>
+        public HashSet<string> IdMask { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
@@ -51,14 +51,6 @@ namespace CipherData.Models
         /// </summary>
         public HashSet<Category>? Children { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter}";
-        }
-
         /// <summary>
         /// Instanciation of new Category.
         /// </summary>
@@ -75,7 +67,7 @@ namespace CipherData.Models
             Category? parent = null, HashSet<Category>? children = null,
             string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             Name = name;
             Description = description;
             IdMask = idMask;
@@ -84,6 +76,21 @@ namespace CipherData.Models
             ConsumingProcesses = consumingProcesses;
             Parent = parent;
             Children = children;
+        }
+
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new object
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"C{IdCounter:D3}";
         }
 
         /// <summary>
@@ -103,6 +110,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static Category Random(string? id = null)
         {
             return new Category(
@@ -116,5 +127,26 @@ namespace CipherData.Models
 
                 );
         }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all categories which contain the searched text
+        /// </summary>
+        public static Tuple<List<Category>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Category.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.IdMask", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.MaterialType", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.CreatingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: "Category.ConsumingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or),
+                new BooleanCondition(attribute: "Category.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Category.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                        }, @operator: Operator.Or));
+        }
+
     }
 }

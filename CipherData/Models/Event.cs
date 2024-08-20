@@ -38,14 +38,6 @@ namespace CipherData.Models
         /// </summary>
         public HashSet<Package> Packages { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter}";
-        }
-
         /// <summary>
         /// Instanciation of a new Event.
         /// </summary>
@@ -55,15 +47,31 @@ namespace CipherData.Models
         /// <param name="timestamp">Timestamp when the event happend</param>
         /// <param name="valid">Whether the event has been validated appropriately</param>
         /// <param name="packages">List of affected packages from actions, the items present the state of each package after the event</param>
+        /// <param name="id">only if you want object to have a certain id</param>
         public Event(int eventType, int processId, string comments, DateTime timestamp, bool valid, HashSet<Package> packages, string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             EventType = eventType;
             ProcessId = processId;
             Comments = comments;
             Timestamp = timestamp;
             Valid = valid;
             Packages = packages;
+        }
+
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new object
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"E{IdCounter:D3}";
         }
 
         /// <summary>
@@ -83,6 +91,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static Event Random(string? id = null)
         {
             return new Event(
@@ -95,5 +107,22 @@ namespace CipherData.Models
                 packages: new HashSet<Package>()
                 );
         }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all events which contain the searched text
+        /// </summary>
+        public static Tuple<List<Event>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+                new BooleanCondition(attribute: "Event.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.EventType", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.ProcessId", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.Comments", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: "Event.Packages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                                            }, @operator: Operator.Or));
+        }
+
     }
 }

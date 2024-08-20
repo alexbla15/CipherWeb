@@ -55,18 +55,23 @@ namespace CipherData.Models
         /// </summary>
         public Category Category { get; set; }
 
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"{DateTime.Now.Year}{new Random().Next(0,3)}{new Random().Next(0,999):D3}{IdCounter:D3}";
-        }
-
+        /// <summary>
+        /// Instanciation of a new package
+        /// </summary>
+        /// <param name="properties">JSON-like additional properties of the package</param>
+        /// <param name="system">Location which contains the package</param>
+        /// <param name="brutMass">Total mass of the package</param>
+        /// <param name="netMass">Net mass of the package</param>
+        /// <param name="createdAt">Timestamp when the package was created</param>
+        /// <param name="category">Category of package</param>
+        /// <param name="vessel">Vessel which contains the package</param>
+        /// <param name="containingPackages">Packages contained in this one</param>
+        /// <param name="comments">Free-text comment on the package</param>
+        /// <param name="id">only use if you want the package to have a specific id</param>
         public Package(string properties, StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
             Vessel? vessel = null, HashSet<Package>? containingPackages = null, string? comments = null, string? id = null)
         {
-            Id = id ?? GetId();
+            Id = id ?? GetNextId();
             Comments = comments;
             Properties = properties;
             Vessel = vessel;
@@ -76,6 +81,21 @@ namespace CipherData.Models
             CreatedAt = createdAt;
             ContainingPackages = containingPackages;
             Category = category;
+        }
+
+        /// <summary>
+        /// Counts how many packages were created.
+        /// </summary>
+        private static int IdCounter { get; set; } = 0;
+
+        /// <summary>
+        /// Get the id of a new package
+        /// </summary>
+        /// <returns></returns>
+        private static string GetNextId()
+        {
+            IdCounter += 1;
+            return $"{DateTime.Now.Year}{new Random().Next(0,3)}{new Random().Next(0,999):D3}{IdCounter:D3}";
         }
 
         /// <summary>
@@ -98,6 +118,10 @@ namespace CipherData.Models
             return result;
         }
 
+        /// <summary>
+        /// Get a random new object.
+        /// </summary>
+        /// <param name="id">only use if you want the object to have a specific id</param>
         public static Package Random(string? id = null)
         {
             Random random = new();
@@ -114,6 +138,23 @@ namespace CipherData.Models
                 system: StorageSystem.Random(),
                 category: Category.Random());
             return result;
+        }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all packages which contain the searched text
+        /// </summary>
+        public static Tuple<List<Package>?, ErrorResponse> Containing(string SearchText)
+        {
+            return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
+                }, @operator: Operator.Or));
         }
 
     }

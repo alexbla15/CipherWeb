@@ -58,20 +58,25 @@
     /// Function taking place upon clicking Enter.s
     /// </summary>
     /// <param name="args"></param>
-    private async Task SearchFunc(KeyboardEventArgs args)
+    private async Task EnteredSearchFunc(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
-            // Wait for a short duration to ensure SearchText is updated
-            await Task.Delay(1);
-            if (!string.IsNullOrWhiteSpace(SearchText))
+            await SearchFunc();
+        }
+    }
+
+    private async Task SearchFunc()
+    {
+        // Wait for a short duration to ensure SearchText is updated
+        await Task.Delay(1);
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            // if value is acceptable, do the search
+            if (autoComplete.Check())
             {
-                // if value is acceptable, do the search
-                if (autoComplete.Check())
-                {
-                    string url = $"{SearchPath}?search={SearchText}";
-                    navigationManager.NavigateTo(url, forceLoad: true);
-                }
+                string url = $"{SearchPath}?search={SearchText}";
+                navigationManager.NavigateTo(url, forceLoad: true);
             }
         }
     }
@@ -79,8 +84,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Start" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
     <CipherAutoComplete @ref=autoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" @bind-value="SearchText"
-                        Data="@TestedData.Packages" TextProperty="Id" OnKeyDown="SearchFunc"></CipherAutoComplete>
-
+                        Data="@TestedData.Packages" TextProperty="Id" OnKeyDown="EnteredSearchFunc" Change="SearchFunc"></CipherAutoComplete>
     <CipherButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px"
-                  Disabled="true" Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
+                  Click="SearchFunc" Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>

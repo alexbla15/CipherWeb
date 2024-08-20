@@ -323,6 +323,7 @@ components:
               description: a collection of steps that make a single definition
               $ref: "#/components/schemas/ProcessDefinition"
             events:
+              description: Events taking place during a process
               type: array
               items:
                 $ref: "#/components/schemas/Event"
