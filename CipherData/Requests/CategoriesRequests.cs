@@ -9,6 +9,14 @@ namespace CipherData.Requests
 {
     public class CategoriesRequests
     {
+        /// <summary>
+        /// Get all available objects
+        /// Path: Get /categories/
+        /// </summary>
+        public static Tuple<List<Category>?, ErrorResponse> GetCategories()
+        {
+            return GenericRequests.Request(TestedData.Categories, canBadRequest: false, canBeNotFound: true);
+        }
 
         /// <summary>
         /// Create a new category.

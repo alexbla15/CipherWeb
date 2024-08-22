@@ -8,7 +8,8 @@ namespace CipherWeb
     {
         public static HashSet<Tuple<string, string>> BuildDictionary()
         {
-            List<Tuple<string, string>> BuildHeaders = Event.Headers().ToList();
+            List<Tuple<string, string>> BuildHeaders = new();
+            BuildHeaders.AddRange(Event.Headers());
             BuildHeaders.AddRange(Package.Headers());
             BuildHeaders.AddRange(Category.Headers());
             BuildHeaders.AddRange(Process.Headers());

@@ -62,8 +62,9 @@
     private CipherDataFilter_WithDataGrid<Event> dataFilter = new CipherDataFilter_WithDataGrid<Event>();
     private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
     private CipherDataAggregater dataAggregater = new CipherDataAggregater();
-
-    private List<Package> rows = TestedData.Packages;
+    
+    private List<Package> packs = Package.All().Item1;
+    private List<Package> rows = Package.All().Item1;
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
     private int ReportId;
@@ -150,8 +151,8 @@
                 Package pack = Package.Random();
                 pack.System = sys;
                 pack.Vessel = ves;
-                pack.BrutMass = TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
-                pack.NetMass =  TestedData.Packages.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
+                pack.BrutMass = packs.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
+                pack.NetMass = packs.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
                 rows.Add(pack);
             }
         }

@@ -29,6 +29,11 @@ namespace CipherData.Models
         public List<ProcessStepDefinition> Steps { get; set; }
 
         /// <summary>
+        /// For randomization only
+        /// </summary>
+        public static List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי" };
+
+        /// <summary>
         /// Definition of a process - 
         /// a collection of steps that make a single definitio
         /// </summary>
@@ -79,7 +84,8 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static ProcessDefinition Random(string? id = null)
         {
-            string proc_name = Globals.GetRandomString(Globals.ProcessesNames);
+
+            string proc_name = TestedData.RandomString(ProcessesNames);
 
             return new ProcessDefinition(
                     id: id,

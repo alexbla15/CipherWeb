@@ -1,0 +1,58 @@
+﻿@inject ICipherInfo _db
+
+@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" DataSource="@Processes" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddProcess.Href" HelpText="הוספת תהליך" Variant="Variant.Outlined" />
+    </AdditionalButtons>
+    <HeaderContent>
+        @if (WithHeaderContent)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes"
+                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    /// <summary>
+    /// Filter mode of the datagrid. Must be a FilterMode-enum.
+    /// </summary>
+    [Parameter]
+    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Is the datagrid filterable.
+    /// </summary>
+    [Parameter]
+    public bool AllowFilter { get; set; } = false;
+
+    /// <summary>
+    /// Is the datagrid groupable.
+    /// </summary>
+    [Parameter]
+    public bool AllowGroup { get; set; } = false;
+
+    /// <summary>
+    /// Is a CipherAutoComplete header is needed.
+    /// </summary>
+    [Parameter]
+    public bool WithHeaderContent { get; set; } = true;
+
+    /// <summary>
+    /// All events for scheduler
+    /// </summary>
+    [Parameter]
+    public List<Process> Processes { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title ??= "דוח תהליכים";
+    }
+}

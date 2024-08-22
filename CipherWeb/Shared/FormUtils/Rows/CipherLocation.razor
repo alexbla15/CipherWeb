@@ -12,9 +12,11 @@
         <Columns>
             <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="50px" />
             <RadzenDropDownDataGridColumn Property="Description" Title="תיאור" Width="50px" />
+            <RadzenDropDownDataGridColumn Property="ParentId" Title="מערכת אב" Width="50px" />
+            <RadzenDropDownDataGridColumn Property="UnitDescription" Title="יחידה" Width="50px" />
         </Columns>
         <ValueTemplate>
-            @((context as StorageSystem).Description): @((context as StorageSystem).Id)
+            @(context.Description): @(context.Id)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </RadzenStack>

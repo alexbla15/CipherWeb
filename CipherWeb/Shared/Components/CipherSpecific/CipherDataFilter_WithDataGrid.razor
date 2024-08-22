@@ -37,11 +37,11 @@
     [Parameter]
     public string GridFilterGap { get; set; } = "20px";
 
-    private CipherDataFilter<Cipher_TItem> dataFilter;
-    private CipherDataGrid<Cipher_TItem> rowsGrid;
+    private CipherDataFilter<Cipher_TItem> dataFilter = new CipherDataFilter<Cipher_TItem>();
+    private CipherDataGrid<Cipher_TItem> rowsGrid = new CipherDataGrid<Cipher_TItem>();
     private IQueryable<Cipher_TItem> filteredRows;
 
-    async void ViewChanged(IQueryable<Cipher_TItem> view)
+    public void ViewChanged(IQueryable<Cipher_TItem> view)
     {
         filteredRows = view;
     }

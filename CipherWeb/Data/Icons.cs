@@ -644,39 +644,196 @@ namespace CipherWeb.Data
             }
         }
 
+        public class Education
+        {
+            public const string Backpack = "backpack";
+            public const string BackpackDisabled = "no_backpack";
+            public const string Book = "book";
+            public const string BookFold = "devices_fold";
+            public const string BookOnline = "book_online";
+            public const string BookOpen = "import_contacts";
+            public const string BookPage = "menu_book";
+            public const string BookTurnPage = "auto_stories";
+            public const string Bookmark = "bookmark";
+            public const string BookmarkAdd = "bookmark_add";
+            public const string BookmarkAdded = "bookmark_added";
+            public const string BookmarkBorder = "bookmark_border";
+            public const string BookmarkCollections = "collections_bookmark";
+            public const string BookmarkRemove = "bookmark_remove";
+            public const string Bookmarks = "bookmarks";
+            public const string Label = "label";
+            public const string LabelImportant = "label_important";
+            public const string LabelImportantOutline = "label_important_outline";
+            public const string LabelNew = "new_label";
+            public const string LabelOff = "label_off";
+            public const string Library = "local_library";
+            public const string More = "more";
+            public const string PlayLesson = "play_lesson";
+            public const string School = "school";
+        }
+
         public class Food
         {
+            public const string BBQ = "outdoor_grill";
+            public const string Bakery = "bakery_dining";
+            public const string Bento = "bento";
+            public const string Breakfast = "breakfast_dining";
+            public const string Brunch = "brunch_dining";
+            public const string Cake = "cake";
+            public const string Cookie = "cookie";
+            public const string Dinner = "dinner_dining";
+            public const string Egg = "egg";
+            public const string EggCoocked = "egg_alt";
+            public const string Fastfood = "fastfood";
+            public const string FastfoodDisabled = "no_food";
+            public const string Flatware = "flatware";
+            public const string Fire = "whatshot";
+            public const string Fire2 = "local_fire_department";
+            public const string Fireplace = "fireplace";
+            public const string FishMeal = "set_meal";
+            public const string Hamburger = "lunch_dining";
+            public const string Icecream = "icecream";
+            public const string Kebab = "kebab_dining";
+            public const string Pizza = "local_pizza";
+            public const string Ramen = "ramen_dining";
+            public const string Rice = "rice_bowl";
+            public const string Restaurant = "food_bank";
+            public const string Restaurant2 = "dining";
+            public const string Restaurant3 = "restaurant";
+            public const string Restaurant4 = "restaurant_menu";
+            public const string RestaurantDisabled = "no_meals";
+            public const string Soup = "soup_kitchen";
+            public const string Takeout = "takeout_dining";
+            public const string Tapas = "tapas";
+
             public class Drinks
             {
-                public const string LocalCafe = "local_cafe";
+                public const string Bar = "local_bar";
+                public const string BarDisabled = "no_drinks";
+                public const string BarMusic = "nightlife";
+                public const string Bear = "sports_bar";
+                public const string Cafe = "local_cafe";
+                public const string Coffee = "coffee";
+                public const string CoffeeMaker = "coffee_maker";
+                public const string Drink = "local_drink";
+                public const string Tea = "emoji_food_beverage";
+                public const string Liquor = "liquor";
+                public const string Wine = "wine_bar";
             }
         }
 
         public class Fun
         {
-
-        }
-
-        public class Education
-        {
-            public const string School = "school";
+            public const string Celebration = "celebration";
+            public const string Gamepad = "gamepad";
+            public const string RSVP = "rsvp";
+            public const string Toy = "smart_toy";
+            public const string Toy2 = "toys";
+            public const string Videogame = "videogame_asset";
+            public const string VideogameDisabled = "videogame_asset_off";
+            public const string Xbox = "sports_esports";
         }
 
         public class Home
         {
+            public const string Balcony = "balcony";
+            public const string Cabin = "cabin";
+            public const string CameraIndoor = "camera_indoor";
+            public const string CameraOutdoor = "camera_outdoor";
+            public const string Chalet = "chalet";
+            public const string Cottage = "cottage";
+            public const string Doorbell = "doorbell";
+            public const string Fence = "fence";
+            public const string Flood = "flood";
+            public const string Foundation = "foundation";
             public const string _Home = "home";
+            public const string Home2 = "house";
+            public const string HomeAdd = "add_home";
+            public const string HomeFilled = "home_filled";
+            public const string HomeSiding = "house_siding";
+            public const string HomeWork = "home_work";
+            public const string HomeWorkAdd = "add_home_work";
+            public const string NightShelter = "night_shelter";
             public const string OtherHouses = "other_houses";
-            public const string Window = "window";
+            public const string Roof = "roofing";
+            public const string SolarPower = "solar_power";
+            public const string WaterDamage = "water_damage";
 
-            public class Baby { }
-            public class Bathroom { }
+            public class Baby
+            {
+                public const string BabyBedroom = "bedroom_baby";
+                public const string Carriage = "child_friendly";
+                public const string ChangingStation = "baby_changing_station";
+                public const string Crib = "crib";
+                public const string Stroller = "stroller";
+                public const string StrollerDisabled = "no_stroller";
+            }
+
+            public class Bathroom
+            {
+                public const string BathTub = "bathtub";
+                public const string _Bathroom = "bathroom";
+                public const string HandsDry = "soap";
+                public const string HandsSoap = "soap";
+                public const string HandsWash = "wash";
+                public const string HotTub = "hot_tub";
+                public const string Sink = "countertops";
+                public const string Shower = "shower";
+            }
 
             public class Bed
             {
-
+                public const string _Bed = "bed";
+                public const string BedKing = "king_bed";
+                public const string BedSingle = "single_bed";
+                public const string Bedroom = "bedroom_parent";
+                public const string BedroomChild = "bedroom_child";
+                public const string Chair = "chair";
+                public const string Chair2 = "chair_alt";
+                public const string Hotel = "hotel";
+                public const string Livingroom = "living";
+                public const string Sofa = "weekend";
             }
-            public class Facilities { }
+
+            public class Facilities
+            {
+                public const string Blender = "blender";
+                public const string Blinds = "blinds";
+                public const string BlindsClosed = "blinds_closed";
+                public const string Checkroom = "checkroom";
+                public const string Curtains = "curtains";
+                public const string CurtainsClosed = "curtains_closed";
+                public const string Desk = "desk";
+                public const string DoorBack = "door_back";
+                public const string DoorFront = "door_front";
+                public const string DoorSensor = "sensor_door";
+                public const string DoorSliding = "door_sliding";
+                public const string DryCleaning = "dry_cleaning";
+                public const string Elevator = "elevator";
+                public const string FanOff = "mode_fan_off";
+                public const string Hvac = "hvac";
+                public const string Iron = "iron";
+                public const string Laundry = "local_laundry_service";
+                public const string Light = "light";
+                public const string Microwave = "microwave";
+                public const string Refrigerator = "kitchen";
+                public const string RollerShades = "roller_shades";
+                public const string RollerShadesClosed = "roller_shades_closed";
+                public const string Room = "meeting_room";
+                public const string RoomDisabled = "no_meeting_room";
+                public const string RoomPreferences = "room_preferences";
+                public const string Shelves = "shelves";
+                public const string Stairs = "stairs";
+                public const string Table = "table_restaurant";
+                public const string TableBar = "table_bar";
+                public const string VerticalShades = "vertical_shades";
+                public const string VerticalShadesClosed = "vertical_shades_closed";
+                public const string Window = "window";
+                public const string WindowSensor = "sensor_window";
+            }
         }
+
+        // continue from here 
 
         public class Multimedia
         {
@@ -888,13 +1045,13 @@ namespace CipherWeb.Data
             public const string Package = Documents.StickyNote;
             public const string PackageCombine = Symbols.GroupWork;
             public const string Process = Data.LineChart.Timeline;
-            public const string Properties = Home.Window;
+            public const string Properties = Home.Facilities.Window;
             public const string Status = UiComponents.Pending;
             public const string Summary = Data.BarChart.Leaderboard;
             public const string Transfer = Arrows.Swap.MultipleStop;
             public const string Type = Symbols.Interests;
             public const string Unit = Social.Groups._Groups;
-            public const string Vessel = Food.Drinks.LocalCafe;
+            public const string Vessel = Food.Drinks.Cafe;
             public const string Year = Time.CalanderMonth;
         }
     }

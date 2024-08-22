@@ -6,13 +6,13 @@
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined"/>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation WithIcon=false Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc"/>
+                <CipherLocation WithIcon=false Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc" />
             </RadzenStack>
         }
     </HeaderContent>
@@ -78,49 +78,24 @@
     {
         Title ??= "דוח תעודות";
         FileTitle ??= "packages";
+
+        SearchFunc();
     }
-
-    public List<Package> GetPackages()
-    {
-        ObjectFactory obj = new ObjectFactory(
-    filter: new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-                                                    },
-        @operator: Operator.Or)
-        );
-        Tuple<List<Package>?, ErrorResponse> results = QueryRequests.QueryObjects<Package>(obj);
-
-        error = results.Item2;
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1;
-        }
-        else
-        {
-            ShowError();
-            return new List<Package>();
-        }
-    }
-
-
 
     /// <summary>
     /// Function taking place upon clicking Enter.s
     /// </summary>
-    private async Task SearchFunc()
+    private void SearchFunc()
     {
-        packages = GetPackages();
+        List<Package>? result = StorageSystem.Packages(SelectedSystem).Item1;
+        packages = (result is null) ? new List<Package>() : result;
     }
 
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
-
-        ds =>
+    ds =>
     @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
-
-,
-        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
+        , new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }
 }

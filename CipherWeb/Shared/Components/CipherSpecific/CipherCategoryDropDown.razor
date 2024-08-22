@@ -39,7 +39,7 @@
     [Parameter]
     public int ColumnWidth { get; set; } = 50;
 
-    private List<Category> subCategories = new List<Category>();
+    private List<Category> subCategories = Category.All().Item1;
 
     protected override async Task OnInitializedAsync()
     {

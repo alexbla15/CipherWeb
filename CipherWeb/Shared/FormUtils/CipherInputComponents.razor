@@ -24,6 +24,8 @@
     [Parameter]
     public string DeleteAllText { get; set; } = "מחיקת תעודות";
 
+    private List<Package> packs = Package.All().Item1;
+
     private RadzenDataGrid<Package> CustomDataGrid;
     private List<Package> from_packs = new List<Package>();
     private Package old_pack = Package.Random();
@@ -138,7 +140,7 @@
                 <RadzenDataGridColumn TItem="Package" Property="Uuid" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
                 <RadzenDataGridColumn TItem="Package" Property="Id" Title="תעודה" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherAutoComplete Data="TestedData.Packages" TextProperty="Id" @bind-Value="@pack.Id" />
+                        <CipherAutoComplete Data="@packs" TextProperty="Id" @bind-Value="@pack.Id" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Property="BrutMass" Title="משקל מועבר [גר']" Width="40%" TextAlign="@TdTextAlign">

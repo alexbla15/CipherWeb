@@ -21,7 +21,7 @@
 @if (objectId == 0)
 {
     <CipherDataFilter_WithDataGrid Cipher_TItem="Package" Title="סינון נתונים"
-                                   GeneralDataSource="@TestedData.Packages" />
+                                   GeneralDataSource="@packs" />
 }
 @if (objectId == 1)
 {
@@ -75,13 +75,12 @@
 
     string width = "width: 200px";
 
+    List<Package> packs = Package.All().Item1;
 
     List<Event> db_events = new List<Event>();
     List<Category> db_subcategories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
-        //db_events = await _db.GetEvents();
-        //db_subcategories = await _db.GetSubCategories();
     }
 }

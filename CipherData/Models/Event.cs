@@ -124,13 +124,5 @@ namespace CipherData.Models
                 new BooleanCondition(attribute: "Event.Packages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                                             }, @operator: Operator.Or));
         }
-
-        public static Tuple<List<Event>?, ErrorResponse> EventsOfSystem(string SelectedSystem)
-        {
-            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
-            {
-                new BooleanCondition(attribute: "Event.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Or));
-        }
     }
 }

@@ -21,11 +21,18 @@ namespace CipherData.Requests
         }
 
         /// <summary>
+        /// Get all available objects
+        /// Path: Get /systems/
+        /// </summary>
+        public static Tuple<List<StorageSystem>?, ErrorResponse> GetSystems()
+        {
+            return GenericRequests.Request(TestedData.FillRandomObjects(20, StorageSystem.Random), canBadRequest: false, canBeNotFound: true);
+        }
+
+        /// <summary>
         /// Get details about a single system
         /// Path: Get /systems/{id}
         /// </summary>
-        /// <param name="sys_id"></param>
-        /// <returns></returns>
         public static Tuple<StorageSystem?, ErrorResponse> GetSystem(string sys_id)
         {
 

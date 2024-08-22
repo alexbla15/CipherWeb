@@ -74,9 +74,11 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Vessel Random(string? id = null)
         {
+            List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
+
             return new Vessel(
                 id: id,
-                type: Globals.GetRandomString(Globals.VesselTypes),
+                type: TestedData.RandomString(VesselTypes),
                 system: StorageSystem.Random()
                 );
         }

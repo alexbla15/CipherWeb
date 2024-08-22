@@ -58,29 +58,27 @@
     font-family: var(--rz-text-font-family);
 }
 
-}
-
 /* ------------------ DATA FILTER ------------------ */
 
 .rz-datafilter .rz-datafilter-item {
     padding: var(--rz-datafilter-item-padding-y) calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation)) var(--rz-datafilter-item-padding-y) 0;
 }
 
-    .rz-datafilter .rz-datafilter-item:after {
-        right: calc(var(--rz-datafilter-item-padding-left) / 2);
-        left: 0;
-        border-right: 2px solid var(--rz-primary-dark);
-        border-left: none;
-        border-bottom: 2px solid var(--rz-primary-dark);
-        border-bottom-right-radius: 5px;
-    }
+.rz-datafilter .rz-datafilter-item:after {
+    right: calc(var(--rz-datafilter-item-padding-left) / 2);
+    left: 0;
+    border-right: 2px solid var(--rz-primary-dark);
+    border-left: none;
+    border-bottom: 2px solid var(--rz-primary-dark);
+    border-bottom-right-radius: 5px;
+}
 
-    .rz-datafilter .rz-datafilter-item:before {
-        right: calc(var(--rz-datafilter-item-padding-left) / 2);
-        left: 0;
-        border-right: 2px solid var(--rz-primary-dark);
-        border-left: none;
-    }
+.rz-datafilter .rz-datafilter-item:before {
+    right: calc(var(--rz-datafilter-item-padding-left) / 2);
+    left: 0;
+    border-right: 2px solid var(--rz-primary-dark);
+    border-left: none;
+}
 
 .rz-datafilter .rz-selectbutton,
 .rz-datafilter .rz-datafilter-bar .rz-splitbutton {
@@ -91,9 +89,9 @@
     padding: 0 calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation)) 0 0;
 }
 
-    .rz-datafilter .rz-datafilter-bar:after {
-        border-bottom-left-radius: 0;
-    }
+.rz-datafilter .rz-datafilter-bar:after {
+    border-bottom-left-radius: 0;
+}
 
 .rz-splitbutton .rz-button.rz-splitbutton-menubutton, .rz-splitbutton .rz-button:not(.rz-splitbutton-menubutton) {
     background-color: var(--rz-primary-light);
@@ -113,6 +111,9 @@
     display: block;
 }
 
+.rz-datafilter .rz-datafilter-editor {
+    min-height: 52px;
+}
 /* ------------------ GRID ------------------ */
 
 :root {

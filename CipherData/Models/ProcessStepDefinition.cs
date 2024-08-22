@@ -66,7 +66,8 @@ namespace CipherData.Models
 
         public static ProcessStepDefinition Random(string? id = null)
         {
-            string name = Globals.GetRandomString(Globals.ProcessesStepNames);
+            List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };
+            string name = TestedData.RandomString(ProcessesStepNames);
 
             return new ProcessStepDefinition(
                 id: id,

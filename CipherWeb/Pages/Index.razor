@@ -11,7 +11,7 @@
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
     <RadzenRow>
-        <CipherEventsScheduler/>
+        <CipherProcessesScheduler/>
     </RadzenRow>
     <RadzenRow>
         <RadzenColumn Size="12">
@@ -22,11 +22,11 @@
 else
 {
     <RadzenRow Gap="0">
-        <CipherEventsScheduler />
+        <CipherProcessesScheduler />
     </RadzenRow>
 }
 
 @code {
-    string cardHeight = "265px";
-    int rowsPerPage = 3;
+    private string cardHeight = "265px";
+    private int rowsPerPage = 3;
 }

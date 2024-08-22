@@ -32,11 +32,10 @@
     [Parameter]
     public bool Group { get; set; } = false;
 
-    List<Category> subCategories = new List<Category>();
+    private List<Category> subCategories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
         Title ??= "סוגים";
-        //subCategories = await _db.GetSubCategories();
     }
 }

@@ -8,7 +8,7 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete @ref=autoComplete Data="@TestedData.Packages" TextProperty="Id" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
+        <CipherAutoComplete @ref=autoComplete Data="@AllPacks" TextProperty="Id" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
@@ -76,6 +76,8 @@
     [Parameter]
     public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
 
+    private List<Package> AllPacks = Package.All().Item1;
+
     private static List<Package>? packs = new List<Package>();
     private static List<Vessel>? vessels = new List<Vessel>();
     private static List<StorageSystem>? systems = new List<StorageSystem>();
@@ -97,7 +99,7 @@
                     };
 
     private ErrorResponse error = ErrorResponse.Success;
-    private CipherAutoComplete autoComplete;
+    private CipherAutoComplete autoComplete = new CipherAutoComplete();
 
     protected override async void OnParametersSet()
     {
@@ -175,26 +177,6 @@
                     navigationManager.NavigateTo(url, forceLoad: true);
                 }
             }
-        }
-    }
-
-    public List<T> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
-    {
-        ObjectFactory obj = new ObjectFactory(
-                filter: createCondition(searchText)
-            );
-
-        Tuple<List<T>?, ErrorResponse> results = QueryRequests.QueryObjects<T>(obj);
-
-        error = results.Item2;
-
-        if (results.Item2 == ErrorResponse.Success)
-        {
-            return results.Item1 ?? new List<T>();
-        }
-        else
-        {
-            return new List<T>();
         }
     }
 

@@ -85,9 +85,11 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Unit Random(string? id = null)
         {
+            List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
+
             return new Unit(
                     id: id,
-                    description: Globals.GetRandomString(Globals.UnitDescriptions)
+                    description: TestedData.RandomString(UnitDescriptions)
                 );
         }
 

@@ -43,11 +43,10 @@
     [Parameter]
     public FilterMode GridFilterMode { get; set; }
 
-    private List<StorageSystem> systems = new List<StorageSystem>();
+    private List<StorageSystem> systems = StorageSystem.All().Item1;
 
     protected override async Task OnInitializedAsync()
     {
-        systems = await _db.GetSystems();
         Title ??= "סיכום תשתיות";
     }
 }

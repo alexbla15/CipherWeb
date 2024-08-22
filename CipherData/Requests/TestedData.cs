@@ -2,30 +2,14 @@
 
 namespace CipherData.Requests
 {
-    public static class Globals
+    public class TestedData
     {
-        public static int VesselIdCounter { get; set; } = 0;
-
-        public static readonly List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
-        public static readonly List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
-        public static readonly List<string> SystemsDescriptions = new() { "תחום", "מעבדה", "מבנה" };
-        public static readonly List<string> CategoriesDescriptions = new() { "חומרים בפאזה מוצקה", "חומרים בפאזה גזית", "חומרים בפאזה נוזלית" };
-        public static readonly List<string> CategoriesNames = new() { "מוצק", "גז", "נוזל" };
-        public static readonly List<string> IdMasks = new() { "111", "222", "333" };
-        public static readonly List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
-        public static readonly List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
-        public static readonly List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי" };
-        public static readonly List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };
-
-        public static string GetRandomString(List<string> values)
+        public static string RandomString(List<string> values)
         {
             Random random = new();
             return values[random.Next(0, values.Count - 1)];
         }
-    }
 
-    public class TestedData
-    {
         public static DateTime RandomDateTime()
         {
             Random random = new();
@@ -48,10 +32,16 @@ namespace CipherData.Requests
 
             return Enumerable.Range(0, amount).Select(_ => randomFunc(null)).ToList();
         }
+        public static List<T> FillRandomObjects<T>(int amount, Func<T> randomFunc)
+        {
+
+            return Enumerable.Range(0, amount).Select(_ => randomFunc()).ToList();
+        }
 
         public static List<Package> Packages = FillRandomObjects(20, Package.Random);
+        public static List<Category> Categories = FillRandomObjects(20, Category.Random);
         public static List<Vessel> Vessels = FillRandomObjects(20, Vessel.Random);
-        public static List<StorageSystem> Systems = FillRandomObjects(20, StorageSystem.Random);
+        public static List<StorageSystem>? Systems = StorageSystem.All().Item1;
         public static List<Event> Events = FillRandomObjects(20, Event.Random);
         public static List<Process> Processes = FillRandomObjects(20, Process.Random);
     }

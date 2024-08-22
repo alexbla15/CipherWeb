@@ -7,6 +7,8 @@
     [Parameter]
     public int MaxShownLabels { get; set; } = int.MaxValue;
 
+    private List<Package> packs = Package.All().Item1;
+
     protected override async Task OnInitializedAsync()
     {
         Label ??= "תעודות";
@@ -17,7 +19,7 @@
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDown TValue="List<string>" Data=@TestedData.Packages TextProperty="Id" ValueProperty="Id"
+    <RadzenDropDown TValue="List<string>" Data=@packs TextProperty="Id" ValueProperty="Id"
                     Multiple=true AllowClear=true Placeholder="@Label" SelectedItemsText="אפשרויות נבחרו" SelectAllText="בחירת כל האפשרויות"
                     AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
                     Chips=true Style="width: 100%;" />

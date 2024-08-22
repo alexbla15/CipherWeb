@@ -21,13 +21,14 @@
         public DateTime EventDate { get; set; }
     }
 
+    private List<Package> packs = Package.All().Item1;
     private List<Analysis> analysis = new();
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="Id" Label="מספר תעודה" Data="@TestedData.Packages"></CipherAutoComplete>
+            <CipherAutoComplete TextProperty="Id" Label="מספר תעודה" Data="@packs"></CipherAutoComplete>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>

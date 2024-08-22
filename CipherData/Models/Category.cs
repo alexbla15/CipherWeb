@@ -79,6 +79,11 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// For randomization only
+        /// </summary>
+        public static List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
+
+        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;
@@ -116,19 +121,31 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Category Random(string? id = null)
         {
+            List<string> CategoriesDescriptions = new() { "חומרים בפאזה מוצקה", "חומרים בפאזה גזית", "חומרים בפאזה נוזלית" }; 
+            List<string> CategoriesNames = new() { "מוצק", "גז", "נוזל" };
+            List<string> IdMasks = new() { "111", "222", "333" }; 
+
             return new Category(
                 id: id,
-                name: Globals.GetRandomString(Globals.CategoriesNames),
-                description: Globals.GetRandomString(Globals.CategoriesDescriptions),
-                idMask: new HashSet<string>() { Globals.GetRandomString(Globals.IdMasks) },
+                name: TestedData.RandomString(CategoriesNames),
+                description: TestedData.RandomString(CategoriesDescriptions),
+                idMask: new HashSet<string>() { TestedData.RandomString(IdMasks) },
                 creatingProcesses: new List<ProcessDefinition>().ToHashSet(),
                 consumingProcesses: new List<ProcessDefinition>().ToHashSet(),
-                materialType: Globals.GetRandomString(Globals.MaterialTypes)
+                materialType: TestedData.RandomString(MaterialTypes)
 
                 );
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// All categories
+        /// </summary>
+        public static Tuple<List<Category>?, ErrorResponse> All()
+        {
+            return CategoriesRequests.GetCategories();
+        }
 
         /// <summary>
         /// Fetch all categories which contain the searched text

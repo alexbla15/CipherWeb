@@ -10,6 +10,15 @@ namespace CipherData.Requests
     public class PackagesRequests
     {
         /// <summary>
+        /// Get all available objects
+        /// Path: Get /packages/
+        /// </summary>
+        public static Tuple<List<Package>?, ErrorResponse> GetPackages()
+        {
+            return GenericRequests.Request(TestedData.Packages, canBadRequest: false, canBeNotFound: true);
+        }
+
+        /// <summary>
         /// Get details about a single package given package ID.
         /// Path: GET /packages/{id}
         public static Tuple<Package?,ErrorResponse> GetPackage(string pack_id)

@@ -127,10 +127,11 @@ namespace CipherData.Models
             Random random = new();
 
             decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M;
+            List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
 
-            Package result = new(
+        Package result = new(
                 id: id,
-                comments: Globals.GetRandomString(Globals.PackageComments),
+                comments: TestedData.RandomString(PackageComments),
                 createdAt: TestedData.RandomDateTime(),
                 brutMass: curr_brutmass,
                 netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
@@ -141,6 +142,14 @@ namespace CipherData.Models
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// All packages
+        /// </summary>
+        public static Tuple<List<Package>?, ErrorResponse> All()
+        {
+            return PackagesRequests.GetPackages();
+        }
 
         /// <summary>
         /// Fetch all packages which contain the searched text
@@ -156,6 +165,5 @@ namespace CipherData.Models
         new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
                 }, @operator: Operator.Or));
         }
-
     }
 }
