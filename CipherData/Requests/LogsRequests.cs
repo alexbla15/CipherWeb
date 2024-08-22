@@ -13,7 +13,7 @@ namespace CipherData.Requests
         /// Get change logs on a given object using its UUID
         /// Path: GET /logs/object/{uuid}
         /// </summary>
-        public static Tuple<UserActionResponse?,ErrorResponse> GetObjectLogs(int uuid)
+        public static Tuple<UserActionResponse,ErrorResponse> GetObjectLogs(int uuid)
         {
             return GenericRequests.Request(UserActionResponse.Random());
         }
@@ -22,7 +22,7 @@ namespace CipherData.Requests
         /// Get change logs made by a specific user.
         /// Path: GET /logs/users/{userid}
         /// </summary>
-        public static Tuple<UserActionResponse?, ErrorResponse> GetUserLogs(int userid)
+        public static Tuple<UserActionResponse, ErrorResponse> GetUserLogs(int userid)
         {
             return GenericRequests.Request(UserActionResponse.Random());
         }

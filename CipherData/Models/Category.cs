@@ -9,46 +9,54 @@ using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
-    public class Category: Resource
+    public class Category : Resource
     {
         /// <summary>
         /// Name of the category
         /// </summary>
+        [HebrewTranslation("שם")]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
+        [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
         /// <summary>
         /// Type of material of this category
         /// </summary>
+        [HebrewTranslation("סוג החומר")]
         public string MaterialType { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
+        [HebrewTranslation("סדרה")]
         public HashSet<string> IdMask { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
+        [HebrewTranslation("תהליכים יוצרים")]
         public HashSet<ProcessDefinition> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
+        [HebrewTranslation("תהליכים צורכים")]
         public HashSet<ProcessDefinition> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
+        [HebrewTranslation("קטגוריית אב")]
         public Category? Parent { get; set; }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
+        [HebrewTranslation("קטגוריות מוכלות")]
         public HashSet<Category>? Children { get; set; }
 
         /// <summary>
@@ -62,8 +70,8 @@ namespace CipherData.Models
         /// <param name="consumingProcesses">List of processes defintions consuming this category</param>
         /// <param name="parent">Parent Category containing this one</param>
         /// <param name="children">Child categories contained in this one</param>
-        public Category(string name, string description, HashSet<string> idMask, string materialType, 
-            HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses, 
+        public Category(string name, string description, HashSet<string> idMask, string materialType,
+            HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses,
             Category? parent = null, HashSet<Category>? children = null,
             string? id = null)
         {
@@ -101,18 +109,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Name", "שם"));
-            result.Add(new("Description", "תיאור"));
-            result.Add(new("IdMask", "סדרה"));
-            result.Add(new("MaterialType", "סוג החומר"));
-            result.Add(new("CreatingProcesses", "תהליכי יצירה"));
-            result.Add(new("ConsumingProcesses", "תהליכי צריכה"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Category>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>
@@ -121,19 +125,19 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Category Random(string? id = null)
         {
-            List<string> CategoriesDescriptions = new() { "חומרים בפאזה מוצקה", "חומרים בפאזה גזית", "חומרים בפאזה נוזלית" }; 
+            List<string> CategoriesDescriptions = new() { "חומרים בפאזה מוצקה", "חומרים בפאזה גזית", "חומרים בפאזה נוזלית" };
             List<string> CategoriesNames = new() { "מוצק", "גז", "נוזל" };
-            List<string> IdMasks = new() { "111", "222", "333" }; 
 
             return new Category(
                 id: id,
                 name: TestedData.RandomString(CategoriesNames),
                 description: TestedData.RandomString(CategoriesDescriptions),
-                idMask: new HashSet<string>() { TestedData.RandomString(IdMasks) },
-                creatingProcesses: new List<ProcessDefinition>().ToHashSet(),
-                consumingProcesses: new List<ProcessDefinition>().ToHashSet(),
-                materialType: TestedData.RandomString(MaterialTypes)
-
+                idMask: new HashSet<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
+                creatingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
+                consumingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
+                materialType: TestedData.RandomString(MaterialTypes),
+                parent: (new Random().Next(0, 2) == 0) ? Random() : null,
+                children: (new Random().Next(0, 2) == 0) ? TestedData.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
                 );
         }
 
@@ -142,7 +146,7 @@ namespace CipherData.Models
         /// <summary>
         /// All categories
         /// </summary>
-        public static Tuple<List<Category>?, ErrorResponse> All()
+        public static Tuple<List<Category>, ErrorResponse> All()
         {
             return CategoriesRequests.GetCategories();
         }
@@ -150,20 +154,21 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all categories which contain the searched text
         /// </summary>
-        public static Tuple<List<Category>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Category>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Category.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.IdMask", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.MaterialType", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.CreatingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Category.ConsumingProcesses.Id", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or),
-                new BooleanCondition(attribute: "Category.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Category.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                        }, @operator: Operator.Or));
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            }, @operator: Operator.Or));
         }
-
     }
 }

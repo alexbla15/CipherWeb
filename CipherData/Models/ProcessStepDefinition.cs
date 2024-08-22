@@ -16,16 +16,19 @@ namespace CipherData.Models
         /// <summary>
         /// Unique name of the process step, two steps in the same process should not have the same name.
         /// </summary>
+        [HebrewTranslation("שם")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the process step
         /// </summary>
+        [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
+        [HebrewTranslation("תנאי")]
         public GroupedBooleanCondition Condition { get; set; }
 
         private static int IdCounter { get; set; } = 0;
@@ -53,15 +56,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Name", "שם"));
-            result.Add(new("Description", "תיאור"));
-            result.Add(new("Condition", "תנאי"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<ProcessStepDefinition>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         public static ProcessStepDefinition Random(string? id = null)

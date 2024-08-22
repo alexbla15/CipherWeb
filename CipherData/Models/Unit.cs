@@ -7,26 +7,31 @@ namespace CipherData.Models
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
+        [HebrewTranslation("תכונות")]
         public string? Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
+        [HebrewTranslation("יחידת אב")]
         public Unit? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
+        [HebrewTranslation("יחידות מוכלות")]
         public HashSet<Unit>? Children { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
+        [HebrewTranslation("מערכות")]
         public HashSet<StorageSystem>? Systems { get; set; }
 
         /// <summary>
@@ -66,17 +71,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Description", "תיאור"));
-            result.Add(new("Properties", "תכונות"));
-            result.Add(new("Parent", "יחידת אב"));
-            result.Add(new("Children", "יחידות מוכלות"));
-            result.Add(new("Systems", "מערכות"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Unit>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>

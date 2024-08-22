@@ -10,13 +10,29 @@
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+                <CipherLocation Label="בחירת מיקום / תחום / מבנה" />
             </RadzenStack>
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes"
-                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Id))" Title="@(proc.Translate(nameof(proc.Id)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Definition.Name))" Title="@(proc.Definition.Translate(nameof(proc.Definition.Name)))">
+                    <Template>
+                        @context.Definition.Name
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.UncompletedSteps))" Title="@(proc.Translate(nameof(proc.UncompletedSteps)))">
+                    <Template>
+                        @(string.Join(", ", context.UncompletedSteps.Select(x=>x.Name).ToList()))
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Start))" Title="@(proc.Translate(nameof(proc.Start)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.End))" Title="@(proc.Translate(nameof(proc.End)))" />
+            </CustomColumns>
+        </CipherDataGrid>
     </ComponentContent>
 </CipherTableCard>
 
@@ -50,6 +66,8 @@
     /// </summary>
     [Parameter]
     public List<Process> Processes { get; set; }
+
+    private Process proc = Process.Random();
 
     protected override async Task OnInitializedAsync()
     {

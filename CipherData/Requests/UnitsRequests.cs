@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="unit"></param>
         /// <returns></returns>
-        public static Tuple<Unit?,ErrorResponse> CreateUnit(UnitRequest unit)
+        public static Tuple<Unit,ErrorResponse> CreateUnit(UnitRequest unit)
         {
             return GenericRequests.Request(Unit.Random());
         }
@@ -26,7 +26,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="unit_id"></param>
         /// <returns></returns>
-        public static Tuple<Unit?, ErrorResponse> GetUnit(string unit_id)
+        public static Tuple<Unit, ErrorResponse> GetUnit(string unit_id)
         {
             return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound:true, canBadRequest:false);
         }
@@ -37,7 +37,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="unit_id"></param>
         /// <returns></returns>
-        public static Tuple<Unit?, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit)
+        public static Tuple<Unit, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit)
         {
             return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound: true);
         }

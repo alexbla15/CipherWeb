@@ -13,16 +13,19 @@ namespace CipherData.Models
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
+        [HebrewTranslation("סוג")]
         public string Type { get; set; }
 
         /// <summary>
         /// Packages within the vessel
         /// </summary>
+        [HebrewTranslation("תעודות מוכלות")]
         public HashSet<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
+        [HebrewTranslation("מערכת")]
         public StorageSystem System { get; set; }
 
         /// <summary>
@@ -57,15 +60,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Type", "סוג"));
-            result.Add(new("ContainingPackages", "תעודות מוכלות"));
-            result.Add(new("System", "מערכת"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Vessel>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>

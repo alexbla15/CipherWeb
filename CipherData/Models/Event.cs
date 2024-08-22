@@ -12,31 +12,37 @@ namespace CipherData.Models
         /// <summary>
         /// Type of event
         /// </summary>
+        [HebrewTranslation("סוג")]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
+        [HebrewTranslation("מספר תהליך")]
         public int ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation("הערות")]
         public string Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
+        [HebrewTranslation("תאריך תנועה")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Whether the event has been validated appropriately
         /// </summary>
+        [HebrewTranslation("סטטוס")]
         public bool Valid { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
+        [HebrewTranslation("תעודות מעורבות")]
         public HashSet<Package> Packages { get; set; }
 
         /// <summary>
@@ -78,18 +84,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("EventType", "סוג"));
-            result.Add(new("ProcessId", "מספר תהליך"));
-            result.Add(new("Comments", "הערות"));
-            result.Add(new("Timestamp", "תאריך תנועה"));
-            result.Add(new("Valid", "סטטוס"));
-            result.Add(new("Packages", "אריזות"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Event>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>
@@ -104,24 +106,32 @@ namespace CipherData.Models
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
                 timestamp: TestedData.RandomDateTime(),
-                valid: Convert.ToBoolean(new Random().Next(0, 1)),
-                packages: new HashSet<Package>()
+                valid: Convert.ToBoolean(new Random().Next(0, 2)),
+                packages: (new Random().Next(0, 2) == 0) ? TestedData.FillRandomObjects(new Random().Next(0, 3), Package.Random).ToHashSet() : new HashSet<Package>()
                 );
         }
 
         // API-RELATED FUNCTIONS
 
         /// <summary>
+        /// All categories
+        /// </summary>
+        public static Tuple<List<Event>, ErrorResponse> All()
+        {
+            return EventsRequests.GetEvents();
+        }
+
+        /// <summary>
         /// Fetch all events which contain the searched text
         /// </summary>
-        public static Tuple<List<Event>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Event>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Event.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.EventType", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.ProcessId", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.Comments", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Event.Packages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Packages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                                             }, @operator: Operator.Or));
         }
     }

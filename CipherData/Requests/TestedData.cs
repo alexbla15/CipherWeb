@@ -41,7 +41,7 @@ namespace CipherData.Requests
         public static List<Package> Packages = FillRandomObjects(20, Package.Random);
         public static List<Category> Categories = FillRandomObjects(20, Category.Random);
         public static List<Vessel> Vessels = FillRandomObjects(20, Vessel.Random);
-        public static List<StorageSystem>? Systems = StorageSystem.All().Item1;
+        public static List<StorageSystem> Systems = StorageSystem.All().Item1;
         public static List<Event> Events = FillRandomObjects(20, Event.Random);
         public static List<Process> Processes = FillRandomObjects(20, Process.Random);
     }

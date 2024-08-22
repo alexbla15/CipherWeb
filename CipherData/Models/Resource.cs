@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,17 +16,20 @@ namespace CipherData.Models
         /// <summary>
         /// Searchable ID for the object
         /// </summary>
+        [HebrewTranslation("מספר סידורי")]
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Required level of clearence to access this object
         /// </summary>
+        [HebrewTranslation("מידור")]
         public string ClearenceLevel { get; set; } = GetRandomClearance();
 
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
         /// </summary>
+        [HebrewTranslation("מספר סידורי אוניברסלי")]
         public int Uuid { get; set; } = GetUuid();
 
         private static int UuidCounter { get; set; } = 0;
@@ -47,13 +51,10 @@ namespace CipherData.Models
         /// <summary>
         /// Method to get all (english, hebrew) translations of the above attributes.
         /// </summary>
-        /// <returns></returns>
-        public static readonly HashSet<Tuple<string, string>> BasicHeaders = new()
+        public static HashSet<Tuple<string, string>> Headers()
         {
-            new ("Id", "שם"),
-            new ("Uuid", "מספר סידורי"),
-            new ("ClearenceLevel", "מידור")
-        };
+            return GetHebrewTranslations<Resource>();
+        }
 
         /// <summary>
         /// Get resources which contain a certain text within one of their parameters
@@ -62,10 +63,43 @@ namespace CipherData.Models
         /// <param name="searchText">wanted text</param>
         /// <param name="createCondition">how to create the GroupedBooleanCondition</param>
         /// <returns></returns>
-        public static Tuple<List<T>?, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
+        public static Tuple<List<T>, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
         {
             ObjectFactory obj = new(filter: createCondition(searchText));
             return QueryRequests.QueryObjects<T>(obj);
+        }
+
+        public string? Translate(string searchedAttribute)
+        {
+            // Get the Type for the generic type T
+            Type type = GetType();
+
+            // Get the PropertyInfo for the property name
+            PropertyInfo? property = type.GetProperty(searchedAttribute);
+            if (property == null)
+            {
+                return null;
+            }
+
+            // Get the HebrewTranslationAttribute and return the translation
+            var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
+            return attribute?.Translation;
+        }
+
+        public static HashSet<Tuple<string, string>> GetHebrewTranslations<T>() where T : Resource
+        {
+            var translations = new HashSet<Tuple<string, string>>();
+
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
+                if (attribute != null)
+                {
+                    translations.Add(Tuple.Create(prop.Name, attribute.Translation));
+                }
+            }
+
+            return translations;
         }
     }
 }

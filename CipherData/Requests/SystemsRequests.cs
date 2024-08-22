@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="sys"></param>
         /// <returns></returns>
-        public static Tuple<StorageSystem?,ErrorResponse> CreateSystem(SystemRequest sys)
+        public static Tuple<StorageSystem,ErrorResponse> CreateSystem(SystemRequest sys)
         {
             return GenericRequests.Request(StorageSystem.Random());
         }
@@ -24,16 +24,16 @@ namespace CipherData.Requests
         /// Get all available objects
         /// Path: Get /systems/
         /// </summary>
-        public static Tuple<List<StorageSystem>?, ErrorResponse> GetSystems()
+        public static Tuple<List<StorageSystem>, ErrorResponse> GetSystems()
         {
-            return GenericRequests.Request(TestedData.FillRandomObjects(20, StorageSystem.Random), canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(TestedData.FillRandomObjects(20, StorageSystem.Random), canBadRequest: false);
         }
 
         /// <summary>
         /// Get details about a single system
         /// Path: Get /systems/{id}
         /// </summary>
-        public static Tuple<StorageSystem?, ErrorResponse> GetSystem(string sys_id)
+        public static Tuple<StorageSystem, ErrorResponse> GetSystem(string sys_id)
         {
 
             return GenericRequests.Request(StorageSystem.Random(sys_id), canBadRequest:false, canBeNotFound:true);
@@ -43,7 +43,7 @@ namespace CipherData.Requests
         /// Update system's details
         /// Path: PUT /systems/{id}
         /// </summary>
-        public static Tuple<StorageSystem?, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys)
+        public static Tuple<StorageSystem, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys)
         {
             return GenericRequests.Request(StorageSystem.Random(sys_id), canBeNotFound: true);
         }
@@ -53,7 +53,7 @@ namespace CipherData.Requests
         /// Path: GET /systems/{id}/conditions
         /// </summary>
         /// <returns></returns>
-        public static Tuple<GroupedBooleanCondition?, ErrorResponse> GetSystemConditions()
+        public static Tuple<GroupedBooleanCondition, ErrorResponse> GetSystemConditions()
         {
             return GenericRequests.Request(GroupedBooleanCondition.Random(), canBadRequest: false);
         }
@@ -63,7 +63,7 @@ namespace CipherData.Requests
         /// Path: PUT /systems/{id}/conditions
         /// </summary>
         /// <returns></returns>
-        public static Tuple<CustomObjectBooleanCondition?, ErrorResponse> UpdateSystemConditions(CustomObjectBooleanCondition condition)
+        public static Tuple<CustomObjectBooleanCondition, ErrorResponse> UpdateSystemConditions(CustomObjectBooleanCondition condition)
         {
             return GenericRequests.Request(CustomObjectBooleanCondition.Random(), canBeNotFound: true);
         }

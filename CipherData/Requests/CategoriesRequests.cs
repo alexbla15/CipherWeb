@@ -13,16 +13,16 @@ namespace CipherData.Requests
         /// Get all available objects
         /// Path: Get /categories/
         /// </summary>
-        public static Tuple<List<Category>?, ErrorResponse> GetCategories()
+        public static Tuple<List<Category>, ErrorResponse> GetCategories()
         {
-            return GenericRequests.Request(TestedData.Categories, canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(TestedData.Categories, canBadRequest: false);
         }
 
         /// <summary>
         /// Create a new category.
         /// Path: POST /categories
         /// </summary>
-        public static Tuple<Category?,ErrorResponse> CreateCategory(CategoryRequest cat)
+        public static Tuple<Category,ErrorResponse> CreateCategory(CategoryRequest cat)
         {
             return GenericRequests.Request(Category.Random());
         }
@@ -31,7 +31,7 @@ namespace CipherData.Requests
         /// Get details about a single category. 
         /// Path: GET /categories/{id}
         /// </summary>
-        public static Tuple<Category?, ErrorResponse> GetCategory(string id)
+        public static Tuple<Category, ErrorResponse> GetCategory(string id)
         {
             return GenericRequests.Request(Category.Random(id), canBadRequest:false, canBeNotFound: true);
         }
@@ -40,7 +40,7 @@ namespace CipherData.Requests
         /// Update category's details. 
         /// Path: PUT /categories/{id}
         /// </summary>
-        public static Tuple<Category?, ErrorResponse> UpdateCategory(string id, CategoryRequest cat)
+        public static Tuple<Category, ErrorResponse> UpdateCategory(string id, CategoryRequest cat)
         {
             return GenericRequests.Request(Category.Random(id), canBeNotFound: true);
         }

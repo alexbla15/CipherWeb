@@ -14,17 +14,26 @@ namespace CipherData.Models
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
+        [HebrewTranslation("הגדרה")]
         public ProcessDefinition Definition { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
+        [HebrewTranslation("תנועות")]
         public HashSet<Event> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
+        [HebrewTranslation("שלבים שטרם הושלמו")]
         public HashSet<ProcessStepDefinition> UncompletedSteps { get; set; }
+
+        [HebrewTranslation("התחלה")]
+        public DateTime Start { get; set; }
+
+        [HebrewTranslation("סיום")]
+        public DateTime End { get; set; }
 
         /// <summary>
         /// An instance of a specific processes
@@ -45,9 +54,6 @@ namespace CipherData.Models
             End = Events.Select(x => x.Timestamp).Max();
         }
 
-        public DateTime Start;
-        public DateTime End;
-
         /// <summary>
         /// Counts how many packages were created.
         /// </summary>
@@ -66,16 +72,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Definition", "הגדרה"));
-            result.Add(new("Events", "תנועות"));
-            result.Add(new("UncompletedSteps", "שלבים שטרם הושלמו"));
-            result.Add(new("StorageSystems", "מערכות"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Process>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>

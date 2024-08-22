@@ -15,8 +15,30 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Event" DataSource="@Events"
-                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+        <CipherDataGrid Cipher_TItem="Event" DataSource="@Events" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Id))" Title="@(ev.Translate(nameof(ev.Id)))">
+                    <FooterTemplate>
+                        <b>@($"כמות: {Events.Count()}")</b>
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.EventType))" Title="@(ev.Translate(nameof(ev.EventType)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.ProcessId))" Title="@(ev.Translate(nameof(ev.ProcessId)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Timestamp))" Title="@(ev.Translate(nameof(ev.Timestamp)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Packages))" Title="@(ev.Translate(nameof(ev.Packages)))">
+                    <Template>
+                        @(string.Join(", ", context.Packages.Select(x => x.Id)))
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Comments))" Title="@(ev.Translate(nameof(ev.Comments)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Valid))" Title="@(ev.Translate(nameof(ev.Valid)))">
+                    <Template>
+                        @((context.Valid) ? "מאומתת" : "לא מאומתת")
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
     </ComponentContent>
 </CipherTableCard>
 
@@ -51,8 +73,11 @@
     [Parameter]
     public List<Event> Events { get; set; }
 
+    private Event ev = Event.Random();
+
     protected override async Task OnInitializedAsync()
     {
         Title ??= "דוח תנועות";
+        Events = Event.All().Item1;
     }
 }

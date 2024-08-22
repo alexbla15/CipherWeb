@@ -19,7 +19,57 @@
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Package" DataSource="@packages" RowsPerPage="@RowsPerPage"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
-                        WithTotalFooter="@AllowTotalFooter" />
+                        WithTotalFooter="@AllowTotalFooter" WithCustomColumns="true">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Id))" Title="@(package.Translate(nameof(package.Id)))">
+                    <FooterTemplate>
+                        סה"כ תעודות: <b>@packages.Count() </b>
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Category))" Title="@(package.Translate(nameof(package.Category)))">
+                    <Template>
+                        @context.Category.Name
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.Vessel)" Title="@(package.Translate(nameof(package.Vessel)))">
+                    <Template>
+                        @context.Vessel?.Id
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.System)" Title="@(package.Translate(nameof(package.System)))">
+                    <Template>
+                        @context.System.Id
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.BrutMass)" Title="@(package.Translate(nameof(package.BrutMass)))">
+                    <FooterTemplate>
+                        @if (packages != null)
+                        {
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(package.BrutMass))?.GetValue(s)))</b>
+                        }
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.NetMass)" Title="@(package.Translate(nameof(package.NetMass)))">
+
+                    <FooterTemplate>
+                        @if (packages != null)
+                        {
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(package.NetMass))?.GetValue(s)))</b>
+                        }
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.ContainingPackages)" Title="@(package.Translate(nameof(package.ContainingPackages)))">
+                    <Template>
+                        @if (context.ContainingPackages.Count() > 0)
+                        {
+                            @context.ContainingPackages.Count()
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.CreatedAt))" Title="@(package.Translate(nameof(package.CreatedAt)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Comments))" Title="@(package.Translate(nameof(package.Comments)))" />
+            </CustomColumns>
+        </CipherDataGrid>
     </ComponentContent>
 </CipherTableCard>
 
@@ -72,9 +122,10 @@
     [Parameter]
     public string SelectedSystem { get; set; } = "S1";
 
+    private Package package = Package.Random();
     private List<Package> packages = new List<Package>();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Title ??= "דוח תעודות";
         FileTitle ??= "packages";
@@ -87,14 +138,13 @@
     /// </summary>
     private void SearchFunc()
     {
-        List<Package>? result = StorageSystem.Packages(SelectedSystem).Item1;
-        packages = (result is null) ? new List<Package>() : result;
+        (packages, error) = StorageSystem.Packages(SelectedSystem);
     }
 
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
-    ds =>
+        ds =>
     @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
         , new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }

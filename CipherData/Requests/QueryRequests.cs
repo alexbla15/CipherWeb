@@ -11,7 +11,7 @@ namespace CipherData.Requests
         /// Can Be Any array of resources. 
         /// Path: POST /query
         /// </summary>
-        public static Tuple<List<T>?, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
+        public static Tuple<List<T>, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
         {
             // Get the type of T
             Type type = typeof(T);

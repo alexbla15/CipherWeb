@@ -1,10 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
@@ -13,46 +7,55 @@ namespace CipherData.Models
         /// <summary>
         /// Free-text comment on the package
         /// </summary>
+        [HebrewTranslation("הערות")]
         public string? Comments { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
+        [HebrewTranslation("תכונות")]
         public string Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
+        [HebrewTranslation("כלי")]
         public Vessel? Vessel { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
+        [HebrewTranslation("מערכת")]
         public StorageSystem System { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
+        [HebrewTranslation("מסה ברוטו [גר']")]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
+        [HebrewTranslation("מסה נטו [גר']")]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
+        [HebrewTranslation("תאריך פתיחה")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
-        public HashSet<Package>? ContainingPackages { get; set; }
+        [HebrewTranslation("תעודות מוכלות")]
+        public HashSet<Package> ContainingPackages { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
+        [HebrewTranslation("קטגוריה")]
         public Category Category { get; set; }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace CipherData.Models
             BrutMass = brutMass;
             NetMass = netMass;
             CreatedAt = createdAt;
-            ContainingPackages = containingPackages;
+            ContainingPackages = containingPackages ?? new HashSet<Package>();
             Category = category;
         }
 
@@ -95,27 +98,20 @@ namespace CipherData.Models
         private static string GetNextId()
         {
             IdCounter += 1;
-            return $"{DateTime.Now.Year}{new Random().Next(0,3)}{new Random().Next(0,999):D3}{IdCounter:D3}";
+            return $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{IdCounter:D3}";
         }
 
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Properties", "תכונות"));
-            result.Add(new("Vessel", "כלי"));
-            result.Add(new("System", "מערכת"));
-            result.Add(new("BrutMass", "מסה ברוטו"));
-            result.Add(new("NetMass", "מסה נטו"));
-            result.Add(new("CreatedAt", "תאריך פתיחה"));
-            result.Add(new("ContainingPackages", "תעודות מוכלות"));
-            result.Add(new("Category", "קטגוריה"));
-            result.Add(new("Comments", "הערות"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<Package>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>
@@ -129,15 +125,17 @@ namespace CipherData.Models
             decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M;
             List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
 
-        Package result = new(
-                id: id,
-                comments: TestedData.RandomString(PackageComments),
-                createdAt: TestedData.RandomDateTime(),
-                brutMass: curr_brutmass,
-                netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
-                properties: "",
-                system: StorageSystem.Random(),
-                category: Category.Random());
+            Package result = new(
+                    id: id,
+                    comments: TestedData.RandomString(PackageComments),
+                    createdAt: TestedData.RandomDateTime(),
+                    brutMass: curr_brutmass,
+                    netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
+                    properties: "",
+                    containingPackages: TestedData.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
+                    system: StorageSystem.Random(),
+                    vessel: Vessel.Random(),
+                    category: Category.Random());
             return result;
         }
 
@@ -146,7 +144,7 @@ namespace CipherData.Models
         /// <summary>
         /// All packages
         /// </summary>
-        public static Tuple<List<Package>?, ErrorResponse> All()
+        public static Tuple<List<Package>, ErrorResponse> All()
         {
             return PackagesRequests.GetPackages();
         }
@@ -154,7 +152,7 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all packages which contain the searched text
         /// </summary>
-        public static Tuple<List<Package>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Package>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
         new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchText),

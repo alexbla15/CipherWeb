@@ -14,7 +14,7 @@ namespace CipherData.Requests
         /// <param name="canBeNotFound">is not found an optional result</param>
         /// <param name="canFail">only for testing. in real api, of course it may fail</param>
         /// <returns></returns>
-        public static Tuple<T?, ErrorResponse> Request<T>(T successResult, bool canBadRequest=true, bool canBeNotFound = false, bool canFail = false)
+        public static Tuple<T, ErrorResponse> Request<T>(T successResult, bool canBadRequest=true, bool canBeNotFound = false, bool canFail = false)
         {
             int result = new Random().Next(1, 4);
 
@@ -23,9 +23,9 @@ namespace CipherData.Requests
                 return result switch
                 {
                     1 => new(successResult, ErrorResponse.Success),
-                    2 when canBadRequest => new(default, ErrorResponse.BadRequest),
-                    3 when canBeNotFound => new(default, ErrorResponse.NotFound),
-                    _ => new(default, ErrorResponse.Unauthorized)
+                    2 when canBadRequest => new(Activator.CreateInstance<T>(), ErrorResponse.BadRequest),
+                    3 when canBeNotFound => new(Activator.CreateInstance<T>(), ErrorResponse.NotFound),
+                    _ => new(Activator.CreateInstance<T>(), ErrorResponse.Unauthorized)
                 };
             }
             else

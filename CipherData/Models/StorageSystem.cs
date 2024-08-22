@@ -7,26 +7,31 @@ namespace CipherData.Models
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
+        [HebrewTranslation("תכונות")]
         public string Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
+        [HebrewTranslation("מערכת אב")]
         public StorageSystem? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
+        [HebrewTranslation("מערכות מוכלות")]
         public HashSet<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
+        [HebrewTranslation("יחידה")]
         public Unit Unit { get; set; }
 
         /// <summary>
@@ -62,21 +67,18 @@ namespace CipherData.Models
             IdCounter += 1;
             return $"S{IdCounter:D3}";
         }
-        
+
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Description", "תיאור"));
-            result.Add(new("Properties", "תכונות"));
-            result.Add(new("Parent", "מערכת אב"));
-            result.Add(new("Children", "מערכות מוכלות"));
-            result.Add(new("Unit", "יחידה"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<StorageSystem>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all systems which contain the searched text
         /// </summary>
-        public static Tuple<List<StorageSystem>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<StorageSystem>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
         new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
@@ -116,7 +118,7 @@ namespace CipherData.Models
         /// </summary>
         /// <param name="SelectedSystem"></param>
         /// <returns></returns>
-        public static Tuple<List<StorageSystem>?, ErrorResponse> All()
+        public static Tuple<List<StorageSystem>, ErrorResponse> All()
         {
             return SystemsRequests.GetSystems();
         }
@@ -126,7 +128,7 @@ namespace CipherData.Models
         /// </summary>
         /// <param name="SelectedSystem"></param>
         /// <returns></returns>
-        public static Tuple<List<Event>?, ErrorResponse> Events(string SelectedSystem)
+        public static Tuple<List<Event>, ErrorResponse> Events(string SelectedSystem)
         {
             return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
@@ -139,7 +141,7 @@ namespace CipherData.Models
         /// </summary>
         /// <param name="SelectedSystem"></param>
         /// <returns></returns>
-        public static Tuple<List<Process>?, ErrorResponse> Processes(string SelectedSystem)
+        public static Tuple<List<Process>, ErrorResponse> Processes(string SelectedSystem)
         {
             return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
@@ -152,7 +154,7 @@ namespace CipherData.Models
         /// <summary>
         /// All packages that took place in a certain system
         /// </summary>
-        public static Tuple<List<Package>?, ErrorResponse> Packages(string SelectedSystem)
+        public static Tuple<List<Package>, ErrorResponse> Packages(string SelectedSystem)
         {
             return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {

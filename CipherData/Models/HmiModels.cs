@@ -1,5 +1,16 @@
 ﻿namespace CipherData.Models
 {
+    [AttributeUsage(AttributeTargets.Property)]
+    public class HebrewTranslationAttribute : Attribute
+    {
+        public string Translation { get; }
+
+        public HebrewTranslationAttribute(string translation)
+        {
+            Translation = translation;
+        }
+    }
+
     public class MyNavLink
     {
         public string Name { get; set; }

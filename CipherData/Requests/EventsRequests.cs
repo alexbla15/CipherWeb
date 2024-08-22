@@ -10,10 +10,19 @@ namespace CipherData.Requests
     public class EventsRequests
     {
         /// <summary>
+        /// Get all events
+        /// Path: GET /events
+        /// </summary>
+        public static Tuple<List<Event>, ErrorResponse> GetEvents()
+        {
+            return GenericRequests.Request(TestedData.FillRandomObjects(20, Event.Random), canBadRequest: false);
+        }
+
+        /// <summary>
         /// Create a new event
         /// Path: POST /events
         /// </summary>
-        public Tuple<Event?,ErrorResponse> CreateEvent(CreateEvent ev)
+        public static Tuple<Event,ErrorResponse> CreateEvent(CreateEvent ev)
         {
             return GenericRequests.Request(Event.Random());
         }
@@ -22,7 +31,7 @@ namespace CipherData.Requests
         /// Update event details.
         /// Path: PUT /events/conditions
         /// </summary>
-        public Tuple<GroupedBooleanCondition?, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition)
+        public static Tuple<GroupedBooleanCondition, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition)
         {
             return GenericRequests.Request(GroupedBooleanCondition.Random(), canBeNotFound:true);
         }
@@ -31,7 +40,7 @@ namespace CipherData.Requests
         /// Get conditions for validating an event. 
         /// Path: GET /events/conditions
         /// </summary>
-        public Tuple<GroupedBooleanCondition?, ErrorResponse> GetEventConditions()
+        public static Tuple<GroupedBooleanCondition, ErrorResponse> GetEventConditions()
         {
             return GenericRequests.Request(GroupedBooleanCondition.Random(), canBadRequest:false, canBeNotFound: true);
         }
@@ -40,7 +49,7 @@ namespace CipherData.Requests
         /// Get details about a single event.
         /// Path: GET /events/{id}
         /// </summary>
-        public Tuple<Event?, ErrorResponse> GetEvent(UpdateEvent ev)
+        public static Tuple<Event, ErrorResponse> GetEvent(UpdateEvent ev)
         {
             return GenericRequests.Request(Event.Random(), canBeNotFound: true);
         }
@@ -48,8 +57,8 @@ namespace CipherData.Requests
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/{id}
-        /// </summary>3
-        public Tuple<Event?, ErrorResponse> UpdateEvent(string event_id)
+        /// </summary>
+        public static Tuple<Event, ErrorResponse> UpdateEvent(string event_id)
         {
             return GenericRequests.Request(Event.Random(event_id), canBadRequest: false, canBeNotFound: true);
         }

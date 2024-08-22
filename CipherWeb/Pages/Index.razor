@@ -15,7 +15,7 @@
     </RadzenRow>
     <RadzenRow>
         <RadzenColumn Size="12">
-            <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" Height="@cardHeight" RowsPerPage=@rowsPerPage/>
+            <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage/>
         </RadzenColumn>
     </RadzenRow>
 }
@@ -27,6 +27,5 @@ else
 }
 
 @code {
-    private string cardHeight = "265px";
     private int rowsPerPage = 3;
 }

@@ -16,16 +16,19 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the process
         /// </summary>
+        [HebrewTranslation("שם")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
+        [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
         /// <summary>
         /// All steps that are associated with this process
         /// </summary>
+        [HebrewTranslation("שלבים")]
         public List<ProcessStepDefinition> Steps { get; set; }
 
         /// <summary>
@@ -67,15 +70,14 @@ namespace CipherData.Models
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public new static HashSet<Tuple<string, string>> Headers()
         {
-            HashSet<Tuple<string, string>> result = BasicHeaders;
+            List<Tuple<string, string>> result = new();
 
-            result.Add(new("Name", "שם"));
-            result.Add(new("Description", "תיאור"));
-            result.Add(new("Steps", "שלבים"));
+            result.AddRange(Resource.Headers());
+            result.AddRange(GetHebrewTranslations<ProcessDefinition>());
 
-            return result;
+            return result.ToHashSet();
         }
 
         /// <summary>

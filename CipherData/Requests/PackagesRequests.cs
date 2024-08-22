@@ -1,9 +1,4 @@
 ﻿using CipherData.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Requests
 {
@@ -13,15 +8,15 @@ namespace CipherData.Requests
         /// Get all available objects
         /// Path: Get /packages/
         /// </summary>
-        public static Tuple<List<Package>?, ErrorResponse> GetPackages()
+        public static Tuple<List<Package>, ErrorResponse> GetPackages()
         {
-            return GenericRequests.Request(TestedData.Packages, canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(TestedData.Packages, canBadRequest: false);
         }
 
         /// <summary>
         /// Get details about a single package given package ID.
         /// Path: GET /packages/{id}
-        public static Tuple<Package?,ErrorResponse> GetPackage(string pack_id)
+        public static Tuple<Package,ErrorResponse> GetPackage(string pack_id)
         {
             return GenericRequests.Request(Package.Random(pack_id), canBadRequest:false, canBeNotFound:true);
         }
@@ -30,7 +25,7 @@ namespace CipherData.Requests
         /// Update comments or caterogy of package
         /// Path: PUT /packages/{id}
         /// </summary>
-        public static Tuple<Package?, ErrorResponse> UpdatePackage(string pack_id, UpdatePackage pack)
+        public static Tuple<Package, ErrorResponse> UpdatePackage(string pack_id, UpdatePackage pack)
         {
             return GenericRequests.Request(Package.Random(pack_id), canBadRequest: false, canBeNotFound: true);
         }

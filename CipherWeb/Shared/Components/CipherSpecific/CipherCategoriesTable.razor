@@ -1,14 +1,51 @@
-﻿@inject ICipherInfo _db
-
-@inherits CipherTableCard
+﻿@inherits CipherTableCard
 
 <CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Category" DataSource="@subCategories"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group" />
+        <CipherDataGrid Cipher_TItem="Category" DataSource="@categories" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.Id))" Title="@(cat.Translate(nameof(cat.Id)))">
+                    <FooterTemplate>
+                        <b>@($"כמות: {categories.Count()}")</b>
+                    </FooterTemplate>
+                    </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.Name))" Title="@(cat.Translate(nameof(cat.Name)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.Description))" Title="@(cat.Translate(nameof(cat.Description)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.MaterialType))" Title="@(cat.Translate(nameof(cat.MaterialType)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.IdMask))" Title="@(cat.Translate(nameof(cat.IdMask)))">
+                    <Template>
+                        @(string.Join(", ", context.IdMask))
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.CreatingProcesses))" Title="@(cat.Translate(nameof(cat.CreatingProcesses)))">
+                    <Template>
+                        @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.ConsumingProcesses))" Title="@(cat.Translate(nameof(cat.ConsumingProcesses)))">
+                    <Template>
+                        @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.Parent))" Title="@(cat.Translate(nameof(cat.Parent)))">
+                    <Template>
+                        @context.Parent?.Name
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(cat.Children))" Title="@(cat.Translate(nameof(cat.Children)))">
+                    <Template>
+                        @if (context.Children != null)
+                        {
+                            @(string.Join(", ", context.Children.Select(x => x.Name)))
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
     </ComponentContent>
 </CipherTableCard>
 
@@ -32,9 +69,10 @@
     [Parameter]
     public bool Group { get; set; } = false;
 
-    private List<Category> subCategories = new List<Category>();
+    private List<Category> categories = Category.All().Item1;
+    private Category cat = Category.Random();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Title ??= "סוגים";
     }

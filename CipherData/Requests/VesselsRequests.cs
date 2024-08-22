@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="vessel"></param>
         /// <returns></returns>
-        public static Tuple<Vessel?,ErrorResponse> CreateVessel(VesselRequest vessel)
+        public static Tuple<Vessel,ErrorResponse> CreateVessel(VesselRequest vessel)
         {
             return GenericRequests.Request(Vessel.Random());
         }
@@ -26,7 +26,7 @@ namespace CipherData.Requests
         /// </summary>
         /// <param name="vessel_id"></param>
         /// <returns></returns>
-        public static Tuple<Vessel?, ErrorResponse> GetVessel(string vessel_id)
+        public static Tuple<Vessel, ErrorResponse> GetVessel(string vessel_id)
         {
             return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound:true, canBadRequest:false);
         }
@@ -36,7 +36,7 @@ namespace CipherData.Requests
         /// Path: PUT /vessels/{id}
         /// </summary>
         /// <returns></returns>
-        public static Tuple<Vessel?, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
+        public static Tuple<Vessel, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
         {
             return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound: true);
         }

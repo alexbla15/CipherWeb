@@ -13,7 +13,7 @@ namespace CipherData.Requests
         /// Create a new process
         /// Path: POST /processDefinitions
         /// </summary>
-        public static Tuple<ProcessDefinition?,ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc)
+        public static Tuple<ProcessDefinition,ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc)
         {
             return GenericRequests.Request(ProcessDefinition.Random());
         }
@@ -22,7 +22,7 @@ namespace CipherData.Requests
         /// Get details about a process definition.
         /// Path: Get /processDefinition/{id}
         /// </summary>
-        public static Tuple<ProcessDefinition?, ErrorResponse> GetProcessDefintion(string proc_id)
+        public static Tuple<ProcessDefinition, ErrorResponse> GetProcessDefintion(string proc_id)
         {
             return GenericRequests.Request(ProcessDefinition.Random(), canBeNotFound:true, canBadRequest:false);
         }
@@ -31,7 +31,7 @@ namespace CipherData.Requests
         /// Update Unit's details
         /// Path: PUT /processDefinitions/{id}
         /// </summary>
-        public static Tuple<ProcessDefinition?, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
+        public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
         {
             return GenericRequests.Request(ProcessDefinition.Random(), canBeNotFound: true);
         }
