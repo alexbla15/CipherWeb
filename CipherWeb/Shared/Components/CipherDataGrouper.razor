@@ -164,7 +164,7 @@
                 int index = i;
                 <CipherFormRow Icon="@($"filter_{index+1}")" Width="240px">
                     <RadzenDropDown @bind-Value="@chosenGroups[index]" TValue="string" Change="@(args => CheckDuplicity(index))" Placeholder="@($"רמה {index+1}")"
-                                    Data="@GroupFields"></RadzenDropDown>
+                                    Data="@GroupFields"/>
                 </CipherFormRow>
             }
         </RadzenStack>

@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Event>, ErrorResponse> GetEvents()
         {
-            return GenericRequests.Request(TestedData.FillRandomObjects(20, Event.Random), canBadRequest: false);
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Event.Random), canBadRequest: false);
         }
 
         /// <summary>

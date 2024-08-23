@@ -1,11 +1,22 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits CipherFormRow
 
-<CipherAutoComplete Label="@Label" Icon="@Icon" />
+<CipherFormRow Icon="@Icon">
+    <RadzenDropDown TValue="string" Placeholder="@Label" Data="@(vessels.Select(x=>x.Type).Distinct())" FilterAsYouType="true">
+        <ValueTemplate>
+            <b>@Label:</b> @context
+        </ValueTemplate>
+    </RadzenDropDown>
+</CipherFormRow>
 
 @code {
+    private ErrorResponse error = ErrorResponse.Success;
+    private List<Vessel> vessels = new();
+
     protected override void OnInitialized()
     {
         Label ??= "סוג הכלי";
         Icon ??= Icons.Cipher.Type;
+
+        (vessels, error) = Vessel.All();
     }
 }

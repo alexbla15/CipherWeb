@@ -130,14 +130,14 @@ namespace CipherData.Models
 
             return new Category(
                 id: id,
-                name: TestedData.RandomString(CategoriesNames),
-                description: TestedData.RandomString(CategoriesDescriptions),
+                name: RandomFuncs.RandomItem(CategoriesNames),
+                description: RandomFuncs.RandomItem(CategoriesDescriptions),
                 idMask: new HashSet<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
                 creatingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
                 consumingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
-                materialType: TestedData.RandomString(MaterialTypes),
+                materialType: RandomFuncs.RandomItem(MaterialTypes),
                 parent: (new Random().Next(0, 2) == 0) ? Random() : null,
-                children: (new Random().Next(0, 2) == 0) ? TestedData.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
+                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
                 );
         }
 

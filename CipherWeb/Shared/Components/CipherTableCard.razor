@@ -1,6 +1,4 @@
-﻿@inject TooltipService tooltipService
-
-@inherits CipherComponentCard
+﻿@inherits CipherComponentCard
 
 <CipherComponentCard MaxWidth="@MaxWidth" Width="@Width" Title="@Title" WithCard="@WithCard" WithButtons="@WithButtons" Height="@Height">
     <HeaderContent>
@@ -97,27 +95,8 @@
     [Parameter]
     public RenderFragment AdditionalButtons { get; set; }
 
-
-    void ShowTooltipWithHtml(ElementReference elementReference, string HelpText, TooltipOptions options = null)
-    {
-        if (!string.IsNullOrWhiteSpace(HelpText))
-        {
-            tooltipService.Open(elementReference, ds =>
-    @<div dir="rtl"> @HelpText </div>, options);
-        }
-    }
-
-    void HideTooltipWithHtml(ElementReference elementReference, string HelpText, TooltipOptions options = null)
-    {
-        if (!string.IsNullOrWhiteSpace(HelpText))
-        {
-            tooltipService.Close();
-        }
-    }
-
     public void Toggle()
     {
         IsFavourite = !IsFavourite;
-        tooltipService.Close();
     }
 }

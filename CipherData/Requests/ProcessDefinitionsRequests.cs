@@ -10,6 +10,15 @@ namespace CipherData.Requests
     public class ProcessDefinitionsRequests
     {
         /// <summary>
+        /// Get all process-definitions.
+        /// Path: Get /processDefinitions/
+        /// </summary>
+        public static Tuple<List<ProcessDefinition>, ErrorResponse> GetProcessDefinitions()
+        {
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, ProcessDefinition.Random));
+        }
+
+        /// <summary>
         /// Create a new process
         /// Path: POST /processDefinitions
         /// </summary>

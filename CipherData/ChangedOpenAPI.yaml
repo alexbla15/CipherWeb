@@ -66,6 +66,9 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
+            name:
+              type: string
+              description: Name of system
             description:
               type: string
               description: Description of system
@@ -530,27 +533,6 @@ components:
                 description: List of ID masks to identify the category from the package ID
                 items:
                   type: string
-    SystemMinimalDetails:
-      description: A contract for getting one of the many options of system-object, using minimal amount of details
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              id: 
-                type: string
-                description: Searchable ID for the object
-              description:
-                type: string
-                description: Description of system
-              parentId:
-                type: string
-                nullable: true
-                description: Parent system's searchable id (containing this one)
-              unitDescription:
-                type: string
-                description: Description of the unit containing this system
-              
     SystemRequest:
       description: Create a new system or update it
       content:
@@ -558,6 +540,9 @@ components:
           schema:
             type: object
             properties:
+              name:
+                type: string
+                description: Name of system
               description:
                 type: string
                 description: Description of system
@@ -652,7 +637,6 @@ paths:
         '401':
           description: Unauthorized
           $ref: "#/components/responses/ErrorResponse"
-      
   /packages/{id}:
     get:
       summary: Get details about a single package given package ID
@@ -956,6 +940,24 @@ paths:
           description: Not found
           $ref: "#/components/responses/ErrorResponse"
   /vessels:
+    get:
+      summary: Get all vessels
+      operationId: getVessels
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vessel"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
     post:
       summary: Create a new vessel
       operationId: createVessel
@@ -1090,8 +1092,26 @@ paths:
           description: Not found
           $ref: "#/components/responses/ErrorResponse"
   /processDefinitions:
+    get:
+      summary: Get all process definitions
+      operationId: getProcessDefinitions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProcessDefinition"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
     post:
-      summary: Create a new process
+      summary: Create a new process definition
       operationId: createProcessDefinition
       requestBody:
         required: true
@@ -1144,6 +1164,25 @@ paths:
         '404':
           description: Not found
           $ref: "#/components/responses/ErrorResponse"
+  /processes:
+    get:
+      summary: Get all processes
+      operationId: getProcesses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Process"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"  
   /processes/{id}:
     get:
       summary: Get details about a process

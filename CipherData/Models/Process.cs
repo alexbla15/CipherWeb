@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CipherData.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace CipherData.Models
     /// <summary>
     /// An instance of a specific processes
     /// </summary>
-    public class Process: Resource
+    public class Process : Resource
     {
         /// <summary>
         /// a collection of steps that make a single definition
@@ -108,15 +109,23 @@ namespace CipherData.Models
         // API-RELATED FUNCTIONS
 
         /// <summary>
+        /// All objects
+        /// </summary>
+        public static Tuple<List<Process>, ErrorResponse> All()
+        {
+            return ProcessRequests.GetProcesses();
+        }
+
+        /// <summary>
         /// Fetch all processes which contain the searched text
         /// </summary>
-        public static Tuple<List<Process>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Process>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Process.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Process.Definition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Process.Events.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Process.UncompletedSteps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Definition)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                                                 }, @operator: Operator.Or));
         }
     }

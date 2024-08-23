@@ -29,7 +29,7 @@ namespace CipherData.Requests
                 };
 
                 // Use the lambda in the FillRandomObjects method. Gets you a list of X random objected of the desired type.
-                List<T> list = TestedData.FillRandomObjects(new Random().Next(1, 20), randomFunc);
+                List<T> list = RandomFuncs.FillRandomObjects(new Random().Next(1, 20), randomFunc);
 
                 // return a successful result / error, according to logic set in Request()
                 return GenericRequests.Request(list, canBeNotFound: true, canFail: canFail);

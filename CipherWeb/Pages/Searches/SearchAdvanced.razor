@@ -1,9 +1,5 @@
 ﻿@page "/Search/Advanced"
 
-@using System.Text
-
-@inject ICipherInfo _db
-
 <PageTitle>חיפוש מתקדם</PageTitle>
 
 <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
@@ -16,53 +12,7 @@
         </Items>
     </RadzenSelectBar>
 </CipherComponentCard>
-
-
-@if (objectId == 0)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Package" Title="סינון נתונים"
-                                   GeneralDataSource="@packs" />
-}
-@if (objectId == 1)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Vessel" Title="סינון נתונים"
-                                   GeneralDataSource="@TestedData.Vessels" />
-}
-@if (objectId == 2)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
-                                   GeneralDataSource="@TestedData.Systems" />
-}
-@if (objectId == 3)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
-                                   GeneralDataSource="@TestedData.Systems" />
-}
-@if (objectId == 4)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים"
-                                   GeneralDataSource="@TestedData.Systems" />
-}
-@if (objectId == 5)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
-                                   GeneralDataSource="@db_events" />
-}
-@if (objectId == 6)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
-                                   GeneralDataSource="@db_events" />
-}
-@if (objectId == 7)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים"
-                                   GeneralDataSource="@db_events" />
-}
-@if (objectId == 8)
-{
-    <CipherDataFilter_WithDataGrid Cipher_TItem="Category" Title="סינון נתונים"
-                                   GeneralDataSource="@db_subcategories" />
-}
+@RenderCipherDataFilter(objectId)
 
 @code {
     [Parameter]
@@ -75,12 +25,33 @@
 
     string width = "width: 200px";
 
-    List<Package> packs = Package.All().Item1;
+    private ErrorResponse error = ErrorResponse.Success;
 
-    List<Event> db_events = new List<Event>();
-    List<Category> db_subcategories = new List<Category>();
+    private List<Package> packs = new List<Package>();
+    private List<Vessel> vessels = new List<Vessel>();
+    private List<StorageSystem> systems = new List<StorageSystem>();
+    private List<Event> events = new List<Event>();
+    private List<Process> procs = new List<Process>();
+    private List<Category> categories = new List<Category>();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
+        (packs, error) = Package.All();
+        (vessels, error) = Vessel.All();
+        (systems, error) = StorageSystem.All();
+        (events, error) = Event.All();
+        (procs, error) = Process.All();
+        (categories, error) = Category.All();
     }
+
+    private RenderFragment RenderCipherDataFilter(int objectId) => objectId switch
+    {
+        0 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Package" Title="סינון נתונים" GeneralDataSource="@packs" />,
+        1 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Vessel" Title="סינון נתונים" GeneralDataSource="@vessels" />,
+        2 or 3 or 4 => @<CipherDataFilter_WithDataGrid Cipher_TItem="StorageSystem" Title="סינון נתונים" GeneralDataSource="@systems" />,
+        5 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Event" Title="סינון נתונים" GeneralDataSource="@events" />,
+        6 or 7 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Process" Title="סינון נתונים" GeneralDataSource="@procs" />,
+        8 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Category" Title="סינון נתונים" GeneralDataSource="@categories" />,
+        _ => null
+    };
 }

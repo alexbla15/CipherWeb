@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using CipherWeb.Data;
+using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 
 namespace CipherWeb.Shared.Components
 {
     public partial class CipherDayView : RadzenDayView
     {
-        public override string Icon => "event";
+        public override string Icon => Icons.Time.Event;
 
         /// <inheritdoc />
         [Parameter]
@@ -23,7 +24,7 @@ namespace CipherWeb.Shared.Components
 
     public partial class CipherMonthView : RadzenMonthView
     {
-        public override string Icon => "calendar_month";
+        public override string Icon => Icons.Time.CalanderMonth;
 
         /// <inheritdoc />
         [Parameter]
@@ -33,7 +34,7 @@ namespace CipherWeb.Shared.Components
 
     public partial class CipherYearPlannerView : RadzenYearPlannerView
     {
-        public override string Icon => "calendar_today";
+        public override string Icon => Icons.Time.CalendarToday;
 
         /// <inheritdoc />
         [Parameter]

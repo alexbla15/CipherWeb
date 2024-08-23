@@ -1,21 +1,27 @@
 ﻿@inherits CipherFormRow
 
 @code {
-    private List<Category> subCategories = Enumerable.Range(0, 2).Select(_ => Category.Random()).ToList();
+    private ErrorResponse error = ErrorResponse.Success;
+    private List<Category> subCategories = new();
+
+    private Category cat = Category.Random();
 
     protected override void OnInitialized()
     {
         Width ??= "300px";
         Label ??= "שם קטגוריה";
         Icon ??= Icons.Symbols.Category;
+
+        (subCategories, error) = Category.All();
     }
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width">
-    <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false" TextProperty="Name" ValueProperty="Name" 
-        AllowClear="true" TValue="string" Style="@($"width: {Width}")">
-        <Template>
-            @Label: @((context as Category).Name)
-        </Template>
+    <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false"
+                    TextProperty="@(nameof(cat.Name))" ValueProperty="@(nameof(cat.Name))"
+                    AllowClear="true" TValue="string" Style="@($"width: {Width}")">
+        <ValueTemplate>
+            <b>@Label:</b> @((context as Category).Name)
+        </ValueTemplate>
     </RadzenDropDown>
 </CipherFormRow>

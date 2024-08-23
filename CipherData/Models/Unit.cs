@@ -91,7 +91,7 @@ namespace CipherData.Models
 
             return new Unit(
                     id: id,
-                    description: TestedData.RandomString(UnitDescriptions)
+                    description: RandomFuncs.RandomItem(UnitDescriptions)
                 );
         }
 
@@ -100,18 +100,17 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all units which contain the searched text
         /// </summary>
-        public static Tuple<List<Unit>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Unit>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Unit.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "Unit.Systems.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                                     }, @operator: Operator.Or));
         }
-
     }
 }
 

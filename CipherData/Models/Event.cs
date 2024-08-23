@@ -1,9 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
@@ -105,16 +100,16 @@ namespace CipherData.Models
                 eventType: new Random().Next(21, 27),
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
-                timestamp: TestedData.RandomDateTime(),
+                timestamp: RandomFuncs.RandomDateTime(),
                 valid: Convert.ToBoolean(new Random().Next(0, 2)),
-                packages: (new Random().Next(0, 2) == 0) ? TestedData.FillRandomObjects(new Random().Next(0, 3), Package.Random).ToHashSet() : new HashSet<Package>()
+                packages: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random).ToHashSet() : new HashSet<Package>()
                 );
         }
 
         // API-RELATED FUNCTIONS
 
         /// <summary>
-        /// All categories
+        /// All objects
         /// </summary>
         public static Tuple<List<Event>, ErrorResponse> All()
         {
@@ -132,7 +127,7 @@ namespace CipherData.Models
                 new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Packages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                            }, @operator: Operator.Or));
+            }, @operator: Operator.Or));
         }
     }
 }

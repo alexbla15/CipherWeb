@@ -98,7 +98,7 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<Process> Processes { get; set; }
+    public List<Process> Processes { get; set; } = new List<Process>();
 
     private RadzenScheduler<Process> scheduler;
 

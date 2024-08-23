@@ -1,9 +1,21 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDown Placeholder="@Label" TValue="string" AllowFiltering="true" Disabled="@Disabled"
-                            Style="width:300px" Data=@Category.MaterialTypes>
-    </RadzenDropDown>
+    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled"
+                            Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש...">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Id))" Title="@(cat.Translate(nameof(cat.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Name))" Title="@(cat.Translate(nameof(cat.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Parent))" Title="@(cat.Translate(nameof(cat.Parent)))">
+                <Template>
+                    @((context as Category).Parent?.Name)
+                </Template>
+            </RadzenDropDownDataGridColumn>
+        </Columns>
+        <ValueTemplate>
+            <b>@Label:</b> @((context as Category).Name)
+        </ValueTemplate>
+    </RadzenDropDownDataGrid>
 </CipherFormRow>
 
 @code {
@@ -13,9 +25,16 @@
     [Parameter]
     public bool Disabled { get; set; } = false;
 
-    protected override async Task OnInitializedAsync()
+    private ErrorResponse error = ErrorResponse.Success;
+    private List<Category> categories = new List<Category>();
+
+    private Category cat = Category.Random();
+
+    protected override void OnInitialized()
     {
         Label ??= "סוג החומר";
         Icon ??= Icons.Cipher.Material;
+
+        (categories, error) = Category.All();
     }
 }

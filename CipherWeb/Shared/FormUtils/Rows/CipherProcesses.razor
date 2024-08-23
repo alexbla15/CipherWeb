@@ -1,9 +1,14 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDown TValue="List<string>" Data=@Constants.Processes Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
-                    AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
-                    Chips=true Style="width: 100%;" />
+    <RadzenDropDownDataGrid TValue="List<string>" Data=@procs Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
+                            Chips=true Style="width: 100%;">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="@(nameof(proc.Name))" Title="@(proc.Translate(nameof(proc.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(proc.Description))" Title="@(proc.Translate(nameof(proc.Description)))"/>
+        </Columns>
+    </RadzenDropDownDataGrid>
 </CipherFormRow>
 
 @code {
@@ -14,11 +19,18 @@
     [Parameter]
     public int MaxShownLabels { get; set; } = int.MaxValue;
 
+    private ErrorResponse error = ErrorResponse.Success;
+    private List<ProcessDefinition> procs = new List<ProcessDefinition>();
+
+    private ProcessDefinition proc = ProcessDefinition.Random();
+
     protected override void OnInitialized()
     {
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
         MinWidth ??= "300px";
+
+        (procs, error) = ProcessDefinition.All();
     }
 }

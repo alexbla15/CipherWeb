@@ -21,13 +21,22 @@
         public DateTime EventDate { get; set; }
     }
 
+    private List<StorageSystem> systems = new List<StorageSystem>();
     private List<Analysis> analysis = new();
+    private ErrorResponse error = ErrorResponse.Success;
+
+    private StorageSystem sys = StorageSystem.Random();
+
+    protected override void OnInitialized()
+    {
+        (systems, error) = StorageSystem.All();
+    }
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="Name" Label="שם המיקום" Data="@TestedData.Vessels"></CipherAutoComplete>
+            <CipherAutoComplete TextProperty="@(nameof(sys.Id))" Label="שם המיקום" Data="@systems"></CipherAutoComplete>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>
@@ -40,15 +49,14 @@
                             <CipherButton Icon="@Icons.Security.Shield" HelpText="אישור בטיחות" Variant="Variant.Outlined" />
                         </Buttons>
                         <ChildContent>
-                            <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="שם" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="תיאור" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="נמצא במיקום" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="יחידה" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
-                            <CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Name)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Description)))" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Parent)))" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Unit)))" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
+                            @*<CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />*@
+                            @*<CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />*@
+                            @*<CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />*@
                         </ChildContent>
                     </CipherComponentCard>
                 </RadzenTabsItem>

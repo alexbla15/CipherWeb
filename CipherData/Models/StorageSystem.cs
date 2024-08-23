@@ -7,6 +7,12 @@ namespace CipherData.Models
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation("שם")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Description of system
+        /// </summary>
         [HebrewTranslation("תיאור")]
         public string Description { get; set; }
 
@@ -37,15 +43,17 @@ namespace CipherData.Models
         /// <summary>
         /// Instanciation of StorageSystem
         /// </summary>
+        /// <param name="name">Name of system</param>
         /// <param name="description">Description of system</param>
         /// <param name="properties">JSON-like additional properties of the system</param>
         /// <param name="unit">Unit responsible for this system.</param>
         /// <param name="parent">Parent system containing this one</param>
         /// <param name="children">Child systems contained in this one</param>
-        public StorageSystem(string description, string properties, Unit unit,
+        public StorageSystem(string description, string properties, Unit unit, string name,
             StorageSystem? parent = null, HashSet<StorageSystem>? children = null, string? id = null)
         {
             Id = id ?? GetNextId();
+            Name = name;
             Description = description;
             Properties = properties;
             Parent = parent;
@@ -91,7 +99,8 @@ namespace CipherData.Models
 
             return new(
                 id: id,
-                description: TestedData.RandomString(SystemsDescriptions),
+                name: $"_{id}",
+                description: RandomFuncs.RandomItem(SystemsDescriptions),
                 properties: "",
                 unit: Unit.Random(),
                 parent: (new Random().Next(0, 5) == 0) ? Random() : null
@@ -104,12 +113,13 @@ namespace CipherData.Models
         public static Tuple<List<StorageSystem>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Properties", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Parent.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "System.Children.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: "System.Unit.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new BooleanCondition(attribute: $"System.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"System.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"System.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"System.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"System.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"System.{nameof(Unit)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText)
                                 }, @operator: Operator.Or));
         }
 
@@ -132,7 +142,7 @@ namespace CipherData.Models
         {
             return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
-                new BooleanCondition(attribute: "Event.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new BooleanCondition(attribute: $"{typeof(Event).Name}.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
 
@@ -145,7 +155,7 @@ namespace CipherData.Models
         {
             return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
-                new BooleanCondition(attribute: "Process.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new BooleanCondition(attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
 
@@ -158,7 +168,7 @@ namespace CipherData.Models
         {
             return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
-                new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new BooleanCondition(attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
     }

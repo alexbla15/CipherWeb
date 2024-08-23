@@ -96,14 +96,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (SetRole == Role.Manager)
-        {
-            SetView = View.Calendar;
-        }
-        else
-        {
-            SetView = View.Table;
-        }
+        SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
         (procs, error) = StorageSystem.Processes(SelectedSystem);
         FileName = $"processes_{SelectedSystem}";

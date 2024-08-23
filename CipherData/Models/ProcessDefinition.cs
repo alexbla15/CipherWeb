@@ -87,7 +87,7 @@ namespace CipherData.Models
         public static ProcessDefinition Random(string? id = null)
         {
 
-            string proc_name = TestedData.RandomString(ProcessesNames);
+            string proc_name = RandomFuncs.RandomItem(ProcessesNames);
 
             return new ProcessDefinition(
                     id: id,
@@ -100,16 +100,23 @@ namespace CipherData.Models
         // API-RELATED FUNCTIONS
 
         /// <summary>
+        /// All objects
+        /// </summary>
+        public static Tuple<List<ProcessDefinition>, ErrorResponse> All()
+        {
+            return ProcessDefinitionsRequests.GetProcessDefinitions();
+        }
+
+        /// <summary>
         /// Fetch all processes definitions which contain the searched text
         /// </summary>
-        public static Tuple<List<ProcessDefinition>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<ProcessDefinition>, ErrorResponse> Containing(string SearchText)
         {
-
             return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "ProcessDefinition.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Description", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "ProcessDefinition.Steps.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
                                                     }, @operator: Operator.Or));
         }
     }

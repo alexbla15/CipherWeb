@@ -127,12 +127,12 @@ namespace CipherData.Models
 
             Package result = new(
                     id: id,
-                    comments: TestedData.RandomString(PackageComments),
-                    createdAt: TestedData.RandomDateTime(),
+                    comments: RandomFuncs.RandomItem(PackageComments),
+                    createdAt: RandomFuncs.RandomDateTime(),
                     brutMass: curr_brutmass,
                     netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
                     properties: "",
-                    containingPackages: TestedData.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
+                    containingPackages: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
                     category: Category.Random());
@@ -155,12 +155,12 @@ namespace CipherData.Models
         public static Tuple<List<Package>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: "Package.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Comments", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Properties", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.Vessel.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.System.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: "Package.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
                 }, @operator: Operator.Or));
         }
     }

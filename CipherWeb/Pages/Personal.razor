@@ -5,17 +5,17 @@
         <RadzenTabsItem Text="פרטים אישיים">
             <CipherFormCard Width="100%" Variant="Variant.Flat" Class="rz-my-12 rz-mx-auto" Style="float:right" MaxWidth="600px" MarginBottom="0px">
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="1rem">
-                    <RadzenImage Path="Images/UserPic.jpg" Style="width: 100px; height: 100px; border-radius: 50%;" />
+                    <CipherAccountImage Width="100px" Height="100px" BorderRadius="50%"/>
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Start" Gap="1rem">
                         <RadzenStack Gap="@Gap">
                             <CipherText TextStyle="@HeaderStyle" Text="שם מלא" TextAlign="TextAlign.Right"/>
-                            <CipherText TextStyle="@ValueStyle" Bold="true">אלכס בלחמן</CipherText>
+                            <CipherText TextStyle="@ValueStyle" Bold="true">@Constants.SetUser.Name</CipherText>
                             <CipherText TextStyle="@HeaderStyle" Text="תפקיד" TextAlign="TextAlign.Right" />
                             <CipherText TextStyle="@ValueStyle" Bold="true">מזין ראשי</CipherText>
                         </RadzenStack>
                         <RadzenStack Gap="@Gap">
                             <CipherText TextStyle="@HeaderStyle" Text="תאריך הצטרפות ל-Cipher" TextAlign="TextAlign.Right" />
-                            <CipherText TextStyle="@ValueStyle" Bold="true">@DateTime.Parse("1/1/2024")</CipherText>
+                            <CipherText TextStyle="@ValueStyle" Bold="true">@DateTime.Today.AddYears(-1)</CipherText>
                             <CipherText TextStyle="@HeaderStyle" Text="תאריך חיבור אחרון ל-Cipher" TextAlign="TextAlign.Right"></CipherText>
                             <CipherText TextStyle="@ValueStyle" Bold="true">@DateTime.Now</CipherText>
                         </RadzenStack>

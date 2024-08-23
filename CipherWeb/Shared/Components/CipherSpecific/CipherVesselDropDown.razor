@@ -3,11 +3,17 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@TestedData.Vessels TextProperty="Id" ValueProperty="Id" Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
+    <RadzenDropDownDataGrid TValue=Vessel Data=@Vessel.All().Item1 TextProperty="@(nameof(ves.Id))" ValueProperty="@(nameof(ves.Id))" 
+    Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="Id" Title="שם" Width="@($"{colWidth}px")" />
-            <RadzenDropDownDataGridColumn Property="Uuid" Title="מספר" Width="@($"{colWidth/2}px")" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ves.Id))" Title="@(ves.Translate(nameof(ves.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ves.Type))" Title="@(ves.Translate(nameof(ves.Type)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ves.System))" Title="@(ves.Translate(nameof(ves.System)))">
+                <Template>
+                    @((context as Vessel).System.Id)
+                </Template>
+                </RadzenDropDownDataGridColumn>
         </Columns>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -19,7 +25,7 @@
     [Parameter]
     public bool Disabled { get; set; } = false;
 
-    private int colWidth = 50;
+    private Vessel ves = Vessel.Random();
 
     protected override async Task OnInitializedAsync()
     {

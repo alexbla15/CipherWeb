@@ -10,7 +10,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> GetPackages()
         {
-            return GenericRequests.Request(TestedData.Packages, canBadRequest: false);
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Package.Random), canBadRequest: false);
         }
 
         /// <summary>

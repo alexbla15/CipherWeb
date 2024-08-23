@@ -25,10 +25,10 @@ namespace CipherWeb.Data
 
     public class EventStatus
     {
-        public readonly static string Pending = "מחכה לאישור";
-        public readonly static string Warning = "תנועה תקולה";
-        public readonly static string Accepted = "תנועה מאושרת";
-        public readonly static string Denied = "תנועה נדחתה";
+        public const string Pending = "מחכה לאישור";
+        public const string Warning = "תנועה תקולה";
+        public const string Accepted = "תנועה מאושרת";
+        public const string Denied = "תנועה נדחתה";
     }
 
     /// <summary>

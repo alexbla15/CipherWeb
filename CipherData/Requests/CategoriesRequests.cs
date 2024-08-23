@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> GetCategories()
         {
-            return GenericRequests.Request(TestedData.Categories, canBadRequest: false);
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Category.Random), canBadRequest: false);
         }
 
         /// <summary>

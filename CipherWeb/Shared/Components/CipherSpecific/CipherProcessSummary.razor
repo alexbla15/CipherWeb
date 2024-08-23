@@ -104,22 +104,13 @@
 
     private bool AddProcess(Event ev)
     {
-        if (View == "day")
+        return View switch
         {
-            return (ev.Timestamp == DateTime.Today);
-        }
-        else if (View == "month")
-        {
-            return (ev.Timestamp.Month == DateTime.Today.Month);
-        }
-        else if (View == "year")
-        {
-            return (ev.Timestamp.Year == DateTime.Today.Year);
-        }
-        else
-        {
-            return false;
-        }
+            "day" => ev.Timestamp.Date == DateTime.Today,
+            "month" => ev.Timestamp.Month == DateTime.Today.Month && ev.Timestamp.Year == DateTime.Today.Year,
+            "year" => ev.Timestamp.Year == DateTime.Today.Year,
+            _ => false
+        };
     }
 
     private void DayView()

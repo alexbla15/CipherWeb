@@ -62,10 +62,15 @@
     private CipherDataFilter_WithDataGrid<Event> dataFilter = new CipherDataFilter_WithDataGrid<Event>();
     private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
     private CipherDataAggregater dataAggregater = new CipherDataAggregater();
-    
+
     private List<Package> packs = Package.All().Item1;
     private List<Package> rows = Package.All().Item1;
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
+
+    private ErrorResponse error = ErrorResponse.Success;
+
+    private List<StorageSystem> systems = new List<StorageSystem>();
+    private List<Vessel> vessels = new List<Vessel>();
 
     private int ReportId;
 
@@ -83,6 +88,9 @@
 
         Random random = new Random();
         ReportId = random.Next(1000,9999);
+
+        (systems, error) = StorageSystem.All();
+        (vessels, error) = Vessel.All();
     }
 
     /// <summary>
@@ -116,7 +124,7 @@
         {
             if (!string.IsNullOrEmpty(dataGrouper.chosenGroups[order]))
             {
-                rowsColumnsOrder.Add(CommonFuncs.DeTranslateField(dataGrouper.chosenGroups[order]), order);
+                rowsColumnsOrder.Add(CipherWeb.CommonFuncs.DeTranslateField(dataGrouper.chosenGroups[order]), order);
             }
         }
 
@@ -142,18 +150,16 @@
     {
         rows = new List<Package>();
 
-        List<string> vessels = TestedData.Vessels.Select(x => x.Id).Distinct().ToList();
-
-        foreach (StorageSystem sys in TestedData.Systems)
+        foreach (StorageSystem sys in systems)
         {
-            foreach (Vessel ves in TestedData.Vessels)
+            foreach (Vessel ves in vessels)
             {
-                Package pack = Package.Random();
+                    Package pack = Package.Random();
                 pack.System = sys;
                 pack.Vessel = ves;
-                pack.BrutMass = packs.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
-                pack.NetMass = packs.Where(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
-                rows.Add(pack);
+                pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
+                pack.NetMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
+                    rows.Add(pack);
             }
         }
         SetColumnsOrder();

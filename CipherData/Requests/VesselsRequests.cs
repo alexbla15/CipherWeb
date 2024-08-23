@@ -10,6 +10,15 @@ namespace CipherData.Requests
     public class VesselsRequests
     {
         /// <summary>
+        /// Get all vessels available.
+        /// Path: Get /vessels/
+        /// </summary>
+        public static Tuple<List<Vessel>, ErrorResponse> GetVessels()
+        {
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Vessel.Random));
+        }
+
+        /// <summary>
         /// Create a new vessel.
         /// Path: POST /vessels
         /// </summary>

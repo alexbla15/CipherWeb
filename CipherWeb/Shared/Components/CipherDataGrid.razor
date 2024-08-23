@@ -140,27 +140,20 @@
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
     }
 
-    async void OnCellDoubleClick(DataGridCellMouseEventArgs<Cipher_TItem> args)
+    public void OnCellDoubleClick(DataGridCellMouseEventArgs<Cipher_TItem> args)
     {
-        if (args.Column.Title.Contains("מערכת"))
+        string? href = args.Column.Title switch
         {
-            Navigate(CipherNavLinks.LocationSearch.Href);
-        }
-        else if (args.Column.Title.Contains("כלי"))
+            string title when title.Contains("מערכת") || title.Contains("מבנה") => CipherNavLinks.LocationSearch.Href,
+            string title when title.Contains("כלי") => CipherNavLinks.VesselSearch.Href,
+            string title when title.Contains("תעודה") || title.Contains("תעודות") => CipherNavLinks.PackageSearch.Href,
+            string title when title.Contains("תחום") => CipherNavLinks.DepartmentSearch.Href,
+            _ => null // or handle the default case if needed
+        };
+
+        if (href != null)
         {
-            Navigate(CipherNavLinks.VesselSearch.Href);
-        }
-        else if (args.Column.Title.Contains("תעודה") || args.Column.Title.Contains("תעודות"))
-        {
-            Navigate(CipherNavLinks.PackageSearch.Href);
-        }
-        else if (args.Column.Title.Contains("תחום"))
-        {
-            Navigate(CipherNavLinks.DepartmentSearch.Href);
-        }
-        else if (args.Column.Title.Contains("מבנה"))
-        {
-            Navigate(CipherNavLinks.LocationSearch.Href);
+            Navigate(href);
         }
     }
 }

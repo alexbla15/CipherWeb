@@ -69,11 +69,13 @@
     [Parameter]
     public bool Group { get; set; } = false;
 
-    private List<Category> categories = Category.All().Item1;
+    private List<Category> categories = new List<Category>();
+    private ErrorResponse error = ErrorResponse.Success;
     private Category cat = Category.Random();
 
     protected override void OnInitialized()
     {
         Title ??= "סוגים";
+        (categories, error) = Category.All();
     }
 }

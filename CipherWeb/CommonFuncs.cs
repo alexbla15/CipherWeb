@@ -60,17 +60,5 @@ namespace CipherWeb
             }
             return null;
         }
-
-        /// <summary>
-        /// Find an improper char within a string.
-        /// </summary>
-        /// <param name="value">desired text</param>
-        /// <returns></returns>
-        public static string? FindImproperChar(string value)
-        {
-            string foundChar = (value.ToCharArray().Any(x => Constants.ImproperChars.Contains(x))) ? value.ToCharArray().
-                Where(x => Constants.ImproperChars.Contains(x)).ToList()[0].ToString() : null;
-            return foundChar;
-        }
     }
 }

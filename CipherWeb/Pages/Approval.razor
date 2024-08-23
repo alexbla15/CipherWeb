@@ -3,8 +3,8 @@
 @using System.Reflection
 
 @inject ICipherInfo _db
-@inject ExcelService excelService
 @inject IJSRuntime JSRuntime
+@inject ExcelService excelService
 @inject DialogService DialogService
 
 @code {
@@ -13,7 +13,7 @@
 
 <PageTitle>אישור תנועות</PageTitle>
 
-<CipherDataFilter_WithDataGrid Title="סינון תנועות לאישור" Cipher_TItem="Event" WithCustomDataGrid=true>
+<CipherDataFilter_WithDataGrid Title="סינון תנועות לאישור" Cipher_TItem="Event" WithCustomDataGrid=true FilterFields="@FilterFields">
     <Buttons>
         <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined"></CipherButton>
         <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
@@ -37,13 +37,16 @@
                                       Size="ButtonSize.Medium" />
                     </Template>
                 </RadzenDataGridColumn>
-
-                <RadzenDataGridColumn TItem="Event" Property="Timestamp" Title="תאריך תנועה" OrderIndex="1" SortOrder="SortOrder.Ascending" />
-                <RadzenDataGridColumn TItem="Event" Property="ProcessId" Title="תהליך" OrderIndex="2" SortOrder="SortOrder.Ascending" />
-                <RadzenDataGridColumn TItem="Event" Property="EventType" Title="סוג" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.EventType))" Title="@(ev.Translate(nameof(ev.EventType)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.ProcessId))" Title="@(ev.Translate(nameof(ev.ProcessId)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Timestamp))" Title="@(ev.Translate(nameof(ev.Timestamp)))" />
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
                     <Template>
-                        <RadzenText Text="111"></RadzenText>
+                        @if (context.Packages.ToList().Count() > 0)
+                        {
+                            @context.Packages.ToList().First().Id
+                            ;
+                        }
                     </Template>
                 </RadzenDataGridColumn>
 
@@ -54,7 +57,11 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מקבלת">
                     <Template>
-                        <RadzenText Text="222"></RadzenText>
+                        @if (context.Packages.ToList().Count() > 0)
+                        {
+                            @context.Packages.ToList().Last().Id
+                            ;
+                        }
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Title="מערכת מקבלת">
@@ -67,10 +74,10 @@
                         <RadzenText Text="5"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="Comments" Title="הערות" />
-                <RadzenDataGridColumn TItem="Event" Title="סטטוס" Width="200px">
-                    <Template Context="ev">
-                        <CipherButton Disabled="true" Width="150px" Text="@ev.Valid.ToString()" ColorStyle="@GetStatusColor(ev.Valid.ToString())" ColorShade="Shade.Default" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Comments))" Title="@(ev.Translate(nameof(ev.Comments)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Valid))" Title="@(ev.Translate(nameof(ev.Valid)))">
+                    <Template>
+                        @((context.Valid) ? "מאומתת" : "לא מאומתת")
                     </Template>
                 </RadzenDataGridColumn>
             </CustomColumns>
@@ -84,51 +91,44 @@
 
     RadzenDataGrid<Event> CustomDataGrid;
 
-    List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>
+    private ErrorResponse error = ErrorResponse.Success;
+    private Event ev = Event.Random();
+
+    private List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>();
+
+    protected override void OnInitialized()
     {
+        (DataSource, error) = Event.All();
+
+        FilterFields.AddRange(new List<Tuple<string, string>>()
+        {
         new ("Timestamp", "תאריך תנועה"),
         new ("DonatingSystem", "מערכת מוסרת"),
         new ("AcceptingSystem", "מערכת מקבלת"),
         new ("DonatingPackage", "תעודה מוסרת"),
         new ("AcceptingPackage", "תעודה מקבלת"),
         new ("EventMass", "מסת תנועה"),
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        DataSource = await _db.GetEvents();
+        });
+        FilterFields.AddRange(Event.GetHebrewTranslations<Event>().ToList());
     }
 
     ButtonStyle GetStatusColor(string status)
     {
-        if (status == EventStatus.Pending)
+        return status switch
         {
-            return ButtonStyle.Secondary;
-        }
-        else if (status == EventStatus.Accepted)
-        {
-            return ButtonStyle.Success;
-        }
-        else if (status == EventStatus.Denied)
-        {
-            return ButtonStyle.Danger;
-        }
-        else if (status == EventStatus.Warning)
-        {
-            return ButtonStyle.Warning;
-        }
-        else
-        {
-            return ButtonStyle.Primary;
-        }
-
+            EventStatus.Pending => ButtonStyle.Secondary,
+            EventStatus.Accepted => ButtonStyle.Success,
+            EventStatus.Denied => ButtonStyle.Danger,
+            EventStatus.Warning => ButtonStyle.Warning,
+            _ => ButtonStyle.Primary
+        };
     }
 
     public async Task OpenEvent()
     {
         await DialogService.OpenAsync("תנועה",
 
-    ds =>
+        ds =>
     @<CipherEventCard dir="rtl" WithCard=false ReadOnly=false></CipherEventCard>, Constants.SetDialogOptions);
     }
 }

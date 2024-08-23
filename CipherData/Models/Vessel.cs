@@ -80,7 +80,7 @@ namespace CipherData.Models
 
             return new Vessel(
                 id: id,
-                type: TestedData.RandomString(VesselTypes),
+                type: RandomFuncs.RandomItem(VesselTypes),
                 system: StorageSystem.Random()
                 );
         }
@@ -88,15 +88,23 @@ namespace CipherData.Models
         // API-RELATED FUNCTIONS
 
         /// <summary>
+        /// All objects
+        /// </summary>
+        public static Tuple<List<Vessel>, ErrorResponse> All()
+        {
+            return VesselsRequests.GetVessels();
+        }
+
+        /// <summary>
         /// Fetch all vessels which contain the searched text
         /// </summary>
-        public static Tuple<List<Vessel>?, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Vessel>, ErrorResponse> Containing(string SearchText)
         {
             return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: "Vessel.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.Type", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.System.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: "Vessel.ContainingPackages.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                     }, @operator: Operator.Or));
         }
     }

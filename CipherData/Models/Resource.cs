@@ -98,7 +98,6 @@ namespace CipherData.Models
                     translations.Add(Tuple.Create(prop.Name, attribute.Translation));
                 }
             }
-
             return translations;
         }
     }

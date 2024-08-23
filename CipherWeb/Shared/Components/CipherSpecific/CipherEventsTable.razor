@@ -74,10 +74,11 @@
     public List<Event> Events { get; set; }
 
     private Event ev = Event.Random();
+    private ErrorResponse error = ErrorResponse.Success;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Title ??= "דוח תנועות";
-        Events = Event.All().Item1;
+        (Events, error) = Event.All();
     }
 }

@@ -26,7 +26,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> GetSystems()
         {
-            return GenericRequests.Request(TestedData.FillRandomObjects(20, StorageSystem.Random), canBadRequest: false);
+            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, StorageSystem.Random), canBadRequest: false);
         }
 
         /// <summary>

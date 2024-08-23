@@ -4,7 +4,11 @@
     protected override void OnInitialized()
     {
         Text ??= "מוגבל";
+        FontSize ??= "large";
+        FontWeight ??= "700";
+        Color ??= Colors.Danger;
+        MarginBottom ??= "0px";
     }
 }
 
-<CipherText Text="@Text" TextAlign="TextAlign.Center" Color="@Colors.Danger" FontSize="large" FontWeight="700" MarginBottom="0px"></CipherText>
+<CipherText Text="@Text" TextAlign="TextAlign.Center" Color="@Color" FontSize="@FontSize" FontWeight="@FontWeight" MarginBottom="@MarginBottom" />
