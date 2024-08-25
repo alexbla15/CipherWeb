@@ -6,24 +6,16 @@
 
 <PageTitle>מסך פתיחה</PageTitle>
 
-<CipherTopNavBar/>
+<CipherTopNavBar />
 
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
-    <RadzenRow>
-        <CipherProcessesScheduler/>
-    </RadzenRow>
-    <RadzenRow>
-        <RadzenColumn Size="12">
-            <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage/>
-        </RadzenColumn>
-    </RadzenRow>
+    <CipherProcessesScheduler />
+    <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage />
 }
 else
 {
-    <RadzenRow Gap="0">
-        <CipherProcessesScheduler />
-    </RadzenRow>
+    <CipherProcessesScheduler />
 }
 
 @code {

@@ -59,6 +59,12 @@ namespace CipherData.Models
         public Category Category { get; set; }
 
         /// <summary>
+        /// List of processes definitions that may accept this package as input
+        /// </summary>
+        [HebrewTranslation("ייעוד")]
+        public HashSet<ProcessDefinition> DestinationProcesses { get; set; }
+
+        /// <summary>
         /// Instanciation of a new package
         /// </summary>
         /// <param name="properties">JSON-like additional properties of the package</param>
@@ -70,9 +76,11 @@ namespace CipherData.Models
         /// <param name="vessel">Vessel which contains the package</param>
         /// <param name="containingPackages">Packages contained in this one</param>
         /// <param name="comments">Free-text comment on the package</param>
+        /// <param name="destinationProcesses">List of processes definitions that may accept this package as input</param>
         /// <param name="id">only use if you want the package to have a specific id</param>
         public Package(string properties, StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
-            Vessel? vessel = null, HashSet<Package>? containingPackages = null, string? comments = null, string? id = null)
+            Vessel? vessel = null, HashSet<Package>? containingPackages = null, HashSet<ProcessDefinition>? destinationProcesses = null,
+            string? comments = null, string? id = null)
         {
             Id = id ?? GetNextId();
             Comments = comments;
@@ -83,6 +91,7 @@ namespace CipherData.Models
             NetMass = netMass;
             CreatedAt = createdAt;
             ContainingPackages = containingPackages ?? new HashSet<Package>();
+            DestinationProcesses = destinationProcesses ?? category.ConsumingProcesses;
             Category = category;
         }
 
@@ -124,6 +133,7 @@ namespace CipherData.Models
 
             decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M;
             List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
+            Category cat = Category.Random();
 
             Package result = new(
                     id: id,
@@ -135,7 +145,42 @@ namespace CipherData.Models
                     containingPackages: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
+                    category: cat,
+                    destinationProcesses: cat.ConsumingProcesses);
+            return result;
+        }
+
+        /// <summary>
+        /// Get an empty new object.
+        /// </summary>
+        public static Package New()
+        {
+            Package result = new(
+                    id: "",
+                    createdAt: DateTime.Now,
+                    brutMass: 0,
+                    netMass: 0,
+                    properties: "",
+                    system: StorageSystem.Random(),
                     category: Category.Random());
+            return result;
+        }
+
+        public PackageRequest Request()
+        {
+            PackageRequest result = new(
+                    id: Id,
+                    comments: Comments,
+                    createdAt: CreatedAt,
+                    brutMass: BrutMass,
+                    netMass: NetMass,
+                    properties: Properties,
+                    containingPackagesIds: ContainingPackages.Select(x => x.Id).ToHashSet(),
+                    systemId: System.Id,
+                    vesselId: Vessel?.Id,
+                    categoryId: Category.Id,
+                    destinationProcessesIds: DestinationProcesses.Select(x => x.Id).ToHashSet());
+
             return result;
         }
 

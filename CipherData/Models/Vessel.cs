@@ -11,6 +11,12 @@ namespace CipherData.Models
     public class Vessel : Resource
     {
         /// <summary>
+        /// Name of vessel
+        /// </summary>
+        [HebrewTranslation("שם")]
+        public string? Name { get; set; }
+
+        /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation("סוג")]
@@ -31,12 +37,14 @@ namespace CipherData.Models
         /// <summary>
         /// Vessel containing some packages, inside some system
         /// </summary>
+        /// <param name="name">name of vessel</param>
         /// <param name="type">User ID of user who made the action. Required.</param>
         /// <param name="system">Full-text user comment on action.</param>
         /// <param name="packages"> Safety restrictions in a list of (MaterialType, SubCategory, Amount)</param>
-        public Vessel(string type, StorageSystem system, HashSet<Package>? packages = null, string? id = null)
+        public Vessel(string type, StorageSystem system, HashSet<Package>? packages = null, string? name = null, string? id = null)
         {
             Id = id ?? GetNextId();
+            Name = name;
             Type = type;
             ContainingPackages = packages;
             System = system;
@@ -80,6 +88,7 @@ namespace CipherData.Models
 
             return new Vessel(
                 id: id,
+                name: id,
                 type: RandomFuncs.RandomItem(VesselTypes),
                 system: StorageSystem.Random()
                 );
@@ -107,6 +116,7 @@ namespace CipherData.Models
         {
             return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
                 new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)

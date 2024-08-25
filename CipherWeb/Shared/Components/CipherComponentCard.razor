@@ -3,9 +3,12 @@
 <CipherFormCard MaxWidth="@MaxWidth" Width="@Width" Variant="@Variant" WithCard="@WithCard" Height="@Height" MaxHeigth="@MaxHeigth"
                 Visible="@Visible" Float="@Float" MarginRight="@MarginRight" MarginTop="@MarginTop" MarginBottom="@MarginBottom" BackgroundColor="@BackgroundColor">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
-        <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" Underline="@Underline" />
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" Underline="@Underline" PaddingLeft="@HeaderContentPaddingRight" />
+        }
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width:100%">
-            <div style="@($"padding-right:{HeaderContentPaddingRight}; display: flex; justify-content: {ContentJustify};")">
+            <div style="@($"display: flex; justify-content: {ContentJustify};")">
                 @HeaderContent
             </div>
             @if (WithButtons)

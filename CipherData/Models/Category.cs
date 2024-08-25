@@ -89,7 +89,7 @@ namespace CipherData.Models
         /// <summary>
         /// For randomization only
         /// </summary>
-        public static List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
+        public static readonly List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
 
         /// <summary>
         /// Counts how many packages were created.

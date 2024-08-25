@@ -60,6 +60,12 @@ components:
             category:
               description: Category of package
               $ref: "#/components/schemas/Category"
+            destinationProcesses:
+              type: array
+              nullable: true
+              description: List of processes definitions that may accept this package as input
+              items:
+                $ref: "#/components/schemas/ProcessDefinition"
     System:
       type: object
       allOf:
@@ -281,40 +287,45 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            name: 
+            createdAt: 
               type: string
-              description: Name of the category
-            description:
+              description: Timestamp when the package was created 
+            brutMass:
+              type: number
+              description: Total mass of the package
+            netMass:
+              type: number
+              description: Net mass of the package
+            systemId:
               type: string
-              description: Free-text description of the category
-            creatingProcesses:
+              description: System containing the package
+            vesselId:
+              type: string
+              nullable: true
+              description: Vessel containing the package
+            containingPackagesIds: 
               type: array
-              description: List of processes definitions creating this category
-              items:
-                $ref: "#/components/schemas/ProcessDefinition"
-            consumingProcesses:
-              type: array
-              description: List of processes defintions consuming this category
-              items:
-                $ref: "#/components/schemas/ProcessDefinition"
-            idMask:
-              type: array
-              description: List of ID masks to identify the category from the package ID
+              nullable: true
               items:
                 type: string
-            MaterialType:
+                description: Packages (Ids) contained in this one
+            properties:
+              type: object
+              additionalProperties: true
+              description: JSON-like additional properties of the package
+            comments:
+              nullable: true
               type: string
-              description: Type of material of this category
-            parent:
-              nullable: true
-              description: Parent Category containing this one
-              $ref: "#/components/schemas/Category"
-            children:
-              nullable: true
-              description: Child categories contained in this one
+              description: Free-text comment on the package
+            categoryId:
+              type: string
+              description: Category (Id) of package
+            destinationProcessesIds:
               type: array
+              nullable: true
+              description: List of processes definitions (Ids) that may accept this package as input
               items:
-                $ref: "#/components/schemas/Category"
+                type: string
     Process:
       type: object
       description: An instance of a specific processes
@@ -411,6 +422,10 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
+            name:
+              type: string
+              nullable: true
+              description: Vessel name
             type:
               type: string
               description: Vessel type
@@ -437,6 +452,34 @@ components:
               code:
                 type: integer
                 description: Error code
+    PackageRequest:
+      description: Create a new package
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                description: Name of the category
+              description:
+                type: string
+                description: Free-text description of the category
+              creatingProcesses:
+                type: array
+                description: List of processes definition IDs creating this category
+                items:
+                  type: integer
+              consumingProcesses:
+                type: array
+                description: List of processes definition IDs consuming this category
+                items:
+                  type: integer
+              idMask:
+                type: array
+                description: List of ID masks to identify the category from the package ID
+                items:
+                  type: string  
     UpdatePackage:
       description: Update package details contract
       content:
@@ -485,7 +528,7 @@ components:
                 type: array
                 description: List of affected packages from actions, the items present the state of each package after the event
                 items:
-                  $ref: "#/components/schemas/Package"
+                  $ref: "#/components/responses/PackageRequest"
     UpdateEvent:
       description: Update event's process or comments
       content:
@@ -584,6 +627,10 @@ components:
           schema:
             type: object
             properties:
+              name: 
+                type: string
+                nullable: true
+                description: Vessel name
               type: 
                 type: string
                 description: Vessel type
@@ -651,7 +698,7 @@ paths:
           description: Not found
           $ref: "#/components/responses/ErrorResponse"
     put:
-      summary: Update comments or caterogy of package
+      summary: Update comments or category of package
       operationId: updatePackage
       requestBody:
         required: true

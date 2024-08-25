@@ -115,6 +115,14 @@ namespace CipherData.Models
         // API related functions
 
         /// <summary>
+        /// All systems that took place in a certain system
+        /// </summary>
+        public static Tuple<List<StorageSystem>, ErrorResponse> All()
+        {
+            return SystemsRequests.GetSystems();
+        }
+
+        /// <summary>
         /// Fetch all systems which contain the searched text
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> Containing(string SearchText)
@@ -133,18 +141,7 @@ namespace CipherData.Models
         /// <summary>
         /// All events that took place in a certain system
         /// </summary>
-        /// <param name="SelectedSystem"></param>
-        /// <returns></returns>
-        public static Tuple<List<StorageSystem>, ErrorResponse> All()
-        {
-            return SystemsRequests.GetSystems();
-        }
-
-        /// <summary>
-        /// All events that took place in a certain system
-        /// </summary>
-        /// <param name="SelectedSystem"></param>
-        /// <returns></returns>
+        /// <param name="SelectedSystem">selected system for query</param>
         public static Tuple<List<Event>, ErrorResponse> Events(string SelectedSystem)
         {
             return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
@@ -156,7 +153,7 @@ namespace CipherData.Models
         /// <summary>
         /// All processes that took place in a certain system
         /// </summary>
-        /// <param name="SelectedSystem"></param>
+        /// <param name="SelectedSystem">selected system for query</param>
         /// <returns></returns>
         public static Tuple<List<Process>, ErrorResponse> Processes(string SelectedSystem)
         {

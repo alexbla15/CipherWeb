@@ -771,6 +771,7 @@
 .rz-event-content {
     font-size: 1rem;
     overflow-wrap: anywhere;
+    margin:5px;
 }
 
 /* ------------------ LAYOUT ------------------ */

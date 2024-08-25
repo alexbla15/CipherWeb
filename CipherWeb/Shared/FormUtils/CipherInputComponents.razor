@@ -55,7 +55,7 @@
     async Task AddComponent()
     {
         // Create a new Restriction object with a unique ID
-        Package pack = Package.Random();
+        Package pack = Package.New();
         pack.Uuid = from_packs.Count + 1;
 
         // Add the new restriction to the existing list

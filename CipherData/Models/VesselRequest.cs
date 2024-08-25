@@ -6,6 +6,11 @@
     public class VesselRequest
     {
         /// <summary>
+        /// Vessel name
+        /// </summary>
+        public string? Name { get; set; }
+
+        /// <summary>
         /// Vessel type
         /// </summary>
         public string Type { get; set; }
@@ -20,8 +25,9 @@
         /// </summary>
         /// <param name="type">Vessel type</param>
         /// <param name="systemId">Id of system containing vessel</param>
-        public VesselRequest(string type, string? systemId = null)
+        public VesselRequest(string type, string? systemId = null, string? name = null)
         {
+            Name = name;
             Type = type;
             SystemId = systemId;
         }
