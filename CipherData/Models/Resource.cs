@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,21 +70,18 @@ namespace CipherData.Models
             return QueryRequests.QueryObjects<T>(obj);
         }
 
-        public string? Translate(string searchedAttribute)
+        public static string Translate(Type type, string searchedAttribute)
         {
-            // Get the Type for the generic type T
-            Type type = GetType();
-
             // Get the PropertyInfo for the property name
             PropertyInfo? property = type.GetProperty(searchedAttribute);
             if (property == null)
             {
-                return null;
+                return searchedAttribute;
             }
 
             // Get the HebrewTranslationAttribute and return the translation
             var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
-            return attribute?.Translation;
+            return (attribute is null) ? searchedAttribute : attribute.Translation;
         }
 
         public static HashSet<Tuple<string, string>> GetHebrewTranslations<T>() where T : Resource

@@ -17,7 +17,7 @@
     <Buttons>
         <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined"></CipherButton>
         <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
-        <CipherExcelButton Data="@DataSource"></CipherExcelButton>
+        <CipherExcelButton Data="@events"></CipherExcelButton>
         <CipherPDFButton></CipherPDFButton>
     </Buttons>
     <CustomDataGrid>
@@ -25,7 +25,7 @@
                         GridFilterMode="FilterMode.Simple" AllowFilter="false"
                         AllowSort="true" AllowGroup="false" HideGroupedColumn="true"
                         AllGroupsExpanded="false"
-                        DataSource="@DataSource">
+                        DataSource="@events">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="Event" Title="אישור" Width="100px">
                     <Template>
@@ -37,9 +37,9 @@
                                       Size="ButtonSize.Medium" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.EventType))" Title="@(ev.Translate(nameof(ev.EventType)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.ProcessId))" Title="@(ev.Translate(nameof(ev.ProcessId)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Timestamp))" Title="@(ev.Translate(nameof(ev.Timestamp)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.EventType))" Title="@(Event.Translate(nameof(CachedData.EventExample.EventType)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.ProcessId))" Title="@(Event.Translate(nameof(CachedData.EventExample.ProcessId)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Timestamp))" Title="@(Event.Translate(nameof(CachedData.EventExample.Timestamp)))" />
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
                     <Template>
                         @if (context.Packages.ToList().Count() > 0)
@@ -74,8 +74,8 @@
                         <RadzenText Text="5"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Comments))" Title="@(ev.Translate(nameof(ev.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(ev.Valid))" Title="@(ev.Translate(nameof(ev.Valid)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Comments))" Title="@(Event.Translate(nameof(CachedData.EventExample.Comments)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Valid))" Title="@(Event.Translate(nameof(CachedData.EventExample.Valid)))">
                     <Template>
                         @((context.Valid) ? "מאומתת" : "לא מאומתת")
                     </Template>
@@ -87,22 +87,29 @@
 <CipherButton Icon="@Icons.Documents.Edit.Save" Text="שמירת אישורים" Variant="Variant.Outlined" Width="100%"></CipherButton>
 
 @code {
-    IEnumerable<Event> DataSource { get; set; } = new List<Event>();
+    /// <summary>
+    /// All events available
+    /// </summary>
+    [Parameter]
+    public List<Event> events { get; set; } = new List<Event>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     RadzenDataGrid<Event> CustomDataGrid;
-
-    private ErrorResponse error = ErrorResponse.Success;
-    private Event ev = Event.Random();
 
     private List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>();
 
     protected override void OnInitialized()
     {
-        (DataSource, error) = Event.All();
+        (events, error) = CachedData.AllEvents;
 
         FilterFields.AddRange(new List<Tuple<string, string>>()
         {
-        new ("Timestamp", "תאריך תנועה"),
+        new (nameof(CachedData.EventExample.Timestamp), Event.Translate(nameof(CachedData.EventExample.Timestamp))),
         new ("DonatingSystem", "מערכת מוסרת"),
         new ("AcceptingSystem", "מערכת מקבלת"),
         new ("DonatingPackage", "תעודה מוסרת"),

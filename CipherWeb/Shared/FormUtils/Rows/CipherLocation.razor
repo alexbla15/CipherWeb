@@ -7,18 +7,18 @@
     {
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
-    <RadzenDropDownDataGrid @bind-Value=@sys Data=@systems TextProperty="@(nameof(system.Id))" ValueProperty="@(nameof(system.Id))"
+    <RadzenDropDownDataGrid @bind-Value=@sys Data=@systems TextProperty="@(nameof(CachedData.SystemExample.Id))" ValueProperty="@(nameof(CachedData.SystemExample.Id))"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled" Change="@Change">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(system.Id))" Title="@(system.Translate(nameof(system.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(system.Description))" Title="@(system.Translate(nameof(system.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(system.Parent))" Title="@(system.Translate(nameof(system.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Id))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Description))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Parent))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Parent)))">
                 <Template>
                     @((context as StorageSystem).Parent?.Id)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(system.Unit))" Title="@(system.Translate(nameof(system.Unit)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Unit))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))">
                 <Template>
                     @((context as StorageSystem).Unit?.Description)
                 </Template>
@@ -76,13 +76,11 @@
     private List<StorageSystem> systems = new List<StorageSystem>();
     private ErrorResponse error = ErrorResponse.Success;
 
-    private StorageSystem system = StorageSystem.Random();
-
     protected override void OnInitialized()
     {
         Label ??= "מיקום";
         Icon ??= Icons.Cipher.Location;
 
-        (systems, error) = StorageSystem.All();
+        (systems, error) = CachedData.AllSystems;
     }
 }

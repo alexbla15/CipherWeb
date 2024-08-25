@@ -3,13 +3,13 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@Vessel.All().Item1 TextProperty="@(nameof(ves.Id))" ValueProperty="@(nameof(ves.Id))" 
-    Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
+    <RadzenDropDownDataGrid TValue=Vessel Data=@vessels TextProperty="@(nameof(CachedData.VesselExample.Id))" ValueProperty="@(nameof(CachedData.VesselExample.Id))"
+                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ves.Id))" Title="@(ves.Translate(nameof(ves.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ves.Type))" Title="@(ves.Translate(nameof(ves.Type)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ves.System))" Title="@(ves.Translate(nameof(ves.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Type))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.System))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))">
                 <Template>
                     @((context as Vessel).System.Id)
                 </Template>
@@ -25,12 +25,25 @@
     [Parameter]
     public bool Disabled { get; set; } = false;
 
-    private Vessel ves = Vessel.Random();
+
+    /// <summary>
+    /// All vessels available
+    /// </summary>
+    [Parameter]
+    public List<Vessel> vessels { get; set; } = new List<Vessel>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     protected override async Task OnInitializedAsync()
     {
         Label ??= "כלי";
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
+
+        (vessels, error) = CachedData.AllVessels;
     }
 }

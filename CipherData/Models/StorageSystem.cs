@@ -2,7 +2,7 @@
 
 namespace CipherData.Models
 {
-    public class StorageSystem: Resource
+    public class StorageSystem : Resource
     {
         /// <summary>
         /// Description of system
@@ -99,13 +99,20 @@ namespace CipherData.Models
 
             return new(
                 id: id,
-                name: $"_{id}",
+                name: id ?? GetNextId(),
                 description: RandomFuncs.RandomItem(SystemsDescriptions),
                 properties: "",
                 unit: Unit.Random(),
                 parent: (new Random().Next(0, 5) == 0) ? Random() : null
                 );
         }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(StorageSystem), searchedAttribute);
+        }
+
+        // API related functions
 
         /// <summary>
         /// Fetch all systems which contain the searched text
@@ -158,8 +165,6 @@ namespace CipherData.Models
                 new BooleanCondition(attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
-
-
 
         /// <summary>
         /// All packages that took place in a certain system

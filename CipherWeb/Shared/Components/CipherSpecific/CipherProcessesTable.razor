@@ -1,8 +1,13 @@
 ﻿@inject ICipherInfo _db
 
+@using OfficeOpenXml
+@using System.IO
+@using OfficeOpenXml.Core.ExcelPackage;
+@inject NavigationManager Navigation
+
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" DataSource="@Processes" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" DataSource="@values()" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddProcess.Href" HelpText="הוספת תהליך" Variant="Variant.Outlined" />
     </AdditionalButtons>
@@ -15,22 +20,26 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes" WithCustomColumns="true"
+        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes" WithCustomColumns="true" @ref=datagrid
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Id))" Title="@(proc.Translate(nameof(proc.Id)))" />
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Definition.Name))" Title="@(proc.Definition.Translate(nameof(proc.Definition.Name)))">
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(CachedData.ProcessExample.Id))" Title="@(Process.Translate(nameof(CachedData.ProcessExample.Id)))">
+                    <FooterTemplate>
+                        <b>סה"כ תהליכים:</b> @Processes.Count()
+                    </FooterTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(CachedData.ProcessExample.Definition.Name))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessExample.Definition.Name)))">
                     <Template>
                         @context.Definition.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.UncompletedSteps))" Title="@(proc.Translate(nameof(proc.UncompletedSteps)))">
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(CachedData.ProcessExample.UncompletedSteps))" Title="@(Process.Translate(nameof(CachedData.ProcessExample.UncompletedSteps)))">
                     <Template>
-                        @(string.Join(", ", context.UncompletedSteps.Select(x=>x.Name).ToList()))
+                        @(string.Join(", ", context.UncompletedSteps.Select(x => x.Name).ToList()))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.Start))" Title="@(proc.Translate(nameof(proc.Start)))" />
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(proc.End))" Title="@(proc.Translate(nameof(proc.End)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(CachedData.ProcessExample.Start))" Title="@(Process.Translate(nameof(CachedData.ProcessExample.Start)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(CachedData.ProcessExample.End))" Title="@(Process.Translate(nameof(CachedData.ProcessExample.End)))" />
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>
@@ -67,10 +76,23 @@
     [Parameter]
     public List<Process> Processes { get; set; } = new List<Process>();
 
-    private Process proc = Process.Random();
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    protected override async Task OnInitializedAsync()
+    private CipherDataGrid<Process> datagrid = new CipherDataGrid<Process>();
+
+    protected override void OnInitialized()
     {
         Title ??= "דוח תהליכים";
+
+        (Processes, error) = CachedData.AllProcesses;
+    }
+
+    public IEnumerable<object> values()
+    {
+        return datagrid.View;
     }
 }

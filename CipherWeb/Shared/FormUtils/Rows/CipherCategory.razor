@@ -4,21 +4,19 @@
     private ErrorResponse error = ErrorResponse.Success;
     private List<Category> subCategories = new();
 
-    private Category cat = Category.Random();
-
     protected override void OnInitialized()
     {
         Width ??= "300px";
         Label ??= "שם קטגוריה";
         Icon ??= Icons.Symbols.Category;
 
-        (subCategories, error) = Category.All();
+        (subCategories, error) = CachedData.AllCategories;
     }
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width">
     <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false"
-                    TextProperty="@(nameof(cat.Name))" ValueProperty="@(nameof(cat.Name))"
+                    TextProperty="@(nameof(CachedData.CategoryExample.Name))" ValueProperty="@(nameof(CachedData.CategoryExample.Name))"
                     AllowClear="true" TValue="string" Style="@($"width: {Width}")">
         <ValueTemplate>
             <b>@Label:</b> @((context as Category).Name)

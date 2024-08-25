@@ -14,7 +14,7 @@
 
         @if (ObjectName != "מבנה")
         {
-            <CipherAutoComplete Icon="@Icons.Cipher.Unit" Label="יחידה" />
+            <CipherAutoComplete Icon="@Icons.Cipher.Unit" Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))" />
             <CipherLocation Label="מיקום" />
         }
         <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Arrows.Start" />

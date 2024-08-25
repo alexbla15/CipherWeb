@@ -40,14 +40,26 @@
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<Package> packs { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
     private CipherAutoComplete autoComplete;
     private string SearchText = string.Empty;
 
-    private List<Package> packs = Package.All().Item1;
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         LabelText ??= "חיפוש תעודה";
+
+        (packs, error) = CachedData.AllPackages;
 
         // Set default OnKeyDown if not provided
         if (!OnKeyDown.HasDelegate)

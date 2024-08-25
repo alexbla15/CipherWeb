@@ -13,6 +13,18 @@
     [Parameter]
     public bool ReadOnly { get; set; } = false;
 
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<Package> packs { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
     public class Analysis
     {
         public int Id { get; set; }
@@ -20,9 +32,13 @@
         public decimal Value { get; set; }
         public DateTime EventDate { get; set; }
     }
-
-    private List<Package> packs = Package.All().Item1;
     private List<Analysis> analysis = new();
+
+
+    protected override void OnInitialized()
+    {
+        (packs, error) = CachedData.AllPackages;
+    }
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard" BackgroundColor="transparent">
@@ -44,16 +60,15 @@
                             <CipherCategoryDropDown Width="@RowWidth" Disabled="@ReadOnly" />
                             <CipherVesselDropDown Width="@RowWidth" Disabled="@ReadOnly" />
                             <CipherLocation Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherNumeric Label="מסה ברוטו" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherNumeric Label="מסה נטו" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="תיאור" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />
-                            <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherNumeric Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherNumeric Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherDatePicker Label="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" Disabled="@ReadOnly" Width="@RowWidth" />
+                            <CipherAutoComplete Multiline="true" Label="@(Package.Translate(nameof(CachedData.PackageExample.Comments)))" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
                         </ChildContent>
                     </CipherComponentCard>
                 </RadzenTabsItem>
 
-                <RadzenTabsItem Text="תעודות מוכלות">
+                <RadzenTabsItem Text="@(Package.Translate(nameof(CachedData.PackageExample.ContainingPackages)))">
                     <CipherPackagesTable WithCard="false" WithHeaderContent="false" Title=""/>
                 </RadzenTabsItem>
 

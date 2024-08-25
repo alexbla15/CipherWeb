@@ -141,6 +141,11 @@ namespace CipherData.Models
                 );
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(Category), searchedAttribute);
+        }
+
         // API-RELATED FUNCTIONS
 
         /// <summary>

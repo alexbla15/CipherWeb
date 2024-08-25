@@ -21,44 +21,44 @@
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" WithCustomColumns="true">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Id))" Title="@(package.Translate(nameof(package.Id)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))">
                     <FooterTemplate>
                         סה"כ תעודות: <b>@packages.Count() </b>
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Category))" Title="@(package.Translate(nameof(package.Category)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
                     <Template>
                         @context.Category.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.Vessel)" Title="@(package.Translate(nameof(package.Vessel)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Vessel)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Vessel)))">
                     <Template>
                         @context.Vessel?.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.System)" Title="@(package.Translate(nameof(package.System)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.System)" Title="@(Package.Translate(nameof(CachedData.PackageExample.System)))">
                     <Template>
                         @context.System.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.BrutMass)" Title="@(package.Translate(nameof(package.BrutMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.BrutMass)" Title="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))">
                     <FooterTemplate>
                         @if (packages != null)
                         {
-                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(package.BrutMass))?.GetValue(s)))</b>
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(CachedData.PackageExample.BrutMass))?.GetValue(s)))</b>
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.NetMass)" Title="@(package.Translate(nameof(package.NetMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.NetMass)" Title="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))">
 
                     <FooterTemplate>
                         @if (packages != null)
                         {
-                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(package.NetMass))?.GetValue(s)))</b>
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(CachedData.PackageExample.NetMass))?.GetValue(s)))</b>
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(package.ContainingPackages)" Title="@(package.Translate(nameof(package.ContainingPackages)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.ContainingPackages)" Title="@(Package.Translate(nameof(CachedData.PackageExample.ContainingPackages)))">
                     <Template>
                         @if (context.ContainingPackages.Count() > 0)
                         {
@@ -66,8 +66,8 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.CreatedAt))" Title="@(package.Translate(nameof(package.CreatedAt)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(package.Comments))" Title="@(package.Translate(nameof(package.Comments)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.CreatedAt))" Title="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Comments))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Comments)))" />
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>
@@ -122,8 +122,11 @@
     [Parameter]
     public string SelectedSystem { get; set; } = "S1";
 
-    private Package package = Package.Random();
-    private List<Package> packages = new List<Package>();
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<Package> packages { get; set; } = new List<Package>();
 
     protected override void OnInitialized()
     {

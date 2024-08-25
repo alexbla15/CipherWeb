@@ -60,6 +60,14 @@
 
 /* ------------------ DATA FILTER ------------------ */
 
+.rz-datafilter .rz-datafilter-group {
+    display: block;
+}
+
+.rz-datafilter .rz-datafilter-editor {
+    min-height: 52px;
+}
+
 .rz-datafilter .rz-datafilter-item {
     padding: var(--rz-datafilter-item-padding-y) calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation)) var(--rz-datafilter-item-padding-y) 0;
 }
@@ -103,17 +111,6 @@
     transform: translateX(-85px);
 }
 
-.rz-menuitem:hover {
-    color: var(--rz-primary);
-}
-
-.rz-datafilter .rz-datafilter-group {
-    display: block;
-}
-
-.rz-datafilter .rz-datafilter-editor {
-    min-height: 52px;
-}
 /* ------------------ GRID ------------------ */
 
 :root {
@@ -159,8 +156,6 @@
 .rz-state-disabled.rz-paginator-element {
     visibility: hidden;
 }
-
-/* ------------------ SELECT BUTTON ------------------ */
 
 .rz-selectbutton .rz-button.rz-button-md {
     color: lightgray;
@@ -224,6 +219,10 @@
     direction: rtl;
 }
 
+.rz-data-grid-data {
+    box-shadow: none;
+}
+
 .rz-selectable {
     direction: ltr;
 }
@@ -241,48 +240,68 @@
     direction: rtl;
 }
 
-.rz-data-grid-data {
-    box-shadow: none;
-}
+    .rz-grid-table thead th {
+        background-color: var(--rz-primary-light);
+    }
 
+        .rz-datatable-thead th > div:not(.rz-cell-filter),
+        .rz-grid-table thead th > div:not(.rz-cell-filter) {
+            background-color: var(--rz-series-5);
+        }
 
-.rz-datatable-data td:not(:last-child),
-.rz-grid-table td:not(:last-child) {
-    border-right: 0;
-}
+        .rz-datatable-thead th .rz-column-title,
+        .rz-grid-table thead th .rz-column-title {
+            padding: 0;
+            text-align: right;
+            justify-content: right;
+            color: var(--rz-primary-darker);
+            font-size: medium;
+            display: block;
+            padding-right: 0.5rem;
+        }
 
-.rz-datatable-tfoot td:not(:last-child),
-.rz-grid-table tfoot td:not(:last-child) {
-    border-right: 0;
-    background-color: var(--rz-primary-dark);
-}
+        .rz-datatable-thead th .rz-column-title-content,
+        .rz-grid-table thead th .rz-column-title-content {
+            text-wrap: wrap;
+        }
 
-.rz-grid-table tfoot td:first-child:not(:last-child) {
-    /* controling first-right item within a footer*/
-    border-bottom-right-radius: 10px
-}
+    .rz-grid-table td .rz-cell-data {
+        text-align: right;
+        text-wrap: balance;
+    }
 
-.rz-grid-table tfoot td:last-child:last-child {
-    /* controling last-left item within a footer*/
-    border-bottom-left-radius: 10px
-}
+    .rz-datatable-data td:not(:last-child),
+    .rz-grid-table td:not(:last-child) {
+        border-right: 0;
+    }
 
-.rz-datatable-data tr td:last-child:not(.rz-composite-cell),
-.rz-grid-table tr td:last-child:not(.rz-composite-cell) {
-    border-right: none;
+    .rz-grid-table tfoot td:first-child:not(:last-child) {
+        /* controling first-right item within a footer*/
+        border-bottom-right-radius: 10px
+    }
+
+    .rz-grid-table tfoot td:last-child:last-child {
+        /* controling last-left item within a footer*/
+        border-bottom-left-radius: 10px
+    }
+
+    .rz-datatable-tfoot td:not(:last-child),
+    .rz-grid-table tfoot td:not(:last-child) {
+        border-right: 0;
+        background-color: var(--rz-primary-dark);
+    }
+
+    .rz-datatable-data tr td:last-child:not(.rz-composite-cell),
+    .rz-grid-table tr td:last-child:not(.rz-composite-cell) {
+        border-right: none;
+    }
+
+.rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(even) > td {
+    background-color: var(--rz-primary-lightest);
 }
 
 .rz-datatable-data td:last-child:not(.rz-composite-cell) .rz-cell-data {
     text-align: right;
-}
-
-.rz-grid-table td .rz-cell-data {
-    text-align: right;
-    text-wrap: balance;
-}
-
-.rz-grid-table-striped tbody > tr:not(.rz-expanded-row-content):nth-child(even) > td {
-    background-color: var(--rz-primary-lightest);
 }
 
 .rz-datatable .rzi-chevron-circle-right,
@@ -310,32 +329,8 @@
     width: 30px;
 }
 
-.rz-datatable-thead th > div:not(.rz-cell-filter),
-.rz-grid-table thead th > div:not(.rz-cell-filter) {
-    background-color: var(--rz-series-5);
-}
-
-.rz-grid-table thead th {
-    background-color: var(--rz-primary-light);
-}
-
-    .rz-datatable-thead th .rz-column-title,
-    .rz-grid-table thead th .rz-column-title {
-        padding: 0;
-        text-align: right;
-        justify-content: right;
-        color: var(--rz-primary-darker);
-        font-size: medium;
-        display: block;
-        padding-right: 0.5rem;
-    }
-
-    .rz-datatable-thead th .rz-column-title-content,
-    .rz-grid-table thead th .rz-column-title-content {
-        text-wrap: wrap;
-    }
-
 /* ------------------ GROUP HEADER ------------------ */
+
 .rz-group-header {
     background-color: var(--rz-series-5);
 }
@@ -650,7 +645,12 @@
 .rz-multiselect-header {
     direction: rtl;
 }
+
 /* ------------------ MENU ------------------ */
+
+.rz-menuitem:hover {
+    color: var(--rz-primary);
+}
 
 .rz-menuitem .rz-menuitem-link {
     direction: rtl;
@@ -661,6 +661,7 @@
     border: 1px solid var(--rz-primary-light);
     border-radius: var(--rz-border-radius);
 }
+
 /* ------------------ SIDEBAR ------------------ */
 
 :root {
@@ -717,10 +718,6 @@
     background-color: var(--rz-primary);
 }
 
-.rz-planner-view .rz-view-header .rz-slot-header {
-    visibility: hidden;
-}
-
 .rz-scheduler-nav-views .rz-button.rz-primary:first-child {
     border-top-left-radius: 0;
     border-top-right-radius: var(--rz-scheduler-border-radius);
@@ -735,14 +732,18 @@
     border-bottom-left-radius: var(--rz-scheduler-border-radius);
 }
 
-.rz-day-view .rz-view-header {
-    padding-right: 0px;
+.rz-planner-view .rz-view-header .rz-slot-header {
+    visibility: hidden;
 }
 
 .rz-view-header .rz-slot-header {
     font-weight: 600;
     border-right: 1px solid var(--rz-scheduler-border-color);
     border-left: 1px solid var(--rz-scheduler-border-color);
+}
+
+.rz-day-view .rz-view-header {
+    padding-right: 0px;
 }
 
 .rz-month-view .rz-slot {
@@ -766,6 +767,12 @@
 .rz-slot-hours {
     border-left: 1px solid var(--rz-scheduler-border-color);
 }
+
+.rz-event-content {
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
 /* ------------------ LAYOUT ------------------ */
 
 :root {
@@ -789,7 +796,6 @@
     background-color: var(--rz-primary-light);
 }
 
-
 /* ------------------ STEPS ------------------ */
 
 :root {
@@ -798,23 +804,6 @@
 
 .rz-steps ul {
     display: flex;
-}
-
-.rz-steps-number {
-    background-color: var(--rz-primary-dark);
-    color: white;
-    opacity: 50%;
-}
-
-.rz-steps-title {
-    color: var(--rz-primary-dark);
-    opacity: 50%;
-}
-
-.rz-steps-next .rzi, .rz-steps-prev .rzi {
-    font-size: var(--rz-icon-size);
-    /*flip the direction of the icon*/
-    transform: rotate(180deg);
 }
 
 .rz-steps .rz-state-highlight .rz-steps-title {
@@ -846,11 +835,29 @@
         opacity: 50%;
     }
 
+.rz-steps-number {
+    background-color: var(--rz-primary-dark);
+    color: white;
+    opacity: 50%;
+}
+
+.rz-steps-title {
+    color: var(--rz-primary-dark);
+    opacity: 50%;
+}
+
+.rz-steps-next .rzi, .rz-steps-prev .rzi {
+    font-size: var(--rz-icon-size);
+    /*flip the direction of the icon*/
+    transform: rotate(180deg);
+}
+
 /* ------------------ DROPDOWN ------------------ */
 
 .rz-dropdown {
     min-height: 52px;
-    justify-content: center
+    justify-content: center;
+    padding: 0.5rem;
 }
 
 rz-multiselect-trigger,
@@ -894,6 +901,7 @@ rz-multiselect-trigger,
         margin-right: 0rem;
         margin-left: 0.5rem;
         direction: rtl;
+        padding: 0.5rem;
     }
 
 /* ------------------ AUTOCOMPLETE ------------------ */
@@ -933,11 +941,15 @@ rz-multiselect-trigger,
 /* ------------------ FORM FIELD ------------------ */
 
 :root {
-    /*--cipher-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;*/
     --cipher-shadow: none;
 }
 
-.rz-colorpicker, .rz-lookup-search input, .rz-spinner, .rz-calendar .rz-inputtext, .rz-multiselect, .rz-dropdown, .mask, .rz-textarea, .rz-textbox {
+.rz-colorpicker, 
+.rz-spinner, 
+.rz-multiselect, 
+.mask, 
+.rz-textarea, 
+.rz-textbox {
     padding: 0.5rem;
 }
 
@@ -984,6 +996,17 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
     box-shadow: none;
 }
 
+.rz-form-field.rz-variant-filled .rz-form-field-content,
+.rz-form-field.rz-variant-flat .rz-form-field-content {
+    border-radius: var(--rz-border-radius)
+}
+
+.rz-form-field.rz-variant-outlined .rz-form-field-start,
+.rz-form-field.rz-variant-filled .rz-form-field-start,
+.rz-form-field.rz-variant-flat .rz-form-field-start {
+    padding-right: 10px;
+}
+
 .rz-form-field.rz-variant-flat:not(.rz-state-disabled).rz-state-focused .rz-form-field-content {
     border: var(--rz-input-focus-border);
     box-shadow: var(--cipher-shadow);
@@ -998,18 +1021,6 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
         right: 1.2rem;
     }
 
-.rz-form-field.rz-variant-filled .rz-form-field-content,
-.rz-form-field.rz-variant-flat .rz-form-field-content {
-    border-radius: var(--rz-border-radius)
-}
-
-
-.rz-form-field.rz-variant-outlined .rz-form-field-start,
-.rz-form-field.rz-variant-filled .rz-form-field-start,
-.rz-form-field.rz-variant-flat .rz-form-field-start {
-    padding-right: 10px;
-}
-
 .rz-form-field.rz-state-focused .rz-form-field-content, .rz-spinner:focus-within:not(.rz-state-disabled), .rz-autocomplete:focus-within:not(.rz-state-disabled), .rz-colorpicker:not(:disabled):not(.rz-state-disabled):focus, .rz-lookup-search input:not(:disabled):not(.rz-state-disabled):focus, .rz-spinner:not(:disabled):not(.rz-state-disabled):focus, .rz-calendar .rz-inputtext:not(:disabled):not(.rz-state-disabled):focus, .rz-multiselect:not(:disabled):not(.rz-state-disabled):focus, .rz-dropdown:not(:disabled):not(.rz-state-disabled):focus, .mask:not(:disabled):not(.rz-state-disabled):focus, .rz-textarea:not(:disabled):not(.rz-state-disabled):focus, .rz-textbox:not(:disabled):not(.rz-state-disabled):focus {
     box-shadow: var(--cipher-shadow);
 }
@@ -1017,6 +1028,7 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
 /* ------------------ CALANDER / DATEPICKER ------------------ */
 
 .rz-calendar .rz-inputtext {
+    padding: 0.5rem;
     padding-right: 0.7rem;
     padding-top: 1rem;
 }
@@ -1055,6 +1067,7 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
 .rz-datepicker-title {
     direction: rtl;
 }
+
 /* ------------------ LOOKUP PANEL ------------------ */
 
 .rz-lookup-panel {

@@ -139,6 +139,11 @@ namespace CipherData.Models
             return result;
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(Package), searchedAttribute);
+        }
+
         // API-RELATED FUNCTIONS
 
         /// <summary>

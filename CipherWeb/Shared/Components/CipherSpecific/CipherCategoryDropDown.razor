@@ -4,14 +4,14 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string" Disabled="@Disabled"
-                            Data=@subCategories TextProperty="@(nameof(cat.Name))" 
-                            ValueProperty="@(nameof(cat.Name))"
+                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" 
+                            ValueProperty="@(nameof(CachedData.CategoryExample.Name))"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Id))" Title="@(cat.Translate(nameof(cat.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Name))" Title="@(cat.Translate(nameof(cat.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.MaterialType))" Title="@(cat.Translate(nameof(cat.MaterialType)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.IdMask))" Title="@(cat.Translate(nameof(cat.IdMask)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
                 <Template>
                     @(string.Join(", ", (context as Category).IdMask))
                 </Template>
@@ -30,9 +30,17 @@
     [Parameter]
     public bool Disabled { get; set; } = false;
 
-    private List<Category> subCategories = new List<Category>();
-    private ErrorResponse error = ErrorResponse.Success;
-    private Category cat = Category.Random();
+    /// <summary>
+    /// All categories optional in the drop down.
+    /// </summary>
+    [Parameter]
+    public List<Category> categories { get; set; } = new List<Category>();
+
+    /// <summary>
+    /// Error response for data fetching
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     protected override void OnInitialized()
     {
@@ -40,6 +48,6 @@
         Icon ??= Icons.Symbols.Category;
         Width ??= "300px";
 
-        (subCategories, error) = Category.All();
+        (categories, error) = CachedData.AllCategories;
     }
 }

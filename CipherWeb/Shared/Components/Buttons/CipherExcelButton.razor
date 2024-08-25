@@ -3,6 +3,11 @@
 @using System.Text
 @using System.Collections
 
+@using OfficeOpenXml
+@using System.IO
+@using OfficeOpenXml.Core.ExcelPackage;
+@inject NavigationManager Navigation
+
 @inject ExcelService excelService
 @inject IJSRuntime JSRuntime
 
@@ -52,35 +57,138 @@
         await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", url, fileName);
     }
 
+    //private string GenerateCSV(IEnumerable<object> data)
+    //{
+    //    using (MemoryStream stream = new MemoryStream())
+    //    {
+    //        using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+    //        {
+    //            // Write header row
+    //            Type modelType = data.First().GetType();
+    //            var properties = modelType.GetProperties();
+    //            // writer.WriteLine(string.Join(",", properties.Select(p => p.Name)));
+
+    //            List<string> heb_properties = new List<string>();
+    //            foreach (var prop in properties)
+    //            {
+    //                // prop.Name
+    //                foreach (Tuple<string, string> head in HebrewDictionary.Headers)
+    //                {
+    //                    if (head.Item1 == prop.Name)
+    //                    {
+    //                        heb_properties.Add(head.Item2);
+    //                    }
+    //                }
+    //            }
+    //            writer.WriteLine(string.Join(",", heb_properties));
+
+    //            // Write data rows
+    //            foreach (var item in data)
+    //            {
+    //                var values = properties.Select(p => Convert.ToString(p.GetValue(item)).Replace(",", ";"));
+    //                writer.WriteLine(string.Join(",", values));
+    //            }
+    //        }
+
+    //        return Encoding.UTF8.GetString(stream.ToArray());
+    //    }
+    //}
+
     private string GenerateCSV(IEnumerable<object> data)
     {
-        using (MemoryStream stream = new MemoryStream())
+        using (var stream = new MemoryStream())
         {
-            using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8))
             {
-                // Write header row
-                Type modelType = data.First().GetType();
-                var properties = modelType.GetProperties();
-                // writer.WriteLine(string.Join(",", properties.Select(p => p.Name)));
+                if (data == null || !data.Any())
+                    return string.Empty;
 
-                List<string> heb_properties = new List<string>();
-                foreach (var prop in properties)
+                var firstItem = data.First();
+
+                // Get all property names from the first item
+                Type type = firstItem.GetType();
+                var properties = type.GetProperties();
+
+                // Write headers with translation if available
+                var headers = properties.Select(p =>
                 {
-                    // prop.Name
-                    foreach (Tuple<string, string> head in HebrewDictionary.Headers)
+                    var translateMethod = type.GetMethod("Translate");
+                    if (translateMethod != null)
                     {
-                        if (head.Item1 == prop.Name)
-                        {
-                            heb_properties.Add(head.Item2);
-                        }
+                        // Assuming the Translate method takes the property name as an argument
+                        return translateMethod.Invoke(firstItem, new object[] { p.Name })?.ToString();
                     }
-                }
-                writer.WriteLine(string.Join(",", heb_properties));
+                    return p.Name;
+                }).ToArray();
+                writer.WriteLine(string.Join(",", headers));
 
                 // Write data rows
                 foreach (var item in data)
                 {
-                    var values = properties.Select(p => Convert.ToString(p.GetValue(item)).Replace(",", ";"));
+                    var values = properties.Select(p =>
+                    {
+                        var value = p.GetValue(item, null);
+                        if (value != null)
+                        {
+                            var valueType = value.GetType();
+
+                            // Check if the value is a collection (like List, IEnumerable, etc.)
+                            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(valueType) && valueType != typeof(string))
+                            {
+                                var idList = new List<string>();
+                                foreach (var subItem in (System.Collections.IEnumerable)value)
+                                {
+                                    // try to save a list of all contained names, otherwise all contained ids
+                                    var idProperty = subItem?.GetType().GetProperty("Name");
+                                    if (idProperty != null)
+                                    {
+                                        var idValue = idProperty.GetValue(subItem)?.ToString();
+                                        if (idValue != null)
+                                        {
+                                            idList.Add(idValue);
+                                        }
+                                    }
+                                    // all contained ids within item
+                                    else
+                                    {
+                                        idProperty = subItem?.GetType().GetProperty("Id");
+                                        if (idProperty != null)
+                                        {
+                                            var idValue = idProperty.GetValue(subItem)?.ToString();
+                                            if (idValue != null)
+                                            {
+                                                idList.Add(idValue);
+                                            }
+                                        }
+                                    }
+                                }
+                                return string.Join(";", idList); // Join IDs
+                            }
+                            else
+                            {
+                                // Check if the value is an object with a Name property
+                                var idProperty = valueType.GetProperty("Name");
+                                if (idProperty != null)
+                                {
+                                    return idProperty.GetValue(value)?.ToString();
+                                }
+                                // if it doesn't, save it's id
+                                else
+                                {
+                                    idProperty = valueType.GetProperty("Id");
+                                    if (idProperty != null)
+                                    {
+                                        return idProperty.GetValue(value)?.ToString();
+                                    }
+                                }
+
+                                return value.ToString()?.Replace(",", ";");
+                            }
+                        }
+
+                        return string.Empty;
+                    }).ToArray();
+
                     writer.WriteLine(string.Join(",", values));
                 }
             }

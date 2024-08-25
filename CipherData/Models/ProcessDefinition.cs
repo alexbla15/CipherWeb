@@ -97,6 +97,11 @@ namespace CipherData.Models
                 );
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(ProcessDefinition), searchedAttribute);
+        }
+
         // API-RELATED FUNCTIONS
 
         /// <summary>

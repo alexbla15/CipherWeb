@@ -8,7 +8,7 @@
         @AdditionalButtons
         @if (ExcelExport)
         {
-            <CipherExcelButton FileName="@FileTitle" Data="@DataSource" />
+            <CipherExcelButton FileName="@FileTitle" Data="@DataSource"/>
         }
         @if (PDFExport)
         {
@@ -94,6 +94,12 @@
     /// </summary>
     [Parameter]
     public RenderFragment AdditionalButtons { get; set; }
+
+    /// <summary>
+    /// Needed datagrid.
+    /// </summary>
+    [Parameter]
+    public RadzenDataGrid<Process> grid { get; set; }
 
     public void Toggle()
     {

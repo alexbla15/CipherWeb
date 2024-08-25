@@ -7,7 +7,17 @@
     [Parameter]
     public int MaxShownLabels { get; set; } = int.MaxValue;
 
-    private List<Package> packs = Package.All().Item1;
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<Package> packs { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     protected override async Task OnInitializedAsync()
     {
@@ -15,11 +25,13 @@
         Icon ??= Icons.Cipher.Package;
         Width ??= "100%";
         MinWidth ??= "300px";
+
+        (packs, error) = CachedData.AllPackages;
     }
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDown TValue="List<string>" Data=@packs TextProperty="Id" ValueProperty="Id"
+    <RadzenDropDown TValue="List<string>" Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" ValueProperty="@(nameof(CachedData.PackageExample.Id))"
                     Multiple=true AllowClear=true Placeholder="@Label" SelectedItemsText="אפשרויות נבחרו" SelectAllText="בחירת כל האפשרויות"
                     AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
                     Chips=true Style="width: 100%;" />

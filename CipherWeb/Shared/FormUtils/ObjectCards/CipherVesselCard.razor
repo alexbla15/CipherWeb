@@ -25,18 +25,16 @@
     private List<Analysis> analysis = new();
     private ErrorResponse error = ErrorResponse.Success;
 
-    private Vessel ves = Vessel.Random();
-
     protected override void OnInitialized()
     {
-        (vessels, error) = Vessel.All();
+        (vessels, error) = CachedData.AllVessels;
     }
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="@(nameof(ves.Id))" Label="@(ves.Translate(nameof(ves.Id)))" Data="@vessels.Select(x=> x.Id).ToList()"></CipherAutoComplete>
+            <CipherAutoComplete TextProperty="@(nameof(CachedData.VesselExample.Id))" Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" Data="@vessels.Select(x=> x.Id).ToList()"></CipherAutoComplete>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>
@@ -48,9 +46,9 @@
                             <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddVessel.Href" />
                         </Buttons>
                         <ChildContent>
-                            <CipherAutoComplete Label="@(ves.Translate(nameof(ves.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(ves.Translate(nameof(ves.Type)))" Icon="@Icons.Cipher.Type" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(ves.Translate(nameof(ves.System)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" Icon="@Icons.Cipher.Type" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
                             @*<CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />*@
                             @*<CipherAutoComplete Label="מגבלות איחסון" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />*@
                             @*<CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />*@

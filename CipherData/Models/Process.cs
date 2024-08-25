@@ -106,6 +106,11 @@ namespace CipherData.Models
             return $"{days} ימים, {hours} שעות";
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(Process), searchedAttribute);
+        }
+
         // API-RELATED FUNCTIONS
 
         /// <summary>

@@ -12,6 +12,18 @@
     /// </summary>
     [Parameter]
     public bool ReadOnly { get; set; } = false;
+    
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<StorageSystem> systems { get; set; } = new List<StorageSystem>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     public class Analysis
     {
@@ -21,22 +33,18 @@
         public DateTime EventDate { get; set; }
     }
 
-    private List<StorageSystem> systems = new List<StorageSystem>();
     private List<Analysis> analysis = new();
-    private ErrorResponse error = ErrorResponse.Success;
-
-    private StorageSystem sys = StorageSystem.Random();
 
     protected override void OnInitialized()
     {
-        (systems, error) = StorageSystem.All();
+        (systems, error) = CachedData.AllSystems;
     }
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="@(nameof(sys.Id))" Label="שם המיקום" Data="@systems"></CipherAutoComplete>
+            <CipherAutoComplete TextProperty="@(nameof(CachedData.SystemExample.Name))" Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" Data="@systems"></CipherAutoComplete>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>
@@ -49,11 +57,11 @@
                             <CipherButton Icon="@Icons.Security.Shield" HelpText="אישור בטיחות" Variant="Variant.Outlined" />
                         </Buttons>
                         <ChildContent>
-                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Name)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Description)))" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Parent)))" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(sys.Translate(nameof(sys.Unit)))" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Description)))" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Parent)))" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
                             @*<CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />*@
                             @*<CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />*@
                             @*<CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />*@

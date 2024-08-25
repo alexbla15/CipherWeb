@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
-<CipherFormRow Icon="@Icon">
-    <RadzenDropDown TValue="string" Placeholder="@Label" Data="@(vessels.Select(x=>x.Type).Distinct())" FilterAsYouType="true">
+<CipherFormRow Icon="@Icon" Width="@Width">
+    <RadzenDropDown TValue="string" Placeholder="@Label" Data="@(vessels.Select(x=>x.Type).Distinct())" FilterAsYouType="true" Style="@($"width: {Width}")">
         <ValueTemplate>
             <b>@Label:</b> @context
         </ValueTemplate>
@@ -10,13 +10,13 @@
 
 @code {
     private ErrorResponse error = ErrorResponse.Success;
-    private List<Vessel> vessels = new();
+    private List<Vessel> vessels = new List<Vessel>();
 
     protected override void OnInitialized()
     {
-        Label ??= "סוג הכלי";
+        Label ??= Vessel.Translate(nameof(CachedData.VesselExample.Type));
         Icon ??= Icons.Cipher.Type;
 
-        (vessels, error) = Vessel.All();
+        (vessels, error) = CachedData.AllVessels;
     }
 }

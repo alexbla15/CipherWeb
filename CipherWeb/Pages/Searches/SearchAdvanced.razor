@@ -36,15 +36,15 @@
 
     protected override void OnInitialized()
     {
-        (packs, error) = Package.All();
-        (vessels, error) = Vessel.All();
-        (systems, error) = StorageSystem.All();
-        (events, error) = Event.All();
-        (procs, error) = Process.All();
-        (categories, error) = Category.All();
+        (packs, error) = CachedData.AllPackages;
+        (vessels, error) = CachedData.AllVessels;
+        (systems, error) = CachedData.AllSystems;
+        (events, error) = CachedData.AllEvents;
+        (procs, error) = CachedData.AllProcesses;
+        (categories, error) = CachedData.AllCategories;
     }
 
-    private RenderFragment RenderCipherDataFilter(int objectId) => objectId switch
+    private RenderFragment? RenderCipherDataFilter(int objectId) => objectId switch
     {
         0 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Package" Title="סינון נתונים" GeneralDataSource="@packs" />,
         1 => @<CipherDataFilter_WithDataGrid Cipher_TItem="Vessel" Title="סינון נתונים" GeneralDataSource="@vessels" />,

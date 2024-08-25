@@ -4,9 +4,9 @@
     <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled"
                             Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש...">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Id))" Title="@(cat.Translate(nameof(cat.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Name))" Title="@(cat.Translate(nameof(cat.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(cat.Parent))" Title="@(cat.Translate(nameof(cat.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Parent))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Parent)))">
                 <Template>
                     @((context as Category).Parent?.Name)
                 </Template>
@@ -28,13 +28,11 @@
     private ErrorResponse error = ErrorResponse.Success;
     private List<Category> categories = new List<Category>();
 
-    private Category cat = Category.Random();
-
     protected override void OnInitialized()
     {
         Label ??= "סוג החומר";
         Icon ??= Icons.Cipher.Material;
 
-        (categories, error) = Category.All();
+        (categories, error) = CachedData.AllCategories;
     }
 }

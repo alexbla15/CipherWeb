@@ -8,7 +8,7 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete @ref=autoComplete Data="@AllPacks" TextProperty="Id" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
+        <CipherAutoComplete @ref=autoComplete Data="@Options" TextProperty="@(nameof(CachedData.PackageExample.Id))" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
@@ -19,35 +19,35 @@
                         <CipherComponentCard>
                             @if (data.Item2 is List<Package>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@Package.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@Package.Headers()"/>
                             }
                             else if (data.Item2 is List<Event>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@Event.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@Event.Headers()"/>
                             }
                             else if (data.Item2 is List<StorageSystem>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@StorageSystem.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@StorageSystem.Headers()"/>
                             }
                             else if (data.Item2 is List<Process>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@Process.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@Process.Headers()"/>
                             }
                             else if (data.Item2 is List<ProcessDefinition>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@ProcessDefinition.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@ProcessDefinition.Headers()"/>
                             }
                             else if (data.Item2 is List<Vessel>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@Vessel.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@Vessel.Headers()"/>
                             }
                             else if (data.Item2 is List<Unit>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@Unit.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@Unit.Headers()"/>
                             }
                             else if (data.Item2 is List<Category>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@Category.Headers()"></CipherDataGrid>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@Category.Headers()"/>
                             }
                         </CipherComponentCard>
                     </RadzenAccordionItem>
@@ -76,7 +76,17 @@
     [Parameter]
     public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
 
-    private List<Package> AllPacks = Package.All().Item1;
+    /// <summary>
+    /// All packages available
+    /// </summary>
+    [Parameter]
+    public List<Package> Options { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     private static List<Package>? packs = new List<Package>();
     private static List<Vessel>? vessels = new List<Vessel>();
@@ -84,6 +94,7 @@
     private static List<Unit>? units = new List<Unit>();
     private static List<Category>? categories = new List<Category>();
     private static List<Event>? events = new List<Event>();
+    private static List<Package>? packages = new List<Package>();
     private static List<Process>? processes = new List<Process>();
     private static List<ProcessDefinition>? processes_definitions = new List<ProcessDefinition>();
 
@@ -98,7 +109,6 @@
         new("קטגוריות", categories),
                     };
 
-    private ErrorResponse error = ErrorResponse.Success;
     private CipherAutoComplete autoComplete = new CipherAutoComplete();
 
     protected override async void OnParametersSet()
@@ -118,6 +128,8 @@
     protected override async Task OnInitializedAsync()
     {
         // Collect needed results
+        (Options, error) = CachedData.AllPackages;
+
         (packs, error) = Package.Containing(SearchText);
         (vessels, error) = Vessel.Containing(SearchText);
         (systems, error) = StorageSystem.Containing(SearchText);

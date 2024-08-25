@@ -63,12 +63,12 @@
     private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
     private CipherDataAggregater dataAggregater = new CipherDataAggregater();
 
-    private List<Package> packs = Package.All().Item1;
-    private List<Package> rows = Package.All().Item1;
+    private List<Package> rows = new List<Package>();
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
     private ErrorResponse error = ErrorResponse.Success;
 
+    private List<Package> packs = new List<Package>();
     private List<StorageSystem> systems = new List<StorageSystem>();
     private List<Vessel> vessels = new List<Vessel>();
 
@@ -89,8 +89,10 @@
         Random random = new Random();
         ReportId = random.Next(1000,9999);
 
-        (systems, error) = StorageSystem.All();
-        (vessels, error) = Vessel.All();
+        (packs, error) = CachedData.AllPackages;
+        (rows, error) = CachedData.AllPackages;
+        (systems, error) = CachedData.AllSystems;
+        (vessels, error) = CachedData.AllVessels;
     }
 
     /// <summary>
@@ -154,11 +156,11 @@
         {
             foreach (Vessel ves in vessels)
             {
-                    Package pack = Package.Random();
+                Package pack = Package.Random();
                 pack.System = sys;
                 pack.Vessel = ves;
-                pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.BrutMass).Sum();
-                pack.NetMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel.Id == ves.Id).Select(x => x.NetMass).Sum();
+                pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.BrutMass).Sum();
+                pack.NetMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.NetMass).Sum();
                     rows.Add(pack);
             }
         }

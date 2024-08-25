@@ -6,19 +6,11 @@
 
 <CipherComponentCard Underline="true" WithCard="false" Title="הזנת כלי חדש" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        @* -- Name -- *@
-        <CipherAutoComplete Icon="@Icons.Cipher.Id" @bind-Value="ves.Id" Label="שם הכלי" />
-
-        <CipherVesselType />
-        <CipherLocation Label="מיקום הכלי" />
-        <CipherMaterialType />
-        <CipherCategoryDropDown />
+        <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />
+        <CipherVesselType Width="300px"/>
+        <CipherLocation Label="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))" />
     </CipherComponentCard>
 
-    <CipherComments Title="כתבו הערות על הכלי" />
+    <CipherComments/>
     <CipherSubmit/>
 </CipherComponentCard>
-
-@code {
-    private Vessel ves = Vessel.Random("");
-}
