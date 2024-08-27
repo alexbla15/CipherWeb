@@ -17,7 +17,7 @@ namespace CipherData.Models
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
-        public string Properties { get; set; }
+        public Dictionary<string,string> Properties { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
@@ -73,7 +73,7 @@ namespace CipherData.Models
         /// <param name="comments">Free-text comment on the package</param>
         /// <param name="destinationProcessesIds">List of processes definitions (Ids) that may accept this package as input</param>
         /// <param name="id">Id of new package</param>
-        public PackageRequest(string id, string properties, string systemId, decimal brutMass, decimal netMass, DateTime createdAt, string categoryId,
+        public PackageRequest(string id, Dictionary<string,string> properties, string systemId, decimal brutMass, decimal netMass, DateTime createdAt, string categoryId,
             string? vesselId = null, HashSet<string>? containingPackagesIds = null, HashSet<string>? destinationProcessesIds = null,
             string? comments = null)
         {

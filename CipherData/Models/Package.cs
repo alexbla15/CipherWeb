@@ -11,10 +11,10 @@ namespace CipherData.Models
         public string? Comments { get; set; }
 
         /// <summary>
-        /// JSON-like additional properties of the package
+        /// Dictionary of additional properties of the package
         /// </summary>
         [HebrewTranslation("תכונות")]
-        public string Properties { get; set; }
+        public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
@@ -67,7 +67,7 @@ namespace CipherData.Models
         /// <summary>
         /// Instanciation of a new package
         /// </summary>
-        /// <param name="properties">JSON-like additional properties of the package</param>
+        /// <param name="properties">Dictionary of additional properties of the package</param>
         /// <param name="system">Location which contains the package</param>
         /// <param name="brutMass">Total mass of the package</param>
         /// <param name="netMass">Net mass of the package</param>
@@ -78,9 +78,9 @@ namespace CipherData.Models
         /// <param name="comments">Free-text comment on the package</param>
         /// <param name="destinationProcesses">List of processes definitions that may accept this package as input</param>
         /// <param name="id">only use if you want the package to have a specific id</param>
-        public Package(string properties, StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
+        public Package(StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
             Vessel? vessel = null, HashSet<Package>? containingPackages = null, HashSet<ProcessDefinition>? destinationProcesses = null,
-            string? comments = null, string? id = null)
+            string? comments = null, string? id = null, Dictionary<string, string>? properties = null)
         {
             Id = id ?? GetNextId();
             Comments = comments;
@@ -141,7 +141,6 @@ namespace CipherData.Models
                     createdAt: RandomFuncs.RandomDateTime(),
                     brutMass: curr_brutmass,
                     netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
-                    properties: "",
                     containingPackages: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
@@ -160,7 +159,6 @@ namespace CipherData.Models
                     createdAt: DateTime.Now,
                     brutMass: 0,
                     netMass: 0,
-                    properties: "",
                     system: StorageSystem.Random(),
                     category: Category.Random());
             return result;

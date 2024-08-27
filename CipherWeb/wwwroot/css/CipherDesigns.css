@@ -952,6 +952,7 @@ rz-multiselect-trigger,
 .rz-textarea, 
 .rz-textbox {
     padding: 0.5rem;
+    min-height: 52px;
 }
 
 div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled, .rz-calendar.rz-state-disabled div:not(.rz-form-field-content) > .rz-inputtext, div:not(.rz-form-field-content) > .rz-listbox.rz-state-disabled, div:not(.rz-form-field-content) > .rz-autocomplete-input:disabled, div:not(.rz-form-field-content) > .rz-state-disabled.rz-autocomplete, div:not(.rz-form-field-content) > .rz-state-disabled.rz-multiselect, div:not(.rz-form-field-content) > .rz-state-disabled.rz-dropdown, div:not(.rz-form-field-content) > .rz-colorpicker:disabled, .rz-lookup-search div:not(.rz-form-field-content) > input:disabled, div:not(.rz-form-field-content) > .rz-spinner:disabled, .rz-calendar div:not(.rz-form-field-content) > .rz-inputtext:disabled, div:not(.rz-form-field-content) > .rz-multiselect:disabled, div:not(.rz-form-field-content) > .rz-dropdown:disabled, div:not(.rz-form-field-content) > .mask:disabled, div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-content) > .rz-textbox:disabled {

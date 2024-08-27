@@ -8,6 +8,7 @@
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Name))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Type))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.System))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))">
                 <Template>
@@ -15,6 +16,9 @@
                 </Template>
                 </RadzenDropDownDataGridColumn>
         </Columns>
+        <ValueTemplate>
+            <b>שם הכלי:</b> @((context as Vessel).Name)
+        </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
 

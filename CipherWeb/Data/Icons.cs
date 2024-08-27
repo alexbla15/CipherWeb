@@ -833,11 +833,48 @@ namespace CipherWeb.Data
             }
         }
 
-        // continue from here 
-
         public class Multimedia
         {
-            public class Camera { }
+            public class Camera 
+            {
+                public const string _Camera = "photo_camera";
+                public const string CameraAdd = "add_a_photo";
+                public const string CameraEnhance = "camera_enhance";
+                public const string CameraFlashOff = "no_flash";
+                public const string CameraFlip = "flip_camera_ios";
+                public const string CameraLinked = "linked_camera";
+                public const string CameraOff = "no_photography";
+                public const string CameraSwitch = "switch_camera";
+                public const string CameraSwitch2 = "cameraswitch";
+                public const string DirtyLens = "dirty_lens";
+                public const string FlashAuto = "flash_auto";
+                public const string FlashOff = "flash_off";
+                public const string FlashOn = "flash_on";
+                public const string Fps30 = "30fps_select";
+                public const string Fps60 = "60fps_select";
+                public const string FpsAuto = "autofps_select";
+                public const string HdrAuto = "hdr_auto";
+                public const string HdrAutoSelect = "hdr_auto_select";
+                public const string HdrEnhancedSelect = "hdr_enhanced_select";
+                public const string HdrOff = "hdr_off";
+                public const string HdrOffSelect = "hdr_off_select";
+                public const string HdrOn = "hdr_on";
+                public const string HdrOnSelect = "hdr_on_select";
+                public const string HdrPlus = "hdr_plus";
+                public const string Monochrome = "monochrome_photos";
+                public const string PartyMode = "party_mode";
+                public const string RawOn = "raw_on";
+                public const string RawOff = "raw_off";
+                public const string Shutter = "camera";
+                public const string ShutterSpeed = "shutter_speed";
+                public const string Timer3 = "timer_3";
+                public const string Timer3s = "timer_3_select";
+                public const string Timer10 = "timer_10";
+                public const string Timer10s = "timer_10_select";
+            }
+
+            // continue from here 
+
             public class Images { }
             public class Megapixles { }
             public class Music { }

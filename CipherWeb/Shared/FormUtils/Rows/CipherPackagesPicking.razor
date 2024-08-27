@@ -19,7 +19,7 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Label ??= "תעודות";
         Icon ??= Icons.Cipher.Package;
@@ -31,8 +31,23 @@
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDown TValue="List<string>" Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" ValueProperty="@(nameof(CachedData.PackageExample.Id))"
-                    Multiple=true AllowClear=true Placeholder="@Label" SelectedItemsText="אפשרויות נבחרו" SelectAllText="בחירת כל האפשרויות"
-                    AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
-                    Chips=true Style="width: 100%;" />
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<string>"
+                            Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))"
+                            ValueProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true"
+                            Chips=true Style="width: 100%;">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+                <Template>
+                   @((context as Package).Category.Name)
+                </Template>
+            </RadzenDropDownDataGridColumn>
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.System))" Title="@(Package.Translate(nameof(CachedData.PackageExample.System)))">
+                <Template>
+                    @((context as Package).System.Name)
+                </Template>
+            </RadzenDropDownDataGridColumn>
+        </Columns>
+    </RadzenDropDownDataGrid>
 </CipherFormRow>

@@ -128,7 +128,7 @@
 }
 
 <RadzenTemplateForm TItem="Model" Data=@model >
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0" Style="padding-bottom:5px">
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
@@ -144,7 +144,7 @@
             }
             @if(string.IsNullOrEmpty(Label))
             {
-                <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" 
+                <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
                 Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
             }
             else

@@ -140,15 +140,28 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Uuid))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Uuid)))" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Uuid))" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
                 <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherAutoComplete Data="@packs" TextProperty="@(nameof(CachedData.PackageExample.Id))" @bind-Value="@pack.Id" />
+
+                        <RadzenDropDownDataGrid Placeholder="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" SearchTextPlaceholder="חיפוש..." TValue="string"
+                                                Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))"
+                                                ValueProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true" 
+                                                Style="@($"width: {Width}; min-height:;")" @bind-Value="@pack.Id">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
+                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+                                    <Template>
+                                        @(string.Join(", ", (context as Package).Category.Name))
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
+                            </Columns>
+                        </RadzenDropDownDataGrid>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.BrutMass))" Title="משקל מועבר [גר']" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.BrutMass))" Title="משקל ברוטו מועבר [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Value="@pack.BrutMass" />
+                        <CipherNumeric @bind-Value="@pack.BrutMass" Width="100%"/>
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

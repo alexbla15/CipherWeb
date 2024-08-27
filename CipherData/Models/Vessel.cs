@@ -43,8 +43,10 @@ namespace CipherData.Models
         /// <param name="packages"> Safety restrictions in a list of (MaterialType, SubCategory, Amount)</param>
         public Vessel(string type, StorageSystem system, HashSet<Package>? packages = null, string? name = null, string? id = null)
         {
-            Id = id ?? GetNextId();
-            Name = name;
+            string nextId = GetNextId();
+
+            Id = id ?? nextId;
+            Name = name ?? nextId;
             Type = type;
             ContainingPackages = packages;
             System = system;

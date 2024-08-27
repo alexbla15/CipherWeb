@@ -18,17 +18,30 @@
     /// </summary>
     [Parameter]
     public bool IsNew { get; set; } = false;
+
+    private CipherPackageId packId = new ();
+    private CipherMaterialType MaterialType = new();
+
+    public string? GetPackId()
+    {
+        return packId?.PackId;
+    }
+
+    public string? GetMaterialType()
+    {
+        return MaterialType.ToString();
+    }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherPackageId Disabled="@ReadOnly"/>
-    <CipherMaterialType Disabled="@ReadOnly" />
+    <CipherPackageId Disabled="@ReadOnly" @ref="packId"/>
+    <CipherMaterialType Disabled="@ReadOnly" @ref="MaterialType" />
     <CipherCategoryDropDown Disabled="@ReadOnly" />
-    <CipherVesselDropDown Disabled="@ReadOnly" />
-    <CipherLocation Disabled="@ReadOnly" />
+    @* <CipherVesselDropDown Disabled="@ReadOnly"/> *@
+    <CipherLocation Disabled="@ReadOnly"/>
     @if (!IsNew)
     {
-        <CipherNumeric Disabled="@ReadOnly" Label="מסה ברוטו" Icon="@Icons.Professions.Construction.Scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="מסה נטו" Icon="@Icons.Professions.Construction.Scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
     }
 </CipherComponentCard>
