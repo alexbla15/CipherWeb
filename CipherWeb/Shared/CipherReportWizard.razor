@@ -86,8 +86,7 @@
     {
         db_events = await _db.GetEvents();
 
-        Random random = new Random();
-        ReportId = random.Next(1000,9999);
+        ReportId = new Random().Next(1000, 9999);
 
         (packs, error) = CachedData.AllPackages;
         (rows, error) = CachedData.AllPackages;
@@ -156,7 +155,7 @@
         {
             foreach (Vessel ves in vessels)
             {
-                Package pack = Package.Random();
+                Package pack = CachedData.PackageExample;
                 pack.System = sys;
                 pack.Vessel = ves;
                 pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.BrutMass).Sum();

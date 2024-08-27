@@ -115,13 +115,19 @@
     [Parameter]
     public string TextDecoration { get; set; }
 
+    /// <summary>
+    /// Text direction (rtl / ltr)
+    /// </summary>
+    [Parameter]
+    public string Dirction { get; set; } = "rtl";
+
 
     protected override async Task OnInitializedAsync()
     {
         StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
         TextDecoration = (Underline) ? "underline" : TextDecoration;
         Style = GetTextStyle();
-        Style = (Bold) ? Style + "font-weight: bold;" : Style;
+        Style += (Bold) ? "font-weight: bold;" : "";
     }
 
     public string GetTextStyle()
@@ -141,7 +147,8 @@
             margin-top: {MarginTop};
             margin-right: {MarginRight};
             margin-left: {MarginLeft};
-            text-decoration: {TextDecoration};";
+            text-decoration: {TextDecoration};
+            direction: {Dirction}";
         ;
     }
 }

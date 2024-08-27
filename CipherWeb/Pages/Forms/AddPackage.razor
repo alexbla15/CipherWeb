@@ -2,31 +2,125 @@
 
 <PageTitle>תעודה חדשה</PageTitle>
 <CipherComponentCard Underline="true" WithCard="false" Title="תעודה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherFormInfo/>
-    <CipherInputComponents />
-    <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo"/>
+    <CipherFormInfo @ref="FormInfo" />
+    @if (!AssemblyOfPackages)
+    {
+        <CipherInputComponents @ref="InputPacks" />
+    }
 
-    <CipherComponentCard Title="תעודות קיימות המוכלות בתעודה זו">
-        <CipherPackagesPicking/>
+    <CipherComponentCard Title="תעודות המוכלות בתעודה זו">
+        <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView"/>
     </CipherComponentCard>
 
-    <CipherComments />
-    <CipherButton Text="בדיקה" Click="FillDetails"></CipherButton>
-    <CipherSubmit ActionText="@($"תעודה {pack.Id} נפתחה בתאריך 29/06/2024 על ידי אבי רון מתוך 5 תעודות שונות. התעודה החדשה במסה 5 גרם.")"></CipherSubmit>
+    <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" />
+
+    <CipherComments @ref="PackComments" />
+    <CipherComponentCard Title="בדיקה">
+        <Buttons>
+            <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
+        </Buttons>
+        <ChildContent>
+            <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+        </ChildContent>
+    </CipherComponentCard>
+
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
 
 @code {
-    private CipherPackageInfo PackInfo = new CipherPackageInfo();
+    /// <summary>
+    /// Is new package an assembly of other packages? otherwise it must get partial mass from other packeges.
+    /// </summary>
+    [Parameter]
+    public bool AssemblyOfPackages { get; set; } = false;
 
-    private Package pack = Package.New();
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    private CipherPackageInfo PackInfo = new();
+    private CipherPackagesPicking InnerPacks = new();
+    private CipherComments PackComments = new();
+    private CipherFormInfo FormInfo = new();
+    private CipherInputComponents InputPacks = new();
+
+    private CipherSubmit submission = new();
+
+    private string JsonRequest;
+
+    private CreateEvent AddPackageEvent = CreateEvent.Empty();
 
     protected override void OnInitialized()
     {
-        FillDetails();
+        Submit();
     }
 
-    public void FillDetails()
+    /// <summary>
+    /// Once there are some inner packs, user cannot add 
+    /// </summary>
+    private void ChangeView()
     {
-        pack.Id = PackInfo.GetPackId();
+        AssemblyOfPackages = (InnerPacks.Value.Count() > 0);
+    }
+
+    /// <summary>
+    /// Fill all needed details for new package based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        Package pack = Package.Empty();
+
+        pack = PackInfo.Value();
+
+        List<Package>? innerPacks = InnerPacks.Value;
+        pack.ContainingPackages = (innerPacks is null) ? new HashSet<Package>() : innerPacks.ToHashSet();
+
+        pack.Comments = PackComments.Value();
+
+        // choosing relevant packages for calculation of mass
+        List<Package> RelevantPackages = AssemblyOfPackages ? pack.ContainingPackages.ToList() : InputPacks.chosenPacks;
+        pack.BrutMass = RelevantPackages.Select(x => x.BrutMass).Sum();
+        pack.NetMass = pack.BrutMass * pack.Concentration;
+
+        // Changed Packages
+        List<PackageRequest> ChangedPacks = new();
+        ChangedPacks.Add(pack.Request());
+
+        if (!AssemblyOfPackages)
+        {
+            foreach (Package inputPack in InputPacks.chosenPacks)
+            {
+                Package PreviousStatus = Package.Get(inputPack.Id).Item1;
+
+                PackageRequest packageRequest = inputPack.Request();
+                // removing the amount that was transfered from the original amount
+                packageRequest.BrutMass = PreviousStatus.BrutMass - packageRequest.BrutMass;
+                packageRequest.NetMass = packageRequest.BrutMass * PreviousStatus.Concentration;
+
+                ChangedPacks.Add(packageRequest);
+            }
+        }
+
+        AddPackageEvent = new CreateEvent(
+            timestamp: FormInfo.GetDateTime(),
+            eventType: 21,
+            actions: ChangedPacks.ToHashSet()
+        );
+
+        Tuple<bool, string> CheckResult = AddPackageEvent.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        JsonRequest = AddPackageEvent.ToJson();
+
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
 }

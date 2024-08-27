@@ -5,7 +5,7 @@
     /// Is submission acceptable.
     /// </summary>
     [Parameter]
-    public bool condition { get; set; }
+    public bool Valid { get; set; } = true;
 
     /// <summary>
     /// Is alert visible under submission button.
@@ -32,16 +32,33 @@
     public string CancelPath { get; set; } = CipherNavLinks.Forms.Href;
 
     /// <summary>
+    /// Message that will be showen when submitting the succesfuly.
+    /// </summary>
+    [Parameter]
+    public string SuccessMessage { get; set; } = "טופס הוזן בהצלחה";
+
+    /// <summary>
+    /// Message that will be showen when submitting the form unsuccesfuly.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; } = "שגיאה בהזנת טופס";
+
+    /// <summary>
     /// Background styling of alert. Must be AlertStyle-enum.
     /// </summary>
     [Parameter]
     public AlertStyle alertStyle { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    /// <summary>
+    /// Function that takes place once user clicks submission.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Click { get; set; }
+
+    protected override void OnInitialized()
     {
         Title ??= "סיכום ואישור";
         alertStyle = AlertStyle.Success;
-        condition = true;
     }
 
     /// <summary>
@@ -49,9 +66,19 @@
     /// </summary>
     public void Save()
     {
+        Click.InvokeAsync();
+
         alertVisible = true;
-        alertStyle = (condition) ? AlertStyle.Success : AlertStyle.Warning;
-        alertText = (condition) ? "טופס הוזן בהצלחה" : "שגיאה בהזנת טופס";
+        alertStyle = (Valid) ? AlertStyle.Success : AlertStyle.Warning;
+        alertText = (Valid) ? SuccessMessage : ErrorMessage;
+    }
+
+    /// <summary>
+    /// Close the shown alert.
+    /// </summary>
+    private void CloseAlert()
+    {
+        alertVisible = false;
     }
 }
 
@@ -72,6 +99,6 @@
                 <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
             </RadzenStack>
         }
-        <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" />
+        <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" Close="@CloseAlert" />
     </ChildContent>
 </CipherComponentCard>

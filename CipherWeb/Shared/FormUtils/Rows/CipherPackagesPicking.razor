@@ -19,6 +19,18 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    /// <summary>
+    /// All packages chosen
+    /// </summary>
+    [Parameter]
+    public List<Package> Value { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Change event
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
     protected override void OnInitialized()
     {
         Label ??= "תעודות";
@@ -31,10 +43,9 @@
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<string>"
-                            Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))"
-                            ValueProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
-                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true"
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="Value"
+                            Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
                             Chips=true Style="width: 100%;">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />

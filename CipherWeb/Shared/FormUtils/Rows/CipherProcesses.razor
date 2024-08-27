@@ -1,13 +1,16 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid TValue="List<string>" Data=@procs Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
-                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels"
-                            Chips=true Style="width: 100%;">
+    <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="בחירת תהליכים"
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(CachedData.ProcessDefinitionExample.Name))"
+                            Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Name))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Description))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description)))" />
         </Columns>
+        <ValueTemplate>
+            <b>@Label:</b> @context
+        </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
 
@@ -19,8 +22,22 @@
     [Parameter]
     public int MaxShownLabels { get; set; } = int.MaxValue;
 
-    private ErrorResponse error = ErrorResponse.Success;
-    private List<ProcessDefinition> procs = new List<ProcessDefinition>();
+    /// <summary>
+    /// All available processes
+    /// </summary>
+    [Parameter]
+    public List<ProcessDefinition> Processes { get; set; } = new();
+
+    /// <summary>
+    /// All chosen processes
+    /// </summary>
+    [Parameter]
+    public List<ProcessDefinition> ChosenProcesses { get; set; } = new();
+
+    /// <summary>
+    /// Data fetching error
+    /// </summary>
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     protected override void OnInitialized()
     {
@@ -29,6 +46,9 @@
         Width ??= "100%";
         MinWidth ??= "300px";
 
-        (procs, error) = CachedData.AllProcessDefinitions;
+        if (Processes.Count() == 0)
+        {
+            (Processes, Error) = CachedData.AllProcessDefinitions;
+        }
     }
 }

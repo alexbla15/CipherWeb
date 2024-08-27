@@ -1,28 +1,23 @@
 ﻿using CipherData.Models;
-using CipherWeb.Data;
-using CipherWeb.Shared.Components;
-using Radzen;
-using System;
-using System.Reflection;
 
 namespace CipherWeb
 {
-    public class CachedData
+    public static class CachedData
     {
-        public static Category CategoryExample = Category.Random();
-        public static Event EventExample = Event.Random();
-        public static Package PackageExample = Package.Random();
-        public static Process ProcessExample = Process.Random();
-        public static ProcessDefinition ProcessDefinitionExample = ProcessDefinition.Random();
-        public static StorageSystem SystemExample = StorageSystem.Random();
-        public static Vessel VesselExample = Vessel.Random();
+        public static readonly Category CategoryExample = Category.Empty();
+        public static readonly Event EventExample = Event.Random();
+        public static readonly Package PackageExample = Package.Empty();
+        public static readonly Process ProcessExample = Process.Random();
+        public static readonly ProcessDefinition ProcessDefinitionExample = ProcessDefinition.Random();
+        public static readonly StorageSystem SystemExample = StorageSystem.Empty();
+        public static readonly Vessel VesselExample = Vessel.Empty();
 
-        public static Tuple<List<Category>, ErrorResponse> AllCategories = Category.All();
-        public static Tuple<List<Event>, ErrorResponse> AllEvents = Event.All();
-        public static Tuple<List<Package>, ErrorResponse> AllPackages = Package.All();
-        public static Tuple<List<Process>, ErrorResponse> AllProcesses = Process.All();
-        public static Tuple<List<ProcessDefinition>, ErrorResponse> AllProcessDefinitions = ProcessDefinition.All();
-        public static Tuple<List<StorageSystem>, ErrorResponse> AllSystems = StorageSystem.All();
-        public static Tuple<List<Vessel>, ErrorResponse> AllVessels = Vessel.All();
+        public static readonly Tuple<List<Category>, ErrorResponse> AllCategories = Category.All();
+        public static readonly Tuple<List<Event>, ErrorResponse> AllEvents = Event.All();
+        public static readonly Tuple<List<Package>, ErrorResponse> AllPackages = Package.All();
+        public static readonly Tuple<List<Process>, ErrorResponse> AllProcesses = Process.All();
+        public static readonly Tuple<List<ProcessDefinition>, ErrorResponse> AllProcessDefinitions = ProcessDefinition.All();
+        public static readonly Tuple<List<StorageSystem>, ErrorResponse> AllSystems = StorageSystem.All();
+        public static readonly Tuple<List<Vessel>, ErrorResponse> AllVessels = Vessel.All();
     }
 }

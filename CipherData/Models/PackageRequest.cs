@@ -1,4 +1,7 @@
 ﻿using CipherData.Requests;
+using System;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 
 namespace CipherData.Models
 {
@@ -17,7 +20,7 @@ namespace CipherData.Models
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
-        public Dictionary<string,string> Properties { get; set; }
+        public Dictionary<string,string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
@@ -73,9 +76,9 @@ namespace CipherData.Models
         /// <param name="comments">Free-text comment on the package</param>
         /// <param name="destinationProcessesIds">List of processes definitions (Ids) that may accept this package as input</param>
         /// <param name="id">Id of new package</param>
-        public PackageRequest(string id, Dictionary<string,string> properties, string systemId, decimal brutMass, decimal netMass, DateTime createdAt, string categoryId,
+        public PackageRequest(string id, string systemId, decimal brutMass, decimal netMass, DateTime createdAt, string categoryId,
             string? vesselId = null, HashSet<string>? containingPackagesIds = null, HashSet<string>? destinationProcessesIds = null,
-            string? comments = null)
+            string? comments = null, Dictionary<string, string>? properties = null)
         {
             Id = id;
             Comments = comments;
@@ -91,9 +94,46 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Ensure special characters are preserved
+            };
+
+            return JsonSerializer.Serialize(this, options);
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check()
+        {
+            Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
+
+            result = (!string.IsNullOrEmpty(Id)) ? result : 
+                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.Id))); // id is required
+            result = (!string.IsNullOrEmpty(CategoryId)) ? result : 
+                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.Category))); // category is required
+            result = (!string.IsNullOrEmpty(SystemId)) ? result :
+                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.System))); // system is rquired
+            result = (BrutMass >= 0 && NetMass >= 0 && BrutMass >= NetMass) ? result :
+                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.BrutMass))); // brut mass must be >= net mass, in any case they mustn't be negative
+            result = (CreatedAt > DateTime.Parse("01/01/1900") && CreatedAt <= DateTime.Now) ? result :
+                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.CreatedAt))); // CreatedAt is required, must be between now and the initial factory time
+
+            return result;
+        }
+
+        /// <summary>
         /// Get a random new object.
         /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
         public static PackageRequest Random()
         {
             return Package.Random().Request();

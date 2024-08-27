@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Event>, ErrorResponse> GetEvents()
         {
-            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Event.Random), canBadRequest: false);
+            return GenericRequests.Request(RandomData.RandomEvents, canBadRequest: false);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Event,ErrorResponse> CreateEvent(CreateEvent ev)
         {
-            return GenericRequests.Request(Event.Random());
+            return GenericRequests.Request(RandomData.RandomEvent);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Event, ErrorResponse> GetEvent(UpdateEvent ev)
         {
-            return GenericRequests.Request(Event.Random(), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomEvent, canBeNotFound: true);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Event, ErrorResponse> UpdateEvent(string event_id)
         {
-            return GenericRequests.Request(Event.Random(event_id), canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomEvent, canBadRequest: false, canBeNotFound: true);
         }
     }
 }

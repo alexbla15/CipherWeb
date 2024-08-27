@@ -4,6 +4,8 @@ using CipherWeb.Shared.Components;
 using Radzen;
 using System;
 using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 
 namespace CipherWeb
 {

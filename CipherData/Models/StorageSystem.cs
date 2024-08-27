@@ -7,7 +7,7 @@ namespace CipherData.Models
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation("שם")]
+        [HebrewTranslation("מערכת")]
         public string Name { get; set; }
 
         /// <summary>
@@ -107,6 +107,20 @@ namespace CipherData.Models
                 );
         }
 
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        public static StorageSystem Empty()
+        {
+            return new(
+                id: "",
+                name: "",
+                description: "",
+                properties: "",
+                unit: Unit.Empty()
+                );
+        }
+
         public static string Translate(string searchedAttribute)
         {
             return Translate(typeof(StorageSystem), searchedAttribute);
@@ -171,6 +185,17 @@ namespace CipherData.Models
             return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
             {
                 new BooleanCondition(attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+            }, @operator: Operator.Or));
+        }
+
+        /// <summary>
+        /// All vessels that are under this system
+        /// </summary>
+        public static Tuple<List<Vessel>, ErrorResponse> Vessels(string SelectedSystem)
+        {
+            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            {
+                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
     }

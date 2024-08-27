@@ -49,6 +49,12 @@
     [Parameter]
     public bool Required { get; set; } = true;
 
+    /// <summary>
+    /// Is component visible.
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
     private decimal _value;
 
     /// <summary>
@@ -75,13 +81,13 @@
     /// Minimal allowed value.
     /// </summary>
     [Parameter]
-    public int Min { get; set; } = 0;
+    public decimal Min { get; set; } = 0;
 
     /// <summary>
     /// Maximal allowed value.
     /// </summary>
     [Parameter]
-    public int Max { get; set; } = int.MaxValue;
+    public decimal Max { get; set; } = decimal.MaxValue;
 
     class Model
     {
@@ -90,15 +96,6 @@
 
     private Model model = new Model() {};
     private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
-
-    /// <summary>
-    /// Check all requirements from value.
-    /// </summary>
-    /// <returns></returns>
-    public bool Check()
-    {
-        return RequiredValidator.IsValid;
-    }
 
     /// <summary>
     /// Behavior upon value - change.
@@ -127,39 +124,30 @@
     }
 }
 
-<RadzenTemplateForm TItem="Model" Data=@model >
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
-
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
-            @if (!string.IsNullOrEmpty(Icon))
-            {
-                <style>
-                    .rz-messages-error {
-                        display: flex;
-                        font-size: small;
-                        padding-right: 2.5rem;
-                    }
-                </style>
-                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-            }
-            @if(string.IsNullOrEmpty(Label))
-            {
-                <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
-                Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
-            }
-            else
-            {
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" 
-                Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
-            </RadzenFormField>
-            }
-        </RadzenStack>
-    <RadzenStack Orientation="Orientation.Vertical">
-        @if (Required)
+<RadzenTemplateForm TItem="Model" Data=@model Visible="@Visible">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
+        @if (!string.IsNullOrEmpty(Icon))
         {
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+            <style>
+                .rz-messages-error {
+                    display: flex;
+                    font-size: small;
+                    padding-right: 2.5rem;
+                }
+            </style>
+            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
         }
-    </RadzenStack>      
-    </RadzenStack>
+        @if(string.IsNullOrEmpty(Label))
+        {
+            <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
+                           Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" Min="@Min" Max="Max" />
+        }
+        else
+        {
+        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+            <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" 
+            Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
+        </RadzenFormField>
+        }
+    </RadzenStack>     
 </RadzenTemplateForm>

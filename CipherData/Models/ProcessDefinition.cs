@@ -16,7 +16,7 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation("שם")]
+        [HebrewTranslation("תהליך")]
         public string Name { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace CipherData.Models
         /// <summary>
         /// For randomization only
         /// </summary>
-        public static List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי" };
+        public static List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי", "עיצוב" };
 
         /// <summary>
         /// Definition of a process - 

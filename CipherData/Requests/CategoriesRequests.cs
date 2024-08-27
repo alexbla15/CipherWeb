@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> GetCategories()
         {
-            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Category.Random), canBadRequest: false);
+            return GenericRequests.Request(RandomData.RandomCategories, canBadRequest: false);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Category,ErrorResponse> CreateCategory(CategoryRequest cat)
         {
-            return GenericRequests.Request(Category.Random());
+            return GenericRequests.Request(RandomData.RandomCategory) ;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Category, ErrorResponse> GetCategory(string id)
         {
-            return GenericRequests.Request(Category.Random(id), canBadRequest:false, canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomCategory, canBadRequest:false, canBeNotFound: true);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Category, ErrorResponse> UpdateCategory(string id, CategoryRequest cat)
         {
-            return GenericRequests.Request(Category.Random(id), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomCategory, canBeNotFound: true);
         }
     }
 }

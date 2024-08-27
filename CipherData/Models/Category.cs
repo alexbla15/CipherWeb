@@ -14,7 +14,7 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation("שם")]
+        [HebrewTranslation("קטגוריה")]
         public string Name { get; set; }
 
         /// <summary>
@@ -138,6 +138,22 @@ namespace CipherData.Models
                 materialType: RandomFuncs.RandomItem(MaterialTypes),
                 parent: (new Random().Next(0, 2) == 0) ? Random() : null,
                 children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
+                );
+        }
+
+        /// <summary>
+        /// Get an empty category scheme.
+        /// </summary>
+        public static Category Empty()
+        {
+            return new Category(
+                id: "",
+                name: "",
+                description: "",
+                idMask: new HashSet<string>(),
+                creatingProcesses: new HashSet<ProcessDefinition>(),
+                consumingProcesses: new HashSet<ProcessDefinition>(),
+                materialType: ""
                 );
         }
 

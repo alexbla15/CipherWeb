@@ -28,7 +28,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new List<Package>();
+    public List<Package> allPacks { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// All chosen packeges
+    /// </summary>
+    [Parameter]
+    public List<Package> chosenPacks { get; set; } = new List<Package>();
 
     /// <summary>
     /// Error response for fetching data
@@ -37,7 +43,6 @@
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
     private RadzenDataGrid<Package> CustomDataGrid;
-    private List<Package> from_packs = new List<Package>();
 
     private bool ShowHelpText = true;
     private int components = 0;
@@ -46,7 +51,7 @@
     {
         Title ??= "תעודות מוסרות";
 
-        (packs, error) = CachedData.AllPackages;
+        (allPacks, error) = CachedData.AllPackages;
     }
 
     /// <summary>
@@ -54,18 +59,16 @@
     /// </summary>
     async Task AddComponent()
     {
-        // Create a new Restriction object with a unique ID
-        Package pack = Package.New();
-        pack.Uuid = from_packs.Count + 1;
-
         // Add the new restriction to the existing list
-        from_packs.Add(pack);
+        chosenPacks.Add(Package.Empty());
 
         StateHasChanged();
 
-        components = from_packs.Count;
+        components = chosenPacks.Count;
 
         ShowHelpText = false;
+
+        RefreshOptionalPackages();
 
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -76,7 +79,7 @@
     /// <returns></returns>
     public decimal GetTotal()
     {
-        return from_packs.Sum(pack => pack.BrutMass);
+        return chosenPacks.Sum(pack => pack.BrutMass);
     }
 
     /// <summary>
@@ -85,21 +88,17 @@
     /// <param name="pack">Package to delete</param>
     async Task DeleteRow(Package pack)
     {
-        from_packs.Remove(pack);
+        chosenPacks.Remove(pack);
 
-        // Reassign IDs after deletion
-        for (int i = 0; i < from_packs.Count; i++)
-        {
-            from_packs[i].Uuid = i + 1;
-        }
+        RefreshOptionalPackages();
 
-        CustomDataGrid.Data = from_packs;
+        CustomDataGrid.Data = chosenPacks;
 
         components--;
 
         await CustomDataGrid.RefreshDataAsync();
 
-        if (from_packs.Count() == 0)
+        if (chosenPacks.Count() == 0)
         {
             ShowHelpText = true;
         }
@@ -111,45 +110,59 @@
     /// <returns></returns>
     async Task DeleteAll()
     {
-        from_packs.Clear();
+        chosenPacks.Clear();
         components = 0;
-        CustomDataGrid.Data = from_packs;
+        CustomDataGrid.Data = chosenPacks;
 
         await CustomDataGrid.RefreshDataAsync();
+        
+        RefreshOptionalPackages();
 
         ShowHelpText = true;
     }
+
+    /// <summary>
+    /// Remove used packages from options, preventing duplicity.
+    /// </summary>
+    public void RefreshOptionalPackages()
+    {
+        // refresh options
+        (allPacks, error) = CachedData.AllPackages;
+        allPacks.RemoveAll(p => chosenPacks.Any(x => x.Id == p.Id));
+    }
 }
 
-<CipherComponentCard Title="@Title">
+<CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
         <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
-
     <ChildContent>
-
         @if (ShowHelpText)
         {
-            <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
+            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@from_packs" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="Package" Context="pack" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn Width="10%" TItem="Package" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Uuid))" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                @*<RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Uuid))" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />*@
+                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-
                         <RadzenDropDownDataGrid Placeholder="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" SearchTextPlaceholder="חיפוש..." TValue="string"
-                                                Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))"
-                                                ValueProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true" 
+                                                Data=@allPacks TextProperty="@(nameof(CachedData.PackageExample.Id))"
+                                                ValueProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
                                                 Style="@($"width: {Width}; min-height:;")" @bind-Value="@pack.Id">
                             <Columns>
                                 <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
+                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
+                                    <Template>
+                                        @((context as Package).Category.MaterialType)
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
                                 <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
                                     <Template>
                                         @(string.Join(", ", (context as Package).Category.Name))
@@ -159,9 +172,14 @@
                         </RadzenDropDownDataGrid>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.BrutMass))" Title="משקל ברוטו מועבר [גר']" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Value="@pack.BrutMass" Width="100%"/>
+                        <CipherNumeric Width="100%" Value="Package.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
+                    <Template Context="pack">
+                        <CipherNumeric @bind-Value="@pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" ShowErrors="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

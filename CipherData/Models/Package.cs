@@ -1,4 +1,7 @@
 ﻿using CipherData.Requests;
+using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Xml;
 
 namespace CipherData.Models
 {
@@ -65,6 +68,11 @@ namespace CipherData.Models
         public HashSet<ProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>
+        /// Calculated from the ratio between net to brut mass
+        /// </summary>
+        public decimal Concentration;
+
+        /// <summary>
         /// Instanciation of a new package
         /// </summary>
         /// <param name="properties">Dictionary of additional properties of the package</param>
@@ -93,6 +101,45 @@ namespace CipherData.Models
             ContainingPackages = containingPackages ?? new HashSet<Package>();
             DestinationProcesses = destinationProcesses ?? category.ConsumingProcesses;
             Category = category;
+
+            Concentration = (brutMass > 0) ? netMass / brutMass : 0;
+        }
+
+        /// <summary>
+        /// Transfrom package object to a PackageRequest object
+        /// </summary>
+        /// <returns></returns>
+        public PackageRequest Request()
+        {
+            PackageRequest result = new(
+                    id: Id,
+                    comments: Comments,
+                    createdAt: CreatedAt,
+                    brutMass: BrutMass,
+                    netMass: NetMass,
+                    properties: Properties,
+                    containingPackagesIds: ContainingPackages.Select(x => x.Id).ToHashSet(),
+                    systemId: System.Id,
+                    vesselId: Vessel?.Id,
+                    categoryId: Category.Id,
+                    destinationProcessesIds: DestinationProcesses.Select(x => x.Id).ToHashSet());
+
+            return result;
+        }
+
+        /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Ensure special characters are preserved
+            };
+
+            return JsonSerializer.Serialize(this, options);
         }
 
         /// <summary>
@@ -104,7 +151,7 @@ namespace CipherData.Models
         /// Get the id of a new package
         /// </summary>
         /// <returns></returns>
-        private static string GetNextId()
+        public static string GetNextId()
         {
             IdCounter += 1;
             return $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{IdCounter:D3}";
@@ -152,42 +199,33 @@ namespace CipherData.Models
         /// <summary>
         /// Get an empty new object.
         /// </summary>
-        public static Package New()
+        public static Package Empty()
         {
             Package result = new(
                     id: "",
                     createdAt: DateTime.Now,
                     brutMass: 0,
                     netMass: 0,
-                    system: StorageSystem.Random(),
-                    category: Category.Random());
+                    system: StorageSystem.Empty(),
+                    category: Category.Empty());
             return result;
         }
-
-        public PackageRequest Request()
-        {
-            PackageRequest result = new(
-                    id: Id,
-                    comments: Comments,
-                    createdAt: CreatedAt,
-                    brutMass: BrutMass,
-                    netMass: NetMass,
-                    properties: Properties,
-                    containingPackagesIds: ContainingPackages.Select(x => x.Id).ToHashSet(),
-                    systemId: System.Id,
-                    vesselId: Vessel?.Id,
-                    categoryId: Category.Id,
-                    destinationProcessesIds: DestinationProcesses.Select(x => x.Id).ToHashSet());
-
-            return result;
-        }
-
         public static string Translate(string searchedAttribute)
         {
             return Translate(typeof(Package), searchedAttribute);
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Get details about a single package given package ID
+        /// </summary>
+        /// <param name="pack_id">package ID</param>
+        /// <returns></returns>
+        public static Tuple<Package, ErrorResponse> Get(string pack_id)
+        {
+            return PackagesRequests.GetPackage(pack_id);
+        }
 
         /// <summary>
         /// All packages

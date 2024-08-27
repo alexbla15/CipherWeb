@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<ProcessDefinition>, ErrorResponse> GetProcessDefinitions()
         {
-            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, ProcessDefinition.Random));
+            return GenericRequests.Request(RandomData.RandomProcessDefinitions);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<ProcessDefinition,ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc)
         {
-            return GenericRequests.Request(ProcessDefinition.Random());
+            return GenericRequests.Request(RandomData.RandomProcessDefinition);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<ProcessDefinition, ErrorResponse> GetProcessDefintion(string proc_id)
         {
-            return GenericRequests.Request(ProcessDefinition.Random(), canBeNotFound:true, canBadRequest:false);
+            return GenericRequests.Request(RandomData.RandomProcessDefinition, canBeNotFound:true, canBadRequest:false);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
         {
-            return GenericRequests.Request(ProcessDefinition.Random(), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomProcessDefinition, canBeNotFound: true);
         }
     }
 }

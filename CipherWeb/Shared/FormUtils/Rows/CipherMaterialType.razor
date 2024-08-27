@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled"
+    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="Value"
                             Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש...">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
@@ -24,6 +24,12 @@
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; } = false;
+
+    /// <summary>
+    /// Chosen value
+    /// </summary>
+    [Parameter]
+    public string? Value { get; set; }
 
     private ErrorResponse error = ErrorResponse.Success;
     private List<Category> categories = new List<Category>();

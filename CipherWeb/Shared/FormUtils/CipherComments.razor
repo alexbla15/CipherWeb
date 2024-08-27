@@ -5,7 +5,7 @@
     /// Value of component.
     /// </summary>
     [Parameter]
-    public string? comments { get; set; }
+    public string Comments { get; set; } = string.Empty;
 
     /// <summary>
     /// Placeholder of the comments' text box.
@@ -19,13 +19,8 @@
     [Parameter]
     public string TextBoxBackgroundColor { get; set; } = "white";
 
-    /// <summary>
-    /// Background color of the icon aside the comments.
-    /// </summary>
-    [Parameter]
-    public string IconBackgroundColor { get; set; } = Colors.PrimaryDark;
-
     private CipherComponentCard Card;
+    private CipherAutoComplete component = new();
 
     /// <summary>
     /// Style of text-box.
@@ -34,31 +29,31 @@
     public string TextAreaStyle()
     {
         return $@"
-            height:{Height};
-            width: {Card.Width};
             background-color: {TextBoxBackgroundColor};
             align-content: center;
             max-width: {Card.Width};
-            float: {Card.Float};
-            border-top-left-radius:10px;
-            border-bottom-left-radius:10px;
-            border-top-right-radius:0;
-            border-bottom-right-radius:0";
+            float: {Card.Float};";
     }
 
     protected override void OnInitialized()
     {
         Title ??= "הערות";
     }
+
+    public string Value()
+    {
+        if (component.Check())
+        {
+            return Comments;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
 }
 
 <CipherComponentCard Title="@Title" @ref=Card Width="@Width" WithCard="@WithCard">
-    <RadzenRow>
-        <RadzenStack Orientation="Orientation.Horizontal" Gap="0px" Style="width:100%">
-            <RadzenIcon Icon="@Icons.Communication.Chat.Comment" IconColor="white"
-                        Style="@($@"background-color:{IconBackgroundColor}; width:37px; height:100%; border-top-right-radius: 10px; 
-                        border-bottom-right-radius:10px; font-size:x-large")"></RadzenIcon>
-            <RadzenTextArea Placeholder="@Placeholder" Value="@comments" Style="@TextAreaStyle()" />
-        </RadzenStack>
-    </RadzenRow>
+    <CipherAutoComplete @ref="component" Width="@Width" ShowErrors="true" Icon="@Icons.Communication.Chat.Comment" Placeholder="@Placeholder"
+                        Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
 </CipherComponentCard>

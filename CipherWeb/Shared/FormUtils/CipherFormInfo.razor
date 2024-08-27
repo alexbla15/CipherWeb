@@ -2,12 +2,19 @@
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherWorker />
-    <CipherDatePicker ShowTime="true" TimeOnly="false"/>
+    <CipherDatePicker ShowTime="true" TimeOnly="false" @ref=DatePicker/>
 </CipherComponentCard>
 
 @code {
+    private CipherDatePicker DatePicker = new();
+
     protected override void OnInitialized()
     {
         Title ??= "פרטי ההזנה";
+    }
+
+    public DateTime GetDateTime()
+    {
+        return DatePicker.GetDateTime();
     }
 }

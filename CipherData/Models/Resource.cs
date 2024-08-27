@@ -1,11 +1,6 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace CipherData.Models
 {
@@ -45,8 +40,7 @@ namespace CipherData.Models
 
         public static string GetRandomClearance()
         {
-            Random random = new();
-            return clearences[random.Next(0, clearences.Count - 1)];
+            return clearences[new Random().Next(0, clearences.Count - 1)];
         }
 
         /// <summary>

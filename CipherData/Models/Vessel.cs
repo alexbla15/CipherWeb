@@ -53,6 +53,17 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Method to get an empty Vessel object scheme
+        /// </summary>
+        public static Vessel Empty()
+        {
+            return new Vessel(
+                type: "",
+                system: StorageSystem.Empty()
+                );
+        }
+
+        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;

@@ -5,7 +5,7 @@
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public Package pack { get; set; }
+    public Package pack { get; set; } = Package.Empty();
 
     /// <summary>
     /// Are fields not editable?
@@ -19,29 +19,85 @@
     [Parameter]
     public bool IsNew { get; set; } = false;
 
-    private CipherPackageId packId = new ();
-    private CipherMaterialType MaterialType = new();
+    /// <summary>
+    /// Processes which can use the current package.
+    /// </summary>
+    [Parameter]
+    public List<ProcessDefinition> DestinationProcesses { get; set; } = new();
 
-    public string? GetPackId()
+    /// <summary>
+    /// All optional vessels
+    /// </summary>
+    [Parameter]
+    public List<Vessel> AllVessels { get; set; }
+
+    /// <summary>
+    /// Vessel which contains the package.
+    /// </summary>
+    [Parameter]
+    public Vessel ChosenVessel { get; set; }
+
+    /// <summary>
+    /// System which contains the package.
+    /// </summary>
+    [Parameter]
+    public StorageSystem ChosenSystem { get; set; }
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private CipherPackageId packId = new ();
+    private CipherCategoryDropDown packCategory = new();
+    private CipherLocation packLocation = new();
+    private CipherVesselDropDown packVessel = new();
+
+    protected override void OnInitialized()
     {
-        return packId?.PackId;
+        (AllVessels, Error) = CachedData.AllVessels;
     }
 
-    public string? GetMaterialType()
+    public Package Value()
     {
-        return MaterialType.ToString();
+        pack.Id = packId.GetValue();
+        pack.Category = packCategory.Value ?? Category.Empty();
+        pack.System = ChosenSystem ?? StorageSystem.Empty();
+        pack.DestinationProcesses = DestinationProcesses.ToHashSet();
+        pack.Vessel = ChosenVessel ?? Vessel.Empty();
+
+        return pack;
+    }
+
+    public void ChangedCategory()
+    {
+        DestinationProcesses = packCategory.Value?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>(); 
+    }
+
+    public void ChangedVessel()
+    {
+        ChosenVessel = packVessel.Value;
+        ChosenSystem = packVessel.Value.System;
+    }
+
+    public void ChangedSystem()
+    {
+        ChosenVessel = null;
+        ChosenSystem = packLocation.Value;
+        (AllVessels, Error) = StorageSystem.Vessels(packLocation.Value.Id);
     }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherPackageId Disabled="@ReadOnly" @ref="packId"/>
-    <CipherMaterialType Disabled="@ReadOnly" @ref="MaterialType" />
-    <CipherCategoryDropDown Disabled="@ReadOnly" />
-    @* <CipherVesselDropDown Disabled="@ReadOnly"/> *@
-    <CipherLocation Disabled="@ReadOnly"/>
+    <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory"/>
+    <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" Value="@ChosenVessel" Change="@ChangedVessel" />
+    <CipherLocation Disabled="@ReadOnly" @ref="packLocation" Value="@ChosenSystem" Change="@ChangedSystem" />
     @if (!IsNew)
     {
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
     }
+    <CipherProcesses Label="תהליכי יעד" ChosenProcesses="@DestinationProcesses"/>
 </CipherComponentCard>

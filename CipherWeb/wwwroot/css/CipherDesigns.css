@@ -256,7 +256,6 @@
             justify-content: right;
             color: var(--rz-primary-darker);
             font-size: medium;
-            display: block;
             padding-right: 0.5rem;
         }
 
@@ -955,19 +954,38 @@ rz-multiselect-trigger,
     min-height: 52px;
 }
 
-div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled, .rz-calendar.rz-state-disabled div:not(.rz-form-field-content) > .rz-inputtext, div:not(.rz-form-field-content) > .rz-listbox.rz-state-disabled, div:not(.rz-form-field-content) > .rz-autocomplete-input:disabled, div:not(.rz-form-field-content) > .rz-state-disabled.rz-autocomplete, div:not(.rz-form-field-content) > .rz-state-disabled.rz-multiselect, div:not(.rz-form-field-content) > .rz-state-disabled.rz-dropdown, div:not(.rz-form-field-content) > .rz-colorpicker:disabled, .rz-lookup-search div:not(.rz-form-field-content) > input:disabled, div:not(.rz-form-field-content) > .rz-spinner:disabled, .rz-calendar div:not(.rz-form-field-content) > .rz-inputtext:disabled, div:not(.rz-form-field-content) > .rz-multiselect:disabled, div:not(.rz-form-field-content) > .rz-dropdown:disabled, div:not(.rz-form-field-content) > .mask:disabled, div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-content) > .rz-textbox:disabled {
+div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled,
+div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled,
+.rz-calendar.rz-state-disabled div:not(.rz-form-field-content) > .rz-inputtext,
+div:not(.rz-form-field-content) > .rz-listbox.rz-state-disabled,
+div:not(.rz-form-field-content) > .rz-autocomplete-input:disabled,
+div:not(.rz-form-field-content) > .rz-state-disabled.rz-autocomplete,
+div:not(.rz-form-field-content) > .rz-state-disabled.rz-multiselect,
+div:not(.rz-form-field-content) > .rz-state-disabled.rz-dropdown,
+div:not(.rz-form-field-content) > .rz-colorpicker:disabled,
+.rz-lookup-search div:not(.rz-form-field-content) > input:disabled,
+div:not(.rz-form-field-content) > .rz-spinner:disabled,
+.rz-calendar div:not(.rz-form-field-content) > .rz-inputtext:disabled, div:not(.rz-form-field-content) > .rz-multiselect:disabled,
+div:not(.rz-form-field-content) > .rz-dropdown:disabled, div:not(.rz-form-field-content) > .mask:disabled,
+div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-content) > .rz-textbox:disabled {
     background-color: white;
+    opacity: 1;
 }
 
-.rz-form-field-content > *,
-.rz-form-field-content > .rz-autocomplete,
-.rz-form-field-content input,
-.rz-form-field-content .rz-inputtext {
-    background-color: white;
-    border-radius: var(--rz-border-radius);
-    display: flex;
-    align-items: center;
-}
+    div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext{
+        color:black;
+        opacity: 1;
+    }
+
+    .rz-form-field-content > *,
+    .rz-form-field-content > .rz-autocomplete,
+    .rz-form-field-content input,
+    .rz-form-field-content .rz-inputtext {
+        background-color: white;
+        border-radius: var(--rz-border-radius);
+        display: flex;
+        align-items: center;
+    }
 
 .rz-form-field:not(.rz-floating-label) .rz-form-field-label,
 .rz-textbox:focus ~ .rz-form-field-label,
@@ -1058,6 +1076,7 @@ div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled, div:not(.rz
 
 .rz-datepicker-header {
     background-color: var(--rz-primary-light);
+    min-height: 62px;
 }
 
 .rz-datepicker-calendar th {

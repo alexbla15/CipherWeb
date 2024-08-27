@@ -97,10 +97,10 @@
 
     class Model
     {
-        public DateTime value;
+        public DateTime value { get; set; } = DateTime.Now;
     }
 
-    private Model model = new Model() { value = DateTime.Now };
+    private Model model = new Model();
     private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
 
     protected override void OnInitialized()
@@ -123,6 +123,11 @@
             DateFormat = "dd/MM/yyyy";
             Label ??= "תאריך";
         }
+    }
+
+    public DateTime GetDateTime()
+    {
+        return model.value;
     }
 
     public bool Check()

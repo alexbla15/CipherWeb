@@ -95,6 +95,17 @@ namespace CipherData.Models
                 );
         }
 
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        public static Unit Empty()
+        {
+            return new Unit(
+                    id: "",
+                    description: ""
+                );
+        }
+
         // API-RELATED FUNCTIONS
 
         /// <summary>

@@ -119,7 +119,7 @@
     private void SearchFunc()
     {
         (procs, error) = StorageSystem.Processes(SelectedSystem);
-        SelectedSystem = (cipherLocation.sys is null) ? SelectedSystem : cipherLocation.sys;
+        SelectedSystem = (cipherLocation.Value is null) ? SelectedSystem : cipherLocation.Value.Name;
         FileName = $"processes_{SelectedSystem}";
     }
 

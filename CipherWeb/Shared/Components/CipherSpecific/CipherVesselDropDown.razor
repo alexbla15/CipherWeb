@@ -3,8 +3,8 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@vessels TextProperty="@(nameof(CachedData.VesselExample.Id))" ValueProperty="@(nameof(CachedData.VesselExample.Id))"
-                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
+    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(CachedData.VesselExample.Id))"
+                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@Value" Change="@Change"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />
@@ -12,12 +12,12 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Type))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.System))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))">
                 <Template>
-                    @((context as Vessel).System.Id)
+                    @((context as Vessel)?.System.Name)
                 </Template>
                 </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>שם הכלי:</b> @((context as Vessel).Name)
+            <b>שם הכלי:</b> @((context as Vessel)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -29,25 +29,39 @@
     [Parameter]
     public bool Disabled { get; set; } = false;
 
+    /// <summary>
+    /// All vessels available
+    /// </summary>
+    [Parameter]
+    public Vessel Value { get; set; }
 
     /// <summary>
     /// All vessels available
     /// </summary>
     [Parameter]
-    public List<Vessel> vessels { get; set; } = new List<Vessel>();
+    public List<Vessel> AllVessels { get; set; } = new List<Vessel>();
 
     /// <summary>
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    protected override async Task OnInitializedAsync()
+    /// <summary>
+    /// Change-value event
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
+    protected override void OnInitialized()
     {
         Label ??= "כלי";
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 
-        (vessels, error) = CachedData.AllVessels;
+        if (AllVessels.Count == 0)
+        {
+            (AllVessels, Error) = CachedData.AllVessels;
+        }
     }
 }

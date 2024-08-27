@@ -3,14 +3,14 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="string" Disabled="@Disabled"
-                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" 
-                            ValueProperty="@(nameof(CachedData.CategoryExample.Name))"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")">
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Category" Disabled="@Disabled"
+                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" @bind-Value="Value"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
+                            Change="@Change">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
                 <Template>
                     @(string.Join(", ", (context as Category).IdMask))
@@ -41,6 +41,18 @@
     /// </summary>
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen category
+    /// </summary>
+    [Parameter]
+    public Category? Value { get; set; }
+
+    /// <summary>
+    /// Changed-value event
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
 
     protected override void OnInitialized()
     {
