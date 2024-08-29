@@ -44,6 +44,12 @@
         public ActionType ActionType { get; set; }
 
         /// <summary>
+        /// Validation status of this user action.
+        /// </summary>
+        [HebrewTranslation("סטטוס")]
+        public int Status { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="by">User ID of user who made the action. Required.</param>
@@ -52,8 +58,9 @@
         /// <param name="objectId">UUID of object affected from the action. Required.</param>
         /// <param name="at">Timestamp of when the action was made. Required.</param>
         /// <param name="actionType">Type of action made by user</param>
+        /// <param name="status">Validation status of this user action.</param>
         public UserAction(string by, int objectId, DateTime at, ActionType actionType,
-            string? comments = null, string? actionParameters = null)
+            string? comments = null, string? actionParameters = null, int status = -1)
         {
             By = by;
             Comments = comments;
@@ -61,6 +68,7 @@
             ObjectId = objectId;
             At = at;
             ActionType = actionType;
+            Status = status;
         }
 
         /// <summary>

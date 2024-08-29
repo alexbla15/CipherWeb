@@ -106,7 +106,14 @@
     /// </summary>
     private void ChangeView()
     {
-        AssemblyOfPackages = (InnerPacks.SelectedPackages.Count() > 0);
+        if (InnerPacks.SelectedPackages is null)
+        {
+            AssemblyOfPackages = false;
+        }
+        else
+        {
+            AssemblyOfPackages = (InnerPacks.SelectedPackages.Count() > 0);
+        }
     }
 
     /// <summary>

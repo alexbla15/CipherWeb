@@ -137,9 +137,9 @@ components:
             timestamp: 
               type: string
               description: Timestamp when the event happend
-            valid:
-              type: boolean
-              description: Whether the event has been validated appropriately
+            status:
+              type: int
+              description: Validation status of event
             eventType:
               type: integer
               description: Type of event
@@ -407,6 +407,9 @@ components:
             objectId:
               type: integer
               description: UUID of object affected from the action
+            status: 
+              type: int
+              description: Validation status of this user action.
             actionType: 
               type: string
               description: Type of action made by user

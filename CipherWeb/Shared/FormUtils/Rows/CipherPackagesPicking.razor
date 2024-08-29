@@ -46,7 +46,7 @@
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
                             Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
-                            Chips=true Style="@($"min-width: {MinWidth};")">
+                            Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">

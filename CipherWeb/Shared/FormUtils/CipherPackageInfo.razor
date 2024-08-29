@@ -100,7 +100,7 @@
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete Label="מספר תעודה" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+    <CipherAutoComplete Label="@Package.Translate(nameof(CachedData.PackageExample.Id))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" Value="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" Value="@ChosenSystem" Change="@ChangedSystem" />

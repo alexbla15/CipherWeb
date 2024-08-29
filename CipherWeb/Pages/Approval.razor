@@ -75,9 +75,9 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Comments))" Title="@(Event.Translate(nameof(CachedData.EventExample.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Valid))" Title="@(Event.Translate(nameof(CachedData.EventExample.Valid)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Status))" Title="@(Event.Translate(nameof(CachedData.EventExample.Status)))">
                     <Template>
-                        @((context.Valid) ? "מאומתת" : "לא מאומתת")
+                        @((context.Status == 0) ? "מאומתת" : "לא מאומתת")
                     </Template>
                 </RadzenDataGridColumn>
             </CustomColumns>

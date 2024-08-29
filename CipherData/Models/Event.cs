@@ -29,10 +29,10 @@ namespace CipherData.Models
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Whether the event has been validated appropriately
+        /// Validation status of event.
         /// </summary>
         [HebrewTranslation("סטטוס")]
-        public bool Valid { get; set; }
+        public int Status { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
@@ -47,23 +47,23 @@ namespace CipherData.Models
         /// <param name="processId">Process ID of process containing to this event</param>
         /// <param name="comments">Free-text comments on the event</param>
         /// <param name="timestamp">Timestamp when the event happend</param>
-        /// <param name="valid">Whether the event has been validated appropriately</param>
+        /// <param name="status">Validation status of event</param>
         /// <param name="packages">List of affected packages from actions, the items present the state of each package after the event</param>
         /// <param name="id">only if you want object to have a certain id</param>
-        public Event(int eventType, int processId, string comments, DateTime timestamp, bool valid, HashSet<Package> packages, string? id = null)
+        public Event(int eventType, int processId, string comments, DateTime timestamp, int status, HashSet<Package> packages, string? id = null)
         {
             Id = id ?? GetNextId();
             EventType = eventType;
             ProcessId = processId;
             Comments = comments;
             Timestamp = timestamp;
-            Valid = valid;
+            Status = status;
             Packages = packages;
         }
 
         public static Event Empty()
         {
-            return new Event(eventType: 0, processId: 0, comments: "", timestamp: DateTime.Now, valid: false,
+            return new Event(eventType: 0, processId: 0, comments: "", timestamp: DateTime.Now, status: 0,
                 packages: new HashSet<Package>());
         }
 
@@ -107,7 +107,7 @@ namespace CipherData.Models
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
                 timestamp: RandomFuncs.RandomDateTime(),
-                valid: Convert.ToBoolean(new Random().Next(0, 2)),
+                status: new Random().Next(0, 2),
                 packages: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random).ToHashSet() : new HashSet<Package>()
                 );
         }
