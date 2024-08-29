@@ -58,16 +58,21 @@
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.ContainingPackages)" Title="@(Package.Translate(nameof(CachedData.PackageExample.ContainingPackages)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Parent)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))">
                     <Template>
-                        @if (context.ContainingPackages.Count() > 0)
+                        @context.Parent?.Id
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Children)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Children)))">
+                    <Template>
+                        @if (context.Children != null)
                         {
-                            @context.ContainingPackages.Count()
+                            @string.Join(", ", context.Children.Select(x => x.Id));
                         }
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.CreatedAt))" Title="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Comments))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Comments)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Description))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Description)))" />
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>

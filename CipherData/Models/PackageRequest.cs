@@ -5,17 +5,18 @@ using System.Text.Json;
 
 namespace CipherData.Models
 {
+    /// <summary>
+    /// When creating an event, this objects describes an affected package status, after an event.
+    /// Ergo, only properties that are changed using Event, are included.
+    /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
+    /// In order to change other Package properties - use UpdatePackage.
+    /// </summary>
     public class PackageRequest
     {
         /// <summary>
-        /// If of the package
+        /// ID of the package
         /// </summary>
         public string Id { get; set; }
-
-        /// <summary>
-        /// Free-text comment on the package
-        /// </summary>
-        public string? Comments { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
@@ -43,14 +44,14 @@ namespace CipherData.Models
         public decimal NetMass { get; set; }
 
         /// <summary>
-        /// Timestamp when the package was created
+        /// Parent (Id) containing this one
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
-        public HashSet<string> ContainingPackagesIds { get; set; }
+        public HashSet<string> ChildrenIds { get; set; }
 
         /// <summary>
         /// Category (Id) of package
@@ -58,39 +59,29 @@ namespace CipherData.Models
         public string CategoryId { get; set; }
 
         /// <summary>
-        /// List of processes definitions (Ids) that may accept this package as input
-        /// </summary>
-        public HashSet<string> DestinationProcessesIds { get; set; }
-
-        /// <summary>
         /// Instanciation of a new package request
         /// </summary>
         /// <param name="properties">JSON-like additional properties of the package</param>
-        /// <param name="systemId">Location (Id) which contains the package</param>
+        /// <param name="system">Location (Id) which contains the package</param>
         /// <param name="brutMass">Total mass of the package</param>
         /// <param name="netMass">Net mass of the package</param>
-        /// <param name="createdAt">Timestamp when the package was created</param>
-        /// <param name="categoryId">Category (Id) of package</param>
-        /// <param name="vesselId">Vessel (Id) which contains the package</param>
-        /// <param name="containingPackagesIds">Packages (Ids) contained in this one</param>
-        /// <param name="comments">Free-text comment on the package</param>
-        /// <param name="destinationProcessesIds">List of processes definitions (Ids) that may accept this package as input</param>
+        /// <param name="category">Category (Id) of package</param>
+        /// <param name="vessel">Vessel (Id) which contains the package</param>
+        /// <param name="children">Packages (Ids) contained in this one</param>
         /// <param name="id">Id of new package</param>
-        public PackageRequest(string id, string systemId, decimal brutMass, decimal netMass, DateTime createdAt, string categoryId,
-            string? vesselId = null, HashSet<string>? containingPackagesIds = null, HashSet<string>? destinationProcessesIds = null,
-            string? comments = null, Dictionary<string, string>? properties = null)
+        public PackageRequest(string id, string system, decimal brutMass, decimal netMass, string category,
+            string? vessel = null, HashSet<string>? children = null, string? parent = null,
+            Dictionary<string, string>? properties = null)
         {
             Id = id;
-            Comments = comments;
             Properties = properties;
-            VesselId = vesselId;
-            SystemId = systemId;
+            VesselId = vessel;
+            SystemId = system;
             BrutMass = brutMass;
             NetMass = netMass;
-            CreatedAt = createdAt;
-            ContainingPackagesIds = containingPackagesIds ?? new HashSet<string>();
-            DestinationProcessesIds = destinationProcessesIds ?? new HashSet<string>();
-            CategoryId = categoryId;
+            ParentId = parent;
+            ChildrenIds = children;
+            CategoryId = category;
         }
 
         /// <summary>
@@ -125,8 +116,6 @@ namespace CipherData.Models
                 Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.System))); // system is rquired
             result = (BrutMass >= 0 && NetMass >= 0 && BrutMass >= NetMass) ? result :
                 Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.BrutMass))); // brut mass must be >= net mass, in any case they mustn't be negative
-            result = (CreatedAt > DateTime.Parse("01/01/1900") && CreatedAt <= DateTime.Now) ? result :
-                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.CreatedAt))); // CreatedAt is required, must be between now and the initial factory time
 
             return result;
         }

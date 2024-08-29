@@ -35,8 +35,8 @@
     {
         Label ??= "תעודות";
         Icon ??= Icons.Cipher.Package;
-        Width ??= "100%";
         MinWidth ??= "300px";
+        Width ??= "300px";
 
         (packs, error) = CachedData.AllPackages;
     }
@@ -46,7 +46,7 @@
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
                             Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
-                            Chips=true Style="width: 100%;">
+                            Chips=true Style="@($"min-width: {MinWidth};")">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">

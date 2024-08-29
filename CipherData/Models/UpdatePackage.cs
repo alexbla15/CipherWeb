@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using static CipherData.Models.CreateEvent;
+﻿using static CipherData.Models.CreateEvent;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace CipherData.Models
 {
     /// <summary>
-    /// Update package details contract
+    /// Update package details contract.
+    /// Ergo, only properties that are not changed using Event, are included.
     /// </summary>
     public class UpdatePackage
     {
         /// <summary>
-        /// New comment on the package
+        /// Unique identifier of a package.
         /// </summary>
-        public string? PackageComments { get; set; }
+        public string? PackageId { get; set; }
+
+        /// <summary>
+        /// Description of the package
+        /// </summary>
+        public string? PackageDescription { get; set; }
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
@@ -23,21 +26,24 @@ namespace CipherData.Models
         public string? ActionComments { get; set; }
 
         /// <summary>
-        /// Category ID of the package
+        /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
-        public int? CategoryId { get; set; }
+        public HashSet<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>
         /// Update package details contract
         /// </summary>
-        /// <param name="packageComments">New comment on the package</param>
-        /// <param name="actionComments">Free text comments on update. Ideally contains reason for change</param>
-        /// <param name="categoryId">Category ID of the package</param>
-        public UpdatePackage(string? packageComments = null, string? actionComments = null, int? categoryId = null)
+        /// <param name="id">Unique identifier of the package</param>
+        /// <param name="description">Description of the package</param>
+        /// <param name="comments">Free text comments on update. Ideally contains reason for change</param>
+        /// <param name="destinationProcesses">List of processes definitions (IDs) that may accept this package as input</param>
+        public UpdatePackage(string? description = null, string? comments = null, string? id = null,
+            HashSet<string>? destinationProcesses = null)
         {
-            PackageComments = packageComments;
-            ActionComments = actionComments;
-            CategoryId = categoryId;
+            PackageId = id;
+            PackageDescription = description;
+            ActionComments = comments;
+            DestinationProcessesIds = destinationProcesses;
         }
 
         /// <summary>
@@ -47,7 +53,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
+            Tuple<bool, string> result = new (true, string.Empty);
 
             result = (!string.IsNullOrEmpty(ActionComments)) ? result : Tuple.Create(false, "הערות תנועה"); // action comments is required
 

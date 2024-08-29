@@ -1007,7 +1007,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     direction: rtl;
     right: 2px; /*label position*/
     background-size: auto;
-    width: auto;
+    width: fit-content;
     max-width: 12rem;
     font-size: 14px;
 }
@@ -1034,7 +1034,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
 
 .rz-form-field-label {
     color: var(--rz-secondary-light);
-    transform: translate(5%, -50%);
+    transform: translate(1rem, -50%);
 }
 
     .rz-form-field-label:last-child {

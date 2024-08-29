@@ -8,10 +8,10 @@ namespace CipherData.Models
     public class Package : Resource
     {
         /// <summary>
-        /// Free-text comment on the package
+        /// Description of the package
         /// </summary>
-        [HebrewTranslation("הערות")]
-        public string? Comments { get; set; }
+        [HebrewTranslation("תיאור")]
+        public string? Description { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
@@ -50,10 +50,16 @@ namespace CipherData.Models
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
+        /// Parent package containing this one.
+        /// </summary>
+        [HebrewTranslation("תעודת אב")]
+        public Package? Parent { get; set; }
+
+        /// <summary>
         /// Packages contained in this one
         /// </summary>
         [HebrewTranslation("תעודות מוכלות")]
-        public HashSet<Package> ContainingPackages { get; set; }
+        public HashSet<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
@@ -82,23 +88,25 @@ namespace CipherData.Models
         /// <param name="createdAt">Timestamp when the package was created</param>
         /// <param name="category">Category of package</param>
         /// <param name="vessel">Vessel which contains the package</param>
-        /// <param name="containingPackages">Packages contained in this one</param>
-        /// <param name="comments">Free-text comment on the package</param>
+        /// <param name="parent">Parent package containing this one.</param>
+        /// <param name="children">Packages contained in this one</param>
+        /// <param name="description">Description of the package</param>
         /// <param name="destinationProcesses">List of processes definitions that may accept this package as input</param>
         /// <param name="id">only use if you want the package to have a specific id</param>
         public Package(StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
-            Vessel? vessel = null, HashSet<Package>? containingPackages = null, HashSet<ProcessDefinition>? destinationProcesses = null,
-            string? comments = null, string? id = null, Dictionary<string, string>? properties = null)
+            Vessel? vessel = null, Package? parent = null, HashSet<Package>? children = null, HashSet<ProcessDefinition>? destinationProcesses = null,
+            string? description = null, string? id = null, Dictionary<string, string>? properties = null)
         {
             Id = id ?? GetNextId();
-            Comments = comments;
+            Description = description;
             Properties = properties;
             Vessel = vessel;
             System = system;
             BrutMass = brutMass;
             NetMass = netMass;
             CreatedAt = createdAt;
-            ContainingPackages = containingPackages ?? new HashSet<Package>();
+            Parent = parent;
+            Children = children;
             DestinationProcesses = destinationProcesses ?? category.ConsumingProcesses;
             Category = category;
 
@@ -113,16 +121,14 @@ namespace CipherData.Models
         {
             PackageRequest result = new(
                     id: Id,
-                    comments: Comments,
-                    createdAt: CreatedAt,
                     brutMass: BrutMass,
                     netMass: NetMass,
                     properties: Properties,
-                    containingPackagesIds: ContainingPackages.Select(x => x.Id).ToHashSet(),
-                    systemId: System.Id,
-                    vesselId: Vessel?.Id,
-                    categoryId: Category.Id,
-                    destinationProcessesIds: DestinationProcesses.Select(x => x.Id).ToHashSet());
+                    parent: Parent?.Id,
+                    children: Children?.Select(x => x.Id).ToHashSet(),
+                    system: System.Id,
+                    vessel: Vessel?.Id,
+                    category: Category.Id);
 
             return result;
         }
@@ -179,16 +185,16 @@ namespace CipherData.Models
             Random random = new();
 
             decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M;
-            List<string> PackageComments = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
+            List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
             Category cat = Category.Random();
 
             Package result = new(
                     id: id,
-                    comments: RandomFuncs.RandomItem(PackageComments),
+                    description: RandomFuncs.RandomItem(PackageDescriptions),
                     createdAt: RandomFuncs.RandomDateTime(),
                     brutMass: curr_brutmass,
                     netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
-                    containingPackages: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
+                    children: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
                     category: cat,
@@ -202,7 +208,7 @@ namespace CipherData.Models
         public static Package Empty()
         {
             Package result = new(
-                    id: "",
+                    id: string.Empty,
                     createdAt: DateTime.Now,
                     brutMass: 0,
                     netMass: 0,
@@ -244,11 +250,11 @@ namespace CipherData.Models
         {
             return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
         new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: searchText),
         new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
         new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
         new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
+        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
                 }, @operator: Operator.Or));
         }
     }

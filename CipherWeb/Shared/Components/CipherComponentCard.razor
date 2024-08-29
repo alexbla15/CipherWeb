@@ -5,7 +5,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
         @if (!string.IsNullOrEmpty(Title))
         {
-            <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Style="width:fit-content" Underline="@Underline" PaddingLeft="@HeaderContentPaddingRight" />
+            <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Underline="@Underline" PaddingLeft="@HeaderContentPaddingRight" />
         }
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width:100%">
             <div style="@($"display: flex; justify-content: {ContentJustify};")">

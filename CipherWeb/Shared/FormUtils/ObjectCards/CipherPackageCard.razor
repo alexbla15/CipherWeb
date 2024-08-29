@@ -63,12 +63,12 @@
                             <CipherNumeric Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
                             <CipherNumeric Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />
                             <CipherDatePicker Label="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" Disabled="@ReadOnly" Width="@RowWidth" />
-                            <CipherAutoComplete Multiline="true" Label="@(Package.Translate(nameof(CachedData.PackageExample.Comments)))" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                            <CipherAutoComplete Multiline="true" Label="@(Package.Translate(nameof(CachedData.PackageExample.Description)))" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />
                         </ChildContent>
                     </CipherComponentCard>
                 </RadzenTabsItem>
 
-                <RadzenTabsItem Text="@(Package.Translate(nameof(CachedData.PackageExample.ContainingPackages)))">
+                <RadzenTabsItem Text="@(Package.Translate(nameof(CachedData.PackageExample.Children)))">
                     <CipherPackagesTable WithCard="false" WithHeaderContent="false" Title=""/>
                 </RadzenTabsItem>
 

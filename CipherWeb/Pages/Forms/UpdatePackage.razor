@@ -85,7 +85,7 @@
 
     private void Submit()
     {
-        RequestedUpdate.PackageComments = PackComments.Value();
+        RequestedUpdate.PackageDescription = PackComments.Value();
 
         JsonRequest = RequestedUpdate.ToJson();
     }

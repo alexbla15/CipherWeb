@@ -43,11 +43,15 @@ components:
               nullable: true
               description: Vessel containing the package
               $ref: "#/components/schemas/Vessel"
-            containingPackages: 
+            parent: 
+              $ref: "#/components/schemas/Package"
+              nullable: true
+              description: Package parent containing this one
+            children: 
               type: array
               nullable: true
+              description: Packages contained in this one
               items:
-                description: Packages contained in this one
                 $ref: "#/components/schemas/Package"
             properties:
               type: object
@@ -321,6 +325,10 @@ components:
               description: List of ID masks to identify the category from the package ID
               items:
                 type: string
+            properties:
+              type: object
+              additionalProperties: true
+              description: JSON-like properties of the category
     Process:
       type: object
       description: An instance of a specific processes
@@ -454,27 +462,39 @@ components:
           schema:
             type: object
             properties:
-              name: 
+              id: 
                 type: string
-                description: Name of the category
-              description:
+                description: ID of the package
+              brutMass:
+                type: number
+                description: Total mass of the package
+              netMass:
+                type: number
+                description: Net mass of the package
+              systemId:
                 type: string
-                description: Free-text description of the category
-              creatingProcesses:
+                description: System (ID) containing the package
+              vesselId:
+                nullable: true
+                description: Vessel (ID) containing the package
+              parentId: 
+                type: string
+                nullable: true
+                description: Parent (ID) package containing this one
+              childrenIds: 
                 type: array
-                description: List of processes definition IDs creating this category
+                nullable: true
+                description: Packages contained in this one
                 items:
-                  type: integer
-              consumingProcesses:
-                type: array
-                description: List of processes definition IDs consuming this category
-                items:
-                  type: integer
-              idMask:
-                type: array
-                description: List of ID masks to identify the category from the package ID
-                items:
-                  type: string  
+                  type: string
+              properties:
+                nullable: true
+                type: object
+                additionalProperties: true
+                description: JSON-like additional properties of the package
+              categoryId:
+                type: string
+                description: Category (ID) of package
     UpdatePackage:
       description: Update package details contract
       content:
@@ -482,18 +502,24 @@ components:
           schema: 
             type: object
             properties:
-              packageComments:
+              packageId:
                 type: string
                 nullable: true
-                description: New comment on the package
-              categoryId:
+                description: Unique identifier of a package.
+              packageDescription:
+                type: string
                 nullable: true
-                type: integer
-                description: Category ID of the package
+                description: Description the package
               actionComments:
                 type: string
                 nullable: true
-                description: Free text comments on update. Ideally contains reason for change
+                description: Free text comments on update. Ideally contains reason for change.
+              destinationProcessesIds:
+                type: array
+                nullable: true
+                description: List of processes definitions (IDs) that may accept this package as input
+                items:
+                  type: string
     CreateEvent:
       description: Create a new event
       content:

@@ -2,6 +2,12 @@
 
 @code {
     /// <summary>
+    /// Width of card containing the comments component.
+    /// </summary>
+    [Parameter]
+    public string CardWidth { get; set; } = "100%";
+
+    /// <summary>
     /// Value of component.
     /// </summary>
     [Parameter]
@@ -14,10 +20,22 @@
     public string? Placeholder { get; set; } = "הערות";
 
     /// <summary>
+    /// Label of the comments' text box.
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; } = "הערות";
+
+    /// <summary>
     /// Background color of the text box containing the comments.
     /// </summary>
     [Parameter]
     public string TextBoxBackgroundColor { get; set; } = "white";
+
+    /// <summary>
+    /// Icon of component.
+    /// </summary>
+    [Parameter]
+    public string Icon { get; set; } = Icons.Communication.Chat.Comment;
 
     private CipherComponentCard Card;
     private CipherAutoComplete component = new();
@@ -32,13 +50,17 @@
             background-color: {TextBoxBackgroundColor};
             align-content: center;
             max-width: {Card.MaxWidth};
-            width: {Card.Width};
-            float: {Card.Float};";
+            width: {Width};
+            float: {Card.Float};
+            min-height: 52px";
     }
 
     protected override void OnInitialized()
     {
         Title ??= "הערות";
+
+        CardWidth = (WithCard) ? CardWidth : "";
+        Width ??= "300px";
     }
 
     public string Value()
@@ -54,7 +76,6 @@
     }
 }
 
-<CipherComponentCard Title="@Title" @ref=Card Width="@Width" WithCard="@WithCard">
-    <CipherAutoComplete @ref="component" Width="@Width" ShowErrors="true" Icon="@Icons.Communication.Chat.Comment" Placeholder="@Placeholder"
-                        Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
+<CipherComponentCard Title="@Title" @ref=Card Width="@CardWidth" WithCard="@WithCard">
+    <CipherAutoComplete @ref="component" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()"/>
 </CipherComponentCard>

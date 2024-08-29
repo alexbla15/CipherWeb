@@ -17,9 +17,9 @@
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
+        <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
     </CipherComponentCard>
 
-    <CipherComments @ref="EventComments" />
 
     @if (CheckJson)
     {
@@ -115,6 +115,8 @@
     /// <returns></returns>
     public HashSet<Package> GetContainingPackages()
     {
+        RequestedEvent = CreateEvent.Empty();
+
         List<Package>? innerPacks = InnerPacks.SelectedPackages;
         return (innerPacks is null) ? new HashSet<Package>() : innerPacks.ToHashSet();
     }
@@ -125,7 +127,7 @@
     /// <param name="pack">Relevant package</param>
     public decimal GetBrutMass(Package pack)
     {
-        List<Package> RelevantPackages = AssemblyOfPackages ? pack.ContainingPackages.ToList() : InputPacks.chosenPacks;
+        List<Package> RelevantPackages = AssemblyOfPackages ? pack.Children.ToList() : InputPacks.chosenPacks;
         return RelevantPackages.Select(x => x.BrutMass).Sum();
     }
 
@@ -136,9 +138,11 @@
     {
         Package pack = Package.Empty();
 
+        RequestedEvent = CreateEvent.Empty();
+
         pack = PackInfo.Value();
 
-        pack.ContainingPackages = GetContainingPackages();
+        pack.Children = GetContainingPackages();
 
         // choosing relevant packages for calculation of mass
         pack.BrutMass = GetBrutMass(pack);

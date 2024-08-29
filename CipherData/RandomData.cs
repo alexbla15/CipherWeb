@@ -1,21 +1,14 @@
 ﻿using CipherData.Models;
-using CipherData;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
-using Microsoft.VisualBasic;
 using CipherData.Requests;
 
 namespace CipherData
 {
     public static class RandomData
     {
+        public static readonly List<string> MaterialTypes = new() { "Mg", "Na", "Ne" };
+        public static readonly List<string> CategoriesNames = new() { "מוצק", "גז", "נוזל" };
+        public static readonly List<string> CategoriesDescriptions = new() { "חומרים בפאזה מוצקה", "חומרים בפאזה גזית", "חומרים בפאזה נוזלית" };
+
         public static readonly CustomObjectBooleanCondition RandomCustomObjectBooleanCondition = CustomObjectBooleanCondition.Random();
         public static readonly GroupedBooleanCondition RandomGroupedBooleanCondition = GroupedBooleanCondition.Random();
         public static readonly UserActionResponse RandomUserActionResponse = UserActionResponse.Random();
