@@ -2,12 +2,6 @@
 
 @code {
     /// <summary>
-    /// Set Packge-object value.
-    /// </summary>
-    [Parameter]
-    public Package pack { get; set; } = Package.Empty();
-
-    /// <summary>
     /// Are fields not editable?
     /// </summary>
     [Parameter]
@@ -18,6 +12,12 @@
     /// </summary>
     [Parameter]
     public bool IsNew { get; set; } = false;
+
+    /// <summary>
+    /// Set Packge-object value.
+    /// </summary>
+    [Parameter]
+    public Package pack { get; set; } = Package.Empty();
 
     /// <summary>
     /// Processes which can use the current package.
@@ -49,10 +49,11 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private CipherPackageId packId = new ();
+    private CipherAutoComplete packId = new();
     private CipherCategoryDropDown packCategory = new();
     private CipherLocation packLocation = new();
     private CipherVesselDropDown packVessel = new();
+    private CipherComments PackComments = new();
 
     protected override void OnInitialized()
     {
@@ -61,37 +62,46 @@
 
     public Package Value()
     {
-        pack.Id = packId.GetValue();
+        pack.Id = (packId.Check()) ? packId.Value : string.Empty;
         pack.Category = packCategory.Value ?? Category.Empty();
         pack.System = ChosenSystem ?? StorageSystem.Empty();
         pack.DestinationProcesses = DestinationProcesses.ToHashSet();
-        pack.Vessel = ChosenVessel ?? Vessel.Empty();
+        pack.Vessel = ChosenVessel ?? null;
+        pack.Comments = PackComments.Value();
 
         return pack;
     }
 
     public void ChangedCategory()
     {
-        DestinationProcesses = packCategory.Value?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>(); 
+        DestinationProcesses = packCategory.Value?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>();
     }
 
     public void ChangedVessel()
     {
-        ChosenVessel = packVessel.Value;
-        ChosenSystem = packVessel.Value.System;
+        if (packVessel.Value != null)
+        {
+            ChosenVessel = packVessel.Value;
+            ChosenSystem = packVessel.Value.System;
+        }
+        else
+        {
+            ChosenVessel = null;
+        }
     }
 
     public void ChangedSystem()
     {
         ChosenVessel = null;
         ChosenSystem = packLocation.Value;
-        (AllVessels, Error) = StorageSystem.Vessels(packLocation.Value.Id);
+
+        (AllVessels, Error) = (packLocation.Value is null)? Vessel.All() : StorageSystem.Vessels(packLocation.Value.Id);
     }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherPackageId Disabled="@ReadOnly" @ref="packId"/>
-    <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory"/>
+    <CipherAutoComplete Label="מספר תעודה" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package"/>
+    <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" Value="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" Value="@ChosenSystem" Change="@ChangedSystem" />
     @if (!IsNew)
@@ -99,5 +109,6 @@
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
     }
-    <CipherProcesses Label="תהליכי יעד" ChosenProcesses="@DestinationProcesses"/>
+    <CipherProcesses Label="תהליכי יעד" ChosenProcesses="@DestinationProcesses" />
+    <CipherComments @ref="PackComments" WithCard="false" Title="" Placeholder="הערות תעודה" Width="300px" />
 </CipherComponentCard>

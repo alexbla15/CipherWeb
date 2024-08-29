@@ -1,9 +1,4 @@
 ﻿using CipherData.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Requests
 {
@@ -15,7 +10,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Process>, ErrorResponse> GetProcesses()
         {
-            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Process.Random));
+            return GenericRequests.Request(RandomData.RandomProcesses);
         }
 
         /// <summary>
@@ -24,7 +19,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Process, ErrorResponse> GetProcess(string proc_id)
         {
-            return GenericRequests.Request(Process.Random(), canBeNotFound: true, canBadRequest:false);
+            return GenericRequests.Request(RandomData.RandomProcess, canBeNotFound: true, canBadRequest:false);
         }
 
         /// <summary>
@@ -33,7 +28,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
         {
-            return GenericRequests.Request(ProcessDefinition.Random(), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomProcessDefinition, canBeNotFound: true);
         }
     }
 }

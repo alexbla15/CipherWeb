@@ -38,6 +38,12 @@
     public string TextProperty { get; set; }
 
     /// <summary>
+    /// Allowed regex pattern for value. Defaulted to only letters / numbers / space / period
+    /// </summary>
+    [Parameter]
+    public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n]+$";
+
+    /// <summary>
     /// Is the component disabled.
     /// </summary>
     [Parameter]
@@ -66,6 +72,12 @@
     /// </summary>
     [Parameter]
     public bool Multiline { get; set; } = false;
+
+    /// <summary>
+    /// Is valid
+    /// </summary>
+    [Parameter]
+    public bool IsValid { get; set; } = true;
 
     private string _value = "";
 
@@ -139,7 +151,7 @@
     {
         if (!string.IsNullOrEmpty(model.value))
         {
-            Regex regex = new Regex(@"[a-z0-9א-ת. \n]", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(AllowedRegex, RegexOptions.IgnoreCase);
             var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
 
             if (invalidChars.Any())
@@ -155,12 +167,12 @@
         return "";
     }
 
-    public bool SqlInjectionValidate()
+    public bool SqlInjectionValidate(string set_value)
     {
         string pattern = string.Join("|", unwantedWords);
         Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
-        return !regex.IsMatch(model.value);
+        return !regex.IsMatch(set_value);
     }
 
     public string SqlInjectionValidatorText()
@@ -188,8 +200,8 @@
 
     public bool Check()
     {
-        // required Validator
-        return RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        IsValid = RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        return IsValid;
     }
 
     private void OnValueChanged(object value)
@@ -203,7 +215,6 @@
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
         Placeholder = Placeholder ?? Label;
         model.value = Value; // Initialize model's value with the parameter value
     }
@@ -235,14 +246,14 @@
             }
             @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width}")" Disabled="@Disabled" onkeydown="@OnKeyDown"
+                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width}")" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                     Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
                                     Multiline="@Multiline"/>
             }
             else
             {
                 <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                    <RadzenAutoComplete @bind-Value=@model.value Name="value" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
+                    <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                         Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
                                         Multiline="@Multiline" />
                 </RadzenFormField>
@@ -251,12 +262,12 @@
         <RadzenStack Orientation="Orientation.Vertical">
             @if (Required && ShowErrors)
             {
-                <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup />
+                <RadzenRequiredValidator @ref="RequiredValidator" Component="setvalue" Text="שדה חובה" Popup=@Popup />
             }
-            <RadzenLengthValidator @ref=LengthValidator Component="value" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
+            <RadzenLengthValidator @ref=LengthValidator Component="setvalue" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
                                    Visible="@(RequiredValidator.IsValid && ShowErrors)" />
-            <RadzenRegexValidator @ref=ImproperCharsValidator Component="value" Pattern="^[a-zA-Z0-9א-ת. \n]+$" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
-            <RadzenCustomValidator @ref=SqlInjectionValidator Component="value" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate())" Visible=@(ShowErrors) />
+            <RadzenRegexValidator @ref=ImproperCharsValidator Component="setvalue" Pattern="@AllowedRegex" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
+            <RadzenCustomValidator @ref=SqlInjectionValidator Component="setvalue" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate(model.value))" Visible=@(ShowErrors) />
         </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

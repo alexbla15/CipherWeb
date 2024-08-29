@@ -1,12 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace CipherData.Models
 {
     public class Category : Resource
@@ -24,10 +16,10 @@ namespace CipherData.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Type of material of this category
+        /// Type of material of this category (highest-level cateogry)
         /// </summary>
         [HebrewTranslation("סוג החומר")]
-        public string MaterialType { get; set; }
+        public Category? MaterialType { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
@@ -65,14 +57,14 @@ namespace CipherData.Models
         /// <param name="name">Name of the category</param>
         /// <param name="description">Free-text description of the category</param>
         /// <param name="idMask">List of ID masks to identify the category from the package ID</param>
-        /// <param name="materialType">Type of material of this category</param>
+        /// <param name="materialType">Type of material of this category (highest-level cateogry)</param>
         /// <param name="creatingProcesses">List of processes definitions creating this category</param>
         /// <param name="consumingProcesses">List of processes defintions consuming this category</param>
         /// <param name="parent">Parent Category containing this one</param>
         /// <param name="children">Child categories contained in this one</param>
-        public Category(string name, string description, HashSet<string> idMask, string materialType,
+        public Category(string name, string description, HashSet<string> idMask,
             HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses,
-            Category? parent = null, HashSet<Category>? children = null,
+            Category? parent = null, HashSet<Category>? children = null, Category? materialType = null,
             string? id = null)
         {
             Id = id ?? GetNextId();
@@ -135,10 +127,22 @@ namespace CipherData.Models
                 idMask: new HashSet<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
                 creatingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
                 consumingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
-                materialType: RandomFuncs.RandomItem(MaterialTypes),
+                materialType: RandomMaterialType(RandomFuncs.RandomItem(MaterialTypes)),
                 parent: (new Random().Next(0, 2) == 0) ? Random() : null,
                 children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
                 );
+        }
+
+        /// <summary>
+        /// Get a random new object of Material type category.
+        /// </summary>
+        /// <param name="name">name of material type</param>
+        public static Category RandomMaterialType(string name)
+        {
+            Category MaterialType = Empty();
+            MaterialType.Name = name;
+
+            return MaterialType;
         }
 
         /// <summary>
@@ -147,13 +151,13 @@ namespace CipherData.Models
         public static Category Empty()
         {
             return new Category(
-                id: "",
-                name: "",
-                description: "",
+                id: string.Empty,
+                name: string.Empty,
+                description: string.Empty,
                 idMask: new HashSet<string>(),
                 creatingProcesses: new HashSet<ProcessDefinition>(),
                 consumingProcesses: new HashSet<ProcessDefinition>(),
-                materialType: ""
+                materialType: null
                 );
         }
 

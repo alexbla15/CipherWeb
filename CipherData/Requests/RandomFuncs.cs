@@ -13,9 +13,9 @@
             int range = 20;  // Calculate the total number of days between the two dates
                                             
             // Generate a random date
-            DateTime randomDate = DateTime.Now.AddDays(random.Next(range));
+            DateTime randomDate = DateTime.Now.AddDays(-random.Next(range));
 
-            return randomDate.AddHours(random.Next(0, 24)).AddMinutes(random.Next(0, 60)).AddSeconds(random.Next(0, 60));
+            return randomDate.AddHours(-random.Next(0, 24)).AddMinutes(-random.Next(0, 60)).AddSeconds(-random.Next(0, 60));
         }
 
         public static List<T> FillRandomObjects<T>(int amount, Func<string?, T> randomFunc)

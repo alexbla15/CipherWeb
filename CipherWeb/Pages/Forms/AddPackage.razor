@@ -1,7 +1,8 @@
 ﻿@page "/forms/addpackage"
 
-<PageTitle>תעודה חדשה</PageTitle>
-<CipherComponentCard Underline="true" WithCard="false" Title="תעודה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<PageTitle>@Title</PageTitle>
+
+<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherFormInfo @ref="FormInfo" />
     @if (!AssemblyOfPackages)
     {
@@ -9,20 +10,28 @@
     }
 
     <CipherComponentCard Title="תעודות המוכלות בתעודה זו">
-        <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView"/>
+        <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView" />
     </CipherComponentCard>
 
     <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" />
 
-    <CipherComments @ref="PackComments" />
-    <CipherComponentCard Title="בדיקה">
-        <Buttons>
-            <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
-        </Buttons>
-        <ChildContent>
-            <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
-        </ChildContent>
+    <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
     </CipherComponentCard>
+
+    <CipherComments @ref="EventComments" />
+
+    @if (CheckJson)
+    {
+        <CipherComponentCard Title="בדיקה">
+            <Buttons>
+                <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
+            </Buttons>
+            <ChildContent>
+                <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+            </ChildContent>
+        </CipherComponentCard>
+    }
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
@@ -41,6 +50,36 @@
     public bool Valid { get; set; } = true;
 
     /// <summary>
+    /// View the submitted json.
+    /// </summary>
+    [Parameter]
+    public bool CheckJson { get; set; } = false;
+
+    /// <summary>
+    /// Page title.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "תעודה חדשה";
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Event ResultEvent { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    /// <summary>
     /// Error message upon improper submission.
     /// </summary>
     [Parameter]
@@ -48,15 +87,14 @@
 
     private CipherPackageInfo PackInfo = new();
     private CipherPackagesPicking InnerPacks = new();
-    private CipherComments PackComments = new();
+    private CipherComments EventComments = new();
     private CipherFormInfo FormInfo = new();
     private CipherInputComponents InputPacks = new();
+    private CipherProcess EventProc = new();
 
     private CipherSubmit submission = new();
 
-    private string JsonRequest;
-
-    private CreateEvent AddPackageEvent = CreateEvent.Empty();
+    private CreateEvent RequestedEvent = CreateEvent.Empty();
 
     protected override void OnInitialized()
     {
@@ -64,11 +102,31 @@
     }
 
     /// <summary>
-    /// Once there are some inner packs, user cannot add 
+    /// Once there are some inner packs, user cannot add
     /// </summary>
     private void ChangeView()
     {
-        AssemblyOfPackages = (InnerPacks.Value.Count() > 0);
+        AssemblyOfPackages = (InnerPacks.SelectedPackages.Count() > 0);
+    }
+
+    /// <summary>
+    /// Get all packages contained within new package
+    /// </summary>
+    /// <returns></returns>
+    public HashSet<Package> GetContainingPackages()
+    {
+        List<Package>? innerPacks = InnerPacks.SelectedPackages;
+        return (innerPacks is null) ? new HashSet<Package>() : innerPacks.ToHashSet();
+    }
+
+    /// <summary>
+    /// choosing relevant packages for calculation of mass
+    /// </summary>
+    /// <param name="pack">Relevant package</param>
+    public decimal GetBrutMass(Package pack)
+    {
+        List<Package> RelevantPackages = AssemblyOfPackages ? pack.ContainingPackages.ToList() : InputPacks.chosenPacks;
+        return RelevantPackages.Select(x => x.BrutMass).Sum();
     }
 
     /// <summary>
@@ -80,19 +138,14 @@
 
         pack = PackInfo.Value();
 
-        List<Package>? innerPacks = InnerPacks.Value;
-        pack.ContainingPackages = (innerPacks is null) ? new HashSet<Package>() : innerPacks.ToHashSet();
-
-        pack.Comments = PackComments.Value();
+        pack.ContainingPackages = GetContainingPackages();
 
         // choosing relevant packages for calculation of mass
-        List<Package> RelevantPackages = AssemblyOfPackages ? pack.ContainingPackages.ToList() : InputPacks.chosenPacks;
-        pack.BrutMass = RelevantPackages.Select(x => x.BrutMass).Sum();
+        pack.BrutMass = GetBrutMass(pack);
         pack.NetMass = pack.BrutMass * pack.Concentration;
 
         // Changed Packages
-        List<PackageRequest> ChangedPacks = new();
-        ChangedPacks.Add(pack.Request());
+        List<PackageRequest> ChangedPacks = new() { pack.Request() };
 
         if (!AssemblyOfPackages)
         {
@@ -100,27 +153,56 @@
             {
                 Package PreviousStatus = Package.Get(inputPack.Id).Item1;
 
-                PackageRequest packageRequest = inputPack.Request();
+                PackageRequest packageRequest = PreviousStatus.Request();
                 // removing the amount that was transfered from the original amount
-                packageRequest.BrutMass = PreviousStatus.BrutMass - packageRequest.BrutMass;
+                packageRequest.BrutMass -= inputPack.BrutMass;
                 packageRequest.NetMass = packageRequest.BrutMass * PreviousStatus.Concentration;
 
                 ChangedPacks.Add(packageRequest);
             }
         }
 
-        AddPackageEvent = new CreateEvent(
+        RequestedEvent = new CreateEvent(
+            worker: FormInfo.GetWorker(),
+            processId: EventProc.ChosenProcess?.Id,
             timestamp: FormInfo.GetDateTime(),
             eventType: 21,
-            actions: ChangedPacks.ToHashSet()
+            actions: ChangedPacks.ToHashSet(),
+            comments: EventComments.Value()
         );
 
-        Tuple<bool, string> CheckResult = AddPackageEvent.Check();
+        Tuple<bool, string> CheckResult = RequestedEvent.Check();
         (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
 
-        JsonRequest = AddPackageEvent.ToJson();
+        JsonRequest = RequestedEvent.ToJson();
 
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
+
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+                submission.SuccessMessage = $"טופס הוזן בהצלחה. עבור חיפוש התנועה נא גשו לתנועה {ResultEvent.Id}.";
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
     }
 }

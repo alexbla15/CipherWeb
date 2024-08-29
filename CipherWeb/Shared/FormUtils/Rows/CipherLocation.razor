@@ -8,7 +8,7 @@
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
     <RadzenDropDownDataGrid @bind-Value=@Value Data=@systems TextProperty="@(nameof(CachedData.SystemExample.Name))"
-                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..."
+                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled" Change="@Change">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Name))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" />
@@ -78,7 +78,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= "מיקום";
+        Label ??= "מערכת";
         Icon ??= Icons.Cipher.Location;
 
         (systems, error) = CachedData.AllSystems;

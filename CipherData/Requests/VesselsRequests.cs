@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> GetVessels()
         {
-            return GenericRequests.Request(RandomFuncs.FillRandomObjects(20, Vessel.Random));
+            return GenericRequests.Request(RandomData.RandomVessels);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel,ErrorResponse> CreateVessel(VesselRequest vessel)
         {
-            return GenericRequests.Request(Vessel.Random());
+            return GenericRequests.Request(RandomData.RandomVessel);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel, ErrorResponse> GetVessel(string vessel_id)
         {
-            return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound:true, canBadRequest:false);
+            return GenericRequests.Request(RandomData.RandomVessel, canBeNotFound:true, canBadRequest:false);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Vessel, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
         {
-            return GenericRequests.Request(Vessel.Random(vessel_id), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomVessel, canBeNotFound: true);
         }
     }
 }

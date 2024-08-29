@@ -1,33 +1,73 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits RadzenStack
 
 @code {
     /// <summary>
-    /// Value of the component.
+    /// All packages available
     /// </summary>
-    private string PackId = string.Empty;
+    [Parameter]
+    public List<Package> allPacks { get; set; } = new List<Package>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Component's Label.
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; } = Package.Translate(nameof(CachedData.PackageExample.Id));
+
+    /// <summary>
+    /// Component's Label.
+    /// </summary>
+    [Parameter]
+    public string? Icon { get; set; } = Icons.Cipher.Package;
+
+    /// <summary>
+    /// Component's width.
+    /// </summary>
+    [Parameter]
+    public string? Width { get; set; } = "300px";
+
+    /// <summary>
+    /// Component's chosen value.
+    /// </summary>
+    [Parameter]
+    public Package Value { get; set; }
 
     private CipherAutoComplete component = new CipherAutoComplete();
 
     protected override void OnInitialized()
     {
-        Label ??= "מספר תעודה";
-        Icon ??= "tag";
-    }
-
-    /// <summary>
-    /// Make sure user gets value only if he passes the check.
-    /// </summary>
-    public string GetValue()
-    {
-        if (component.Check())
-        {
-            return PackId;
-        }
-        else
-        {
-            return "";
-        }
+        (allPacks, error) = CachedData.AllPackages;
     }
 }
 
-<CipherAutoComplete @ref=component Disabled="@Disabled" Width="@Width" Label="@Label" Icon="@Icon" Style="@Constants.textStyle" @bind-Value=@PackId />
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    }
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Package" AllowClear="true"
+                            Data=@allPacks TextProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
+                            Style="@($"width: {Width}; min-height:;")" @bind-Value="Value">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
+                <Template>
+                    @((context as Package).Category.MaterialType?.Name)
+                </Template>
+            </RadzenDropDownDataGridColumn>
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+                <Template>
+                    @(string.Join(", ", (context as Package).Category.Name))
+                </Template>
+            </RadzenDropDownDataGridColumn>
+        </Columns>
+        <ValueTemplate>
+            <b>@Label:</b> @((context as Package).Id)
+        </ValueTemplate>
+    </RadzenDropDownDataGrid>
+</RadzenStack>

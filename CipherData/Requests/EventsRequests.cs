@@ -1,9 +1,4 @@
 ﻿using CipherData.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Requests
 {
@@ -19,7 +14,7 @@ namespace CipherData.Requests
         }
 
         /// <summary>
-        /// Create a new event
+        /// Create a new event.
         /// Path: POST /events
         /// </summary>
         public static Tuple<Event,ErrorResponse> CreateEvent(CreateEvent ev)
@@ -33,7 +28,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<GroupedBooleanCondition, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition)
         {
-            return GenericRequests.Request(GroupedBooleanCondition.Random(), canBeNotFound:true);
+            return GenericRequests.Request(RandomData.RandomGroupedBooleanCondition, canBeNotFound:true);
         }
 
         /// <summary>
@@ -42,7 +37,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<GroupedBooleanCondition, ErrorResponse> GetEventConditions()
         {
-            return GenericRequests.Request(GroupedBooleanCondition.Random(), canBadRequest:false, canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomGroupedBooleanCondition, canBadRequest:false, canBeNotFound: true);
         }
 
         /// <summary>

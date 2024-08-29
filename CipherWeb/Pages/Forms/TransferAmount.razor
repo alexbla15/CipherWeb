@@ -1,16 +1,160 @@
 ﻿@page "/Forms/TransferAmount"
 
-@inject ICipherInfo _db
+<PageTitle>@Title</PageTitle>
 
-<PageTitle>העברה בין תעודות</PageTitle>
-
-<CipherComponentCard Underline="true" WithCard="false" Title="העברה בין תעודות" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherFormInfo />
-    <CipherComponentCard Title="הזינו פרטים על תעודה מוסרת ומקבלת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Arrows.Squared.Input" />
-        <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Arrows.Squared.Output" />
-        <CipherAmount Label="מסה מועברת" />
+<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherFormInfo @ref="FormInfo" />
+    <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Arrows.Squared.Input" @ref=DonatingPack />
+        <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Arrows.Squared.Output" @ref=AcceptingPack />
+        <CipherAmount Label="מסה מועברת" @ref=DeltaM />
+        <CipherProcess @ref=EventProc/>
     </CipherComponentCard>
-    <CipherComments Title="כתבו הערות על התנועה" />
-    <CipherSubmit ActionText="תעודה 111 מסרה 5 גרם לתעודה 222. הפעולה נעשתה על ידי אבי רון בתאריך 14.7.24." />
+    <CipherComments @ref="EventComments" />
+
+    @* <CipherComponentCard Title="בדיקה">
+        <Buttons>
+            <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
+        </Buttons>
+        <ChildContent>
+            <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+        </ChildContent>
+    </CipherComponentCard> *@
+
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Page title.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "העברה בין תעודות";
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Event ResultEvent { get; set; }
+
+
+    private CipherFormInfo FormInfo = new();
+    private CipherPackageId DonatingPack = new();
+    private CipherPackageId AcceptingPack = new();
+    private CipherAmount DeltaM = new();
+    private CipherSubmit submission = new();
+    private CipherComments EventComments = new();
+    private CipherProcess EventProc = new();
+
+    private CreateEvent RequestedEvent = CreateEvent.Empty();
+
+    /// <summary>
+    /// Fill all needed details for new event based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        if (DonatingPack.Value is null)
+        {
+            (Valid, ErrorMessage) = (false, "יש למלא תעודה מוסרת.");
+        }
+        else if (AcceptingPack.Value is null)
+        {
+            (Valid, ErrorMessage) = (false, "יש למלא תעודה מקבלת.");
+        }
+        else if (DonatingPack.Value.Id == AcceptingPack.Value.Id)
+        {
+            (Valid, ErrorMessage) = (false, "תעודה מקבלת ומוסרת חייבות להיות שונות זו מזו.");
+        }
+        else
+        {
+            Package DonatingPackage = ((Package)DonatingPack.Value);
+            Package AcceptingPackage = ((Package)AcceptingPack.Value);
+
+            if (DonatingPackage.BrutMass < DeltaM.Amount)
+            {
+                (Valid, ErrorMessage) = (false, $"מסת התעודה המוסרת היא {DonatingPackage.BrutMass} גרם. מסה זו קטנה מהמסה שנמסרת.");
+            }
+            else if (DeltaM.Amount == 0)
+            {
+                (Valid, ErrorMessage) = (false, $"נא לבחור מסה גדולה מ0.");
+            }
+            else
+            {
+                DonatingPackage.BrutMass -= DeltaM.Amount;
+                DonatingPackage.NetMass = DonatingPackage.BrutMass * DonatingPackage.Concentration;
+
+                AcceptingPackage.BrutMass += DeltaM.Amount;
+                AcceptingPackage.NetMass = AcceptingPackage.BrutMass * AcceptingPackage.Concentration;
+
+                RequestedEvent = new CreateEvent(
+                    worker: FormInfo.GetWorker(),
+                    timestamp: FormInfo.GetDateTime(),
+                    eventType: 23,
+                    processId: EventProc.ChosenProcess?.Id,
+                    actions: new HashSet<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
+                    comments: EventComments.Value()
+
+                );
+
+
+                Tuple<bool, string> CheckResult = RequestedEvent.Check();
+                (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+                JsonRequest = RequestedEvent.ToJson();
+            }
+        }
+        SendRequest();
+
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
+
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+                submission.SuccessMessage = $"טופס הוזן בהצלחה. עבור חיפוש התנועה נא גשו לתנועה {ResultEvent.Id}.";
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
+    }
+}

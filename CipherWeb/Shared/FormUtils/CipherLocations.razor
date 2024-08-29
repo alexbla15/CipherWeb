@@ -2,6 +2,18 @@
 
 @code {
     /// <summary>
+    /// Initial location.
+    /// </summary>
+    [Parameter]
+    public StorageSystem InitialLocation { get; set; }
+
+    /// <summary>
+    /// Final location.
+    /// </summary>
+    [Parameter]
+    public StorageSystem FinalLocation { get; set; }
+
+    /// <summary>
     /// Label of initial location.
     /// </summary>
     [Parameter]
@@ -24,9 +36,14 @@
     /// </summary>
     [Parameter]
     public string FinalLocationIcon { get; set; } = Icons.Awards.Flag;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "ציינו מיקום התחלתי וסופי";
+    }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" />
-    <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" />
+    <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" @bind-Value=InitialLocation/>
+    <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" @bind-Value=FinalLocation />
 </CipherComponentCard>

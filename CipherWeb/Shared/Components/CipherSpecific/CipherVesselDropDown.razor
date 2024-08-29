@@ -3,7 +3,7 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(CachedData.VesselExample.Id))"
+    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(CachedData.VesselExample.Id))" AllowClear="true"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@Value" Change="@Change"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>

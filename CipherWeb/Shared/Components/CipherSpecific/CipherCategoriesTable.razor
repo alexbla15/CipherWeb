@@ -15,7 +15,11 @@
                     </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
                 <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Description))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Description)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" >
+                    <Template>
+                        @context.MaterialType?.Name
+                    </Template>    
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
                     <Template>
                         @(string.Join(", ", context.IdMask))

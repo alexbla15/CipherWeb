@@ -1,11 +1,13 @@
 ﻿@inherits CipherComponentCard
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherWorker />
+    <CipherWorker @ref=Worker />
     <CipherDatePicker ShowTime="true" TimeOnly="false" @ref=DatePicker/>
 </CipherComponentCard>
 
 @code {
+    private CipherWorker Worker = new();
+
     private CipherDatePicker DatePicker = new();
 
     protected override void OnInitialized()
@@ -16,5 +18,10 @@
     public DateTime GetDateTime()
     {
         return DatePicker.GetDateTime();
+    }
+
+    public string GetWorker()
+    {
+        return Worker.GetWorker();
     }
 }

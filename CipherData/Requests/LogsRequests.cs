@@ -15,7 +15,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<UserActionResponse,ErrorResponse> GetObjectLogs(int uuid)
         {
-            return GenericRequests.Request(UserActionResponse.Random());
+            return GenericRequests.Request(RandomData.RandomUserActionResponse);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<UserActionResponse, ErrorResponse> GetUserLogs(int userid)
         {
-            return GenericRequests.Request(UserActionResponse.Random());
+            return GenericRequests.Request(RandomData.RandomUserActionResponse);
         }
     }
 }

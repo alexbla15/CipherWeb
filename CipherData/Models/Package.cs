@@ -206,10 +206,12 @@ namespace CipherData.Models
                     createdAt: DateTime.Now,
                     brutMass: 0,
                     netMass: 0,
+                    vessel: Vessel.Empty(),
                     system: StorageSystem.Empty(),
                     category: Category.Empty());
             return result;
         }
+
         public static string Translate(string searchedAttribute)
         {
             return Translate(typeof(Package), searchedAttribute);

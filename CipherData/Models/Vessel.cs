@@ -58,7 +58,9 @@ namespace CipherData.Models
         public static Vessel Empty()
         {
             return new Vessel(
-                type: "",
+                id: string.Empty,
+                name: string.Empty,
+                type: string.Empty,
                 system: StorageSystem.Empty()
                 );
         }

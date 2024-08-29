@@ -287,43 +287,38 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
-            createdAt: 
+            name: 
               type: string
-              description: Timestamp when the package was created 
-            brutMass:
-              type: number
-              description: Total mass of the package
-            netMass:
-              type: number
-              description: Net mass of the package
-            systemId:
+              description: Name of the category
+            description:
               type: string
-              description: System containing the package
-            vesselId:
-              type: string
+              description: Free-text description of the category
+            MaterialType:
+              description: Type of material of this category (highest-level cateogry)
               nullable: true
-              description: Vessel containing the package
-            containingPackagesIds: 
+              $ref: "#/components/schemas/Category"
+            Parent:
+              description: Parent Category containing this one.
+              nullable: true
+              $ref: "#/components/schemas/Category"
+            Children:
+              description: Child categories contained in this one.
               type: array
-              nullable: true
               items:
-                type: string
-                description: Packages (Ids) contained in this one
-            properties:
-              type: object
-              additionalProperties: true
-              description: JSON-like additional properties of the package
-            comments:
-              nullable: true
-              type: string
-              description: Free-text comment on the package
-            categoryId:
-              type: string
-              description: Category (Id) of package
-            destinationProcessesIds:
+                $ref: "#/components/schemas/Category"
+            creatingProcesses:
               type: array
-              nullable: true
-              description: List of processes definitions (Ids) that may accept this package as input
+              description: List of processes definitions creating this category
+              items:
+                $ref: "#/components/schemas/ProcessDefinition"
+            consumingProcesses:
+              type: array
+              description: List of processes defintions consuming this category
+              items:
+                $ref: "#/components/schemas/ProcessDefinition"
+            idMask:
+              type: array
+              description: List of ID masks to identify the category from the package ID
               items:
                 type: string
     Process:
@@ -510,6 +505,9 @@ components:
               - eventType
               - actions
             properties:
+              worker: 
+                type: string
+                description: name of worker that created the event
               timestamp: 
                 type: string
                 description: Timestamp when the event happend
@@ -521,7 +519,7 @@ components:
                 nullable: true
                 description: Free-text comments on the event
               processId:
-                type: integer
+                type: string
                 nullable: true
                 description: Process ID of process containing to this event. If null, tries to estimate it from event details
               actions: 

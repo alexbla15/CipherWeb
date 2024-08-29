@@ -16,6 +16,11 @@ namespace CipherData.Models
     public class CreateEvent
     {
         /// <summary>
+        /// Name of worker that fulfilled the form
+        /// </summary>
+        public string Worker { get; set; }
+
+        /// <summary>
         /// Type of event. Required
         /// </summary>
         public int EventType { get; set; }
@@ -23,7 +28,7 @@ namespace CipherData.Models
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
-        public int? ProcessId { get; set; }
+        public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
@@ -43,13 +48,15 @@ namespace CipherData.Models
         /// <summary>
         /// Create new event
         /// </summary>
+        /// <param name="worker">Name of updating worker. Required</param>
         /// <param name="eventType">Type of event. Required</param>
         /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
         /// <param name="comments">Free-text comments on the event</param>
         /// <param name="timestamp">Timestamp when the event happend. Required</param>
         /// <param name="actions">List of affected packages from actions, the items present the state of each package after the event</param>
-        public CreateEvent(DateTime timestamp, int eventType, HashSet<PackageRequest> actions, int? processId = null, string? comments = null)
+        public CreateEvent(string worker, DateTime timestamp, int eventType, HashSet<PackageRequest> actions, string? processId = null, string? comments = null)
         {
+            Worker = worker;
             EventType = eventType;
             ProcessId = processId;
             Comments = comments;
@@ -58,28 +65,30 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Return an empty CreateEvent object scheme.
-        /// </summary>
-        public static CreateEvent Empty()
-        {
-            return new CreateEvent(timestamp: DateTime.Now, eventType: 0, actions: new HashSet<PackageRequest>());
-        }
-
-        /// <summary>
         /// Create new event (Use for one-package-event)
         /// </summary>
+        /// <param name="worker">Name of updating worker. Required</param>
         /// <param name="eventType">Type of event. Required</param>
         /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
         /// <param name="comments">Free-text comments on the event</param>
         /// <param name="timestamp">Timestamp when the event happend. Required</param>
         /// <param name="action">affected package, the item present the state of package after the event</param>
-        public CreateEvent(DateTime timestamp, int eventType, PackageRequest action, int? processId = null, string? comments = null)
+        public CreateEvent(string worker, DateTime timestamp, int eventType, PackageRequest action, string? processId = null, string? comments = null)
         {
+            Worker = worker;
             EventType = eventType;
             ProcessId = processId;
             Comments = comments;
             Timestamp = timestamp;
             Actions = new HashSet<PackageRequest>() { action };
+        }
+
+        /// <summary>
+        /// Return an empty CreateEvent object scheme.
+        /// </summary>
+        public static CreateEvent Empty()
+        {
+            return new CreateEvent(worker: "", timestamp: DateTime.Now, eventType: 0, actions: new HashSet<PackageRequest>());
         }
 
         /// <summary>
@@ -92,6 +101,7 @@ namespace CipherData.Models
             Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
             List<Tuple<bool, string>> actionsCheck = Actions.Select(x=>x.Check()).ToList();
 
+            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, "שם עובד"); // worker name is required
             result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // event type is required
             result = (Timestamp > DateTime.Parse("01/01/1900") && Timestamp <= DateTime.Now) ? result : 
                 Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));

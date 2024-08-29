@@ -53,6 +53,15 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Get an empty process definition object scheme.
+        /// </summary>
+        /// <returns></returns>
+        public static ProcessDefinition Empty()
+        {
+            return new ProcessDefinition(name: "", description: "", steps: new());
+        }
+
+        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;

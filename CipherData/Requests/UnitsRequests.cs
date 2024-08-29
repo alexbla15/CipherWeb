@@ -17,7 +17,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit,ErrorResponse> CreateUnit(UnitRequest unit)
         {
-            return GenericRequests.Request(Unit.Random());
+            return GenericRequests.Request(RandomData.RandomUnit);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit, ErrorResponse> GetUnit(string unit_id)
         {
-            return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound:true, canBadRequest:false);
+            return GenericRequests.Request(RandomData.RandomUnit, canBeNotFound:true, canBadRequest:false);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<Unit, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit)
         {
-            return GenericRequests.Request(Unit.Random(unit_id), canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomUnit, canBeNotFound: true);
         }
     }
 }

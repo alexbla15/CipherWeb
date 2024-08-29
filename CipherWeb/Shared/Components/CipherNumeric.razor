@@ -94,7 +94,7 @@
         public decimal value = 0;
     }
 
-    private Model model = new Model() {};
+    private Model model = new Model() { };
     private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
 
     /// <summary>
@@ -137,17 +137,17 @@
             </style>
             <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
         }
-        @if(string.IsNullOrEmpty(Label))
+        @if (string.IsNullOrEmpty(Label))
         {
             <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
                            Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" Min="@Min" Max="Max" />
         }
         else
         {
-        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-            <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" 
-            Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
-        </RadzenFormField>
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+                <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
+                               Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
+            </RadzenFormField>
         }
-    </RadzenStack>     
+    </RadzenStack>
 </RadzenTemplateForm>

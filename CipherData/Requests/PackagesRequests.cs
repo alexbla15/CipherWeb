@@ -27,7 +27,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Package, ErrorResponse> UpdatePackage(string pack_id, UpdatePackage pack)
         {
-            return GenericRequests.Request(Package.Random(pack_id), canBadRequest: false, canBeNotFound: true);
+            return GenericRequests.Request(RandomData.RandomPackage, canBadRequest: false, canBeNotFound: true);
         }
     }
 }

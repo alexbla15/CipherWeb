@@ -23,7 +23,7 @@
     /// All packages chosen
     /// </summary>
     [Parameter]
-    public List<Package> Value { get; set; } = new List<Package>();
+    public List<Package> SelectedPackages { get; set; } = new List<Package>();
 
     /// <summary>
     /// Change event
@@ -43,7 +43,7 @@
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="Value"
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
                             Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
                             Chips=true Style="width: 100%;">

@@ -61,6 +61,12 @@ namespace CipherData.Models
             Packages = packages;
         }
 
+        public static Event Empty()
+        {
+            return new Event(eventType: 0, processId: 0, comments: "", timestamp: DateTime.Now, valid: false,
+                packages: new HashSet<Package>());
+        }
+
         /// <summary>
         /// Counts how many packages were created.
         /// </summary>
