@@ -37,6 +37,12 @@
     [Parameter]
     public string Icon { get; set; } = Icons.Communication.Chat.Comment;
 
+    /// <summary>
+    /// Are comments required?
+    /// </summary>
+    [Parameter]
+    public bool Required { get; set; } = true;
+
     private CipherComponentCard Card;
     private CipherAutoComplete component = new();
 
@@ -77,5 +83,5 @@
 }
 
 <CipherComponentCard Title="@Title" @ref=Card Width="@CardWidth" WithCard="@WithCard">
-    <CipherAutoComplete @ref="component" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()"/>
+    <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
 </CipherComponentCard>

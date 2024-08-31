@@ -49,7 +49,7 @@ namespace CipherData.Models
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
-        public HashSet<string> ChildrenIds { get; set; }
+        public HashSet<string>? ChildrenIds { get; set; }
 
         /// <summary>
         /// Category (Id) of package

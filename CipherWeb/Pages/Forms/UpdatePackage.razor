@@ -1,22 +1,19 @@
 ﻿@page "/Forms/UpdatePackage"
 
-@inject ICipherInfo _db
-
 <PageTitle>@Title</PageTitle>
 
 <CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherComponentCard Title="בחירת תעודה">
-        <CipherPackageId />
+        <CipherPackageId @ref=OriginalPackage/>
     </CipherComponentCard>
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherCategoryDropDown />
-        <CipherVesselDropDown />
-        <CipherComments @ref="PackComments" WithCard="false" Title="" Placeholder="הערות תעודה" Width="300px"/>
+        <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" @ref=newId Required="false"/>
+        <CipherComments @ref="PackDescription" WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" 
+        Icon="@Icons.Documents.Page.Description" Width="300px" />
+        <CipherProcesses @ref="Destinations" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
+        <CipherComments @ref="EventComments" Width="300px" WithCard="false" Title="" />
     </CipherComponentCard>
-
-    <CipherComments Title="הערות עבור עדכון"/>
-
 
     @if (CheckJson)
     {
@@ -46,7 +43,7 @@
     /// View the submitted json.
     /// </summary>
     [Parameter]
-    public bool CheckJson { get; set; } = true;
+    public bool CheckJson { get; set; } = false;
 
     /// <summary>
     /// Page title.
@@ -64,7 +61,7 @@
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event ResultEvent { get; set; }
+    public Package Result { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -79,14 +76,76 @@
     public string ErrorMessage { get; set; }
 
     private CipherSubmit submission = new();
-    private CipherComments PackComments = new();
+    private CipherComments PackDescription = new();
+    private CipherPackageId OriginalPackage = new();
+    private CipherAutoComplete newId = new();
+    private CipherProcesses Destinations = new();
+    private CipherComments EventComments = new();
 
     private CipherData.Models.UpdatePackage RequestedUpdate = CipherData.Models.UpdatePackage.Empty();
 
     private void Submit()
     {
-        RequestedUpdate.PackageDescription = PackComments.Value();
+        // initially, form is valid, there is no error, there is no data at all.
+        string originalPackId = string.Empty;
+        (Valid, ErrorMessage) = (true, string.Empty);
+        JsonRequest = string.Empty;
 
-        JsonRequest = RequestedUpdate.ToJson();
+        if (OriginalPackage.Value is null)
+        {
+            (Valid, ErrorMessage) = (false, "נא לבחור בתעודה אותה רוצים לעדכן.");
+        }
+        else
+        {
+            originalPackId = ((Package)OriginalPackage.Value).Id;
+
+            if (newId.Check())
+            {
+                RequestedUpdate.PackageId = newId.Value;
+                RequestedUpdate.DestinationProcessesIds = Destinations.ChosenProcesses.Select(x => x.Id).ToHashSet();
+                RequestedUpdate.PackageDescription = PackDescription.Value();
+                RequestedUpdate.ActionComments = EventComments.Value();
+
+                (Valid, ErrorMessage) = RequestedUpdate.Check();
+
+                if (Valid)
+                {
+                    JsonRequest = RequestedUpdate.ToJson();
+                }
+            }
+            else
+            {
+                (Valid, ErrorMessage) = (false, "שגיאה במספר התעודה החדש");
+            }
+        }
+
+        SendRequest(originalPackId);
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest(string originalPackId)
+    {
+        if (Valid)
+        {
+            (Result, Error) = PackagesRequests.UpdatePackage(originalPackId, RequestedUpdate);
+
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+                submission.SuccessMessage = "תעודה עודכנה בהצלחה";
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
     }
 }

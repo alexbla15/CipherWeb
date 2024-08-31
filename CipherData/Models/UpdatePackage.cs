@@ -11,7 +11,7 @@ namespace CipherData.Models
     public class UpdatePackage
     {
         /// <summary>
-        /// Unique identifier of a package.
+        /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
         public string? PackageId { get; set; }
 
@@ -33,7 +33,8 @@ namespace CipherData.Models
         /// <summary>
         /// Update package details contract
         /// </summary>
-        /// <param name="id">Unique identifier of the package</param>
+        /// <param name="uuid">Unique identifier of the resource</param>
+        /// <param name="id">Unique identifier of a package (if null, no change in package id).</param>
         /// <param name="description">Description of the package</param>
         /// <param name="comments">Free text comments on update. Ideally contains reason for change</param>
         /// <param name="destinationProcesses">List of processes definitions (IDs) that may accept this package as input</param>
@@ -55,7 +56,13 @@ namespace CipherData.Models
         {
             Tuple<bool, string> result = new (true, string.Empty);
 
-            result = (!string.IsNullOrEmpty(ActionComments)) ? result : Tuple.Create(false, "הערות תנועה"); // action comments is required
+            result = (!string.IsNullOrEmpty(ActionComments)) ? result : Tuple.Create(false, "שגיאה בהערות / הערות חסרות."); // action comments is required
+            
+            if (string.IsNullOrEmpty(PackageId) && string.IsNullOrEmpty(PackageDescription) && 
+                (DestinationProcessesIds?.Count == 0 || DestinationProcessesIds is null))
+            {
+                result = Tuple.Create(false, "לא ניתן להזין טופס עדכון ללא שינויים.");
+            }
 
             return result;
         }

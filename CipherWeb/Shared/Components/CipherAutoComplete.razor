@@ -200,7 +200,14 @@
 
     public bool Check()
     {
-        IsValid = RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        if (Required)
+        {
+            IsValid = RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        }
+        else
+        {
+            IsValid = LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        }
         return IsValid;
     }
 
@@ -230,8 +237,8 @@
     }
 }
 
-<RadzenTemplateForm TItem="Model" Data=@model>
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+<RadzenTemplateForm TItem="Model" Data=@model Style="display:flex">
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center">
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {

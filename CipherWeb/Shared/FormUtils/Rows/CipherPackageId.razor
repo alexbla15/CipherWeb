@@ -5,13 +5,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> allPacks { get; set; } = new List<Package>();
+    public List<Package> AllPacks { get; set; } = new List<Package>();
 
     /// <summary>
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Component's Label.
@@ -41,7 +41,12 @@
 
     protected override void OnInitialized()
     {
-        (allPacks, error) = CachedData.AllPackages;
+        (AllPacks, Error) = CachedData.AllPackages;
+    }
+
+    public Package GetValue()
+    {
+        return (Value is null) ? Package.Empty() : Value;
     }
 }
 
@@ -51,7 +56,7 @@
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Package" AllowClear="true"
-                            Data=@allPacks TextProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
+                            Data=@AllPacks TextProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
                             Style="@($"width: {Width}; min-height:;")" @bind-Value="Value">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
