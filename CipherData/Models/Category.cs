@@ -6,7 +6,7 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation("קטגוריה")]
+        [HebrewTranslation("שם הקטגוריה")]
         public string Name { get; set; }
 
         /// <summary>

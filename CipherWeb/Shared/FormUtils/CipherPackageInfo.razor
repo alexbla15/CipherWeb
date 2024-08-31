@@ -64,7 +64,7 @@
     public Package Value()
     {
         pack.Id = (packId.Check()) ? packId.Value : string.Empty;
-        pack.Category = packCategory.Value ?? Category.Empty();
+        pack.Category = packCategory.ChosenCategory ?? Category.Empty();
         pack.System = ChosenSystem ?? StorageSystem.Empty();
         pack.Vessel = ChosenVessel ?? null;
         pack.Parent = ParentPackage.Value;
@@ -74,7 +74,7 @@
 
     public void ChangedCategory()
     {
-        DestinationProcesses = packCategory.Value?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>();
+        DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>();
     }
 
     public void ChangedVessel()

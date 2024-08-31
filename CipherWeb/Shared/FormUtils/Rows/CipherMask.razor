@@ -1,11 +1,25 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Label="@Label" Icon="@Icon" MinLength="1" MaxLength="3" />
+<CipherAutoComplete Label="@Label" Icon="@Icon" MinLength="1" MaxLength="3" @ref=Mask/>
 
 @code {
-    protected override async Task OnInitializedAsync()
+    private CipherAutoComplete Mask = new();
+
+    protected override void OnInitialized()
     {
         Label ??= "סדרה";
         Icon ??= Icons.Security.Password;
+    }
+
+    public string GetValue()
+    {
+        if (Mask.Check())
+        {
+            return Mask.Value;
+        }
+        else
+        {
+            return "";
+        }
     }
 }

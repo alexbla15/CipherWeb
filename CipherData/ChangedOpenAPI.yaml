@@ -585,6 +585,10 @@ components:
               name: 
                 type: string
                 description: Name of the category
+              parentId: 
+                type: string
+                nullable: true
+                description: Parent-category (ID) containing this one. Not necessarily Material-type.
               description:
                 type: string
                 description: Free-text description of the category
@@ -592,17 +596,22 @@ components:
                 type: array
                 description: List of processes definition IDs creating this category
                 items:
-                  type: integer
+                  type: string
               consumingProcesses:
                 type: array
                 description: List of processes definition IDs consuming this category
                 items:
-                  type: integer
+                  type: string
               idMask:
                 type: array
                 description: List of ID masks to identify the category from the package ID
                 items:
                   type: string
+              properties:
+                type: object
+                nullable: true
+                additionalProperties: true
+                description: JSON-like properties of the category
     SystemRequest:
       description: Create a new system or update it
       content:

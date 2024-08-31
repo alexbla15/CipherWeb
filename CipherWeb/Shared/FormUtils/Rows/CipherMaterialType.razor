@@ -1,16 +1,11 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="Value"
+    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
                             Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש...">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Parent))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Parent)))">
-                <Template>
-                    @((context as Category).Parent?.Name)
-                </Template>
-            </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @((context as Category).Name)
@@ -29,7 +24,7 @@
     /// Chosen value
     /// </summary>
     [Parameter]
-    public string? Value { get; set; }
+    public Category? ChosenMaterialType { get; set; }
 
     private ErrorResponse error = ErrorResponse.Success;
     private List<Category> categories = new List<Category>();
@@ -40,5 +35,8 @@
         Icon ??= Icons.Cipher.Material;
 
         (categories, error) = CachedData.AllCategories;
+
+        // filter only material types
+        categories = categories.Where(x => x.Parent == null).ToList();
     }
 }

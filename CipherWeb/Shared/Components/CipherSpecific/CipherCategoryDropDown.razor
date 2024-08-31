@@ -1,20 +1,18 @@
 ﻿@inherits CipherFormRow
 
-@inject ICipherInfo _db
-
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Category" Disabled="@Disabled" AllowClear="true"
-                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" @bind-Value="Value"
+                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" @bind-Value="ChosenCategory"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" >
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
                 <Template>
                     @((context as Category).MaterialType?.Name)
                 </Template>
-                </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
+            </RadzenDropDownDataGridColumn>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
                 <Template>
                     @(string.Join(", ", (context as Category).IdMask))
@@ -50,7 +48,7 @@
     /// Chosen category
     /// </summary>
     [Parameter]
-    public Category? Value { get; set; }
+    public Category? ChosenCategory { get; set; }
 
     /// <summary>
     /// Changed-value event

@@ -1,8 +1,109 @@
 ﻿@page "/forms/AddCategory"
 
-<PageTitle>קטגוריה חדשה</PageTitle>
+<PageTitle>@Title</PageTitle>
 
-<CipherComponentCard Underline="true" WithCard="false" Title="הזנת קטגוריה חדשה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherCategoryCard />
-    <CipherSubmit/>
+<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherCategoryCard @ref=CategoryDetails/>
+
+    @if (CheckJson)
+    {
+        <CipherComponentCard Title="בדיקה">
+            <Buttons>
+                <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
+            </Buttons>
+            <ChildContent>
+                <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+            </ChildContent>
+        </CipherComponentCard>
+    }
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// View the submitted json.
+    /// </summary>
+    [Parameter]
+    public bool CheckJson { get; set; } = false;
+
+    /// <summary>
+    /// Page title.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "קטגוריה חדשה";
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Category Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    private CipherSubmit submission = new();
+    private CipherCategoryCard CategoryDetails = new();
+    private CategoryRequest cat = CategoryRequest.Empty();
+
+    /// <summary>
+    /// Fill all needed details for new package based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        cat = CategoryDetails.Value();
+
+        Tuple<bool, string> CheckResult = cat.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        JsonRequest = cat.ToJson();
+
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            (Result, Error) = CategoriesRequests.CreateCategory(cat);
+
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
+    }
+}
