@@ -1,73 +1,35 @@
 ﻿@inherits CipherComponentCard
 
+<CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel" @ref=VesName />
+    <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category" Multiline="true"
+                        @ref=VesType />
+    <CipherLocation @ref="VesSystem" />
+</CipherComponentCard>
+
 @code {
-    /// <summary>
-    /// Width of each row within card.
-    /// </summary>
-    [Parameter]
-    public string RowWidth { get; set; } = "400px";
+    private CipherAutoComplete VesName = new();
+    private CipherAutoComplete VesType = new();
+    private CipherLocation VesSystem = new();
 
-    /// <summary>
-    /// Set editability of each row.
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; } = false;
-
-    public class Analysis
+    public VesselRequest Value()
     {
-        public int Id { get; set; }
-        public string Type { get; set; }
-        public decimal Value { get; set; }
-        public DateTime EventDate { get; set; }
+        VesselRequest ves = VesselRequest.Empty();
+
+        ves.Name = VesName.Check() ? VesName.Value : string.Empty;
+        ves.Type = VesType.Check() ? VesType.Value : string.Empty;
+        ves.SystemId = VesSystem.Value?.Id;
+
+        return ves;
     }
 
-    private List<Vessel> vessels = new List<Vessel>();
-    private List<Analysis> analysis = new();
-    private ErrorResponse error = ErrorResponse.Success;
-
-    protected override void OnInitialized()
+    /// <summary>
+    /// Outside Value-function, since it can be null within VesselRequest, but you cannot pass the request if there is an error.
+    /// </summary>
+    /// <returns></returns>
+    public Tuple<bool, string> CheckName()
     {
-        (vessels, error) = CachedData.AllVessels;
+        bool ValidName = VesName.Check();
+        return new(ValidName, Vessel.Translate(nameof(CachedData.VesselExample.Name)));
     }
 }
-
-<CipherComponentCard Title="@Title" WithCard="@WithCard">
-    <HeaderContent>
-        <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="@(nameof(CachedData.VesselExample.Id))" Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" Data="@vessels.Select(x=> x.Id).ToList()"></CipherAutoComplete>
-        </RadzenStack>
-    </HeaderContent>
-    <ChildContent>
-        <RadzenTabs>
-            <Tabs>
-                <RadzenTabsItem Text="פרטים">
-                    <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-                        <Buttons>
-                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddVessel.Href" />
-                        </Buttons>
-                        <ChildContent>
-                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" Icon="@Icons.Cipher.Type" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
-                            @*<CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />*@
-                            @*<CipherAutoComplete Label="מגבלות איחסון" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />*@
-                            @*<CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth" Disabled="@ReadOnly" />*@
-                        </ChildContent>
-                    </CipherComponentCard>
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תעודות מוכלות">
-                    <CipherPackagesTable WithCard="false" WithHeaderContent="false" Title="" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תנועות">
-                    <CipherEventsTable Title="" WithCard="false" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תעודות">
-                    <CipherPackagesTable WithHeaderContent=false Title ="" WithCard="false" />
-                </RadzenTabsItem>
-            </Tabs>
-        </RadzenTabs>
-    </ChildContent>
-</CipherComponentCard>

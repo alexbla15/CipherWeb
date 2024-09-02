@@ -1,36 +1,111 @@
-﻿@page "/forms/AddStorageSystem"
+﻿@page "/forms/AddSystem"
 
-<PageTitle>מערכת חדשה</PageTitle>
+@inject NotificationService NotificationService
 
-<CipherComponentCard Underline="true" WithCard="false" Title="@($"הוספת {ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherComponentCard Title="@($"פרטי ה{ObjectName}")" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        @* -- Name -- *@
-        <CipherAutoComplete Icon="@Icons.Cipher.Id" @bind-Value="sys.Description" Label="@($"שם ה{ObjectName}")" />
+<PageTitle>@Title</PageTitle>
 
-        @if (ObjectName == "מערכת")
-        {
-            <CipherSystemType/>
-        }
 
-        @if (ObjectName != "מבנה")
-        {
-            <CipherAutoComplete Icon="@Icons.Cipher.Unit" Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))" />
-            <CipherLocation Label="מיקום" />
-        }
-        <CipherDatePicker Label="תאריך פתיחה" Icon="@Icons.Arrows.Start" />
-    </CipherComponentCard>
+<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherSystemCard @ref=SysDetails />
 
-    <CipherSystemRestictions ObjectName="@ObjectName" />
-
-    <CipherComments />
-    <CipherSubmit ActionText="@($"{ObjectName} בשם A. ה{ObjectName} ללא מגבלות.")"></CipherSubmit>
+    @if (CheckJson)
+    {
+        <CipherComponentCard Title="בדיקה">
+            <Buttons>
+                <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
+            </Buttons>
+            <ChildContent>
+                <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+            </ChildContent>
+        </CipherComponentCard>
+    }
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
     [Parameter]
-    public string ObjectName { get; set; } = "מערכת";
-    private bool ShowHelpText = true;
-    private int components = 0;
+    public bool Valid { get; set; } = true;
 
-    private StorageSystem sys = CachedData.SystemExample;
+    /// <summary>
+    /// View the submitted json.
+    /// </summary>
+    [Parameter]
+    public bool CheckJson { get; set; } = true;
+
+    /// <summary>
+    /// Page title.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "מערכת חדשה";
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public StorageSystem Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    private CipherSubmit submission = new();
+    private SystemRequest sys = SystemRequest.Empty();
+    private CipherSystemCard SysDetails = new();
+
+    /// <summary>
+    /// Fill all needed details for new package based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        sys = SysDetails.Value();
+        Tuple<bool,string> CheckResult = sys.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        JsonRequest = sys.ToJson();
+
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            (Result, Error) = SystemsRequests.CreateSystem(sys);
+
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
+    }
 }

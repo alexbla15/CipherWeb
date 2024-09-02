@@ -16,8 +16,6 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AddProcess = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
         public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddStorageSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
-        public static readonly MySubNavLink AddDepartment = new() { Href = "Forms/AddDepartment", Name = "תחום חדש", Icon = Icons.Cipher.Department };
-        public static readonly MySubNavLink AddLocation = new() { Href = "Forms/AddLocation", Name = "מבנה חדש", Icon = Icons.Home._Home };
         public static readonly MyNavLink Forms = new()
         {
             Href = "Forms",
@@ -25,7 +23,7 @@ namespace CipherWeb.Data
             Name = "הזנה",
             SubLinks = new()
                 { AddPackage, TransferAmount, Relocation, UpdatePackage, 
-                AddCategory, AddProcess, AddVessel, AddStorageSystem, AddDepartment, AddLocation }
+                AddCategory, AddProcess, AddVessel, AddStorageSystem }
         };
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור", SubLinks = new List<MySubNavLink>() };

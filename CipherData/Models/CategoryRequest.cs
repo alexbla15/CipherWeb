@@ -105,7 +105,7 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Return an empty CreateEvent object scheme.
+        /// Return an empty object scheme.
         /// </summary>
         public static CategoryRequest Empty()
         {

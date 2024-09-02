@@ -2,36 +2,32 @@
     public class IconInfo
     {
         public string IconName { get; set; }
-        public string SubClass { get; set; }
         public string MainClass { get; set; }
+        public string SubClass { get; set; }
+        public string ThirdClass { get; set; }
     }
 
     public List<IconInfo> GetIcons()
     {
         var icons = new List<IconInfo>();
-
-        // Get the Icons type
         var iconsType = typeof(Icons);
 
-        // Traverse all nested types (Main classes)
         foreach (var mainClass in iconsType.GetNestedTypes())
         {
-            // Traverse all members (fields/properties) in the main class
             foreach (var member in mainClass.GetFields())
             {
-                // If it's a constant (which represents an icon name)
                 if (member.IsLiteral && !member.IsInitOnly)
                 {
                     icons.Add(new IconInfo
                         {
                             IconName = (string)member.GetRawConstantValue(),
                             SubClass = "",
-                            MainClass = mainClass.Name
+                            MainClass = mainClass.Name,
+                            ThirdClass = ""
                         });
                 }
             }
 
-            // Traverse sub-classes
             foreach (var subClass in mainClass.GetNestedTypes())
             {
                 foreach (var member in subClass.GetFields())
@@ -42,8 +38,26 @@
                             {
                                 IconName = (string)member.GetRawConstantValue(),
                                 SubClass = subClass.Name,
-                                MainClass = mainClass.Name
+                                MainClass = mainClass.Name,
+                                ThirdClass = ""
                             });
+                    }
+                }
+
+                foreach (var thirdClass in subClass.GetNestedTypes())
+                {
+                    foreach (var member in thirdClass.GetFields())
+                    {
+                        if (member.IsLiteral && !member.IsInitOnly)
+                        {
+                            icons.Add(new IconInfo
+                                {
+                                    IconName = (string)member.GetRawConstantValue(),
+                                    SubClass = subClass.Name,
+                                    MainClass = mainClass.Name,
+                                    ThirdClass = thirdClass.Name  // Populate ThirdClass
+                                });
+                        }
                     }
                 }
             }
@@ -71,7 +85,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Style="padding-bottom:20px">
     <CipherAutoComplete @bind-Value=searchText></CipherAutoComplete>
-<CipherButton Icon="@Icons.Arrows.Swap.Cached" Click="ChangeSearchText"></CipherButton>
+    <CipherButton Icon="@Icons.Arrows.Swap.Cached" Click="ChangeSearchText"></CipherButton>
 </RadzenStack>
 
 <RadzenAccordion>
@@ -84,13 +98,44 @@
                     <RadzenAccordion Style="flex-direction:column">
                         <Items>
                             <RadzenAccordionItem Text="@sub">
-                                @foreach (string ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
-                                {
-                                    <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
-                                        <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
-                                        <CipherText Text="@ic.Replace("_"," ")" TextAlign="TextAlign.Center" Wrap="true" />
-                                    </CipherComponentCard>
+                                @{
+                                    var thirdClasses = icons.Where(x => x.MainClass == main && x.SubClass == sub)
+                                    .Select(x => x.ThirdClass)
+                                    .Where(x => !string.IsNullOrEmpty(x))
+                                    .Distinct()
+                                    .ToList();
                                 }
+                                @if (thirdClasses.Any())
+                                {
+                                    <RadzenAccordion Style="flex-direction:column">
+                                        <Items>
+                                            @foreach (string third in thirdClasses)
+                                            {
+                                                <RadzenAccordionItem Text="@third">
+                                                    @foreach (string ic in icons.Where(x => x.MainClass == main && x.SubClass == sub && x.ThirdClass == third).Select(x => x.IconName))
+                                                    {
+                                                        <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                                            <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
+                                                            <CipherText Text="@ic.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                                        </CipherComponentCard>
+                                                    }
+                                                </RadzenAccordionItem>
+                                            }
+                                        </Items>
+                                    </RadzenAccordion>
+                                }
+                                else
+                                {
+                                    @foreach (string ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
+                                    {
+                                        <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                            <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
+                                            <CipherText Text="@ic.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                        </CipherComponentCard>
+                                    }
+
+                                }
+
                             </RadzenAccordionItem>
                         </Items>
                     </RadzenAccordion>

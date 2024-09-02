@@ -871,12 +871,65 @@ namespace CipherWeb.Data
                 public const string Timer3s = "timer_3_select";
                 public const string Timer10 = "timer_10";
                 public const string Timer10s = "timer_10_select";
+
+                public class Megapixles
+                {
+                    public const string _mp = "mp";
+                    public const string _2mp = "2mp";
+                    public const string _3mp = "3mp";
+                    public const string _4mp = "4mp";
+                    public const string _5mp = "5mp";
+                    public const string _6mp = "6mp";
+                    public const string _7mp = "7mp";
+                    public const string _8mp = "8mp";
+                    public const string _9mp = "9mp";
+                    public const string _10mp = "10mp";
+                    public const string _11mp = "11mp";
+                    public const string _12mp = "12mp";
+                    public const string _13mp = "13mp";
+                    public const string _14mp = "14mp";
+                    public const string _15mp = "15mp";
+                    public const string _16mp = "16mp";
+                    public const string _17mp = "17mp";
+                    public const string _18mp = "18mp";
+                    public const string _19mp = "19mp";
+                    public const string _20mp = "20mp";
+                    public const string _21mp = "21mp";
+                    public const string _22mp = "22mp";
+                    public const string _23mp = "23mp";
+                    public const string _24mp = "24mp";
+                }
+
+            }
+
+            public class Images
+            {
+                public const string Album = "photo_album";
+                public const string ArtTrack = "art_track";
+                public const string BurstMode = "burst_mode";
+                public const string Compare = "compare";
+                public const string Filter = "filter";
+                public const string FilterBW = "filter_b_and_w";
+                public const string Gif = "gif";
+                public const string GifBox = "gif_box";
+                public const string Image = "image";
+                public const string ImageAdd = "add_photo_alternate";
+                public const string ImageBroken = "broken_image";
+                public const string ImageCamera = "photo_camera_back";
+                public const string ImageCrop = "crop_original";
+                public const string ImageHide = "hide_image";
+                public const string ImageLibrary = "photo_library";
+                public const string ImageSearch = "image_search";
+                public const string Panorama = "panorama";
+                public const string PanoramaHoriz = "panorama_horizontal";
+                public const string PanoramaVr = "vrpano";
+                public const string PermMedia = "perm_media";
+                public const string RemoveRedEye = "remove_red_eye";
+                public const string Satellite = "satellite";
+                public const string Wallpaper = "wallpaper";
             }
 
             // continue from here 
-
-            public class Images { }
-            public class Megapixles { }
             public class Music { }
             public class Video 
             { 

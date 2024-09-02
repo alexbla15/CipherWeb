@@ -1,94 +1,35 @@
 ﻿@inherits CipherComponentCard
 
+<CipherComponentCard Title="פרטי המערכת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Icon="@Icons.Cipher.Location" @ref=SysName />
+    <CipherComments @ref="SysDescription" WithCard="false" Title="" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))" 
+    Icon="@Icons.Documents.Page.Description" Width="300px" />
+    <CipherLocation @ref="SysParent" />
+</CipherComponentCard>
+
 @code {
-    /// <summary>
-    /// Width of each row within card.
-    /// </summary>
-    [Parameter]
-    public string RowWidth { get; set; } = "400px";
+    private CipherAutoComplete SysName = new();
+    private CipherLocation SysParent = new();
+    private CipherComments SysDescription = new();
 
-    /// <summary>
-    /// Set editability of each row.
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; } = false;
-    
-    /// <summary>
-    /// All packages available
-    /// </summary>
-    [Parameter]
-    public List<StorageSystem> systems { get; set; } = new List<StorageSystem>();
-
-    /// <summary>
-    /// Error response for fetching data
-    /// </summary>
-    [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
-
-    public class Analysis
+    public SystemRequest Value()
     {
-        public int Id { get; set; }
-        public string Type { get; set; }
-        public decimal Value { get; set; }
-        public DateTime EventDate { get; set; }
+        SystemRequest sys = SystemRequest.Empty();
+
+        sys.Name = SysName.Check() ? SysName.Value : string.Empty;
+        sys.Description = SysDescription.Value();
+        sys.ParentId = SysParent.Value?.Id;
+
+        return sys;
     }
 
-    private List<Analysis> analysis = new();
-
-    protected override void OnInitialized()
+    /// <summary>
+    /// Outside Value-function, since it can be null within VesselRequest, but you cannot pass the request if there is an error.
+    /// </summary>
+    /// <returns></returns>
+    public Tuple<bool, string> CheckName()
     {
-        (systems, error) = CachedData.AllSystems;
+        bool ValidName = SysName.Check();
+        return new(ValidName, Vessel.Translate(nameof(CachedData.VesselExample.Name)));
     }
 }
-
-<CipherComponentCard Title="@Title" WithCard="@WithCard">
-    <HeaderContent>
-        <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherAutoComplete TextProperty="@(nameof(CachedData.SystemExample.Name))" Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" Data="@systems"></CipherAutoComplete>
-        </RadzenStack>
-    </HeaderContent>
-    <ChildContent>
-        <RadzenTabs>
-            <Tabs>
-                <RadzenTabsItem Text="פרטים">
-                    <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-                        <Buttons>
-                            <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.AddStorageSystem.Href" Variant="Variant.Outlined" />
-                            <CipherButton Icon="@Icons.Security.Shield" HelpText="אישור בטיחות" Variant="Variant.Outlined" />
-                        </Buttons>
-                        <ChildContent>
-                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Id)))" Icon="@Icons.Cipher.Id" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" Icon="@Icons.Cipher.Location" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Description)))" Icon="@Icons.Documents.Page.Description" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Parent)))" Icon="@Icons.Travel.Navigation.MyLocation" Width="@RowWidth" Disabled="@ReadOnly" />
-                            <CipherAutoComplete Label="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))" Icon="@Icons.Cipher.Unit" Width="@RowWidth" Disabled="@ReadOnly" />
-                            @*<CipherDatePicker Label="תאריך פתיחה" Disabled="@ReadOnly" Width="@RowWidth" />*@
-                            @*<CipherNumeric Label="שאריות" Icon="@Icons.Documents.Delete._Delete" Width="@RowWidth" Disabled="@ReadOnly" />*@
-                            @*<CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" Disabled="@ReadOnly" />*@
-                        </ChildContent>
-                    </CipherComponentCard>
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תעודות">
-                    <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="כלים">
-                    <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="מערכות">
-                    <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תחומים">
-                    <CipherPackagesTable WithHeaderContent=false Title="" WithCard="false" />
-                </RadzenTabsItem>
-
-                <RadzenTabsItem Text="תנועות">
-                    <CipherEventsTable Title="" WithCard="false" />
-                </RadzenTabsItem>
-            </Tabs>
-        </RadzenTabs>
-    </ChildContent>
-</CipherComponentCard>
