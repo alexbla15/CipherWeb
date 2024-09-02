@@ -37,15 +37,12 @@
     [Parameter]
     public bool Visible { get; set; } = true;
 
-  
+
     /// <summary>
     /// Numeric value of component.
     /// </summary>
     [Parameter]
-    public decimal Amount { get; set; }
-
-    [Parameter]
-    public EventCallback<decimal> ValueChanged { get; set; }
+    public decimal Amount { get; set; } = 0;
 
     /// <summary>
     /// Minimal allowed value.
@@ -59,7 +56,15 @@
     [Parameter]
     public decimal Max { get; set; } = decimal.MaxValue;
 
+    [Parameter]
+    public EventCallback<decimal> AmountChanged { get; set; }
+
     private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+
+    protected override void OnInitialized()
+    {
+        AmountChanged.InvokeAsync(Amount);
+    }
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
@@ -69,13 +74,14 @@
     }
     @if (string.IsNullOrEmpty(Label))
     {
-        <RadzenNumeric @bind-Value=@Amount Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
-                       Min="@Min" Max="Max" />
+        <RadzenNumeric @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
+                       Min="@Min" Max="Max" Visible="@Visible" />
     }
     else
     {
-        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-            <RadzenNumeric Min="@Min" Max="Max" @bind-Value=@Amount Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")" />
+        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")" Visible="@Visible">
+            <RadzenNumeric Min="@Min" Max="Max" @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled"
+                           Style="@($"width:{Width};")"/>
         </RadzenFormField>
     }
 </RadzenStack>

@@ -289,6 +289,28 @@ components:
             - and
             - any
             - or
+    CategoryProperty:
+      type: object
+      description: property that applies generally to all packages of this category.
+      properties:
+        name: 
+          type: string
+          description: Name of the category-property
+        description:
+          type: string
+          nullable: true
+          description: Free-text description of the category-property
+        propertyType: 
+          type: string
+          description: Type of action made by user
+          enum:
+            - Text
+            - Number
+            - Boolean
+        defaultValue:
+          type: string
+          nullable: true
+          description: Value that will be set for this category as default. User cannot change that.
     Category:
       type: object
       allOf:
@@ -330,9 +352,10 @@ components:
               items:
                 type: string
             properties:
-              type: object
-              additionalProperties: true
-              description: JSON-like properties of the category
+              type: array
+              description: List of properties that apply generally to all packages of this category.
+              items:
+                $ref: "#/components/schemas/CategoryProperty"
     Process:
       type: object
       description: An instance of a specific processes

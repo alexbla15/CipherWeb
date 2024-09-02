@@ -98,7 +98,6 @@ namespace CipherData.Models
         {
             Id = id ?? GetNextId();
             Description = description;
-            Properties = properties;
             Vessel = vessel;
             System = system;
             BrutMass = brutMass;
@@ -108,6 +107,15 @@ namespace CipherData.Models
             Children = children;
             DestinationProcesses = destinationProcesses ?? category.ConsumingProcesses;
             Category = category;
+
+            if (properties == null && Category.Properties != null)
+            {
+                Properties = new Dictionary<string, string>();
+                foreach (CategoryProperty prop in Category.Properties)
+                {
+                    Properties.Add(prop.Name, prop.DefaultValue);
+                }
+            }
 
             Concentration = (brutMass > 0) ? netMass / brutMass : 0;
         }

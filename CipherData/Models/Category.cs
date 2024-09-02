@@ -25,7 +25,7 @@ namespace CipherData.Models
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation("תכונות")]
-        public HashSet<string>? Properties { get; set; }
+        public HashSet<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
@@ -83,7 +83,7 @@ namespace CipherData.Models
             ConsumingProcesses = consumingProcesses;
             Parent = parent;
             Children = children;
-            Properties = properties?.Select(x=>x.ToJson()).ToHashSet() ;
+            Properties = properties;
         }
 
         /// <summary>
@@ -193,7 +193,9 @@ namespace CipherData.Models
                 new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
                 new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText)
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Description", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.DefaultValue", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
             }, @operator: Operator.Or));
         }
     }

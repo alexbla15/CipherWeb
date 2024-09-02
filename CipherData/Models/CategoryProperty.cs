@@ -24,7 +24,7 @@ namespace CipherData.Models
         /// <summary>
         /// Free-text description of the property
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
@@ -43,7 +43,7 @@ namespace CipherData.Models
         /// <param name="description">Free-text description of the category</param>
         /// <param name="propertyType">Type of the property (string / decimal / bool)</param>
         /// <param name="value">Value that will be set for this category as default. User cannot change that.</param>
-        public CategoryProperty(string name, string description, PropertyType propertyType = PropertyType.Text, 
+        public CategoryProperty(string name, string? description = null, PropertyType propertyType = PropertyType.Text, 
             string? value = null)
         {
             Name = name;

@@ -102,6 +102,8 @@
         {
             ShowHelpText = true;
         }
+
+        StateHasChanged();
     }
 
     /// <summary>
@@ -115,7 +117,7 @@
         CustomDataGrid.Data = chosenPacks;
 
         await CustomDataGrid.RefreshDataAsync();
-        
+
         RefreshOptionalPackages();
 
         ShowHelpText = true;
@@ -149,27 +151,16 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                @*<RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Uuid))" Title="#" Width="10%" SortOrder="SortOrder.Ascending" TextAlign="@TdTextAlign" />*@
                 <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <RadzenDropDownDataGrid Placeholder="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" SearchTextPlaceholder="חיפוש..." TValue="string"
-                                                Data=@allPacks TextProperty="@(nameof(CachedData.PackageExample.Id))"
-                                                ValueProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
-                                                Style="@($"width: {Width}; min-height:;")" @bind-Value="@pack.Id">
-                            <Columns>
-                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
-                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
-                                    <Template>
-                                        @((context as Package).Category.MaterialType?.Name)
-                                    </Template>
-                                </RadzenDropDownDataGridColumn>
-                                <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
-                                    <Template>
-                                        @(string.Join(", ", (context as Package).Category.Name))
-                                    </Template>
-                                </RadzenDropDownDataGridColumn>
-                            </Columns>
-                        </RadzenDropDownDataGrid>
+                        @if (string.IsNullOrEmpty(pack.Id))
+                        {
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null" Change="@(args=>pack.Id = ((Package)args).Id)" />
+                        }
+                        else
+                        {
+                        <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = ((Package)args).Id)" />
+                        }
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
@@ -179,7 +170,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Amount="@pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" ShowErrors="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()
