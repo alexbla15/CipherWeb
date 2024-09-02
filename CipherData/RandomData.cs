@@ -29,5 +29,6 @@ namespace CipherData
         public static readonly List<ProcessDefinition> RandomProcessDefinitions = RandomFuncs.FillRandomObjects(20, ProcessDefinition.Random);
         public static readonly List<StorageSystem> RandomSystems = RandomFuncs.FillRandomObjects(20, StorageSystem.Random);
         public static readonly List<Vessel> RandomVessels = RandomFuncs.FillRandomObjects(20, Vessel.Random);
+        public static readonly List<Unit> RandomUnits = RandomFuncs.FillRandomObjects(20, Unit.Random);
     }
 }

@@ -10,6 +10,15 @@ namespace CipherData.Requests
     public class UnitsRequests
     {
         /// <summary>
+        /// Get all vessels available.
+        /// Path: Get /units/
+        /// </summary>
+        public static Tuple<List<Unit>, ErrorResponse> GetUnits()
+        {
+            return GenericRequests.Request(RandomData.RandomUnits);
+        }
+
+        /// <summary>
         /// Create a new unit.
         /// Path: POST /units
         /// </summary>

@@ -7,13 +7,13 @@ namespace CipherData.Models
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation("מערכת")]
+        [HebrewTranslation("שם מערכת")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation("תיאור")]
+        [HebrewTranslation("תיאור מערכת")]
         public string Description { get; set; }
 
         /// <summary>

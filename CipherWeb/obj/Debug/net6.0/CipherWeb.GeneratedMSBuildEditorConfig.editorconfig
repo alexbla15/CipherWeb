@@ -36,8 +36,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkUHJvY2Vzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddStorageSystem.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkU3RvcmFnZVN5c3RlbS5yYXpvcg==
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddSystem.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkU3lzdGVtLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddVessel.razor]

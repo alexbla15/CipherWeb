@@ -15,7 +15,7 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AddCategory = new() { Href = "Forms/AddCategory", Name = "קטגוריה חדשה", Icon = Icons.Symbols.Category };
         public static readonly MySubNavLink AddProcess = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddStorageSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
+        public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
         public static readonly MyNavLink Forms = new()
         {
             Href = "Forms",

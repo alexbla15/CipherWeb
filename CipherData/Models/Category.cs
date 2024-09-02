@@ -25,7 +25,7 @@ namespace CipherData.Models
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation("תכונות")]
-        public Dictionary<string, string>? Properties { get; set; }
+        public HashSet<string>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
@@ -72,7 +72,7 @@ namespace CipherData.Models
         public Category(string name, string description, HashSet<string> idMask,
             HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses,
             Category? parent = null, HashSet<Category>? children = null, Category? materialType = null,
-            string? id = null, Dictionary<string,string>? properties = null)
+            string? id = null, HashSet<CategoryProperty>? properties = null)
         {
             Id = id ?? GetNextId();
             Name = name;
@@ -83,7 +83,7 @@ namespace CipherData.Models
             ConsumingProcesses = consumingProcesses;
             Parent = parent;
             Children = children;
-            Properties = properties;
+            Properties = properties?.Select(x=>x.ToJson()).ToHashSet() ;
         }
 
         /// <summary>

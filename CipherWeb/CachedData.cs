@@ -20,5 +20,6 @@ namespace CipherWeb
         public static readonly Tuple<List<ProcessDefinition>, ErrorResponse> AllProcessDefinitions = ProcessDefinition.All();
         public static readonly Tuple<List<StorageSystem>, ErrorResponse> AllSystems = StorageSystem.All();
         public static readonly Tuple<List<Vessel>, ErrorResponse> AllVessels = Vessel.All();
+        public static readonly Tuple<List<Unit>, ErrorResponse> AllUnits = Unit.All();
     }
 }

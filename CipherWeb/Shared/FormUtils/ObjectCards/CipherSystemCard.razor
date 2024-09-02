@@ -4,13 +4,15 @@
     <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Icon="@Icons.Cipher.Location" @ref=SysName />
     <CipherComments @ref="SysDescription" WithCard="false" Title="" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))" 
     Icon="@Icons.Documents.Page.Description" Width="300px" />
-    <CipherLocation @ref="SysParent" />
+    <CipherLocation @ref="SysParent" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" />
+    <CipherUnitDropDown @ref="SysUnit"/>
 </CipherComponentCard>
 
 @code {
     private CipherAutoComplete SysName = new();
     private CipherLocation SysParent = new();
     private CipherComments SysDescription = new();
+    private CipherUnitDropDown SysUnit = new();
 
     public SystemRequest Value()
     {
@@ -19,6 +21,7 @@
         sys.Name = SysName.Check() ? SysName.Value : string.Empty;
         sys.Description = SysDescription.Value();
         sys.ParentId = SysParent.Value?.Id;
+        sys.UnitId = SysUnit.ChosenUnit?.Id;
 
         return sys;
     }

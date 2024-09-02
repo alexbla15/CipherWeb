@@ -104,7 +104,11 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
+            name:
+              type: string
+              description: Name of the unit
             description:
+              nullable: true
               type: string
               description: Description of the unit
             parent:
@@ -968,6 +972,24 @@ paths:
           description: Not found
           $ref: "#/components/responses/ErrorResponse"
   /units:
+    get:
+      summary: Get all units
+      operationId: getUnits
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Unit"
+        '400':
+          description: Bad request
+          $ref: "#/components/responses/ErrorResponse"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/ErrorResponse"
     post:
       summary: Create a new unit
       operationId: createUnit

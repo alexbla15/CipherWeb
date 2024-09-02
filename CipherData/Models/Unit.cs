@@ -5,10 +5,16 @@ namespace CipherData.Models
     public class Unit : Resource
     {
         /// <summary>
-        /// Description of system
+        /// Name of unit.
+        /// </summary>
+        [HebrewTranslation("שם יחידה")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Description of unit.
         /// </summary>
         [HebrewTranslation("תיאור")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
@@ -37,15 +43,17 @@ namespace CipherData.Models
         /// <summary>
         /// Instanciation of new unit.
         /// </summary>
-        /// <param name="description">Description of system</param>
+        /// <param name="name">Name of unit</param>
+        /// <param name="description">Description of unit</param>
         /// <param name="parent">Parent system containing this one</param>
         /// <param name="children">Child systems contained in this one</param>
         /// <param name="systems">Systems under this unit</param>
         /// <param name="properties">JSON-like additional properties of the unit</param>
-        public Unit(string description, Unit? parent = null, HashSet<Unit>? children = null, HashSet<StorageSystem>? systems = null, string? properties = null,
+        public Unit(string name, string? description = null, Unit? parent = null, HashSet<Unit>? children = null, HashSet<StorageSystem>? systems = null, string? properties = null,
             string? id = null)
         {
             Id = id ?? GetNextId();
+            Name = name;
             Description = description;
             Parent = parent;
             Children = children;
@@ -91,6 +99,7 @@ namespace CipherData.Models
 
             return new Unit(
                     id: id,
+                    name: GetNextId(),
                     description: RandomFuncs.RandomItem(UnitDescriptions)
                 );
         }
@@ -101,12 +110,26 @@ namespace CipherData.Models
         public static Unit Empty()
         {
             return new Unit(
-                    id: "",
-                    description: ""
+                    id: string.Empty,
+                    name: string.Empty
                 );
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(Unit), searchedAttribute);
+        }
+
+
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// All objects
+        /// </summary>
+        public static Tuple<List<Unit>, ErrorResponse> All()
+        {
+            return UnitsRequests.GetUnits();
+        }
 
         /// <summary>
         /// Fetch all units which contain the searched text
@@ -115,6 +138,7 @@ namespace CipherData.Models
         {
             return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
                 new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),

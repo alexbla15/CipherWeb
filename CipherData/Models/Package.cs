@@ -1,7 +1,6 @@
 ﻿using CipherData.Requests;
 using System.Text.Json;
 using System.Text.Encodings.Web;
-using System.Xml;
 
 namespace CipherData.Models
 {
