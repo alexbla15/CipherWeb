@@ -3,15 +3,27 @@
 <PageTitle>@Title</PageTitle>
 
 <CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherFormInfo @ref="FormInfo" />
+
     <CipherComponentCard Title="בחירת תעודה">
-        <CipherPackageId @ref=OriginalPackage/>
+        <CipherPackageId @ref=OriginalPackage Change="Change" />
     </CipherComponentCard>
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" @ref=newId Required="false"/>
-        <CipherComments @ref="PackDescription" WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" 
-        Icon="@Icons.Documents.Page.Description" Width="300px" />
-        <CipherProcesses @ref="Destinations" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
+        <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId />
+        <CipherComments @ref=PackDescription WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
+                        Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenPackage?.Description" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.Scale" />
+
+        <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" />
+        <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" />
+        <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" />
+
+        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
+        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))" />
+        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
+
     </CipherComponentCard>
 
     <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
@@ -25,7 +37,8 @@
                 <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
             </Buttons>
             <ChildContent>
-                <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+                <RadzenTextArea @bind-Value="UpdatePackJsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
+                <RadzenTextArea @bind-Value="CreateEventJsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
             </ChildContent>
         </CipherComponentCard>
     }
@@ -55,16 +68,28 @@
     public string Title { get; set; } = "עדכון תעודה";
 
     /// <summary>
-    /// Json request that will be sent to the API server.
+    /// Json request that will be sent to the API server. (Specific for update package request)
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; }
+    public string UpdatePackJsonRequest { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server. (specific for create event request)
+    /// </summary>
+    [Parameter]
+    public string CreateEventJsonRequest { get; set; }
+
+    /// <summary>
+    /// API package result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Package UpdatePackResult { get; set; }
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Package Result { get; set; }
+    public Event CreateEventResult { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -78,43 +103,147 @@
     [Parameter]
     public string ErrorMessage { get; set; }
 
+    private CipherFormInfo FormInfo = new();
     private CipherSubmit submission = new();
     private CipherComments PackDescription = new();
     private CipherPackageId OriginalPackage = new();
+    private CipherPackageId ParentPack = new();
     private CipherAutoComplete newId = new();
     private CipherProcesses Destinations = new();
     private CipherComments EventComments = new();
+    private CipherNumeric SetBrutMass = new();
+    private CipherNumeric SetNetMass = new();
+    private CipherCategoryDropDown SetCategory = new();
+    private CipherVesselDropDown SetVessel = new();
+    private CipherLocation SetSystem = new();
+    private CipherPackagesPicking SetChildren = new();
 
-    private CipherData.Models.UpdatePackage RequestedUpdate = CipherData.Models.UpdatePackage.Empty();
+    private Package? ChosenPackage;
+    private Package OriginalPack = Package.Empty();
+    private Package NewPack = Package.Empty();
 
-    private void Submit()
+    private CipherData.Models.UpdatePackage RequestedPackUpdate = CipherData.Models.UpdatePackage.Empty();
+    private CreateEvent UpdatePackEvent = CreateEvent.Empty();
+
+    public void Change()
     {
-        // initially, form is valid, there is no error, there is no data at all.
+        ChosenPackage = OriginalPackage.ChosenPackage;
+
+        if (OriginalPackage.ChosenPackage != null)
+        {
+            newId.Value = ChosenPackage.Id;
+
+            OriginalPack = ChosenPackage;
+            NewPack = ChosenPackage;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Set all values to default empty values.
+    /// </summary>
+    public void Reset()
+    {
         string originalPackId = string.Empty;
         (Valid, ErrorMessage) = (true, string.Empty);
-        JsonRequest = string.Empty;
+        UpdatePackJsonRequest = string.Empty;
+        CreateEventJsonRequest = string.Empty;
+        UpdatePackEvent = CreateEvent.Empty();
+        NewPack = Package.Empty();
+    }
 
-        if (OriginalPackage.ChosenPackage is null)
+    /// <summary>
+    /// Check if original package was chosen. No point in update if it wasn't.
+    /// </summary>
+    /// <returns></returns>
+    public bool OriginalPackChosen()
+    {
+        bool IsChosen = OriginalPackage.ChosenPackage != null;
+
+        if (!IsChosen)
         {
             (Valid, ErrorMessage) = (false, "נא לבחור בתעודה אותה רוצים לעדכן.");
         }
-        else
+
+        return IsChosen;
+    }
+
+    /// <summary>
+    /// Set all properties of UpdatePackage request.
+    /// </summary>
+    public void SetUpdatePackageRequest()
+    {
+        if (Valid)
         {
-            originalPackId = ((Package)OriginalPackage.ChosenPackage).Id;
+            NewPack.Id = newId.Value;
+            NewPack.DestinationProcesses = Destinations.ChosenProcesses?.ToHashSet();
+
+            if (PackDescription.Check())
+            {
+                NewPack.Description = PackDescription.Value();
+                RequestedPackUpdate.PackageId = NewPack.Id;
+                RequestedPackUpdate.DestinationProcessesIds = NewPack.DestinationProcesses?.Select(x => x.Id).ToHashSet();
+                RequestedPackUpdate.PackageDescription = NewPack.Description;
+                RequestedPackUpdate.ActionComments = EventComments.Value();
+
+                (Valid, ErrorMessage) = RequestedPackUpdate.Check();
+            }
+            else
+            {
+                (Valid, ErrorMessage) = (false, "שגיאה בתיאור התעודה");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set all properties of CreateEvent request.
+    /// </summary>
+    public void SetCreateEventRequest()
+    {
+        if (Valid)
+        {
+            NewPack.BrutMass = SetBrutMass.Amount;
+            NewPack.NetMass = SetNetMass.Amount;
+            NewPack.Category = SetCategory.ChosenCategory ?? Category.Empty();
+            NewPack.Vessel = SetVessel.ChosenVessel;
+            NewPack.System = SetSystem.ChosenSystem ?? StorageSystem.Empty();
+            NewPack.Parent = ParentPack.GetValue();
+            NewPack.Children = SetChildren.SelectedPackages?.ToHashSet();
+
+            UpdatePackEvent.EventType = 26;
+            UpdatePackEvent.Worker = FormInfo.GetWorker();
+            UpdatePackEvent.Timestamp = FormInfo.GetDateTime();
+            UpdatePackEvent.Comments = EventComments.Value();
+            UpdatePackEvent.Actions.Add(NewPack.Request());
+
+            Tuple<bool,string> CheckResult = UpdatePackEvent.Check();
+            (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה ב{CheckResult.Item2}");
+        }
+    }
+
+    private void Submit()
+    {
+        Reset();
+
+        if (OriginalPackChosen())
+        {
+            string? originalPackId = OriginalPackage.ChosenPackage.Id;
 
             if (newId.Check())
             {
-                RequestedUpdate.PackageId = newId.Value;
-                RequestedUpdate.DestinationProcessesIds = Destinations.ChosenProcesses.Select(x => x.Id).ToHashSet();
-                RequestedUpdate.PackageDescription = PackDescription.Value();
-                RequestedUpdate.ActionComments = EventComments.Value();
+                // must be first, because it can change the package id!!!
+                SetUpdatePackageRequest();
+                SendUpdatePackageRequest(originalPackId);
 
-                (Valid, ErrorMessage) = RequestedUpdate.Check();
+                SetCreateEventRequest();
+                SendCreateEventRequest();
 
-                if (Valid)
+                if (!FoundCreateEventChanges() && !FoundUpdatePackageChanges())
                 {
-                    JsonRequest = RequestedUpdate.ToJson();
+                    (Valid, ErrorMessage) = (false, "לא נעשו שינויים כלל");
                 }
+
             }
             else
             {
@@ -122,33 +251,107 @@
             }
         }
 
-        SendRequest(originalPackId);
+        SetSubmission();
     }
 
     /// <summary>
-    /// Send request to API
+    /// Check if package-parameters (for UpdatePackage) were changed in the form
     /// </summary>
-    public void SendRequest(string originalPackId)
+    /// <returns></returns>
+    public bool FoundUpdatePackageChanges()
     {
-        if (Valid)
+        bool different = false;
+
+        different |= OriginalPack.Id != NewPack.Id;
+        different |= OriginalPack.Description != NewPack.Description;
+
+
+        if ((OriginalPack.DestinationProcesses != null) && (NewPack.DestinationProcesses != null))
         {
-            (Result, Error) = PackagesRequests.UpdatePackage(originalPackId, RequestedUpdate);
+            different |= !OriginalPack.DestinationProcesses.Select(x => x.Id).ToHashSet().SetEquals(NewPack.DestinationProcesses.Select(x => x.Id).ToHashSet());
+
+        }
+        else if (((OriginalPack.DestinationProcesses != null) && (OriginalPack.DestinationProcesses == null)) || ((OriginalPack.DestinationProcesses == null) && (OriginalPack.DestinationProcesses != null)))
+        {
+            different = true;
+        }
+
+        return different;
+    }
+
+    /// <summary>
+    /// Check if package-parameters were changed in the form
+    /// </summary>
+    /// <returns></returns>
+    public bool FoundCreateEventChanges()
+    {
+        bool different = false;
+
+        different |= OriginalPack.BrutMass != NewPack.BrutMass;
+        different |= OriginalPack.NetMass != NewPack.NetMass;
+        different |= OriginalPack.Category.Id != NewPack.Category.Id;
+        different |= OriginalPack.Vessel?.Id != NewPack.Vessel?.Id;
+        different |= OriginalPack.System.Id != NewPack.System.Id;
+        different |= OriginalPack.Parent?.Id != NewPack.Parent?.Id;
+
+        if ((OriginalPack.Children != null) && (OriginalPack.Children != null))
+        {
+            different |= !OriginalPack.Children.Select(x => x.Id).ToHashSet().SetEquals(NewPack.Children.Select(x => x.Id).ToHashSet()); ;
+        }
+        else if (((OriginalPack.Children != null) && (OriginalPack.Children == null)) || ((OriginalPack.Children == null) && (OriginalPack.Children != null)))
+        {
+            different = true;
+        }
+
+        return different;
+    }
+
+    /// <summary>
+    /// Send create-event request to API
+    /// </summary>
+    public void SendCreateEventRequest()
+    {
+        if (Valid && FoundCreateEventChanges())
+        {
+            CreateEventJsonRequest = UpdatePackEvent.ToJson();
+
+            (CreateEventResult, Error) = EventsRequests.CreateEvent(UpdatePackEvent);
 
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
-            }
-            else
-            {
-                submission.Valid = true;
-                submission.SuccessMessage = "תעודה עודכנה בהצלחה";
+                Valid = false;
+                ErrorMessage = Error.Message;
             }
         }
-        else
+    }
+
+    /// <summary>
+    /// Send update-package request to API
+    /// </summary>
+    public void SendUpdatePackageRequest(string originalPackId)
+    {
+        if (Valid && FoundUpdatePackageChanges())
         {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
+            UpdatePackJsonRequest = RequestedPackUpdate.ToJson();
+
+            (UpdatePackResult, Error) = PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
+
+            if (Error != ErrorResponse.Success)
+            {
+                Valid = false;
+                ErrorMessage = Error.Message;
+            }
+        }
+    }
+
+    public void SetSubmission()
+    {
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
+
+        if (Valid)
+        {
+            ChosenPackage = NewPack;
         }
     }
 }

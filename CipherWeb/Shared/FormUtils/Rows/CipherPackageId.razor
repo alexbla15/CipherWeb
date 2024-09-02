@@ -56,9 +56,9 @@
         (AllPacks, Error) = CachedData.AllPackages;
     }
 
-    public Package GetValue()
+    public Package? GetValue()
     {
-        return (ChosenPackage is null) ? Package.Empty() : ChosenPackage;
+        return ChosenPackage;
     }
 }
 

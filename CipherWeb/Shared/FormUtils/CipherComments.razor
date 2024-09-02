@@ -71,7 +71,7 @@
 
     public string Value()
     {
-        if (component.Check())
+        if (Check())
         {
             return Comments;
         }
@@ -79,6 +79,11 @@
         {
             return string.Empty;
         }
+    }
+
+    public bool Check()
+    {
+        return component.Check();
     }
 }
 
