@@ -88,7 +88,10 @@
     {
         Title ??= "דוח תהליכים";
 
-        (Processes, error) = CachedData.AllProcesses;
+        if (Processes is null)
+        {
+            (Processes, error) = CachedData.AllProcesses;
+        }
     }
 
     public IEnumerable<object> values()

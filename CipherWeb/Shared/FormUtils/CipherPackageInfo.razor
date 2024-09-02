@@ -67,7 +67,7 @@
         pack.Category = packCategory.ChosenCategory ?? Category.Empty();
         pack.System = ChosenSystem ?? StorageSystem.Empty();
         pack.Vessel = ChosenVessel ?? null;
-        pack.Parent = ParentPackage.Value;
+        pack.Parent = ParentPackage.ChosenPackage;
 
         return pack;
     }
@@ -79,10 +79,10 @@
 
     public void ChangedVessel()
     {
-        if (packVessel.Value != null)
+        if (packVessel.ChosenVessel != null)
         {
-            ChosenVessel = packVessel.Value;
-            ChosenSystem = packVessel.Value.System;
+            ChosenVessel = packVessel.ChosenVessel;
+            ChosenSystem = packVessel.ChosenVessel.System;
         }
         else
         {
@@ -93,17 +93,17 @@
     public void ChangedSystem()
     {
         ChosenVessel = null;
-        ChosenSystem = packLocation.Value;
+        ChosenSystem = packLocation.ChosenSystem;
 
-        (AllVessels, Error) = (packLocation.Value is null)? Vessel.All() : StorageSystem.Vessels(packLocation.Value.Id);
+        (AllVessels, Error) = (packLocation.ChosenSystem is null)? Vessel.All() : StorageSystem.Vessels(packLocation.ChosenSystem.Id);
     }
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherAutoComplete Label="@Package.Translate(nameof(CachedData.PackageExample.Id))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" />
-    <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" Value="@ChosenVessel" Change="@ChangedVessel" />
-    <CipherLocation Disabled="@ReadOnly" @ref="packLocation" Value="@ChosenSystem" Change="@ChangedSystem" />
+    <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
+    <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
     <CipherPackageId Label="@Package.Translate(nameof(CachedData.PackageExample.Parent))" @ref=ParentPackage />
     @if (!IsNew)
     {

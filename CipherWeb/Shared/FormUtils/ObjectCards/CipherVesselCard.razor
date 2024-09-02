@@ -18,7 +18,7 @@
 
         ves.Name = VesName.Check() ? VesName.Value : string.Empty;
         ves.Type = VesType.Check() ? VesType.Value : string.Empty;
-        ves.SystemId = VesSystem.Value?.Id;
+        ves.SystemId = VesSystem.ChosenSystem?.Id;
 
         return ves;
     }

@@ -82,6 +82,10 @@
     protected override void OnInitialized()
     {
         Title ??= "דוח תנועות";
-        (Events, error) = CachedData.AllEvents;
+
+        if (Events is null)
+        {
+            (Events, error) = CachedData.AllEvents;
+        }
     }
 }

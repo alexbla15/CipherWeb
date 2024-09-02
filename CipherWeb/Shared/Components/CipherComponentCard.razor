@@ -22,7 +22,7 @@
     @if (ChildContent != null)
     {
         <div style="@($@"
-            padding: {ContentPadding}; display:{ContentDisplay};
+            padding: {ContentPadding}; display:{ContentDisplay}; align-items: {AlignCardItems};
             justify-content: {ContentJustify}; flex-wrap: {ContentFlexWrap};
             column-gap: {ContentColumnGap}; row-Gap: {ContentRowGap}")">
             @ChildContent
@@ -83,6 +83,12 @@
     /// </summary>
     [Parameter]
     public string? ButtonsGap { get; set; }
+
+    /// <summary>
+    /// Align items within the card.
+    /// </summary>
+    [Parameter]
+    public string? AlignCardItems { get; set; }
 
     /// <summary>
     /// Card's side buttons.

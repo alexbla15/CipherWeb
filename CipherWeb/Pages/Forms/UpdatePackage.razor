@@ -12,6 +12,9 @@
         <CipherComments @ref="PackDescription" WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" 
         Icon="@Icons.Documents.Page.Description" Width="300px" />
         <CipherProcesses @ref="Destinations" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
+    </CipherComponentCard>
+
+    <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherComments @ref="EventComments" Width="300px" WithCard="false" Title="" />
     </CipherComponentCard>
 
@@ -91,13 +94,13 @@
         (Valid, ErrorMessage) = (true, string.Empty);
         JsonRequest = string.Empty;
 
-        if (OriginalPackage.Value is null)
+        if (OriginalPackage.ChosenPackage is null)
         {
             (Valid, ErrorMessage) = (false, "נא לבחור בתעודה אותה רוצים לעדכן.");
         }
         else
         {
-            originalPackId = ((Package)OriginalPackage.Value).Id;
+            originalPackId = ((Package)OriginalPackage.ChosenPackage).Id;
 
             if (newId.Check())
             {

@@ -2,6 +2,12 @@
 
 @code {
     /// <summary>
+    /// Is component readonly?
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    /// <summary>
     /// All packages available
     /// </summary>
     [Parameter]
@@ -35,7 +41,13 @@
     /// Component's chosen value.
     /// </summary>
     [Parameter]
-    public Package Value { get; set; }
+    public Package? ChosenPackage { get; set; }
+
+    /// <summary>
+    /// Action function that occurs upon change of set-value.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change {get;set;}
 
     private CipherAutoComplete component = new CipherAutoComplete();
 
@@ -46,7 +58,7 @@
 
     public Package GetValue()
     {
-        return (Value is null) ? Package.Empty() : Value;
+        return (ChosenPackage is null) ? Package.Empty() : ChosenPackage;
     }
 }
 
@@ -57,7 +69,8 @@
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Package" AllowClear="true"
                             Data=@AllPacks TextProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
-                            Style="@($"width: {Width}; min-height:;")" @bind-Value="Value">
+                            Style="@($"width: {Width}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
+                            Change="@Change">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">

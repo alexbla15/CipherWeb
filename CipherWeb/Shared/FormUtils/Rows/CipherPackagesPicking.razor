@@ -2,6 +2,12 @@
 
 @code {
     /// <summary>
+    /// Is component readonly?
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    /// <summary>
     /// Max amount of labels that will be shown upon choosing. Afterwards, it will be shown as "X labels were selected"
     /// </summary>
     [Parameter]
@@ -46,7 +52,7 @@
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
                             Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
-                            Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true">
+                            Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true" Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">

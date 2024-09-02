@@ -32,47 +32,17 @@
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Decide if error-message is a popup.
-    /// </summary>
-    [Parameter]
-    public bool Popup { get; set; }
-
-    /// <summary>
-    /// Enable / disable error-messages.
-    /// </summary>
-    [Parameter]
-    public bool ShowErrors { get; set; } = true;
-
-    /// <summary>
-    /// Is value required for form.
-    /// </summary>
-    [Parameter]
-    public bool Required { get; set; } = true;
-
-    /// <summary>
     /// Is component visible.
     /// </summary>
     [Parameter]
     public bool Visible { get; set; } = true;
 
-    private decimal _value;
-
+  
     /// <summary>
     /// Numeric value of component.
     /// </summary>
     [Parameter]
-    public decimal Value
-    {
-        get => _value;
-        set
-        {
-            if (_value != value)
-            {
-                _value = value;
-                ValueChanged.InvokeAsync(value);
-            }
-        }
-    }
+    public decimal Amount { get; set; }
 
     [Parameter]
     public EventCallback<decimal> ValueChanged { get; set; }
@@ -89,65 +59,23 @@
     [Parameter]
     public decimal Max { get; set; } = decimal.MaxValue;
 
-    class Model
-    {
-        public decimal value = 0;
-    }
-
-    private Model model = new Model() { };
     private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
-
-    /// <summary>
-    /// Behavior upon value - change.
-    /// </summary>
-    /// <param name="value"></param>
-    private void OnValueChanged(decimal value)
-    {
-        model.value = value;
-        Value = value; // Update the Value parameter
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        model.value = Value; // Initialize model's value with the parameter value
-    }
-
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        await base.SetParametersAsync(parameters);
-
-        if (parameters.TryGetValue<decimal>(nameof(Value), out var newValue))
-        {
-            model.value = newValue; // Synchronize model's value with the new parameter value
-        }
-    }
 }
 
-<RadzenTemplateForm TItem="Model" Data=@model Visible="@Visible">
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
-        @if (!string.IsNullOrEmpty(Icon))
-        {
-            <style>
-                .rz-messages-error {
-                    display: flex;
-                    font-size: small;
-                    padding-right: 2.5rem;
-                }
-            </style>
-            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-        }
-        @if (string.IsNullOrEmpty(Label))
-        {
-            <RadzenNumeric @bind-Value=@model.value Name="value" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
-                           Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" Min="@Min" Max="Max" />
-        }
-        else
-        {
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenNumeric Name="value" Min="@Min" Max="Max" @bind-Value=@model.value Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
-                               Change="@(EventCallback.Factory.Create<decimal>(this, OnValueChanged))" />
-            </RadzenFormField>
-        }
-    </RadzenStack>
-</RadzenTemplateForm>
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+    }
+    @if (string.IsNullOrEmpty(Label))
+    {
+        <RadzenNumeric @bind-Value=@Amount Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
+                       Min="@Min" Max="Max" />
+    }
+    else
+    {
+        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+            <RadzenNumeric Min="@Min" Max="Max" @bind-Value=@Amount Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")" />
+        </RadzenFormField>
+    }
+</RadzenStack>

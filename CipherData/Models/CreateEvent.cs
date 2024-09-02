@@ -33,7 +33,7 @@ namespace CipherData.Models
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
@@ -49,7 +49,7 @@ namespace CipherData.Models
         /// <param name="comments">Free-text comments on the event</param>
         /// <param name="timestamp">Timestamp when the event happend. Required</param>
         /// <param name="actions">List of affected packages from actions, the items present the state of each package after the event</param>
-        public CreateEvent(string worker, DateTime timestamp, int eventType, HashSet<PackageRequest> actions, string? processId = null, string? comments = null)
+        public CreateEvent(string worker, DateTime? timestamp, int eventType, HashSet<PackageRequest> actions, string? processId = null, string? comments = null)
         {
             Worker = worker;
             EventType = eventType;
@@ -98,12 +98,19 @@ namespace CipherData.Models
 
             result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, "שם עובד"); // worker name is required
             result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // event type is required
-            result = (Timestamp > DateTime.Parse("01/01/1900") && Timestamp <= DateTime.Now) ? result : 
-                Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));
-            result = (Actions.Count > 0 && !actionsCheck.Any(x=>x.Item1 == false)) ? result :
-                Tuple.Create(false, actionsCheck.Where(x => x.Item1 == false).First().Item2);
 
-            return result;
+            if (Timestamp is null)
+            {
+                return Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));
+            }
+            else
+            {
+                result = (Timestamp > DateTime.Parse("01/01/1900") && Timestamp <= DateTime.Now) ? result :
+                    Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));
+                result = (Actions.Count > 0 && !actionsCheck.Any(x => x.Item1 == false)) ? result :
+                    Tuple.Create(false, actionsCheck.Where(x => x.Item1 == false).First().Item2);
+                return result;
+            }
         }
 
         /// <summary>

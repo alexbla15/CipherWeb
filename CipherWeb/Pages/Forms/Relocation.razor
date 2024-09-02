@@ -86,7 +86,7 @@
         {
             (Valid, ErrorMessage) = (false, "יש לבחור תעודות מועברות");
         }
-        else if (FinalLocation.Value is null)
+        else if (FinalLocation.ChosenSystem is null)
         {
             (Valid, ErrorMessage) = (false, "יש לבחור מערכת חדשה.");
         }
@@ -96,13 +96,13 @@
 
             foreach (Package p in RelocatedPacks.SelectedPackages)
             {
-                if (p.System.Id == FinalLocation.Value.Id)
+                if (p.System.Id == FinalLocation.ChosenSystem.Id)
                 {
-                    (Valid, ErrorMessage) = (false, $"תעודה {p.Id} נמצאת במערכת {FinalLocation.Value.Name}. נא בחרו מערכת אחרת או מחקו תעודה זו מהרשימה.");
+                    (Valid, ErrorMessage) = (false, $"תעודה {p.Id} נמצאת במערכת {FinalLocation.ChosenSystem.Name}. נא בחרו מערכת אחרת או מחקו תעודה זו מהרשימה.");
                     InitialLocationCheck = false;
                     break;
                 }
-                p.System = FinalLocation.Value;
+                p.System = FinalLocation.ChosenSystem;
             }
 
             if (!InitialLocationCheck)

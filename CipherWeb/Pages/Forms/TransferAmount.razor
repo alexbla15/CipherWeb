@@ -86,22 +86,22 @@
     /// </summary>
     public void Submit()
     {
-        if (DonatingPack.Value is null)
+        if (DonatingPack.ChosenPackage is null)
         {
             (Valid, ErrorMessage) = (false, "יש למלא תעודה מוסרת.");
         }
-        else if (AcceptingPack.Value is null)
+        else if (AcceptingPack.ChosenPackage is null)
         {
             (Valid, ErrorMessage) = (false, "יש למלא תעודה מקבלת.");
         }
-        else if (DonatingPack.Value.Id == AcceptingPack.Value.Id)
+        else if (DonatingPack.ChosenPackage.Id == AcceptingPack.ChosenPackage.Id)
         {
             (Valid, ErrorMessage) = (false, "תעודה מקבלת ומוסרת חייבות להיות שונות זו מזו.");
         }
         else
         {
-            Package DonatingPackage = ((Package)DonatingPack.Value);
-            Package AcceptingPackage = ((Package)AcceptingPack.Value);
+            Package DonatingPackage = ((Package)DonatingPack.ChosenPackage);
+            Package AcceptingPackage = ((Package)AcceptingPack.ChosenPackage);
 
             if (DonatingPackage.BrutMass < DeltaM.Amount)
             {

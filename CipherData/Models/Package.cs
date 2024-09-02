@@ -187,17 +187,21 @@ namespace CipherData.Models
             List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
             Category cat = Category.Random();
 
+            HashSet<Package> random_packs = RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet();
+            Package? Parent = (random_packs.Count > 0) ? random_packs.First() : null;
+
             Package result = new(
                     id: id,
                     description: RandomFuncs.RandomItem(PackageDescriptions),
                     createdAt: RandomFuncs.RandomDateTime(),
                     brutMass: curr_brutmass,
                     netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
-                    children: RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet(),
+                    parent: Parent,
+                    children: (Parent is null) ? null : random_packs.Where(x => x.Id != Parent.Id).ToHashSet(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
                     category: cat,
-                    destinationProcesses: cat.ConsumingProcesses);
+                    destinationProcesses: cat.ConsumingProcesses); ;
             return result;
         }
 
@@ -223,6 +227,26 @@ namespace CipherData.Models
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// All events relevant for package.
+        /// </summary>
+        public Tuple<List<Event>, ErrorResponse> Events()
+        {
+            return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
+                }, @operator: Operator.Or));
+        }
+
+        /// <summary>
+        /// All events relevant for package.
+        /// </summary>
+        public Tuple<List<Process>, ErrorResponse> Processes()
+        {
+            return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition(conditions: new() {
+        new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.Packages.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
+                }));
+        }
 
         /// <summary>
         /// Get details about a single package given package ID

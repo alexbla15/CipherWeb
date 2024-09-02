@@ -73,13 +73,13 @@
     [Parameter]
     public DateTime Max { get; set; } = DateTime.MaxValue;
 
-    private DateTime _value = DateTime.Today;
+    private DateTime? _value = DateTime.Now;
 
     /// <summary>
     /// Set value of component.
     /// </summary>
     [Parameter]
-    public DateTime Value
+    public DateTime? Value
     {
         get => _value;
         set
@@ -87,17 +87,18 @@
             if (_value != value)
             {
                 _value = value;
+                model.value = value;
                 ValueChanged.InvokeAsync(value);
             }
         }
     }
 
     [Parameter]
-    public EventCallback<DateTime> ValueChanged { get; set; }
+    public EventCallback<DateTime?> ValueChanged { get; set; }
 
     class Model
     {
-        public DateTime value { get; set; } = DateTime.Now;
+        public DateTime? value { get; set; } = DateTime.Now;
     }
 
     private Model model = new Model();
@@ -125,7 +126,7 @@
         }
     }
 
-    public DateTime GetDateTime()
+    public DateTime? GetDateTime()
     {
         return model.value;
     }

@@ -20,7 +20,7 @@
 
         sys.Name = SysName.Check() ? SysName.Value : string.Empty;
         sys.Description = SysDescription.Value();
-        sys.ParentId = SysParent.Value?.Id;
+        sys.ParentId = SysParent.ChosenSystem?.Id;
         sys.UnitId = SysUnit.ChosenUnit?.Id;
 
         return sys;
