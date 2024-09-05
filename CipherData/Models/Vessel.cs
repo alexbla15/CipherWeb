@@ -7,25 +7,25 @@ namespace CipherData.Models
         /// <summary>
         /// Name of vessel
         /// </summary>
-        [HebrewTranslation("Vessel.Name")]
+        [HebrewTranslation(Translator.Vessel_Name)]
         public string? Name { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
-        [HebrewTranslation("Vessel.Type")]
+        [HebrewTranslation(Translator.Vessel_Type)]
         public string Type { get; set; }
 
         /// <summary>
         /// Packages within the vessel
         /// </summary>
-        [HebrewTranslation("Vessel.Packages")]
+        [HebrewTranslation(Translator.Vessel_Packages)]
         public HashSet<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
-        [HebrewTranslation("Vessel.System")]
+        [HebrewTranslation(Translator.Vessel_System)]
         public StorageSystem System { get; set; }
 
         /// <summary>

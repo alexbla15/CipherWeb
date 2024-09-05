@@ -1,5 +1,4 @@
-﻿@inject ICipherInfo _db
-@inject DialogService DialogService
+﻿@inject DialogService DialogService
 
 @inherits CipherSteps
 
@@ -84,10 +83,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        db_events = await _db.GetEvents();
 
         ReportId = new Random().Next(1000, 9999);
 
+        (db_events, error) = CachedData.AllEvents;
         (packs, error) = CachedData.AllPackages;
         (rows, error) = CachedData.AllPackages;
         (systems, error) = CachedData.AllSystems;

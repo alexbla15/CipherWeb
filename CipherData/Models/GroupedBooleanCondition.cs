@@ -8,13 +8,13 @@
         /// <summary>
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
-        [HebrewTranslation("Conditions")]
+        [HebrewTranslation(Translator.Conditions)]
         public HashSet<Condition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
-        [HebrewTranslation("Condition.Operator")]
+        [HebrewTranslation(Translator.Condition_Operator)]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>

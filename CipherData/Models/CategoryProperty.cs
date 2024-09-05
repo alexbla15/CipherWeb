@@ -19,25 +19,25 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the property
         /// </summary>
-        [HebrewTranslation("CategoryProperty.Name")]
+        [HebrewTranslation(Translator.CategoryProperty_Name)]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
-        [HebrewTranslation("CategoryProperty.Description")]
+        [HebrewTranslation(Translator.CategoryProperty_Description)]
         public string? Description { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
-        [HebrewTranslation("CategoryProperty.Type")]
+        [HebrewTranslation(Translator.CategoryProperty_Type)]
         public PropertyType PropertyType { get; set; }
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
-        [HebrewTranslation("CategoryProperty.Value")]
+        [HebrewTranslation(Translator.CategoryProperty_Value)]
         public string? DefaultValue { get; set; }
 
         /// <summary>
@@ -56,27 +56,23 @@ namespace CipherData.Models
             DefaultValue = value;
         }
 
-        public bool Check()
+        public Tuple<bool, string> Check()
         {
-            bool result = true;
+            Tuple<bool, string> result = new(true, string.Empty);
 
-            result &= (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Description)); // required
+            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomCategoryProperty.Name))); // required
+            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomCategoryProperty.Description))); // required
 
-            result &= (PropertyType == PropertyType.Number && decimal.TryParse(DefaultValue, out _));
-            result &= (PropertyType == PropertyType.Boolean && bool.TryParse(DefaultValue, out _));
+            if (PropertyType == PropertyType.Number)
+            {
+                result = decimal.TryParse(DefaultValue, out _) ? result : Tuple.Create(false, $"תכונה {Name} היא מספרית. הערך שהוזן אינו תואם לכך."); 
+            }
+            else if (PropertyType == PropertyType.Boolean)
+            {
+                result = bool.TryParse(DefaultValue, out _) ? result : Tuple.Create(false, $"תכונה {Name} היא בוליאנית. הערך שהוזן אינו תואם לכך.");
+            }
 
             return result;
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static CategoryProperty Empty()
-        {
-            return new CategoryProperty(
-                name: string.Empty,
-                description: string.Empty
-                );
         }
 
         /// <summary>
@@ -92,6 +88,27 @@ namespace CipherData.Models
             };
 
             return JsonSerializer.Serialize(this, options);
+        }
+
+        public static CategoryProperty Random()
+        {
+            return new CategoryProperty(name: "כמות");
+        }
+
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        public static CategoryProperty Empty()
+        {
+            return new CategoryProperty(
+                name: string.Empty,
+                description: string.Empty
+                );
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(CategoryProperty), searchedAttribute);
         }
     }
 }

@@ -13,37 +13,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation("Event.Worker")]
+        [HebrewTranslation(Translator.Event_Worker)]
         public string Worker { get; set; }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
-        [HebrewTranslation("Event.Type")]
+        [HebrewTranslation(Translator.Event_Type)]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
-        [HebrewTranslation("Event.ProcessId")]
+        [HebrewTranslation(Translator.Event_ProcessId)]
         public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation("Event.Comments")]
+        [HebrewTranslation(Translator.Event_Comments)]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        [HebrewTranslation("Event.Timestamp")]
+        [HebrewTranslation(Translator.Event_Timestamp)]
         public DateTime? Timestamp { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation("Event.Actions")]
+        [HebrewTranslation(Translator.Event_Actions)]
         public HashSet<PackageRequest> Actions { get; set; }
 
         /// <summary>

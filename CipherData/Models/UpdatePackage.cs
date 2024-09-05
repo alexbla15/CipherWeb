@@ -13,21 +13,25 @@ namespace CipherData.Models
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
+        [HebrewTranslation(Translator.Package_Id)]
         public string? PackageId { get; set; }
 
         /// <summary>
         /// Description of the package
         /// </summary>
+        [HebrewTranslation(Translator.Package_Description)]
         public string? PackageDescription { get; set; }
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
+        [HebrewTranslation(Translator.Event_ActionComments)]
         public string? ActionComments { get; set; }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
+        [HebrewTranslation(Translator.Package_DestinationProcesses)]
         public HashSet<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>

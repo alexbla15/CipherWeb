@@ -15,13 +15,13 @@
         /// <summary>
         /// List of object factory specifications and conditions on them
         /// </summary>
-        [HebrewTranslation("Conditions")]
+        [HebrewTranslation(Translator.Conditions)]
         public List<CustomCondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
-        [HebrewTranslation("Condition.Operator")]
+        [HebrewTranslation(Translator.Condition_Operator)]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>

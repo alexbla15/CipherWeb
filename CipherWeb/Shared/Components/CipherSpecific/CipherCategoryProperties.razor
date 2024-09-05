@@ -1,0 +1,189 @@
+﻿@inject DialogService DialogService
+
+@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "כאן ניתן להוסיף תכונות לקטגוריה זו. להוספה לחצו על כפתור ההוספה למעלה";
+
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת תכונה";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת תכונות";
+
+    /// <summary>
+    /// All chosen category-properties
+    /// </summary>
+    [Parameter]
+    public List<CategoryProperty> ChosenProperties { get; set; } = new List<CategoryProperty>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    private RadzenDataGrid<CategoryProperty> CustomDataGrid = new();
+
+    private bool ShowHelpText = true;
+    private int components = 0;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "תכונות הקטגוריה";
+    }
+
+    /// <summary>
+    /// Add a component to the memory.
+    /// </summary>
+    async Task AddComponent()
+    {
+        // Add the new restriction to the existing list
+        ChosenProperties.Add(CategoryProperty.Empty());
+
+        StateHasChanged();
+
+        components = ChosenProperties.Count;
+
+        ShowHelpText = false;
+
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
+    /// <summary>
+    /// Deletes a category-property from memory & view.
+    /// </summary>
+    /// <param name="prop">Property to delete</param>
+    async Task DeleteRow(CategoryProperty prop)
+    {
+        ChosenProperties.Remove(prop);
+
+        CustomDataGrid.Data = ChosenProperties;
+
+        components--;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        if (ChosenProperties.Count() == 0)
+        {
+            ShowHelpText = true;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Clears all category-properties from memory & view.
+    /// </summary>
+    /// <returns></returns>
+    async Task DeleteAll()
+    {
+        ChosenProperties.Clear();
+        components = 0;
+        CustomDataGrid.Data = ChosenProperties;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+}
+
+<CipherComponentCard Title="@Title" Visible="@Visible">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+    </Buttons>
+    <ChildContent>
+        @if (ShowHelpText)
+        {
+            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+        }
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="CategoryProperty" AllowColumnResize="true" Visible="!components.Equals(0)">
+            <Columns>
+                <RadzenDataGridColumn Width="10%" TItem="CategoryProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Name)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherAutoComplete @bind-Value="@prop.Name"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Description)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherAutoComplete @bind-Value="@prop.Description" Multiline="true"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.PropertyType)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
+                                        Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))">
+                            <ValueTemplate>
+                                @if (prop.PropertyType == PropertyType.Text)
+                                {
+                                    @("טקסט")
+                                }
+                                else if (prop.PropertyType == PropertyType.Number)
+                                {
+                                    @("מספר")
+                                }
+                                else
+                                {
+                                    @("בוליאני")
+                                }
+                            </ValueTemplate>
+                            <Template>
+                                @if (context == PropertyType.Text)
+                                {
+                                    @("טקסט")
+                                }
+                                else if (context == PropertyType.Number)
+                                {
+                                    @("מספר")
+                                }
+                                else
+                                {
+                                    @("בוליאני")
+                                }
+                            </Template>
+                            </RadzenDropDown>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.DefaultValue)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        @if (prop.PropertyType == PropertyType.Text)
+                        {
+                            <CipherAutoComplete @bind-Value="@prop.DefaultValue" />
+                        }
+                        else if (prop.PropertyType == PropertyType.Number)
+                        {
+                            <CipherNumeric AmountChanged="@(args=> prop.DefaultValue = args.ToString())"/>
+                        }
+                        else
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" AlignItems="AlignItems.Center" style="width:50%">
+                                <CipherText Text="כן" TextAlign="TextAlign.Center" Bold="true"/>
+                                <RadzenSwitch ValueChanged="@(args=> prop.DefaultValue = args.ToString())"/>
+                                <CipherText Text="לא" TextAlign="TextAlign.Center" Bold="true" />
+                            </RadzenStack>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>

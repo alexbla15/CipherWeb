@@ -8,7 +8,7 @@
         /// <summary>
         /// List of all user actions found
         /// </summary>
-        [HebrewTranslation("UserActions")]
+        [HebrewTranslation(Translator.UserActions)]
         public HashSet<UserAction> UserActions { get; set; }
 
         /// <summary>

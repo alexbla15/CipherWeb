@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Update event's process or comments
@@ -14,19 +8,19 @@ namespace CipherData.Models
         /// <summary>
         /// New process ID for event
         /// </summary>
-        [HebrewTranslation("Event.ProcessId")]
+        [HebrewTranslation(Translator.Event_ProcessId)]
         public int? ProcessId { get; set; }
 
         /// <summary>
         /// Updated comment for event
         /// </summary>
-        [HebrewTranslation("Event.Comments")]
+        [HebrewTranslation(Translator.Event_Comments)]
         public string? EventComment { get; set; }
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
-        [HebrewTranslation("Event.ActionComment")]
+        [HebrewTranslation(Translator.Event_ActionComments)]
         public string? ActionComment { get; set; }
 
         /// <summary>

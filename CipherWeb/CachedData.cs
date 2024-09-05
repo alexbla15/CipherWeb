@@ -5,6 +5,7 @@ namespace CipherWeb
     public static class CachedData
     {
         public static readonly Category CategoryExample = Category.Empty();
+        public static readonly CategoryProperty CategoryPropertyExample = CategoryProperty.Empty();
         public static readonly Event EventExample = Event.Random();
         public static readonly Package PackageExample = Package.Empty();
         public static readonly Process ProcessExample = Process.Random();

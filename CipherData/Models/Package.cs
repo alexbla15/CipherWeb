@@ -9,67 +9,67 @@ namespace CipherData.Models
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation("Package.Description")]
+        [HebrewTranslation(Translator.Package_Description)]
         public string? Description { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
         /// </summary>
-        [HebrewTranslation("Package.Properties")]
+        [HebrewTranslation(Translator.Package_Properties)]
         public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
-        [HebrewTranslation("Package.Vessel")]
+        [HebrewTranslation(Translator.Package_Vessel)]
         public Vessel? Vessel { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
-        [HebrewTranslation("Package.System")]
+        [HebrewTranslation(Translator.Package_System)]
         public StorageSystem System { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation("Package.BrutMass")]
+        [HebrewTranslation(Translator.Package_BrutMass)]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation("Package.NetMass")]
+        [HebrewTranslation(Translator.Package_NetMass)]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
-        [HebrewTranslation("Package.CreatedAt")]
+        [HebrewTranslation(Translator.Package_CreatedAt)]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
         /// </summary>
-        [HebrewTranslation("Package.Parent")]
+        [HebrewTranslation(Translator.Package_Parent)]
         public Package? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
-        [HebrewTranslation("Package.Children")]
+        [HebrewTranslation(Translator.Package_Children)]
         public HashSet<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
-        [HebrewTranslation("Package.Category")]
+        [HebrewTranslation(Translator.Package_Category)]
         public Category Category { get; set; }
 
         /// <summary>
         /// List of processes definitions that may accept this package as input
         /// </summary>
-        [HebrewTranslation("Package.DestinationProcesses")]
+        [HebrewTranslation(Translator.Package_DestinationProcesses)]
         public HashSet<ProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>

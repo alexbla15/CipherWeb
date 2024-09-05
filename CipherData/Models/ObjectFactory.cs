@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public enum Order
     {
@@ -23,13 +15,13 @@ namespace CipherData.Models
         /// <summary>
         /// Attribute to order by
         /// </summary>
-        [HebrewTranslation("Order.Attribute")]
+        [HebrewTranslation(Translator.OrderedItem_Attribute)]
         public string Attribute { get; set; }
 
         /// <summary>
         /// Desired order on the attribute
         /// </summary>
-        [HebrewTranslation("Order.Order")]
+        [HebrewTranslation(Translator.OrderedItem_Order)]
         public Order Order { get; set; }
 
         /// <summary>
@@ -49,20 +41,20 @@ namespace CipherData.Models
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
-        [HebrewTranslation("Aggregate.Attribute")]
+        [HebrewTranslation(Translator.AggregateItem_Attribute)]
         public string Attribute { get; set; } = string.Empty;
 
         /// <summary>
         /// New name to give to the aggregated field. 
         /// if null, name is auto generated
         /// </summary>
-        [HebrewTranslation("Aggregate.As")]
+        [HebrewTranslation(Translator.AggregateItem_As)]
         public string? As { get; set; }
 
         /// <summary>
         /// Method to aggregate the field by
         /// </summary>
-        [HebrewTranslation("Aggregate.Method")]
+        [HebrewTranslation(Translator.AggregateItem_Method)]
         public Method Method { get; set; }
 
         /// <summary>
@@ -88,20 +80,20 @@ namespace CipherData.Models
         /// Conditions to apply to get the desired objects. 
         /// All conditions must have the same target object.
         /// </summary>
-        [HebrewTranslation("ObjectFactory.Filter")]
+        [HebrewTranslation(Translator.ObjectFactory_Filter)]
         public GroupedBooleanCondition Filter { get; set; }
 
         /// <summary>
         /// Define order to the filtered objects
         /// </summary>
-        [HebrewTranslation("ObjectFactory.OrderBy")]
+        [HebrewTranslation(Translator.ObjectFactory_OrderBy)]
         public HashSet<OrderedItem>? OrderBy { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
-        [HebrewTranslation("ObjectFactory.GroupBy")]
+        [HebrewTranslation(Translator.ObjectFactory_GroupBy)]
         public HashSet<string>? GroupBy { get; set; }
 
         /// <summary>
@@ -109,7 +101,7 @@ namespace CipherData.Models
         ///  by default returns the grouped by fields if they 
         ///  exist. If null, returns the filtered objects
         /// </summary>
-        [HebrewTranslation("ObjectFactory.Aggregate")]
+        [HebrewTranslation(Translator.ObjectFactory_Aggregate)]
         public HashSet<AggregateItem>? Aggregate { get; set; }
 
         /// <summary>

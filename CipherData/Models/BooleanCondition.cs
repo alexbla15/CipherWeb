@@ -49,19 +49,19 @@
         /// Can be chained to include sub-objects.
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
-        [HebrewTranslation("Condition.Attribute")]
+        [HebrewTranslation(Translator.Condition_Attribute)]
         public string Attribute { get; set; }
 
         /// <summary>
         /// Expected relation between attribute and a value.
         /// </summary>
-        [HebrewTranslation("Condition.Relation")]
+        [HebrewTranslation(Translator.Condition_Relation)]
         public AttributeRelation AttributeRelation { get; set; }
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
-        [HebrewTranslation("Condition.Operator")]
+        [HebrewTranslation(Translator.Condition_Operator)]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
-        [HebrewTranslation("Condition.Value")]
+        [HebrewTranslation(Translator.Condition_Value)]
         public string? Value { get; set; }
 
         /// <summary>

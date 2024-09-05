@@ -10,43 +10,43 @@
         /// <summary>
         /// User ID of user who made the action. Required.
         /// </summary>
-        [HebrewTranslation("UserAction.By")]
+        [HebrewTranslation(Translator.UserAction_By)]
         public string By { get; set; }
 
         /// <summary>
         /// Full-text user comment on action.
         /// </summary>
-        [HebrewTranslation("UserAction.Comments")]
+        [HebrewTranslation(Translator.UserAction_Comments)]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Parameters changed by the action. (JSON)
         /// </summary>
-        [HebrewTranslation("UserAction.ActionParameters")]
+        [HebrewTranslation(Translator.UserAction_ActionParameters)]
         public string? ActionParameters { get; set; }
 
         /// <summary>
         /// UUID of object affected from the action. Required.
         /// </summary>
-        [HebrewTranslation("UserAction.ObjectId")]
+        [HebrewTranslation(Translator.UserAction_ObjectId)]
         public int ObjectId { get; set; }
 
         /// <summary>
         /// Timestamp of when the action was made. Required.
         /// </summary>
-        [HebrewTranslation("UserAction.At")]
+        [HebrewTranslation(Translator.UserAction_At)]
         public DateTime At { get; set; }
 
         /// <summary>
         /// Type of action made by user
         /// </summary>
-        [HebrewTranslation("UserAction.ActionType")]
+        [HebrewTranslation(Translator.UserAction_ActionType)]
         public ActionType ActionType { get; set; }
 
         /// <summary>
         /// Validation status of this user action.
         /// </summary>
-        [HebrewTranslation("UserAction.Status")]
+        [HebrewTranslation(Translator.UserAction_Status)]
         public int Status { get; set; }
 
         /// <summary>

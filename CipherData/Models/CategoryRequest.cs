@@ -14,44 +14,44 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation("Category.Name")]
+        [HebrewTranslation(Translator.Category_Name)]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation("Category.Description")]
+        [HebrewTranslation(Translator.Category_Description)]
         public string Description { get; set; }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
-        [HebrewTranslation("Category.Parent")]
+        [HebrewTranslation(Translator.Category_Parent)]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
-        [HebrewTranslation("Category.CreatingProcesses")]
+        [HebrewTranslation(Translator.Category_CreatingProcesses)]
         public HashSet<string> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
-        [HebrewTranslation("Category.ConsumingProcesses")]
+        [HebrewTranslation(Translator.Category_ConsumingProcesses)]
         public HashSet<string> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation("Category.IdMask")]
+        [HebrewTranslation(Translator.Category_IdMask)]
         public HashSet<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation("Category.Properties")]
-        public Dictionary<string, string>? Properties { get; set; }
+        [HebrewTranslation(Translator.Category_Properties)]
+        public HashSet<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// Create a new category or update it
@@ -65,7 +65,7 @@ namespace CipherData.Models
         public CategoryRequest(string name, string description, HashSet<string> idMask,
             string? parent = null,
             HashSet<string>? creatingProcesses = null, 
-            HashSet<string>? consumingProcesses = null, Dictionary<string,string>? properties = null)
+            HashSet<string>? consumingProcesses = null, HashSet<CategoryProperty>? properties = null)
         {
             Name = name;
             Description = description;
@@ -90,6 +90,15 @@ namespace CipherData.Models
             result = (IdMask.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.IdMask))); // required
             result = (CreatingProcesses.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.CreatingProcesses))); // event type is required
             result = (ConsumingProcesses.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.ConsumingProcesses))); // event type is required
+
+            // check properties
+            if (Properties != null && result.Item1)
+            {
+                foreach (CategoryProperty prop in Properties)
+                {
+                    result = prop.Check();
+                }
+            }
 
             return result;
         }

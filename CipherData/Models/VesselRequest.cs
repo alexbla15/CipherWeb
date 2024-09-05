@@ -12,19 +12,19 @@ namespace CipherData.Models
         /// <summary>
         /// Vessel name
         /// </summary>
-        [HebrewTranslation("Vessel.Name")]
+        [HebrewTranslation(Translator.Vessel_Name)]
         public string? Name { get; set; }
 
         /// <summary>
         /// Vessel type
         /// </summary>
-        [HebrewTranslation("Vessel.Type")]
+        [HebrewTranslation(Translator.Vessel_Type)]
         public string Type { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
-        [HebrewTranslation("Vessel.System")]
+        [HebrewTranslation(Translator.Vessel_System)]
         public string SystemId { get; set; }
 
         /// <summary>

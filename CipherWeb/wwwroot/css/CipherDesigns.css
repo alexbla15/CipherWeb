@@ -1114,3 +1114,10 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     outline: none;
     border-radius: var(--rz-border-radius);
 }
+
+/* ------------------ SWITCH ------------------ */
+
+:root {
+    --rz-switch-background-color: var(--rz-danger-lighter);
+    --rz-switch-checked-background-color: var(--rz-success);
+}

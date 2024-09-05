@@ -7,37 +7,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of system
         /// </summary>
-        [HebrewTranslation("System.Name")]
+        [HebrewTranslation(Translator.System_Name)]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation("System.Description")]
+        [HebrewTranslation(Translator.System_Description)]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation("System.Properties")]
+        [HebrewTranslation(Translator.System_Properties)]
         public Dictionary<string,string> Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation("System.Parent")]
+        [HebrewTranslation(Translator.System_Parent)]
         public StorageSystem? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation("System.Children")]
+        [HebrewTranslation(Translator.System_Children)]
         public HashSet<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
-        [HebrewTranslation("System.Unit")]
+        [HebrewTranslation(Translator.System_Unit)]
         public Unit Unit { get; set; }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace CipherData.Models
                 id: id,
                 name: id ?? GetNextId(),
                 description: RandomFuncs.RandomItem(SystemsDescriptions),
-                properties: "",
+                properties: new Dictionary<string,string>(),
                 unit: Unit.Random(),
                 parent: (new Random().Next(0, 5) == 0) ? Random() : null
                 );

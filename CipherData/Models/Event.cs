@@ -7,37 +7,37 @@ namespace CipherData.Models
         /// <summary>
         /// Type of event
         /// </summary>
-        [HebrewTranslation("Event.Type")]
+        [HebrewTranslation(Translator.Event_Type)]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
-        [HebrewTranslation("Event.ProcessId")]
+        [HebrewTranslation(Translator.Event_ProcessId)]
         public int ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation("Event.Comments")]
+        [HebrewTranslation(Translator.Event_Comments)]
         public string Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
-        [HebrewTranslation("Event.Timestamp")]
+        [HebrewTranslation(Translator.Event_Timestamp)]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation("Event.Status")]
+        [HebrewTranslation(Translator.Event_Status)]
         public int Status { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation("Event.Packages")]
+        [HebrewTranslation(Translator.Event_Packages)]
         public HashSet<Package> Packages { get; set; }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace CipherData.Models
 
         public static Event Empty()
         {
-            return new Event(eventType: 0, processId: 0, comments: "", timestamp: DateTime.Now, status: 0,
+            return new Event(eventType: 0, processId: 0, comments: string.Empty, timestamp: DateTime.Now, status: 0,
                 packages: new HashSet<Package>());
         }
 

@@ -14,55 +14,55 @@ namespace CipherData.Models
         /// <summary>
         /// ID of the package
         /// </summary>
-        [HebrewTranslation("Package.Id")]
+        [HebrewTranslation(Translator.Package_Id)]
         public string Id { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
-        [HebrewTranslation("Package.Properties")]
+        [HebrewTranslation(Translator.Package_Properties)]
         public Dictionary<string,string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
-        [HebrewTranslation("Package.Vessel")]
+        [HebrewTranslation(Translator.Package_Vessel)]
         public string? VesselId { get; set; }
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
-        [HebrewTranslation("Package.System")]
+        [HebrewTranslation(Translator.Package_System)]
         public string SystemId { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation("Package.BrutMass")]
+        [HebrewTranslation(Translator.Package_BrutMass)]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation("Package.NetMass")]
+        [HebrewTranslation(Translator.Package_NetMass)]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Parent (Id) containing this one
         /// </summary>
-        [HebrewTranslation("Package.Parent")]
+        [HebrewTranslation(Translator.Package_Parent)]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
-        [HebrewTranslation("Package.Children")]
+        [HebrewTranslation(Translator.Package_Children)]
         public HashSet<string>? ChildrenIds { get; set; }
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
-        [HebrewTranslation("Package.Category")]
+        [HebrewTranslation(Translator.Package_Category)]
         public string CategoryId { get; set; }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
+            Tuple<bool, string> result = new(true, string.Empty);
 
             result = (!string.IsNullOrEmpty(Id)) ? result : 
                 Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.Id))); // id is required

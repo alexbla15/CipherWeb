@@ -635,10 +635,11 @@ components:
                 items:
                   type: string
               properties:
-                type: object
+                type: array
                 nullable: true
-                additionalProperties: true
                 description: JSON-like properties of the category
+                items:
+                  $ref: "#/components/schemas/CategoryProperty"
     SystemRequest:
       description: Create a new system or update it
       content:
@@ -669,9 +670,12 @@ components:
           schema:
             type: object
             properties:
+              name:
+                type: string
+                description: Name of unit
               description:
                 type: string
-                description: Description of system
+                description: Description of unit
               parentId:
                 nullable: true
                 description: ID of parent unit

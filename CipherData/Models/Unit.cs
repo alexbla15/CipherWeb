@@ -7,37 +7,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of unit.
         /// </summary>
-        [HebrewTranslation("Unit.Name")]
+        [HebrewTranslation(Translator.Unit_Name)]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of unit.
         /// </summary>
-        [HebrewTranslation("Unit.Description")]
+        [HebrewTranslation(Translator.Unit_Description)]
         public string? Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation("Unit.Properties")]
+        [HebrewTranslation(Translator.Unit_Properties)]
         public string? Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation("Unit.Parent")]
+        [HebrewTranslation(Translator.Unit_Parent)]
         public Unit? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation("Unit.Children")]
+        [HebrewTranslation(Translator.Unit_Children)]
         public HashSet<Unit>? Children { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
-        [HebrewTranslation("Unit.Systems")]
+        [HebrewTranslation(Translator.Unit_Systems)]
         public HashSet<StorageSystem>? Systems { get; set; }
 
         /// <summary>

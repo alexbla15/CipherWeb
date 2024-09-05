@@ -1,8 +1,8 @@
 ﻿@inherits CipherComponentCard
 
 <CipherComponentCard Title="פרטי הקטגוריה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat/>
     <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Name))" Icon="@Icons.Symbols.Category" @ref=CatName />
+    <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat />
     <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Symbols.Category" Multiline="true"
     @ref=CatDescription />
     <CipherMask @ref=CatMask />

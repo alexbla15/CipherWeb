@@ -6,27 +6,33 @@
     public class UnitRequest
     {
         /// <summary>
+        /// Name of unit
+        /// </summary>
+        [HebrewTranslation(Translator.Unit_Name)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// Description of unit
         /// </summary>
-        [HebrewTranslation("Unit.Description")]
+        [HebrewTranslation(Translator.Unit_Description)]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation("Unit.Properties")]
+        [HebrewTranslation(Translator.Unit_Properties)]
         public string Properties { get; set; }
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
-        [HebrewTranslation("Unit.Parent")]
+        [HebrewTranslation(Translator.Unit_Parent)]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
-        [HebrewTranslation("Unit.Conditions")]
+        [HebrewTranslation(Translator.Unit_Conditions)]
         public GroupedBooleanCondition Conditions { get; set; }
 
         /// <summary>
