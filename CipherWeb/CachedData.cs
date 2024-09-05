@@ -8,6 +8,7 @@ namespace CipherWeb
         public static readonly CategoryProperty CategoryPropertyExample = CategoryProperty.Empty();
         public static readonly Event EventExample = Event.Random();
         public static readonly Package PackageExample = Package.Empty();
+        public static readonly PackageProperty PackagePropertyExample = new();
         public static readonly Process ProcessExample = Process.Random();
         public static readonly ProcessDefinition ProcessDefinitionExample = ProcessDefinition.Random();
         public static readonly StorageSystem SystemExample = StorageSystem.Empty();

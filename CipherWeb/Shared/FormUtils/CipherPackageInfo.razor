@@ -66,8 +66,9 @@
         pack.Id = (packId.Check()) ? packId.Value : string.Empty;
         pack.Category = packCategory.ChosenCategory ?? Category.Empty();
         pack.System = ChosenSystem ?? StorageSystem.Empty();
-        pack.Vessel = ChosenVessel ?? null;
+        pack.Vessel = ChosenVessel;
         pack.Parent = ParentPackage.ChosenPackage;
+        pack.Properties = pack.Category.Properties?.ToDictionary(x => x.Name, x => x.DefaultValue);
 
         return pack;
     }
@@ -111,5 +112,13 @@
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherProcesses Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" ChosenProcesses="@DestinationProcesses" />
+    }
+
+    @if (packCategory.ChosenCategory != null)
+    {
+        @foreach (CategoryProperty prop in packCategory.ChosenCategory.Properties)
+        {
+            <CipherAutoComplete Label="@prop.Name" Value="@prop.DefaultValue" Disabled="true" Icon="@Icons.Cipher.Properties" />
+        }
     }
 </CipherComponentCard>

@@ -92,7 +92,7 @@ namespace CipherData.Models
 
         public static CategoryProperty Random()
         {
-            return new CategoryProperty(name: "כמות");
+            return new CategoryProperty(name: "כמות", value: "5");
         }
 
         /// <summary>

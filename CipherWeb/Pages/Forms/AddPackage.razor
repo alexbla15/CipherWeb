@@ -9,18 +9,20 @@
         <CipherInputComponents @ref="InputPacks" />
     }
 
-    <CipherComponentCard Title="תעודות המוכלות בתעודה זו" >
+    <CipherComponentCard Title="תעודות המוכלות בתעודה זו">
         <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView" />
     </CipherComponentCard>
 
     <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" />
 
+    <CipherPackageProperties @ref="PackProps" />
+
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
         <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
     </CipherComponentCard>
-    
-    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
+
+    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson" />
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
@@ -80,6 +82,9 @@
     private CipherFormInfo FormInfo = new();
     private CipherInputComponents InputPacks = new();
     private CipherProcess EventProc = new();
+    private CipherPackageProperties PackProps = new();
+
+    private Package pack = Package.Empty();
 
     private CipherSubmit submission = new();
 
@@ -132,7 +137,7 @@
     /// </summary>
     public void Submit()
     {
-        Package pack = Package.Empty();
+        pack = Package.Empty();
 
         RequestedEvent = CreateEvent.Empty();
 
@@ -143,6 +148,15 @@
         // choosing relevant packages for calculation of mass
         pack.BrutMass = GetBrutMass(pack);
         pack.NetMass = pack.BrutMass * pack.Concentration;
+
+        // add new properties
+        if(PackProps.ChosenProperties != null)
+        {
+            foreach (PackageProperty prop in PackProps.ChosenProperties)
+            {
+                pack.Properties.Add(prop.Name, prop.Value);
+            }
+        }
 
         // Changed Packages
         List<PackageRequest> ChangedPacks = new() { pack.Request() };

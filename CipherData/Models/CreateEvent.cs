@@ -102,7 +102,7 @@ namespace CipherData.Models
             Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
             List<Tuple<bool, string>> actionsCheck = Actions.Select(x=>x.Check()).ToList();
 
-            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.EngToHebPairs["Event.Worker"]); // worker name is required
+            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.Event_Worker); // worker name is required
             result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // event type is required
 
             if (Timestamp is null)

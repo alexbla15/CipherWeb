@@ -130,7 +130,8 @@ namespace CipherData.Models
                 consumingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
                 materialType: RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes)),
                 parent: (new Random().Next(0, 2) == 0) ? Random() : null,
-                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null
+                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null,
+                properties: new HashSet<CategoryProperty>() { CategoryProperty.Random()}
                 );
         }
 
