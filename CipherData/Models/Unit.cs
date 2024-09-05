@@ -32,13 +32,13 @@ namespace CipherData.Models
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(Translator.Unit_Children)]
-        public HashSet<Unit>? Children { get; set; }
+        public List<Unit>? Children { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
         [HebrewTranslation(Translator.Unit_Systems)]
-        public HashSet<StorageSystem>? Systems { get; set; }
+        public List<StorageSystem>? Systems { get; set; }
 
         /// <summary>
         /// Instanciation of new unit.
@@ -49,7 +49,7 @@ namespace CipherData.Models
         /// <param name="children">Child systems contained in this one</param>
         /// <param name="systems">Systems under this unit</param>
         /// <param name="properties">JSON-like additional properties of the unit</param>
-        public Unit(string name, string? description = null, Unit? parent = null, HashSet<Unit>? children = null, HashSet<StorageSystem>? systems = null, string? properties = null,
+        public Unit(string name, string? description = null, Unit? parent = null, List<Unit>? children = null, List<StorageSystem>? systems = null, string? properties = null,
             string? id = null)
         {
             Id = id ?? GetNextId();

@@ -9,7 +9,7 @@
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
         [HebrewTranslation(Translator.Conditions)]
-        public HashSet<Condition> Conditions { get; set; }
+        public List<Condition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="conditions">Any of BooleanCondition / GroupedBooleadCondition</param>
         /// <param name="operator">Operator used to resolve the multiple condition results to a single boolean.</param>
-        public GroupedBooleanCondition(HashSet<Condition> conditions, Operator @operator = Operator.And)
+        public GroupedBooleanCondition(List<Condition> conditions, Operator @operator = Operator.And)
         {
             Conditions = conditions;
             Operator = @operator;
@@ -34,7 +34,7 @@
         public static GroupedBooleanCondition Random()
         {
             return new GroupedBooleanCondition(
-                conditions: new HashSet<Condition>()
+                conditions: new List<Condition>()
                 );
         }
     }

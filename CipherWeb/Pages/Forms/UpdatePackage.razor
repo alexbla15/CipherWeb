@@ -167,13 +167,13 @@
         if (Valid)
         {
             NewPack.Id = newId.Value;
-            NewPack.DestinationProcesses = Destinations.ChosenProcesses?.ToHashSet();
+            NewPack.DestinationProcesses = Destinations.ChosenProcesses;
 
             if (PackDescription.Check())
             {
                 NewPack.Description = PackDescription.Value();
                 RequestedPackUpdate.PackageId = NewPack.Id;
-                RequestedPackUpdate.DestinationProcessesIds = NewPack.DestinationProcesses?.Select(x => x.Id).ToHashSet();
+                RequestedPackUpdate.DestinationProcessesIds = NewPack.DestinationProcesses?.Select(x => x.Id).ToList();
                 RequestedPackUpdate.PackageDescription = NewPack.Description;
                 RequestedPackUpdate.ActionComments = EventComments.Value();
 
@@ -199,7 +199,7 @@
             NewPack.Vessel = SetVessel.ChosenVessel;
             NewPack.System = SetSystem.ChosenSystem ?? StorageSystem.Empty();
             NewPack.Parent = ParentPack.GetValue();
-            NewPack.Children = SetChildren.SelectedPackages?.ToHashSet();
+            NewPack.Children = SetChildren.SelectedPackages;
 
             UpdatePackEvent.EventType = 26;
             UpdatePackEvent.Worker = FormInfo.GetWorker();
@@ -258,7 +258,7 @@
 
         if ((OriginalPack.DestinationProcesses != null) && (NewPack.DestinationProcesses != null))
         {
-            different |= !OriginalPack.DestinationProcesses.Select(x => x.Id).ToHashSet().SetEquals(NewPack.DestinationProcesses.Select(x => x.Id).ToHashSet());
+            different |= !OriginalPack.DestinationProcesses.Select(x => x.Id).ToHashSet().SetEquals(NewPack.DestinationProcesses.Select(x => x.Id).ToList());
 
         }
         else if (((OriginalPack.DestinationProcesses != null) && (OriginalPack.DestinationProcesses == null)) || ((OriginalPack.DestinationProcesses == null) && (OriginalPack.DestinationProcesses != null)))
@@ -286,7 +286,7 @@
 
         if ((OriginalPack.Children != null) && (OriginalPack.Children != null))
         {
-            different |= !OriginalPack.Children.Select(x => x.Id).ToHashSet().SetEquals(NewPack.Children.Select(x => x.Id).ToHashSet()); ;
+            different |= !OriginalPack.Children.Select(x => x.Id).ToHashSet().SetEquals(NewPack.Children.Select(x => x.Id));
         }
         else if (((OriginalPack.Children != null) && (OriginalPack.Children == null)) || ((OriginalPack.Children == null) && (OriginalPack.Children != null)))
         {

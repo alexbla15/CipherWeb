@@ -1,0 +1,134 @@
+﻿@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "כאן ניתן להוסיף תכונות לתעודה זו זו. להוספה לחצו על כפתור ההוספה למעלה";
+
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת תכונה";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת תכונות";
+
+    /// <summary>
+    /// All chosen category-properties
+    /// </summary>
+    [Parameter]
+    public List<PackageProperty>? ChosenProperties { get; set; } = new List<PackageProperty>();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    private RadzenDataGrid<PackageProperty> CustomDataGrid = new();
+
+    private bool ShowHelpText = true;
+    private int components = 0;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "תכונות התעודה";
+        ChosenProperties = ChosenProperties ?? new List<PackageProperty>();
+        components = ChosenProperties.Count();
+    }
+
+    /// <summary>
+    /// Add a component to the memory.
+    /// </summary>
+    async Task AddComponent()
+    {
+        // Add the new restriction to the existing list
+        ChosenProperties.Add(new PackageProperty());
+
+        StateHasChanged();
+
+        components = ChosenProperties.Count;
+
+        ShowHelpText = false;
+
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
+    /// <summary>
+    /// Deletes a category-property from memory & view.
+    /// </summary>
+    /// <param name="prop">Property to delete</param>
+    async Task DeleteRow(PackageProperty prop)
+    {
+        ChosenProperties.Remove(prop);
+
+        CustomDataGrid.Data = ChosenProperties;
+
+        components--;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        if (ChosenProperties.Count() == 0)
+        {
+            ShowHelpText = true;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Clears all category-properties from memory & view.
+    /// </summary>
+    /// <returns></returns>
+    async Task DeleteAll()
+    {
+        ChosenProperties.Clear();
+        components = 0;
+        CustomDataGrid.Data = ChosenProperties;
+
+        await CustomDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+}
+
+<CipherComponentCard Title="@Title" Visible="@Visible">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
+        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+    </Buttons>
+    <ChildContent>
+        @if (ShowHelpText)
+        {
+            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+        }
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="PackageProperty" AllowColumnResize="true" Visible="!components.Equals(0)">
+            <Columns>
+                <RadzenDataGridColumn Width="10%" TItem="PackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Name)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherAutoComplete @bind-Value="@prop.Name"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Value)))" TextAlign="@TdTextAlign">
+                    <Template Context="prop">
+                        <CipherAutoComplete @bind-Value="@prop.Value" Multiline="true"/>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>

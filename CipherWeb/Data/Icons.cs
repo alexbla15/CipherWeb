@@ -1136,6 +1136,7 @@ namespace CipherWeb.Data
             public const string PackageCombine = Symbols.GroupWork;
             public const string Process = Data.LineChart.Timeline;
             public const string Properties = Home.Facilities.Window;
+            public const string Rule = "rule";
             public const string Status = UiComponents.Pending;
             public const string Summary = Data.BarChart.Leaderboard;
             public const string Transfer = Arrows.Swap.MultipleStop;

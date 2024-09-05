@@ -57,7 +57,7 @@ namespace CipherData.Models
         /// Packages (Ids) contained in this one
         /// </summary>
         [HebrewTranslation(Translator.Package_Children)]
-        public HashSet<string>? ChildrenIds { get; set; }
+        public List<string>? ChildrenIds { get; set; }
 
         /// <summary>
         /// Category (Id) of package
@@ -77,7 +77,7 @@ namespace CipherData.Models
         /// <param name="children">Packages (Ids) contained in this one</param>
         /// <param name="id">Id of new package</param>
         public PackageRequest(string id, string system, decimal brutMass, decimal netMass, string category,
-            string? vessel = null, HashSet<string>? children = null, string? parent = null,
+            string? vessel = null, List<string>? children = null, string? parent = null,
             Dictionary<string, string>? properties = null)
         {
             Id = id;

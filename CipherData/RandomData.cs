@@ -24,6 +24,7 @@ namespace CipherData
         public static readonly Vessel RandomVessel = Vessel.Random();
 
         public static readonly List<Category> RandomCategories = RandomFuncs.FillRandomObjects(20, Category.Random);
+        public static readonly List<CategoryProperty> RandomCategoryProperties = RandomFuncs.FillRandomObjects(3, CategoryProperty.Random);
         public static readonly List<Event> RandomEvents = RandomFuncs.FillRandomObjects(20, Event.Random);
         public static readonly List<Package> RandomPackages = RandomFuncs.FillRandomObjects(20, Package.Random);
         public static readonly List<Process> RandomProcesses = RandomFuncs.FillRandomObjects(20, Process.Random);

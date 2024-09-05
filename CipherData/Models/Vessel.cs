@@ -20,7 +20,7 @@ namespace CipherData.Models
         /// Packages within the vessel
         /// </summary>
         [HebrewTranslation(Translator.Vessel_Packages)]
-        public HashSet<Package>? ContainingPackages { get; set; }
+        public List<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
@@ -35,7 +35,7 @@ namespace CipherData.Models
         /// <param name="type">User ID of user who made the action. Required.</param>
         /// <param name="system">Full-text user comment on action.</param>
         /// <param name="packages"> Safety restrictions in a list of (MaterialType, SubCategory, Amount)</param>
-        public Vessel(string type, StorageSystem system, HashSet<Package>? packages = null, string? name = null, string? id = null)
+        public Vessel(string type, StorageSystem system, List<Package>? packages = null, string? name = null, string? id = null)
         {
             string nextId = GetNextId();
 

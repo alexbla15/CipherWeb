@@ -114,7 +114,7 @@
                     timestamp: FormInfo.GetDateTime(),
                     eventType: 23,
                     processId: EventProc.ChosenProcess?.Id,
-                    actions: new HashSet<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
+                    actions: new List<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
                     comments: EventComments.Value()
                 );
 

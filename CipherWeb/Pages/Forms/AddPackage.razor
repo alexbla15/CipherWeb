@@ -114,12 +114,12 @@
     /// Get all packages contained within new package
     /// </summary>
     /// <returns></returns>
-    public HashSet<Package> GetContainingPackages()
+    public List<Package> GetContainingPackages()
     {
         RequestedEvent = CreateEvent.Empty();
 
         List<Package>? innerPacks = InnerPacks.SelectedPackages;
-        return (innerPacks is null) ? new HashSet<Package>() : innerPacks.ToHashSet();
+        return innerPacks ?? new List<Package>();
     }
 
     /// <summary>
@@ -181,7 +181,7 @@
             processId: EventProc.ChosenProcess?.Id,
             timestamp: FormInfo.GetDateTime(),
             eventType: 21,
-            actions: ChangedPacks.ToHashSet(),
+            actions: ChangedPacks,
             comments: EventComments.Value()
         );
 

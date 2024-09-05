@@ -64,7 +64,7 @@
     public void Submit()
     {
         cat = CategoryDetails.Value();
-        cat.Properties = CatProperties.ChosenProperties.ToHashSet();
+        cat.Properties = CatProperties.ChosenProperties;
 
         Tuple<bool, string> CheckResult = cat.Check();
         (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");

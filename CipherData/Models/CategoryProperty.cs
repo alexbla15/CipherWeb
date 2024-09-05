@@ -90,9 +90,28 @@ namespace CipherData.Models
             return JsonSerializer.Serialize(this, options);
         }
 
-        public static CategoryProperty Random()
+        public bool Equals(CategoryProperty other)
         {
-            return new CategoryProperty(name: "כמות", value: "5");
+            if (other == null) return false;
+            return Name == other.Name && DefaultValue == other.DefaultValue;
+        }
+
+        public override bool Equals(object obj) => Equals(obj as CategoryProperty);
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, DefaultValue);
+        }
+
+        public static CategoryProperty Random(string? set_name = null)
+        {
+            CategoryProperty TextOption = new(name: "צבע", value: "אדום");
+            CategoryProperty NumberOption = new(name: "כמות", value: "5", propertyType: PropertyType.Number);
+            CategoryProperty BoolOption = new(name: "מיועד לאיחסון?", value: "True", propertyType: PropertyType.Boolean);
+
+            List<CategoryProperty> CategoryProperties = new() { TextOption, BoolOption, NumberOption};
+
+            return CategoryProperties[new Random().Next(CategoryProperties.Count)];
         }
 
         /// <summary>

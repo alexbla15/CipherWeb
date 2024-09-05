@@ -22,13 +22,13 @@ namespace CipherData.Models
         /// Events taking place during a process
         /// </summary>
         [HebrewTranslation(Translator.Process_Events)]
-        public HashSet<Event> Events { get; set; }
+        public List<Event> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
         [HebrewTranslation(Translator.Process_UncompletedSteps)]
-        public HashSet<ProcessStepDefinition> UncompletedSteps { get; set; }
+        public List<ProcessStepDefinition> UncompletedSteps { get; set; }
 
         [HebrewTranslation(Translator.Process_Start)]
         public DateTime Start { get; set; }
@@ -43,7 +43,7 @@ namespace CipherData.Models
         /// <param name="events">Events taking place during a process</param>
         /// <param name="uncompletedSteps">Uncompleted steps for completing the process</param>
         /// <param name="id">Only if you want process to have specific id</param>
-        public Process(ProcessDefinition definition, HashSet<Event> events, HashSet<ProcessStepDefinition> uncompletedSteps,
+        public Process(ProcessDefinition definition, List<Event> events, List<ProcessStepDefinition> uncompletedSteps,
             string? id = null)
         {
             Id = id ?? GetNextId();
@@ -92,8 +92,8 @@ namespace CipherData.Models
             return new Process(
                 id: id,
                 definition: ProcessDefinition.Random(),
-                events: Enumerable.Range(0, 3).Select(_ => Event.Random()).ToHashSet(),
-                uncompletedSteps: Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToHashSet()
+                events: Enumerable.Range(0, 3).Select(_ => Event.Random()).ToList(),
+                uncompletedSteps: Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToList()
                 );
         }
 

@@ -101,7 +101,7 @@
                     worker: FormInfo.GetWorker(),
                     timestamp: FormInfo.GetDateTime(),
                     eventType: 24,
-                    actions: RelocatedPacks.SelectedPackages.Select(x => x.Request()).ToHashSet(),
+                    actions: RelocatedPacks.SelectedPackages.Select(x => x.Request()).ToList(),
                     comments: EventComments.Value()
                 );
 

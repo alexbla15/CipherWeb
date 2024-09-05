@@ -25,13 +25,13 @@
         cat.ParentId = ParentCat.ChosenCategory?.Id;
         cat.Name = CatName.Check() ? CatName.Value : "";
         cat.Description = CatDescription.Check() ? CatDescription.Value : "";
-        cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToHashSet();
-        cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToHashSet();
+        cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
+        cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
 
         string cat_mask = CatMask.GetValue();
         if (cat_mask != "")
         {
-            cat.IdMask = new HashSet<string>() { cat_mask };
+            cat.IdMask = new List<string>() { cat_mask };
         }
 
         return cat;

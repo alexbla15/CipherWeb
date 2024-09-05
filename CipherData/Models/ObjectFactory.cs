@@ -87,14 +87,14 @@
         /// Define order to the filtered objects
         /// </summary>
         [HebrewTranslation(Translator.ObjectFactory_OrderBy)]
-        public HashSet<OrderedItem>? OrderBy { get; set; }
+        public List<OrderedItem>? OrderBy { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
         [HebrewTranslation(Translator.ObjectFactory_GroupBy)]
-        public HashSet<string>? GroupBy { get; set; }
+        public List<string>? GroupBy { get; set; }
 
         /// <summary>
         ///  List of aggregate methods defining the new object.
@@ -102,7 +102,7 @@
         ///  exist. If null, returns the filtered objects
         /// </summary>
         [HebrewTranslation(Translator.ObjectFactory_Aggregate)]
-        public HashSet<AggregateItem>? Aggregate { get; set; }
+        public List<AggregateItem>? Aggregate { get; set; }
 
         /// <summary>
         /// Method to get desired objects by filtering and aggregating the database
@@ -112,7 +112,7 @@
         /// <param name="groupBy">List of object attributes to group by. If null, aggregates all the objects to a single one.</param>
         /// <param name="aggregate">List of aggregate methods defining the new object. by default returns the grouped by fields if they exist. If null, returns the filtered objects</param>
         public ObjectFactory(
-            GroupedBooleanCondition filter, HashSet<OrderedItem>? orderBy = null, HashSet<string>? groupBy = null, HashSet<AggregateItem>? aggregate = null)
+            GroupedBooleanCondition filter, List<OrderedItem>? orderBy = null, List<string>? groupBy = null, List<AggregateItem>? aggregate = null)
         {
             Filter = filter;
             OrderBy = orderBy;

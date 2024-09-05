@@ -44,7 +44,7 @@ namespace CipherData.Models
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
         [HebrewTranslation(Translator.Event_Actions)]
-        public HashSet<PackageRequest> Actions { get; set; }
+        public List<PackageRequest> Actions { get; set; }
 
         /// <summary>
         /// Create new event
@@ -55,7 +55,7 @@ namespace CipherData.Models
         /// <param name="comments">Free-text comments on the event</param>
         /// <param name="timestamp">Timestamp when the event happend. Required</param>
         /// <param name="actions">List of affected packages from actions, the items present the state of each package after the event</param>
-        public CreateEvent(string worker, DateTime? timestamp, int eventType, HashSet<PackageRequest> actions, string? processId = null, string? comments = null)
+        public CreateEvent(string worker, DateTime? timestamp, int eventType, List<PackageRequest> actions, string? processId = null, string? comments = null)
         {
             Worker = worker;
             EventType = eventType;
@@ -81,7 +81,7 @@ namespace CipherData.Models
             ProcessId = processId;
             Comments = comments;
             Timestamp = timestamp;
-            Actions = new HashSet<PackageRequest>() { action };
+            Actions = new List<PackageRequest>() { action };
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace CipherData.Models
         /// </summary>
         public static CreateEvent Empty()
         {
-            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new HashSet<PackageRequest>());
+            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new List<PackageRequest>());
         }
 
         /// <summary>

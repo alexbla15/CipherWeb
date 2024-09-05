@@ -118,7 +118,8 @@
     {
         @foreach (CategoryProperty prop in packCategory.ChosenCategory.Properties)
         {
-            <CipherAutoComplete Label="@prop.Name" Value="@prop.DefaultValue" Disabled="true" Icon="@Icons.Cipher.Properties" />
+            <CipherAutoComplete Label="@prop.Name" Value="@prop.DefaultValue" Disabled="true"
+                                Icon="@((prop.PropertyType == PropertyType.Text) ? Icons.Design.Colors.Draw : ((prop.PropertyType == PropertyType.Number) ? Icons.Cipher.Properties : Icons.Cipher.Rule))" />
         }
     }
 </CipherComponentCard>

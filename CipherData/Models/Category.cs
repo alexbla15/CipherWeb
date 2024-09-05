@@ -20,25 +20,25 @@ namespace CipherData.Models
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(Translator.Category_IdMask)]
-        public HashSet<string> IdMask { get; set; }
+        public List<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(Translator.Category_Properties)]
-        public HashSet<CategoryProperty>? Properties { get; set; }
+        public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
         [HebrewTranslation(Translator.Category_CreatingProcesses)]
-        public HashSet<ProcessDefinition> CreatingProcesses { get; set; }
+        public List<ProcessDefinition> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
         [HebrewTranslation(Translator.Category_ConsumingProcesses)]
-        public HashSet<ProcessDefinition> ConsumingProcesses { get; set; }
+        public List<ProcessDefinition> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
@@ -56,7 +56,7 @@ namespace CipherData.Models
         /// Child categories contained in this one
         /// </summary>
         [HebrewTranslation(Translator.Category_Children)]
-        public HashSet<Category>? Children { get; set; }
+        public List<Category>? Children { get; set; }
 
         /// <summary>
         /// Instanciation of new Category.
@@ -70,10 +70,10 @@ namespace CipherData.Models
         /// <param name="parent">Parent Category containing this one</param>
         /// <param name="children">Child categories contained in this one</param>
         /// <param name="properties">Properties that are accurate to most of the packages of this category.</param>
-        public Category(string name, string description, HashSet<string> idMask,
-            HashSet<ProcessDefinition> creatingProcesses, HashSet<ProcessDefinition> consumingProcesses,
-            Category? parent = null, HashSet<Category>? children = null, Category? materialType = null,
-            string? id = null, HashSet<CategoryProperty>? properties = null)
+        public Category(string name, string description, List<string> idMask,
+            List<ProcessDefinition> creatingProcesses, List<ProcessDefinition> consumingProcesses,
+            Category? parent = null, List<Category>? children = null, Category? materialType = null,
+            string? id = null, List<CategoryProperty>? properties = null)
         {
             Id = id ?? GetNextId();
             Name = name;
@@ -125,13 +125,13 @@ namespace CipherData.Models
                 id: id,
                 name: RandomFuncs.RandomItem(RandomData.CategoriesNames),
                 description: RandomFuncs.RandomItem(RandomData.CategoriesDescriptions),
-                idMask: new HashSet<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
-                creatingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
-                consumingProcesses: new HashSet<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
+                idMask: new List<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
+                creatingProcesses: new List<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
+                consumingProcesses: new List<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
                 materialType: RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes)),
                 parent: (new Random().Next(0, 2) == 0) ? Random() : null,
-                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random).ToHashSet() : null,
-                properties: new HashSet<CategoryProperty>() { CategoryProperty.Random()}
+                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random) : null,
+                properties: RandomFuncs.FillRandomObjects(3, CategoryProperty.Random).Distinct().ToList()
                 );
         }
 
@@ -156,9 +156,9 @@ namespace CipherData.Models
                 id: string.Empty,
                 name: string.Empty,
                 description: string.Empty,
-                idMask: new HashSet<string>(),
-                creatingProcesses: new HashSet<ProcessDefinition>(),
-                consumingProcesses: new HashSet<ProcessDefinition>(),
+                idMask: new List<string>(),
+                creatingProcesses: new List<ProcessDefinition>(),
+                consumingProcesses: new List<ProcessDefinition>(),
                 materialType: null
                 );
         }

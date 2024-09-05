@@ -38,7 +38,7 @@ namespace CipherData.Models
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
         [HebrewTranslation(Translator.Event_Packages)]
-        public HashSet<Package> Packages { get; set; }
+        public List<Package> Packages { get; set; }
 
         /// <summary>
         /// Instanciation of a new Event.
@@ -50,7 +50,7 @@ namespace CipherData.Models
         /// <param name="status">Validation status of event</param>
         /// <param name="packages">List of affected packages from actions, the items present the state of each package after the event</param>
         /// <param name="id">only if you want object to have a certain id</param>
-        public Event(int eventType, int processId, string comments, DateTime timestamp, int status, HashSet<Package> packages, string? id = null)
+        public Event(int eventType, int processId, string comments, DateTime timestamp, int status, List<Package> packages, string? id = null)
         {
             Id = id ?? GetNextId();
             EventType = eventType;
@@ -64,7 +64,7 @@ namespace CipherData.Models
         public static Event Empty()
         {
             return new Event(eventType: 0, processId: 0, comments: string.Empty, timestamp: DateTime.Now, status: 0,
-                packages: new HashSet<Package>());
+                packages: new List<Package>());
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace CipherData.Models
                 comments: "תנועה לדוגמה",
                 timestamp: RandomFuncs.RandomDateTime(),
                 status: new Random().Next(0, 2),
-                packages: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random).ToHashSet() : new HashSet<Package>()
+                packages: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random) : new List<Package>()
                 );
         }
 

@@ -32,7 +32,7 @@ namespace CipherData.Models
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(Translator.System_Children)]
-        public HashSet<StorageSystem>? Children { get; set; }
+        public List<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
@@ -50,7 +50,7 @@ namespace CipherData.Models
         /// <param name="parent">Parent system containing this one</param>
         /// <param name="children">Child systems contained in this one</param>
         public StorageSystem(string description, Dictionary<string,string> properties, Unit unit, string name,
-            StorageSystem? parent = null, HashSet<StorageSystem>? children = null, string? id = null)
+            StorageSystem? parent = null, List<StorageSystem>? children = null, string? id = null)
         {
             Id = id ?? GetNextId();
             Name = name;

@@ -58,7 +58,7 @@ namespace CipherData.Models
         /// Packages contained in this one
         /// </summary>
         [HebrewTranslation(Translator.Package_Children)]
-        public HashSet<Package>? Children { get; set; }
+        public List<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
@@ -70,7 +70,7 @@ namespace CipherData.Models
         /// List of processes definitions that may accept this package as input
         /// </summary>
         [HebrewTranslation(Translator.Package_DestinationProcesses)]
-        public HashSet<ProcessDefinition> DestinationProcesses { get; set; }
+        public List<ProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>
         /// Calculated from the ratio between net to brut mass
@@ -93,7 +93,7 @@ namespace CipherData.Models
         /// <param name="destinationProcesses">List of processes definitions that may accept this package as input</param>
         /// <param name="id">only use if you want the package to have a specific id</param>
         public Package(StorageSystem system, decimal brutMass, decimal netMass, DateTime createdAt, Category category,
-            Vessel? vessel = null, Package? parent = null, HashSet<Package>? children = null, HashSet<ProcessDefinition>? destinationProcesses = null,
+            Vessel? vessel = null, Package? parent = null, List<Package>? children = null, List<ProcessDefinition>? destinationProcesses = null,
             string? description = null, string? id = null, Dictionary<string, string>? properties = null)
         {
             Id = id ?? GetNextId();
@@ -113,7 +113,10 @@ namespace CipherData.Models
                 Properties = new Dictionary<string, string>();
                 foreach (CategoryProperty prop in Category.Properties)
                 {
-                    Properties.Add(prop.Name, prop.DefaultValue);
+                    if (!Properties.ContainsKey(prop.Name))
+                    {
+                        Properties.Add(prop.Name, prop.DefaultValue);
+                    }
                 }
             }
 
@@ -132,7 +135,7 @@ namespace CipherData.Models
                     netMass: NetMass,
                     properties: Properties,
                     parent: Parent?.Id,
-                    children: Children?.Select(x => x.Id).ToHashSet(),
+                    children: Children?.Select(x => x.Id).ToList(),
                     system: System.Id,
                     vessel: Vessel?.Id,
                     category: Category.Id);
@@ -195,7 +198,7 @@ namespace CipherData.Models
             List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
             Category cat = Category.Random();
 
-            HashSet<Package> random_packs = RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random).ToHashSet();
+            List<Package> random_packs = RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random);
             Package? Parent = (random_packs.Count > 0) ? random_packs.First() : null;
 
             Package result = new(
@@ -205,7 +208,7 @@ namespace CipherData.Models
                     brutMass: curr_brutmass,
                     netMass: curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
                     parent: Parent,
-                    children: (Parent is null) ? null : random_packs.Where(x => x.Id != Parent.Id).ToHashSet(),
+                    children: (Parent is null) ? null : random_packs.Where(x => x.Id != Parent.Id).ToList(),
                     system: StorageSystem.Random(),
                     vessel: Vessel.Random(),
                     category: cat,

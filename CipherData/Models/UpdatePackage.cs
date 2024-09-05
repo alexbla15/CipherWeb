@@ -32,7 +32,7 @@ namespace CipherData.Models
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
         [HebrewTranslation(Translator.Package_DestinationProcesses)]
-        public HashSet<string>? DestinationProcessesIds { get; set; }
+        public List<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>
         /// Update package details contract
@@ -43,7 +43,7 @@ namespace CipherData.Models
         /// <param name="comments">Free text comments on update. Ideally contains reason for change</param>
         /// <param name="destinationProcesses">List of processes definitions (IDs) that may accept this package as input</param>
         public UpdatePackage(string? description = null, string? comments = null, string? id = null,
-            HashSet<string>? destinationProcesses = null)
+            List<string>? destinationProcesses = null)
         {
             PackageId = id;
             PackageDescription = description;

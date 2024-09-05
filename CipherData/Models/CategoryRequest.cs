@@ -33,25 +33,25 @@ namespace CipherData.Models
         /// List of processes definition IDs creating this category
         /// </summary>
         [HebrewTranslation(Translator.Category_CreatingProcesses)]
-        public HashSet<string> CreatingProcesses { get; set; }
+        public List<string> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
         [HebrewTranslation(Translator.Category_ConsumingProcesses)]
-        public HashSet<string> ConsumingProcesses { get; set; }
+        public List<string> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(Translator.Category_IdMask)]
-        public HashSet<string> IdMask { get; set; }
+        public List<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(Translator.Category_Properties)]
-        public HashSet<CategoryProperty>? Properties { get; set; }
+        public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// Create a new category or update it
@@ -62,16 +62,16 @@ namespace CipherData.Models
         /// <param name="creatingProcesses">List of processes definition IDs creating this category</param>
         /// <param name="consumingProcesses">List of processes definition IDs consuming this category</param>
         /// <param name="idMask">List of ID masks to identify the category from the package ID</param>
-        public CategoryRequest(string name, string description, HashSet<string> idMask,
+        public CategoryRequest(string name, string description, List<string> idMask,
             string? parent = null,
-            HashSet<string>? creatingProcesses = null, 
-            HashSet<string>? consumingProcesses = null, HashSet<CategoryProperty>? properties = null)
+            List<string>? creatingProcesses = null, 
+            List<string>? consumingProcesses = null, List<CategoryProperty>? properties = null)
         {
             Name = name;
             Description = description;
             ParentId = parent;
-            CreatingProcesses = creatingProcesses ?? new HashSet<string>();
-            ConsumingProcesses = consumingProcesses ?? new HashSet<string>();
+            CreatingProcesses = creatingProcesses ?? new List<string>();
+            ConsumingProcesses = consumingProcesses ?? new List<string>();
             IdMask = idMask;
             Properties = properties;
         }
@@ -124,7 +124,7 @@ namespace CipherData.Models
         /// </summary>
         public static CategoryRequest Empty()
         {
-            return new CategoryRequest(name: string.Empty, description: string.Empty, idMask: new HashSet<string>());
+            return new CategoryRequest(name: string.Empty, description: string.Empty, idMask: new List<string>());
         }
     }
 }
