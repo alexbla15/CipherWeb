@@ -137,7 +137,6 @@
         if (Valid)
         {
             (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
-
             if (Error != ErrorResponse.Success)
             {
                 submission.Valid = false;
@@ -146,7 +145,6 @@
             else
             {
                 submission.Valid = true;
-                submission.SuccessMessage = $"טופס הוזן בהצלחה. עבור חיפוש התנועה נא גשו לתנועה {ResultEvent.Id}.";
             }
         }
         else

@@ -24,6 +24,15 @@
         <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))" />
         <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
 
+
+        @if (NewProps != null)
+        {
+            foreach (string prop_name in NewProps.Keys)
+            {
+                <CipherAutoComplete Label="@prop_name" Icon="@Icons.Cipher.Properties" @bind-Value="NewProps[prop_name]" />
+            }
+        }
+
     </CipherComponentCard>
 
     <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
@@ -115,9 +124,12 @@
     private CipherData.Models.UpdatePackage RequestedPackUpdate = CipherData.Models.UpdatePackage.Empty();
     private CreateEvent UpdatePackEvent = CreateEvent.Empty();
 
+    private Dictionary<string, string>? NewProps = new();
+
     public void Change()
     {
         ChosenPackage = OriginalPackage.ChosenPackage;
+        NewProps = OriginalPack.Properties;
 
         if (OriginalPackage.ChosenPackage != null)
         {
@@ -200,6 +212,7 @@
             NewPack.System = SetSystem.ChosenSystem ?? StorageSystem.Empty();
             NewPack.Parent = ParentPack.GetValue();
             NewPack.Children = SetChildren.SelectedPackages;
+            NewPack.Properties = NewProps;
 
             UpdatePackEvent.EventType = 26;
             UpdatePackEvent.Worker = FormInfo.GetWorker();
@@ -284,11 +297,21 @@
         different |= OriginalPack.System.Id != NewPack.System.Id;
         different |= OriginalPack.Parent?.Id != NewPack.Parent?.Id;
 
-        if ((OriginalPack.Children != null) && (OriginalPack.Children != null))
+        if ((OriginalPack.Properties != null) && (NewPack.Properties != null))
+        {
+            different |= !OriginalPack.Properties.OrderBy(kvp => kvp.Key).SequenceEqual(NewPack.Properties.OrderBy(kvp => kvp.Key));
+        }
+        else if (((OriginalPack.Properties != null) && (NewPack.Properties == null)) || ((OriginalPack.Properties == null) && (NewPack.Properties != null)))
+        {
+            different = true;
+        }
+
+        
+        if ((OriginalPack.Children != null) && (NewPack.Children != null))
         {
             different |= !OriginalPack.Children.Select(x => x.Id).ToHashSet().SetEquals(NewPack.Children.Select(x => x.Id));
         }
-        else if (((OriginalPack.Children != null) && (OriginalPack.Children == null)) || ((OriginalPack.Children == null) && (OriginalPack.Children != null)))
+        else if (((OriginalPack.Children != null) && (NewPack.Children == null)) || ((OriginalPack.Children == null) && (NewPack.Children != null)))
         {
             different = true;
         }
@@ -306,12 +329,20 @@
             CreateEventJsonRequest = UpdatePackEvent.ToJson();
 
             (CreateEventResult, Error) = EventsRequests.CreateEvent(UpdatePackEvent);
-
             if (Error != ErrorResponse.Success)
             {
-                Valid = false;
-                ErrorMessage = Error.Message;
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
             }
+            else
+            {
+                submission.Valid = true;
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
         }
     }
 
@@ -325,20 +356,25 @@
             UpdatePackJsonRequest = RequestedPackUpdate.ToJson();
 
             (UpdatePackResult, Error) = PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
-
             if (Error != ErrorResponse.Success)
             {
-                Valid = false;
-                ErrorMessage = Error.Message;
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
             }
+            else
+            {
+                submission.Valid = true;
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
         }
     }
 
     public void SetSubmission()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
-
         if (Valid)
         {
             ChosenPackage = NewPack;
