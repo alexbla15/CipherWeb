@@ -10,18 +10,8 @@
         <CipherPackagesPicking @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
     </CipherComponentCard>
-
-    @if (CheckJson)
-    {
-        <CipherComponentCard Title="בדיקה">
-            <Buttons>
-                <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
-            </Buttons>
-            <ChildContent>
-                <RadzenTextArea @bind-Value="JsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
-            </ChildContent>
-        </CipherComponentCard>
-    }
+    
+    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>

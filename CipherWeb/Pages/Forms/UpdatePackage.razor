@@ -30,18 +30,8 @@
         <CipherComments @ref="EventComments" Width="300px" WithCard="false" Title="" />
     </CipherComponentCard>
 
-    @if (CheckJson)
-    {
-        <CipherComponentCard Title="בדיקה">
-            <Buttons>
-                <CipherButton Text="בדיקה" Click="Submit"></CipherButton>
-            </Buttons>
-            <ChildContent>
-                <RadzenTextArea @bind-Value="UpdatePackJsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
-                <RadzenTextArea @bind-Value="CreateEventJsonRequest" ReadOnly="true" Style="width: 100%; direction:ltr; height: 300px" />
-            </ChildContent>
-        </CipherComponentCard>
-    }
+    <CipherJsonCheck JsonValue="@UpdatePackJsonRequest" Visible="@CheckJson"/>
+    <CipherJsonCheck JsonValue="@CreateEventJsonRequest" Visible="@CheckJson"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 
