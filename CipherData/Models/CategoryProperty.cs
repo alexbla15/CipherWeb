@@ -19,21 +19,25 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the property
         /// </summary>
+        [HebrewTranslation("CategoryProperty.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
+        [HebrewTranslation("CategoryProperty.Description")]
         public string? Description { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
+        [HebrewTranslation("CategoryProperty.Type")]
         public PropertyType PropertyType { get; set; }
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
+        [HebrewTranslation("CategoryProperty.Value")]
         public string? DefaultValue { get; set; }
 
         /// <summary>

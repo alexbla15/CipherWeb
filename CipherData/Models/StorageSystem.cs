@@ -5,39 +5,39 @@ namespace CipherData.Models
     public class StorageSystem : Resource
     {
         /// <summary>
-        /// Description of system
+        /// Name of system
         /// </summary>
-        [HebrewTranslation("שם מערכת")]
+        [HebrewTranslation("System.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation("תיאור מערכת")]
+        [HebrewTranslation("System.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation("תכונות")]
-        public string Properties { get; set; }
+        [HebrewTranslation("System.Properties")]
+        public Dictionary<string,string> Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation("מערכת אב")]
+        [HebrewTranslation("System.Parent")]
         public StorageSystem? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation("מערכות מוכלות")]
+        [HebrewTranslation("System.Children")]
         public HashSet<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
-        [HebrewTranslation("יחידה")]
+        [HebrewTranslation("System.Unit")]
         public Unit Unit { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace CipherData.Models
         /// <param name="unit">Unit responsible for this system.</param>
         /// <param name="parent">Parent system containing this one</param>
         /// <param name="children">Child systems contained in this one</param>
-        public StorageSystem(string description, string properties, Unit unit, string name,
+        public StorageSystem(string description, Dictionary<string,string> properties, Unit unit, string name,
             StorageSystem? parent = null, HashSet<StorageSystem>? children = null, string? id = null)
         {
             Id = id ?? GetNextId();
@@ -113,10 +113,10 @@ namespace CipherData.Models
         public static StorageSystem Empty()
         {
             return new(
-                id: "",
-                name: "",
-                description: "",
-                properties: "",
+                id: string.Empty,
+                name: string.Empty,
+                description: string.Empty,
+                properties: new Dictionary<string,string>(),
                 unit: Unit.Empty()
                 );
         }

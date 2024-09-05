@@ -13,31 +13,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
+        [HebrewTranslation("Event.Worker")]
         public string Worker { get; set; }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
+        [HebrewTranslation("Event.Type")]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
+        [HebrewTranslation("Event.ProcessId")]
         public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation("Event.Comments")]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
+        [HebrewTranslation("Event.Timestamp")]
         public DateTime? Timestamp { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
+        [HebrewTranslation("Event.Actions")]
         public HashSet<PackageRequest> Actions { get; set; }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace CipherData.Models
         /// </summary>
         public static CreateEvent Empty()
         {
-            return new CreateEvent(worker: "", timestamp: DateTime.Now, eventType: 0, actions: new HashSet<PackageRequest>());
+            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new HashSet<PackageRequest>());
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace CipherData.Models
             Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
             List<Tuple<bool, string>> actionsCheck = Actions.Select(x=>x.Check()).ToList();
 
-            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, "שם עובד"); // worker name is required
+            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.EngToHebPairs["Event.Worker"]); // worker name is required
             result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // event type is required
 
             if (Timestamp is null)

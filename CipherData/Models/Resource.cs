@@ -12,20 +12,20 @@ namespace CipherData.Models
         /// <summary>
         /// Searchable ID for the object
         /// </summary>
-        [HebrewTranslation("מספר סידורי")]
+        [HebrewTranslation("Resource.Id")]
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Required level of clearence to access this object
         /// </summary>
-        [HebrewTranslation("מידור")]
+        [HebrewTranslation("Resource.ClearenceLevel")]
         public string ClearenceLevel { get; set; } = GetRandomClearance();
 
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
         /// </summary>
-        [HebrewTranslation("מספר סידורי אוניברסלי")]
+        [HebrewTranslation("Resource.Uuid")]
         public int Uuid { get; set; } = GetUuid();
 
         private static int UuidCounter { get; set; } = 0;

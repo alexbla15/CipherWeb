@@ -1,10 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -13,25 +7,25 @@ namespace CipherData.Models
         /// <summary>
         /// Name of vessel
         /// </summary>
-        [HebrewTranslation("שם")]
+        [HebrewTranslation("Vessel.Name")]
         public string? Name { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
-        [HebrewTranslation("סוג")]
+        [HebrewTranslation("Vessel.Type")]
         public string Type { get; set; }
 
         /// <summary>
         /// Packages within the vessel
         /// </summary>
-        [HebrewTranslation("תעודות מוכלות")]
+        [HebrewTranslation("Vessel.Packages")]
         public HashSet<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
-        [HebrewTranslation("מערכת")]
+        [HebrewTranslation("Vessel.System")]
         public StorageSystem System { get; set; }
 
         /// <summary>

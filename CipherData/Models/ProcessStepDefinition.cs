@@ -16,19 +16,19 @@ namespace CipherData.Models
         /// <summary>
         /// Unique name of the process step, two steps in the same process should not have the same name.
         /// </summary>
-        [HebrewTranslation("שם")]
+        [HebrewTranslation("ProcessStepDefinition.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the process step
         /// </summary>
-        [HebrewTranslation("תיאור")]
+        [HebrewTranslation("ProcessStepDefinition.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
-        [HebrewTranslation("תנאי")]
+        [HebrewTranslation("ProcessStepDefinition.Condition")]
         public GroupedBooleanCondition Condition { get; set; }
 
         private static int IdCounter { get; set; } = 0;

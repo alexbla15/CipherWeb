@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Groups of boolean conditions on a single object
@@ -16,11 +8,13 @@ namespace CipherData.Models
         /// <summary>
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
+        [HebrewTranslation("Conditions")]
         public HashSet<Condition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
+        [HebrewTranslation("Condition.Operator")]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>
@@ -34,6 +28,9 @@ namespace CipherData.Models
             Operator = @operator;
         }
 
+        /// <summary>
+        /// Create a random object.
+        /// </summary>
         public static GroupedBooleanCondition Random()
         {
             return new GroupedBooleanCondition(

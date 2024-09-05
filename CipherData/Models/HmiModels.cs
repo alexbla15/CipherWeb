@@ -7,7 +7,14 @@
 
         public HebrewTranslationAttribute(string translation)
         {
-            Translation = translation;
+            if (Translator.EngToHebPairs.ContainsKey(translation))
+            {
+                Translation = Translator.EngToHebPairs[translation];
+            }
+            else
+            {
+                Translation = translation;
+            }
         }
     }
 

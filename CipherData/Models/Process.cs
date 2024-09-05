@@ -15,25 +15,25 @@ namespace CipherData.Models
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
-        [HebrewTranslation("הגדרה")]
+        [HebrewTranslation("Process.Definition")]
         public ProcessDefinition Definition { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
-        [HebrewTranslation("תנועות")]
+        [HebrewTranslation("Process.Events")]
         public HashSet<Event> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
-        [HebrewTranslation("שלבים שטרם הושלמו")]
+        [HebrewTranslation("Process.UncompletedSteps")]
         public HashSet<ProcessStepDefinition> UncompletedSteps { get; set; }
 
-        [HebrewTranslation("התחלה")]
+        [HebrewTranslation("Process.Start")]
         public DateTime Start { get; set; }
 
-        [HebrewTranslation("סיום")]
+        [HebrewTranslation("Process.End")]
         public DateTime End { get; set; }
 
         /// <summary>

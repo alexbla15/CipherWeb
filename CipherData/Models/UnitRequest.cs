@@ -8,21 +8,25 @@
         /// <summary>
         /// Description of unit
         /// </summary>
+        [HebrewTranslation("Unit.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
+        [HebrewTranslation("Unit.Properties")]
         public string Properties { get; set; }
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
+        [HebrewTranslation("Unit.Parent")]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
+        [HebrewTranslation("Unit.Conditions")]
         public GroupedBooleanCondition Conditions { get; set; }
 
         /// <summary>

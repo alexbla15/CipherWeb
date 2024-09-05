@@ -14,37 +14,43 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
+        [HebrewTranslation("Category.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
+        [HebrewTranslation("Category.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
+        [HebrewTranslation("Category.Parent")]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
+        [HebrewTranslation("Category.CreatingProcesses")]
         public HashSet<string> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
+        [HebrewTranslation("Category.ConsumingProcesses")]
         public HashSet<string> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
+        [HebrewTranslation("Category.IdMask")]
         public HashSet<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation("תכונות")]
+        [HebrewTranslation("Category.Properties")]
         public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
@@ -109,7 +115,7 @@ namespace CipherData.Models
         /// </summary>
         public static CategoryRequest Empty()
         {
-            return new CategoryRequest(name: "", description: "", idMask: new HashSet<string>());
+            return new CategoryRequest(name: string.Empty, description: string.Empty, idMask: new HashSet<string>());
         }
     }
 }

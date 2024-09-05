@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public enum AttributeRelation
     {
@@ -57,16 +49,19 @@ namespace CipherData.Models
         /// Can be chained to include sub-objects.
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
+        [HebrewTranslation("Condition.Attribute")]
         public string Attribute { get; set; }
 
         /// <summary>
         /// Expected relation between attribute and a value.
         /// </summary>
+        [HebrewTranslation("Condition.Relation")]
         public AttributeRelation AttributeRelation { get; set; }
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
+        [HebrewTranslation("Condition.Operator")]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>
@@ -74,6 +69,7 @@ namespace CipherData.Models
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
+        [HebrewTranslation("Condition.Value")]
         public string? Value { get; set; }
 
         /// <summary>

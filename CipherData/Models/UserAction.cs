@@ -10,43 +10,43 @@
         /// <summary>
         /// User ID of user who made the action. Required.
         /// </summary>
-        [HebrewTranslation("שם מבצע/ת")]
+        [HebrewTranslation("UserAction.By")]
         public string By { get; set; }
 
         /// <summary>
         /// Full-text user comment on action.
         /// </summary>
-        [HebrewTranslation("הערות")]
+        [HebrewTranslation("UserAction.Comments")]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Parameters changed by the action. (JSON)
         /// </summary>
-        [HebrewTranslation("פרמטרים שהשתנו")]
+        [HebrewTranslation("UserAction.ActionParameters")]
         public string? ActionParameters { get; set; }
 
         /// <summary>
         /// UUID of object affected from the action. Required.
         /// </summary>
-        [HebrewTranslation("מספר סידורי")]
+        [HebrewTranslation("UserAction.ObjectId")]
         public int ObjectId { get; set; }
 
         /// <summary>
         /// Timestamp of when the action was made. Required.
         /// </summary>
-        [HebrewTranslation("תאריך פעולה")]
+        [HebrewTranslation("UserAction.At")]
         public DateTime At { get; set; }
 
         /// <summary>
         /// Type of action made by user
         /// </summary>
-        [HebrewTranslation("סוג פעולה")]
+        [HebrewTranslation("UserAction.ActionType")]
         public ActionType ActionType { get; set; }
 
         /// <summary>
         /// Validation status of this user action.
         /// </summary>
-        [HebrewTranslation("סטטוס")]
+        [HebrewTranslation("UserAction.Status")]
         public int Status { get; set; }
 
         /// <summary>

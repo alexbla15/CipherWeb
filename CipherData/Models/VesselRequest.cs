@@ -12,21 +12,25 @@ namespace CipherData.Models
         /// <summary>
         /// Vessel name
         /// </summary>
+        [HebrewTranslation("Vessel.Name")]
         public string? Name { get; set; }
 
         /// <summary>
         /// Vessel type
         /// </summary>
+        [HebrewTranslation("Vessel.Type")]
         public string Type { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
+        [HebrewTranslation("Vessel.System")]
         public string SystemId { get; set; }
 
         /// <summary>
         /// Create a new unit or update it
         /// </summary>
+        /// <param name="name">Vessel name</param>
         /// <param name="type">Vessel type</param>
         /// <param name="systemId">Id of system containing vessel</param>
         public VesselRequest(string type, string systemId, string? name = null)

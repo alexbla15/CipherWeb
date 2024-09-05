@@ -1,9 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
@@ -16,25 +11,25 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation("תהליך")]
+        [HebrewTranslation("ProcessDefinition.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
-        [HebrewTranslation("תיאור")]
+        [HebrewTranslation("ProcessDefinition.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// All steps that are associated with this process
         /// </summary>
-        [HebrewTranslation("שלבים")]
+        [HebrewTranslation("ProcessDefinition.Steps")]
         public List<ProcessStepDefinition> Steps { get; set; }
 
         /// <summary>
         /// For randomization only
         /// </summary>
-        public static List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי", "עיצוב" };
+        public static readonly List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי", "עיצוב" };
 
         /// <summary>
         /// Definition of a process - 
@@ -58,7 +53,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public static ProcessDefinition Empty()
         {
-            return new ProcessDefinition(name: "", description: "", steps: new());
+            return new ProcessDefinition(name: string.Empty, description: string.Empty, steps: new());
         }
 
         /// <summary>

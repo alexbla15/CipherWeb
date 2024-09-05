@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public class CustomCondition
     {
@@ -20,11 +15,13 @@ namespace CipherData.Models
         /// <summary>
         /// List of object factory specifications and conditions on them
         /// </summary>
+        [HebrewTranslation("Conditions")]
         public List<CustomCondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
+        [HebrewTranslation("Condition.Operator")]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>
@@ -39,6 +36,9 @@ namespace CipherData.Models
             Operator = @operator;
         }
 
+        /// <summary>
+        /// Create a random object.
+        /// </summary>
         public static CustomObjectBooleanCondition Random()
         {
             return new CustomObjectBooleanCondition(conditions: new List<CustomCondition>());

@@ -14,16 +14,19 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the process
         /// </summary>
+        [HebrewTranslation("ProcessDefinition.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
+        [HebrewTranslation("ProcessDefinition.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Steps of the process
         /// </summary>
+        [HebrewTranslation("ProcessDefinition.Steps")]
         public List<ProcessStepDefinition> Steps { get; set; }
 
         /// <summary>

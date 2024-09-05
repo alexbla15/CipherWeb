@@ -14,16 +14,19 @@ namespace CipherData.Models
         /// <summary>
         /// New process ID for event
         /// </summary>
+        [HebrewTranslation("Event.ProcessId")]
         public int? ProcessId { get; set; }
 
         /// <summary>
         /// Updated comment for event
         /// </summary>
+        [HebrewTranslation("Event.Comments")]
         public string? EventComment { get; set; }
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
+        [HebrewTranslation("Event.ActionComment")]
         public string? ActionComment { get; set; }
 
         /// <summary>

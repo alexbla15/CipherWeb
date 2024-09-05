@@ -1,4 +1,5 @@
 ﻿using CipherData.Requests;
+
 namespace CipherData.Models
 {
     public class Category : Resource
@@ -6,55 +7,55 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation("שם הקטגוריה")]
+        [HebrewTranslation("Category.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation("תיאור")]
+        [HebrewTranslation("Category.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation("סדרה")]
+        [HebrewTranslation("Category.IdMask")]
         public HashSet<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation("תכונות")]
+        [HebrewTranslation("Category.Properties")]
         public HashSet<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
-        [HebrewTranslation("תהליכים יוצרים")]
+        [HebrewTranslation("Category.CreatingProcesses")]
         public HashSet<ProcessDefinition> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
-        [HebrewTranslation("תהליכים צורכים")]
+        [HebrewTranslation("Category.ConsumingProcesses")]
         public HashSet<ProcessDefinition> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
-        [HebrewTranslation("סוג החומר")]
+        [HebrewTranslation("Category.MaterialType")]
         public Category? MaterialType { get; set; }
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
-        [HebrewTranslation("קטגוריית אב")]
+        [HebrewTranslation("Category.Parent")]
         public Category? Parent { get; set; }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
-        [HebrewTranslation("קטגוריות מוכלות")]
+        [HebrewTranslation("Category.Children")]
         public HashSet<Category>? Children { get; set; }
 
         /// <summary>

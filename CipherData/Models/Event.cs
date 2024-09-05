@@ -7,37 +7,37 @@ namespace CipherData.Models
         /// <summary>
         /// Type of event
         /// </summary>
-        [HebrewTranslation("סוג")]
+        [HebrewTranslation("Event.Type")]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
-        [HebrewTranslation("מספר תהליך")]
+        [HebrewTranslation("Event.ProcessId")]
         public int ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation("הערות")]
+        [HebrewTranslation("Event.Comments")]
         public string Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
-        [HebrewTranslation("תאריך תנועה")]
+        [HebrewTranslation("Event.Timestamp")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation("סטטוס")]
+        [HebrewTranslation("Event.Status")]
         public int Status { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation("תעודות מעורבות")]
+        [HebrewTranslation("Event.Packages")]
         public HashSet<Package> Packages { get; set; }
 
         /// <summary>

@@ -9,67 +9,67 @@ namespace CipherData.Models
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation("תיאור")]
+        [HebrewTranslation("Package.Description")]
         public string? Description { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
         /// </summary>
-        [HebrewTranslation("תכונות")]
+        [HebrewTranslation("Package.Properties")]
         public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
-        [HebrewTranslation("כלי")]
+        [HebrewTranslation("Package.Vessel")]
         public Vessel? Vessel { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
-        [HebrewTranslation("מערכת")]
+        [HebrewTranslation("Package.System")]
         public StorageSystem System { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation("מסה ברוטו [גר']")]
+        [HebrewTranslation("Package.BrutMass")]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation("מסה נטו [גר']")]
+        [HebrewTranslation("Package.NetMass")]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
-        [HebrewTranslation("תאריך פתיחה")]
+        [HebrewTranslation("Package.CreatedAt")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
         /// </summary>
-        [HebrewTranslation("תעודת אב")]
+        [HebrewTranslation("Package.Parent")]
         public Package? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
-        [HebrewTranslation("תעודות מוכלות")]
+        [HebrewTranslation("Package.Children")]
         public HashSet<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
-        [HebrewTranslation("קטגוריה")]
+        [HebrewTranslation("Package.Category")]
         public Category Category { get; set; }
 
         /// <summary>
         /// List of processes definitions that may accept this package as input
         /// </summary>
-        [HebrewTranslation("ייעוד")]
+        [HebrewTranslation("Package.DestinationProcesses")]
         public HashSet<ProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public class Worker
     {
+        [HebrewTranslation("Event.Worker")]
         public string Name { get; set; }
 
         public Worker(string name)

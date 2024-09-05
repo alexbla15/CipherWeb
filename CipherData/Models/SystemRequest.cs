@@ -12,26 +12,31 @@ namespace CipherData.Models
         /// <summary>
         /// Name of system
         /// </summary>
+        [HebrewTranslation("System.Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation("System.Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
+        [HebrewTranslation("System.Properties")]
         public string Properties { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
+        [HebrewTranslation("System.Unit")]
         public string UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
+        [HebrewTranslation("System.Parent")]
         public string? ParentId { get; set; }
 
         /// <summary>
