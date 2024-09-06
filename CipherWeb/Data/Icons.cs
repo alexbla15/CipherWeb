@@ -1,6 +1,4 @@
-﻿using Radzen;
-
-namespace CipherWeb.Data
+﻿namespace CipherWeb.Data
 {
     public class Icons
     {
@@ -929,10 +927,72 @@ namespace CipherWeb.Data
                 public const string Wallpaper = "wallpaper";
             }
 
-            // continue from here 
-            public class Music { }
-            public class Video 
-            { 
+            public class Music 
+            {
+                public const string AudioFile = "audio_file";
+                public const string Disc = "album";
+                public const string DiscFull = "disc_full";
+                public const string Earbuds = "earbuds";
+                public const string EarbudsBattery = "earbuds_battery";
+                public const string Headset = "headset";
+                public const string HeadsetBattery = "headphones_battery";
+                public const string HeadsetMic = "headset_mic";
+                public const string HeadsetOff = "headset_off";
+                public const string MicOff = "mic_external_off";
+                public const string MicOn = "mic_external_on";
+                public const string MusicBluetoothOff = "media_bluetooth_off";
+                public const string MusicBluetoothOn = "media_bluetooth_on";
+                public const string MusicLibrary = "library_music";
+                public const string MusicOff = "music_off";
+                public const string MusicOn = "music_note";
+                public const string MusicQueue = "queue_music";
+                public const string MusicVideo = "music_video";
+                public const string Piano = "piano";
+                public const string PianoOff = "piano_off";
+                public const string Radio = "radio";
+                public const string Speaker = "speaker";
+                public const string SpeakerGroup = "speaker_group";
+            }
+
+            public class Video
+            {
+                public const string AdultContentOff = "no_adult_content";
+                public const string CameraRoll = "camera_roll";
+                public const string ClosedCaption = "closed_caption";
+                public const string ClosedCaptionDisabled = "closed_caption_disabled";
+                public const string ClosedCaptionOff = "closed_caption_off";
+                public const string Duo = "duo";
+                public const string DisabledVisible = "disabled_visible";
+                public const string EmergencyRecording = "emergency_recording";
+                public const string Explicit = "explicit";
+                public const string FiberDvr = "fiber_dvr";
+                public const string FiberNew = "fiber_new";
+                public const string FiberPin = "fiber_pin";
+                public const string Hevc = "hevc";
+                public const string MotionPhotosAuto = "motion_photos_auto";
+                public const string Movie = "movie";
+                public const string MovieEdit = "movie_edit";
+                public const string MovieFilter = "movie_filter";
+                public const string PhotoCameraFront = "photo_camera_front";
+                public const string Rated18 = "18_up_rating";
+                public const string Sd = "sd";
+                public const string SdCard = "sd_card";
+                public const string Subtitles = "subtitles";
+                public const string SubtitlesOff = "subtitles_off";
+                public const string TheaterComedy = "theater_comedy";
+                public const string Theaters = "theaters";
+                public const string VideoCall = "video_call";
+                public const string VideoCallMissed = "missed_video_call";
+                public const string VideoCamera = "videocam";
+                public const string VideoCameraBack = "video_camera_back";
+                public const string VideoCameraFront = "video_camera_front";
+                public const string VideoCameraOff = "videocam_off";
+                public const string VideoFile = "video_file";
+                public const string VideoStable = "video_stable";
+                public const string VideoSwitch = "switch_video";
+                public const string Wb_auto = "wb_auto";
+
+                // continue from here 
                 public class Play { }
                 public class Quality { }
             }

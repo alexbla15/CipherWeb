@@ -1,54 +1,28 @@
 ﻿@inherits CipherComponentCard
 
-@code {
-    /// <summary>
-    /// Width of each row within card.
-    /// </summary>
-    [Parameter]
-    public string RowWidth { get; set; } = "300px";
+<CipherComponentCard WithCard="false" Title="">
+    <CipherComponentCard Title="פרטי התהליך" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name))" Icon="@Icons.Cipher.Process" @ref=ProcName />
+        <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description))" Icon="@Icons.Communication.Chat.Comment" @ref=ProcDescription />
 
-    public class Analysis
-    {
-        public int Id { get; set; }
-        public string Type { get; set; }
-        public decimal Value { get; set; }
-        public DateTime EventDate { get; set; }
-    }
+    </CipherComponentCard>
 
-    private List<Analysis> analysis = new();
-}
-
-<CipherComponentCard Title="@Title" WithCard="@WithCard" Width="1000px" MaxWidth="1000px">
-    <RadzenTabs>
-        <Tabs>
-            <RadzenTabsItem Text="פרטים">
-                <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Width="@RowWidth" />
-                <CipherAutoComplete Label="שם תהליך" Icon="@Icons.Communication.Chat.QA" Width="@RowWidth" />
-                <CipherAutoComplete Label="סוג תהליך" Icon="@Icons.Symbols.Category" Width="@RowWidth" />
-                <CipherAutoComplete Label="מיקומים" Icon="@Icons.Cipher.Location" Width="@RowWidth" />
-                <CipherAutoComplete Label="תהליכים יוצרים" Icon="@Icons.Arrows.Squared.Input" Width="@RowWidth" />
-                <CipherAutoComplete Label="תהליכים צורכים" Icon="@Icons.Arrows.Squared.Output" Width="@RowWidth" />
-                <CipherAutoComplete Label="סוגים נצרכים" Icon="@Icons.Arrows.Squared.Input" Width="@RowWidth" />
-                <CipherAutoComplete Label="סוגים צורכים" Icon="@Icons.Arrows.Squared.Output" Width="@RowWidth" />
-                <CipherDatePicker Label="תאריך עדכון" />
-                <CipherWorker Label="עובד/ת מעדכנ/ת" Width="@RowWidth" />
-                <CipherDatePicker Label="תאריך אישור" />
-                <CipherWorker Label="עובד/ת מאשר/ת" Width="@RowWidth" />
-                <CipherAutoComplete Label="מגבלות" Icon="@Icons.Documents.Delete.Dangerous" Width="@RowWidth" />
-                <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.Comment" Width="@RowWidth"/>
-
-                <br />
-                <br />
-            </RadzenTabsItem>
-
-            <RadzenTabsItem Text="תהליכי עבר">
-                <CipherEventsTable Title="" WithCard="false" />
-            </RadzenTabsItem>
-
-            <RadzenTabsItem Text="תעודות">
-                <CipherPackagesTable Title="" WithCard="false" />
-            </RadzenTabsItem>
-        </Tabs>
-    </RadzenTabs>
-
+    <CipherProcessSteps @ref="ProcSteps" />
 </CipherComponentCard>
+
+@code {
+    private CipherAutoComplete ProcName = new();
+    private CipherAutoComplete ProcDescription = new();
+    private CipherProcessSteps ProcSteps = new();
+
+    public ProcessDefinitionRequest Value()
+    {
+        ProcessDefinitionRequest proc = ProcessDefinitionRequest.Empty();
+
+        proc.Name = ProcName.Check() ? ProcName.Value : string.Empty;
+        proc.Description = ProcDescription.Check() ? ProcDescription.Value : string.Empty;
+        proc.Steps = ProcSteps.ChosenSteps;
+
+        return proc;
+    }
+}

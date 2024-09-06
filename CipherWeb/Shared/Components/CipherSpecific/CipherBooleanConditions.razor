@@ -1,0 +1,248 @@
+﻿@inherits CipherComponentCard
+
+@code {
+    [Parameter]
+    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+
+    /// <summary>
+    /// Text shown in case no rows were added.
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; } = "כאן ניתן להוסיף תנאים. להוספה לחצו על כפתור ההוספה למעלה";
+
+    /// <summary>
+    /// Help text for add-button.
+    /// </summary>
+    [Parameter]
+    public string AddText { get; set; } = "הוספת תנאי";
+
+    /// <summary>
+    /// Help text for delete-all-button.
+    /// </summary>
+    [Parameter]
+    public string DeleteAllText { get; set; } = "מחיקת תנאים";
+
+    /// <summary>
+    /// Help text for save-button.
+    /// </summary>
+    [Parameter]
+    public string SaveConditionsText { get; set; } = "שמירת תנאים";
+
+    /// <summary>
+    /// All available attributes to set conditions on them
+    /// </summary>
+    [Parameter]
+    public List<string> AvailableAttributes { get; set; } = new();
+
+    /// <summary>
+    /// All chosen conditions
+    /// </summary>
+    [Parameter]
+    public ProcessStepDefinition SelectedStep { get; set; }
+
+    /// <summary>
+    /// All chosen conditions
+    /// </summary>
+    [Parameter]
+    public List<BooleanCondition> ChosenConditions { get; set; } = new();
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    private RadzenDataGrid<BooleanCondition> ConditionsDataGrid = new();
+
+    private bool ShowHelpText = true;
+    private int conditions = 0;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "תנאים נבחרים";
+    }
+
+    /// <summary>
+    /// Add a condition to the memory.
+    /// </summary>
+    async Task AddCondition()
+    {
+        // Add the new restriction to the existing list
+        ChosenConditions.Add(BooleanCondition.Empty());
+
+        StateHasChanged();
+
+        conditions = ChosenConditions.Count;
+
+        ShowHelpText = false;
+
+        await ConditionsDataGrid.RefreshDataAsync();
+    }
+
+    /// <summary>
+    /// Deletes a condition from memory & view.
+    /// </summary>
+    /// <param name="cond">Condition to delete</param>
+    async Task DeleteCondition(BooleanCondition cond)
+    {
+        ChosenConditions.Remove(cond);
+
+        ConditionsDataGrid.Data = ChosenConditions;
+
+        conditions--;
+
+        await ConditionsDataGrid.RefreshDataAsync();
+
+        if (ChosenConditions.Count() == 0)
+        {
+            ShowHelpText = true;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Clears all conditions from memory & view.
+    /// </summary>
+    /// <returns></returns>
+    async Task DeleteAllConditions()
+    {
+        ChosenConditions.Clear();
+        conditions = 0;
+        ConditionsDataGrid.Data = ChosenConditions;
+
+        await ConditionsDataGrid.RefreshDataAsync();
+
+        ShowHelpText = true;
+    }
+
+    public void Save()
+    {
+        SelectedStep.Condition = new GroupedBooleanCondition(conditions: ChosenConditions);
+    }
+}
+
+<CipherComponentCard Title="@Title" Visible="@Visible">
+    <Buttons>
+        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddCondition())" HelpText="@AddText" />
+        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAllConditions())" HelpText="@DeleteAllText" />
+        <CipherButton Icon="@Icons.Documents.Edit.Save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
+    </Buttons>
+    <ChildContent>
+        @if (ShowHelpText)
+        {
+            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+        }
+        <RadzenDataGrid @ref="ConditionsDataGrid" Data="@ChosenConditions" TItem="BooleanCondition" AllowColumnResize="true" Visible="!conditions.Equals(0)">
+            <Columns>
+                <RadzenDataGridColumn Width="10%" TItem="BooleanCondition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="cond">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteCondition(cond))" @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Attribute)))" TextAlign="@TdTextAlign">
+                    <Template Context="cond">
+                        <RadzenDropDown @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.AttributeRelation)))" TextAlign="@TdTextAlign">
+                    <Template Context="cond">
+                        <RadzenDropDown @bind-Value="cond.AttributeRelation" TValue="AttributeRelation" Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
+                            <ValueTemplate>
+                                @if (cond.AttributeRelation == AttributeRelation.Eq)
+                                {
+                                    @("שווה ל")
+                                }
+                                else if (cond.AttributeRelation == AttributeRelation.Ne)
+                                {
+                                    @("שונה מ")
+                                }
+                                else if (cond.AttributeRelation == AttributeRelation.Gt)
+                                {
+                                    @("גדול מ")
+                                }
+                                else if (cond.AttributeRelation == AttributeRelation.Lt)
+                                {
+                                    @("קטן מ")
+                                }
+                                else
+                                {
+                                    @("מכיל")
+                                }
+                            </ValueTemplate>
+                            <Template>
+                                @if (context == AttributeRelation.Eq)
+                                {
+                                    @("שווה ל")
+                                }
+                                else if (context == AttributeRelation.Ne)
+                                {
+                                    @("שונה מ")
+                                }
+                                else if (context == AttributeRelation.Gt)
+                                {
+                                    @("גדול מ")
+                                }
+                                else if (context == AttributeRelation.Lt)
+                                {
+                                    @("קטן מ")
+                                }
+                                else
+                                {
+                                    @("מכיל")
+                                }
+                            </Template>
+                        </RadzenDropDown>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Value)))" TextAlign="@TdTextAlign">
+                    <Template Context="cond">
+                        <CipherAutoComplete @bind-Value="@cond.Value" Width="50%"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Operator)))" TextAlign="@TdTextAlign">
+                    <Template Context="cond">
+                        <RadzenDropDown @bind-Value="cond.Operator" TValue="Operator" Data="@(new List<Operator>() {Operator.All, Operator.Any, Operator.And, Operator.Or})">
+                            <ValueTemplate>
+                                @if (cond.Operator == Operator.All)
+                                {
+                                    @("כל האיברים")
+                                }
+                                else if (cond.Operator == Operator.Any)
+                                {
+                                    @("לפחות אחד")
+                                }
+                                else if (cond.Operator == Operator.Or)
+                                {
+                                    @("או")
+                                }
+                                else
+                                {
+                                    @("גם")
+                                }
+                            </ValueTemplate>
+                            <Template>
+                                @if (context == Operator.All)
+                                {
+                                    @("כל האיברים")
+                                }
+                                else if (context == Operator.Any)
+                                {
+                                    @("לפחות אחד")
+                                }
+                                else if (context == Operator.Or)
+                                {
+                                    @("או")
+                                }
+                                else
+                                {
+                                    @("גם")
+                                }
+                            </Template>
+                        </RadzenDropDown>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+</CipherComponentCard>

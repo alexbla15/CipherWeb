@@ -118,7 +118,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Process>, ErrorResponse> All()
         {
-            return ProcessRequests.GetProcesses();
+            return ProcessesRequests.GetProcesses();
         }
 
         /// <summary>
@@ -126,12 +126,12 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Process>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Definition)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                                }, @operator: Operator.Or));
+            return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Process).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Process).Name}.{nameof(Definition)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            }, @operator: Operator.Or));
         }
     }
 }

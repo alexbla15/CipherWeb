@@ -123,12 +123,12 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                     }, @operator: Operator.Or));
         }
     }

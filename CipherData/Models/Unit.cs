@@ -136,14 +136,14 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Unit>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
                                     }, @operator: Operator.Or));
         }
     }

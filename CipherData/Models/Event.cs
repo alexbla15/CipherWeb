@@ -132,12 +132,12 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Event>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(Packages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
             }, @operator: Operator.Or));
         }
     }

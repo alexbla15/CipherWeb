@@ -244,8 +244,8 @@ namespace CipherData.Models
         /// </summary>
         public Tuple<List<Event>, ErrorResponse> Events()
         {
-            return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
+            return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
                 }, @operator: Operator.Or));
         }
 
@@ -254,8 +254,8 @@ namespace CipherData.Models
         /// </summary>
         public Tuple<List<Process>, ErrorResponse> Processes()
         {
-            return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.Packages.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
+            return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.Packages.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
                 }));
         }
 
@@ -282,13 +282,13 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-        new BooleanCondition(attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
+            return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Package).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
                 }, @operator: Operator.Or));
         }
     }

@@ -4,6 +4,7 @@ namespace CipherWeb
 {
     public static class CachedData
     {
+        public static readonly BooleanCondition BooleanConditionExample = BooleanCondition.Empty();
         public static readonly Category CategoryExample = Category.Empty();
         public static readonly CategoryProperty CategoryPropertyExample = CategoryProperty.Empty();
         public static readonly Event EventExample = Event.Random();
@@ -11,6 +12,7 @@ namespace CipherWeb
         public static readonly PackageProperty PackagePropertyExample = new();
         public static readonly Process ProcessExample = Process.Random();
         public static readonly ProcessDefinition ProcessDefinitionExample = ProcessDefinition.Random();
+        public static readonly ProcessStepDefinition ProcessStepDefinitionExample = ProcessStepDefinition.Random();
         public static readonly StorageSystem SystemExample = StorageSystem.Empty();
         public static readonly Vessel VesselExample = Vessel.Empty();
         public static readonly Unit UnitExample = Unit.Empty();

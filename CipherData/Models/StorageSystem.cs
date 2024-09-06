@@ -141,15 +141,15 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"System.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"System.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"System.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"System.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"System.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"System.{nameof(Unit)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText)
-                                }, @operator: Operator.Or));
+            return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"System.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"System.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"System.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"System.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"System.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"System.{nameof(Unit)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText)
+            }, @operator: Operator.Or));
         }
 
         /// <summary>
@@ -158,9 +158,9 @@ namespace CipherData.Models
         /// <param name="SelectedSystem">selected system for query</param>
         public static Tuple<List<Event>, ErrorResponse> Events(string SelectedSystem)
         {
-            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
-                new BooleanCondition(attribute: $"{typeof(Event).Name}.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new (attribute: $"{typeof(Event).Name}.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
 
@@ -171,9 +171,9 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<List<Process>, ErrorResponse> Processes(string SelectedSystem)
         {
-            return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
-                new BooleanCondition(attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new (attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
 
@@ -182,9 +182,9 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> Packages(string SelectedSystem)
         {
-            return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
-                new BooleanCondition(attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new (attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
 
@@ -193,9 +193,9 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> Vessels(string SelectedSystem)
         {
-            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new()
+            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
-                new BooleanCondition(attribute: $"{typeof(Vessel).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
+                new (attribute: $"{typeof(Vessel).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
             }, @operator: Operator.Or));
         }
     }

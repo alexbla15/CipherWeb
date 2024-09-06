@@ -26,9 +26,21 @@
 
     public enum Operator
     {
+        /// <summary>
+        /// All of the items in the array must follow the condition.
+        /// </summary>
         All,
+        /// <summary>
+        /// 
+        /// </summary>
         And, 
-        Any, 
+        /// <summary>
+        /// At least one of the items in the array must follow the condition.
+        /// </summary>
+        Any,
+        /// <summary>
+        /// 
+        /// </summary>
         Or
     }
 
@@ -86,6 +98,19 @@
             AttributeRelation = attributeRelation;
             Operator = @operator;
             Value = value;
+        }
+
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        public static BooleanCondition Empty()
+        {
+            return new BooleanCondition(attribute: string.Empty, attributeRelation: AttributeRelation.Contains);
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(BooleanCondition), searchedAttribute);
         }
     }
 }

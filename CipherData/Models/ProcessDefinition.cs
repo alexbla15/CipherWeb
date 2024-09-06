@@ -121,12 +121,12 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<ProcessDefinition>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
-                                                    }, @operator: Operator.Or));
+            return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
+                }, @operator: Operator.Or));
         }
     }
 }

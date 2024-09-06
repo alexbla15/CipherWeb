@@ -183,21 +183,21 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new() {
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Children)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Description", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new BooleanCondition(attribute: $"{typeof(Category).Name}.{nameof(Properties)}.DefaultValue", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+            return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
+                new (attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Description", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.DefaultValue", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
             }, @operator: Operator.Or));
         }
     }

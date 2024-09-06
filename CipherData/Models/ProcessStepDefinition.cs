@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static CipherData.Models.CreateEvent;
 
 namespace CipherData.Models
 {
@@ -54,6 +57,22 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
+            };
+
+            string result = JsonSerializer.Serialize(this, options);
+            return result;
+        }
+
+        /// <summary>
         /// Hebrew-english translation
         /// </summary>
         public new static HashSet<Tuple<string, string>> Headers()
@@ -77,6 +96,21 @@ namespace CipherData.Models
                 description:name,
                 condition: GroupedBooleanCondition.Random()
                 );
+        }
+
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        /// <returns></returns>
+        public static ProcessStepDefinition Empty()
+        {
+            return new ProcessStepDefinition(name: string.Empty, description: string.Empty,
+                condition: GroupedBooleanCondition.Empty());
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(ProcessStepDefinition), searchedAttribute);
         }
     }
 }
