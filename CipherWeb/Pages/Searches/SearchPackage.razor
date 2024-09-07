@@ -1,5 +1,44 @@
 ﻿@page "/Search/Package"
 
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
+
 <PageTitle>חיפוש תעודה</PageTitle>
 
-<CipherPackageCard Title="חיפוש תעודה" ReadOnly="true" WithCard="false"/>
+<CipherPackageCard Title="חיפוש תעודה" ReadOnly="true" WithCard="false" @bind-ChosenPackage="@ChosenPackage"/>
+
+@code {
+    /// <summary>
+    /// Chosen package upon searching
+    /// </summary>
+    [Parameter]
+    public Package? ChosenPackage { get; set; }
+
+    /// <summary>
+    /// API response to search.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (ChosenPackage, Error) = Package.Get(idValue);
+        }
+    }
+
+    public void ChangeUrl()
+    {
+        if (ChosenPackage is null)
+        {
+            Navigation.NavigateTo(CipherNavLinks.PackageSearch.Href);
+        }
+        else
+        {
+            Navigation.NavigateTo($"{CipherNavLinks.PackageSearch.Href}?Id={ChosenPackage.Id}");
+        }
+    }
+}

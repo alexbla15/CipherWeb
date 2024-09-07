@@ -101,11 +101,10 @@
                                 @{
                                     var thirdClasses = icons.Where(x => x.MainClass == main && x.SubClass == sub)
                                     .Select(x => x.ThirdClass)
-                                    .Where(x => !string.IsNullOrEmpty(x))
                                     .Distinct()
                                     .ToList();
                                 }
-                                @if (thirdClasses.Any())
+                                @if (thirdClasses.Any(x=> !string.IsNullOrEmpty(x)))
                                 {
                                     <RadzenAccordion Style="flex-direction:column">
                                         <Items>

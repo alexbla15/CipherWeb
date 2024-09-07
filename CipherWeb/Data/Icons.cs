@@ -990,20 +990,100 @@
                 public const string VideoFile = "video_file";
                 public const string VideoStable = "video_stable";
                 public const string VideoSwitch = "switch_video";
-                public const string Wb_auto = "wb_auto";
+                public const string WbAuto = "wb_auto";
 
-                // continue from here 
-                public class Play { }
-                public class Quality { }
+                public class Play
+                {
+                    public const string FastForward = "fast_forward";
+                    public const string FastRewind = "fast_rewind";
+                    public const string LiveTv = "live_tv";
+                    public const string OnDemandVideo = "ondemand_video";
+                    public const string Pause = "pause";
+                    public const string PauseCircle = "pause_circle";
+                    public const string PauseCircleOutline = "pause_circle_outline";
+                    public const string PauseMotionPhotos = "motion_photos_pause";
+                    public const string PausePresentation = "pause_presentation";
+                    public const string PlayArrow = "play_arrow";
+                    public const string PlayCircle = "play_circle";
+                    public const string PlayCircleOutline = "play_circle_outline";
+                    public const string PlayDisabled = "play_disabled";
+                    public const string SkipNext = "skip_next";
+                    public const string SkipPrevious = "skip_previous";
+                    public const string SmartDisplay = "smart_display";
+                    public const string Square = "square";
+                    public const string Stop = "stop";
+                    public const string StopCircle = "stop_circle";
+                    public const string Subscriptions = "subscriptions";
+                    public const string VideoLibrary = "video_library";
+                    public const string VideoSettings = "video_settings";
+                }
+
+                public class Quality
+                {
+                    public const string _1k = "1k";
+                    public const string _2k = "2k";
+                    public const string _3k = "3k";
+                    public const string _4k = "4k";
+                    public const string _5k = "5k";
+                    public const string _6k = "6k";
+                    public const string _7k = "7k";
+                    public const string _8k = "8k";
+                    public const string _9k = "9k";
+                    public const string _10k = "10k";
+                    public const string _1kPlus = "1k_plus";
+                    public const string _2kPlus = "2k_plus";
+                    public const string _3kPlus = "3k_plus";
+                    public const string _4kPlus = "4k_plus";
+                    public const string _5kPlus = "5k_plus";
+                    public const string _6kPlus = "6k_plus";
+                    public const string _7kPlus = "7k_plus";
+                    public const string _8kPlus = "8k_plus";
+                    public const string _9kPlus = "9k_plus";
+                    public const string HD = "hd";
+                    public const string HQ = "high_quality";
+                }
             }
 
-            public class Volume { }
+            public class Volume
+            {
+                public const string CameraMic = "perm_camera_mic";
+                public const string Campaign = "campaign";
+                public const string ConnectWithoutContact = "connect_without_contact";
+                public const string Hearing = "hearing";
+                public const string HearingOff = "hearing_disabled";
+                public const string Mic = "mic";
+                public const string MicNone = "mic_none";
+                public const string MicOff = "mic_off";
+                public const string MicSettings = "settings_voice";
+                public const string SpatialAudio = "spatial_audio";
+                public const string VoiceOver = "record_voice_over";
+                public const string VoiceOverOff = "voice_over_off";
+                public const string VolumeDown = "volume_down";
+                public const string VolumeMute = "volume_mute";
+                public const string VolumeOff = "volume_off";
+                public const string VolumeUp = "volume_up";
+            }
         }
 
         public class Professions
         {
+            public const string Balance = "balance";
+            public const string Carpenter = "carpenter";
             public const string CleaningServices = "cleaning_services";
+            public const string Factory = "factory";
+            public const string FireHydrant = "fire_hydrant_alt";
+            public const string GasMeter = "gas_meter";
+            public const string Gavel = "gavel";
+            public const string HeatPump = "heat_pump";
+            public const string OilBarrel = "oil_barrel";
+            public const string Pallet = "pallet";
+            public const string Phishing = "phishing";
+            public const string Propane = "propane";
+            public const string PropaneTank = "propane_tank";
+            public const string RealEstateAgent = "real_estate_agent";
+            public const string Warehouse = "warehouse";
 
+            // continue from here 
             public class Construction
             {
                 public const string Architecture = "architecture";

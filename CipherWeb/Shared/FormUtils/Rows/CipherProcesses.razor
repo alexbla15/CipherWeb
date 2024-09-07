@@ -3,7 +3,7 @@
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
     <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(CachedData.ProcessDefinitionExample.Name))"
-                            Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ...">
+                            Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Name))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Description))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description)))" />
@@ -15,6 +15,12 @@
 </CipherFormRow>
 
 @code {
+    /// <summary>
+    /// Is the component readonly, or it's editable.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     /// <summary>
     /// Max amount of labels that will be shown upon choosing. Afterwards, it will be shown as "X labels were selected".
     /// Initially set to max.

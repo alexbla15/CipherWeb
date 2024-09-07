@@ -18,6 +18,12 @@
     /// </summary>
     [Parameter]
     public List<Package> packs { get; set; } = new List<Package>();
+    
+    /// <summary>
+    /// Chosen package to view within card.
+    /// </summary>
+    [Parameter]
+    public Package? ChosenPackage { get; set; }
 
     /// <summary>
     /// Error response for fetching data
@@ -29,8 +35,6 @@
 
     private CipherPackageId SetPack = new();
     private CipherPackageId PackId = new();
-
-    private Package? ChosenPackage;
 
     protected override void OnInitialized()
     {
@@ -63,7 +67,8 @@
     <ChildContent>
         <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
             <Buttons>
-                <CipherNavButton Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" Path="@CipherNavLinks.UpdatePackage.Href" />
+                <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים" 
+                Disabled="@(ChosenPackage != null)" Path="@($"{CipherNavLinks.UpdatePackage.Href}?Id={ChosenPackage?.Id}")" />
             </Buttons>
             <ChildContent>
                 <CipherPackageId Width="@RowWidth" Disabled="@ReadOnly" ChosenPackage="ChosenPackage" />
@@ -78,8 +83,17 @@
                 <CipherLocation ChosenSystem="@ChosenPackage?.System" Width="@RowWidth" Disabled="@ReadOnly" />
                 <CipherDatePicker Value="@ChosenPackage?.CreatedAt" Label="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" Disabled="@ReadOnly" Width="@RowWidth" />
 
-                <CipherProcesses ChosenProcesses="@ChosenPackage?.DestinationProcesses.ToList()" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
+                <CipherProcesses ChosenProcesses="@ChosenPackage?.DestinationProcesses.ToList()" Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
                 <CipherPackageId ChosenPackage="@ChosenPackage?.Parent" Width="@RowWidth" Disabled="@ReadOnly" Label="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))" />
+
+                @if (ChosenPackage != null)
+                {
+                    @foreach (string prop in ChosenPackage.Properties.Keys)
+                    {
+                        <CipherAutoComplete Label="@prop" Value="@ChosenPackage.Properties[prop]" Disabled="true"
+                                            Icon="@Icons.Cipher.Properties" />
+                    }
+                }
                 <CipherPackagesPicking SelectedPackages="@ChosenPackage?.Children?.ToList()" Width="@RowWidth" Disabled="@ReadOnly" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
             </ChildContent>
         </CipherComponentCard>

@@ -1,5 +1,9 @@
 ﻿@page "/Forms/UpdatePackage"
 
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
+
 <PageTitle>@Title</PageTitle>
 
 <CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
@@ -59,6 +63,12 @@
     /// </summary>
     [Parameter]
     public bool CheckJson { get; set; } = false;
+
+    /// <summary>
+    /// Id of package, as transfered from a different page
+    /// </summary>
+    [Parameter]
+    public string? PackId { get; set; }
 
     /// <summary>
     /// Page title.
@@ -126,9 +136,40 @@
 
     private Dictionary<string, string>? NewProps = new();
 
+    private bool FirstInitialization = true;
+
+    protected override void OnInitialized()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (OriginalPackage.ChosenPackage, Error) = Package.Get(idValue);
+            Change();
+        }
+        FirstInitialization = false;
+    }
+
+    public void ChangeUrl()
+    {
+        if (ChosenPackage is null)
+        {
+            Navigation.NavigateTo(CipherNavLinks.UpdatePackage.Href);
+        }
+        else
+        {
+            Navigation.NavigateTo($"{CipherNavLinks.UpdatePackage.Href}?Id={ChosenPackage?.Id}");
+        }
+    }
+
     public void Change()
     {
         ChosenPackage = OriginalPackage.ChosenPackage;
+
+        if (!FirstInitialization)
+        {
+            ChangeUrl();
+        }
+
         NewProps = OriginalPack.Properties;
 
         if (OriginalPackage.ChosenPackage != null)
