@@ -5,8 +5,8 @@ namespace CipherWeb.Data
 {
     public class CipherNavLinks
     {
-        public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home._Home, Name = "מסך הבית", SubLinks = new() };
-        public static readonly MyNavLink Personal = new() { Href = "Personal", Icon = Icons.Social.SinglePerson.AccountCircle, Name = "אזור אישי", SubLinks = new List<MySubNavLink>() };
+        public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home._Home, Name = "מסך הבית" };
+        public static readonly MyNavLink Personal = new() { Href = "Personal", Icon = Icons.Social.SinglePerson.AccountCircle, Name = "אזור אישי" };
 
         public static readonly MySubNavLink AddPackage = new() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.AddCircleOutline };
         public static readonly MySubNavLink TransferAmount = new() { Href = "Forms/TransferAmount", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
@@ -26,7 +26,7 @@ namespace CipherWeb.Data
                 AddCategory, AddProcess, AddVessel, AddStorageSystem }
         };
 
-        public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור", SubLinks = new List<MySubNavLink>() };
+        public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור" };
 
         public static readonly MySubNavLink CustomReport = new() { Href = "Reports/CustomReport", Name = "יצירת דוח", Icon = Icons.Documents.Edit._Edit};
         public static readonly MySubNavLink PackagesReport = new() { Href = "Reports/Packages", Name = "תעודות", Icon = Icons.Cipher.Package };
@@ -50,7 +50,6 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AdvancedSearch = new() { Href = "Search/Advanced", Name = "מתקדם", Icon = Icons.Cipher.Advanced };
         public static readonly MySubNavLink PackageSearch = new() { Href = "Search/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
         public static readonly MySubNavLink VesselSearch = new() { Href = "Search/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink DepartmentSearch = new() { Href = "Search/Department", Name = "תחום", Icon = Icons.Cipher.Department };
         public static readonly MySubNavLink LocationSearch = new() { Href = "Search/System", Name = "מיקום", Icon = Icons.Cipher.Location };
         public static readonly MyNavLink Search = new()
         {
@@ -58,10 +57,10 @@ namespace CipherWeb.Data
             Icon = Icons.SearchAndFilter.Search,
             Name = "חיפוש",
             SubLinks = new()
-                { FreeSearch, AdvancedSearch, PackageSearch, VesselSearch, DepartmentSearch, LocationSearch }
+                { FreeSearch, AdvancedSearch, PackageSearch, VesselSearch, LocationSearch }
         };
 
-        public static readonly MyNavLink Information = new() { Href = "Information", Icon = Icons.Communication.Chat.QA, Name = "הסברים ותמיכה", SubLinks = new() };
+        public static readonly MyNavLink Information = new() { Href = "Information", Icon = Icons.Communication.Chat.QA, Name = "הסברים ותמיכה" };
 
         public static readonly List<MyNavLink> links = new()
         {

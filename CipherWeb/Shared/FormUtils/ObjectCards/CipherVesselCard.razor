@@ -1,35 +1,106 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Title="פרטי הכלי" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel" @ref=VesName />
-    <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category" Multiline="true"
-                        @ref=VesType />
-    <CipherLocation @ref="VesSystem" />
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (!NewVessel)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                <CipherVesselDropDown Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
+                                      Change="@Change" @ref="VesId"/>
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <Buttons>
+
+                @if (!NewVessel)
+                {
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                                     Disabled="@(ChosenVessel != null)" Path="@($"{CipherNavLinks.AddVessel.Href}?Id={ChosenVessel?.Id}")" />
+                }
+            </Buttons>
+            <ChildContent>
+                @if (NewVessel && ChosenVessel != null)
+                {
+                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                        <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
+                                              Value="@ChosenVessel?.Id" Disabled="true"/>
+                    </RadzenStack>
+                }
+                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel"
+                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Name" @ref=VesName/>
+                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category" Multiline="true"
+                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Type" @ref=VesType />
+                <CipherLocation Disabled="@ReadOnly" ChosenSystem="@ChosenVessel?.System" @ref=VesSys/>
+
+                @if (!NewVessel)
+                {
+                    <CipherPackagesPicking SelectedPackages="@ChosenVessel?.ContainingPackages" />
+                }
+            </ChildContent>
+        </CipherComponentCard>
+    </ChildContent>
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Is vessel card used for defining new vessel or not?
+    /// </summary>
+    [Parameter]
+    public bool NewVessel { get; set; } = false;
+
+    /// <summary>
+    /// Are attributes read-only
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    /// <summary>
+    /// Chosen vessel within the card
+    /// </summary>
+    [Parameter]
+    public Vessel ChosenVessel { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing the vessel.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> ChangeVessel { get; set; }
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private CipherVesselDropDown VesId = new();
     private CipherAutoComplete VesName = new();
     private CipherAutoComplete VesType = new();
-    private CipherLocation VesSystem = new();
+    private CipherLocation VesSys = new();
+
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי הכלי";
+    }
+
+    public void Change()
+    {
+        ChosenVessel = VesId.ChosenVessel;
+
+        ChangeVessel.InvokeAsync();
+
+        StateHasChanged();
+    }
 
     public VesselRequest Value()
     {
-        VesselRequest ves = VesselRequest.Empty();
+        VesselRequest newRequest = VesselRequest.Empty();
 
-        ves.Name = VesName.Check() ? VesName.Value : string.Empty;
-        ves.Type = VesType.Check() ? VesType.Value : string.Empty;
-        ves.SystemId = VesSystem.ChosenSystem?.Id;
+        newRequest.Type = (VesType.Check()) ? VesType.Value : string.Empty;
+        newRequest.Name = (VesName.Check()) ? VesName.Value : string.Empty;
+        newRequest.SystemId = VesSys.ChosenSystem?.Id;
 
-        return ves;
-    }
-
-    /// <summary>
-    /// Outside Value-function, since it can be null within VesselRequest, but you cannot pass the request if there is an error.
-    /// </summary>
-    /// <returns></returns>
-    public Tuple<bool, string> CheckName()
-    {
-        bool ValidName = VesName.Check();
-        return new(ValidName, Vessel.Translate(nameof(CachedData.VesselExample.Name)));
+        return newRequest;
     }
 }

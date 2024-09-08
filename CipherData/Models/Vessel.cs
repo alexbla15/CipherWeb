@@ -47,6 +47,20 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Transfrom package object to a VesselRequest object
+        /// </summary>
+        /// <returns></returns>
+        public VesselRequest Request()
+        {
+            VesselRequest result = new(
+                    name: Name,
+                    type: Type,
+                    systemId: System.Id);
+
+            return result;
+        }
+
+        /// <summary>
         /// Method to get an empty Vessel object scheme
         /// </summary>
         public static Vessel Empty()
@@ -68,7 +82,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        private static string GetNextId()
+        public static string GetNextId()
         {
             IdCounter += 1;
             return $"V{IdCounter:D3}";
@@ -99,7 +113,8 @@ namespace CipherData.Models
                 id: id,
                 name: id,
                 type: RandomFuncs.RandomItem(VesselTypes),
-                system: StorageSystem.Random()
+                system: StorageSystem.Random(),
+                packages: new List<Package>() { RandomData.RandomPackage }
                 );
         }
 
@@ -109,6 +124,16 @@ namespace CipherData.Models
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Get details about a single vessel given vessel ID
+        /// </summary>
+        /// <param name="id">vessel ID</param>
+        /// <returns></returns>
+        public static Tuple<Vessel, ErrorResponse> Get(string id)
+        {
+            return VesselsRequests.GetVessel(id);
+        }
 
         /// <summary>
         /// All objects

@@ -2,6 +2,12 @@
 
 @code {
     /// <summary>
+    /// Is the component disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
     /// Width of card containing the comments component.
     /// </summary>
     [Parameter]
@@ -88,5 +94,6 @@
 }
 
 <CipherComponentCard Title="@Title" @ref=Card Width="@CardWidth" WithCard="@WithCard">
-    <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
+    <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Disabled="@Disabled"
+                        Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
 </CipherComponentCard>

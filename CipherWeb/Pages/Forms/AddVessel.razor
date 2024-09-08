@@ -1,12 +1,14 @@
 ﻿@page "/forms/addvessel"
 
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
 @inject NotificationService NotificationService
 
 <PageTitle>@Title</PageTitle>
 
-
 <CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherVesselCard @ref=VesDetails />
+    <CipherVesselCard @ref=VesDetails NewVessel="true" Title="" ChosenVessel="@SetVessel" />
     <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
@@ -54,16 +56,35 @@
     [Parameter]
     public ErrorResponse Error { get; set; }
 
+    private Vessel SetVessel;
+
     private CipherSubmit submission = new();
     private VesselRequest ves = VesselRequest.Empty();
     private CipherVesselCard VesDetails = new();
+
+    protected override void OnInitialized()
+    {
+        GetVesselFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public void GetVesselFromUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (SetVessel, Error) = Vessel.Get(idValue);
+        }
+    }
 
     /// <summary>
     /// Fill all needed details for new package based on the form details.
     /// </summary>
     public void Submit()
     {
-        Tuple<bool, string> CheckResult = VesDetails.CheckName();
+        Tuple<bool, string> CheckResult = VesDetails.Value().Check();
 
         (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
 

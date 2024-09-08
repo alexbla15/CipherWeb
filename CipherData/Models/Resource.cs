@@ -1,9 +1,30 @@
 ﻿using CipherData.Requests;
+using System.Globalization;
 using System.Reflection;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CipherData.Models
 {
+    /// <summary>
+    /// Custom DateTime converter
+    /// </summary>
+    public class JsonDateTimeConverter : JsonConverter<DateTime>
+    {
+        private readonly string _dateTimeFormat = "yyyy-MM-dd HH:mm"; // Format excluding seconds
+
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return DateTime.ParseExact(reader.GetString(), _dateTimeFormat, CultureInfo.InvariantCulture);
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString(_dateTimeFormat));
+        }
+    }
+
     /// <summary>
     /// Basic resource template for objects.
     /// </summary>
@@ -19,8 +40,7 @@ namespace CipherData.Models
         /// Required level of clearence to access this object
         /// </summary>
         [HebrewTranslation(Translator.Resource_ClearenceLevel)]
-        public string ClearenceLevel { get; set; } = GetRandomClearance();
-
+        public string ClearenceLevel { get; set; } = RandomFuncs.RandomItem(clearences);
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
@@ -37,11 +57,6 @@ namespace CipherData.Models
         }
 
         public static readonly List<string> clearences = new() { "מוגבל", "מוגבל מאוד", "חופשי" };
-
-        public static string GetRandomClearance()
-        {
-            return clearences[new Random().Next(0, clearences.Count - 1)];
-        }
 
         /// <summary>
         /// Method to get all (english, hebrew) translations of the above attributes.
@@ -91,6 +106,22 @@ namespace CipherData.Models
                 }
             }
             return translations;
+        }
+
+        /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public static string ToJson<T>(T ChosenObject)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
+                Converters = { new JsonDateTimeConverter() } // Include custom DateTime converter
+            };
+
+            return JsonSerializer.Serialize(ChosenObject, options);
         }
     }
 }

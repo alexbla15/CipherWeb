@@ -49,6 +49,7 @@ namespace CipherData.Models
         {
             Tuple<bool, string> result = new(true, string.Empty);
 
+            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.Name))); // required
             result = (!string.IsNullOrEmpty(Type)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.Type))); // required
             result = (!string.IsNullOrEmpty(SystemId)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.System))); // required
 
@@ -69,14 +70,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public string ToJson()
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true, // Pretty print
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter() } // Include custom DateTime converter
-            };
-
-            return JsonSerializer.Serialize(this, options);
+            return Resource.ToJson(this);
         }
     }
 }

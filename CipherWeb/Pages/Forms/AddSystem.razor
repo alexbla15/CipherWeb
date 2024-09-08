@@ -1,15 +1,15 @@
 ﻿@page "/forms/AddSystem"
 
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
 @inject NotificationService NotificationService
 
 <PageTitle>@Title</PageTitle>
 
-
 <CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherSystemCard @ref=SysDetails />
-    
+    <CipherSystemCard @ref=SysDetails NewSystem="true" Title="" ChosenSystem="@SetSystem"/>
     <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
-
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
 
@@ -56,9 +56,28 @@
     [Parameter]
     public ErrorResponse Error { get; set; }
 
+    private StorageSystem SetSystem;
+
     private CipherSubmit submission = new();
     private CipherSystemCard SysDetails = new();
     private SystemRequest sys = SystemRequest.Empty();
+
+    protected override void OnInitialized()
+    {
+        GetVesselFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public void GetVesselFromUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (SetSystem, Error) = StorageSystem.Get(idValue);
+        }
+    }
 
     /// <summary>
     /// Fill all needed details for new package based on the form details.

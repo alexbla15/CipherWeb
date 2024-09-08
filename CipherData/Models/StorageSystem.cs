@@ -129,6 +129,16 @@ namespace CipherData.Models
         // API related functions
 
         /// <summary>
+        /// Get details about a system vessel given system ID
+        /// </summary>
+        /// <param name="id">system ID</param>
+        /// <returns></returns>
+        public static Tuple<StorageSystem, ErrorResponse> Get(string id)
+        {
+            return SystemsRequests.GetSystem(id);
+        }
+
+        /// <summary>
         /// All systems that took place in a certain system
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> All()

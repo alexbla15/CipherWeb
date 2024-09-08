@@ -75,54 +75,21 @@
     /// <summary>
     /// Add a parameter to the memory.
     /// </summary>
-    private void AddComponent()
+    async Task AddComponent()
     {
         if (components == set_params.Count)
         {
-
             int next_id = components + 1;
             Parameter new_param = new Parameter() { Id = next_id };
 
-            // from_packs.Add(new_pack);
+            set_params.Add(new_param);
+            StateHasChanged();
 
-            components += 1;
-            CustomDataGrid.InsertRow(new_param);
-
+            components = set_params.Count;
             ShowHelpText = false;
+
+            await CustomDataGrid.RefreshDataAsync();
         }
-    }
-
-    /// <summary>
-    /// Edits a parameter.
-    /// </summary>
-    /// <param name="param"></param>
-    /// <returns></returns>
-    async Task EditRow(Parameter param)
-    {
-        // prevent editing of two rows in parallel
-        if (CustomDataGrid.Count == set_params.Count)
-        {
-            old_param.Id = param.Id;
-            old_param.Name = param.Name;
-            old_param.pType = param.pType;
-
-            set_params.Remove(param);
-            await CustomDataGrid.EditRow(param);
-        }
-    }
-
-    /// <summary>
-    /// Cancels edit of a parameter.
-    /// </summary>
-    /// <param name="param"></param>
-    /// <returns></returns>
-    async Task CancelEdit(Parameter param)
-    {
-        param.Id = old_param.Id;
-        param.Name = old_param.Name;
-        param.pType = old_param.pType;
-
-        await SaveRow(param);
     }
 
     /// <summary>
@@ -133,11 +100,6 @@
     async Task DeleteRow(Parameter param)
     {
         set_params.Remove(param);
-
-        foreach (Parameter p in set_params)
-        {
-            p.Id = set_params.IndexOf(p) + 1;
-        }
 
         CustomDataGrid.Data = set_params;
 
@@ -165,19 +127,6 @@
 
         ShowHelpText = true;
     }
-
-    /// <summary>
-    /// Saves a parameter to the memory.
-    /// </summary>
-    /// <param name="param"></param>
-    /// <returns></returns>
-    async Task SaveRow(Parameter param)
-    {
-        set_params.Add(param);
-
-        await CustomDataGrid.UpdateRow(param);
-        await CustomDataGrid.RefreshDataAsync();
-    }
 }
 
 <CipherComponentCard Title="@Title">
@@ -193,14 +142,19 @@
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="!components.Equals(0)">
             <Columns>
-                <RadzenDataGridColumn TItem="Parameter" Property="Id" Title="#" SortOrder="SortOrder.Descending" TextAlign="@TdTextAlign" Width="5%" />
+                <RadzenDataGridColumn Width="10%" TItem="Parameter" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <Template Context="param">
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(param))" @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Parameter" Property="Id" Title="#" TextAlign="@TdTextAlign" Width="5%" />
                 <RadzenDataGridColumn TItem="Parameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
-                    <EditTemplate Context="param">
+                    <Template Context="param">
                         <CipherAutoComplete @bind-Value="@param.Name" Width="100%" />
-                    </EditTemplate>
+                    </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Parameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
-                    <EditTemplate Context="param">
+                    <Template Context="param">
                         <RadzenDropDownDataGrid @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Path" ValueProperty="Path"
                                                 Placeholder="חיפוש פרמטר" SearchTextPlaceholder="חיפוש..."
                                                 AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
@@ -209,17 +163,7 @@
                                 <RadzenDropDownDataGridColumn Property="ParameterName" Title="שם פרמטר" OrderIndex="2" />
                             </Columns>
                         </RadzenDropDownDataGrid>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn Width="10%" TItem="Parameter" Context="param" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                    <Template Context="param">
-                        <CipherEditButton Variant=Variant.Outlined Click="@(args => EditRow(param))" @onclick:stopPropagation="true" />
-                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(param))" @onclick:stopPropagation="true" />
                     </Template>
-                    <EditTemplate Context="param">
-                        <CipherSuccessButton Variant=Variant.Outlined Click="@((args) => SaveRow(param))" />
-                        <CipherCloseButton Variant=Variant.Outlined Click="@((args) => CancelEdit(param))" />
-                    </EditTemplate>
                 </RadzenDataGridColumn>
             </Columns>
         </RadzenDataGrid>

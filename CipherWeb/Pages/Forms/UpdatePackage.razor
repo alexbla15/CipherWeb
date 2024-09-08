@@ -10,7 +10,7 @@
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="בחירת תעודה">
-        <CipherPackageId @ref=OriginalPackage Change="Change" />
+        <CipherPackageId @ref=OriginalPackage Change="Change" ChosenPackage="ChosenPackage"/>
     </CipherComponentCard>
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
@@ -140,6 +140,14 @@
 
     protected override void OnInitialized()
     {
+        GetPackageFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public void GetPackageFromUrl()
+    {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
         {
@@ -149,35 +157,33 @@
         FirstInitialization = false;
     }
 
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
     public void ChangeUrl()
     {
-        if (ChosenPackage is null)
-        {
-            Navigation.NavigateTo(CipherNavLinks.UpdatePackage.Href);
-        }
-        else
-        {
-            Navigation.NavigateTo($"{CipherNavLinks.UpdatePackage.Href}?Id={ChosenPackage?.Id}");
-        }
+        ChosenPackage = OriginalPackage.ChosenPackage;
+        string newUrl = CipherNavLinks.UpdatePackage.Href;
+        newUrl = (ChosenPackage is null) ? newUrl : $"{newUrl}?Id={ChosenPackage.Id}";
+        Navigation.NavigateTo(newUrl);
     }
 
     public void Change()
     {
+        NewProps = OriginalPack.Properties;
         ChosenPackage = OriginalPackage.ChosenPackage;
 
-        if (!FirstInitialization)
-        {
-            ChangeUrl();
-        }
-
-        NewProps = OriginalPack.Properties;
-
-        if (OriginalPackage.ChosenPackage != null)
+        if (ChosenPackage != null)
         {
             newId.Value = ChosenPackage.Id;
 
             OriginalPack = ChosenPackage;
             NewPack = ChosenPackage;
+        }
+
+        if (!FirstInitialization)
+        {
+            ChangeUrl();
         }
 
         StateHasChanged();

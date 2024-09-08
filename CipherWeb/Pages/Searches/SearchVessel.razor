@@ -1,5 +1,67 @@
 ﻿@page "/Search/Vessel"
 
-<PageTitle>חיפוש כלי</PageTitle>
+@using Microsoft.AspNetCore.WebUtilities;
 
-<CipherVesselCard Title="חיפוש כלי" ReadOnly="true"/>
+@inject NavigationManager Navigation
+
+<PageTitle>@Title</PageTitle>
+
+<CipherVesselCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@vesCard" ChangeVessel="ChangeVessel" />
+
+@code {
+    /// <summary>
+    /// Page Title
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "חיפוש כלי";
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Vessel? ChosenVessel { get; set; }
+
+    /// <summary>
+    /// API response to search.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    private CipherVesselCard vesCard = new();
+
+    protected override void OnInitialized()
+    {
+        GetObjectFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the vessel id from the url.
+    /// </summary>
+    public void GetObjectFromUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (ChosenVessel, Error) = Vessel.Get(idValue);
+        }
+    }
+
+    /// <summary>
+    /// Method taking place as vessel is changed
+    /// </summary>
+    public void ChangeVessel()
+    {
+        ChangeUrl();
+    }
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenVessel = vesCard.ChosenVessel;
+        string newUrl = CipherNavLinks.VesselSearch.Href;
+        newUrl = (ChosenVessel is null) ? newUrl : $"{newUrl}?Id={ChosenVessel.Id}";
+        Navigation.NavigateTo(newUrl);
+    }
+}

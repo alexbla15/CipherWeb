@@ -1,18 +1,89 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Title="פרטי המערכת" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Icon="@Icons.Cipher.Location" @ref=SysName />
-    <CipherComments @ref="SysDescription" WithCard="false" Title="" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))" 
-    Icon="@Icons.Documents.Page.Description" Width="300px" />
-    <CipherLocation @ref="SysParent" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" />
-    <CipherUnitDropDown @ref="SysUnit"/>
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (!NewSystem)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                <CipherLocation Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Id))" Icon="@Icons.Cipher.Id"
+                                Change="@Change" @ref="SysId" />
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <Buttons>
+
+                @if (!NewSystem)
+                {
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                                     Disabled="@(ChosenSystem != null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenSystem?.Id}")" />
+                }
+            </Buttons>
+            <ChildContent>
+
+                @if (NewSystem && ChosenSystem != null)
+                {
+                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                        <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Id))" Icon="@Icons.Cipher.Id"
+                                            Value="@ChosenSystem?.Id" Disabled="true" />
+                    </RadzenStack>
+                }
+                <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))"
+                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenSystem?.Name" Disabled="@ReadOnly" />
+                <CipherComments @ref="SysDescription" WithCard="false" Title="" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))"
+                                Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenSystem?.Description" Disabled="@ReadOnly" />
+                <CipherLocation @ref="SysParent" Disabled="@ReadOnly" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" ChosenSystem="@ChosenSystem?.Parent" />
+                <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenSystem?.Unit" Disabled="@ReadOnly" />
+            </ChildContent>
+        </CipherComponentCard>
+    </ChildContent>
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Is system card used for defining new system or not?
+    /// </summary>
+    [Parameter]
+    public bool NewSystem { get; set; } = false;
+
+    /// <summary>
+    /// Are attributes read-only
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    /// <summary>
+    /// Chosen vessel within the card
+    /// </summary>
+    [Parameter]
+    public StorageSystem? ChosenSystem { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing the system.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> ChangeSystem { get; set; }
+
+    private CipherLocation SysId = new();
     private CipherAutoComplete SysName = new();
     private CipherLocation SysParent = new();
     private CipherComments SysDescription = new();
     private CipherUnitDropDown SysUnit = new();
+
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי המערכת";
+    }
+
+    public void Change()
+    {
+        ChosenSystem = SysId.ChosenSystem;
+
+        ChangeSystem.InvokeAsync();
+
+        StateHasChanged();
+    }
 
     public SystemRequest Value()
     {

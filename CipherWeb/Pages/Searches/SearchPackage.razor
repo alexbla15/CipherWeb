@@ -4,11 +4,17 @@
 
 @inject NavigationManager Navigation
 
-<PageTitle>חיפוש תעודה</PageTitle>
+<PageTitle>@Title</PageTitle>
 
-<CipherPackageCard Title="חיפוש תעודה" ReadOnly="true" WithCard="false" @bind-ChosenPackage="@ChosenPackage"/>
+<CipherPackageCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@packCard" ChangePackage="ChangeUrl" />
 
 @code {
+    /// <summary>
+    /// Page Title
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "חיפוש תעודה";
+
     /// <summary>
     /// Chosen package upon searching
     /// </summary>
@@ -21,6 +27,8 @@
     [Parameter]
     public ErrorResponse Error { get; set; }
 
+    private CipherPackageCard packCard = new();
+
     protected override void OnInitialized()
     {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
@@ -30,15 +38,14 @@
         }
     }
 
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
     public void ChangeUrl()
     {
-        if (ChosenPackage is null)
-        {
-            Navigation.NavigateTo(CipherNavLinks.PackageSearch.Href);
-        }
-        else
-        {
-            Navigation.NavigateTo($"{CipherNavLinks.PackageSearch.Href}?Id={ChosenPackage.Id}");
-        }
+        ChosenPackage = packCard.ChosenPackage;
+        string newUrl = CipherNavLinks.PackageSearch.Href;
+        newUrl = (ChosenPackage is null) ? newUrl : $"{newUrl}?Id={ChosenPackage.Id}";
+        Navigation.NavigateTo(newUrl);
     }
 }

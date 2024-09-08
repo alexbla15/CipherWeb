@@ -93,17 +93,10 @@ namespace CipherData.Models
 
         /// <summary>
         /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
+        /// </summary>s
         public string ToJson()
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true, // Pretty print
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Ensure special characters are preserved
-            };
-
-            return JsonSerializer.Serialize(this, options);
+            return Resource.ToJson(this);
         }
 
         /// <summary>

@@ -18,7 +18,7 @@
     /// </summary>
     [Parameter]
     public List<Package> packs { get; set; } = new List<Package>();
-    
+
     /// <summary>
     /// Chosen package to view within card.
     /// </summary>
@@ -30,6 +30,12 @@
     /// </summary>
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Event that takes place upon changing the package.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> ChangePackage { get; set; }
 
     private List<Process> PackProcesses = new();
 
@@ -54,6 +60,7 @@
             (PackProcesses, error) = (new List<Process>(), ErrorResponse.Success);
         }
 
+        ChangePackage.InvokeAsync();
         StateHasChanged();
     }
 }
@@ -71,8 +78,6 @@
                 Disabled="@(ChosenPackage != null)" Path="@($"{CipherNavLinks.UpdatePackage.Href}?Id={ChosenPackage?.Id}")" />
             </Buttons>
             <ChildContent>
-                <CipherPackageId Width="@RowWidth" Disabled="@ReadOnly" ChosenPackage="ChosenPackage" />
-
                 <CipherComments WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
                                 Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenPackage?.Description" />
                 <CipherNumeric Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" Width="@RowWidth" Disabled="@ReadOnly" />

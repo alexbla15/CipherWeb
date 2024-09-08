@@ -121,34 +121,10 @@ namespace CipherData.Models
 
         /// <summary>
         /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
+        /// </summary>s
         public string ToJson()
         {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true, // Pretty print
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter() } // Include custom DateTime converter
-            };
-
-            return JsonSerializer.Serialize(this, options);
-        }
-
-        // Custom DateTime converter
-        public class JsonDateTimeConverter : JsonConverter<DateTime>
-        {
-            private readonly string _dateTimeFormat = "yyyy-MM-dd HH:mm"; // Format excluding seconds
-
-            public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                return DateTime.ParseExact(reader.GetString(), _dateTimeFormat, CultureInfo.InvariantCulture);
-            }
-
-            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-            {
-                writer.WriteStringValue(value.ToString(_dateTimeFormat));
-            }
+            return Resource.ToJson(this);
         }
     }
 }
