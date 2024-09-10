@@ -2,7 +2,7 @@
 
 <CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <HeaderContent>
-        @if (!NewVessel)
+        @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
                 <CipherVesselDropDown Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
@@ -13,28 +13,20 @@
     <ChildContent>
         <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
             <Buttons>
-
-                @if (!NewVessel)
+                @if (SetMode == FormMode.ReadOnly)
                 {
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenVessel != null)" Path="@($"{CipherNavLinks.AddVessel.Href}?Id={ChosenVessel?.Id}")" />
+                                     Disabled="@(ChosenVessel is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenVessel?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
-                @if (NewVessel && ChosenVessel != null)
-                {
-                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                        <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
-                                              Value="@ChosenVessel?.Id" Disabled="true"/>
-                    </RadzenStack>
-                }
                 <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel"
-                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Name" @ref=VesName/>
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" Value="@ChosenVessel?.Name" @ref=VesName />
                 <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category"
-                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Type" @ref=VesType Data="@CachedData.AllVessels.Item1.Select(x=>x.Type).Distinct()"/>
-                <CipherLocation Disabled="@ReadOnly" ChosenSystem="@ChosenVessel?.System" @ref=VesSys/>
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" Value="@ChosenVessel?.Type" @ref=VesType />
+                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" ChosenSystem="@ChosenVessel?.System" @ref=VesSys />
 
-                @if (!NewVessel)
+                @if (SetMode == FormMode.ReadOnly)
                 {
                     <CipherPackagesPicking SelectedPackages="@ChosenVessel?.ContainingPackages" />
                 }
@@ -45,10 +37,10 @@
 
 @code {
     /// <summary>
-    /// Is vessel card used for defining new vessel or not?
+    /// Define the usage of this object-card
     /// </summary>
     [Parameter]
-    public bool NewVessel { get; set; } = false;
+    public FormMode SetMode { get; set; } = FormMode.Create;
 
     /// <summary>
     /// Are attributes read-only

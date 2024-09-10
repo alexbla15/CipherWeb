@@ -12,7 +12,7 @@
         <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
     </CipherComponentCard>
     
-    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
+    <CipherJsonCheck JsonValue="@JsonRequest"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </CipherComponentCard>
@@ -23,12 +23,6 @@
     /// </summary>
     [Parameter]
     public bool Valid { get; set; } = true;
-
-    /// <summary>
-    /// View the submitted json.
-    /// </summary>
-    [Parameter]
-    public bool CheckJson { get; set; } = false;
 
     /// <summary>
     /// Page title.

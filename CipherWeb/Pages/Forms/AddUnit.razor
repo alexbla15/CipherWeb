@@ -1,17 +1,12 @@
 ﻿@page "/forms/AddUnit"
 
-@using Microsoft.AspNetCore.WebUtilities;
-
 @inject NavigationManager Navigation
-@inject NotificationService NotificationService
 
-<PageTitle>@Title</PageTitle>
-
-<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherUnitCard @ref=UnitDetails NewUnit="true" Title="" ChosenUnit="@SetUnit" />
-    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
+<ResourceForm Title="@NavLink.Name">
+    <CipherUnitCard @ref=UnitDetails SetMode="@FormMode.Create" Title="" />
+    <CipherJsonCheck JsonValue="@JsonRequest" />
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
-</CipherComponentCard>
+</ResourceForm>
 
 @code {
     /// <summary>
@@ -21,16 +16,10 @@
     public bool Valid { get; set; } = true;
 
     /// <summary>
-    /// View the submitted json.
+    /// Page nav link.
     /// </summary>
     [Parameter]
-    public bool CheckJson { get; set; } = true;
-
-    /// <summary>
-    /// Page title.
-    /// </summary>
-    [Parameter]
-    public string Title { get; set; } = "יחידה חדשה";
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.AddUnit;
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -62,23 +51,6 @@
     private UnitRequest unit = UnitRequest.Empty();
     private CipherUnitCard UnitDetails = new();
 
-    protected override void OnInitialized()
-    {
-        GetUnitFromUrl();
-    }
-
-    /// <summary>
-    /// Method to deduce the package id from the url.
-    /// </summary>
-    public void GetUnitFromUrl()
-    {
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
-        {
-            (SetUnit, Error) = Unit.Get(idValue);
-        }
-    }
-
     /// <summary>
     /// Fill all needed details for new package based on the form details.
     /// </summary>
@@ -108,20 +80,15 @@
         if (Valid)
         {
             (Result, Error) = UnitsRequests.CreateUnit(unit);
+            
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
-            }
-            else
-            {
-                submission.Valid = true;
+                Valid = false;
+                ErrorMessage = Error.Message;
             }
         }
-        else
-        {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
-        }
+
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
 }

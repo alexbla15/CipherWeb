@@ -246,7 +246,7 @@
 }
 
 <RadzenTemplateForm TItem="Model" Data=@model Style="display:flex">
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" Style="@($"width: {Width}")">
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" Style="@($"width: {Width};")">
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {
@@ -261,13 +261,13 @@
             }
             @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width}")" Disabled="@Disabled" onkeydown="@OnKeyDown"
+                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                     Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
                                     Multiline="@Multiline"/>
             }
             else
             {
-                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width}; min-width: {Width}")">
                     <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                         Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
                                         Multiline="@Multiline" />

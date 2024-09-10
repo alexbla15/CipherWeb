@@ -30,4 +30,23 @@
     {
         public const string PrimaryLightest = "var(--rz-primary-lightest)";
     }
+
+    /// <summary>
+    /// Distinguish between 3 modes of each form
+    /// </summary>
+    public enum FormMode
+    {
+        /// <summary>
+        /// values are editable (defaults to original value of component)
+        /// </summary>
+        Update,
+        /// <summary>
+        /// values are editable (defaults to empty value of component)
+        /// </summary>
+        Create,
+        /// <summary>
+        /// read-only option of the component
+        /// </summary>
+        ReadOnly
+    }
 }

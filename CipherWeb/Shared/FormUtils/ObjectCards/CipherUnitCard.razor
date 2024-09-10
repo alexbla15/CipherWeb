@@ -2,7 +2,7 @@
 
 <CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <HeaderContent>
-        @if (!NewUnit)
+        @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
                 <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
@@ -13,26 +13,18 @@
     <ChildContent>
         <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
             <Buttons>
-
-                @if (!NewUnit)
+                @if (SetMode == FormMode.ReadOnly)
                 {
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenUnit != null)" Path="@($"{CipherNavLinks.AddUnit.Href}?Id={ChosenUnit?.Id}")" />
+                                     Disabled="@(ChosenUnit is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenUnit?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
-                @if (NewUnit && ChosenUnit != null)
-                {
-                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                        <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
-                                              Value="@ChosenUnit?.Id" Disabled="true"/>
-                    </RadzenStack>
-                }
                 <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Name))" Icon="@Icons.Cipher.Unit"
-                                    Disabled="@ReadOnly" Value="@ChosenUnit?.Name" @ref=UnitName/>
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))" Value="@ChosenUnit?.Name" @ref=UnitName/>
                 <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Description))" Icon="@Icons.Documents.Page.Description"
-                                    Disabled="@ReadOnly" Value="@ChosenUnit?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@ReadOnly" 
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))" Value="@ChosenUnit?.Description" @ref=UnitDescription />
+                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))"
                                     ChosenUnit="@ChosenUnit?.Parent" @ref=UnitParent />
             </ChildContent>
         </CipherComponentCard>
@@ -41,16 +33,10 @@
 
 @code {
     /// <summary>
-    /// Is vessel card used for defining new vessel or not?
+    /// Define the usage of this object-card
     /// </summary>
     [Parameter]
-    public bool NewUnit { get; set; } = false;
-
-    /// <summary>
-    /// Are attributes read-only
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; } = false;
+    public FormMode SetMode { get; set; } = FormMode.Create;
 
     /// <summary>
     /// Chosen vessel within the card

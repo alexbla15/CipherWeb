@@ -42,8 +42,8 @@
         <CipherComments @ref="EventComments" Width="300px" WithCard="false" Title="" />
     </CipherComponentCard>
 
-    <CipherJsonCheck JsonValue="@UpdatePackJsonRequest" Visible="@CheckJson"/>
-    <CipherJsonCheck JsonValue="@CreateEventJsonRequest" Visible="@CheckJson"/>
+    <CipherJsonCheck JsonValue="@UpdatePackJsonRequest"/>
+    <CipherJsonCheck JsonValue="@CreateEventJsonRequest"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 
@@ -56,12 +56,6 @@
     /// </summary>
     [Parameter]
     public bool Valid { get; set; } = true;
-
-    /// <summary>
-    /// View the submitted json.
-    /// </summary>
-    [Parameter]
-    public bool CheckJson { get; set; } = false;
 
     /// <summary>
     /// Id of package, as transfered from a different page

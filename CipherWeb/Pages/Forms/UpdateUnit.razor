@@ -1,0 +1,140 @@
+﻿@page "/Forms/UpdateUnit"
+
+@inject NavigationManager Navigation
+
+<ResourceForm @ref="ResourcePage" Title="@NavLink.Name">
+    <CipherUnitCard Title="" WithCard="false" @ref="@UnitDetails" ChangeUnit="ChangeUrl" ChosenUnit="@ChosenObject" SetMode="FormMode.Update" />
+    <CipherJsonCheck JsonValue="@JsonRequest" />
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)"/>
+</ResourceForm>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.UpdateUnit;
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Unit? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Unit? ChosenObject { get; set; }
+
+    private CipherSubmit submission = new();
+    private UnitRequest unitRequest = UnitRequest.Empty();
+    private CipherUnitCard UnitDetails = new();
+    private ResourceForm ResourcePage = new();
+
+    private Unit? OriginalUnit;
+
+    protected override void OnInitialized()
+    {
+        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Unit>(Navigation);
+        OriginalUnit = ChosenObject;
+    }
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenObject = UnitDetails.ChosenUnit;
+        OriginalUnit = ChosenObject;
+
+        ResourcePage.ChangeUrl(Navigation, NavLink, ChosenObject?.Id);
+    }
+
+    /// <summary>
+    /// Fill all needed details for request based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        unitRequest = UnitDetails.Value();
+        Tuple<bool, string> CheckResult = unitRequest.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        JsonRequest = unitRequest.ToJson();
+
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Check if unit attributes were changed in the form
+    /// </summary>
+    /// <returns></returns>
+    public bool FoundChanges()
+    {
+        bool different = false;
+
+        different |= UnitDetails.Value()?.Name != OriginalUnit?.Name;
+        different |= UnitDetails.Value()?.Description != OriginalUnit?.Description;
+        different |= UnitDetails.Value()?.ParentId != OriginalUnit?.Parent?.Id;
+
+        if (!different)
+        {
+            Valid = false;
+            ErrorMessage = "לא השתנו פרמטרים.";
+        }
+
+        return different;
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            if (UnitDetails.ChosenUnit is null)
+            {
+                Valid = false;
+                ErrorMessage = "לא נבחרה יחידה לעדכון.";
+            }
+            else if (FoundChanges())
+            {
+                (Result, Error) = UnitsRequests.UpdateUnit(UnitDetails.ChosenUnit?.Id, unitRequest);
+
+                if (Error != ErrorResponse.Success)
+                {
+                    Valid = false;
+                    ErrorMessage = Error.Message;
+                }
+            }
+        }
+
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
+    }
+}

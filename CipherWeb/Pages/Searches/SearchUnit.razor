@@ -1,69 +1,45 @@
 ﻿@page "/Search/Unit"
 
-@using Microsoft.AspNetCore.WebUtilities;
-
 @inject NavigationManager Navigation
 
-<PageTitle>@Title</PageTitle>
-
-<CipherUnitCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@unitCard" ChangeUnit="ChangeUnit" ChosenUnit="@ChosenUnit" />
-
-<CipherObjectChangesTable ObjectChanges="@ChosenUnit?.UserActions().Item1" />
+<CipherWeb.Pages.Forms.ResourceForm @ref="ResourcePage" Title="@NavLink.Name">
+    <CipherUnitCard Title="" WithCard="false" @ref="@objectCard" ChangeUnit="ChangeUrl" ChosenUnit="@ChosenObject" SetMode="FormMode.ReadOnly" />
+    <CipherObjectChangesTable ObjectChanges="@ChosenObject?.UserActions().Item1" />
+</CipherWeb.Pages.Forms.ResourceForm>
 
 @code {
     /// <summary>
-    /// Page Title
+    /// Page nav link.
     /// </summary>
     [Parameter]
-    public string Title { get; set; } = "חיפוש כלי";
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.UnitSearch;
 
     /// <summary>
     /// Chosen object upon searching
     /// </summary>
     [Parameter]
-    public Unit? ChosenUnit { get; set; }
+    public Unit? ChosenObject { get; set; }
 
     /// <summary>
     /// API response to search.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private CipherUnitCard unitCard = new();
+    private CipherUnitCard objectCard = new();
+    private CipherWeb.Pages.Forms.ResourceForm ResourcePage = new();
 
     protected override void OnInitialized()
     {
-        GetObjectFromUrl();
+        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Unit>(Navigation);
     }
 
     /// <summary>
-    /// Method to deduce the vessel id from the url.
-    /// </summary>
-    public void GetObjectFromUrl()
-    {
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
-        {
-            (ChosenUnit, Error) = Unit.Get(idValue);
-        }
-    }
-
-    /// <summary>
-    /// Method taking place as vessel is changed
-    /// </summary>
-    public void ChangeUnit()
-    {
-        ChangeUrl();
-    }
-
-    /// <summary>
-    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// Changes URL to include the chosen-unit id, upon searching it within the page.
     /// </summary>
     public void ChangeUrl()
     {
-        ChosenUnit = unitCard.ChosenUnit;
-        string newUrl = CipherNavLinks.UnitSearch.Href;
-        newUrl = (ChosenUnit is null) ? newUrl : $"{newUrl}?Id={ChosenUnit.Id}";
-        Navigation.NavigateTo(newUrl);
+        ChosenObject = objectCard.ChosenUnit;
+        ResourcePage.ChangeUrl(Navigation, NavLink, ChosenObject?.Id);
     }
 }

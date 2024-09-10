@@ -56,12 +56,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVsb2NhdGlvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/ResourceForm.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVzb3VyY2VGb3JtLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/TransferAmount.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVHJhbnNmZXJBbW91bnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdatePackage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateUnit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlVW5pdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateVessel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlVmVzc2VsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Index.razor]

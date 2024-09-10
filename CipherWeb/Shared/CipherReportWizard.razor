@@ -56,12 +56,6 @@
 
 @code {
     /// <summary>
-    /// View the submitted json.
-    /// </summary>
-    [Parameter]
-    public bool CheckJson { get; set; } = true;
-
-    /// <summary>
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
@@ -198,7 +192,7 @@
             <CipherAutoComplete Label="מידור" Value="מוגבל"/>
         </CipherComponentCard>
         <br/>
-        <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson" />
+        <CipherJsonCheck JsonValue="@JsonRequest" />
         <br/>
         <CipherButton Text="קישור לדוח" Icon="@Icons.Arrows.Squared.OpenInNew" Width="100%" />
     </CipherComponentCard>

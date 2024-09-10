@@ -11,7 +11,6 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AddPackage = new() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.AddCircleOutline };
         public static readonly MySubNavLink TransferAmount = new() { Href = "Forms/TransferAmount", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
         public static readonly MySubNavLink Relocation = new() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Cipher.Location };
-        public static readonly MySubNavLink UpdatePackage = new() { Href = "Forms/UpdatePackage", Name = "עדכון נתונים", Icon = Icons.Arrows.Rounded.Refresh };
         public static readonly MySubNavLink AddCategory = new() { Href = "Forms/AddCategory", Name = "קטגוריה חדשה", Icon = Icons.Symbols.Category };
         public static readonly MySubNavLink AddProcess = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
@@ -23,8 +22,21 @@ namespace CipherWeb.Data
             Icon = Icons.Documents.Edit._Edit,
             Name = "הזנה",
             SubLinks = new()
-                { AddPackage, TransferAmount, Relocation, UpdatePackage, 
+                { AddPackage, TransferAmount, Relocation,
                 AddCategory, AddProcess, AddVessel, AddStorageSystem, AddUnit }
+        };
+
+        public static readonly MySubNavLink UpdatePackage = new() { Href = "Forms/UpdatePackage", Name = "עריכת תעודה", Icon = Icons.Cipher.Package };
+        public static readonly MySubNavLink UpdateUnit = new() { Href = "Forms/UpdateUnit", Name = "עריכת יחידה", Icon = Icons.Cipher.Unit };
+        public static readonly MySubNavLink UpdateVessel = new() { Href = "Forms/UpdateVessel", Name = "עריכת כלי", Icon = Icons.Cipher.Vessel };
+
+        public static readonly MyNavLink Update = new()
+        {
+            Href = "Froms/Updates",
+            Icon = Icons.Design.RebaseEdit,
+            Name = "עריכת נתונים",
+            SubLinks = new()
+                { UpdatePackage, UpdateUnit, UpdateVessel}
         };
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור" };
@@ -66,7 +78,7 @@ namespace CipherWeb.Data
 
         public static readonly List<MyNavLink> links = new()
         {
-            Home, Personal,Forms, Approval, Reports, Search, Information
+            Home, Personal,Forms, Update, Approval, Reports, Search, Information
         };
     }
 }

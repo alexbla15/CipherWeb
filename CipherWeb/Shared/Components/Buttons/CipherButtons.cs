@@ -142,7 +142,8 @@ namespace CipherWeb.Shared.Components.Buttons
             builder.AddAttribute(11, "ColorShade", ColorShade);
             builder.AddAttribute(12, "ColorStyle", ColorStyle);
             builder.AddAttribute(13, "Style", Style);
-            builder.AddAttribute(14, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
+            builder.AddAttribute(14, "Disabled", Disabled);
+            builder.AddAttribute(15, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
             builder.CloseComponent();
         }
     }

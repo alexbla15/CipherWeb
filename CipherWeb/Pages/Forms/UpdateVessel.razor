@@ -1,0 +1,140 @@
+﻿@page "/Forms/UpdateVessel"
+
+@inject NavigationManager Navigation
+
+<ResourceForm @ref="ResourcePage" Title="@NavLink.Name">
+    <CipherVesselCard Title="" WithCard="false" @ref="@VesDetails" ChangeVessel="ChangeUrl" ChosenVessel="@ChosenObject" SetMode="FormMode.Update" />
+    <CipherJsonCheck JsonValue="@JsonRequest" />
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)"/>
+</ResourceForm>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.UpdateVessel;
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Vessel? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Vessel? ChosenObject { get; set; }
+
+    private CipherSubmit submission = new();
+    private VesselRequest vesRequest = VesselRequest.Empty();
+    private CipherVesselCard VesDetails = new();
+    private ResourceForm ResourcePage = new();
+
+    private Vessel? OriginalVessel;
+
+    protected override void OnInitialized()
+    {
+        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Vessel>(Navigation);
+        OriginalVessel = ChosenObject;
+    }
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenObject = VesDetails.ChosenVessel;
+        OriginalVessel = ChosenObject;
+
+        ResourcePage.ChangeUrl(Navigation, NavLink, ChosenObject?.Id);
+    }
+
+    /// <summary>
+    /// Fill all needed details for request based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        vesRequest = VesDetails.Value();
+        Tuple<bool, string> CheckResult = vesRequest.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        JsonRequest = vesRequest.ToJson();
+
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Check if unit attributes were changed in the form
+    /// </summary>
+    /// <returns></returns>
+    public bool FoundChanges()
+    {
+        bool different = false;
+
+        different |= VesDetails.Value()?.Name != OriginalVessel?.Name;
+        different |= VesDetails.Value()?.Type != OriginalVessel?.Type;
+        different |= VesDetails.Value()?.SystemId != OriginalVessel?.System?.Id;
+
+        if (!different)
+        {
+            Valid = false;
+            ErrorMessage = "לא השתנו פרמטרים.";
+        }
+
+        return different;
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            if (VesDetails.ChosenVessel is null)
+            {
+                Valid = false;
+                ErrorMessage = "לא נבחרה יחידה לעדכון.";
+            }
+            else if (FoundChanges())
+            {
+                (Result, Error) = VesselsRequests.UpdateVessel(VesDetails.ChosenVessel?.Id, vesRequest);
+
+                if (Error != ErrorResponse.Success)
+                {
+                    Valid = false;
+                    ErrorMessage = Error.Message;
+                }
+            }
+        }
+
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
+    }
+}
