@@ -1,0 +1,127 @@
+﻿@page "/forms/AddUnit"
+
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
+@inject NotificationService NotificationService
+
+<PageTitle>@Title</PageTitle>
+
+<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherUnitCard @ref=UnitDetails NewUnit="true" Title="" ChosenUnit="@SetUnit" />
+    <CipherJsonCheck JsonValue="@JsonRequest" Visible="@CheckJson"/>
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
+</CipherComponentCard>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// View the submitted json.
+    /// </summary>
+    [Parameter]
+    public bool CheckJson { get; set; } = true;
+
+    /// <summary>
+    /// Page title.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "יחידה חדשה";
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API event result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Unit? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private Unit? SetUnit;
+
+    private CipherSubmit submission = new();
+    private UnitRequest unit = UnitRequest.Empty();
+    private CipherUnitCard UnitDetails = new();
+
+    protected override void OnInitialized()
+    {
+        GetUnitFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public void GetUnitFromUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (SetUnit, Error) = Unit.Get(idValue);
+        }
+    }
+
+    /// <summary>
+    /// Fill all needed details for new package based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        Tuple<bool, string> CheckResult = UnitDetails.Value().Check();
+
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        if (CheckResult.Item1)
+        {
+            unit = UnitDetails.Value();
+            CheckResult = unit.Check();
+            (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+        }
+
+        JsonRequest = unit.ToJson();
+
+        SendRequest();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+            (Result, Error) = UnitsRequests.CreateUnit(unit);
+            if (Error != ErrorResponse.Success)
+            {
+                submission.Valid = false;
+                submission.ErrorMessage = Error.Message;
+            }
+            else
+            {
+                submission.Valid = true;
+            }
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
+        }
+    }
+}

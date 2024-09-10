@@ -1,0 +1,108 @@
+﻿@inherits CipherComponentCard
+
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (!NewUnit)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
+                                      Change="@Change" @ref="UnitId" ChosenUnit="@ChosenUnit"/>
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <Buttons>
+
+                @if (!NewUnit)
+                {
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                                     Disabled="@(ChosenUnit != null)" Path="@($"{CipherNavLinks.AddUnit.Href}?Id={ChosenUnit?.Id}")" />
+                }
+            </Buttons>
+            <ChildContent>
+                @if (NewUnit && ChosenUnit != null)
+                {
+                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                        <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
+                                              Value="@ChosenUnit?.Id" Disabled="true"/>
+                    </RadzenStack>
+                }
+                <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Name))" Icon="@Icons.Cipher.Unit"
+                                    Disabled="@ReadOnly" Value="@ChosenUnit?.Name" @ref=UnitName/>
+                <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Description))" Icon="@Icons.Documents.Page.Description"
+                                    Disabled="@ReadOnly" Value="@ChosenUnit?.Description" @ref=UnitDescription />
+                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@ReadOnly" 
+                                    ChosenUnit="@ChosenUnit?.Parent" @ref=UnitParent />
+            </ChildContent>
+        </CipherComponentCard>
+    </ChildContent>
+</CipherComponentCard>
+
+@code {
+    /// <summary>
+    /// Is vessel card used for defining new vessel or not?
+    /// </summary>
+    [Parameter]
+    public bool NewUnit { get; set; } = false;
+
+    /// <summary>
+    /// Are attributes read-only
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
+
+    /// <summary>
+    /// Chosen vessel within the card
+    /// </summary>
+    [Parameter]
+    public Unit? ChosenUnit { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing the vessel.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> ChangeUnit { get; set; }
+
+    /// <summary>
+    /// Error response for fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private CipherAutoComplete UnitName = new();
+    private CipherAutoComplete UnitDescription = new();
+    private CipherUnitDropDown UnitId = new();
+    private CipherUnitDropDown UnitParent = new();
+
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי היחידה";
+
+        // DON'T DELETE - it maked the form refresh with details from url
+        if (ChosenUnit != null)
+        {
+            StateHasChanged();
+        }
+    }
+
+    public void Change()
+    {
+        ChosenUnit = UnitId.ChosenUnit;
+
+        ChangeUnit.InvokeAsync();
+
+        StateHasChanged();
+    }
+
+    public UnitRequest Value()
+    {
+        UnitRequest newRequest = UnitRequest.Empty();
+
+        newRequest.Name = (UnitName.Check()) ? UnitName.Value : string.Empty;
+        newRequest.Description = (UnitDescription.Check()) ? UnitDescription.Value : string.Empty;
+        newRequest.ParentId = UnitParent.ChosenUnit?.Id;
+
+        return newRequest;
+    }
+}

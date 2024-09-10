@@ -16,6 +16,7 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AddProcess = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
         public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
+        public static readonly MySubNavLink AddUnit = new() { Href = "Forms/AddUnit", Name = "יחידה חדשה", Icon = Icons.Cipher.Unit };
         public static readonly MyNavLink Forms = new()
         {
             Href = "Forms",
@@ -23,7 +24,7 @@ namespace CipherWeb.Data
             Name = "הזנה",
             SubLinks = new()
                 { AddPackage, TransferAmount, Relocation, UpdatePackage, 
-                AddCategory, AddProcess, AddVessel, AddStorageSystem }
+                AddCategory, AddProcess, AddVessel, AddStorageSystem, AddUnit }
         };
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור" };
@@ -51,13 +52,14 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink PackageSearch = new() { Href = "Search/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
         public static readonly MySubNavLink VesselSearch = new() { Href = "Search/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
         public static readonly MySubNavLink LocationSearch = new() { Href = "Search/System", Name = "מיקום", Icon = Icons.Cipher.Location };
+        public static readonly MySubNavLink UnitSearch = new() { Href = "Search/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
         public static readonly MyNavLink Search = new()
         {
             Href = "Searches",
             Icon = Icons.SearchAndFilter.Search,
             Name = "חיפוש",
             SubLinks = new()
-                { FreeSearch, AdvancedSearch, PackageSearch, VesselSearch, LocationSearch }
+                { FreeSearch, AdvancedSearch, PackageSearch, VesselSearch, LocationSearch, UnitSearch }
         };
 
         public static readonly MyNavLink Information = new() { Href = "Information", Icon = Icons.Communication.Chat.QA, Name = "הסברים ותמיכה" };

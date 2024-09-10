@@ -30,8 +30,8 @@
                 }
                 <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel"
                                     Disabled="@ReadOnly" Value="@ChosenVessel?.Name" @ref=VesName/>
-                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category" Multiline="true"
-                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Type" @ref=VesType />
+                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category"
+                                    Disabled="@ReadOnly" Value="@ChosenVessel?.Type" @ref=VesType Data="@CachedData.AllVessels.Item1.Select(x=>x.Type).Distinct()"/>
                 <CipherLocation Disabled="@ReadOnly" ChosenSystem="@ChosenVessel?.System" @ref=VesSys/>
 
                 @if (!NewVessel)

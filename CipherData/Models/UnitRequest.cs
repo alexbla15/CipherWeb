@@ -21,7 +21,7 @@
         /// JSON-like additional properties of the unit
         /// </summary>
         [HebrewTranslation(Translator.Unit_Properties)]
-        public string Properties { get; set; }
+        public string? Properties { get; set; }
 
         /// <summary>
         /// ID of parent unit
@@ -33,7 +33,7 @@
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
         [HebrewTranslation(Translator.Unit_Conditions)]
-        public GroupedBooleanCondition Conditions { get; set; }
+        public GroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
         /// Create a new unit or update it
@@ -42,12 +42,52 @@
         /// <param name="properties">JSON-like additional properties of the unit</param>
         /// <param name="parentId">ID of parent unit</param>
         /// <param name="conditions">Conditions on the unit to make sure it is valid.</param>
-        public UnitRequest(string description, GroupedBooleanCondition conditions, string properties, string? parentId = null)
+        public UnitRequest(string name, string description, GroupedBooleanCondition? conditions = null, string? properties = null, 
+            string? parentId = null)
         {
+            Name = name;
             Description = description;
             Properties = properties;
             ParentId = parentId;
             Conditions = conditions;
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check()
+        {
+            Tuple<bool, string> result = new(true, string.Empty);
+
+            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomUnitRequest.Name))); // required
+            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomUnitRequest.Description))); // required
+
+            return result;
+        }
+
+        /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return Resource.ToJson(this);
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(UnitRequest), searchedAttribute);
+        }
+
+        /// <summary>
+        /// Get an empty object scheme.
+        /// </summary>
+        /// <returns></returns>
+        public static UnitRequest Empty()
+        {
+            return new UnitRequest(name: string.Empty, description: string.Empty);
         }
     }
 }

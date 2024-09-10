@@ -21,6 +21,7 @@ namespace CipherData
         public static readonly ProcessDefinition RandomProcessDefinition = ProcessDefinition.Random();
         public static readonly StorageSystem RandomSystem = StorageSystem.Random();
         public static readonly Unit RandomUnit = Unit.Random();
+        public static readonly UnitRequest RandomUnitRequest = Unit.Random().Request();
         public static readonly Vessel RandomVessel = Vessel.Random();
 
         public static readonly List<Category> RandomCategories = RandomFuncs.FillRandomObjects(20, Category.Random);

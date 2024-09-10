@@ -142,12 +142,13 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Attribute)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes"/>
+                        <RadzenDropDown @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.AttributeRelation)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.AttributeRelation" TValue="AttributeRelation" Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
+                        <RadzenDropDown @bind-Value="cond.AttributeRelation" Style="width: 100%" TValue="AttributeRelation" 
+                        Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
                             <ValueTemplate>
                                 @if (cond.AttributeRelation == AttributeRelation.Eq)
                                 {
@@ -197,12 +198,12 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <CipherAutoComplete @bind-Value="@cond.Value" Width="50%"/>
+                        <CipherAutoComplete @bind-Value="@cond.Value" Width="100%"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Operator)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.Operator" TValue="Operator" Data="@(new List<Operator>() {Operator.All, Operator.Any, Operator.And, Operator.Or})">
+                        <RadzenDropDown @bind-Value="cond.Operator" Style="width: 100%" TValue="Operator" Data="@(new List<Operator>() {Operator.All, Operator.Any, Operator.And, Operator.Or})">
                             <ValueTemplate>
                                 @if (cond.Operator == Operator.All)
                                 {

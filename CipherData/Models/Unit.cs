@@ -61,6 +61,12 @@ namespace CipherData.Models
             Properties = properties;
         }
 
+        public UnitRequest Request()
+        {
+            return new UnitRequest(name: Name, description: Description, properties: Properties, parentId: Parent?.Id,
+                conditions: GroupedBooleanCondition.Empty());
+        }
+
         /// <summary>
         /// Counts how many packages were created.
         /// </summary>
@@ -122,6 +128,17 @@ namespace CipherData.Models
 
 
         // API-RELATED FUNCTIONS
+
+
+        /// <summary>
+        /// Get details about a single unit given unit ID
+        /// </summary>
+        /// <param name="id">unit ID</param>
+        /// <returns></returns>
+        public static Tuple<Unit, ErrorResponse> Get(string id)
+        {
+            return UnitsRequests.GetUnit(id);
+        }
 
         /// <summary>
         /// All objects

@@ -1,0 +1,69 @@
+﻿@page "/Search/Unit"
+
+@using Microsoft.AspNetCore.WebUtilities;
+
+@inject NavigationManager Navigation
+
+<PageTitle>@Title</PageTitle>
+
+<CipherUnitCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@unitCard" ChangeUnit="ChangeUnit" ChosenUnit="@ChosenUnit" />
+
+<CipherObjectChangesTable ObjectChanges="@ChosenUnit?.UserActions().Item1" />
+
+@code {
+    /// <summary>
+    /// Page Title
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "חיפוש כלי";
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Unit? ChosenUnit { get; set; }
+
+    /// <summary>
+    /// API response to search.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; }
+
+    private CipherUnitCard unitCard = new();
+
+    protected override void OnInitialized()
+    {
+        GetObjectFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the vessel id from the url.
+    /// </summary>
+    public void GetObjectFromUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
+        {
+            (ChosenUnit, Error) = Unit.Get(idValue);
+        }
+    }
+
+    /// <summary>
+    /// Method taking place as vessel is changed
+    /// </summary>
+    public void ChangeUnit()
+    {
+        ChangeUrl();
+    }
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenUnit = unitCard.ChosenUnit;
+        string newUrl = CipherNavLinks.UnitSearch.Href;
+        newUrl = (ChosenUnit is null) ? newUrl : $"{newUrl}?Id={ChosenUnit.Id}";
+        Navigation.NavigateTo(newUrl);
+    }
+}
