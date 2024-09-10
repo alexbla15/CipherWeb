@@ -2,7 +2,7 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
-                            Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש...">
+                            Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />

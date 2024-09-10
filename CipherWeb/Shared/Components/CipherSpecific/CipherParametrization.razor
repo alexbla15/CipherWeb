@@ -156,8 +156,8 @@
                 <RadzenDataGridColumn TItem="Parameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
                     <Template Context="param">
                         <RadzenDropDownDataGrid @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Path" ValueProperty="Path"
-                                                Placeholder="חיפוש פרמטר" SearchTextPlaceholder="חיפוש..."
-                                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@Constants.textStyle">
+                                                Placeholder="חיפוש פרמטר" SearchTextPlaceholder="חיפוש..." AllowSorting=false
+                                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
                             <Columns>
                                 <RadzenDropDownDataGridColumn Property="Class" Title="קטגוריה" OrderIndex="1" />
                                 <RadzenDropDownDataGridColumn Property="ParameterName" Title="שם פרמטר" OrderIndex="2" />

@@ -1,14 +1,12 @@
-﻿@inject ICipherInfo _db
-
-@inherits RadzenStack
+﻿@inherits RadzenStack
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     @if (WithIcon)
     {
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
-    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@systems TextProperty="@(nameof(CachedData.SystemExample.Name))"
-                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true"
+    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(CachedData.SystemExample.Name))"
+                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled" Change="@Change">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Name))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" />
@@ -38,6 +36,12 @@
     public StorageSystem? ChosenSystem { get; set; }
 
     /// <summary>
+    /// All available systems to choose from.
+    /// </summary>
+    [Parameter]
+    public List<StorageSystem> AvailableSystems { get; set; } = new List<StorageSystem>();
+
+    /// <summary>
     /// Label and placeholder of component.
     /// </summary>
     [Parameter]
@@ -47,7 +51,7 @@
     /// Icon aside the component.
     /// </summary>
     [Parameter]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Component's width.
@@ -73,14 +77,17 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    private List<StorageSystem> systems = new List<StorageSystem>();
-    private ErrorResponse error = ErrorResponse.Success;
+    /// <summary>
+    /// Response from API to data fetching
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     protected override void OnInitialized()
     {
         Label ??= "מערכת";
         Icon ??= Icons.Cipher.Location;
 
-        (systems, error) = CachedData.AllSystems;
+        (AvailableSystems, Error) = CachedData.AllSystems;
     }
 }

@@ -1,6 +1,8 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@categories" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" IsReport="@IsReport"
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
     </AdditionalButtons>
@@ -77,7 +79,7 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public List<Category> categories { get; set; } = new List<Category>();
+    public IEnumerable<Category> categories { get; set; } = new List<Category>();
 
     /// <summary>
     /// State of rsponse for data fetching in this component

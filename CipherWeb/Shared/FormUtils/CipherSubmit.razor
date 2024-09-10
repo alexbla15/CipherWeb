@@ -80,6 +80,16 @@
     {
         alertVisible = false;
     }
+
+    public void SetValid(bool value)
+    {
+        Valid = value;
+    }
+
+    public void SetErrorMessage(string msg)
+    {
+        ErrorMessage = msg;
+    }
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard" ButtonsGap="10px" ContentPadding="">

@@ -1,6 +1,6 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Label="@Label" Icon="@Icon" MinLength="1" MaxLength="3" @ref=Mask/>
+<CipherAutoComplete Label="@Label" Icon="@Icon" MinLength="1" MaxLength="3" @ref=Mask AllowedRegex="^[0-9]+$" />
 
 @code {
     private CipherAutoComplete Mask = new();
@@ -11,15 +11,12 @@
         Icon ??= Icons.Security.Password;
     }
 
+    /// <summary>
+    /// Get the value set within the mask. Resets the value if it doesn't fullfill the check function.
+    /// </summary>
+    /// <returns></returns>
     public string GetValue()
     {
-        if (Mask.Check())
-        {
-            return Mask.Value;
-        }
-        else
-        {
-            return "";
-        }
+        return Mask.Check() ? Mask.Value : string.Empty;
     }
 }

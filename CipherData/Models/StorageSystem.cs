@@ -129,6 +129,22 @@ namespace CipherData.Models
         // API related functions
 
         /// <summary>
+        /// All events that took place in this system
+        /// </summary>
+        public Tuple<List<Event>, ErrorResponse> Events()
+        {
+            return Events(Id);
+        }
+
+        /// <summary>
+        /// All packages that took place in this system
+        /// </summary>
+        public Tuple<List<Package>, ErrorResponse> Packages()
+        {
+            return Packages(Id);
+        }
+
+        /// <summary>
         /// Get details about a system vessel given system ID
         /// </summary>
         /// <param name="id">system ID</param>

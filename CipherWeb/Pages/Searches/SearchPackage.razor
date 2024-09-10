@@ -6,7 +6,9 @@
 
 <PageTitle>@Title</PageTitle>
 
-<CipherPackageCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@packCard" ChangePackage="ChangeUrl" />
+<CipherPackageCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@packCard" ChangePackage="ChangeUrl" ChosenPackage="@ChosenPackage" />
+
+<CipherObjectChangesTable ObjectChanges="@ChosenPackage?.UserActions().Item1" />
 
 @code {
     /// <summary>
@@ -25,11 +27,19 @@
     /// API response to search.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherPackageCard packCard = new();
 
     protected override void OnInitialized()
+    {
+        GetObjectFromUrl();
+    }
+
+    /// <summary>
+    /// Method to deduce the vessel id from the url.
+    /// </summary>
+    public void GetObjectFromUrl()
     {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
@@ -45,7 +55,12 @@
     {
         ChosenPackage = packCard.ChosenPackage;
         string newUrl = CipherNavLinks.PackageSearch.Href;
-        newUrl = (ChosenPackage is null) ? newUrl : $"{newUrl}?Id={ChosenPackage.Id}";
+
+        if (ChosenPackage != null)
+        {
+            newUrl = $"{newUrl}?Id={ChosenPackage.Id}";
+        }
+
         Navigation.NavigateTo(newUrl);
     }
 }

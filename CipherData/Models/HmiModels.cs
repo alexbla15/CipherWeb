@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Diagnostics.Metrics;
+
+namespace CipherData.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class HebrewTranslationAttribute : Attribute
@@ -39,5 +41,38 @@
         public string Title { get; set; }
         public string Icon { get; set; }
         public string Href { get; set; }
+    }
+
+    public class Report
+    {
+        /// <summary>
+        /// Report unique identifier.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Report title, as will be shown to user.
+        /// </summary>
+        public string? Title { get; set; }
+
+        public Report(string? title = null)
+        {
+            IdCounter++;
+
+            Id = IdCounter;
+            Title = title;
+        }
+
+        public string ToJson()
+        {
+            return Resource.ToJson(this);
+        }
+
+        private static int IdCounter { get; set; } = 0;
+
+        public static int GetNextId()
+        {
+            return IdCounter += 1;
+        }
     }
 }

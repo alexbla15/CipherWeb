@@ -1,0 +1,44 @@
+﻿@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" DataSource="@ObjectChanges?.UserActions">
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="UserAction" DataSource="@ObjectChanges?.UserActions" RowsPerPage="@Constants.RowsPerPage"
+                        WithCustomColumns="true">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.At))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.At)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.ActionParameters))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.ActionParameters)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.ActionType))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.ActionType)))">
+                    <Template>
+                        @if (context.ActionType == ActionType.Created)
+                        {
+                            @("פעולה נוצרה")
+                        }
+                        else if (context.ActionType == ActionType.Modified)
+                        {
+                            @("פעולה עודכנה")
+                        }
+                        else if (context.ActionType == ActionType.Created)
+                        {
+                            @("פעולה אושרה")
+                        }
+                    </Template>
+                </RadzenDataGridColumn><RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.Comments))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.Comments)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.By))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.By)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.Status))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.Status)))" />
+            </CustomColumns>
+        </CipherDataGrid>
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    /// <summary>
+    /// All changes that occured to the package.
+    /// </summary>
+    [Parameter]
+    public UserActionResponse? ObjectChanges { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Title ??= "היסטוריית שינויים";
+    }
+}

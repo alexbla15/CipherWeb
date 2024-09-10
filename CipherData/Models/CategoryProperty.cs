@@ -1,7 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     public enum PropertyType
     {

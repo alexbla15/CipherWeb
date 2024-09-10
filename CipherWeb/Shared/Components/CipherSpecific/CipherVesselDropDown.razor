@@ -4,7 +4,7 @@
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
     <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(CachedData.VesselExample.Id))" AllowClear="true"
-                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@ChosenVessel" Change="@Change"
+                            Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@ChosenVessel" Change="@Change" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />

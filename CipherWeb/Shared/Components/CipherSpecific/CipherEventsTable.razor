@@ -1,16 +1,16 @@
-﻿@inject ICipherInfo _db
+﻿@inherits CipherTableCard
 
-@inherits CipherTableCard
-
-<CipherTableCard Title="@Title" DataSource="@Events" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@Events" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" IsReport="@IsReport"
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddProcess.Href" HelpText="הוספת תנועה" Variant="Variant.Outlined" />
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherAutoComplete Label="בחירת מיקום / תחום / מבנה"></CipherAutoComplete>
+                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem/>
             </RadzenStack>
         }
     </HeaderContent>
@@ -71,7 +71,7 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<Event> Events { get; set; }
+    public IEnumerable<Event> Events { get; set; } = new List<Event>();
 
     /// <summary>
     /// Error response of fetching data
@@ -79,13 +79,30 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    private CipherLocation ChosenSystem = new();
+
     protected override void OnInitialized()
     {
         Title ??= "דוח תנועות";
 
         if (Events is null)
         {
-            (Events, error) = CachedData.AllEvents;
+            SearchFunc();
+        }
+    }
+
+    /// <summary>
+    /// Function taking place upon clicking Enter.
+    /// </summary>
+    private void SearchFunc()
+    {
+        if (ChosenSystem.ChosenSystem is null)
+        {
+            Events = new List<Event>();
+        }
+        else
+        {
+            (Events, error) = ChosenSystem.ChosenSystem.Events();
         }
     }
 }

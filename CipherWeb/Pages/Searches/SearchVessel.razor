@@ -6,7 +6,9 @@
 
 <PageTitle>@Title</PageTitle>
 
-<CipherVesselCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@vesCard" ChangeVessel="ChangeVessel" />
+<CipherVesselCard Title="@Title" ReadOnly="true" WithCard="false" @ref="@vesCard" ChangeVessel="ChangeVessel" ChosenVessel="@ChosenVessel" />
+
+<CipherObjectChangesTable ObjectChanges="@ChosenVessel?.UserActions().Item1" />
 
 @code {
     /// <summary>

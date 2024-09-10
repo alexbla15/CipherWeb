@@ -6,8 +6,9 @@
 
 <PageTitle>@Title</PageTitle>
 
-<CipherSystemCard Title="@Title" ReadOnly="true" WithCard="false" @ref=sysCard ChangeSystem="ChangeSystem" />
+<CipherSystemCard Title="@Title" ReadOnly="true" WithCard="false" @ref=sysCard ChangeSystem="ChangeUrl" ChosenSystem="@ChosenSystem"/>
 
+<CipherObjectChangesTable ObjectChanges="@ChosenSystem?.UserActions().Item1" />
 @code {
     /// <summary>
     /// Page Title
@@ -25,7 +26,7 @@
     /// API response to search.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherSystemCard sysCard = new();
 
@@ -44,14 +45,6 @@
         {
             (ChosenSystem, Error) = StorageSystem.Get(idValue);
         }
-    }
-
-    /// <summary>
-    /// Method taking place as vessel is changed
-    /// </summary>
-    public void ChangeSystem()
-    {
-        ChangeUrl();
     }
 
     /// <summary>

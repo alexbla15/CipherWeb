@@ -123,5 +123,15 @@ namespace CipherData.Models
 
             return JsonSerializer.Serialize(ChosenObject, options);
         }
+
+        // API RELATED FUNCTIONS
+
+        /// <summary>
+        /// Fetch all user actions that occured to this package.
+        /// </summary>
+        public Tuple<UserActionResponse, ErrorResponse> UserActions()
+        {
+            return LogsRequests.GetObjectLogs(uuid: Uuid);
+        }
     }
 }

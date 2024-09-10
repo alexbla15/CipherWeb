@@ -52,7 +52,7 @@
     /// API response to submission.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
@@ -109,14 +109,7 @@
                 AcceptingPackage.BrutMass += DeltaM.Amount;
                 AcceptingPackage.NetMass = AcceptingPackage.BrutMass * AcceptingPackage.Concentration;
 
-                RequestedEvent = new CreateEvent(
-                    worker: FormInfo.GetWorker(),
-                    timestamp: FormInfo.GetDateTime(),
-                    eventType: 23,
-                    processId: EventProc.ChosenProcess?.Id,
-                    actions: new List<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
-                    comments: EventComments.Value()
-                );
+                RequestedEvent = SetRequestedEvent(DonatingPackage, AcceptingPackage);
 
 
                 Tuple<bool, string> CheckResult = RequestedEvent.Check();
@@ -127,6 +120,18 @@
         }
         SendRequest();
 
+    }
+
+    public CreateEvent SetRequestedEvent(Package DonatingPackage, Package AcceptingPackage)
+    {
+        return new CreateEvent(
+                    worker: FormInfo.GetWorker(),
+                    timestamp: FormInfo.GetDateTime(),
+                    eventType: 23,
+                    processId: EventProc.ChosenProcess?.Id,
+                    actions: new List<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
+                    comments: EventComments.Value()
+                );
     }
 
     /// <summary>

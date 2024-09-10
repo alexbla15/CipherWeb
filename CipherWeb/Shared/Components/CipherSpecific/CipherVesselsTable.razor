@@ -1,0 +1,70 @@
+﻿@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddVessel.Href" HelpText="הוספת כלי" Variant="Variant.Outlined" />
+    </AdditionalButtons>
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="Vessel" DataSource="@Vessels" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))">
+                    <FooterTemplate>
+                        <b>@($"כמות: {Vessels.Count()}")</b>
+                    </FooterTemplate>
+                    </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(CachedData.VesselExample.Name))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Name)))" />
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(CachedData.VesselExample.Type))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" />
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(CachedData.VesselExample.System))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))">
+                    <Template>
+                        @context.System?.Name
+                    </Template>    
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(CachedData.VesselExample.ContainingPackages))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.ContainingPackages)))">
+                    <Template>
+                        @(string.Join(", ", context.Id))
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// Defaults to SimpleWithMenu.
+    /// </summary>
+    [Parameter]
+    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Allows/disabled filtering.
+    /// </summary>
+    [Parameter]
+    public bool Filter { get; set; } = false;
+
+    /// <summary>
+    /// Allows/disables grouping.
+    /// </summary>
+    [Parameter]
+    public bool Group { get; set; } = false;
+
+    /// <summary>
+    /// All available category options
+    /// </summary>
+    [Parameter]
+    public IEnumerable<Vessel> Vessels { get; set; } = new List<Vessel>();
+
+    /// <summary>
+    /// State of rsponse for data fetching in this component
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "כלים";
+        (Vessels, error) = CachedData.AllVessels;
+    }
+}

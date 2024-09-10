@@ -6,7 +6,7 @@
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
                 <CipherVesselDropDown Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
-                                      Change="@Change" @ref="VesId"/>
+                                      Change="@Change" @ref="VesId" ChosenVessel="@ChosenVessel"/>
             </RadzenStack>
         }
     </HeaderContent>
@@ -82,6 +82,12 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי הכלי";
+
+        // DON'T DELETE - it maked the form refresh with details from url
+        if (ChosenVessel != null)
+        {
+            StateHasChanged();
+        }
     }
 
     public void Change()

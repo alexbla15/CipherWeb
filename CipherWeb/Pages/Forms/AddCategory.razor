@@ -20,7 +20,7 @@
     /// View the submitted json.
     /// </summary>
     [Parameter]
-    public bool CheckJson { get; set; } = false;
+    public bool CheckJson { get; set; } = true;
 
     /// <summary>
     /// Page title.
@@ -32,7 +32,7 @@
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; }
+    public string? JsonRequest { get; set; }
 
     /// <summary>
     /// Error message upon improper submission.

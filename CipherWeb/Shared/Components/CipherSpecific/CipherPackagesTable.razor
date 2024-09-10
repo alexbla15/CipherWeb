@@ -12,7 +12,7 @@
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation WithIcon=false Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc" />
+                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref="SelectedSystem"/>
             </RadzenStack>
         }
     </HeaderContent>
@@ -73,6 +73,14 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.CreatedAt))" Title="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" />
                 <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Description))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Description)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Properties)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Properties)))">
+                    <Template>
+                        @if (context.Properties != null)
+                        {
+                            @string.Join(", ", context.Properties.Select(x => $"{x.Key}:{x.Value}"));
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>
@@ -83,7 +91,7 @@
     /// Error result of events fetching.
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
@@ -122,16 +130,12 @@
     public int RowsPerPage { get; set; } = 12;
 
     /// <summary>
-    /// System name for data fetching events
-    /// </summary>
-    [Parameter]
-    public string SelectedSystem { get; set; } = "S1";
-
-    /// <summary>
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packages { get; set; } = new List<Package>();
+    public IEnumerable<Package> packages { get; set; } = new List<Package>();
+
+    private CipherLocation SelectedSystem = new();
 
     protected override void OnInitialized()
     {
@@ -146,14 +150,21 @@
     /// </summary>
     private void SearchFunc()
     {
-        (packages, error) = StorageSystem.Packages(SelectedSystem);
+        if (SelectedSystem.ChosenSystem is null)
+        {
+            packages = new List<Package>();
+        }
+        else
+        {
+            (packages, Error) = SelectedSystem.ChosenSystem.Packages();
+        }
     }
 
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
         ds =>
-    @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+    @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SelectedSystem.ChosenSystem?.Name" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
         , new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }
 }

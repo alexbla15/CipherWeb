@@ -74,7 +74,7 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<Process> Processes { get; set; } = new List<Process>();
+    public IEnumerable<Process> Processes { get; set; } = new List<Process>();
 
     /// <summary>
     /// Error response for fetching data

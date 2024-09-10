@@ -64,10 +64,6 @@
     display: block;
 }
 
-.rz-datafilter .rz-datafilter-editor {
-    min-height: 52px;
-}
-
 .rz-datafilter .rz-datafilter-item {
     padding: var(--rz-datafilter-item-padding-y) calc(var(--rz-datafilter-item-padding-left) + var(--rz-datafilter-item-indentation)) var(--rz-datafilter-item-padding-y) 0;
 }
@@ -1051,6 +1047,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     padding: 0.5rem;
     padding-right: 0.7rem;
     padding-top: 1rem;
+    min-height:52px;
 }
 
 .rz-datepicker-trigger {

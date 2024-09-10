@@ -59,6 +59,12 @@
     public string JsonRequest { get; set; }
 
     /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
@@ -68,13 +74,7 @@
     /// API response to submission.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
-
-    /// <summary>
-    /// Error message upon improper submission.
-    /// </summary>
-    [Parameter]
-    public string ErrorMessage { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherPackageInfo PackInfo = new();
     private CipherPackagesPicking InnerPacks = new();
@@ -84,7 +84,7 @@
     private CipherProcess EventProc = new();
     private CipherPackageProperties PackProps = new();
 
-    private Package pack = Package.Empty();
+    private Package NewPackage = Package.Empty();
 
     private CipherSubmit submission = new();
 
@@ -137,29 +137,70 @@
     /// </summary>
     public void Submit()
     {
-        pack = Package.Empty();
+        Valid = true;
 
-        RequestedEvent = CreateEvent.Empty();
+        RequestedEvent = GetRequestedEvent();
 
-        pack = PackInfo.Value();
+        if (Valid)
+        {
+            Tuple<bool, string> CheckResult = RequestedEvent.Check();
+            (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+        }
 
-        pack.Children = GetContainingPackages();
+        JsonRequest = RequestedEvent.ToJson();
 
-        // choosing relevant packages for calculation of mass
-        pack.BrutMass = GetBrutMass(pack);
-        pack.NetMass = pack.BrutMass * pack.Concentration;
+        SendRequest();
+    }
 
-        // add new properties
-        if(PackProps.ChosenProperties != null)
+    /// <summary>
+    /// Method to add new properties to the package.
+    /// </summary>
+    public void SetPackProps()
+    {
+        if (PackProps.ChosenProperties != null)
         {
             foreach (PackageProperty prop in PackProps.ChosenProperties)
             {
-                pack.Properties.Add(prop.Name, prop.Value);
+                if (NewPackage.Properties is null)
+                {
+                    NewPackage.Properties = new Dictionary<string, string>();
+                }
+                else if (NewPackage.Properties.ContainsKey(prop.Name))
+                {
+                    (Valid, ErrorMessage) = (false, $"התכונה \"{prop.Name}\" כבר קיימת עבור תעודה זו.");
+                }
+                else
+                {
+                    NewPackage.Properties.Add(prop.Name, prop.Value);
+                }
             }
         }
+    }
 
-        // Changed Packages
-        List<PackageRequest> ChangedPacks = new() { pack.Request() };
+    public void SetNewPackage()
+    {
+        NewPackage = Package.Empty();
+
+        NewPackage = PackInfo.Value();
+
+        NewPackage.Children = GetContainingPackages();
+
+        // choosing relevant packages for calculation of mass
+        NewPackage.BrutMass = GetBrutMass(NewPackage);
+        NewPackage.NetMass = NewPackage.BrutMass * NewPackage.Concentration;
+
+        SetPackProps();
+
+    }
+
+    /// <summary>
+    /// Get all the package requests of packages that were changed in this event.
+    /// </summary>
+    public List<PackageRequest> GetChangedPacks()
+    {
+        SetNewPackage();
+
+        List<PackageRequest> ChangedPacks = new() { NewPackage.Request() };
 
         if (!AssemblyOfPackages)
         {
@@ -175,8 +216,14 @@
                 ChangedPacks.Add(packageRequest);
             }
         }
+        return ChangedPacks;
+    }
 
-        RequestedEvent = new CreateEvent(
+    public CreateEvent GetRequestedEvent()
+    {
+        List<PackageRequest> ChangedPacks = GetChangedPacks();
+
+        return new CreateEvent(
             worker: FormInfo.GetWorker(),
             processId: EventProc.ChosenProcess?.Id,
             timestamp: FormInfo.GetDateTime(),
@@ -184,13 +231,6 @@
             actions: ChangedPacks,
             comments: EventComments.Value()
         );
-
-        Tuple<bool, string> CheckResult = RequestedEvent.Check();
-        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-
-        JsonRequest = RequestedEvent.ToJson();
-
-        SendRequest();
     }
 
     /// <summary>

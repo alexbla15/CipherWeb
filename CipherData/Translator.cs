@@ -61,8 +61,8 @@ namespace CipherData
         public const string Event_Packages = "תעודות מעורבות";
         public const string Event_ProcessId = "מספר תהליך";
         public const string Event_Status = _Status;
-        public const string Event_Timestamp = "סוג תנועה";
-        public const string Event_Type = "תהליך תנועה";
+        public const string Event_Timestamp = "תאריך תנועה";
+        public const string Event_Type = "סוג תנועה";
         public const string Event_Worker = _Worker;
 
         // ERROR 

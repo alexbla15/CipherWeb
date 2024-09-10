@@ -44,6 +44,12 @@
 
     protected override void OnInitialized()
     {
+        // DON'T DELETE - it maked the form refresh with details from url
+        if (ChosenPackage != null)
+        {
+            StateHasChanged();
+        }
+
         (packs, error) = CachedData.AllPackages;
     }
 
@@ -68,7 +74,7 @@
 <CipherComponentCard Title="@Title" WithCard="@WithCard" BackgroundColor="transparent">
     <HeaderContent>
         <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-            <CipherPackageId @ref=SetPack Icon="" Change="Change" />
+            <CipherPackageId @ref=SetPack Icon="" Change="Change" ChosenPackage="@ChosenPackage"/>
         </RadzenStack>
     </HeaderContent>
     <ChildContent>

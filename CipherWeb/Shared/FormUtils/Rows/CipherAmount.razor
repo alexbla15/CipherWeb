@@ -1,14 +1,8 @@
 ﻿@inherits CipherNumeric
 
-<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="@Amount"/>
+<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="Amount" />
 
 @code {
-    /// <summary>
-    /// Set value of component.
-    /// </summary>
-    [Parameter]
-    public decimal Amount { get; set; }
-
     protected override void OnInitialized()
     {
         Label ??= "מסה [גר']";

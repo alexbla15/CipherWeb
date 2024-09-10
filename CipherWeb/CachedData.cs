@@ -16,6 +16,7 @@ namespace CipherWeb
         public static readonly StorageSystem SystemExample = StorageSystem.Empty();
         public static readonly Vessel VesselExample = Vessel.Empty();
         public static readonly Unit UnitExample = Unit.Empty();
+        public static readonly UserAction UserActionExample = UserAction.Empty();
 
         public static readonly Tuple<List<Category>, ErrorResponse> AllCategories = Category.All();
         public static readonly Tuple<List<Event>, ErrorResponse> AllEvents = Event.All();

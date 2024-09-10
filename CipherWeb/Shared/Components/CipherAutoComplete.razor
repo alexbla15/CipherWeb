@@ -11,37 +11,56 @@
     /// Component's label.
     /// </summary>
     [Parameter]
-    public string Label { get; set; }
+    public string? Label { get; set; }
 
     /// <summary>
     /// Placeholder for autocomplete.
     /// </summary>
     [Parameter]
-    public string Placeholder { get; set; }
+    public string? Placeholder { get; set; }
 
     /// <summary>
     /// Component's style.
     /// </summary>
     [Parameter]
-    public string Style { get; set; }
+    public string? Style { get; set; }
 
     /// <summary>
     /// Component's side icon.
     /// </summary>
     [Parameter]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Property of @Data to show as text-value within AutoComplete.
     /// </summary>
     [Parameter]
-    public string TextProperty { get; set; }
+    public string? TextProperty { get; set; }
 
     /// <summary>
     /// Allowed regex pattern for value. Defaulted to only letters / numbers / space / period
     /// </summary>
     [Parameter]
     public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n]+$";
+
+    private string _value = string.Empty;
+
+    /// <summary>
+    /// Component's value.
+    /// </summary>
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (_value != value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync(value);
+            }
+        }
+    }
 
     /// <summary>
     /// Is the component disabled.
@@ -79,25 +98,6 @@
     [Parameter]
     public bool IsValid { get; set; } = true;
 
-    private string _value = "";
-
-    /// <summary>
-    /// Component's value.
-    /// </summary>
-    [Parameter]
-    public string Value
-    {
-        get => _value;
-        set
-        {
-            if (_value != value)
-            {
-                _value = value;
-                ValueChanged.InvokeAsync(value);
-            }
-        }
-    }
-
     /// <summary>
     /// AutoComplete options.
     /// </summary>
@@ -128,24 +128,28 @@
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
+    /// <summary>
+    /// Words that are not allowed to use within the content of the component.
+    /// </summary>
+    [Parameter]
+    public string[] UnallowedWords { get; set; } = Constants.UnallowedWords;
+
     private string LengthValidatorText()
     {
-        return $"{MinLength}-{MaxLength} תווים. ";
+        return $"{MinLength}-{MaxLength} תווים";
     }
 
     class Model
     {
-        public string value = "";
+        public string value = string.Empty;
     }
 
-    Model model = new Model() { value = "" };
+    Model model = new Model() { value = string.Empty };
     RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
     RadzenLengthValidator LengthValidator = new RadzenLengthValidator();
     RadzenRegexValidator ImproperCharsValidator = new RadzenRegexValidator();
     RadzenCustomValidator SqlInjectionValidator = new RadzenCustomValidator();
     RadzenCustomValidator ValueExistsValidator = new RadzenCustomValidator();
-
-    private string[] unwantedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
 
     public string ImproperCharsValidatorText()
     {
@@ -154,60 +158,63 @@
             Regex regex = new Regex(AllowedRegex, RegexOptions.IgnoreCase);
             var invalidChars = model.value.Where(c => !regex.IsMatch(c.ToString())).ToList();
 
-            if (invalidChars.Any())
+            if (invalidChars.Contains(' '))
             {
-                return "לא ניתן להשתמש בתו " + invalidChars[0] + ". ";
+                return "לא ניתן להשתמש ברווח";
             }
-            else
+            else if (invalidChars.Contains('.'))
             {
-                return "";
+                return "לא ניתן להשתמש בנקודה";
             }
-
+            else if (invalidChars.Any())
+            {
+                return "לא ניתן להשתמש בתו " + invalidChars[0];
+            }
         }
-        return "";
+
+        return string.Empty;
     }
 
-    public bool SqlInjectionValidate(string set_value)
+    public Regex UnallowedWordsRegex()
     {
-        string pattern = string.Join("|", unwantedWords);
-        Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
-
-        return !regex.IsMatch(set_value);
+        string pattern = string.Join("|", UnallowedWords);
+        return new Regex(pattern, RegexOptions.IgnoreCase);
     }
 
-    public string SqlInjectionValidatorText()
+    /// <summary>
+    /// Check if any unwanted ward was used within the set-value.
+    /// </summary>
+    /// <param name="set_value"></param>
+    /// <returns></returns>
+    public bool UnallowedWordsValidate(string set_value)
     {
-        string pattern = string.Join("|", unwantedWords);
-        Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+        return !UnallowedWordsRegex().IsMatch(set_value);
+    }
 
-        if (string.IsNullOrEmpty(model.value))
-        {
-            return "";
-        }
-        else
+    /// <summary>
+    /// Get the error message for using unallowed words.
+    /// </summary>
+    /// <returns></returns>
+    public string UnallowedWordsValidatorText()
+    {
+        Regex regex = UnallowedWordsRegex();
+
+        if (!string.IsNullOrEmpty(model.value))
         {
             if (regex.IsMatch(model.value))
             {
                 Match match = regex.Match(model.value);
-                return "אסור להשתמש במילה " + match.Value + ". ";
-            }
-            else
-            {
-                return "";
+                return "אסור להשתמש במילה " + match.Value;
             }
         }
+
+        return string.Empty;
     }
 
     public bool Check()
     {
-        if (Required)
-        {
-            IsValid = RequiredValidator.IsValid && LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
-        }
-        else
-        {
-            IsValid = LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
-        }
+        IsValid = LengthValidator.IsValid && ImproperCharsValidator.IsValid && SqlInjectionValidator.IsValid;
+        IsValid = (Required) ? IsValid && RequiredValidator.IsValid : IsValid;
 
         return IsValid;
     }
@@ -275,7 +282,7 @@
             <RadzenLengthValidator @ref=LengthValidator Component="setvalue" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
                                    Visible="@(RequiredValidator.IsValid && ShowErrors)" />
             <RadzenRegexValidator @ref=ImproperCharsValidator Component="setvalue" Pattern="@AllowedRegex" Text="@ImproperCharsValidatorText()" Visible=@(ShowErrors) />
-            <RadzenCustomValidator @ref=SqlInjectionValidator Component="setvalue" Text="@SqlInjectionValidatorText()" Validator="(() => SqlInjectionValidate(model.value))" Visible=@(ShowErrors) />
+            <RadzenCustomValidator @ref=SqlInjectionValidator Component="setvalue" Text="@UnallowedWordsValidatorText()" Validator="(() => UnallowedWordsValidate(model.value))" Visible=@(ShowErrors) />
         </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

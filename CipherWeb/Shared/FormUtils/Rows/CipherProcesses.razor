@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder"
+    <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(CachedData.ProcessDefinitionExample.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>

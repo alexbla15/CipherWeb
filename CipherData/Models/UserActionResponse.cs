@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using CipherData.Requests;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Get user actions contract
@@ -22,7 +24,7 @@
 
         public static UserActionResponse Random()
         {
-            return new UserActionResponse(new List<UserAction>());
+            return new UserActionResponse(RandomFuncs.FillRandomObjects(2, UserAction.Random));
         }
     }
 }

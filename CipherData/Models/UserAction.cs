@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using CipherData.Requests;
+
+namespace CipherData.Models
 {
     public enum ActionType
     {
@@ -71,6 +73,11 @@
             Status = status;
         }
 
+        public static string Translate(string searchedAttribute)
+        {
+            return Translate(typeof(UserAction), searchedAttribute);
+        }
+
         /// <summary>
         /// Hebrew-english translation
         /// </summary>
@@ -82,6 +89,35 @@
             result.AddRange(GetHebrewTranslations<UserAction>());
 
             return result.ToHashSet();
+        }
+
+        /// <summary>
+        /// Get an empty object scheme
+        /// </summary>
+        /// <returns></returns>
+        public static UserAction Empty()
+        {
+            return new UserAction(
+                by: string.Empty,
+                objectId: 0,
+                at: DateTime.Now,
+                actionType: ActionType.Modified
+                );
+        }
+
+        /// <summary>
+        /// Get a Random object scheme
+        /// </summary>
+        /// <returns></returns>
+        public static UserAction Random(string? comments = null)
+        {
+            return new UserAction(
+                by: Worker.Random().Name,
+                objectId: new Random().Next(1000),
+                at: RandomFuncs.RandomDateTime(),
+                actionType: RandomFuncs.RandomItem(new List<ActionType>() { ActionType.Modified, ActionType.Created, ActionType.Approved }),
+                comments: comments ?? "בדיקה"
+                );
         }
     }
 }

@@ -1,13 +1,5 @@
-﻿using Radzen;
-
-namespace CipherWeb.Data
+﻿namespace CipherWeb.Data
 {
-    public enum Language
-    {
-        English,
-        Hebrew
-    }
-
     public class Roles
     {
         public readonly static string Manager = "מנהל";
@@ -36,9 +28,6 @@ namespace CipherWeb.Data
     /// </summary>
     public static class CipherColors
     {
-        //
-        // Summary:
-        //     Primary lightest.
         public const string PrimaryLightest = "var(--rz-primary-lightest)";
     }
 }

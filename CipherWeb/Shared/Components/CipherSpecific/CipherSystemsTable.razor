@@ -1,0 +1,86 @@
+﻿@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddStorageSystem.Href" HelpText="הוספת מערכת" Variant="Variant.Outlined" />
+    </AdditionalButtons>
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@Systems" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Id))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Id)))">
+                    <FooterTemplate>
+                        <b>@($"כמות: {Systems.Count()}")</b>
+                    </FooterTemplate>
+                    </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Name))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" />
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Description))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Description)))" />
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Parent))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Parent)))">
+                    <Template>
+                        @context.Parent?.Name
+                    </Template>    
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Children))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Children)))">
+                    <Template>
+                        @if (context.Children != null)
+                        {
+                            @(string.Join(", ", context.Children.Select(x => x.Name)))
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Unit))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))">
+                    <Template>
+                        @context.Unit?.Name
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(CachedData.SystemExample.Properties))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Properties)))">
+                    <Template>
+                        @if (context.Properties != null)
+                        {
+                            @(string.Join(", ", context.Properties.Select(x => $"{x.Key} : {x.Value}")))
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// Defaults to SimpleWithMenu.
+    /// </summary>
+    [Parameter]
+    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Allows/disabled filtering.
+    /// </summary>
+    [Parameter]
+    public bool Filter { get; set; } = false;
+
+    /// <summary>
+    /// Allows/disables grouping.
+    /// </summary>
+    [Parameter]
+    public bool Group { get; set; } = false;
+
+    /// <summary>
+    /// All available category options
+    /// </summary>
+    [Parameter]
+    public IEnumerable<StorageSystem> Systems { get; set; } = new List<StorageSystem>();
+
+    /// <summary>
+    /// State of rsponse for data fetching in this component
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "מערכות";
+        (Systems, error) = CachedData.AllSystems;
+    }
+}
