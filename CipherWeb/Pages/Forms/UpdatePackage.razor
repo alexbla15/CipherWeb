@@ -28,12 +28,11 @@
         <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))" />
         <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
 
-
         @if (NewProps != null)
         {
-            foreach (string prop_name in NewProps.Keys)
+            @foreach (string prop in NewProps.Keys)
             {
-                <CipherAutoComplete Label="@prop_name" Icon="@Icons.Cipher.Properties" @bind-Value="NewProps[prop_name]" />
+                <CipherAutoComplete Label="@prop" @bind-Value="@NewProps[prop]" Icon="@(Icons.Cipher.Properties)" />
             }
         }
 
@@ -134,13 +133,28 @@
     private CipherData.Models.UpdatePackage RequestedPackUpdate = CipherData.Models.UpdatePackage.Empty();
     private CreateEvent UpdatePackEvent = CreateEvent.Empty();
 
-    private Dictionary<string, string>? NewProps = new();
+    private Dictionary<string, string>? NewProps = new Dictionary<string, string>();
 
     private bool FirstInitialization = true;
 
     protected override void OnInitialized()
     {
         GetPackageFromUrl();
+    }
+
+    public void ChangeNewProps(string prop_name, string new_value)
+    {
+        if (NewProps != null)
+        {
+            if (NewProps.ContainsKey(prop_name))
+            {
+                NewProps[prop_name] = new_value;
+            }
+        }
+        else
+        {
+            NewProps = OriginalPack.Properties;
+        }
     }
 
     /// <summary>
@@ -425,6 +439,11 @@
         if (Valid)
         {
             ChosenPackage = NewPack;
+        }
+        else
+        {
+            submission.Valid = Valid;
+            submission.ErrorMessage = ErrorMessage;
         }
     }
 }
