@@ -950,6 +950,11 @@ rz-multiselect-trigger,
     min-height: 52px;
 }
 
+.rz-autocomplete-input
+{
+    min-height:52px
+}
+
 div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled,
 div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled,
 .rz-calendar.rz-state-disabled div:not(.rz-form-field-content) > .rz-inputtext,

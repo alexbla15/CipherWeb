@@ -94,9 +94,17 @@ namespace CipherData.Models
             // check properties
             if (Properties != null && result.Item1)
             {
-                foreach (CategoryProperty prop in Properties)
+                // check uniqueness of the properties names
+                List<string> props = Properties.Select(prop => prop.Name).ToList();
+                result = props.Count == props.Distinct().Count() ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.Properties)));
+
+                if (result.Item1)
                 {
-                    result = prop.Check();
+                    // check inner logic of each property
+                    foreach (CategoryProperty prop in Properties)
+                    {
+                        result = prop.Check();
+                    }
                 }
             }
 

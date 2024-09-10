@@ -118,18 +118,19 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Name"/>
+                        <CipherAutoComplete @bind-Value="@prop.Name" Width="100%"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Description" Multiline="true"/>
+                        <CipherAutoComplete @bind-Value="@prop.Description" Multiline="true" Width="100%" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.PropertyType)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
-                                        Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))">
+                                        Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))"
+                                        Style="width: 100%">
                             <ValueTemplate>
                                 @if (prop.PropertyType == PropertyType.Text)
                                 {
@@ -165,11 +166,11 @@
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {
-                            <CipherAutoComplete @bind-Value="@prop.DefaultValue" />
+                            <CipherAutoComplete @bind-Value="@prop.DefaultValue" Width="100%" />
                         }
                         else if (prop.PropertyType == PropertyType.Number)
                         {
-                            <CipherNumeric AmountChanged="@(args=> prop.DefaultValue = args.ToString())"/>
+                            <CipherNumeric AmountChanged="@(args=> prop.DefaultValue = args.ToString())" Width="100%" />
                         }
                         else
                         {
