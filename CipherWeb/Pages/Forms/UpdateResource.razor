@@ -1,4 +1,6 @@
-﻿@inject NavigationManager Navigation
+﻿@using System.Reflection
+
+@inject NavigationManager Navigation
 
 @typeparam Cipher_TItem
 
@@ -71,13 +73,10 @@
     /// </summary>
     private Dictionary<Type, Func<object?>>? chosenObjectMap;
 
-    private Cipher_TItem? OriginalObject;
-
     protected override void OnInitialized()
     {
         SetChosenObjMap();
         (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Cipher_TItem>(Navigation);
-        OriginalObject = ChosenObject;
     }
 
     public void SetChosenObjMap()
@@ -113,7 +112,6 @@
     public void ChangeUrl()
     {
         ChosenObject = GetChosenObject();
-        OriginalObject = ChosenObject;
         ResourcePage.ChangeUrl(Navigation, NavLink, GetObjectId(ChosenObject));
     }
 
@@ -178,9 +176,9 @@
 
         // find the appropriate type, and then check if some details were changed relatively to the original object.
 
-        bool FoundUnitChanges() => FoundChanges(unitRequest.Compare(OriginalObject as Unit));
-        bool FoundCategoryChanges() => FoundChanges(catRequest.Compare(OriginalObject as Category));
-        bool FoundVesselChanges() => FoundChanges(vesRequest.Compare(OriginalObject as Vessel));
+        bool FoundUnitChanges() => FoundChanges(unitRequest.Compare(ChosenObject as Unit));
+        bool FoundCategoryChanges() => FoundChanges(catRequest.Compare(ChosenObject as Category));
+        bool FoundVesselChanges() => FoundChanges(vesRequest.Compare(ChosenObject as Vessel));
 
         if (typeof(Cipher_TItem) == typeof(Unit))
         {
@@ -242,19 +240,19 @@
     public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)UnitsRequests.UpdateUnit((OriginalObject as Unit)?.Id, unitRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)UnitsRequests.UpdateUnit((ChosenObject as Unit)?.Id, unitRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.UpdateCategory((OriginalObject as Category)?.Id, catRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.UpdateCategory((ChosenObject as Category)?.Id, catRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.UpdateVessel((OriginalObject as Vessel)?.Id, vesRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.UpdateVessel((ChosenObject as Vessel)?.Id, vesRequest);
     }
 
     /// <summary>
