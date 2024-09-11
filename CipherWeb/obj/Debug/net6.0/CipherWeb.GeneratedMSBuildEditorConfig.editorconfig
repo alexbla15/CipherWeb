@@ -64,8 +64,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVHJhbnNmZXJBbW91bnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlQ2F0ZWdvcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdatePackage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateResource.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUmVzb3VyY2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateUnit.razor]
@@ -116,6 +124,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoQWR2YW5jZWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchCategory.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoQ2F0ZWdvcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Searches/Searches.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -126,6 +138,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchPackage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUGFja2FnZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchProcess.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUHJvY2Vzcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchResource.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUmVzb3VyY2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchSystem.razor]

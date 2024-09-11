@@ -36,14 +36,10 @@
 
     private RadzenDataGrid<PackageProperty> CustomDataGrid = new();
 
-    private bool ShowHelpText = true;
-    private int components = 0;
-
     protected override void OnInitialized()
     {
         Title ??= "תכונות התעודה";
         ChosenProperties = ChosenProperties ?? new List<PackageProperty>();
-        components = ChosenProperties.Count();
     }
 
     /// <summary>
@@ -55,10 +51,6 @@
         ChosenProperties.Add(new PackageProperty());
 
         StateHasChanged();
-
-        components = ChosenProperties.Count;
-
-        ShowHelpText = false;
 
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -73,14 +65,7 @@
 
         CustomDataGrid.Data = ChosenProperties;
 
-        components--;
-
         await CustomDataGrid.RefreshDataAsync();
-
-        if (ChosenProperties.Count() == 0)
-        {
-            ShowHelpText = true;
-        }
 
         StateHasChanged();
     }
@@ -92,12 +77,9 @@
     async Task DeleteAll()
     {
         ChosenProperties.Clear();
-        components = 0;
         CustomDataGrid.Data = ChosenProperties;
 
         await CustomDataGrid.RefreshDataAsync();
-
-        ShowHelpText = true;
     }
 }
 
@@ -107,11 +89,11 @@
         <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (ShowHelpText)
+        @if (ChosenProperties.Count() == 0)
         {
-            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+            <CipherText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="PackageProperty" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="PackageProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="PackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="prop">

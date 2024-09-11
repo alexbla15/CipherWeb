@@ -44,9 +44,6 @@
 
     private RadzenDataGrid<Package> CustomDataGrid;
 
-    private bool ShowHelpText = true;
-    private int components = 0;
-
     protected override void OnInitialized()
     {
         Title ??= "תעודות מוסרות";
@@ -63,10 +60,6 @@
         chosenPacks.Add(Package.Empty());
 
         StateHasChanged();
-
-        components = chosenPacks.Count;
-
-        ShowHelpText = false;
 
         RefreshOptionalPackages();
 
@@ -94,14 +87,7 @@
 
         CustomDataGrid.Data = chosenPacks;
 
-        components--;
-
         await CustomDataGrid.RefreshDataAsync();
-
-        if (chosenPacks.Count() == 0)
-        {
-            ShowHelpText = true;
-        }
 
         StateHasChanged();
     }
@@ -113,14 +99,11 @@
     async Task DeleteAll()
     {
         chosenPacks.Clear();
-        components = 0;
         CustomDataGrid.Data = chosenPacks;
 
         await CustomDataGrid.RefreshDataAsync();
 
         RefreshOptionalPackages();
-
-        ShowHelpText = true;
     }
 
     /// <summary>
@@ -140,11 +123,11 @@
         <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (ShowHelpText)
+        @if (chosenPacks.Count() == 0)
         {
-            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+            <CipherText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="Package" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="Package" AllowColumnResize="true" Visible="chosenPacks.Count() != 0">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="Package" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">

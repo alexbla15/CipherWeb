@@ -87,6 +87,16 @@ namespace CipherData.Models
             Properties = properties;
         }
 
+        public CategoryRequest Request()
+        {
+            return new CategoryRequest(name: Name, description: Description, idMask: IdMask,
+                parent: Parent?.Id,
+                creatingProcesses: CreatingProcesses.Select(x => x.Id).ToList(),
+                consumingProcesses: ConsumingProcesses.Select(x => x.Id).ToList(),
+                properties: Properties
+                );
+        }
+
         /// <summary>
         /// Counts how many packages were created.
         /// </summary>
@@ -169,6 +179,15 @@ namespace CipherData.Models
         }
 
         // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Get details about a single object given object ID
+        /// </summary>
+        /// <param name="id">object ID</param>
+        public static Tuple<Category, ErrorResponse> Get(string id)
+        {
+            return CategoriesRequests.GetCategory(id);
+        }
 
         /// <summary>
         /// All categories

@@ -42,7 +42,7 @@
         /// <param name="properties">JSON-like additional properties of the unit</param>
         /// <param name="parentId">ID of parent unit</param>
         /// <param name="conditions">Conditions on the unit to make sure it is valid.</param>
-        public UnitRequest(string name, string description, GroupedBooleanCondition? conditions = null, string? properties = null, 
+        public UnitRequest(string name, string description, GroupedBooleanCondition? conditions = null, string? properties = null,
             string? parentId = null)
         {
             Name = name;
@@ -65,6 +65,22 @@
             result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomUnitRequest.Description))); // required
 
             return result;
+        }
+
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(Unit? OtherObject)
+        {
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Description != OtherObject?.Description;
+            different |= ParentId != OtherObject?.Parent?.Id;
+
+            return different;
         }
 
         /// <summary>

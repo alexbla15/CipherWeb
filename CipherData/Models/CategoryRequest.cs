@@ -112,6 +112,53 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Checks for difference between this and another category
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(Category? OtherObject)
+        {
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Description != OtherObject?.Description;
+            different |= ParentId != OtherObject?.Parent?.Id;
+            different |= IdMask[0] != OtherObject?.IdMask[0];
+
+            if ((CreatingProcesses != null) && (OtherObject?.CreatingProcesses != null))
+            {
+                different |= !CreatingProcesses.ToHashSet().SetEquals(OtherObject.CreatingProcesses.Select(x => x.Id).ToList());
+
+            }
+            else if (((CreatingProcesses != null) && (OtherObject?.CreatingProcesses == null)) || ((CreatingProcesses == null) && (OtherObject?.CreatingProcesses != null)))
+            {
+                different = true;
+            }
+
+            if ((ConsumingProcesses != null) && (OtherObject?.ConsumingProcesses != null))
+            {
+                different |= !ConsumingProcesses.ToHashSet().SetEquals(OtherObject.ConsumingProcesses.Select(x => x.Id).ToList());
+
+            }
+            else if (((ConsumingProcesses != null) && (OtherObject?.ConsumingProcesses == null)) || ((ConsumingProcesses == null) && (OtherObject?.ConsumingProcesses != null)))
+            {
+                different = true;
+            }
+
+            if ((Properties != null) && (OtherObject?.Properties != null))
+            {
+                different |= !Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList());
+
+            }
+            else if (((Properties != null) && (OtherObject?.Properties == null)) || ((Properties == null) && (OtherObject?.Properties != null)))
+            {
+                different = true;
+            }
+
+            return different;
+        }
+
+        /// <summary>
         /// Transfrom this object to JSON, readable by API
         /// </summary>
         /// <returns></returns>

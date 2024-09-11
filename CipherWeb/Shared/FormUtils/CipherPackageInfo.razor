@@ -108,7 +108,7 @@
     <CipherPackageId Label="@Package.Translate(nameof(CachedData.PackageExample.Parent))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" Icon="@Icons.Documents.Page.Description" Width="300px" />
+        <CipherComments @ref="PackDescription" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" Icon="@Icons.Documents.Page.Description" Width="300px" />
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherProcesses Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" ChosenProcesses="@DestinationProcesses" />

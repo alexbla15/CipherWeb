@@ -7,11 +7,11 @@
     </Buttons>
 
     <ChildContent>
-        @if (ShowHelpText)
+        @if (restrictions.Count() == 0)
         {
-            <CipherText Text="@HelpText" Visible="@ShowHelpText"></CipherText>
+            <CipherText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="restrictions.Count() != 0">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="Restriction" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="restriction">
@@ -70,9 +70,6 @@
     private RadzenDataGrid<Restriction> CustomDataGrid;
     private List<Restriction> restrictions = new List<Restriction>();
 
-    private bool ShowHelpText = true;
-    private int components = 0;
-
     protected override void OnInitialized()
     {
         Title ??= $"מגבלות {ObjectName}";
@@ -104,9 +101,6 @@
         // Ensure the grid is properly bound by reassigning the list
         restrictions = new List<Restriction>(restrictions);
 
-        components = restrictions.Count;
-        ShowHelpText = false;
-
         // Trigger the UI to re-render with the updated data
         StateHasChanged();
     }
@@ -133,13 +127,8 @@
             restrictions[i].Id = i + 1;
         }
 
-        components = restrictions.Count;
-
         // Fully reload the grid
         await CustomDataGrid.Reload();
-
-        // Update visibility of the help text
-        ShowHelpText = restrictions.Count == 0;
     }
 
     /// <summary>
@@ -149,11 +138,8 @@
     async Task DeleteAll()
     {
         restrictions.Clear();
-        components = 0;
         CustomDataGrid.Data = restrictions;
 
         await CustomDataGrid.RefreshDataAsync();
-
-        ShowHelpText = true;
     }
 }

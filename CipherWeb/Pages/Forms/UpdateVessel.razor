@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 
 <ResourceForm @ref="ResourcePage" Title="@NavLink.Name">
-    <CipherVesselCard Title="" WithCard="false" @ref="@VesDetails" ChangeVessel="ChangeUrl" ChosenVessel="@ChosenObject" SetMode="FormMode.Update" />
+    <CipherVesselCard Title="" WithCard="false" @ref="@VesDetails" ChangeObject="ChangeUrl" ChosenObject="@ChosenObject" SetMode="FormMode.Update" />
     <CipherJsonCheck JsonValue="@JsonRequest" />
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)"/>
 </ResourceForm>
@@ -69,7 +69,7 @@
     /// </summary>
     public void ChangeUrl()
     {
-        ChosenObject = VesDetails.ChosenVessel;
+        ChosenObject = VesDetails.ChosenObject;
         OriginalVessel = ChosenObject;
 
         ResourcePage.ChangeUrl(Navigation, NavLink, ChosenObject?.Id);
@@ -117,14 +117,14 @@
     {
         if (Valid)
         {
-            if (VesDetails.ChosenVessel is null)
+            if (VesDetails.ChosenObject is null)
             {
                 Valid = false;
                 ErrorMessage = "לא נבחרה יחידה לעדכון.";
             }
             else if (FoundChanges())
             {
-                (Result, Error) = VesselsRequests.UpdateVessel(VesDetails.ChosenVessel?.Id, vesRequest);
+                (Result, Error) = VesselsRequests.UpdateVessel(VesDetails.ChosenObject?.Id, vesRequest);
 
                 if (Error != ErrorResponse.Success)
                 {

@@ -19,7 +19,7 @@
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
-        <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
+        <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
 
     <CipherJsonCheck JsonValue="@JsonRequest" />
@@ -223,7 +223,7 @@
             timestamp: FormInfo.GetDateTime(),
             eventType: 21,
             actions: ChangedPacks,
-            comments: EventComments.Value()
+            comments: EventComments.GetValue()
         );
     }
 

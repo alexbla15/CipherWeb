@@ -95,9 +95,9 @@
 
         public static CategoryProperty Random(string? set_name = null)
         {
-            CategoryProperty TextOption = new(name: "צבע", value: "אדום");
-            CategoryProperty NumberOption = new(name: "כמות", value: "5", propertyType: PropertyType.Number);
-            CategoryProperty BoolOption = new(name: "מיועד לאיחסון?", value: "True", propertyType: PropertyType.Boolean);
+            CategoryProperty TextOption = new(name: "צבע", description: "צבע נראה לעין", value: "אדום");
+            CategoryProperty NumberOption = new(name: "כמות", description: "כמות יחידות", value: "5", propertyType: PropertyType.Number);
+            CategoryProperty BoolOption = new(name: "מיועד לאיחסון?", description: "עבר בדיקה, כעת מוכן לאיחסון", value: "True", propertyType: PropertyType.Boolean);
 
             List<CategoryProperty> CategoryProperties = new() { TextOption, BoolOption, NumberOption};
 

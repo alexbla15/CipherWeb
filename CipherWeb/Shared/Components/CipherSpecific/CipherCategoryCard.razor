@@ -1,22 +1,87 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Title="פרטי הקטגוריה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Name))" Icon="@Icons.Symbols.Category" @ref=CatName />
-    <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat />
-    <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Symbols.Category" Multiline="true"
-    @ref=CatDescription />
-    <CipherMask @ref=CatMask />
-    <CipherProcesses Icon="@Icons.Arrows.Squared.Input" Label="@Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses))" @ref=InProcs />
-    <CipherProcesses Icon="@Icons.Arrows.Squared.Output" Label="@Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses))" @ref=OutProcs/>
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (SetMode != FormMode.Create)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                <CipherCategoryDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="CatId" ChosenCategory="@ChosenObject" />
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <Buttons>
+                @if (SetMode == FormMode.ReadOnly)
+                {
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateCategory.Href}?Id={ChosenObject?.Id}")" />
+                }
+            </Buttons>
+            <ChildContent>
+                <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Name))" Icon="@Icons.Symbols.Category" @ref=CatName 
+                Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name"/>
+                <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat
+                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@ChosenObject?.Parent" />
+                <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Symbols.Category" Multiline="true"
+                @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
+                <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
+                <CipherProcesses Icon="@Icons.Arrows.Squared.Input" Label="@Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses))" @ref=InProcs
+                                 Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
+                <CipherProcesses Icon="@Icons.Arrows.Squared.Output" Label="@Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses))" @ref=OutProcs
+                                 Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
+
+            </ChildContent>
+        </CipherComponentCard>
+        <CipherCategoryProperties @ref=CatProperties ChosenProperties="@(ChosenObject?.Properties ?? new List<CategoryProperty>())" />
+    </ChildContent>
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Define the usage of this object-card
+    /// </summary>
+    [Parameter]
+    public FormMode SetMode { get; set; } = FormMode.Create;
+
+    /// <summary>
+    /// Chosen category within the card
+    /// </summary>
+    [Parameter]
+    public Category? ChosenObject { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing the category.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> ChangeObject { get; set; }
+
+    private CipherCategoryDropDown CatId = new();
     private CipherCategoryDropDown ParentCat = new();
     private CipherAutoComplete CatName = new();
     private CipherAutoComplete CatDescription = new();
     private CipherMask CatMask = new();
     private CipherProcesses InProcs = new();
     private CipherProcesses OutProcs = new();
+    private CipherCategoryProperties CatProperties = new();
+
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי הקטגוריה";
+
+        // DON'T DELETE - it maked the form refresh with details from url
+        if (ChosenObject != null)
+        {
+            StateHasChanged();
+        }
+    }
+
+    public void Change()
+    {
+        ChosenObject = CatId.ChosenCategory;
+        ChangeObject.InvokeAsync();
+        StateHasChanged();
+    }
 
     public CategoryRequest Value()
     {
@@ -27,6 +92,7 @@
         cat.Description = CatDescription.Check() ? CatDescription.Value : "";
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
+        cat.Properties = CatProperties.ChosenProperties;
 
         string cat_mask = CatMask.GetValue();
         if (cat_mask != "")

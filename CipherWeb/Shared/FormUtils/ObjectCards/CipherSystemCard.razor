@@ -1,29 +1,54 @@
 ﻿@inherits CipherComponentCard
 
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (SetMode != FormMode.Create)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                <CipherLocation Icon="@Icons.Cipher.Location" Change="Change" @ref="SysId" ChosenSystem="@ChosenObject" />
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <Buttons>
+
+                @if (SetMode == FormMode.ReadOnly)
+                {
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenObject?.Id}")" />
+                }
+            </Buttons>
+            <ChildContent>
+                <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" />
+                <CipherComments @ref="SysDescription" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))"
+                                Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" ChosenSystem="@ChosenObject?.Parent" />
+                <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+            </ChildContent>
+        </CipherComponentCard>
+    </ChildContent>
+</CipherComponentCard>
+
 @code {
     /// <summary>
-    /// Is system card used for defining new system or not?
+    /// Define the usage of this object-card
     /// </summary>
     [Parameter]
-    public bool NewSystem { get; set; } = false;
-
-    /// <summary>
-    /// Are attributes read-only
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; } = false;
+    public FormMode SetMode { get; set; } = FormMode.Create;
 
     /// <summary>
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public StorageSystem? ChosenSystem { get; set; }
+    public StorageSystem? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the system.
     /// </summary>
     [Parameter]
-    public EventCallback<object> ChangeSystem { get; set; }
+    public EventCallback<object> ChangeObject { get; set; }
 
     private CipherLocation SysId = new();
     private CipherAutoComplete SysName = new();
@@ -33,20 +58,19 @@
 
     protected override void OnInitialized()
     {
+        Title ??= "פרטי המערכת";
+
         // DON'T DELETE - it maked the form refresh with details from url
-        if (ChosenSystem != null)
+        if (ChosenObject != null)
         {
             StateHasChanged();
         }
-
-        Title ??= "פרטי המערכת";
     }
 
     public void Change()
     {
-        ChosenSystem = SysId.ChosenSystem;
-
-        ChangeSystem.InvokeAsync();
+        ChosenObject = SysId.ChosenSystem;
+        ChangeObject.InvokeAsync();
         StateHasChanged();
     }
 
@@ -55,59 +79,10 @@
         SystemRequest sys = SystemRequest.Empty();
 
         sys.Name = SysName.Check() ? SysName.Value : string.Empty;
-        sys.Description = SysDescription.Value();
+        sys.Description = SysDescription.GetValue();
         sys.ParentId = SysParent.ChosenSystem?.Id;
         sys.UnitId = SysUnit.ChosenUnit?.Id;
 
         return sys;
     }
-
-    /// <summary>
-    /// Outside Value-function, since it can be null within VesselRequest, but you cannot pass the request if there is an error.
-    /// </summary>
-    /// <returns></returns>
-    public Tuple<bool, string> CheckName()
-    {
-        bool ValidName = SysName.Check();
-        return new(ValidName, Vessel.Translate(nameof(CachedData.VesselExample.Name)));
-    }
 }
-
-<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <HeaderContent>
-        @if (!NewSystem)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherLocation Icon="" Change="Change" @ref="SysId" ChosenSystem="@ChosenSystem"/>
-            </RadzenStack>
-        }
-    </HeaderContent>
-    <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-
-                @if (!NewSystem)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenSystem != null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenSystem?.Id}")" />
-                }
-            </Buttons>
-            <ChildContent>
-
-                @if (NewSystem && ChosenSystem != null)
-                {
-                    <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                        <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Id))" Icon="@Icons.Cipher.Id"
-                                            Value="@ChosenSystem?.Id" Disabled="true" />
-                    </RadzenStack>
-                }
-                <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))"
-                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenSystem?.Name" Disabled="@ReadOnly" />
-                <CipherComments @ref="SysDescription" WithCard="false" Title="" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))"
-                                Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenSystem?.Description" Disabled="@ReadOnly" />
-                <CipherLocation @ref="SysParent" Disabled="@ReadOnly" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" ChosenSystem="@ChosenSystem?.Parent" />
-                <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenSystem?.Unit" Disabled="@ReadOnly" />
-            </ChildContent>
-        </CipherComponentCard>
-    </ChildContent>
-</CipherComponentCard>

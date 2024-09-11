@@ -8,7 +8,7 @@
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherLocation Label="מיקום חדש" @ref=FinalLocation />
         <CipherPackagesPicking @ref="RelocatedPacks" />
-        <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
+        <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -96,7 +96,7 @@
                     timestamp: FormInfo.GetDateTime(),
                     eventType: 24,
                     actions: RelocatedPacks.SelectedPackages.Select(x => x.Request()).ToList(),
-                    comments: EventComments.Value()
+                    comments: EventComments.GetValue()
                 );
 
 

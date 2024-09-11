@@ -9,7 +9,7 @@
         <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Arrows.Squared.Output" @ref=AcceptingPack />
         <CipherAmount Label="מסה מועברת" @ref=DeltaM />
         <CipherProcess @ref=EventProc />
-        <CipherComments @ref="EventComments" WithCard="false" Title="" Width="300px" />
+        <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -124,7 +124,7 @@
                     eventType: 23,
                     processId: EventProc.ChosenProcess?.Id,
                     actions: new List<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
-                    comments: EventComments.Value()
+                    comments: EventComments.GetValue()
                 );
     }
 

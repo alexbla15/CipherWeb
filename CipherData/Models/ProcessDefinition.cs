@@ -97,7 +97,7 @@ namespace CipherData.Models
                     id: id,
                     name: proc_name,
                     description: proc_name,
-                    steps: new List<ProcessStepDefinition>()
+                    steps: new List<ProcessStepDefinition>() { ProcessStepDefinition.Random()}
                 );
         }
 

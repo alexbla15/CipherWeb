@@ -42,7 +42,6 @@
     private List<Parameter> set_params = new List<Parameter>() { };
     private Parameter old_param = new Parameter();
 
-    private bool ShowHelpText = true;
     int components = 0;
 
     protected override async void OnInitialized()
@@ -86,7 +85,6 @@
             StateHasChanged();
 
             components = set_params.Count;
-            ShowHelpText = false;
 
             await CustomDataGrid.RefreshDataAsync();
         }
@@ -106,11 +104,6 @@
         components --;
 
         await CustomDataGrid.RefreshDataAsync();
-
-        if (set_params.Count() == 0)
-        {
-            ShowHelpText = true;
-        }
     }
 
     /// <summary>
@@ -124,8 +117,6 @@
         CustomDataGrid.Data = set_params;
 
         await CustomDataGrid.RefreshDataAsync();
-
-        ShowHelpText = true;
     }
 }
 
@@ -136,11 +127,11 @@
     </Buttons>
 
     <ChildContent>
-        @if (ShowHelpText)
+        @if (set_params.Count() == 0)
         {
-            <CipherText Text="@HelpText"></CipherText>
+            <CipherText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="!components.Equals(0)">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="set_params.Count() != 0">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="Parameter" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="param">

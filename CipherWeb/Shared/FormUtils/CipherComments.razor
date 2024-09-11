@@ -1,18 +1,6 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherAutoComplete
 
 @code {
-    /// <summary>
-    /// Is the component disabled.
-    /// </summary>
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    /// <summary>
-    /// Width of card containing the comments component.
-    /// </summary>
-    [Parameter]
-    public string CardWidth { get; set; } = "100%";
-
     /// <summary>
     /// Value of component.
     /// </summary>
@@ -20,36 +8,11 @@
     public string Comments { get; set; } = string.Empty;
 
     /// <summary>
-    /// Placeholder of the comments' text box.
-    /// </summary>
-    [Parameter]
-    public string? Placeholder { get; set; } = "הערות";
-
-    /// <summary>
-    /// Label of the comments' text box.
-    /// </summary>
-    [Parameter]
-    public string? Label { get; set; } = "הערות";
-
-    /// <summary>
     /// Background color of the text box containing the comments.
     /// </summary>
     [Parameter]
     public string TextBoxBackgroundColor { get; set; } = "white";
 
-    /// <summary>
-    /// Icon of component.
-    /// </summary>
-    [Parameter]
-    public string Icon { get; set; } = Icons.Communication.Chat.Comment;
-
-    /// <summary>
-    /// Are comments required?
-    /// </summary>
-    [Parameter]
-    public bool Required { get; set; } = true;
-
-    private CipherComponentCard Card;
     private CipherAutoComplete component = new();
 
     /// <summary>
@@ -61,21 +24,18 @@
         return $@"
             background-color: {TextBoxBackgroundColor};
             align-content: center;
-            max-width: {Card.MaxWidth};
             width: {Width};
-            float: {Card.Float};
             min-height: 52px";
     }
 
     protected override void OnInitialized()
     {
-        Title ??= "הערות";
-
-        CardWidth = (WithCard) ? CardWidth : "";
+        Placeholder ??= "הערות";
         Width ??= "300px";
+        Icon ??= Icons.Communication.Chat.Comment;
     }
 
-    public string Value()
+    public string GetValue()
     {
         if (Check())
         {
@@ -86,14 +46,7 @@
             return string.Empty;
         }
     }
-
-    public bool Check()
-    {
-        return component.Check();
-    }
 }
 
-<CipherComponentCard Title="@Title" @ref=Card Width="@CardWidth" WithCard="@WithCard">
-    <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Disabled="@Disabled"
-                        Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" />
-</CipherComponentCard>
+<CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Disabled="@Disabled"
+                    Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" Placeholder="@Placeholder"/>

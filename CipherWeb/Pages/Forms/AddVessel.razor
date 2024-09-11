@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 
 <ResourceForm Title="@NavLink.Name">
-    <CipherVesselCard @ref=VesDetails SetMode="@FormMode.Create" Title="" ChosenVessel="@SetVessel" />
+    <CipherVesselCard @ref=VesDetails SetMode="@FormMode.Create" Title="" ChosenObject="@SetVessel" />
     <CipherJsonCheck JsonValue="@JsonRequest"/>
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
 </ResourceForm>

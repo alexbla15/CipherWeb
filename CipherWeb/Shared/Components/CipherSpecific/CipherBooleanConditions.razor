@@ -54,9 +54,6 @@
 
     private RadzenDataGrid<BooleanCondition> ConditionsDataGrid = new();
 
-    private bool ShowHelpText = true;
-    private int conditions = 0;
-
     protected override void OnInitialized()
     {
         Title ??= "תנאים נבחרים";
@@ -72,10 +69,6 @@
 
         StateHasChanged();
 
-        conditions = ChosenConditions.Count;
-
-        ShowHelpText = false;
-
         await ConditionsDataGrid.RefreshDataAsync();
     }
 
@@ -89,14 +82,7 @@
 
         ConditionsDataGrid.Data = ChosenConditions;
 
-        conditions--;
-
         await ConditionsDataGrid.RefreshDataAsync();
-
-        if (ChosenConditions.Count() == 0)
-        {
-            ShowHelpText = true;
-        }
 
         StateHasChanged();
     }
@@ -108,12 +94,9 @@
     async Task DeleteAllConditions()
     {
         ChosenConditions.Clear();
-        conditions = 0;
         ConditionsDataGrid.Data = ChosenConditions;
 
         await ConditionsDataGrid.RefreshDataAsync();
-
-        ShowHelpText = true;
     }
 
     public void Save()
@@ -129,11 +112,11 @@
         <CipherButton Icon="@Icons.Documents.Edit.Save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
     </Buttons>
     <ChildContent>
-        @if (ShowHelpText)
+        @if (ChosenConditions.Count() == 0)
         {
-            <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+            <CipherText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="ConditionsDataGrid" Data="@ChosenConditions" TItem="BooleanCondition" AllowColumnResize="true" Visible="!conditions.Equals(0)">
+        <RadzenDataGrid @ref="ConditionsDataGrid" Data="@ChosenConditions" TItem="BooleanCondition" AllowColumnResize="true" Visible="@(ChosenConditions.Count() != 0)">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="BooleanCondition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="cond">

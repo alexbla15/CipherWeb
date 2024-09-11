@@ -55,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= "כלי";
+        Label ??= Vessel.Translate(nameof(CachedData.VesselExample.Name));
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 

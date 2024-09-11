@@ -6,7 +6,7 @@
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
                 <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
-                                      Change="@Change" @ref="UnitId" ChosenUnit="@ChosenUnit"/>
+                                      Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject"/>
             </RadzenStack>
         }
     </HeaderContent>
@@ -16,16 +16,16 @@
                 @if (SetMode == FormMode.ReadOnly)
                 {
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenUnit is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenUnit?.Id}")" />
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Name))" Icon="@Icons.Cipher.Unit"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))" Value="@ChosenUnit?.Name" @ref=UnitName/>
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
                 <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Description))" Icon="@Icons.Documents.Page.Description"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))" Value="@ChosenUnit?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenUnit is null))"
-                                    ChosenUnit="@ChosenUnit?.Parent" @ref=UnitParent />
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
+                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />
             </ChildContent>
         </CipherComponentCard>
     </ChildContent>
@@ -42,13 +42,13 @@
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public Unit? ChosenUnit { get; set; }
+    public Unit? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the vessel.
     /// </summary>
     [Parameter]
-    public EventCallback<object> ChangeUnit { get; set; }
+    public EventCallback<object> ChangeObject { get; set; }
 
     /// <summary>
     /// Error response for fetching data
@@ -66,7 +66,7 @@
         Title ??= "פרטי היחידה";
 
         // DON'T DELETE - it maked the form refresh with details from url
-        if (ChosenUnit != null)
+        if (ChosenObject != null)
         {
             StateHasChanged();
         }
@@ -74,9 +74,9 @@
 
     public void Change()
     {
-        ChosenUnit = UnitId.ChosenUnit;
+        ChosenObject = UnitId.ChosenUnit;
 
-        ChangeUnit.InvokeAsync();
+        ChangeObject.InvokeAsync();
 
         StateHasChanged();
     }

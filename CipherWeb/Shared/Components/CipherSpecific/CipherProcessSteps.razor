@@ -37,9 +37,6 @@
     private RadzenDataGrid<ProcessStepDefinition> StepsDataGrid = new();
     private CipherBooleanConditions SelectedConditions = new();
 
-    private bool ShowHelpText = true;
-    private int steps = 0;
-
     /// <summary>
     ///
     /// </summary>
@@ -47,6 +44,10 @@
 
     protected override void OnInitialized()
     {
+        if (ChosenSteps == null)
+        {
+            ChosenSteps = new List<ProcessStepDefinition>();
+        }
     }
 
     /// <summary>
@@ -58,10 +59,6 @@
         ChosenSteps.Add(ProcessStepDefinition.Empty());
 
         StateHasChanged();
-
-        steps = ChosenSteps.Count;
-
-        ShowHelpText = false;
 
         await StepsDataGrid.RefreshDataAsync();
     }
@@ -76,14 +73,7 @@
 
         StepsDataGrid.Data = ChosenSteps;
 
-        steps--;
-
         await StepsDataGrid.RefreshDataAsync();
-
-        if (ChosenSteps.Count() == 0)
-        {
-            ShowHelpText = true;
-        }
 
         StateHasChanged();
     }
@@ -95,12 +85,9 @@
     async Task DeleteAllSteps()
     {
         ChosenSteps.Clear();
-        steps = 0;
         StepsDataGrid.Data = ChosenSteps;
 
         await StepsDataGrid.RefreshDataAsync();
-
-        ShowHelpText = true;
     }
 }
 
@@ -113,11 +100,11 @@
                     <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAllSteps())" HelpText="@DeleteAllText" />
                 </Buttons>
                 <ChildContent>
-                    @if (ShowHelpText)
+                    @if (ChosenSteps.Count() == 0)
                     {
-                        <CipherText Text="@HelpText" Visible="@ShowHelpText" />
+                        <CipherText Text="@HelpText" />
                     }
-                    <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" TItem="ProcessStepDefinition" AllowColumnResize="true" Visible="!steps.Equals(0)">
+                    <RadzenDataGrid @ref="StepsDataGrid" Data="ChosenSteps" TItem="ProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
                         <Columns>
                             <RadzenDataGridColumn Width="10%" TItem="ProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                                 <Template Context="step">

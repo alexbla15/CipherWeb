@@ -1,0 +1,245 @@
+﻿@inject NavigationManager Navigation
+
+@typeparam Cipher_TItem
+
+<ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
+    @if (typeof(Cipher_TItem) == typeof(Unit))
+    {
+        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Unit)" 
+            SetMode="FormMode.Update" />
+    }
+    else if (typeof(Cipher_TItem) == typeof(Category))
+    {
+        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Category)" SetMode="FormMode.Update" />
+    }
+    <CipherJsonCheck JsonValue="@JsonRequest" />
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)"/>
+</ResourceForm>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink? NavLink { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Cipher_TItem? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Cipher_TItem? ChosenObject { get; set; }
+
+    private CipherSubmit submission = new();
+    private ResourceForm ResourcePage = new();
+
+    private UnitRequest unitRequest = UnitRequest.Empty();
+    private CategoryRequest catRequest = CategoryRequest.Empty();
+
+    private CipherUnitCard unitCard = new();
+    private CipherVesselCard vesCard = new();
+    private CipherSystemCard sysCard = new();
+    private CipherPackageCard packCard = new();
+    private CipherProcessCard procCard = new();
+    private CipherCategoryCard catCard = new();
+
+
+    /// <summary>
+    /// Chosen objects mapping dictionary
+    /// </summary>
+    private Dictionary<Type, Func<object?>> chosenObjectMap;
+
+    private Cipher_TItem? OriginalObject;
+
+    protected override void OnInitialized()
+    {
+        SetChosenObjMap();
+
+        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Cipher_TItem>(Navigation);
+        OriginalObject = ChosenObject;
+    }
+
+
+    public void SetChosenObjMap()
+    {
+        chosenObjectMap = new Dictionary<Type, Func<object?>>
+        {
+            { typeof(Unit), () => unitCard.ChosenObject },
+            { typeof(Vessel), () => vesCard.ChosenObject },
+            { typeof(StorageSystem), () => sysCard.ChosenObject },
+            { typeof(Package), () => packCard.ChosenObject },
+            { typeof(ProcessDefinition), () => procCard.ChosenObject },
+            { typeof(Category), () => catCard.ChosenObject },
+        };
+    }
+
+    /// <summary>
+    /// Retrieve the object's ID for URL changes.
+    /// </summary>
+    private string? GetObjectId(object? obj)
+    {
+        return (obj as Resource)?.Id;
+    }
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenObject = GetChosenObject();
+        OriginalObject = ChosenObject;
+        ResourcePage.ChangeUrl(Navigation, NavLink, GetObjectId(ChosenObject));
+    }
+
+    /// <summary>
+    /// Get the chosen object based on its type.
+    /// </summary>
+    private Cipher_TItem? GetChosenObject()
+    {
+        if (chosenObjectMap.TryGetValue(typeof(Cipher_TItem), out var chosenObjectFunc))
+        {
+            return (Cipher_TItem?)chosenObjectFunc?.Invoke();
+        }
+        return default;
+    }
+
+    /// <summary>
+    /// Fill all needed details for request based on the form details.
+    /// </summary>
+    public void Submit()
+    {
+        Tuple<bool, string> CheckResult = new(Valid, ErrorMessage);
+        if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            unitRequest = unitCard.Value();
+            CheckResult = unitRequest.Check();
+
+            JsonRequest = unitRequest.ToJson();
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            catRequest = catCard.Value();
+            CheckResult = catRequest.Check();
+            JsonRequest = catRequest.ToJson();
+        }
+
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
+
+        SendRequest();
+    }
+
+    public void FoundDifferenct(bool different)
+    {
+        if (!different)
+        {
+            Valid = false;
+            ErrorMessage = "לא השתנו פרמטרים.";
+        }
+    }
+
+    /// <summary>
+    /// Check if unit attributes were changed in the form
+    /// </summary>
+    /// <returns></returns>
+    public bool FoundUnitChanges()
+    {
+        bool different = unitRequest.Compare(OriginalObject as Unit);
+        FoundDifferenct(different);
+        return different;
+    }
+
+    /// <summary>
+    /// Check if category attributes were changed in the form
+    /// </summary>
+    /// <returns></returns>
+    public bool FoundCategoryChanges()
+    {
+        bool different = catRequest.Compare(OriginalObject as Category);
+        FoundDifferenct(different);
+        return different;
+    }
+
+    public Tuple<Unit, ErrorResponse>? SendUnitRequest(Unit ChosenResource)
+    {
+        unitRequest = ChosenResource.Request();
+        return UnitsRequests.UpdateUnit(ChosenResource.Id, unitRequest);
+    }
+
+    public Tuple<Category, ErrorResponse>? SendCategoryRequest(Category ChosenResource)
+    {
+        catRequest = ChosenResource.Request();
+        return CategoriesRequests.UpdateCategory(ChosenResource.Id, catRequest);
+    }
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (Valid)
+        {
+
+            Cipher_TItem? ResultObject = GetChosenObject();
+            if (ResultObject is null)
+            {
+                Valid = false;
+                ErrorMessage = "לא נבחר אובייקט לעדכון.";
+            }
+            else
+            {
+                if (typeof(Cipher_TItem) == typeof(Unit))
+                {
+                    if (FoundUnitChanges())
+                    {
+                        var requestResult = SendUnitRequest(ResultObject as Unit);
+                        (Result, Error) = ((Cipher_TItem)(object)requestResult.Item1, requestResult.Item2);
+                    }
+                }
+                else if (typeof(Cipher_TItem) == typeof(Category))
+                {
+                    if (FoundCategoryChanges())
+                    {
+                        var requestResult = SendCategoryRequest(ResultObject as Category);
+                        (Result, Error) = ((Cipher_TItem)(object)requestResult.Item1, requestResult.Item2);
+                    }
+                }
+                if (Error != ErrorResponse.Success)
+                {
+                    Valid = false;
+                    ErrorMessage = Error.Message;
+                }
+            }
+        }
+
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
+    }
+}

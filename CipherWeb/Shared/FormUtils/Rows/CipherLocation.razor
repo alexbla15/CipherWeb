@@ -85,7 +85,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= "מערכת";
+        Label ??= StorageSystem.Translate(nameof(CachedData.SystemExample.Name));
         Icon ??= Icons.Cipher.Location;
 
         (AvailableSystems, Error) = CachedData.AllSystems;

@@ -5,8 +5,7 @@
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherVesselDropDown Label="@Vessel.Translate(nameof(CachedData.VesselExample.Id))" Icon="@Icons.Cipher.Id"
-                                      Change="@Change" @ref="VesId" ChosenVessel="@ChosenVessel"/>
+                <CipherVesselDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="VesId" ChosenVessel="@ChosenObject"/>
             </RadzenStack>
         }
     </HeaderContent>
@@ -16,19 +15,19 @@
                 @if (SetMode == FormMode.ReadOnly)
                 {
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenVessel is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenVessel?.Id}")" />
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" Value="@ChosenVessel?.Name" @ref=VesName />
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
                 <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" Value="@ChosenVessel?.Type" @ref=VesType />
-                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenVessel is null))" ChosenSystem="@ChosenVessel?.System" @ref=VesSys />
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
+                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenSystem="@ChosenObject?.System" @ref=VesSys />
 
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherPackagesPicking SelectedPackages="@ChosenVessel?.ContainingPackages" />
+                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages" />
                 }
             </ChildContent>
         </CipherComponentCard>
@@ -43,28 +42,16 @@
     public FormMode SetMode { get; set; } = FormMode.Create;
 
     /// <summary>
-    /// Are attributes read-only
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; } = false;
-
-    /// <summary>
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public Vessel ChosenVessel { get; set; }
+    public Vessel? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the vessel.
     /// </summary>
     [Parameter]
-    public EventCallback<object> ChangeVessel { get; set; }
-
-    /// <summary>
-    /// Error response for fetching data
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+    public EventCallback<object> ChangeObject { get; set; }
 
     private CipherVesselDropDown VesId = new();
     private CipherAutoComplete VesName = new();
@@ -76,7 +63,7 @@
         Title ??= "פרטי הכלי";
 
         // DON'T DELETE - it maked the form refresh with details from url
-        if (ChosenVessel != null)
+        if (ChosenObject != null)
         {
             StateHasChanged();
         }
@@ -84,10 +71,8 @@
 
     public void Change()
     {
-        ChosenVessel = VesId.ChosenVessel;
-
-        ChangeVessel.InvokeAsync();
-
+        ChosenObject = VesId.ChosenVessel;
+        ChangeObject.InvokeAsync();
         StateHasChanged();
     }
 

@@ -15,7 +15,7 @@
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId />
-        <CipherComments @ref=PackDescription WithCard="false" Title="" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
+        <CipherComments @ref=PackDescription Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
                         Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenPackage?.Description" />
         <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" />
         <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.Scale" />
@@ -39,7 +39,7 @@
     </CipherComponentCard>
 
     <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherComments @ref="EventComments" Width="300px" WithCard="false" Title="" />
+        <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
 
     <CipherJsonCheck JsonValue="@UpdatePackJsonRequest"/>
@@ -238,11 +238,11 @@
 
             if (PackDescription.Check())
             {
-                NewPack.Description = PackDescription.Value();
+                NewPack.Description = PackDescription.GetValue();
                 RequestedPackUpdate.PackageId = NewPack.Id;
                 RequestedPackUpdate.DestinationProcessesIds = NewPack.DestinationProcesses?.Select(x => x.Id).ToList();
                 RequestedPackUpdate.PackageDescription = NewPack.Description;
-                RequestedPackUpdate.ActionComments = EventComments.Value();
+                RequestedPackUpdate.ActionComments = EventComments.GetValue();
 
                 (Valid, ErrorMessage) = RequestedPackUpdate.Check();
             }
@@ -272,7 +272,7 @@
             UpdatePackEvent.EventType = 26;
             UpdatePackEvent.Worker = FormInfo.GetWorker();
             UpdatePackEvent.Timestamp = FormInfo.GetDateTime();
-            UpdatePackEvent.Comments = EventComments.Value();
+            UpdatePackEvent.Comments = EventComments.GetValue();
             UpdatePackEvent.Actions.Add(NewPack.Request());
 
             Tuple<bool,string> CheckResult = UpdatePackEvent.Check();
@@ -329,7 +329,7 @@
             different |= !OriginalPack.DestinationProcesses.Select(x => x.Id).ToHashSet().SetEquals(NewPack.DestinationProcesses.Select(x => x.Id).ToList());
 
         }
-        else if (((OriginalPack.DestinationProcesses != null) && (OriginalPack.DestinationProcesses == null)) || ((OriginalPack.DestinationProcesses == null) && (OriginalPack.DestinationProcesses != null)))
+        else if (((OriginalPack.DestinationProcesses != null) && (NewPack.DestinationProcesses == null)) || ((OriginalPack.DestinationProcesses == null) && (NewPack.DestinationProcesses != null)))
         {
             different = true;
         }

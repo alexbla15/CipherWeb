@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid TValue="ProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
+    <RadzenDropDownDataGrid TValue="ProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
         Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(CachedData.ProcessDefinitionExample.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Name))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name)))" />
@@ -31,16 +31,22 @@
     /// Chosen process among AllProcesses
     /// </summary>
     [Parameter]
-    public ProcessDefinition ChosenProcess { get; set; }
+    public ProcessDefinition? ChosenProcess { get; set; }
 
     /// <summary>
     /// Data fetching error
     /// </summary>
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
+    /// <summary>
+    /// Action function that occurs upon change of set-value.
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
     protected override void OnInitialized()
     {
-        Label ??= "תהליך";
+        Label ??= ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Id));
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
         MinWidth ??= "300px";

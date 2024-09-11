@@ -144,10 +144,10 @@
     {
         string? href = args.Column.Title switch
         {
-            string title when title.Contains("מערכת") || title.Contains("מבנה") => CipherNavLinks.LocationSearch.Href,
+            string title when title.Contains("מערכת") || title.Contains("מבנה") => CipherNavLinks.SystemSearch.Href,
             string title when title.Contains("כלי") => CipherNavLinks.VesselSearch.Href,
             string title when title.Contains("תעודה") || title.Contains("תעודות") => CipherNavLinks.PackageSearch.Href,
-            string title when title.Contains("תחום") => CipherNavLinks.LocationSearch.Href,
+            string title when title.Contains("תחום") => CipherNavLinks.SystemSearch.Href,
             _ => null // or handle the default case if needed
         };
 

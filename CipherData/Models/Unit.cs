@@ -126,15 +126,12 @@ namespace CipherData.Models
             return Translate(typeof(Unit), searchedAttribute);
         }
 
-
         // API-RELATED FUNCTIONS
-
 
         /// <summary>
         /// Get details about a single unit given unit ID
         /// </summary>
         /// <param name="id">unit ID</param>
-        /// <returns></returns>
         public static Tuple<Unit, ErrorResponse> Get(string id)
         {
             return UnitsRequests.GetUnit(id);
