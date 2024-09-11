@@ -147,8 +147,19 @@ namespace CipherData.Models
 
             if ((Properties != null) && (OtherObject?.Properties != null))
             {
+                // check for same property names
                 different |= !Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList());
-
+                // check for differences
+                if (!different)
+                {
+                    foreach (CategoryProperty prop in Properties)
+                    {
+                        CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
+                        different |= prop.Description != other_prop.Description;
+                        different |= prop.PropertyType != other_prop.PropertyType;
+                        different |= prop.DefaultValue != other_prop.DefaultValue;
+                    }
+                }
             }
             else if (((Properties != null) && (OtherObject?.Properties == null)) || ((Properties == null) && (OtherObject?.Properties != null)))
             {

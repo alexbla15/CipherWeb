@@ -1,6 +1,7 @@
 ﻿using static CipherData.Models.CreateEvent;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System;
 
 namespace CipherData.Models
 {
@@ -54,6 +55,23 @@ namespace CipherData.Models
             result = (!string.IsNullOrEmpty(SystemId)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.System))); // required
 
             return result;
+        }
+
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(Vessel? OtherObject)
+        {
+
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Type != OtherObject?.Type;
+            different |= SystemId != OtherObject?.System?.Id;
+
+            return different;
         }
 
         /// <summary>

@@ -41,7 +41,7 @@
     /// Allowed regex pattern for value. Defaulted to only letters / numbers / space / period
     /// </summary>
     [Parameter]
-    public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n]+$";
+    public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n?]+$";
 
     private string _value = string.Empty;
 
@@ -246,7 +246,7 @@
 }
 
 <RadzenTemplateForm TItem="Model" Data=@model Style="display:flex">
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center">
+    <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" Style="width:100%">
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {

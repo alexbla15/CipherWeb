@@ -3,17 +3,9 @@
 @typeparam Cipher_TItem
 
 <ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
-    @if (typeof(Cipher_TItem) == typeof(Unit))
-    {
-        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Unit)" 
-            SetMode="FormMode.Update" />
-    }
-    else if (typeof(Cipher_TItem) == typeof(Category))
-    {
-        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Category)" SetMode="FormMode.Update" />
-    }
+    @RenderChosenCard()
     <CipherJsonCheck JsonValue="@JsonRequest" />
-    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)"/>
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenObject != null)" />
 </ResourceForm>
 
 @code {
@@ -64,6 +56,7 @@
 
     private UnitRequest unitRequest = UnitRequest.Empty();
     private CategoryRequest catRequest = CategoryRequest.Empty();
+    private VesselRequest vesRequest = VesselRequest.Empty();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -76,39 +69,43 @@
     /// <summary>
     /// Chosen objects mapping dictionary
     /// </summary>
-    private Dictionary<Type, Func<object?>> chosenObjectMap;
+    private Dictionary<Type, Func<object?>>? chosenObjectMap;
 
     private Cipher_TItem? OriginalObject;
 
     protected override void OnInitialized()
     {
         SetChosenObjMap();
-
         (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Cipher_TItem>(Navigation);
         OriginalObject = ChosenObject;
     }
 
-
     public void SetChosenObjMap()
     {
         chosenObjectMap = new Dictionary<Type, Func<object?>>
-        {
+            {
             { typeof(Unit), () => unitCard.ChosenObject },
             { typeof(Vessel), () => vesCard.ChosenObject },
             { typeof(StorageSystem), () => sysCard.ChosenObject },
             { typeof(Package), () => packCard.ChosenObject },
             { typeof(ProcessDefinition), () => procCard.ChosenObject },
             { typeof(Category), () => catCard.ChosenObject },
-        };
+            };
+    }
+
+    /// <summary>
+    /// Get the chosen object based on its type.
+    /// </summary>
+    private Cipher_TItem? GetChosenObject()
+    {
+        return chosenObjectMap.TryGetValue(typeof(Cipher_TItem), out var chosenObjectFunc) ?
+        (Cipher_TItem?)chosenObjectFunc?.Invoke() : default;
     }
 
     /// <summary>
     /// Retrieve the object's ID for URL changes.
     /// </summary>
-    private string? GetObjectId(object? obj)
-    {
-        return (obj as Resource)?.Id;
-    }
+    private string? GetObjectId(object? obj) => (obj as Resource)?.Id;
 
     /// <summary>
     /// Changes URL to include the chosen-package id, upon searching it within the page.
@@ -121,125 +118,165 @@
     }
 
     /// <summary>
-    /// Get the chosen object based on its type.
+    /// Method to fill in the request and check it before submission.
     /// </summary>
-    private Cipher_TItem? GetChosenObject()
+    /// <returns></returns>
+    private Tuple<bool, string> HandleSubmissionRequest()
     {
-        if (chosenObjectMap.TryGetValue(typeof(Cipher_TItem), out var chosenObjectFunc))
-        {
-            return (Cipher_TItem?)chosenObjectFunc?.Invoke();
-        }
-        return default;
-    }
-
-    /// <summary>
-    /// Fill all needed details for request based on the form details.
-    /// </summary>
-    public void Submit()
-    {
-        Tuple<bool, string> CheckResult = new(Valid, ErrorMessage);
         if (typeof(Cipher_TItem) == typeof(Unit))
         {
             unitRequest = unitCard.Value();
-            CheckResult = unitRequest.Check();
-
-            JsonRequest = unitRequest.ToJson();
+            return unitRequest.Check();
         }
         else if (typeof(Cipher_TItem) == typeof(Category))
         {
             catRequest = catCard.Value();
-            CheckResult = catRequest.Check();
-            JsonRequest = catRequest.ToJson();
+            return catRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            vesRequest = vesCard.Value();
+            return vesRequest.Check();
         }
 
-        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-
-        SendRequest();
+        return new Tuple<bool, string>(true, string.Empty);
     }
 
-    public void FoundDifferenct(bool different)
+    /// <summary>
+    /// Method for submitting checked request, or showing errors within the checking process.
+    /// </summary>
+    public void Submit()
     {
-        if (!different)
+        Valid = true;
+        var requestCheck = HandleSubmissionRequest();
+
+        if (!requestCheck.Item1)
         {
             Valid = false;
-            ErrorMessage = "לא השתנו פרמטרים.";
+            ErrorMessage = $"שגיאה בטופס. שגיאה ב{requestCheck.Item2}.";
         }
+
+        SendRequest();
+        UpdateSubmissionSummary();
     }
 
-    /// <summary>
-    /// Check if unit attributes were changed in the form
-    /// </summary>
-    /// <returns></returns>
-    public bool FoundUnitChanges()
-    {
-        bool different = unitRequest.Compare(OriginalObject as Unit);
-        FoundDifferenct(different);
-        return different;
-    }
-
-    /// <summary>
-    /// Check if category attributes were changed in the form
-    /// </summary>
-    /// <returns></returns>
-    public bool FoundCategoryChanges()
-    {
-        bool different = catRequest.Compare(OriginalObject as Category);
-        FoundDifferenct(different);
-        return different;
-    }
-
-    public Tuple<Unit, ErrorResponse>? SendUnitRequest(Unit ChosenResource)
-    {
-        unitRequest = ChosenResource.Request();
-        return UnitsRequests.UpdateUnit(ChosenResource.Id, unitRequest);
-    }
-
-    public Tuple<Category, ErrorResponse>? SendCategoryRequest(Category ChosenResource)
-    {
-        catRequest = ChosenResource.Request();
-        return CategoriesRequests.UpdateCategory(ChosenResource.Id, catRequest);
-    }
     /// <summary>
     /// Send request to API
     /// </summary>
     public void SendRequest()
     {
-        if (Valid)
-        {
+        if (!Valid) return;
 
-            Cipher_TItem? ResultObject = GetChosenObject();
-            if (ResultObject is null)
-            {
-                Valid = false;
-                ErrorMessage = "לא נבחר אובייקט לעדכון.";
-            }
-            else
-            {
-                if (typeof(Cipher_TItem) == typeof(Unit))
-                {
-                    if (FoundUnitChanges())
-                    {
-                        var requestResult = SendUnitRequest(ResultObject as Unit);
-                        (Result, Error) = ((Cipher_TItem)(object)requestResult.Item1, requestResult.Item2);
-                    }
-                }
-                else if (typeof(Cipher_TItem) == typeof(Category))
-                {
-                    if (FoundCategoryChanges())
-                    {
-                        var requestResult = SendCategoryRequest(ResultObject as Category);
-                        (Result, Error) = ((Cipher_TItem)(object)requestResult.Item1, requestResult.Item2);
-                    }
-                }
-                if (Error != ErrorResponse.Success)
-                {
-                    Valid = false;
-                    ErrorMessage = Error.Message;
-                }
-            }
+        Cipher_TItem? ResultObject = GetChosenObject();
+
+        if (ResultObject is null)
+        {
+            Valid = false;
+            ErrorMessage = "לא נבחר אובייקט לעדכון.";
+            return;
         }
 
+        // find the appropriate type, and then check if some details were changed relatively to the original object.
+
+        bool FoundUnitChanges() => FoundChanges(unitRequest.Compare(OriginalObject as Unit));
+        bool FoundCategoryChanges() => FoundChanges(catRequest.Compare(OriginalObject as Category));
+        bool FoundVesselChanges() => FoundChanges(vesRequest.Compare(OriginalObject as Vessel));
+
+        if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            HandleRequest(() => FoundUnitChanges(), () => SendUnitRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            HandleRequest(() => FoundCategoryChanges(), () => SendCategoryRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            HandleRequest(() => FoundVesselChanges(), () => SendVesselRequest());
+        }
+
+        if (Error != ErrorResponse.Success)
+        {
+            Valid = false;
+            ErrorMessage = Error.Message;
+        }
+    }
+
+    private void UpdateSubmissionSummary()
+    {
         submission.Valid = Valid;
         submission.ErrorMessage = ErrorMessage;
     }
+
+    /// <summary>
+    /// Method to check if there were changed in the object, and then sending its request to API.
+    /// </summary>
+    /// <param name="hasChanges">method to check if the request is different from the original object</param>
+    /// <param name="sendRequest">method to send the request to the API</param>
+    private void HandleRequest(Func<bool> hasChanges, Func<Tuple<Cipher_TItem, ErrorResponse>?> sendRequest)
+    {
+        if (!hasChanges()) return;
+
+        var requestResult = sendRequest();
+        if (requestResult != null)
+        {
+            (Result, Error) = requestResult.ToValueTuple();
+        }
+    }
+
+    /// <summary>
+    /// Make form invalid if no difference was found between the original object and the request.
+    /// </summary>
+    /// <param name="different">Check result</param>
+    /// <returns></returns>
+    private bool FoundChanges(bool different)
+    {
+        if (!different)
+        {
+            Valid = false;
+            ErrorMessage = "אין שינוי בפרמטרים";
+        }
+        return different;
+    }
+
+    public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
+    {
+        JsonRequest = unitRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)UnitsRequests.UpdateUnit((OriginalObject as Unit)?.Id, unitRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
+    {
+        JsonRequest = catRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.UpdateCategory((OriginalObject as Category)?.Id, catRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
+    {
+        JsonRequest = vesRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.UpdateVessel((OriginalObject as Vessel)?.Id, vesRequest);
+    }
+
+    /// <summary>
+    /// Method to get the appropriate object-card to the selected type
+    /// </summary>
+    /// <returns></returns>
+    private RenderFragment RenderChosenCard() =>
+    @<div>
+        @if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl"
+                            ChosenObject="@(ChosenObject as Unit)" SetMode="FormMode.Update" />
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl"
+                                ChosenObject="@(ChosenObject as Category)" SetMode="FormMode.Update" />
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl"
+                                ChosenObject="@(ChosenObject as Vessel)" SetMode="FormMode.Update" />
+        }
+    </div>;
 }

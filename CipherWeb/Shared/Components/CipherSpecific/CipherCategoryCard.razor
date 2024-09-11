@@ -92,7 +92,7 @@
         cat.Description = CatDescription.Check() ? CatDescription.Value : "";
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        cat.Properties = CatProperties.ChosenProperties;
+        cat.Properties = ChosenObject?.Properties;
 
         string cat_mask = CatMask.GetValue();
         if (cat_mask != "")
