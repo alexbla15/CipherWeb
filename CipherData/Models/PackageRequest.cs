@@ -1,7 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -14,55 +11,55 @@ namespace CipherData.Models
         /// <summary>
         /// ID of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Id)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
         public string Id { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Properties)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
         public Dictionary<string,string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Vessel)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Vessel))]
         public string? VesselId { get; set; }
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_System)]
+        [HebrewTranslation(typeof(Package), nameof(Package.System))]
         public string SystemId { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_BrutMass)]
+        [HebrewTranslation(typeof(Package), nameof(Package.BrutMass))]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_NetMass)]
+        [HebrewTranslation(typeof(Package), nameof(Package.NetMass))]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Parent (Id) containing this one
         /// </summary>
-        [HebrewTranslation(Translator.Package_Parent)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Parent))]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
-        [HebrewTranslation(Translator.Package_Children)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Children))]
         public List<string>? ChildrenIds { get; set; }
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Category)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Category))]
         public string CategoryId { get; set; }
 
         /// <summary>

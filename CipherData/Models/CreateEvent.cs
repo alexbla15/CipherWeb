@@ -1,9 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Create new event
@@ -13,37 +8,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(Translator.Event_Worker)]
+        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         public string Worker { get; set; }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
-        [HebrewTranslation(Translator.Event_Type)]
+        [HebrewTranslation(typeof(Event), nameof(Event.EventType))]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
-        [HebrewTranslation(Translator.Event_ProcessId)]
+        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
         public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(Translator.Event_Comments)]
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        [HebrewTranslation(Translator.Event_Timestamp)]
+        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
         public DateTime? Timestamp { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation(Translator.Event_Actions)]
+        [HebrewTranslation(typeof(Event), nameof(Event.Packages))]
         public List<PackageRequest> Actions { get; set; }
 
         /// <summary>
@@ -99,11 +94,12 @@ namespace CipherData.Models
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new Tuple<bool, string>(true, string.Empty);
+            Tuple<bool, string> result = new(true, string.Empty);
             List<Tuple<bool, string>> actionsCheck = Actions.Select(x=>x.Check()).ToList();
 
-            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.Event_Worker); // worker name is required
-            result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // event type is required
+            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.Worker)}"]); // required
+            result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // required
+            result = (!string.IsNullOrEmpty(Comments)) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Comments))); // required
 
             if (Timestamp is null)
             {

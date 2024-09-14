@@ -10,7 +10,7 @@ namespace CipherData.Models
         /// <summary>
         /// List of all user actions found
         /// </summary>
-        [HebrewTranslation(Translator.UserActions)]
+        [HebrewTranslation(nameof(UserActions))]
         public List<UserAction> UserActions { get; set; }
 
         /// <summary>

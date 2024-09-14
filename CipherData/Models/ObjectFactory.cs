@@ -15,13 +15,13 @@
         /// <summary>
         /// Attribute to order by
         /// </summary>
-        [HebrewTranslation(Translator.OrderedItem_Attribute)]
+        [HebrewTranslation(typeof(OrderedItem), nameof(Attribute))]
         public string Attribute { get; set; }
 
         /// <summary>
         /// Desired order on the attribute
         /// </summary>
-        [HebrewTranslation(Translator.OrderedItem_Order)]
+        [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
         public Order Order { get; set; }
 
         /// <summary>
@@ -41,20 +41,20 @@
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
-        [HebrewTranslation(Translator.AggregateItem_Attribute)]
+        [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
         public string Attribute { get; set; } = string.Empty;
 
         /// <summary>
         /// New name to give to the aggregated field. 
         /// if null, name is auto generated
         /// </summary>
-        [HebrewTranslation(Translator.AggregateItem_As)]
+        [HebrewTranslation(typeof(AggregateItem), nameof(As))]
         public string? As { get; set; }
 
         /// <summary>
         /// Method to aggregate the field by
         /// </summary>
-        [HebrewTranslation(Translator.AggregateItem_Method)]
+        [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
         public Method Method { get; set; }
 
         /// <summary>
@@ -80,20 +80,20 @@
         /// Conditions to apply to get the desired objects. 
         /// All conditions must have the same target object.
         /// </summary>
-        [HebrewTranslation(Translator.ObjectFactory_Filter)]
+        [HebrewTranslation(typeof(ObjectFactory), nameof(Attribute))]
         public GroupedBooleanCondition Filter { get; set; }
 
         /// <summary>
         /// Define order to the filtered objects
         /// </summary>
-        [HebrewTranslation(Translator.ObjectFactory_OrderBy)]
+        [HebrewTranslation(typeof(ObjectFactory), nameof(OrderBy))]
         public List<OrderedItem>? OrderBy { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
-        [HebrewTranslation(Translator.ObjectFactory_GroupBy)]
+        [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
         public List<string>? GroupBy { get; set; }
 
         /// <summary>
@@ -101,7 +101,7 @@
         ///  by default returns the grouped by fields if they 
         ///  exist. If null, returns the filtered objects
         /// </summary>
-        [HebrewTranslation(Translator.ObjectFactory_Aggregate)]
+        [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
         public List<AggregateItem>? Aggregate { get; set; }
 
         /// <summary>

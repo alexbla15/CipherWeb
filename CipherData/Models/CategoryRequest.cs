@@ -1,56 +1,50 @@
-﻿using System;
-using static CipherData.Models.CreateEvent;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Create a new category or update it
     /// </summary>
     public class CategoryRequest
     {
-
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation(Translator.Category_Name)]
+        [HebrewTranslation(typeof(Category), nameof(Category.Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation(Translator.Category_Description)]
+        [HebrewTranslation(typeof(Category), nameof(Category.Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
-        [HebrewTranslation(Translator.Category_Parent)]
+        [HebrewTranslation(typeof(Category), nameof(Category.Parent))]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
-        [HebrewTranslation(Translator.Category_CreatingProcesses)]
+        [HebrewTranslation(typeof(Category), nameof(Category.CreatingProcesses))]
         public List<string> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
-        [HebrewTranslation(Translator.Category_ConsumingProcesses)]
+        [HebrewTranslation(typeof(Category), nameof(Category.ConsumingProcesses))]
         public List<string> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation(Translator.Category_IdMask)]
+        [HebrewTranslation(typeof(Category), nameof(Category.IdMask))]
         public List<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation(Translator.Category_Properties)]
+        [HebrewTranslation(typeof(Category), nameof(Category.Properties))]
         public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
@@ -155,9 +149,7 @@ namespace CipherData.Models
                     foreach (CategoryProperty prop in Properties)
                     {
                         CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
-                        different |= prop.Description != other_prop.Description;
-                        different |= prop.PropertyType != other_prop.PropertyType;
-                        different |= prop.DefaultValue != other_prop.DefaultValue;
+                        different |= prop.Compare(other_prop);
                     }
                 }
             }

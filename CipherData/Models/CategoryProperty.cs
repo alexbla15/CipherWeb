@@ -16,25 +16,25 @@
         /// <summary>
         /// Name of the property
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Name)]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Description)]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
         public string? Description { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Type)]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
         public PropertyType PropertyType { get; set; }
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Value)]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
         public string? DefaultValue { get; set; }
 
         /// <summary>
@@ -91,6 +91,23 @@
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, DefaultValue);
+        }
+
+        /// <summary>
+        /// Checks for difference between this and another category
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(CategoryProperty? OtherObject)
+        {
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Description != OtherObject?.Description;
+            different |= PropertyType != OtherObject?.PropertyType;
+            different |= DefaultValue != OtherObject?.DefaultValue;
+
+            return different;
         }
 
         public static CategoryProperty Random(string? set_name = null)

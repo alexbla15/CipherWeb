@@ -1,9 +1,4 @@
-﻿using static CipherData.Models.CreateEvent;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Create a new unit or update it
@@ -13,19 +8,19 @@ namespace CipherData.Models
         /// <summary>
         /// Vessel name
         /// </summary>
-        [HebrewTranslation(Translator.Vessel_Name)]
+        [HebrewTranslation(typeof(Vessel), nameof(Vessel.Name))]
         public string? Name { get; set; }
 
         /// <summary>
         /// Vessel type
         /// </summary>
-        [HebrewTranslation(Translator.Vessel_Type)]
+        [HebrewTranslation(typeof(Vessel), nameof(Vessel.Type))]
         public string Type { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
-        [HebrewTranslation(Translator.Vessel_System)]
+        [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
         public string SystemId { get; set; }
 
         /// <summary>

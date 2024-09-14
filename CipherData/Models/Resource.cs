@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -33,19 +34,19 @@ namespace CipherData.Models
         /// <summary>
         /// Searchable ID for the object
         /// </summary>
-        [HebrewTranslation(Translator.Resource_Id)]
+        [HebrewTranslation(typeof(Resource), nameof(Id))]
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Required level of clearence to access this object
         /// </summary>
-        [HebrewTranslation(Translator.Resource_ClearenceLevel)]
+        [HebrewTranslation(typeof(Resource), nameof(ClearenceLevel))]
         public string ClearenceLevel { get; set; } = RandomFuncs.RandomItem(clearences);
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
         /// </summary>
-        [HebrewTranslation(Translator.Resource_Uuid)]
+        [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         public int Uuid { get; set; } = GetUuid();
 
         private static int UuidCounter { get; set; } = 0;

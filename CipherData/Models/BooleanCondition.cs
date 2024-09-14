@@ -61,19 +61,19 @@
         /// Can be chained to include sub-objects.
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
-        [HebrewTranslation(Translator.Condition_Attribute)]
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Attribute))]
         public string Attribute { get; set; }
 
         /// <summary>
         /// Expected relation between attribute and a value.
         /// </summary>
-        [HebrewTranslation(Translator.Condition_Relation)]
+        [HebrewTranslation(typeof(BooleanCondition), nameof(AttributeRelation))]
         public AttributeRelation AttributeRelation { get; set; }
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
-        [HebrewTranslation(Translator.Condition_Operator)]
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>
@@ -81,7 +81,7 @@
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
-        [HebrewTranslation(Translator.Condition_Value)]
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Value))]
         public string? Value { get; set; }
 
         /// <summary>
@@ -98,6 +98,25 @@
             AttributeRelation = attributeRelation;
             Operator = @operator;
             Value = value;
+        }
+
+
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(BooleanCondition? OtherObject)
+        {
+
+            bool different = false;
+
+            different |= Attribute != OtherObject?.Attribute;
+            different |= AttributeRelation != OtherObject?.AttributeRelation;
+            different |= Operator != OtherObject?.Operator;
+            different |= Value != OtherObject?.Value;
+
+            return different;
         }
 
         /// <summary>

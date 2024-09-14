@@ -467,3 +467,5 @@ D:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\scopedcss\projectbundle\CipherW
 D:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\CipherWeb.csproj.Up2Date
 D:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\CipherWeb.genruntimeconfig.cache
 D:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\ref\CipherWeb.dll
+D:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Data\TranslationDictionary.json
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Data\TranslationDictionary.json

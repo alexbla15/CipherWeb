@@ -2,7 +2,7 @@
 {
     public class Worker
     {
-        [HebrewTranslation(Translator.Event_Worker)]
+        [HebrewTranslation(nameof(Worker))]
         public string Name { get; set; }
 
         public Worker(string name)

@@ -2,7 +2,10 @@
 {
     public class CustomCondition
     {
+        [HebrewTranslation(typeof(CustomCondition), nameof(Factory))]
         public ObjectFactory Factory { get; set; }
+
+        [HebrewTranslation(typeof(CustomCondition), nameof(ObjectCondition))]
         public GroupedBooleanCondition ObjectCondition { get; set; }
     }
 
@@ -15,13 +18,13 @@
         /// <summary>
         /// List of object factory specifications and conditions on them
         /// </summary>
-        [HebrewTranslation(Translator.Conditions)]
+        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
         public List<CustomCondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
-        [HebrewTranslation(Translator.Condition_Operator)]
+        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.And;
 
         /// <summary>

@@ -1,0 +1,240 @@
+﻿@using System.Reflection
+
+@inject NavigationManager Navigation
+
+@typeparam Cipher_TItem
+
+<ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
+    @RenderChosenCard()
+    <CipherJsonCheck JsonValue="@JsonRequest" />
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
+</ResourceForm>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink? NavLink { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Cipher_TItem? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private CipherSubmit submission = new();
+    private ResourceForm ResourcePage = new();
+
+    private UnitRequest unitRequest = UnitRequest.Empty();
+    private CategoryRequest catRequest = CategoryRequest.Empty();
+    private VesselRequest vesRequest = VesselRequest.Empty();
+    private ProcessDefinitionRequest procDefRequest = ProcessDefinitionRequest.Empty();
+    private SystemRequest sysRequest = SystemRequest.Empty();
+
+    private CipherUnitCard unitCard = new();
+    private CipherVesselCard vesCard = new();
+    private CipherSystemCard sysCard = new();
+    private CipherPackageCard packCard = new();
+    private CipherProcessCard procCard = new();
+    private CipherCategoryCard catCard = new();
+
+    /// <summary>
+    /// Retrieve the object's ID for URL changes.
+    /// </summary>
+    private string? GetObjectId(object? obj) => (obj as Resource)?.Id;
+
+    /// <summary>
+    /// Method to fill in the request and check it before submission.
+    /// </summary>
+    /// <returns></returns>
+    private Tuple<bool, string> HandleSubmissionRequest()
+    {
+        if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            unitRequest = unitCard.Value();
+            return unitRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            catRequest = catCard.Value();
+            return catRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            vesRequest = vesCard.Value();
+            return vesRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        {
+            procDefRequest = procCard.Value();
+            return procDefRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        {
+            sysRequest = sysCard.Value();
+            return sysRequest.Check();
+        }
+
+        return new Tuple<bool, string>(false, "שגיאת מערכת");
+    }
+
+    /// <summary>
+    /// Method for submitting checked request, or showing errors within the checking process.
+    /// </summary>
+    public void Submit()
+    {
+        Valid = true;
+        var requestCheck = HandleSubmissionRequest();
+
+        if (!requestCheck.Item1)
+        {
+            Valid = false;
+            ErrorMessage = $"שגיאה בטופס. שגיאה ב{requestCheck.Item2}.";
+        }
+
+        SendRequest();
+        UpdateSubmissionSummary();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public void SendRequest()
+    {
+        if (!Valid) return;
+
+        if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            HandleRequest(() => SendUnitRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            HandleRequest(() => SendCategoryRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            HandleRequest(() => SendVesselRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        {
+            HandleRequest(() => SendProcessDefinitionRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        {
+            HandleRequest(() => SendSystemRequest());
+        }
+        else
+        {
+            Valid = false;
+            ErrorMessage = "שגיאת מערכת";
+        }
+
+        if (Error != ErrorResponse.Success)
+        {
+            Valid = false;
+            ErrorMessage = Error.Message;
+        }
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
+    }
+
+    /// <summary>
+    /// Method to check if there were changed in the object, and then sending its request to API.
+    /// </summary>
+    /// <param name="sendRequest">method to send the request to the API</param>
+    private void HandleRequest(Func<Tuple<Cipher_TItem, ErrorResponse>?> sendRequest)
+    {
+        var requestResult = sendRequest();
+        if (requestResult != null)
+        {
+            (Result, Error) = requestResult.ToValueTuple();
+        }
+    }
+
+    public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
+    {
+        JsonRequest = unitRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)UnitsRequests.CreateUnit(unitRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
+    {
+        JsonRequest = catRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.CreateCategory(catRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
+    {
+        JsonRequest = vesRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.CreateVessel(vesRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
+    {
+        JsonRequest = procDefRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)ProcessDefinitionsRequests.CreateProcessDefinition(procDefRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
+    {
+        JsonRequest = sysRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)SystemsRequests.CreateSystem(sysRequest);
+    }
+
+    /// <summary>
+    /// Method to get the appropriate object-card to the selected type
+    /// </summary>
+    /// <returns></returns>
+    private RenderFragment RenderChosenCard() =>
+    @<div style="width:100%">
+        @if (typeof(Cipher_TItem) == typeof(Unit))
+        {
+            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" SetMode="FormMode.Create"/>
+        }
+        else if (typeof(Cipher_TItem) == typeof(Category))
+        {
+            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" SetMode="FormMode.Create" />
+        }
+        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        {
+            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" SetMode="FormMode.Create" />
+        }
+        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        {
+            <CipherProcessCard Title="" WithCard="false" @ref="@procCard" SetMode="FormMode.Create"/>
+        }
+        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        {
+            <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="FormMode.Create" />
+        }
+    </div>;
+}

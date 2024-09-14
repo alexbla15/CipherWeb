@@ -1,8 +1,4 @@
-﻿using static CipherData.Models.CreateEvent;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Create a new system or update it
@@ -12,31 +8,31 @@ namespace CipherData.Models
         /// <summary>
         /// Name of system
         /// </summary>
-        [HebrewTranslation(Translator.System_Name)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(Translator.System_Description)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(Translator.System_Properties)]
-        public string Properties { get; set; }
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Properties))]
+        public Dictionary<string,string> Properties { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
-        [HebrewTranslation(Translator.System_Unit)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Unit))]
         public string UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
-        [HebrewTranslation(Translator.System_Parent)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Parent))]
         public string? ParentId { get; set; }
 
         /// <summary>
@@ -47,7 +43,7 @@ namespace CipherData.Models
         /// <param name="properties">JSON-like properties of the system</param>
         /// <param name="parentId">ID of parent system containing this one</param>
         /// <param name="unitId">ID of unit responsible for this system.</param>
-        public SystemRequest(string name, string description, string unitId, string properties, string? parentId=null)
+        public SystemRequest(string name, string description, string unitId, Dictionary<string,string> properties, string? parentId=null)
         {
             Name = name;
             Description = description;
@@ -72,12 +68,38 @@ namespace CipherData.Models
             return result;
         }
 
+
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(StorageSystem? OtherObject)
+        {
+            bool different = false;
+
+            if (OtherObject == null)
+            {
+                different = true;
+            }
+            else
+            {
+                different |= Name != OtherObject?.Name;
+                different |= Description != OtherObject?.Description;
+                different |= ParentId != OtherObject?.Parent?.Id;
+                different |= UnitId != OtherObject?.Unit?.Id;
+                different |= (Properties.Count != OtherObject?.Properties.Count) ? true : Properties.Any(x=>!OtherObject.Properties.Contains(x));
+            }
+
+            return different;
+        }
+
         /// <summary>
         /// Return an empty object scheme.
         /// </summary>
         public static SystemRequest Empty()
         {
-            return new SystemRequest(name: string.Empty, description: string.Empty, unitId: string.Empty, properties: string.Empty);
+            return new SystemRequest(name: string.Empty, description: string.Empty, unitId: string.Empty, properties: new Dictionary<string, string>());
         }
 
         /// <summary>

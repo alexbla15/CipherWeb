@@ -5,7 +5,7 @@
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Id))" Icon="@Icons.Cipher.Id"
+                <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Name))"
                                       Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject"/>
             </RadzenStack>
         }
@@ -65,7 +65,7 @@
     {
         Title ??= "פרטי היחידה";
 
-        // DON'T DELETE - it maked the form refresh with details from url
+        // DON'T DELETE - it made the form refresh with details from url
         if (ChosenObject != null)
         {
             StateHasChanged();

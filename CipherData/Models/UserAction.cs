@@ -12,43 +12,43 @@ namespace CipherData.Models
         /// <summary>
         /// User ID of user who made the action. Required.
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_By)]
+        [HebrewTranslation(typeof(UserAction), nameof(By))]
         public string By { get; set; }
 
         /// <summary>
         /// Full-text user comment on action.
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_Comments)]
+        [HebrewTranslation(typeof(UserAction), nameof(Comments))]
         public string? Comments { get; set; }
 
         /// <summary>
         /// Parameters changed by the action. (JSON)
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_ActionParameters)]
+        [HebrewTranslation(typeof(UserAction), nameof(ActionParameters))]
         public string? ActionParameters { get; set; }
 
         /// <summary>
         /// UUID of object affected from the action. Required.
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_ObjectId)]
+        [HebrewTranslation(typeof(UserAction), nameof(ObjectId))]
         public int ObjectId { get; set; }
 
         /// <summary>
         /// Timestamp of when the action was made. Required.
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_At)]
+        [HebrewTranslation(typeof(UserAction), nameof(At))]
         public DateTime At { get; set; }
 
         /// <summary>
         /// Type of action made by user
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_ActionType)]
+        [HebrewTranslation(typeof(UserAction), nameof(ActionType))]
         public ActionType ActionType { get; set; }
 
         /// <summary>
         /// Validation status of this user action.
         /// </summary>
-        [HebrewTranslation(Translator.UserAction_Status)]
+        [HebrewTranslation(typeof(UserAction), nameof(Status))]
         public int Status { get; set; }
 
         /// <summary>

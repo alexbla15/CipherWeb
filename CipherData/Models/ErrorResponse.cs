@@ -5,13 +5,13 @@
         /// <summary>
         /// Error message
         /// </summary>
-        [HebrewTranslation(Translator.Error_Message)]
+        [HebrewTranslation(typeof(ErrorResponse), nameof(Message))]
         public string Message { get; set; }
 
         /// <summary>
         /// Error code
         /// </summary>
-        [HebrewTranslation(Translator.Error_Code)]
+        [HebrewTranslation(typeof(ErrorResponse), nameof(Code))]
         public int Code { get; set; }
 
         /// <summary>
@@ -25,9 +25,9 @@
             Code = code;
         }
 
-        public static readonly ErrorResponse Success = new(Translator.RequestResult_200, 200);
-        public static readonly ErrorResponse BadRequest = new(Translator.RequestResult_400, 400);
-        public static readonly ErrorResponse Unauthorized = new(Translator.RequestResult_401, 401);
-        public static readonly ErrorResponse NotFound = new(Translator.RequestResult_404, 404);
+        public static readonly ErrorResponse Success = new(Translator.TranslationsDictionary["RequestResult_200"], 200);
+        public static readonly ErrorResponse BadRequest = new(Translator.TranslationsDictionary["RequestResult_400"], 400);
+        public static readonly ErrorResponse Unauthorized = new(Translator.TranslationsDictionary["RequestResult_401"], 401);
+        public static readonly ErrorResponse NotFound = new(Translator.TranslationsDictionary["RequestResult_404"], 404);
     }
 }

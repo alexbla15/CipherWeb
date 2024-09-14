@@ -8,13 +8,13 @@
         /// <summary>
         /// Name of the property
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Name)]
+        [HebrewTranslation(typeof(PackageProperty), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Property value.
         /// </summary>
-        [HebrewTranslation(Translator.CategoryProperty_Value)]
+        [HebrewTranslation(typeof(PackageProperty), nameof(Value))]
         public string? Value { get; set; }
 
         public bool FromCategory { get; set; } = false;

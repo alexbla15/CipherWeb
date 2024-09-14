@@ -1,9 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CipherData.Models
 {
@@ -15,25 +10,25 @@ namespace CipherData.Models
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
-        [HebrewTranslation(Translator.Process_Definition)]
+        [HebrewTranslation(typeof(Process), nameof(Definition))]
         public ProcessDefinition Definition { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
-        [HebrewTranslation(Translator.Process_Events)]
+        [HebrewTranslation(typeof(Process), nameof(Events))]
         public List<Event> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
-        [HebrewTranslation(Translator.Process_UncompletedSteps)]
+        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
         public List<ProcessStepDefinition> UncompletedSteps { get; set; }
 
-        [HebrewTranslation(Translator.Process_Start)]
+        [HebrewTranslation(typeof(Process), nameof(Start))]
         public DateTime Start { get; set; }
 
-        [HebrewTranslation(Translator.Process_End)]
+        [HebrewTranslation(typeof(Process), nameof(End))]
         public DateTime End { get; set; }
 
         /// <summary>

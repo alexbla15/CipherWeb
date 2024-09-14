@@ -12,7 +12,7 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink TransferAmount = new() { Href = "Forms/TransferAmount", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
         public static readonly MySubNavLink Relocation = new() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Cipher.Location };
         public static readonly MySubNavLink AddCategory = new() { Href = "Forms/AddCategory", Name = "קטגוריה חדשה", Icon = Icons.Symbols.Category };
-        public static readonly MySubNavLink AddProcess = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
+        public static readonly MySubNavLink AddProcessDefinition = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
         public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
         public static readonly MySubNavLink AddUnit = new() { Href = "Forms/AddUnit", Name = "יחידה חדשה", Icon = Icons.Cipher.Unit };
@@ -23,22 +23,23 @@ namespace CipherWeb.Data
             Name = "הזנה",
             SubLinks = new()
                 { AddPackage, TransferAmount, Relocation,
-                AddCategory, AddProcess, AddVessel, AddStorageSystem, AddUnit }
+                AddCategory, AddProcessDefinition, AddVessel, AddStorageSystem, AddUnit }
         };
 
-        public static readonly MySubNavLink UpdateCategory = new() { Href = "Forms/UpdateCategory", Name = "עריכת קטגוריה", Icon = Icons.Symbols.Category };
-        public static readonly MySubNavLink UpdatePackage = new() { Href = "Forms/UpdatePackage", Name = "עריכת תעודה", Icon = Icons.Cipher.Package };
-        public static readonly MySubNavLink UpdateUnit = new() { Href = "Forms/UpdateUnit", Name = "עריכת יחידה", Icon = Icons.Cipher.Unit };
-        public static readonly MySubNavLink UpdateVessel = new() { Href = "Forms/UpdateVessel", Name = "עריכת כלי", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink UpdateProcess = new() { Href = "Forms/UpdateProcess", Name = "עריכת תהליך", Icon = Icons.Cipher.Process };
+        public static readonly MySubNavLink UpdateCategory = new() { Href = "Forms/Updates/Category", Name = "קטגוריה", Icon = Icons.Symbols.Category };
+        public static readonly MySubNavLink UpdatePackage = new() { Href = "Forms/Updates/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
+        public static readonly MySubNavLink UpdateUnit = new() { Href = "Forms/Updates/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
+        public static readonly MySubNavLink UpdateVessel = new() { Href = "Forms/Updates/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
+        public static readonly MySubNavLink UpdateSystem = new() { Href = "Forms/Updates/System", Name = "מערכת", Icon = Icons.Cipher.Location };
+        public static readonly MySubNavLink UpdateProcess = new() { Href = "Forms/Updates/Process", Name = "תהליך", Icon = Icons.Cipher.Process };
 
         public static readonly MyNavLink Update = new()
         {
-            Href = "Froms/Updates",
+            Href = "Forms/Updates",
             Icon = Icons.Design.RebaseEdit,
             Name = "עריכת נתונים",
             SubLinks = new()
-                { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateProcess}
+                { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
         };
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור" };

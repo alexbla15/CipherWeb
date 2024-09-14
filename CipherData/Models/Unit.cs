@@ -7,38 +7,44 @@ namespace CipherData.Models
         /// <summary>
         /// Name of unit.
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Name)]
+        [HebrewTranslation(typeof(Unit), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of unit.
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Description)]
+        [HebrewTranslation(typeof(Unit), nameof(Description))]
         public string? Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Properties)]
+        [HebrewTranslation(typeof(Unit), nameof(Properties))]
         public string? Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Parent)]
+        [HebrewTranslation(typeof(Unit), nameof(Parent))]
         public Unit? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Children)]
+        [HebrewTranslation(typeof(Unit), nameof(Children))]
         public List<Unit>? Children { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Systems)]
+        [HebrewTranslation(typeof(Unit), nameof(Systems))]
         public List<StorageSystem>? Systems { get; set; }
+
+        /// <summary>
+        /// Conditions on the unit to make sure it is valid.
+        /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
+        public GroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
         /// Instanciation of new unit.

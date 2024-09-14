@@ -19,7 +19,7 @@ namespace CipherWeb
         public static string[] GetFields(Type a)
         {
             FieldInfo[] fields = a.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            List<string> fields_names = new List<string> { };
+            List<string> fields_names = new();
             foreach (FieldInfo field in fields)
             {
                 fields_names.Add(field.Name.Replace("k__BackingField", "").Replace("<","").Replace(">",""));
@@ -35,7 +35,7 @@ namespace CipherWeb
         public static List<Tuple<string, string>> GetTranslatedFields(Type a)
         {
             string[] fields = GetFields(a);
-            List<Tuple<string, string>> hebFields = new List<Tuple<string, string>> { };
+            List<Tuple<string, string>> hebFields = new();
             foreach (Tuple<string, string> h in HebrewDictionary.Headers)
             {
                 if (fields.Contains(h.Item1))

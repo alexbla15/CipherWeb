@@ -1,5 +1,6 @@
 ﻿@inherits CipherComponentCard
 
+@using System.Reflection;
 @code {
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
@@ -32,7 +33,7 @@
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
-    public List<string> AvailableAttributes { get; set; } = new();
+    public List<Tuple<string, string>> AvailableAttributes { get; set; } = new();
 
     /// <summary>
     /// All chosen conditions
@@ -57,6 +58,31 @@
     protected override void OnInitialized()
     {
         Title ??= "תנאים נבחרים";
+        AvailableAttributes = GetTranslatedFields(typeof(Event));
+    }
+
+    /// <summary>
+    /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
+    /// </summary>
+    public static List<Tuple<string, string>> GetTranslatedFields(Type setType)
+    {
+        List<Type> OptionalTypes = new() { typeof(Package), typeof(Vessel), typeof(StorageSystem), typeof(Category), typeof(ProcessDefinition) };
+        List<Tuple<string,string>> translations = new();
+
+        foreach (PropertyInfo prop in setType.GetProperties())
+        {
+            var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
+            if (attribute != null)
+            {
+                translations.Add(Tuple.Create(prop.Name, attribute.Translation));
+                if (OptionalTypes.Contains(prop.GetType()))
+                {
+                    translations.AddRange(GetTranslatedFields(prop.GetType()));
+                }
+                // not finished
+            }
+        }
+        return translations;
     }
 
     /// <summary>
@@ -125,7 +151,18 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Attribute)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%"/>
+                        <RadzenDropDownDataGrid @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%">
+                            <RadzenDropDownDataGridColumn Property="Item1" Title="שם תכונה">
+                                <Template>
+                                    @((context as Tuple<string,string>).Item1)
+                                </Template>
+                            </RadzenDropDownDataGridColumn>
+                            <RadzenDropDownDataGridColumn Property="Item2" Title="תרגום">
+                                <Template>
+                                    @((context as Tuple<string, string>).Item2)
+                                </Template>
+                            </RadzenDropDownDataGridColumn>
+                        </RadzenDropDownDataGrid>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.AttributeRelation)))" TextAlign="@TdTextAlign">

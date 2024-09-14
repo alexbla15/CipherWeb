@@ -1,8 +1,4 @@
-﻿using static CipherData.Models.CreateEvent;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Update package details contract.
@@ -13,25 +9,25 @@ namespace CipherData.Models
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
-        [HebrewTranslation(Translator.Package_Id)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
         public string? PackageId { get; set; }
 
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Description)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Description))]
         public string? PackageDescription { get; set; }
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
-        [HebrewTranslation(Translator.Event_ActionComments)]
+        [HebrewTranslation(nameof(ActionComments))]
         public string? ActionComments { get; set; }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
-        [HebrewTranslation(Translator.Package_DestinationProcesses)]
+        [HebrewTranslation(typeof(Package), nameof(Package.Processes))]
         public List<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>

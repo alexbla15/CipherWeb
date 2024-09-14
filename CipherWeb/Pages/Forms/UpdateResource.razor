@@ -59,6 +59,8 @@
     private UnitRequest unitRequest = UnitRequest.Empty();
     private CategoryRequest catRequest = CategoryRequest.Empty();
     private VesselRequest vesRequest = VesselRequest.Empty();
+    private ProcessDefinitionRequest procDefRequest = ProcessDefinitionRequest.Empty();
+    private SystemRequest sysRequest = SystemRequest.Empty();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -82,14 +84,14 @@
     public void SetChosenObjMap()
     {
         chosenObjectMap = new Dictionary<Type, Func<object?>>
-            {
+        {
             { typeof(Unit), () => unitCard.ChosenObject },
             { typeof(Vessel), () => vesCard.ChosenObject },
             { typeof(StorageSystem), () => sysCard.ChosenObject },
             { typeof(Package), () => packCard.ChosenObject },
             { typeof(ProcessDefinition), () => procCard.ChosenObject },
             { typeof(Category), () => catCard.ChosenObject },
-            };
+        };
     }
 
     /// <summary>
@@ -136,8 +138,18 @@
             vesRequest = vesCard.Value();
             return vesRequest.Check();
         }
+        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        {
+            procDefRequest = procCard.Value();
+            return procDefRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        {
+            sysRequest = sysCard.Value();
+            return sysRequest.Check();
+        }
 
-        return new Tuple<bool, string>(true, string.Empty);
+        return new Tuple<bool, string>(false, "שגיאת מערכת");
     }
 
     /// <summary>
@@ -165,9 +177,7 @@
     {
         if (!Valid) return;
 
-        Cipher_TItem? ResultObject = GetChosenObject();
-
-        if (ResultObject is null)
+        if (ChosenObject is null)
         {
             Valid = false;
             ErrorMessage = "לא נבחר אובייקט לעדכון.";
@@ -179,6 +189,8 @@
         bool FoundUnitChanges() => FoundChanges(unitRequest.Compare(ChosenObject as Unit));
         bool FoundCategoryChanges() => FoundChanges(catRequest.Compare(ChosenObject as Category));
         bool FoundVesselChanges() => FoundChanges(vesRequest.Compare(ChosenObject as Vessel));
+        bool FoundProcDefinitionChanges() => FoundChanges(procDefRequest.Compare(ChosenObject as ProcessDefinition));
+        bool FoundSystemChanges() => FoundChanges(sysRequest.Compare(ChosenObject as StorageSystem));
 
         if (typeof(Cipher_TItem) == typeof(Unit))
         {
@@ -191,6 +203,19 @@
         else if (typeof(Cipher_TItem) == typeof(Vessel))
         {
             HandleRequest(() => FoundVesselChanges(), () => SendVesselRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        {
+            HandleRequest(() => FoundProcDefinitionChanges(), () => SendProcessDefinitionRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        {
+            HandleRequest(() => FoundSystemChanges(), () => SendSystemRequest());
+        }
+        else
+        {
+            Valid = false;
+            ErrorMessage = "שגיאת מערכת";
         }
 
         if (Error != ErrorResponse.Success)
@@ -255,26 +280,48 @@
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.UpdateVessel((ChosenObject as Vessel)?.Id, vesRequest);
     }
 
+    private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
+    {
+        JsonRequest = vesRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)ProcessDefinitionsRequests.UpdateProcessDefinition((ChosenObject as ProcessDefinition)?.Id, procDefRequest);
+    }
+
+    private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
+    {
+        JsonRequest = sysRequest.ToJson();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)SystemsRequests.UpdateSystem((ChosenObject as StorageSystem)?.Id, sysRequest);
+    }
+
     /// <summary>
     /// Method to get the appropriate object-card to the selected type
     /// </summary>
     /// <returns></returns>
     private RenderFragment RenderChosenCard() =>
-    @<div>
+    @<div style="width:100%">
         @if (typeof(Cipher_TItem) == typeof(Unit))
-        {
-            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl"
-                            ChosenObject="@(ChosenObject as Unit)" SetMode="FormMode.Update" />
-        }
-        else if (typeof(Cipher_TItem) == typeof(Category))
-        {
-            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl"
-                                ChosenObject="@(ChosenObject as Category)" SetMode="FormMode.Update" />
-        }
-        else if (typeof(Cipher_TItem) == typeof(Vessel))
-        {
-            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl"
-                                ChosenObject="@(ChosenObject as Vessel)" SetMode="FormMode.Update" />
-        }
+    {
+        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl"
+                        ChosenObject="@(ChosenObject as Unit)" SetMode="FormMode.Update" />
+    }
+    else if (typeof(Cipher_TItem) == typeof(Category))
+    {
+        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl"
+                            ChosenObject="@(ChosenObject as Category)" SetMode="FormMode.Update" />
+    }
+    else if (typeof(Cipher_TItem) == typeof(Vessel))
+    {
+        <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl"
+                          ChosenObject="@(ChosenObject as Vessel)" SetMode="FormMode.Update" />
+    }
+    else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+    {
+        <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl"
+                           ChosenObject="@(ChosenObject as ProcessDefinition)" SetMode="FormMode.Update" />
+    }
+    else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+    {
+        <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl"
+                           ChosenObject="@(ChosenObject as StorageSystem)" SetMode="FormMode.Update" />
+    }
     </div>;
 }

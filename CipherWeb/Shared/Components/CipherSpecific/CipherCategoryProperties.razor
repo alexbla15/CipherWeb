@@ -101,7 +101,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Name" Width="100%"/>
+                        <CipherAutoComplete @bind-Value="@prop.Name" Width="100%" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Description)))" TextAlign="@TdTextAlign">

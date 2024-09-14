@@ -1,6 +1,4 @@
 ﻿using CipherData.Requests;
-using System.Text.Json;
-using System.Text.Encodings.Web;
 
 namespace CipherData.Models
 {
@@ -9,67 +7,67 @@ namespace CipherData.Models
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Description)]
+        [HebrewTranslation(typeof(Package), nameof(Description))]
         public string? Description { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Properties)]
+        [HebrewTranslation(typeof(Package), nameof(Properties))]
         public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Vessel)]
+        [HebrewTranslation(typeof(Package), nameof(Vessel))]
         public Vessel? Vessel { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_System)]
+        [HebrewTranslation(typeof(Package), nameof(System))]
         public StorageSystem System { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_BrutMass)]
+        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
         public decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation(Translator.Package_NetMass)]
+        [HebrewTranslation(typeof(Package), nameof(NetMass))]
         public decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
-        [HebrewTranslation(Translator.Package_CreatedAt)]
+        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
         /// </summary>
-        [HebrewTranslation(Translator.Package_Parent)]
+        [HebrewTranslation(typeof(Package), nameof(Parent))]
         public Package? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
-        [HebrewTranslation(Translator.Package_Children)]
+        [HebrewTranslation(typeof(Package), nameof(Children))]
         public List<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
-        [HebrewTranslation(Translator.Package_Category)]
+        [HebrewTranslation(typeof(Package), nameof(Category))]
         public Category Category { get; set; }
 
         /// <summary>
         /// List of processes definitions that may accept this package as input
         /// </summary>
-        [HebrewTranslation(Translator.Package_DestinationProcesses)]
+        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
         public List<ProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>

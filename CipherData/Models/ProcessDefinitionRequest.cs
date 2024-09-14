@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using static CipherData.Models.CreateEvent;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Create a new process definition or update it.
@@ -19,19 +8,19 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation(Translator.ProcessDefinition_Name)]
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
-        [HebrewTranslation(Translator.ProcessDefinition_Description)]
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// Steps of the process
         /// </summary>
-        [HebrewTranslation(Translator.ProcessDefinition_Steps)]
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
         public List<ProcessStepDefinition> Steps { get; set; }
 
         /// <summary>
@@ -71,6 +60,39 @@ namespace CipherData.Models
             return Resource.ToJson(this);
         }
 
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(ProcessDefinition? OtherObject)
+        {
+
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Description != OtherObject?.Description;
+
+            if (Steps.Count == OtherObject?.Steps.Count)
+            {
+                // check for same step names
+                different |= !Steps.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Steps.Select(x => x.Name).ToList());
+                // check for differences
+                if (!different)
+                {
+                    foreach (ProcessStepDefinition step in Steps)
+                    {
+                        different |= step.Compare(OtherObject.Steps.Where(x => x.Name == step.Name).First());
+                    }
+                }
+            }
+            else
+            {
+                different = true;
+            }
+
+            return different;
+        }
 
         /// <summary>
         /// Get an empty object scheme.

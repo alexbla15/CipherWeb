@@ -1,21 +1,33 @@
-﻿using System.Diagnostics.Metrics;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class HebrewTranslationAttribute : Attribute
     {
         public string Translation { get; }
 
-        public HebrewTranslationAttribute(string translation)
+        public HebrewTranslationAttribute(string engWord)
         {
-            if (Translator.EngToHebPairs.ContainsKey(translation))
+            if (Translator.TranslationsDictionary.ContainsKey(engWord))
             {
-                Translation = Translator.EngToHebPairs[translation];
+                Translation = Translator.TranslationsDictionary[engWord];
             }
             else
             {
-                Translation = translation;
+                Translation = engWord;
+            }
+        }
+
+        public HebrewTranslationAttribute(Type ObjType, string engWord)
+        {   
+            string FullWord = (ObjType == typeof(StorageSystem)) ? $"System_{engWord}" : $"{ObjType.Name}_{engWord}";
+
+            if (Translator.TranslationsDictionary.ContainsKey(FullWord))
+            {
+                Translation = Translator.TranslationsDictionary[FullWord];
+            }
+            else
+            {
+                Translation = FullWord;
             }
         }
     }

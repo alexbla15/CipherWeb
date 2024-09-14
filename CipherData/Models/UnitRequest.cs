@@ -8,31 +8,31 @@
         /// <summary>
         /// Name of unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Name)]
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Description)]
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Properties)]
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Properties))]
         public string? Properties { get; set; }
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Parent)]
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Parent))]
         public string? ParentId { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
-        [HebrewTranslation(Translator.Unit_Conditions)]
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Conditions))]
         public GroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>

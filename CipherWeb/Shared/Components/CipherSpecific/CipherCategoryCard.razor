@@ -5,7 +5,7 @@
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherCategoryDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="CatId" ChosenCategory="@ChosenObject" />
+                <CipherCategoryDropDown Change="@Change" @ref="CatId" ChosenCategory="@ChosenObject" />
             </RadzenStack>
         }
     </HeaderContent>
@@ -33,7 +33,7 @@
 
             </ChildContent>
         </CipherComponentCard>
-        <CipherCategoryProperties @ref=CatProperties ChosenProperties="@(ChosenObject?.Properties)" />
+        <CipherCategoryProperties @ref=CatProperties ChosenProperties="@(ChosenObject?.Properties ?? new List<CategoryProperty>())"  />
     </ChildContent>
 </CipherComponentCard>
 
@@ -69,7 +69,7 @@
     {
         Title ??= "פרטי הקטגוריה";
 
-        // DON'T DELETE - it maked the form refresh with details from url
+        // DON'T DELETE - it made the form refresh with details from url
         if (ChosenObject != null)
         {
             StateHasChanged();
@@ -88,14 +88,14 @@
         CategoryRequest cat = CategoryRequest.Empty();
 
         cat.ParentId = ParentCat.ChosenCategory?.Id;
-        cat.Name = CatName.Check() ? CatName.Value : "";
-        cat.Description = CatDescription.Check() ? CatDescription.Value : "";
+        cat.Name = CatName.Check() ? CatName.Value : string.Empty;
+        cat.Description = CatDescription.Check() ? CatDescription.Value : string.Empty;
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        cat.Properties = CatProperties.ChosenProperties;
+        cat.Properties = ChosenObject?.Properties;
 
         string cat_mask = CatMask.GetValue();
-        if (cat_mask != "")
+        if (cat_mask != string.Empty)
         {
             cat.IdMask = new List<string>() { cat_mask };
         }

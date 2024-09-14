@@ -1,0 +1,121 @@
+﻿{
+  "AggregateItem_Attribute": "תכונה",
+  "AggregateItem_As": "כינוי",
+  "AggregateItem_Method": "פונקציה",
+
+  "BooleanCondition_Attribute": "תכונה",
+  "BooleanCondition_AttributeRelation": "יחס",
+  "BooleanCondition_Operator": "אופרטור",
+  "BooleanCondition_Value": "ערך",
+
+  "Category_Children": "קטגוריות מוכלות",
+  "Category_ConsumingProcesses": "תהליכים יוצרים",
+  "Category_CreatingProcesses": "תהליכים צורכים",
+  "Category_Description": "תיאור",
+  "Category_IdMask": "סדרה",
+  "Category_MaterialType": "סוג החומר",
+  "Category_Name": "שם קטגוריה",
+  "Category_Parent": "קטגוריית אב",
+  "Category_Properties": "תכונות",
+
+  "CategoryProperty_Name": "תכונה",
+  "CategoryProperty_Description": "תיאור",
+  "CategoryProperty_PropertyType": "טיפוס",
+  "CategoryProperty_DefaultValue": "ערך ברירת מחדל",
+
+  "Condition_Attribute": "תכונה",
+  "Condition_Operator": "אופרטור",
+  "Condition_Relation": "יחס",
+  "Condition_Value": "ערך",
+
+  "Event_Actions": "תעודות מעורבות",
+  "Event_Comments": "הערות",
+  "Event_Packages": "תעודות מעורבות",
+  "Event_ProcessId": "מספר תהליך",
+  "Event_Status": "סטטוס",
+  "Event_Timestamp": "תאריך תנועה",
+  "Event_EventType": "סוג תנועה",
+  "Event_Worker": "שם עובד",
+
+  "Error_Code": "קוד שגיאה",
+  "Error_Message": "הודעת שגיאה",
+
+  "GroupedBooleanCondition_Conditions": "תנאים",
+  "GroupedBooleanCondition_Operator": "אופרטור",
+
+  "ObjectFactory_Aggregate": "אגרגטים",
+  "ObjectFactory_Filter": "סינון לפי",
+  "ObjectFactory_OrderBy": "סידור לפי",
+  "ObjectFactory_GroupBy": "קיבוץ לפי",
+
+  "OrderedItem_Attribute": "תכונה",
+  "OrderedItem_Order": "אופן סידור",
+
+  "Package_BrutMass": "מסה ברוטו [גר']",
+  "Package_Category": "קטגוריה",
+  "Package_Children": "תעודות מוכלות",
+  "Package_CreatedAt": "תאריך פתיחה",
+  "Package_Description": "תיאור",
+  "Package_DestinationProcesses": "ייעוד",
+  "Package_Id": "מספר סידורי",
+  "Package_NetMass": "מסה נטו [גר']",
+  "Package_Parent": "תעודת אב",
+  "Package_Properties": "תכונות",
+  "Package_System": "מערכת",
+  "Package_Vessel": "כלי",
+
+  "PackageProperty_Name": "תכונה",
+  "PackageProperty_Value": "ערך",
+
+  "Process_Definition": "הגדרה",
+  "Process_End": "סיום",
+  "Process_Events": "תנועות",
+  "Process_Start": "התחלה",
+  "Process_UncompletedSteps": "שלבים שטרם הושלמו",
+
+  "ProcessDefinition_Description": " תיאור תהליך",
+  "ProcessDefinition_Name": "שם תהליך",
+  "ProcessDefinition_Steps": "שלבים",
+
+  "ProcessStepDefinition_Condition": "תנאי",
+  "ProcessStepDefinition_Description": "תיאור שלב",
+  "ProcessStepDefinition_Name": "שם שלב",
+
+  "Resource_ClearenceLevel": "מידור",
+  "Resource_Id": "מספר סידורי",
+  "Resource_Uuid": "מספר סידורי אוניברסלי",
+
+  "RequestResult_200": "OK",
+  "RequestResult_400": "שגיאה בבקשה",
+  "RequestResult_401": "אין הרשאה",
+  "RequestResult_404": "בעיה בכתובת המבוקשת",
+
+  "System_Children": "מערכות מוכלות",
+  "System_Name": "שם מערכת",
+  "System_Description": "תיאור",
+  "System_Parent": "מערכת אב",
+  "System_Properties": "תכונות",
+  "System_Unit": "יחידה",
+
+  "Unit_Children": "יחידות מוכלות",
+  "Unit_Conditions": "מגבלות",
+  "Unit_Description": "תיאור",
+  "Unit_Name": "שם יחידה",
+  "Unit_Parent": "יחידת אב",
+  "Unit_Properties": "תכונות",
+  "Unit_Systems": "מערכות",
+
+  "UserActions": "פעולות משתמש",
+  "UserAction_ActionParameters": "פרמטרים שהשתנו",
+  "UserAction_ActionType": "סוג פעולה",
+  "UserAction_At": "תאריך פעולה",
+  "UserAction_By": "שם עובד",
+  "UserAction_Comments": "הערות",
+  "UserAction_ObjectId": "מספר סידורי",
+  "UserAction_Status": "סטטוס",
+
+  "Vessel_Name": "שם כלי",
+  "Vessel_Packages": "תעודות",
+  "Vessel_System": "מערכת",
+  "Vessel_Type": "סוג"
+}

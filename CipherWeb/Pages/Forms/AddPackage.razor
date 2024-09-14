@@ -1,8 +1,8 @@
 ﻿@page "/forms/addpackage"
 
-<PageTitle>@Title</PageTitle>
+<PageTitle>@NavLink?.Name</PageTitle>
 
-<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard Underline="true" WithCard="false" Title="@NavLink?.Name" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     <CipherFormInfo @ref="FormInfo" />
     @if (!AssemblyOfPackages)
     {
@@ -29,6 +29,12 @@
 
 @code {
     /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink? NavLink { get; set; } = CipherNavLinks.AddPackage;
+
+    /// <summary>
     /// Is new package an assembly of other packages? otherwise it must get partial mass from other packeges.
     /// </summary>
     [Parameter]
@@ -41,28 +47,22 @@
     public bool Valid { get; set; } = true;
 
     /// <summary>
-    /// Page title.
-    /// </summary>
-    [Parameter]
-    public string Title { get; set; } = "תעודה חדשה";
-
-    /// <summary>
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; }
+    public string? JsonRequest { get; set; }
 
     /// <summary>
     /// Error message upon improper submission.
     /// </summary>
     [Parameter]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event ResultEvent { get; set; }
+    public Event? ResultEvent { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -132,14 +132,10 @@
     public void Submit()
     {
         Valid = true;
-
         RequestedEvent = GetRequestedEvent();
 
-        if (Valid)
-        {
-            Tuple<bool, string> CheckResult = RequestedEvent.Check();
-            (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-        }
+        Tuple<bool, string> CheckResult = RequestedEvent.Check();
+        (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
 
         JsonRequest = RequestedEvent.ToJson();
 
@@ -184,7 +180,6 @@
         NewPackage.NetMass = NewPackage.BrutMass * NewPackage.Concentration;
 
         SetPackProps();
-
     }
 
     /// <summary>
@@ -237,18 +232,17 @@
             (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
-            }
-            else
-            {
-                submission.Valid = true;
+                Valid = false;
+                ErrorMessage = Error.Message;
             }
         }
-        else
-        {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
-        }
+
+        UpdateSubmissionSummary();
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
 }

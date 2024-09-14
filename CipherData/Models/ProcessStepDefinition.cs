@@ -1,12 +1,4 @@
 ﻿using CipherData.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Threading.Tasks;
-using static CipherData.Models.CreateEvent;
 
 namespace CipherData.Models
 {
@@ -19,19 +11,19 @@ namespace CipherData.Models
         /// <summary>
         /// Unique name of the process step, two steps in the same process should not have the same name.
         /// </summary>
-        [HebrewTranslation(Translator.ProcessStepDefinition_Name)]
+        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the process step
         /// </summary>
-        [HebrewTranslation(Translator.ProcessStepDefinition_Description)]
+        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
-        [HebrewTranslation(Translator.ProcessStepDefinition_Condition)]
+        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
         public GroupedBooleanCondition Condition { get; set; }
 
         private static int IdCounter { get; set; } = 0;
@@ -62,6 +54,25 @@ namespace CipherData.Models
         public string ToJson()
         {
             return ToJson(this);
+        }
+
+        /// <summary>
+        /// Checks for difference between this and another object
+        /// </summary>
+        /// <param name="OtherObject"></param>
+        /// <returns></returns>
+        public bool Compare(ProcessStepDefinition? OtherObject)
+        {
+
+            bool different = false;
+
+            different |= Name != OtherObject?.Name;
+            different |= Description != OtherObject?.Description;
+
+            // now for condition
+            different |= Condition.Compare(OtherObject?.Condition);
+
+            return different;
         }
 
         /// <summary>

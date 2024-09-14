@@ -138,6 +138,9 @@ components:
         - $ref: "#/components/schemas/Resource"
         - type: object
           properties:
+            worker: 
+              type: string
+              description: name of worker that created the event
             timestamp: 
               type: string
               description: Timestamp when the event happend

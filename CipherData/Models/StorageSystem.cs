@@ -7,37 +7,37 @@ namespace CipherData.Models
         /// <summary>
         /// Name of system
         /// </summary>
-        [HebrewTranslation(Translator.System_Name)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(Translator.System_Description)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(Translator.System_Properties)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
         public Dictionary<string,string> Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation(Translator.System_Parent)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
         public StorageSystem? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(Translator.System_Children)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
         public List<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
-        [HebrewTranslation(Translator.System_Unit)]
+        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
         public Unit Unit { get; set; }
 
         /// <summary>
@@ -49,13 +49,13 @@ namespace CipherData.Models
         /// <param name="unit">Unit responsible for this system.</param>
         /// <param name="parent">Parent system containing this one</param>
         /// <param name="children">Child systems contained in this one</param>
-        public StorageSystem(string description, Dictionary<string,string> properties, Unit unit, string name,
+        public StorageSystem(string description, Unit unit, string name, Dictionary<string, string>? properties = null,
             StorageSystem? parent = null, List<StorageSystem>? children = null, string? id = null)
         {
             Id = id ?? GetNextId();
             Name = name;
             Description = description;
-            Properties = properties;
+            Properties = properties ?? new Dictionary<string, string>();
             Parent = parent;
             Children = children;
             Unit = unit;

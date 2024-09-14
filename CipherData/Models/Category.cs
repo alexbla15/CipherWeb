@@ -1,4 +1,6 @@
 ﻿using CipherData.Requests;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -7,55 +9,55 @@ namespace CipherData.Models
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation(Translator.Category_Name)]
+        [HebrewTranslation(typeof(Category), nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation(Translator.Category_Description)]
+        [HebrewTranslation(typeof(Category), nameof(Description))]
         public string Description { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation(Translator.Category_IdMask)]
+        [HebrewTranslation(typeof(Category), nameof(IdMask))]
         public List<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation(Translator.Category_Properties)]
+        [HebrewTranslation(typeof(Category), nameof(Properties))]
         public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
-        [HebrewTranslation(Translator.Category_CreatingProcesses)]
+        [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
         public List<ProcessDefinition> CreatingProcesses { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
-        [HebrewTranslation(Translator.Category_ConsumingProcesses)]
+        [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
         public List<ProcessDefinition> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
-        [HebrewTranslation(Translator.Category_MaterialType)]
+        [HebrewTranslation(typeof(Category), nameof(MaterialType))]
         public Category? MaterialType { get; set; }
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
-        [HebrewTranslation(Translator.Category_Parent)]
+        [HebrewTranslation(typeof(Category), nameof(Parent))]
         public Category? Parent { get; set; }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
-        [HebrewTranslation(Translator.Category_Children)]
+        [HebrewTranslation(typeof(Category), nameof(Children))]
         public List<Category>? Children { get; set; }
 
         /// <summary>
@@ -94,6 +96,17 @@ namespace CipherData.Models
                 creatingProcesses: CreatingProcesses.Select(x => x.Id).ToList(),
                 consumingProcesses: ConsumingProcesses.Select(x => x.Id).ToList(),
                 properties: Properties
+                );
+        }
+
+        public Category Copy()
+        {
+            return new Category(
+                name: Name, 
+                description: Description, idMask : IdMask,
+            creatingProcesses : CreatingProcesses, consumingProcesses: ConsumingProcesses,
+            parent : Parent, children: Children, materialType: MaterialType,
+            id : Id, properties: Properties
                 );
         }
 
@@ -208,15 +221,15 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
                 new (attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.Description", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.DefaultValue", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(ProcessDefinition.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
             }, @operator: Operator.Or));
         }
     }

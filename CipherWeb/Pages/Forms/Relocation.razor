@@ -33,25 +33,25 @@
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; }
+    public string? JsonRequest { get; set; }
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event ResultEvent { get; set; }
+    public Event? ResultEvent { get; set; }
 
     /// <summary>
     /// API response to submission.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Error message upon improper submission.
     /// </summary>
     [Parameter]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     private CipherFormInfo FormInfo = new();
     private CipherLocation FinalLocation = new();
@@ -66,7 +66,12 @@
     /// </summary>
     public void Submit()
     {
-        if (RelocatedPacks.SelectedPackages.Count() == 0)
+        Valid = true;
+        if (RelocatedPacks.SelectedPackages is null)
+        {
+            (Valid, ErrorMessage) = (false, "יש לבחור תעודות מועברות");
+        }
+        else if (RelocatedPacks.SelectedPackages.Count() == 0)
         {
             (Valid, ErrorMessage) = (false, "יש לבחור תעודות מועברות");
         }
@@ -89,7 +94,7 @@
                 p.System = FinalLocation.ChosenSystem;
             }
 
-            if (!InitialLocationCheck)
+            if (InitialLocationCheck)
             {
                 RequestedEvent = new CreateEvent(
                     worker: FormInfo.GetWorker(),
@@ -99,14 +104,12 @@
                     comments: EventComments.GetValue()
                 );
 
-
                 Tuple<bool, string> CheckResult = RequestedEvent.Check();
                 (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-
-                JsonRequest = RequestedEvent.ToJson();
             }
         }
 
+        JsonRequest = RequestedEvent.ToJson();
         SendRequest();
     }
 
@@ -120,18 +123,17 @@
             (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
-            }
-            else
-            {
-                submission.Valid = true;
+                Valid = false;
+                ErrorMessage = Error.Message;
             }
         }
-        else
-        {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
-        }
+
+        UpdateSubmissionSummary();
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
 }

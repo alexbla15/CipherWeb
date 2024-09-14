@@ -5,39 +5,45 @@ namespace CipherData.Models
     public class Event : Resource
     {
         /// <summary>
+        /// Name of worker that fulfilled the form
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        public string Worker { get; set; }
+
+        /// <summary>
         /// Type of event
         /// </summary>
-        [HebrewTranslation(Translator.Event_Type)]
+        [HebrewTranslation(typeof(Event), nameof(EventType))]
         public int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
-        [HebrewTranslation(Translator.Event_ProcessId)]
+        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         public int ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(Translator.Event_Comments)]
+        [HebrewTranslation(typeof(Event), nameof(Comments))]
         public string Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
-        [HebrewTranslation(Translator.Event_Timestamp)]
+        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation(Translator.Event_Status)]
+        [HebrewTranslation(typeof(Event), nameof(Status))]
         public int Status { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation(Translator.Event_Packages)]
+        [HebrewTranslation(typeof(Event), nameof(Packages))]
         public List<Package> Packages { get; set; }
 
         /// <summary>
@@ -50,9 +56,10 @@ namespace CipherData.Models
         /// <param name="status">Validation status of event</param>
         /// <param name="packages">List of affected packages from actions, the items present the state of each package after the event</param>
         /// <param name="id">only if you want object to have a certain id</param>
-        public Event(int eventType, int processId, string comments, DateTime timestamp, int status, List<Package> packages, string? id = null)
+        public Event(string worker, int eventType, int processId, string comments, DateTime timestamp, int status, List<Package> packages, string? id = null)
         {
             Id = id ?? GetNextId();
+            Worker = worker;
             EventType = eventType;
             ProcessId = processId;
             Comments = comments;
@@ -63,7 +70,8 @@ namespace CipherData.Models
 
         public static Event Empty()
         {
-            return new Event(eventType: 0, processId: 0, comments: string.Empty, timestamp: DateTime.Now, status: 0,
+            return new Event(worker: string.Empty, eventType: 0, processId: 0, comments: string.Empty, 
+                timestamp: DateTime.Now, status: 0,
                 packages: new List<Package>());
         }
 
@@ -103,6 +111,7 @@ namespace CipherData.Models
         {
             return new Event(
                 id: id,
+                worker: Models.Worker.Random().Name,
                 eventType: new Random().Next(21, 27),
                 processId: new Random().Next(1, 20),
                 comments: "תנועה לדוגמה",
@@ -134,10 +143,11 @@ namespace CipherData.Models
         {
             return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
                 new (attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
+                new (attribute: $"{typeof(Event).Name}.{nameof(Worker)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
+                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Package.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
             }, @operator: Operator.Or));
         }
     }
