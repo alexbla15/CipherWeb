@@ -39,54 +39,25 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckName()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Name)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Name, Translate(nameof(Name)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckDescription()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Description)));
-                }
-            }
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Description, Translate(nameof(Description)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckSteps(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckSteps()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (Steps.Count <= 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(Steps)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.FullList(Steps, Translate(nameof(Steps)));
         }
 
         /// <summary>
@@ -96,11 +67,12 @@
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = CheckName();
-            result = CheckDescription(result);
-            result = CheckSteps(result);
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
+            result.Fields.Add(CheckSteps());
 
-            return result;
+            return result.Check();
         }
 
         /// <summary>

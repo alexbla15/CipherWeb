@@ -53,18 +53,32 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckName()
+        {
+            return CheckField.Required(Name, Translate(nameof(Name)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckDescription()
+        {
+            return CheckField.Required(Description, Translate(nameof(Description)));
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
-        /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
 
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomUnitRequest.Name))); // required
-            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomUnitRequest.Description))); // required
-
-            return result;
+            return result.Check();
         }
 
         /// <summary>

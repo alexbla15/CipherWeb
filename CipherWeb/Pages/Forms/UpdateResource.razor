@@ -163,7 +163,7 @@
         if (!requestCheck.Item1)
         {
             Valid = false;
-            ErrorMessage = $"שגיאה בטופס. שגיאה ב{requestCheck.Item2}.";
+            ErrorMessage = requestCheck.Item2;
         }
 
         SendRequest();

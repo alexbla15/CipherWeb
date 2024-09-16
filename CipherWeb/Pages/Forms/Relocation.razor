@@ -1,27 +1,25 @@
 ﻿@page "/Forms/Relocation"
 
-<PageTitle>@Title</PageTitle>
-
-<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<ResourceForm Title="@NavLink?.Name">
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="מיקום חדש" @ref=FinalLocation />
-        <CipherPackagesPicking @ref="RelocatedPacks" />
+        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(CachedData.CreateRelocationEventExample.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(CachedData.CreateRelocationEventExample.Packages))" @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
-</CipherComponentCard>
+</ResourceForm>
 
 @code {
     /// <summary>
-    /// Page title.
+    /// Page nav link.
     /// </summary>
     [Parameter]
-    public string Title { get; set; } = "שינוי מיקום";
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.Relocation;
 
     /// <summary>
     /// Is form valid for submission.
@@ -59,7 +57,7 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private CreateEvent RequestedEvent = CreateEvent.Empty();
+    private CreateRelocationEvent RequestedEvent = CreateRelocationEvent.Empty();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -67,49 +65,17 @@
     public void Submit()
     {
         Valid = true;
-        if (RelocatedPacks.SelectedPackages is null)
-        {
-            (Valid, ErrorMessage) = (false, "יש לבחור תעודות מועברות");
-        }
-        else if (RelocatedPacks.SelectedPackages.Count() == 0)
-        {
-            (Valid, ErrorMessage) = (false, "יש לבחור תעודות מועברות");
-        }
-        else if (FinalLocation.ChosenSystem is null)
-        {
-            (Valid, ErrorMessage) = (false, "יש לבחור מערכת חדשה.");
-        }
-        else
-        {
-            bool InitialLocationCheck = true;
 
-            foreach (Package p in RelocatedPacks.SelectedPackages)
-            {
-                if (p.System.Id == FinalLocation.ChosenSystem.Id)
-                {
-                    (Valid, ErrorMessage) = (false, $"תעודה {p.Id} נמצאת במערכת {FinalLocation.ChosenSystem.Name}. נא בחרו מערכת אחרת או מחקו תעודה זו מהרשימה.");
-                    InitialLocationCheck = false;
-                    break;
-                }
-                p.System = FinalLocation.ChosenSystem;
-            }
+        RequestedEvent = new CreateRelocationEvent(
+            worker: FormInfo.GetWorker(),
+            timestamp: FormInfo.GetDateTime(),
+            targetSystem: FinalLocation.ChosenSystem,
+            packages : RelocatedPacks.SelectedPackages,
+            comments: EventComments.GetValue()
+        );
 
-            if (InitialLocationCheck)
-            {
-                RequestedEvent = new CreateEvent(
-                    worker: FormInfo.GetWorker(),
-                    timestamp: FormInfo.GetDateTime(),
-                    eventType: 24,
-                    actions: RelocatedPacks.SelectedPackages.Select(x => x.Request()).ToList(),
-                    comments: EventComments.GetValue()
-                );
+        (Valid, ErrorMessage) = RequestedEvent.Check();
 
-                Tuple<bool, string> CheckResult = RequestedEvent.Check();
-                (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-            }
-        }
-
-        JsonRequest = RequestedEvent.ToJson();
         SendRequest();
     }
 
@@ -120,7 +86,9 @@
     {
         if (Valid)
         {
-            (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
+            CreateEvent ev = RequestedEvent.Create();
+            JsonRequest = ev.ToJson();
+            (ResultEvent, Error) = EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

@@ -23,6 +23,13 @@
   "CategoryProperty_PropertyType": "טיפוס",
   "CategoryProperty_DefaultValue": "ערך ברירת מחדל",
 
+  "CreateTranserAmountEvent_DonatingPackage": "תעודה מוסרת",
+  "CreateTranserAmountEvent_AcceptingPackage": "תעודה מקבלת",
+  "CreateTranserAmountEvent_Amount": "מסה מועברת [גר']",
+
+  "CreateRelocationEvent_TargetSystem": "מערכת יעד",
+  "CreateRelocationEvent_Packages": "תעודות מועברות",
+
   "Condition_Attribute": "תכונה",
   "Condition_Operator": "אופרטור",
   "Condition_Relation": "יחס",

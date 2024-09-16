@@ -37,19 +37,42 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckName()
+        {
+            return CheckField.Required(Name, Translate(nameof(Name)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckType()
+        {
+            return CheckField.Required(Type, Translate(nameof(Type)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckSystemId()
+        {
+            return CheckField.Required(SystemId, Translate(nameof(SystemId)));
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckType());
+            result.Fields.Add(CheckSystemId());
 
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.Name))); // required
-            result = (!string.IsNullOrEmpty(Type)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.Type))); // required
-            result = (!string.IsNullOrEmpty(SystemId)) ? result : Tuple.Create(false, Vessel.Translate(nameof(RandomData.RandomVessel.System))); // required
-
-            return result;
+            return result.Check();
         }
 
         /// <summary>
@@ -84,6 +107,11 @@
         public string ToJson()
         {
             return Resource.ToJson(this);
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(VesselRequest), searchedAttribute);
         }
     }
 }

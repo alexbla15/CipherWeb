@@ -1,13 +1,11 @@
 ﻿@page "/Forms/TransferAmount"
 
-<PageTitle>@Title</PageTitle>
-
-<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<ResourceForm Title="@NavLink?.Name">
     <CipherFormInfo @ref="FormInfo" />
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="תעודה מוסרת" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-        <CipherPackageId Label="תעודה מקבלת" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-        <CipherAmount Label="מסה מועברת" @ref=DeltaM />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CachedData.CreateTranserAmountEventExample.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CachedData.CreateTranserAmountEventExample.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+        <CipherAmount Label="@CreateTranserAmountEvent.Translate(nameof(CachedData.CreateTranserAmountEventExample.Amount))" @ref=DeltaM />
         <CipherProcess @ref=EventProc />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
@@ -15,9 +13,15 @@
     <CipherJsonCheck JsonValue="@JsonRequest"/>
 
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
-</CipherComponentCard>
+ </ResourceForm>
 
 @code {
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.TransferAmount;
+
     /// <summary>
     /// Is form valid for submission.
     /// </summary>
@@ -25,22 +29,16 @@
     public bool Valid { get; set; } = true;
 
     /// <summary>
-    /// Page title.
-    /// </summary>
-    [Parameter]
-    public string Title { get; set; } = "העברה בין תעודות";
-
-    /// <summary>
     /// Error message upon improper submission.
     /// </summary>
     [Parameter]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; }
+    public string? JsonRequest { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -52,7 +50,7 @@
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event ResultEvent { get; set; }
+    public Event? ResultEvent { get; set; }
 
 
     private CipherFormInfo FormInfo = new();
@@ -63,69 +61,27 @@
     private CipherComments EventComments = new();
     private CipherProcess EventProc = new();
 
-    private CreateEvent RequestedEvent = CreateEvent.Empty();
+    private CreateTranserAmountEvent RequestedEvent = CreateTranserAmountEvent.Empty();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
     public void Submit()
     {
-        if (DonatingPack.ChosenPackage is null)
-        {
-            (Valid, ErrorMessage) = (false, "יש למלא תעודה מוסרת.");
-        }
-        else if (AcceptingPack.ChosenPackage is null)
-        {
-            (Valid, ErrorMessage) = (false, "יש למלא תעודה מקבלת.");
-        }
-        else if (DonatingPack.ChosenPackage.Id == AcceptingPack.ChosenPackage.Id)
-        {
-            (Valid, ErrorMessage) = (false, "תעודה מקבלת ומוסרת חייבות להיות שונות זו מזו.");
-        }
-        else
-        {
-            Package DonatingPackage = ((Package)DonatingPack.ChosenPackage);
-            Package AcceptingPackage = ((Package)AcceptingPack.ChosenPackage);
+        RequestedEvent = new CreateTranserAmountEvent(
+            amount: DeltaM.Amount,
+            donatingPackage: DonatingPack.ChosenPackage,
+            acceptingPackage: AcceptingPack.ChosenPackage,
+            worker: FormInfo.GetWorker(),
+            timestamp: FormInfo.GetDateTime(),
+            processId: EventProc.ChosenProcess?.Id,
+            comments: EventComments.Comments
+        );
 
-            if (DonatingPackage.BrutMass < DeltaM.Amount)
-            {
-                (Valid, ErrorMessage) = (false, $"מסת התעודה המוסרת היא {DonatingPackage.BrutMass} גרם. מסה זו קטנה מהמסה שנמסרת.");
-            }
-            else if (DeltaM.Amount == 0)
-            {
-                (Valid, ErrorMessage) = (false, $"נא לבחור מסה גדולה מ0.");
-            }
-            else
-            {
-                DonatingPackage.BrutMass -= DeltaM.Amount;
-                DonatingPackage.NetMass = DonatingPackage.BrutMass * DonatingPackage.Concentration;
+        (Valid, ErrorMessage) = RequestedEvent.Check();
 
-                AcceptingPackage.BrutMass += DeltaM.Amount;
-                AcceptingPackage.NetMass = AcceptingPackage.BrutMass * AcceptingPackage.Concentration;
-
-                RequestedEvent = SetRequestedEvent(DonatingPackage, AcceptingPackage);
-
-
-                Tuple<bool, string> CheckResult = RequestedEvent.Check();
-                (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה בטופס. שגיאה ב{CheckResult.Item2}.");
-
-                JsonRequest = RequestedEvent.ToJson();
-            }
-        }
         SendRequest();
 
-    }
-
-    public CreateEvent SetRequestedEvent(Package DonatingPackage, Package AcceptingPackage)
-    {
-        return new CreateEvent(
-                    worker: FormInfo.GetWorker(),
-                    timestamp: FormInfo.GetDateTime(),
-                    eventType: 23,
-                    processId: EventProc.ChosenProcess?.Id,
-                    actions: new List<PackageRequest>() { DonatingPackage.Request(), AcceptingPackage.Request() },
-                    comments: EventComments.GetValue()
-                );
     }
 
     /// <summary>
@@ -135,21 +91,22 @@
     {
         if (Valid)
         {
-            (ResultEvent, Error) = EventsRequests.CreateEvent(RequestedEvent);
+            CreateEvent ev = RequestedEvent.Create();
+            JsonRequest += ev.ToJson();
+            (ResultEvent, Error) = EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
-            }
-            else
-            {
-                submission.Valid = true;
+                Valid = false;
+                ErrorMessage = Error.Message;
             }
         }
-        else
-        {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
-        }
+
+        UpdateSubmissionSummary();
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
 }

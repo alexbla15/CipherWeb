@@ -19,6 +19,69 @@ namespace CipherData
             Message = message;
         }
 
+        public static CheckField Greater(decimal value, decimal min_value, string field_name, string? min_field_name = null)
+        {
+            string ErrorMessage = (min_field_name is null) ?
+                $"השדה \"{field_name}\" חייב להיות גדול מ {min_value}." : $"השדה \"{field_name}\" חייב להיות גדול מ {min_field_name}.";
+
+            bool condition = value > min_value;
+
+            return new CheckField(
+                succeeded: condition,
+                message: condition ? string.Empty : ErrorMessage
+                );
+        }
+
+        public static CheckField GreaterEqual(decimal value, decimal min_value, string field_name, string? min_field_name = null)
+        {
+            string ErrorMessage = (min_field_name is null) ? 
+                $"השדה \"{field_name}\" חייב להיות גדול/שווה ל {min_value}." : $"השדה \"{field_name}\" חייב להיות גדול/שווה ל {min_field_name}.";
+
+            bool condition = value >= min_value;
+
+            return new CheckField(
+                succeeded: condition,
+                message: condition ? string.Empty : ErrorMessage
+                );
+        }
+
+        public static CheckField LowerEqual(decimal value, decimal min_value, string field_name, string? min_field_name = null)
+        {
+            string ErrorMessage = (min_field_name is null) ?
+                $"השדה \"{field_name}\" חייב להיות קטן/שווה ל {min_value}." : $"השדה \"{field_name}\" חייב להיות קטן/שווה ל {min_field_name}.";
+
+            bool condition = value <= min_value;
+
+            return new CheckField(
+                succeeded: condition,
+                message: condition ? string.Empty : ErrorMessage
+                );
+        }
+
+        public static CheckField NotEq<T>(T value, T unwanted_value, string field_name)
+        {
+            string ErrorMessage = $"השדה \"{field_name}\" חייב להיות שונה מ{unwanted_value}.";
+
+            bool condition = (value is null) ? unwanted_value != null : !value.Equals(unwanted_value);
+
+            return new CheckField(
+                succeeded: condition,
+                message: condition ? string.Empty : ErrorMessage
+                );
+        }
+
+        public static CheckField Between(DateTime value, DateTime min_value, DateTime max_value, string field_name)
+        {
+            string ErrorMessage = $"השדה \"{field_name}\" חייב להיות בטווח {min_value} - {max_value}.";
+
+            bool condition = value >= min_value && value < max_value;
+
+            return new CheckField(
+                succeeded: condition,
+                message: condition ? string.Empty : ErrorMessage
+                );
+        }
+
         public static CheckField Required<T>(T value, string field_name)
         {
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה.";

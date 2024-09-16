@@ -7,6 +7,8 @@ namespace CipherWeb
         public static readonly BooleanCondition BooleanConditionExample = BooleanCondition.Empty();
         public static readonly Category CategoryExample = Category.Empty();
         public static readonly CategoryProperty CategoryPropertyExample = CategoryProperty.Empty();
+        public static readonly CreateRelocationEvent CreateRelocationEventExample = CreateRelocationEvent.Empty();
+        public static readonly CreateTranserAmountEvent CreateTranserAmountEventExample = CreateTranserAmountEvent.Empty();
         public static readonly Event EventExample = Event.Random();
         public static readonly Package PackageExample = Package.Empty();
         public static readonly PackageProperty PackagePropertyExample = new();

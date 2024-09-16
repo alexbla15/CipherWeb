@@ -86,7 +86,7 @@
         ChosenPackage.System = ChosenSystem ?? StorageSystem.Empty();
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
-        ChosenPackage.Properties = PackProps.ChosenProperties?.ToDictionary(x => x.Name, x => x.Value);
+        ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => new PackageProperty(x.Name, x.Value)).ToList();
         ChosenPackage.Children = InnerPacks.SelectedPackages ?? new List<Package>();
 
         return ChosenPackage;

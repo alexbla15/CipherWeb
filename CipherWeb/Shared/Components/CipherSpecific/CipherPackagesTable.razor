@@ -77,7 +77,7 @@
                     <Template>
                         @if (context.Properties != null)
                         {
-                            @string.Join(", ", context.Properties.Select(x => $"{x.Key}:{x.Value}"));
+                            @string.Join(", ", context.Properties.Select(x => $"{x.Name}:{x.Value}"));
                         }
                     </Template>
                 </RadzenDataGridColumn>

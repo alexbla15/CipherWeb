@@ -55,19 +55,25 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckName()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Name)));
-                }
-            }
+            return CheckField.Required(Name, Translate(nameof(Name)));
+        }
 
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckDescription()
+        {
+            return CheckField.Required(Description, Translate(nameof(Description)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckUnitId()
+        {
+            return CheckField.Required(UnitId, Translate(nameof(UnitId)));
         }
 
         /// <summary>
@@ -77,11 +83,12 @@
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = CheckName();
-            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, StorageSystem.Translate(nameof(RandomData.RandomSystem.Description))); // required
-            result = (!string.IsNullOrEmpty(UnitId)) ? result : Tuple.Create(false, StorageSystem.Translate(nameof(RandomData.RandomSystem.Unit))); // required
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
+            result.Fields.Add(CheckUnitId());
 
-            return result;
+            return result.Check();
         }
 
 

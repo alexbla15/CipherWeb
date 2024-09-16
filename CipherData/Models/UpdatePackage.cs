@@ -48,23 +48,61 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckActionComments()
+        {
+            return CheckField.Required(ActionComments, Translate(nameof(ActionComments)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckPackageId()
+        {
+            return CheckField.Required(PackageId, Translate(nameof(PackageId)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckPackageDescription()
+        {
+            return CheckField.Required(PackageDescription, Translate(nameof(PackageDescription)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckDestinationProcessesIds()
+        {
+            CheckField result = CheckField.Required(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds)));
+            return (result.Succeeded) ? CheckField.FullList(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds))) : result;
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new (true, string.Empty);
+            CheckClass result = new();
+            result.Fields.Add(CheckActionComments());
 
-            result = (!string.IsNullOrEmpty(ActionComments)) ? result : Tuple.Create(false, "שגיאה בהערות / הערות חסרות."); // action comments is required
-            
-            if (string.IsNullOrEmpty(PackageId) && string.IsNullOrEmpty(PackageDescription) && 
-                (DestinationProcessesIds?.Count == 0 || DestinationProcessesIds is null))
+            List<CheckField> optionalChanges = new() { CheckPackageId(), CheckPackageDescription(), CheckDestinationProcessesIds()};
+            bool FoundChanges = optionalChanges.Any(x => x.Succeeded);
+
+            if (FoundChanges)
             {
-                result = Tuple.Create(false, "לא ניתן להזין טופס עדכון ללא שינויים.");
+                result.Fields.Add(optionalChanges.Where(x => x.Succeeded).First());
+            }
+            else
+            {
+                return Tuple.Create(false, "לא נמצאו שינויים בתעודה.");
             }
 
-            return result;
+            return result.Check();
         }
 
         /// <summary>
@@ -82,6 +120,11 @@
         public string ToJson()
         {
             return Resource.ToJson(this);
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(UpdatePackage), searchedAttribute);
         }
     }
 }

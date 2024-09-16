@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -20,7 +18,7 @@ namespace CipherData.Models
         /// JSON-like additional properties of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
-        public Dictionary<string,string>? Properties { get; set; }
+        public List<PackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
@@ -77,7 +75,7 @@ namespace CipherData.Models
         /// <param name="id">Id of new package</param>
         public PackageRequest(string id, string system, decimal brutMass, decimal netMass, string category,
             string? vessel = null, List<string>? children = null, string? parent = null,
-            Dictionary<string, string>? properties = null)
+            List<PackageProperty>? properties = null)
         {
             Id = id;
             Properties = properties;
@@ -98,85 +96,76 @@ namespace CipherData.Models
             return Resource.ToJson(this);
         }
 
-
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckId(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckId()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Id))
-                {
-                    return Tuple.Create(false, Translate(nameof(Id)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Id, Translate(nameof(Id)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckCategoryId(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckCategoryId()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Id))
-                {
-                    return Tuple.Create(false, Translate(nameof(CategoryId)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckSystemId(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckSystemId()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Id))
-                {
-                    return Tuple.Create(false, Translate(nameof(SystemId)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(SystemId, Translate(nameof(SystemId)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckMass(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckBrutMass()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
+            return CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckNetMass()
+        {
+            return CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckMass()
+        {
+            CheckField result = CheckBrutMass();
+            result = (result.Succeeded) ? CheckNetMass() : result;
+
+            if (result.Succeeded)
             {
-                if (BrutMass < 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(BrutMass)));
-                }
-                if (NetMass < 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(NetMass)));
-                }
-                if (BrutMass < NetMass)
-                {
-                    return Tuple.Create(false, $"{Translate(nameof(BrutMass))}. מסה ברוטו צריכה להיות גדולה ממסה נטו.");
-                }
+                result = CheckField.GreaterEqual(BrutMass, NetMass, Translate(nameof(BrutMass)), Translate(nameof(NetMass)));
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckProperties()
+        {
+            CheckField result = new();
+
+            if (Properties != null)
+            {
+                result = CheckField.Distinct(Properties.Select(x=>x.Name).ToList(), Translate(nameof(Properties)));
+                result = (result.Succeeded)? CheckField.ListItems(Properties, Translate(nameof(Properties))) : result;
             }
 
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return result;
         }
 
         /// <summary>
@@ -186,12 +175,14 @@ namespace CipherData.Models
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = CheckId();
-            result = CheckCategoryId(result);
-            result = CheckSystemId(result);
-            result = CheckMass(result);
+            CheckClass result = new();
+            result.Fields.Add(CheckId());
+            result.Fields.Add(CheckCategoryId());
+            result.Fields.Add(CheckSystemId());
+            result.Fields.Add(CheckMass());
+            result.Fields.Add(CheckProperties());
 
-            return result;
+            return result.Check();
         }
 
         public static string Translate(string searchedAttribute)

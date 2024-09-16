@@ -30,9 +30,9 @@
 
         @if (NewProps != null)
         {
-            @foreach (string prop in NewProps.Keys)
+            @foreach (PackageProperty prop in NewProps)
             {
-                <CipherAutoComplete Label="@prop" @bind-Value="@NewProps[prop]" Icon="@(Icons.Cipher.Properties)" />
+                <CipherAutoComplete Label="@prop.Name" @bind-Value="@prop.Value" Icon="@(Icons.Cipher.Properties)" />
             }
         }
 
@@ -127,7 +127,7 @@
     private CipherData.Models.UpdatePackage RequestedPackUpdate = CipherData.Models.UpdatePackage.Empty();
     private CreateEvent UpdatePackEvent = CreateEvent.Empty();
 
-    private Dictionary<string, string>? NewProps = new Dictionary<string, string>();
+    private List<PackageProperty>? NewProps = new();
 
     private bool FirstInitialization = true;
 
@@ -140,9 +140,9 @@
     {
         if (NewProps != null)
         {
-            if (NewProps.ContainsKey(prop_name))
+            if (NewProps.Any(x=>x.Name == prop_name))
             {
-                NewProps[prop_name] = new_value;
+                NewProps.Where(x=>x.Name == prop_name).First().Value = new_value;
             }
         }
         else
@@ -354,7 +354,7 @@
 
         if ((OriginalPack.Properties != null) && (NewPack.Properties != null))
         {
-            different |= !OriginalPack.Properties.OrderBy(kvp => kvp.Key).SequenceEqual(NewPack.Properties.OrderBy(kvp => kvp.Key));
+            different |= !OriginalPack.Properties.OrderBy(x => x.Name).SequenceEqual(NewPack.Properties.OrderBy(x => x.Name));
         }
         else if (((OriginalPack.Properties != null) && (NewPack.Properties == null)) || ((OriginalPack.Properties == null) && (NewPack.Properties != null)))
         {

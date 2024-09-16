@@ -14,7 +14,7 @@ namespace CipherData.Models
         /// Dictionary of additional properties of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public Dictionary<string, string>? Properties { get; set; }
+        public List<PackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
@@ -108,12 +108,12 @@ namespace CipherData.Models
 
             if (properties == null && Category.Properties != null)
             {
-                Properties = new Dictionary<string, string>();
+                Properties = new List<PackageProperty>();
                 foreach (CategoryProperty prop in Category.Properties)
                 {
-                    if (!Properties.ContainsKey(prop.Name))
+                    if (!Properties.Any(x=>x.Name == prop.Name))
                     {
-                        Properties.Add(prop.Name, prop.DefaultValue);
+                        Properties.Add(new PackageProperty(prop.Name, prop.DefaultValue));
                     }
                 }
             }

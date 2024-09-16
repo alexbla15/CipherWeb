@@ -48,10 +48,13 @@
                 
                 @if (ChosenObject != null && SetMode != FormMode.Create)
                 {
-                    @foreach (string prop in ChosenObject.Properties.Keys)
+                    if (ChosenObject.Properties != null)
                     {
-                        <CipherAutoComplete Label="@prop" Value="@ChosenObject.Properties[prop]" Disabled="true"
-                                            Icon="@Icons.Cipher.Properties" />
+                        @foreach (PackageProperty prop in ChosenObject.Properties)
+                        {
+                            <CipherAutoComplete Label="@prop.Name" Value="@prop.Value" Disabled="true"
+                            Icon="@Icons.Cipher.Properties" />
+                        }
                     }
                 }
                 <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
