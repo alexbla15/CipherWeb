@@ -15,14 +15,14 @@
             <Buttons>
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                                      Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Name))" Icon="@Icons.Cipher.Unit"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Description))" Icon="@Icons.Documents.Page.Description"
+                <CipherAutoComplete Label="@Unit.Translate(nameof(CachedData.UnitExample.Description))" Icon="@Icons.Documents.Page.description"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
                 <CipherUnitDropDown Label="@Unit.Translate(nameof(CachedData.UnitExample.Parent))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />

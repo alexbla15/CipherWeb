@@ -37,17 +37,68 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Name)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Description)));
+                }
+            }
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckSteps(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (Steps.Count <= 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(Steps)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, ProcessDefinition.Translate(nameof(RandomData.RandomProcessDefinition.Name))); // required
-            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, ProcessDefinition.Translate(nameof(RandomData.RandomProcessDefinition.Description))); // required
-            result = (Steps.Count > 0) ? result : Tuple.Create(false, ProcessDefinition.Translate(nameof(RandomData.RandomProcessDefinition.Steps))); // required
+            Tuple<bool, string> result = CheckName();
+            result = CheckDescription(result);
+            result = CheckSteps(result);
 
             return result;
         }
@@ -100,6 +151,11 @@
         public static ProcessDefinitionRequest Empty()
         {
             return new ProcessDefinitionRequest(name: string.Empty, description: string.Empty, steps: new List<ProcessStepDefinition>());
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(ProcessDefinitionRequest), searchedAttribute);
         }
     }
 }

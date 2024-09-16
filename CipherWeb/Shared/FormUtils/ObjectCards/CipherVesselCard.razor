@@ -14,7 +14,7 @@
             <Buttons>
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                                      Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>

@@ -1,4 +1,7 @@
-﻿namespace CipherData.Models
+﻿using CipherData.Requests;
+using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create new event
@@ -80,11 +83,108 @@
         }
 
         /// <summary>
-        /// Return an empty CreateEvent object scheme.
+        /// Method to check if field is applicable for this request
         /// </summary>
-        public static CreateEvent Empty()
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckWorker(Tuple<bool, string>? CurrCheckResult = null)
         {
-            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new List<PackageRequest>());
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Worker))
+                {
+                    return Tuple.Create(false, Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.Worker)}"]);
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+        
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckEventType(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (EventType == 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(EventType)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckComments(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Comments))
+                {
+                    return Tuple.Create(false, Translate(nameof(Comments)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckTimeStamp(Tuple<bool, string>? CurrCheckResult = null)
+        {
+
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (Timestamp is null)
+                {
+                    return Tuple.Create(false, Translate(nameof(Timestamp)));
+                }
+                else if (Timestamp < DateTime.Parse("01/01/1900") || Timestamp > DateTime.Now)
+                {
+                    return Tuple.Create(false, Translate(nameof(Timestamp)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckActions(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                List<Tuple<bool, string>> actionsCheck = Actions.Select(x => x.Check()).ToList();
+                if (Actions.Count == 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(Actions)));
+                }
+                else if (actionsCheck.Any(x => x.Item1 == false))
+                {
+                    return Tuple.Create(false, actionsCheck.Where(x => !x.Item1).First().Item2);
+                }
+                else if (Actions.Select(x => x.Id).Distinct().Count() != Actions.Count)
+                {
+                    return Tuple.Create(false, $"{Translate(nameof(Actions))}. לא ניתן להשתמש באותה תעודה מוסרת מספר פעמים");
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
         }
 
         /// <summary>
@@ -94,25 +194,26 @@
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-            List<Tuple<bool, string>> actionsCheck = Actions.Select(x=>x.Check()).ToList();
+            Tuple<bool, string> result = CheckWorker();
+            result = CheckEventType(result);
+            result = CheckComments(result);
+            result = CheckTimeStamp(result);
+            result = CheckActions(result);
 
-            result = (!string.IsNullOrEmpty(Worker)) ? result : Tuple.Create(false, Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.Worker)}"]); // required
-            result = (EventType > 0) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.EventType))); // required
-            result = (!string.IsNullOrEmpty(Comments)) ? result : Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Comments))); // required
+            return result;
+        }
 
-            if (Timestamp is null)
-            {
-                return Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));
-            }
-            else
-            {
-                result = (Timestamp > DateTime.Parse("01/01/1900") && Timestamp <= DateTime.Now) ? result :
-                    Tuple.Create(false, Event.Translate(nameof(RandomData.RandomEvent.Timestamp)));
-                result = (Actions.Count > 0 && !actionsCheck.Any(x => x.Item1 == false)) ? result :
-                    Tuple.Create(false, actionsCheck.Where(x => x.Item1 == false).First().Item2);
-                return result;
-            }
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(CreateEvent), searchedAttribute);
+        }
+
+        /// <summary>
+        /// Return an empty CreateEvent object scheme.
+        /// </summary>
+        public static CreateEvent Empty()
+        {
+            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new List<PackageRequest>());
         }
 
         /// <summary>

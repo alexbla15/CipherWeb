@@ -5,7 +5,7 @@ namespace CipherWeb.Data
 {
     public class CipherNavLinks
     {
-        public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home._Home, Name = "מסך הבית" };
+        public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home.home, Name = "מסך הבית" };
         public static readonly MyNavLink Personal = new() { Href = "Personal", Icon = Icons.Social.SinglePerson.AccountCircle, Name = "אזור אישי" };
 
         public static readonly MySubNavLink AddPackage = new() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.AddCircleOutline };
@@ -14,12 +14,12 @@ namespace CipherWeb.Data
         public static readonly MySubNavLink AddCategory = new() { Href = "Forms/AddCategory", Name = "קטגוריה חדשה", Icon = Icons.Symbols.Category };
         public static readonly MySubNavLink AddProcessDefinition = new() { Href = "Forms/AddProcess", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
         public static readonly MySubNavLink AddVessel = new() { Href = "Forms/AddVessel", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddSystem", Name = "מערכת חדשה", Icon = Icons.Documents.Inventory };
+        public static readonly MySubNavLink AddStorageSystem = new() { Href = "Forms/AddSystem", Name = "מערכת חדשה", Icon = Icons.Documents.inventory };
         public static readonly MySubNavLink AddUnit = new() { Href = "Forms/AddUnit", Name = "יחידה חדשה", Icon = Icons.Cipher.Unit };
         public static readonly MyNavLink Forms = new()
         {
             Href = "Forms",
-            Icon = Icons.Documents.Edit._Edit,
+            Icon = Icons.Documents.Edit.edit,
             Name = "הזנה",
             SubLinks = new()
                 { AddPackage, TransferAmount, Relocation,
@@ -36,7 +36,7 @@ namespace CipherWeb.Data
         public static readonly MyNavLink Update = new()
         {
             Href = "Forms/Updates",
-            Icon = Icons.Design.RebaseEdit,
+            Icon = Icons.Design.rebase_edit,
             Name = "עריכת נתונים",
             SubLinks = new()
                 { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
@@ -44,10 +44,10 @@ namespace CipherWeb.Data
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור" };
 
-        public static readonly MySubNavLink CustomReport = new() { Href = "Reports/CustomReport", Name = "יצירת דוח", Icon = Icons.Documents.Edit._Edit};
+        public static readonly MySubNavLink CustomReport = new() { Href = "Reports/CustomReport", Name = "יצירת דוח", Icon = Icons.Documents.Edit.edit};
         public static readonly MySubNavLink PackagesReport = new() { Href = "Reports/Packages", Name = "תעודות", Icon = Icons.Cipher.Package };
         public static readonly MySubNavLink CategoriesReport = new() { Href = "Reports/Categories", Name = "סוגים", Icon = Icons.Symbols.Category };
-        public static readonly MySubNavLink EventsReport = new() { Href = "Reports/Events", Name = "תנועות", Icon = Icons.Data.DeviceHub };
+        public static readonly MySubNavLink EventsReport = new() { Href = "Reports/Events", Name = "תנועות", Icon = Icons.Data.device_hub };
         public static readonly MySubNavLink DepartmentsReport = new() { Href = "Reports/Departments", Name = "תחומים", Icon = Icons.Cipher.Department };
         public static readonly MySubNavLink UnitsReport = new() { Href = "Reports/Units", Name = "יחידות", Icon = Icons.Cipher.Unit };
         public static readonly MySubNavLink LocationsReport = new() { Href = "Reports/Locations", Name = "מיקומים", Icon = Icons.Cipher.Location };
@@ -79,7 +79,7 @@ namespace CipherWeb.Data
                 { FreeSearch, AdvancedSearch, CategorySearch, PackageSearch, VesselSearch, SystemSearch, UnitSearch, ProcessSearch }
         };
 
-        public static readonly MyNavLink Information = new() { Href = "Information", Icon = Icons.Communication.Chat.QA, Name = "הסברים ותמיכה" };
+        public static readonly MyNavLink Information = new() { Href = "Information", Icon = Icons.Communication.Chat.question_answer, Name = "הסברים ותמיכה" };
 
         public static readonly List<MyNavLink> links = new()
         {

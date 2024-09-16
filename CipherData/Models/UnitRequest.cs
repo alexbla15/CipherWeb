@@ -15,7 +15,7 @@
         /// Description of unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Description))]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
@@ -42,7 +42,7 @@
         /// <param name="properties">JSON-like additional properties of the unit</param>
         /// <param name="parentId">ID of parent unit</param>
         /// <param name="conditions">Conditions on the unit to make sure it is valid.</param>
-        public UnitRequest(string name, string description, GroupedBooleanCondition? conditions = null, string? properties = null,
+        public UnitRequest(string name, string? description, GroupedBooleanCondition? conditions = null, string? properties = null,
             string? parentId = null)
         {
             Name = name;

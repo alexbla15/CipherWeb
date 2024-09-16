@@ -53,15 +53,31 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Name)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, StorageSystem.Translate(nameof(RandomData.RandomSystem.Name))); // required
+            Tuple<bool, string> result = CheckName();
             result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, StorageSystem.Translate(nameof(RandomData.RandomSystem.Description))); // required
             result = (!string.IsNullOrEmpty(UnitId)) ? result : Tuple.Create(false, StorageSystem.Translate(nameof(RandomData.RandomSystem.Unit))); // required
 
@@ -108,6 +124,11 @@
         public string ToJson()
         {
             return Resource.ToJson(this);
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(SystemRequest), searchedAttribute);
         }
     }
 }

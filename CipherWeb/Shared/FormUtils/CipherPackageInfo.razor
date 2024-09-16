@@ -14,10 +14,16 @@
     public bool IsNew { get; set; } = false;
 
     /// <summary>
+    /// Is new package an assembly of other packages? otherwise it must get partial mass from other packeges.
+    /// </summary>
+    [Parameter]
+    public bool AssemblyOfPackages { get; set; } = false;
+
+    /// <summary>
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public Package pack { get; set; } = Package.Empty();
+    public Package ChosenPackage { get; set; } = Package.Empty();
 
     /// <summary>
     /// Processes which can use the current package.
@@ -29,13 +35,19 @@
     /// All optional vessels
     /// </summary>
     [Parameter]
-    public List<Vessel> AllVessels { get; set; }
+    public List<Vessel>? AllVessels { get; set; }
 
     /// <summary>
     /// Vessel which contains the package.
     /// </summary>
     [Parameter]
     public Vessel? ChosenVessel { get; set; }
+
+    /// <summary>
+    /// Category of the package.
+    /// </summary>
+    [Parameter]
+    public Category? ChosenCategory { get; set; }
 
     /// <summary>
     /// System which contains the package.
@@ -55,6 +67,12 @@
     private CipherVesselDropDown packVessel = new();
     private CipherComments PackDescription = new();
     private CipherPackageId ParentPackage = new();
+    private CipherPackageProperties PackProps = new();
+    private CipherPackagesPicking InnerPacks = new();
+    private CipherInputComponents InputPacks = new();
+
+    private Package NewPackage = Package.Empty();
+    private List<PackageProperty> ChosenProperties = new List<PackageProperty>();
 
     protected override void OnInitialized()
     {
@@ -63,19 +81,23 @@
 
     public Package Value()
     {
-        pack.Id = (packId.Check()) ? packId.Value : string.Empty;
-        pack.Category = packCategory.ChosenCategory ?? Category.Empty();
-        pack.System = ChosenSystem ?? StorageSystem.Empty();
-        pack.Vessel = ChosenVessel;
-        pack.Parent = ParentPackage.ChosenPackage;
-        pack.Properties = pack.Category.Properties?.ToDictionary(x => x.Name, x => x.DefaultValue);
+        ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
+        ChosenPackage.Category = packCategory.ChosenCategory ?? Category.Empty();
+        ChosenPackage.System = ChosenSystem ?? StorageSystem.Empty();
+        ChosenPackage.Vessel = ChosenVessel;
+        ChosenPackage.Parent = ParentPackage.ChosenPackage;
+        ChosenPackage.Properties = PackProps.ChosenProperties?.ToDictionary(x => x.Name, x => x.Value);
+        ChosenPackage.Children = InnerPacks.SelectedPackages ?? new List<Package>();
 
-        return pack;
+        return ChosenPackage;
     }
 
     public void ChangedCategory()
     {
+        ChosenCategory = packCategory.ChosenCategory;
         DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>();
+        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty(name: x.Name, value: x.DefaultValue)).ToList() ?? new List<PackageProperty>();
+        StateHasChanged();
     }
 
     public void ChangedVessel()
@@ -98,28 +120,93 @@
 
         (AllVessels, Error) = (packLocation.ChosenSystem is null)? Vessel.All() : StorageSystem.Vessels(packLocation.ChosenSystem.Id);
     }
+
+    /// <summary>
+    /// Once there are some inner packs, user cannot add
+    /// </summary>
+    private void ChangeView()
+    {
+        if (InnerPacks.SelectedPackages is null)
+        {
+            AssemblyOfPackages = false;
+        }
+        else
+        {
+            AssemblyOfPackages = (InnerPacks.SelectedPackages.Count() > 0);
+        }
+    }
+
+    /// <summary>
+    /// choosing relevant packages for calculation of mass
+    /// </summary>
+    /// <param name="pack">Relevant package</param>
+    public decimal GetBrutMass(Package pack)
+    {
+        List<Package> RelevantPackages = AssemblyOfPackages ? pack.Children.ToList() : InputPacks.chosenPacks;
+        return RelevantPackages.Select(x => x.BrutMass).Sum();
+    }
+
+    public void SetNewPackage()
+    {
+        NewPackage = Package.Empty();
+
+        NewPackage = Value();
+
+        // choosing relevant packages for calculation of mass
+        NewPackage.BrutMass = GetBrutMass(NewPackage);
+        NewPackage.NetMass = NewPackage.BrutMass * NewPackage.Concentration;
+    }
+
+    /// <summary>
+    /// Get all the package requests of packages that were changed in this event.
+    /// </summary>
+    public List<PackageRequest> GetChangedPacks()
+    {
+        SetNewPackage();
+
+        List<PackageRequest> ChangedPacks = new() { NewPackage.Request() };
+
+        if (!AssemblyOfPackages)
+        {
+            foreach (Package inputPack in InputPacks.chosenPacks)
+            {
+                Package PreviousStatus = Package.Get(inputPack.Id).Item1;
+
+                PackageRequest packageRequest = PreviousStatus.Request();
+                // removing the amount that was transfered from the original amount
+                packageRequest.BrutMass -= inputPack.BrutMass;
+                packageRequest.NetMass = packageRequest.BrutMass * PreviousStatus.Concentration;
+
+                ChangedPacks.Add(packageRequest);
+            }
+        }
+        return ChangedPacks;
+    }
+}
+
+
+@if (!AssemblyOfPackages)
+{
+    <CipherInputComponents @ref="InputPacks" />
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
     <CipherAutoComplete Label="@Package.Translate(nameof(CachedData.PackageExample.Id))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
-    <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" />
+    <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory"/>
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
     <CipherPackageId Label="@Package.Translate(nameof(CachedData.PackageExample.Parent))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" Icon="@Icons.Documents.Page.Description" Width="300px" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.Scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.Scale" />
+        <CipherComments @ref="PackDescription" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.scale" />
         <CipherProcesses Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" ChosenProcesses="@DestinationProcesses" />
     }
-
-    @if (packCategory.ChosenCategory != null)
-    {
-        @foreach (CategoryProperty prop in packCategory.ChosenCategory.Properties)
-        {
-            <CipherAutoComplete Label="@prop.Name" Value="@prop.DefaultValue" Disabled="true"
-                                Icon="@((prop.PropertyType == PropertyType.Text) ? Icons.Design.Colors.Draw : ((prop.PropertyType == PropertyType.Number) ? Icons.Cipher.Properties : Icons.Cipher.Rule))" />
-        }
-    }
 </CipherComponentCard>
+
+<CipherComponentCard Title="תעודות המוכלות בתעודה זו">
+    <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView" />
+</CipherComponentCard>
+
+<CipherPackageProperties @ref="PackProps" ChosenProperties="@ChosenProperties" />

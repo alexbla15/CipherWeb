@@ -16,7 +16,7 @@
 <CipherDataFilter_WithDataGrid Title="סינון תנועות לאישור" Cipher_TItem="Event" WithCustomDataGrid=true FilterFields="@FilterFields">
     <Buttons>
         <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined"></CipherButton>
-        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
         <CipherExcelButton Data="@events"></CipherExcelButton>
         <CipherPDFButton></CipherPDFButton>
     </Buttons>
@@ -32,7 +32,7 @@
                         <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
                                       Variant="Variant.Flat" ColorShade="Shade.Default"
                                       Size="ButtonSize.Medium" />
-                        <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.Cancel"
+                        <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
                                       Variant="Variant.Flat" ColorShade="Shade.Default"
                                       Size="ButtonSize.Medium" />
                     </Template>
@@ -84,7 +84,7 @@
         </CipherDataGrid>
     </CustomDataGrid>
 </CipherDataFilter_WithDataGrid>
-<CipherButton Icon="@Icons.Documents.Edit.Save" Text="שמירת אישורים" Variant="Variant.Outlined" Width="100%"></CipherButton>
+<CipherButton Icon="@Icons.Documents.Edit.save" Text="שמירת אישורים" Variant="Variant.Outlined" Width="100%"></CipherButton>
 
 @code {
     /// <summary>

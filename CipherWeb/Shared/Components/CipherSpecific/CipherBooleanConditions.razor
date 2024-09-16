@@ -134,8 +134,8 @@
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddCondition())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAllConditions())" HelpText="@DeleteAllText" />
-        <CipherButton Icon="@Icons.Documents.Edit.Save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAllConditions())" HelpText="@DeleteAllText" />
+        <CipherButton Icon="@Icons.Documents.Edit.save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
     </Buttons>
     <ChildContent>
         @if (ChosenConditions.Count() == 0)

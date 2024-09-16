@@ -26,7 +26,7 @@
     /// All chosen category-properties
     /// </summary>
     [Parameter]
-    public List<PackageProperty>? ChosenProperties { get; set; } = new List<PackageProperty>();
+    public List<PackageProperty> ChosenProperties { get; set; } = new List<PackageProperty>();
 
     /// <summary>
     /// Error response for fetching data
@@ -39,7 +39,6 @@
     protected override void OnInitialized()
     {
         Title ??= "תכונות התעודה";
-        ChosenProperties = ChosenProperties ?? new List<PackageProperty>();
     }
 
     /// <summary>
@@ -86,7 +85,7 @@
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
         @if (ChosenProperties.Count() == 0)

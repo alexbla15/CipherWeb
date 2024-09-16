@@ -61,8 +61,6 @@
 
         StateHasChanged();
 
-        RefreshOptionalPackages();
-
         await CustomDataGrid.RefreshDataAsync();
     }
 
@@ -83,10 +81,6 @@
     {
         chosenPacks.Remove(pack);
 
-        RefreshOptionalPackages();
-
-        CustomDataGrid.Data = chosenPacks;
-
         await CustomDataGrid.RefreshDataAsync();
 
         StateHasChanged();
@@ -99,28 +93,15 @@
     async Task DeleteAll()
     {
         chosenPacks.Clear();
-        CustomDataGrid.Data = chosenPacks;
 
         await CustomDataGrid.RefreshDataAsync();
-
-        RefreshOptionalPackages();
-    }
-
-    /// <summary>
-    /// Remove used packages from options, preventing duplicity.
-    /// </summary>
-    public void RefreshOptionalPackages()
-    {
-        // refresh options
-        (allPacks, error) = CachedData.AllPackages;
-        allPacks.RemoveAll(p => chosenPacks.Any(x => x.Id == p.Id));
     }
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
         @if (chosenPacks.Count() == 0)
@@ -142,7 +123,7 @@
                         }
                         else
                         {
-                        <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = ((Package)args).Id)" />
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = (args is null) ? string.Empty : ((Package)args).Id)" />
                         }
                     </Template>
                 </RadzenDataGridColumn>

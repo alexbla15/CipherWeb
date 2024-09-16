@@ -14,14 +14,14 @@
             <Buttons>
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                                      Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name))" Icon="@Icons.Cipher.Process" @ref=ProcName
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
-                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description))" Icon="@Icons.Communication.Chat.Comment" @ref=ProcDescription
+                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
             </ChildContent>
         </CipherComponentCard>

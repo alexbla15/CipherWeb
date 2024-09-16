@@ -53,21 +53,69 @@
             DefaultValue = value;
         }
 
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Name)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Description)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckDefaultValue(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (PropertyType == PropertyType.Number)
+                {
+                    return decimal.TryParse(DefaultValue, out _) ? (CurrCheckResult is null ? Tuple.Create(true, string.Empty) : CurrCheckResult) : Tuple.Create(false, $"תכונה {Name} היא מספרית. הערך שהוזן אינו תואם לכך.");
+                }
+                else if (PropertyType == PropertyType.Boolean)
+                {
+                    return bool.TryParse(DefaultValue, out _) ? (CurrCheckResult is null ? Tuple.Create(true, string.Empty) : CurrCheckResult) : Tuple.Create(false, $"תכונה {Name} היא בוליאנית. הערך שהוזן אינו תואם לכך.");
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomCategoryProperty.Name))); // required
-            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Translate(nameof(RandomData.RandomCategoryProperty.Description))); // required
-
-            if (PropertyType == PropertyType.Number)
-            {
-                result = decimal.TryParse(DefaultValue, out _) ? result : Tuple.Create(false, $"תכונה {Name} היא מספרית. הערך שהוזן אינו תואם לכך."); 
-            }
-            else if (PropertyType == PropertyType.Boolean)
-            {
-                result = bool.TryParse(DefaultValue, out _) ? result : Tuple.Create(false, $"תכונה {Name} היא בוליאנית. הערך שהוזן אינו תואם לכך.");
-            }
+            Tuple<bool, string> result = CheckName();
+            result = CheckDescription(result);
+            result = CheckDefaultValue(result);
 
             return result;
         }

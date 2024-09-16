@@ -6,7 +6,7 @@
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
             <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Value="@Report.GetNextId().ToString()" Disabled="true"></CipherAutoComplete>
-            <CipherAutoComplete Label="שם הדוח" Icon="@Icons.Documents.Edit._Edit" @ref="ReportName"/>
+            <CipherAutoComplete Label="שם הדוח" Icon="@Icons.Documents.Edit.edit" @ref="ReportName"/>
         </CipherComponentCard>
         <CipherParametrization />
     </RadzenStepsItem>
@@ -23,8 +23,8 @@
 
         <CipherComponentCard Title="תצוגה מקדימה">
             <Buttons>
-                <CipherButton Icon="@Icons.Arrows.Rounded.Refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
-                <CipherButton Icon="@Icons.Documents.Edit.Save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Arrows.Rounded.refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Documents.Edit.save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
                 <CipherExcelButton Data="@db_events"></CipherExcelButton>
                 <CipherPDFButton></CipherPDFButton>
             </Buttons>
@@ -46,7 +46,7 @@
             <CipherComponentCard Title="סיום" >
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
                     <CipherSubmitButton Size="ButtonSize.Medium" Click="@OpenSavingDialog"/>
-                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" 
+                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" 
                     Text="ביטול" Path="@CipherNavLinks.Reports.Href" Size="ButtonSize.Medium"></CipherNavButton>
                 </RadzenStack>
             </CipherComponentCard>
@@ -194,7 +194,7 @@
         <br/>
         <CipherJsonCheck JsonValue="@JsonRequest" />
         <br/>
-        <CipherButton Text="קישור לדוח" Icon="@Icons.Arrows.Squared.OpenInNew" Width="100%" />
+        <CipherButton Text="קישור לדוח" Icon="@Icons.Arrows.Squared.open_in_new" Width="100%" />
     </CipherComponentCard>
     
     , Constants.SetDialogOptions);

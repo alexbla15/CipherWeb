@@ -97,14 +97,14 @@
             <CipherComponentCard Title="הגדרת שלבים" Visible="@Visible">
                 <Buttons>
                     <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddStep())" HelpText="@AddText" />
-                    <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAllSteps())" HelpText="@DeleteAllText" />
+                    <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAllSteps())" HelpText="@DeleteAllText" />
                 </Buttons>
                 <ChildContent>
                     @if (ChosenSteps.Count() == 0)
                     {
                         <CipherText Text="@HelpText" />
                     }
-                    <RadzenDataGrid @ref="StepsDataGrid" Data="ChosenSteps" TItem="ProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
+                    <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" TItem="ProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
                         <Columns>
                             <RadzenDataGridColumn Width="10%" TItem="ProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                                 <Template Context="step">

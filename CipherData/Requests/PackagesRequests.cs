@@ -18,7 +18,9 @@ namespace CipherData.Requests
         /// Path: GET /packages/{id}
         public static Tuple<Package,ErrorResponse> GetPackage(string pack_id)
         {
-            return GenericRequests.Request(RandomData.RandomPackage, canBadRequest:false, canBeNotFound:true);
+            Package res = RandomData.RandomPackage;
+            res.Id = pack_id;
+            return GenericRequests.Request(res, canBadRequest:false, canBeNotFound:true);
         }
 
         /// <summary>

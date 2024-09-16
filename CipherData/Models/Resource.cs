@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -133,6 +132,23 @@ namespace CipherData.Models
         public Tuple<UserActionResponse, ErrorResponse> UserActions()
         {
             return LogsRequests.GetObjectLogs(uuid: Uuid);
+        }
+
+        /// <summary>
+        /// Check if check has allready failed.
+        /// </summary>
+        /// <param name="CurrCheckResult"></param>
+        /// <returns></returns>
+        public static bool CheckFailed(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (CurrCheckResult != null)
+            {
+                if (!CurrCheckResult.Item1)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

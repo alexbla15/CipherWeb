@@ -14,26 +14,27 @@
             <Buttons>
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                                      Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateCategory.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Name))" Icon="@Icons.Symbols.Category" @ref=CatName 
                 Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name"/>
-                <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat
-                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@ChosenObject?.Parent" />
-                <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Symbols.Category" Multiline="true"
+                <CipherCategoryDropDown Label="@Category.Translate(nameof(CachedData.CategoryExample.Parent))" @ref=ParentCat Change="@(args => ChangedParent((Category?)args))"
+                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
+                <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Documents.Page.description" Multiline="true"
                 @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
                 <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.Input" Label="@Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses))" @ref=InProcs
+                <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses))" @ref=InProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.Output" Label="@Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses))" @ref=OutProcs
+                <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses))" @ref=OutProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
 
             </ChildContent>
         </CipherComponentCard>
-        <CipherCategoryProperties @ref=CatProperties ChosenProperties="@(ChosenObject?.Properties ?? new List<CategoryProperty>())"  />
+        <CipherCategoryProperties @ref=CatProperties
+                                  ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<CategoryProperty>())))" />
     </ChildContent>
 </CipherComponentCard>
 
@@ -65,6 +66,9 @@
     private CipherProcesses OutProcs = new();
     private CipherCategoryProperties CatProperties = new();
 
+    private Category? Parent;
+    private List<CategoryProperty>? ParentProps;
+
     protected override void OnInitialized()
     {
         Title ??= "פרטי הקטגוריה";
@@ -92,7 +96,7 @@
         cat.Description = CatDescription.Check() ? CatDescription.Value : string.Empty;
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        cat.Properties = ChosenObject?.Properties;
+        cat.Properties = CatProperties.ChosenProperties;
 
         string cat_mask = CatMask.GetValue();
         if (cat_mask != string.Empty)
@@ -101,5 +105,22 @@
         }
 
         return cat;
+    }
+
+    /// <summary>
+    /// Method to set properties according to category's parent's properties.
+    /// </summary>
+    public void ChangedParent(Category? parent)
+    {
+        Parent = parent;
+        ParentProps = null;
+
+        if (parent != null)
+        {
+            if (parent.Properties != null)
+            {
+                ParentProps = parent?.Properties;
+            }
+        }
     }
 }

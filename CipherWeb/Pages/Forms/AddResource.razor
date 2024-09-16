@@ -49,17 +49,22 @@
 
     private CipherSubmit submission = new();
     private ResourceForm ResourcePage = new();
+    private CipherPackageInfo PackInfo = new();
+    private CipherComments EventComments = new();
+    private CipherFormInfo FormInfo = new();
+    private CipherProcess EventProc = new();
 
+    private Package NewPackage = Package.Empty();
     private UnitRequest unitRequest = UnitRequest.Empty();
     private CategoryRequest catRequest = CategoryRequest.Empty();
     private VesselRequest vesRequest = VesselRequest.Empty();
     private ProcessDefinitionRequest procDefRequest = ProcessDefinitionRequest.Empty();
     private SystemRequest sysRequest = SystemRequest.Empty();
+    private CreateEvent packRequest = CreateEvent.Empty();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
     private CipherSystemCard sysCard = new();
-    private CipherPackageCard packCard = new();
     private CipherProcessCard procCard = new();
     private CipherCategoryCard catCard = new();
 
@@ -98,6 +103,21 @@
         {
             sysRequest = sysCard.Value();
             return sysRequest.Check();
+        }
+        else if (typeof(Cipher_TItem) == typeof(Package))
+        {
+            List<PackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
+
+            packRequest = new CreateEvent(
+            worker: FormInfo.GetWorker(),
+            processId: EventProc.ChosenProcess?.Id,
+            timestamp: FormInfo.GetDateTime(),
+            eventType: 21,
+            actions: ChangedPacks,
+            comments: EventComments.GetValue()
+            );
+
+            return packRequest.Check();
         }
 
         return new Tuple<bool, string>(false, "שגיאת מערכת");
@@ -147,6 +167,10 @@
         else if (typeof(Cipher_TItem) == typeof(StorageSystem))
         {
             HandleRequest(() => SendSystemRequest());
+        }
+        else if (typeof(Cipher_TItem) == typeof(Package))
+        {
+            HandleRequest(() => SendPackageRequest());
         }
         else
         {
@@ -210,6 +234,20 @@
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)SystemsRequests.CreateSystem(sysRequest);
     }
 
+    private Tuple<Cipher_TItem, ErrorResponse>? SendPackageRequest()
+    {
+        JsonRequest = packRequest.ToJson();
+        Tuple<Event, ErrorResponse> evResult = (Tuple<Event, ErrorResponse>)(object)EventsRequests.CreateEvent(packRequest);
+        if (evResult.Item1.Packages.Count > 0)
+        {
+            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(evResult.Item1.Packages[0], evResult.Item2);
+        }
+        else
+        {
+            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(Package.Empty(), evResult.Item2);
+        }
+    }
+
     /// <summary>
     /// Method to get the appropriate object-card to the selected type
     /// </summary>
@@ -235,6 +273,16 @@
         else if (typeof(Cipher_TItem) == typeof(StorageSystem))
         {
             <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="FormMode.Create" />
+        }
+        else if (typeof(Cipher_TItem) == typeof(Package))
+        {
+            <CipherFormInfo @ref="FormInfo" />
+            <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" />
+
+            <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
+                <CipherComments @ref="EventComments" Width="300px" />
+            </CipherComponentCard>
         }
     </div>;
 }

@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -96,6 +98,87 @@
             return Resource.ToJson(this);
         }
 
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckId(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return Tuple.Create(false, Translate(nameof(Id)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckCategoryId(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return Tuple.Create(false, Translate(nameof(CategoryId)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckSystemId(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Id))
+                {
+                    return Tuple.Create(false, Translate(nameof(SystemId)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckMass(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (BrutMass < 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(BrutMass)));
+                }
+                if (NetMass < 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(NetMass)));
+                }
+                if (BrutMass < NetMass)
+                {
+                    return Tuple.Create(false, $"{Translate(nameof(BrutMass))}. מסה ברוטו צריכה להיות גדולה ממסה נטו.");
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
@@ -103,18 +186,17 @@
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-
-            result = (!string.IsNullOrEmpty(Id)) ? result : 
-                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.Id))); // id is required
-            result = (!string.IsNullOrEmpty(CategoryId)) ? result : 
-                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.Category))); // category is required
-            result = (!string.IsNullOrEmpty(SystemId)) ? result :
-                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.System))); // system is rquired
-            result = (BrutMass >= 0 && NetMass >= 0 && BrutMass >= NetMass) ? result :
-                Tuple.Create(false, Package.Translate(nameof(RandomData.RandomPackage.BrutMass))); // brut mass must be >= net mass, in any case they mustn't be negative
+            Tuple<bool, string> result = CheckId();
+            result = CheckCategoryId(result);
+            result = CheckSystemId(result);
+            result = CheckMass(result);
 
             return result;
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(PackageRequest), searchedAttribute);
         }
 
         /// <summary>
@@ -123,6 +205,11 @@
         public static PackageRequest Random()
         {
             return Package.Random().Request();
+        }
+
+        public static PackageRequest Empty()
+        {
+            return new PackageRequest(id: string.Empty, system: string.Empty, brutMass: 0, netMass: 0, category: string.Empty);
         }
 
         // API-RELATED FUNCTIONS

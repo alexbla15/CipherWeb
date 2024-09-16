@@ -97,7 +97,7 @@
         @if (string.IsNullOrEmpty(ActionText))
         {
             <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
-            <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
+            <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
         }
     </Buttons>
     <ChildContent>
@@ -106,7 +106,7 @@
             <CipherText TextStyle="TextStyle.Subtitle1" Text="@ActionText"></CipherText>
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
                 <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
-                <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.Cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
+                <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
             </RadzenStack>
         }
         <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" Close="@CloseAlert" />

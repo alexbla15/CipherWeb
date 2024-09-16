@@ -15,7 +15,7 @@
 
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit._Edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                                      Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenObject?.Id}")" />
                 }
             </Buttons>
@@ -23,7 +23,7 @@
                 <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" />
                 <CipherComments @ref="SysDescription" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))"
-                                Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                                Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" ChosenSystem="@ChosenObject?.Parent" />
                 <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
             </ChildContent>

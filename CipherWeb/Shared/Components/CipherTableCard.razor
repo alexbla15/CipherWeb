@@ -16,17 +16,17 @@
         }
         @if (!string.IsNullOrEmpty(ExpandPath))
         {
-            <CipherNavButton Icon="@Icons.Arrows.Squared.OpenInNew" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
+            <CipherNavButton Icon="@Icons.Arrows.Squared.open_in_new" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
         }
         @if (Sharable)
         {
-            <CipherButton Icon="@Icons.Communication.Mail._Mail" HelpText="שיתוף" Variant="Variant.Outlined" />
+            <CipherButton Icon="@Icons.Communication.Mail.mail" HelpText="שיתוף" Variant="Variant.Outlined" />
         }
         @if (IsReport)
         {
             <CipherButton @bind-Value=@IsFavourite Variant="@(IsFavourite ? Variant.Filled : Variant.Outlined)" 
             ColorStyle="@(IsFavourite ? ButtonStyle.Primary : ButtonStyle.Danger)" ColorShade=Shade.Default
-                          Icon="@Icons.Awards.Star" HelpText="@(IsFavourite ? "הסרה ממועדפים" : "הוספה למועדפים" )" Click="@Toggle" />
+                          Icon="@Icons.Awards.star" HelpText="@(IsFavourite ? "הסרה ממועדפים" : "הוספה למועדפים" )" Click="@Toggle" />
         }
     </Buttons>
     <ChildContent>

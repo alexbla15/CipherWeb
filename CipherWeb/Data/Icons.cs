@@ -4,830 +4,830 @@
     {
         public class Accessibility
         {
-            public const string Accessible = "accessible";
-            public const string AccessibleForward = "accessible_forward";
-            public const string AssistWalker = "assist_walker";
-            public const string Blind = "blind";
-            public const string Elderly = "elderly";
-            public const string ElderlyWoman = "elderly_woman";
-            public const string EventSeat = "event_seat";
-            public const string NotAccessible = "not_accessible";
-            public const string PregnantWoman = "pregnant_woman";
+            public const string accessible = nameof(accessible);
+            public const string accessible_forward = nameof(accessible_forward);
+            public const string assist_walker = nameof(assist_walker);
+            public const string blind = nameof(blind);
+            public const string elderly = nameof(elderly);
+            public const string elderly_woman = nameof(elderly_woman);
+            public const string event_seat = nameof(event_seat);
+            public const string not_accessible = nameof(not_accessible);
+            public const string pregnant_woman = nameof(pregnant_woman);
         }
 
-        public class Arrows
+        public class Arrows 
         {
-            public const string AirlineStops = "airline_stops";
-            public const string AltRoute = "alt_route";
-            public const string Archive = "archive";
-            public const string AssignmentReturn = "assignment_return";
-            public const string AssignmentReturned = "assignment_returned";
-            public const string CallMerge = "call_merge";
-            public const string CallSplit = "call_split";
-            public const string Directions = "directions";
-            public const string DoubleArrow = "double_arrow";
-            public const string Download = "download";
-            public const string DownloadForOffline = "download_for_offline";
-            public const string DownloadOff = "file_download_off";
-            public const string Downloading = "downloading";
-            public const string FirstPage = "first_page";
-            public const string ForkLeft = "fork_left";
-            public const string ForkRight = "fork_right";
-            public const string KeyboardDoubleArrowDown = "keyboard_double_arrow_down";
-            public const string KeyboardDoubleArrowLeft = "keyboard_double_arrow_left";
-            public const string KeyboardDoubleArrowRight = "keyboard_double_arrow_right";
-            public const string KeyboardDoubleArrowUp = "keyboard_double_arrow_up";
-            public const string KeyboardTab = "keyboard_tab";
-            public const string KeyboardCapsLock = "keyboard_capslock";
-            public const string LastPage = "last_page";
-            public const string Merge = "merge";
-            public const string PlayForWork = "play_for_work";
-            public const string Publish = "publish";
-            public const string RampLeft = "ramp_left";
-            public const string RampRight = "ramp_right";
-            public const string ScreenShare = "screen_share";
-            public const string Shuffle = "shuffle";
-            public const string ShuffleOn = "shuffle_on";
-            public const string Start = "start";
-            public const string StopScreenShare = "stop_screen_share";
-            public const string VerticalAlignBottom = "vertical_align_bottom";
-            public const string VerticalAlignTop = "vertical_align_top";
-            public const string Unarchive = "unarchive";
-            public const string Upgrade = "upgrade";
-            public const string Upload = "upload";
-            public const string UploadOff = "file_upload_off";
+            public const string airline_stops = nameof(airline_stops);
+            public const string alt_route = nameof(alt_route);
+            public const string archive = nameof(archive);
+            public const string assignment_return = nameof(assignment_return);
+            public const string assignment_returned = nameof(assignment_returned);
+            public const string call_merge = nameof(call_merge);
+            public const string call_split = nameof(call_split);
+            public const string directions = nameof(directions);
+            public const string double_arrow = nameof(double_arrow);
+            public const string download = nameof(download);
+            public const string download_for_offline = nameof(download_for_offline);
+            public const string downloading = nameof(downloading);
+            public const string file_download_off = nameof(file_download_off);
+            public const string file_upload_off = nameof(file_upload_off);
+            public const string first_page = nameof(first_page);
+            public const string fork_left = nameof(fork_left);
+            public const string fork_right = nameof(fork_right);
+            public const string keyboard_double_arrow_down = nameof(keyboard_double_arrow_down);
+            public const string keyboard_double_arrow_left = nameof(keyboard_double_arrow_left);
+            public const string keyboard_double_arrow_right = nameof(keyboard_double_arrow_right);
+            public const string keyboard_double_arrow_up = nameof(keyboard_double_arrow_up);
+            public const string keyboard_tab = nameof(keyboard_tab);
+            public const string keyboard_capslock = nameof(keyboard_capslock);
+            public const string last_page = nameof(last_page);
+            public const string merge = nameof(merge);
+            public const string play_for_work = nameof(play_for_work);
+            public const string publish = nameof(publish);
+            public const string ramp_left = nameof(ramp_left);
+            public const string ramp_right = nameof(ramp_right);
+            public const string screen_share = nameof(screen_share);
+            public const string shuffle = nameof(shuffle);
+            public const string shuffle_on = nameof(shuffle_on);
+            public const string start = nameof(start);
+            public const string stop_screen_share = nameof(stop_screen_share);
+            public const string vertical_align_bottom = nameof(vertical_align_bottom);
+            public const string vertical_align_top = nameof(vertical_align_top);
+            public const string unarchive = nameof(unarchive);
+            public const string upgrade = nameof(upgrade);
+            public const string upload = nameof(upload);
 
             public class Broken
             {
-                public const string Assistant = "assistant";
-                public const string CallMissedOutgoing = "call_missed_outgoing";
-                public const string DataExploration = "data_exploration";
-                public const string KeyboardReturn = "keyboard_return";
-                public const string Shortcut = "shortcut";
-                public const string SubdirectoryArrowLeft = "subdirectory_arrow_left";
-                public const string SubdirectoryArrowRight = "subdirectory_arrow_right";
-                public const string TrendingDown = "trending_down";
-                public const string TrendingUp = "trending_up";
-                public const string TurnLeft = "turn_left";
-                public const string TurnRight = "turn_right";
-                public const string TurnSharpLeft = "turn_sharp_left";
-                public const string TurnSharpRight = "turn_sharp_right";
-                public const string TurnSlightLeft = "turn_slight_left";
-                public const string TurnSlightRight = "turn_slight_right";
+                public const string assistant = nameof(assistant);
+                public const string call_missed_outgoing = nameof(call_missed_outgoing);
+                public const string data_exploration = nameof(data_exploration);
+                public const string keyboard_return = nameof(keyboard_return);
+                public const string shortcut = nameof(shortcut);
+                public const string subdirectory_arrow_left = nameof(subdirectory_arrow_left);
+                public const string subdirectory_arrow_right = nameof(subdirectory_arrow_right);
+                public const string trending_down = nameof(trending_down);
+                public const string trending_up = nameof(trending_up);
+                public const string turn_left = nameof(turn_left);
+                public const string turn_right = nameof(turn_right);
+                public const string turn_sharp_left = nameof(turn_sharp_left);
+                public const string turn_sharp_right = nameof(turn_sharp_right);
+                public const string turn_slight_left = nameof(turn_slight_left);
+                public const string turn_slight_right = nameof(turn_slight_right);
             }
 
             public class Circled
             {
-                public const string ArrowCircleDown = "arrow_circle_down";
-                public const string ArrowCircleLeft = "arrow_circle_left";
-                public const string ArrowCircleRight = "arrow_circle_right";
-                public const string ArrowCircleUp = "arrow_circle_up";
-                public const string ExpandCircleDown = "expand_circle_down";
-                public const string NextPlan = "next_plan";
-                public const string NotStarted = "not_started";
-                public const string Outbound = "outbound";
+                public const string arrow_circle_down = nameof(arrow_circle_down);
+                public const string arrow_circle_left = nameof(arrow_circle_left);
+                public const string arrow_circle_right = nameof(arrow_circle_right);
+                public const string arrow_circle_up = nameof(arrow_circle_up);
+                public const string expand_circle_down = nameof(expand_circle_down);
+                public const string next_plan = nameof(next_plan);
+                public const string not_started = nameof(not_started);
+                public const string outbound = nameof(outbound);
             }
 
             public class Rounded
             {
                 public const string _360 = "360";
-                public const string AutoMode = "auto_mode";
-                public const string Forward5 = "forward_5";
-                public const string Forward10 = "forward_10";
-                public const string Forward30 = "forward_30";
-                public const string Redo = "redo";
-                public const string Refresh = "refresh";
-                public const string Repartition = "repartition";
-                public const string Replay = "replay";
-                public const string Replay5 = "replay_5";
-                public const string Replay10 = "replay_10";
-                public const string Replay30 = "replay_30";
-                public const string ReplayFilled = "replay_circle_filled";
-                public const string Reply = "reply";
-                public const string ReplyAll = "reply_all";
-                public const string Restart = "restart_alt";
-                public const string Rotate90DegreesCw = "rotate_90_degrees_cw";
-                public const string Rotate90DegreesCcw = "rotate_90_degrees_ccw";
-                public const string RotateLeft = "rotate_left";
-                public const string RotateRight = "rotate_right";
-                public const string RoundaboutLeft = "roundabout_left";
-                public const string RoundaboutRight = "roundabout_right";
-                public const string SettingsBackupRestore = "settings_backup_restore";
-                public const string SwitchAccessShortcut = "switch_access_shortcut";
-                public const string SwitchAccessShortcutAdd = "switch_access_shortcut_add";
-                public const string UTurnLeft = "u_turn_left";
-                public const string UTurnRight = "u_turn_right";
-                public const string Undo = "undo";
-                public const string UpdateDisabled = "update_disabled";
+                public const string auto_mode = nameof(auto_mode);
+                public const string forward_5 = nameof(forward_5);
+                public const string forward_10 = nameof(forward_10);
+                public const string forward_30 = nameof(forward_30);
+                public const string redo = nameof(redo);
+                public const string refresh = nameof(refresh);
+                public const string repartition = nameof(repartition);
+                public const string replay = nameof(replay);
+                public const string replay_5 = nameof(replay_5);
+                public const string replay_10 = nameof(replay_10);
+                public const string replay_30 = nameof(replay_30);
+                public const string replay_circle_filled = nameof(replay_circle_filled);
+                public const string reply = nameof(reply);
+                public const string reply_all = nameof(reply_all);
+                public const string restart_alt = nameof(restart_alt);
+                public const string rotate_90_degrees_cw = nameof(rotate_90_degrees_cw);
+                public const string rotate_90_degrees_ccw = nameof(rotate_90_degrees_ccw);
+                public const string rotate_left = nameof(rotate_left);
+                public const string rotate_right = nameof(rotate_right);
+                public const string roundabout_left = nameof(roundabout_left);
+                public const string roundabout_right = nameof(roundabout_right);
+                public const string settings_backup_restore = nameof(settings_backup_restore);
+                public const string switch_access_shortcut = nameof(switch_access_shortcut);
+                public const string switch_access_shortcut_add = nameof(switch_access_shortcut_add);
+                public const string u_turn_left = nameof(u_turn_left);
+                public const string u_turn_right = nameof(u_turn_right);
+                public const string undo = nameof(undo);
+                public const string update_disabled = nameof(update_disabled);
             }
 
             public class Simple
             {
                 // ARROWS - SIMPLE
-                public const string ArrowBack = "arrow_back";
-                public const string ArrowDownward = "arrow_downward";
-                public const string ArrowDropDown = "arrow_drop_down";
-                public const string ArrowDropUp = "arrow_drop_up";
-                public const string ArrowBackIOsNew = "arrow_back_ios_new";
-                public const string ArrowForward = "arrow_forward";
-                public const string ArrowLeft = "arrow_left";
-                public const string ArrowOutward = "arrow_outward";
-                public const string ArrowRight = "arrow_right";
-                public const string ArrowRightAlt = "arrow_right_alt";
-                public const string ArrowUpward = "arrow_upward";
-                public const string East = "east";
-                public const string Forward = "forward";
-                public const string KeyboardArrowDown = "keyboard_arrow_down";
-                public const string KeyboardArrowLeft = "keyboard_arrow_left";
-                public const string KeyboardArrowRight = "keyboard_arrow_right";
-                public const string KeyboardArrowUp = "keyboard_arrow_up";
-                public const string NorthEast = "north_east";
-                public const string NorthWest = "north_west";
-                public const string Straight = "straight";
-                public const string South = "south";
-                public const string SouthEast = "south_east";
-                public const string SouthWest = "south_west";
-                public const string TransitEnterexit = "transit_enterexit";
-                public const string West = "west";
+                public const string arrow_back = nameof(arrow_back);
+                public const string arrow_downward = nameof(arrow_downward);
+                public const string arrow_drop_down = nameof(arrow_drop_down);
+                public const string arrow_drop_up = nameof(arrow_drop_up);
+                public const string arrow_back_ios_new = nameof(arrow_back_ios_new);
+                public const string arrow_forward = nameof(arrow_forward);
+                public const string arrow_left = nameof(arrow_left);
+                public const string arrow_outward = nameof(arrow_outward);
+                public const string arrow_right = nameof(arrow_right);
+                public const string arrow_right_alt = nameof(arrow_right_alt);
+                public const string arrow_upward = nameof(arrow_upward);
+                public const string east = nameof(east);
+                public const string forward = nameof(forward);
+                public const string keyboard_arrow_down = nameof(keyboard_arrow_down);
+                public const string keyboard_arrow_left = nameof(keyboard_arrow_left);
+                public const string keyboard_arrow_right = nameof(keyboard_arrow_right);
+                public const string keyboard_arrow_up = nameof(keyboard_arrow_up);
+                public const string north_east = nameof(north_east);
+                public const string north_west = nameof(north_west);
+                public const string straight = nameof(straight);
+                public const string south = nameof(south);
+                public const string south_east = nameof(south_east);
+                public const string south_west = nameof(south_west);
+                public const string transit_enterexit = nameof(transit_enterexit);
+                public const string west = nameof(west);
             }
 
             public class Squared
             {
-                public const string ExitToApp = "exit_to_app";
-                public const string Input = "input";
-                public const string IOsShare = "ios_share";
-                public const string Login = "login";
-                public const string Logout = "logout";
-                public const string OpenInBrowser = "open_in_browser";
-                public const string OpenInNew = "open_in_new";
-                public const string OpenInNewOff = "open_in_new_off";
-                public const string Output = "output";
-                public const string PresentToAll = "present_to_all";
-                public const string SaveAlt = "save_alt";
-                public const string Slideshow = "slideshow";
-                public const string SystemUpdateAlt = "system_update_alt";
+                public const string exit_to_app = nameof(exit_to_app);
+                public const string input = nameof(input);
+                public const string ios_share = nameof(ios_share);
+                public const string login = nameof(login);
+                public const string logout = nameof(logout);
+                public const string open_in_browser = nameof(open_in_browser);
+                public const string open_in_new = nameof(open_in_new);
+                public const string open_in_new_off = nameof(open_in_new_off);
+                public const string output = nameof(output);
+                public const string present_to_all = nameof(present_to_all);
+                public const string save_alt = nameof(save_alt);
+                public const string slideshow = nameof(slideshow);
+                public const string system_update_alt = nameof(system_update_alt);
             }
 
             public class Swap
             {
-                public const string Cached = "cached";
-                public const string ChangeCircle = "change_circle";
-                public const string CompareArrows = "compare_arrows";
-                public const string FlipCameraAndroid = "flip_camera_android";
-                public const string MobiledataOff = "mobiledata_off";
-                public const string MultipleStop = "multiple_stop";
-                public const string PublishedWithChanges = "published_with_changes";
-                public const string Renew = "autorenew";
-                public const string Repeat = "repeat";
-                public const string RepeatOn = "repeat_on";
-                public const string RepeatOne = "repeat_one";
-                public const string RepeatOneOn = "repeat_one_on";
-                public const string ScreenRotationAlt = "screen_rotation_alt";
-                public const string SwapCalls = "swap_calls";
-                public const string SwapHoriz = "swap_horiz";
-                public const string SwapHorizCircle = "swap_horizontal_circle";
-                public const string SwapVert = "swap_vert";
-                public const string SwapVertCircle = "swap_vertical_circle";
-                public const string SwitchLeft = "switch_left";
-                public const string SwitchRight = "switch_right";
-                public const string Sync = "sync";
-                public const string SyncAlt = "sync_alt";
-                public const string SyncDisabled = "sync_disabled";
-                public const string SyncLock = "sync_lock";
-                public const string SyncProblem = "sync_problem";
-                public const string WifiProtectedSetup = "wifi_protected_setup";
+                public const string autorenew = nameof(autorenew);
+                public const string cached = nameof(cached);
+                public const string change_circle = nameof(change_circle);
+                public const string compare_arrows = nameof(compare_arrows);
+                public const string flip_camera_android = nameof(flip_camera_android);
+                public const string mobiledata_off = nameof(mobiledata_off);
+                public const string multiple_stop = nameof(multiple_stop);
+                public const string published_with_changes = nameof(published_with_changes);
+                public const string repeat = nameof(repeat);
+                public const string repeat_on = nameof(repeat_on);
+                public const string repeat_one = nameof(repeat_one);
+                public const string repeat_one_on = nameof(repeat_one_on);
+                public const string screen_rotation_alt = nameof(screen_rotation_alt);
+                public const string swap_calls = nameof(swap_calls);
+                public const string swap_horiz = nameof(swap_horiz);
+                public const string swap_horizontal_circle = nameof(swap_horizontal_circle);
+                public const string swap_vert = nameof(swap_vert);
+                public const string swap_vertical_circle = nameof(swap_vertical_circle);
+                public const string switch_left = nameof(switch_left);
+                public const string switch_right = nameof(switch_right);
+                public const string sync = nameof(sync);
+                public const string sync_alt = nameof(sync_alt);
+                public const string sync_disabled = nameof(sync_disabled);
+                public const string sync_lock = nameof(sync_lock);
+                public const string sync_problem = nameof(sync_problem);
+                public const string wifi_protected_setup = nameof(wifi_protected_setup);
             }
         }
 
         public class Awards
         {
-            public const string EmojiEvents = "emoji_events";
-            public const string Flag = "flag";
-            public const string FlagCircle = "flag_circle";
-            public const string HotelClass = "hotel_class";
-            public const string LocalActivity = "local_activity";
-            public const string MilitiryTech = "military_tech";
-            public const string OutlinedFlag = "outlined_flag";
-            public const string SportsScore = "sports_score";
-            public const string Star = "star";
-            public const string StarHalf = "star_half";
-            public const string StarOutline = "star_outline";
-            public const string StarPurple500 = "star_outline";
-            public const string StarRate = "star_rate";
-            public const string Tour = "tour";
-            public const string WorkspacePrimium = "workspace_premium";
+            public const string emoji_events = nameof(emoji_events);
+            public const string flag = nameof(flag);
+            public const string flag_circle = nameof(flag_circle);
+            public const string hotel_class = nameof(hotel_class);
+            public const string local_activity = nameof(local_activity);
+            public const string military_tech = nameof(military_tech);
+            public const string outlined_flag = nameof(outlined_flag);
+            public const string sports_score = nameof(sports_score);
+            public const string star = nameof(star);
+            public const string star_half = nameof(star_half);
+            public const string star_outline = nameof(star_outline);
+            public const string star_purple500 = nameof(star_purple500);
+            public const string star_rate = nameof(star_rate);
+            public const string tour = nameof(tour);
+            public const string workspace_premium = nameof(workspace_premium);
         }
 
         public class Communication
         {
-            public const string ContactEmergency = "contact_emergency";
-            public const string ContactPhone = "contact_phone";
-            public const string Contactless = "contactless";
-            public const string NoSim = "no_sim";
-            public const string Share = "share";
-            public const string SignLanguage = "sign_language";
-            public const string SimCard = "sim_card";
-            public const string SimCardAlert = "sim_card_alert";
-            public const string SimCardDownload = "sim_card_download";
-            public const string Sip = "sip";
-            public const string Voicemail = "voicemail";
+            public const string contact_emergency = nameof(contact_emergency);
+            public const string contact_phone = nameof(contact_phone);
+            public const string contactless = nameof(contactless);
+            public const string no_sim = nameof(no_sim);
+            public const string share = nameof(share);
+            public const string sign_language = nameof(sign_language);
+            public const string sim_card = nameof(sim_card);
+            public const string sim_card_alert = nameof(sim_card_alert);
+            public const string sim_card_download = nameof(sim_card_download);
+            public const string sip = nameof(sip);
+            public const string voicemail = nameof(voicemail);
 
             public class Call
             {
-                public const string CallAdd = "add_call";
-                public const string Callback = "phone_callback";
-                public const string CallBluetoothSpeaker = "phone_bluetooth_speaker";
-                public const string CallDisabled = "phone_disabled";
-                public const string CallEnabled = "phone_enabled";
-                public const string CallEnd = "call_end";
-                public const string CallForwarded = "phone_forwarded";
-                public const string CallMissed = "phone_missed";
-                public const string CallPaused = "phone_paused";
-                public const string CallSettings = "settings_phone";
-                public const string CallWifi = "wifi_calling";
-                public const string CallWifi2 = "wifi_calling_3";
-                public const string DialPad = "dialpad";
-                public const string DialerSip = "dialer_sip";
-                public const string PhoneMsg = "perm_phone_msg";
-                public const string RingVolume = "ring_volume";
-                public const string Tty = "tty";
+                public const string add_call = nameof(add_call);
+                public const string call_end = nameof(call_end);
+                public const string dialpad = nameof(dialpad);
+                public const string dialer_sip = nameof(dialer_sip);
+                public const string perm_phone_msg = nameof(perm_phone_msg);
+                public const string phone_bluetooth_speaker = nameof(phone_bluetooth_speaker);
+                public const string phone_callback = nameof(phone_callback);
+                public const string phone_disabled = nameof(phone_disabled);
+                public const string phone_enabled = nameof(phone_enabled);
+                public const string phone_forwarded = nameof(phone_forwarded);
+                public const string phone_missed = nameof(phone_missed);
+                public const string phone_paused = nameof(phone_paused);
+                public const string ring_volume = nameof(ring_volume);
+                public const string settings_phone = nameof(settings_phone);
+                public const string tty = nameof(tty);
+                public const string wifi_calling = nameof(wifi_calling);
+                public const string wifi_calling_3 = nameof(wifi_calling_3);
             }
 
             public class Chat
             {
-                public const string Assistant = "assistant";
-                public const string _Chat = "chat";
-                public const string ChatBubble = "chat_bubble";
-                public const string ChatBubbleOutline = "chat_bubble_outline";
-                public const string ChatRead = "mark_chat_read";
-                public const string ChatUnread = "mark_chat_unread";
-                public const string ChatUnreadAlt = "mark_unread_chat_alt";
-                public const string Comment = "comment";
-                public const string CommentAdd = "add_comment";
-                public const string CommentBank = "comment_bank";
-                public const string CommentDisabled = "comments_disabled";
-                public const string Feedback = "feedback";
-                public const string Lyrics = "lyrics";
-                public const string MapsUgc = "maps_ugc";
-                public const string Message = "message";
-                public const string ModeComment = "mode_comment";
-                public const string Mms = "mms";
-                public const string QA = "question_answer";
-                public const string QuickReply = "quickreply";
-                public const string RateReview = "rate_review";
-                public const string Reviews = "reviews";
-                public const string Sms = "sms";
-                public const string SpeakerNotes = "speaker_notes";
-                public const string SpeakerNotesOff = "speaker_notes_off";
-                public const string VoiceChat = "voice_chat";
+                public const string add_comment = nameof(add_comment);
+                public const string assistant = nameof(assistant);
+                public const string chat = nameof(chat);
+                public const string chat_bubble = nameof(chat_bubble);
+                public const string chat_bubble_outline = nameof(chat_bubble_outline);
+                public const string comment = nameof(comment);
+                public const string comment_bank = nameof(comment_bank);
+                public const string comments_disabled = nameof(comments_disabled);
+                public const string feedback = nameof(feedback);
+                public const string lyrics = nameof(lyrics);
+                public const string maps_ugc = nameof(maps_ugc);
+                public const string mark_chat_read = nameof(mark_chat_read);
+                public const string mark_chat_unread = nameof(mark_chat_unread);
+                public const string mark_unread_chat_alt = nameof(mark_unread_chat_alt);
+                public const string message = nameof(message);
+                public const string mode_comment = nameof(mode_comment);
+                public const string mms = nameof(mms);
+                public const string question_answer = nameof(question_answer);
+                public const string quickreply = nameof(quickreply);
+                public const string rate_review = nameof(rate_review);
+                public const string reviews = nameof(reviews);
+                public const string sms = nameof(sms);
+                public const string speaker_notes = nameof(speaker_notes);
+                public const string speaker_notes_off = nameof(speaker_notes_off);
+                public const string voice_chat = nameof(voice_chat);
             }
 
             public class Mail
             {
-                public const string AllInbox = "all_inbox";
-                public const string AlternateEmail = "alternate_email";
-                public const string AttachEmail = "attach_email";
-                public const string ContactMail = "contact_mail";
-                public const string Drafts = "drafts";
-                public const string ForwardToInbox = "forward_to_inbox";
-                public const string Inbox = "inbox";
-                public const string _Mail = "mail";
-                public const string MailLock = "mail_lock";
-                public const string MailOutline = "mail_outline";
-                public const string MarkAsUnread = "mark_as_unread";
-                public const string MarkEmailread = "mark_email_read";
-                public const string MarkEmailUnread = "mark_email_unread";
-                public const string MarkunreadMailbox = "markunread_mailbox";
-                public const string MoveToInbox = "move_to_inbox";
-                public const string OutgoingMail = "outgoing_mail";
-                public const string Upcoming = "upcoming";
-                public const string Unsubscribe = "unsubscribe";
+                public const string all_inbox = nameof(all_inbox);
+                public const string alternate_email = nameof(alternate_email);
+                public const string attach_email = nameof(attach_email);
+                public const string contact_mail = nameof(contact_mail);
+                public const string drafts = nameof(drafts);
+                public const string forward_to_inbox = nameof(forward_to_inbox);
+                public const string inbox = nameof(inbox);
+                public const string mail = nameof(mail);
+                public const string mail_lock = nameof(mail_lock);
+                public const string mail_outline = nameof(mail_outline);
+                public const string mark_as_unread = nameof(mark_as_unread);
+                public const string mark_email_read = nameof(mark_email_read);
+                public const string mark_email_unread = nameof(mark_email_unread);
+                public const string markunread_mailbox = nameof(markunread_mailbox);
+                public const string move_to_inbox = nameof(move_to_inbox);
+                public const string outgoing_mail = nameof(outgoing_mail);
+                public const string upcoming = nameof(upcoming);
+                public const string unsubscribe = nameof(unsubscribe);
             }
         }
 
         public class Creative
         {
-            public const string BatchPrediction = "batch_prediction";
-            public const string EmojiObjects = "emoji_objects";
-            public const string Extension = "extension";
-            public const string ExtensionOff = "extension_off";
-            public const string Lightbulb = "lightbulb";
-            public const string LightbulbCircle = "lightbulb_circle";
-            public const string LightbulbOutline = "lightbulb_outline";
-            public const string ModelTraining = "model_training";
-            public const string OnlinePrediction = "online_prediction";
-            public const string Psychology = "psychology";
-            public const string PsychologyAlt = "psychology_alt";
-            public const string SendTimeExtension = "send_time_extension";
-            public const string TipsAndUpdates = "tips_and_updates";
-            public const string Tungsten = "tungsten";
-            public const string WbIncandescent = "wb_incandescent";
+            public const string batch_prediction = nameof(batch_prediction);
+            public const string emoji_objects = nameof(emoji_objects);
+            public const string extension = nameof(extension);
+            public const string extension_off = nameof(extension_off);
+            public const string lightbulb = nameof(lightbulb);
+            public const string lightbulb_circle = nameof(lightbulb_circle);
+            public const string lightbulb_outline = nameof(lightbulb_outline);
+            public const string model_training = nameof(model_training);
+            public const string online_prediction = nameof(online_prediction);
+            public const string psychology = nameof(psychology);
+            public const string psychology_alt = nameof(psychology_alt);
+            public const string send_time_extension = nameof(send_time_extension);
+            public const string tips_and_updates = nameof(tips_and_updates);
+            public const string tungsten = nameof(tungsten);
+            public const string wb_incandescent = nameof(wb_incandescent);
         }
 
         public class Data
         {
-            public const string Abc = "abc";
-            public const string AccountTree = "account_tree";
-            public const string Calculate = "calculate";
-            public const string DataArray = "data_array";
-            public const string DataObject = "data_object";
-            public const string Dataset = "dataset";
-            public const string Dataset_linked = "dataset_linked";
-            public const string DeviceHub = "device_hub";
-            public const string Exposure = "exposure";
-            public const string Flaky = "flaky";
-            public const string Functions = "functions";
-            public const string Hub = "hub";
-            public const string Iso = "iso";
-            public const string JoinFull = "join_full";
-            public const string JoinInner = "join_inner";
-            public const string JoinLeft = "join_left";
-            public const string JoinRight = "join_right";
-            public const string Lan = "lan";
-            public const string LinearScale = "linear_scale";
-            public const string _Numbers = "numbers";
-            public const string Polyline = "polyline";
-            public const string ScatterPlot = "scatter_plot";
-            public const string Schema = "schema";
-            public const string Tag = "tag";
+            public const string abc = nameof(abc);
+            public const string account_tree = nameof(account_tree);
+            public const string calculate = nameof(calculate);
+            public const string data_array = nameof(data_array);
+            public const string data_object = nameof(data_object);
+            public const string dataset = nameof(dataset);
+            public const string dataset_linked = nameof(dataset_linked);
+            public const string device_hub = nameof(device_hub);
+            public const string exposure = nameof(exposure);
+            public const string flaky = nameof(flaky);
+            public const string functions = nameof(functions);
+            public const string hub = nameof(hub);
+            public const string iso = nameof(iso);
+            public const string join_full = nameof(join_full);
+            public const string join_inner = nameof(join_inner);
+            public const string join_left = nameof(join_left);
+            public const string join_right = nameof(join_right);
+            public const string lan = nameof(lan);
+            public const string linear_scale = nameof(linear_scale);
+            public const string numbers = nameof(numbers);
+            public const string polyline = nameof(polyline);
+            public const string scatter_plot = nameof(scatter_plot);
+            public const string schema = nameof(schema);
+            public const string tag = nameof(tag);
 
             public class BarChart
             {
-                public const string AddChart = "add_chart";
-                public const string Analytics = "analytics";
-                public const string _BarChart = "bar_chart";
-                public const string Equalizer = "equalizer";
-                public const string InsertChart = "insert_chart";
-                public const string InsertChartOutlined = "insert_chart_outlined";
-                public const string Leaderboard = "leaderboard";
-                public const string StackedBarChart = "stacked_bar_chart";
-                public const string ViewKanban = "view_kanban";
+                public const string add_chart = nameof(add_chart);
+                public const string analytics = nameof(analytics);
+                public const string bar_chart = nameof(bar_chart);
+                public const string equalizer = nameof(equalizer);
+                public const string insert_chart = nameof(insert_chart);
+                public const string insert_chart_outlined = nameof(insert_chart_outlined);
+                public const string leaderboard = nameof(leaderboard);
+                public const string stacked_bar_chart = nameof(stacked_bar_chart);
+                public const string view_kanban = nameof(view_kanban);
             }
 
             public class Charts 
             {
-
-                public const string AreaChart = "area_chart";
-                public const string BubbleChart = "bubble_chart";
-                public const string CandlestickChart = "candlestick_chart";
-                public const string DataSaverOn = "data_saver_on";
-                public const string DataUsage = "data_usage";
-                public const string DonutLarge = "donut_large";
-                public const string DonutSmall = "donut_small";
-                public const string IncompleteCircle = "incomplete_circle";
-                public const string PieChart = "pie_chart";
-                public const string PieChartOutline = "pie_chart_outline";
-                public const string SsidChart = "ssid_chart";
-                public const string WaterfallChart = "waterfall_chart";
+                public const string area_chart = nameof(area_chart);
+                public const string bubble_chart = nameof(bubble_chart);
+                public const string candlestick_chart = nameof(candlestick_chart);
+                public const string data_saver_on = nameof(data_saver_on);
+                public const string data_usage = nameof(data_usage);
+                public const string donut_large = nameof(donut_large);
+                public const string donut_small = nameof(donut_small);
+                public const string incomplete_circle = nameof(incomplete_circle);
+                public const string pie_chart = nameof(pie_chart);
+                public const string pie_chart_outline = nameof(pie_chart_outline);
+                public const string ssid_chart = nameof(ssid_chart);
+                public const string waterfall_chart = nameof(waterfall_chart);
             }
 
             public class LineChart
             {
-                public const string AutoGraph = "auto_graph";
-                public const string DataThresholding = "data_thresholding";
-                public const string Insights = "insights";
-                public const string LegendToggle = "legend_toggle";
-                public const string LineAxis = "line_axis";
-                public const string MultilineChart = "multiline_chart";
-                public const string QueryStats = "query_stats";
-                public const string Score = "score";
-                public const string ShowChart = "show_chart";
-                public const string StackedLineChart = "stacked_line_chart";
-                public const string Timeline = "timeline";
+                public const string auto_graph = nameof(auto_graph);
+                public const string data_thresholding = nameof(data_thresholding);
+                public const string insights = nameof(insights);
+                public const string legend_toggle = nameof(legend_toggle);
+                public const string line_axis = nameof(line_axis);
+                public const string multiline_chart = nameof(multiline_chart);
+                public const string query_stats = nameof(query_stats);
+                public const string score = nameof(score);
+                public const string show_chart = nameof(show_chart);
+                public const string stacked_line_chart = nameof(stacked_line_chart);
+                public const string timeline = nameof(timeline);
             }
 
             public class Numbers
             {
-                public const string _0 = "exposure_zero";
-                public const string _3s = "timer_3";
-                public const string _10s = "timer_10";
                 public const string _30fps = "30fps";
                 public const string _60fps = "60fps";
                 public const string _123 = "123";
-                public const string Filter1 = "filter_1";
-                public const string Filter2 = "filter_2";
-                public const string Filter3 = "filter_3";
-                public const string Filter4 = "filter_4";
-                public const string Filter5 = "filter_5";
-                public const string Filter6 = "filter_6";
-                public const string Filter7 = "filter_7";
-                public const string Filter8 = "filter_8";
-                public const string Filter9 = "filter_9";
-                public const string Filter9Plus = "filter_9_plus";
-                public const string Looks1 = "looks_one";
-                public const string Looks2 = "looks_two";
-                public const string Looks3 = "looks_3";
-                public const string Looks4 = "looks_4";
-                public const string Looks5 = "looks_5";
-                public const string Looks6 = "looks_6";
-                public const string Neg1 = "exposure_neg_1";
-                public const string Neg2 = "exposure_neg_2";
-                public const string Pin = "pin";
-                public const string Plus1 = "plus_one";
-                public const string Plus2 = "exposure_plus_2";
+                public const string exposure_neg_1 = nameof(exposure_neg_1);
+                public const string exposure_neg_2 = nameof(exposure_neg_2);
+                public const string exposure_plus_2 = nameof(exposure_plus_2);
+                public const string exposure_zero = nameof(exposure_zero);
+                public const string filter_1 = nameof(filter_1);
+                public const string filter_2 = nameof(filter_2);
+                public const string filter_3 = nameof(filter_3);
+                public const string filter_4 = nameof(filter_4);
+                public const string filter_5 = nameof(filter_5);
+                public const string filter_6 = nameof(filter_6);
+                public const string filter_7 = nameof(filter_7);
+                public const string filter_8 = nameof(filter_8);
+                public const string filter_9 = nameof(filter_9);
+                public const string filter_9_plus = nameof(filter_9_plus);
+                public const string looks_one = nameof(looks_one);
+                public const string looks_two = nameof(looks_two);
+                public const string looks_3 = nameof(looks_3);
+                public const string looks_4 = nameof(looks_4);
+                public const string looks_5 = nameof(looks_5);
+                public const string looks_6 = nameof(looks_6);
+                public const string pin = nameof(pin);
+                public const string plus_one = nameof(plus_one);
+                public const string timer_3 = nameof(timer_3);
+                public const string timer_10 = nameof(timer_10);
             }
         }
 
         public class Design
         {
             public const string _3dRotation = "3d_rotation";
-            public const string DensityLarge = "density_large";
-            public const string DensityMedium = "density_medium";
-            public const string DensitySmall = "density_small";
-            public const string Fluorescent = "fluorescent";
-            public const string PanoramaHoriz = "panorama_horizontal";
-            public const string PanoramaHorizFilled = "panorama_horizontal_select";
-            public const string PanoramaPhotosphere = "panorama_photosphere";
-            public const string PanoramaPhotosphereFilled = "panorama_photosphere_select";
-            public const string PanoramaVert = "panorama_vertical";
-            public const string PanoramaVertFilled = "panorama_vertical_select";
-            public const string PanoramaWideAngle = "panorama_wide_angle";
-            public const string PanoramaWideAngleSelect = "panorama_wide_angle_select";
-            public const string RebaseEdit = "rebase_edit";
-            public const string Tune = "tune";
-            public const string ViewComfyAlt = "view_comfy_alt";
-            public const string ViewCompactAlt = "view_compact_alt";
-            public const string ViewCozy = "view_cozy";
+            public const string density_large = nameof(density_large);
+            public const string density_medium = nameof(density_medium);
+            public const string density_small = nameof(density_small);
+            public const string fluorescent = nameof(fluorescent);
+            public const string panorama_horizontal = nameof(panorama_horizontal);
+            public const string panorama_horizontal_select = nameof(panorama_horizontal_select);
+            public const string panorama_photosphere = nameof(panorama_photosphere);
+            public const string panorama_photosphere_select = nameof(panorama_photosphere_select);
+            public const string panorama_vertical = nameof(panorama_vertical);
+            public const string panorama_vertical_select = nameof(panorama_vertical_select);
+            public const string panorama_wide_angle = nameof(panorama_wide_angle);
+            public const string panorama_wide_angle_select = nameof(panorama_wide_angle_select);
+            public const string rebase_edit = nameof(rebase_edit);
+            public const string tune = nameof(tune);
+            public const string view_comfy_alt = nameof(view_comfy_alt);
+            public const string view_compact_alt = nameof(view_compact_alt);
+            public const string view_cozy = nameof(view_cozy);
 
             public class Colors 
             {
-                public const string AutoFixHigh = "auto_fix_high";
-                public const string AutoFixNormal = "auto_fix_normal";
-                public const string AutoFixOff = "auto_fix_off";
-                public const string BlurCircular = "blur_circular";
-                public const string BlurLinear = "blur_linear";
-                public const string BlurOff = "blur_off";
-                public const string BlurOn = "blur_on";
-                public const string BrightnessAuto = "brightness_auto";
-                public const string Brush = "brush";
-                public const string Colorize = "colorize";
-                public const string Contrast = "contrast";
-                public const string Deblur = "deblur";
-                public const string Draw = "draw";
-                public const string FilterFrames = "filter_frames";
-                public const string FormatColorFill = "format_color_fill";
-                public const string FormatColorReset = "format_color_reset";
-                public const string FormatPaint = "format_paint";
-                public const string Gesture = "gesture";
-                public const string Gradient = "gradient";
-                public const string ImagesearchRoller = "imagesearch_roller";
-                public const string InvertColors = "invert_colors";
-                public const string InvertColorsOff = "invert_colors_off";
-                public const string Opacity = "opacity";
-                public const string Pallete = "pallete";
-                public const string Style = "style";
-                public const string Texture = "texture";
-                public const string Tonality = "tonality";
+                public const string auto_fix_high = nameof(auto_fix_high);
+                public const string auto_fix_normal = nameof(auto_fix_normal);
+                public const string auto_fix_off = nameof(auto_fix_off);
+                public const string blur_circular = nameof(blur_circular);
+                public const string blur_linear = nameof(blur_linear);
+                public const string blur_off = nameof(blur_off);
+                public const string blur_on = nameof(blur_on);
+                public const string brightness_auto = nameof(brightness_auto);
+                public const string brush = nameof(brush);
+                public const string colorize = nameof(colorize);
+                public const string contrast = nameof(contrast);
+                public const string deblur = nameof(deblur);
+                public const string draw = nameof(draw);
+                public const string filter_frames = nameof(filter_frames);
+                public const string format_color_fill = nameof(format_color_fill);
+                public const string format_color_reset = nameof(format_color_reset);
+                public const string format_paint = nameof(format_paint);
+                public const string gesture = nameof(gesture);
+                public const string gradient = nameof(gradient);
+                public const string imagesearch_roller = nameof(imagesearch_roller);
+                public const string invert_colors = nameof(invert_colors);
+                public const string invert_colors_off = nameof(invert_colors_off);
+                public const string opacity = nameof(opacity);
+                public const string pallete = nameof(pallete);
+                public const string style = nameof(style);
+                public const string texture = nameof(texture);
+                public const string tonality = nameof(tonality);
             }
 
             public class Text
             {
-                public const string FontDownload = "font_download";
-                public const string FontDownloadOff = "font_download_off";
-                public const string FormatBold = "format_bold";
-                public const string FormatClear = "format_clear";
-                public const string FormatColorText = "format_color_text";
-                public const string FormatItalic = "format_italic";
-                public const string FormatSize = "format_size";
-                public const string FormatStrikethrough = "format_strikethrough";
-                public const string FormatUnderline = "format_underline";
-                public const string GTranslate = "g_translate";
-                public const string Rtt = "rtt";
-                public const string SortByAlpha = "sort_by_alpha";
-                public const string Spellcheck = "spellcheck";
-                public const string Strikethrough = "strikethrough";
-                public const string Subscript = "subscript";
-                public const string Superscript = "superscript";
-                public const string TextDecrease = "text_decrease";
-                public const string TextFields = "text_fields";
-                public const string TextFormat = "text_format";
-                public const string TextIncrease = "text_increase";
-                public const string TextRotateUp = "text_rotate_up";
-                public const string TextRotateVertical = "text_rotate_vertical";
-                public const string TextRotationAngledown = "text_rotation_angledown";
-                public const string TextRotationAngleup = "text_rotation_angleup";
-                public const string TextRotationDown = "text_rotation_down";
-                public const string TextRotationNone = "text_rotation_none";
-                public const string Translate = "translate";
-                public const string TypeSpecimen = "type_specimen";
-                public const string WrapText = "wrap_text";
+                public const string font_download = nameof(font_download);
+                public const string font_download_off = nameof(font_download_off);
+                public const string format_bold = nameof(format_bold);
+                public const string format_clear = nameof(format_clear);
+                public const string format_color_text = nameof(format_color_text);
+                public const string format_italic = nameof(format_italic);
+                public const string format_size = nameof(format_size);
+                public const string format_strikethrough = nameof(format_strikethrough);
+                public const string format_underline = nameof(format_underline);
+                public const string g_translate = nameof(g_translate);
+                public const string rtt = nameof(rtt);
+                public const string sort_by_alpha = nameof(sort_by_alpha);
+                public const string spellcheck = nameof(spellcheck);
+                public const string strikethrough_s = nameof(strikethrough_s);
+                public const string subscript = nameof(subscript);
+                public const string superscript = nameof(superscript);
+                public const string text_decrease = nameof(text_decrease);
+                public const string text_fields = nameof(text_fields);
+                public const string text_format = nameof(text_format);
+                public const string text_increase = nameof(text_increase);
+                public const string text_rotate_up = nameof(text_rotate_up);
+                public const string text_rotate_vertical = nameof(text_rotate_vertical);
+                public const string text_rotation_angledown = nameof(text_rotation_angledown);
+                public const string text_rotation_angleup = nameof(text_rotation_angleup);
+                public const string text_rotation_down = nameof(text_rotation_down);
+                public const string text_rotation_none = nameof(text_rotation_none);
+                public const string translate = nameof(translate);
+                public const string type_specimen = nameof(type_specimen);
+                public const string wrap_text = nameof(wrap_text);
             }
         }
 
         public class Documents
         {
-            public const string AdfScanner = "adf_scanner";
-            public const string Article = "article";
-            public const string Assignment = "assignment";
-            public const string AssignmentAdd = "assignment_add";
-            public const string ContentCopy = "content_copy";
-            public const string ContentPaste = "content_paste";
-            public const string ContentPasteGo = "content_paste_go";
-            public const string ContentPasteOff = "content_paste_off";
-            public const string CopyAll = "copy_all";
-            public const string Copyright = "copyright";
-            public const string DocumentScanner = "document_scanner";
-            public const string FactCheck = "fact_check";
-            public const string Fax = "fax";
-            public const string Feed = "feed";
-            public const string FilterNone = "filter_none";
-            public const string FormatQuote = "format_quote";
-            public const string Inventory = "inventory";
-            public const string LibraryBooks = "library_books";
-            public const string Newspaper = "newspaper";
-            public const string Note = "note";
-            public const string PDF = "picture_as_pdf";
-            public const string PostAdd = "post_add";
-            public const string Preview = "preview";
-            public const string Print = "print";
-            public const string PrintDisabled = "print_disabled";
-            public const string Scanner = "scanner";
-            public const string StickyNote = "sticky_note_2";
-            public const string Summarize = "summarize";
-            public const string Wysiwyg = "wysiwyg";
+            public const string adf_scanner = nameof(adf_scanner);
+            public const string article = nameof(article);
+            public const string assignment = nameof(assignment);
+            public const string assignment_add = nameof(assignment_add);
+            public const string content_copy = nameof(content_copy);
+            public const string content_paste = nameof(content_paste);
+            public const string content_paste_go = nameof(content_paste_go);
+            public const string content_paste_off = nameof(content_paste_off);
+            public const string copy_all = nameof(copy_all);
+            public const string copyright = nameof(copyright);
+            public const string document_scanner = nameof(document_scanner);
+            public const string fact_check = nameof(fact_check);
+            public const string fax = nameof(fax);
+            public const string feed = nameof(feed);
+            public const string filter_none = nameof(filter_none);
+            public const string format_quote = nameof(format_quote);
+            public const string inventory = nameof(inventory);
+            public const string library_books = nameof(library_books);
+            public const string newspaper = nameof(newspaper);
+            public const string note = nameof(note);
+            public const string picture_as_pdf = nameof(picture_as_pdf);
+            public const string post_add = nameof(post_add);
+            public const string preview = nameof(preview);
+            public const string print = nameof(print);
+            public const string print_disabled = nameof(print_disabled);
+            public const string scanner = nameof(scanner);
+            public const string sticky_note_2 = nameof(sticky_note_2);
+            public const string summarize = nameof(summarize);
+            public const string wysiwyg = nameof(wysiwyg);
 
             public class Delete
             {
-                public const string Backspace = "backspace";
-                public const string Cancel = "cancel";
-                public const string CancelPresentation = "cancel_presentation";
-                public const string Close = "close";
-                public const string Dangerous = "dangerous";
-                public const string _Delete = "delete";
-                public const string DeleteAuto = "auto_delete";
-                public const string DeleteForever = "delete_forever";
-                public const string DeleteOutline = "delete_outline";
-                public const string DeleteSweep = "delete_sweep";
-                public const string DisabledByDefault = "disabled_by_default";
-                public const string DoNotDisturbOnTotalSilence = "do_not_disturb_on_total_silence";
-                public const string DoNotDisturbOff = "do_not_disturb_off";
-                public const string DoNotDisturbOn = "do_not_disturb_on";
-                public const string HighlightOff = "highlight_off";
-                public const string IndeterminateCheckBox = "indeterminate_check_box";
-                public const string Remove = "remove";
-                public const string RemoveCircle = "remove_circle";
-                public const string RemoveCircleOutline = "remove_circle_outline";
-                public const string RestoreFromTrash = "restore_from_trash";
+                public const string auto_delete = nameof(auto_delete);
+                public const string backspace = nameof(backspace);
+                public const string cancel = nameof(cancel);
+                public const string cancel_presentation = nameof(cancel_presentation);
+                public const string close = nameof(close);
+                public const string dangerous = nameof(dangerous);
+                public const string delete = nameof(delete);
+                public const string delete_forever = nameof(delete_forever);
+                public const string delete_outline = nameof(delete_outline);
+                public const string delete_sweep = nameof(delete_sweep);
+                public const string disabled_by_default = nameof(disabled_by_default);
+                public const string do_not_disturb_on_total_silence = nameof(do_not_disturb_on_total_silence);
+                public const string do_not_disturb_off = nameof(do_not_disturb_off);
+                public const string do_not_disturb_on = nameof(do_not_disturb_on);
+                public const string highlight_off = nameof(highlight_off);
+                public const string indeterminate_check_box = nameof(indeterminate_check_box);
+                public const string remove = nameof(remove);
+                public const string remove_circle = nameof(remove_circle);
+                public const string remove_circle_outline = nameof(remove_circle_outline);
+                public const string restore_from_trash = nameof(restore_from_trash);
             }
 
             public class Edit
             {
-                public const string BorderColor = "border_color";
-                public const string ContentCut = "content_cut";
-                public const string DriveFileRenameOutline = "drive_file_rename_outline";
-                public const string _Edit = "edit";
-                public const string EditDocument = "edit_document";
-                public const string EditOff = "edit_document";
-                public const string HistoryEdu = "history_edu";
-                public const string NoteAlt = "note_alt";
-                public const string Save = "save";
-                public const string SaveAs = "save";
-                public const string TrackChanges = "track_changes";
+                public const string border_color = nameof(border_color);
+                public const string content_cut = nameof(content_cut);
+                public const string drive_file_rename_outline = nameof(drive_file_rename_outline);
+                public const string edit = nameof(edit);
+                public const string edit_document = nameof(edit_document);
+                public const string edit_off = nameof(edit_off);
+                public const string history_edu = nameof(history_edu);
+                public const string note_alt = nameof(note_alt);
+                public const string save = nameof(save);
+                public const string save_as = nameof(save);
+                public const string track_changes = nameof(track_changes);
             }
 
             public class Folders
             {
-                public const string DriveFileMove = "drive_file_move";
-                public const string DriveFileMoveOutline = "drive_file_move_outline";
-                public const string DriveFileMoveRtl = "drive_file_move_rtl";
-                public const string DriveFolderUpload= "drive_folder_upload";
-                public const string Folder = "folder";
-                public const string FolderDelete = "folder_delete";
-                public const string FolderNew = "create_new_folder";
-                public const string FolderOff = "folder_off";
-                public const string FolderOpen = "folder_open";
-                public const string FolderRule = "rule_folder";
-                public const string FolderShared = "folder_shared";
-                public const string FolderSnippet = "snippet_folder";
-                public const string FolderSpecial = "folder_special";
-                public const string FolderZip = "folder_zip";
-                public const string Source = "source";
+                public const string create_new_folder = nameof(create_new_folder);
+                public const string drive_file_move = nameof(drive_file_move);
+                public const string drive_file_move_outline = nameof(drive_file_move_outline);
+                public const string drive_file_move_rtl = nameof(drive_file_move_rtl);
+                public const string drive_folder_upload = nameof(drive_folder_upload);
+                public const string folder = nameof(folder);
+                public const string folder_delete = nameof(folder_delete);
+                public const string folder_off = nameof(folder_off);
+                public const string folder_open = nameof(folder_open);
+                public const string folder_shared = nameof(folder_shared);
+                public const string folder_special = nameof(folder_special);
+                public const string folder_zip = nameof(folder_zip);
+                public const string rule_folder = nameof(rule_folder);
+                public const string snippet_folder = nameof(snippet_folder);
+                public const string source = nameof(source);
             }
 
             public class Link
             {
-                public const string AttachFile = "attach_file";
-                public const string Attachment = "attachment";
-                public const string FilePresent = "file_present";
-                public const string LinkAdd = "add_link";
-                public const string LinkOff = "link_off";
-                public const string LinkOn = "link";
+                public const string add_link = nameof(add_link);
+                public const string attach_file = nameof(attach_file);
+                public const string attachment = nameof(attachment);
+                public const string file_present = nameof(file_present);
+                public const string link = nameof(link);
+                public const string link_off = nameof(link_off);
             }
 
             public class Page
             {
-                public const string Description = "description";
-                public const string Difference = "difference";
-                public const string File = "insert_drive_file";
-                public const string FileAdd = "note_add";
-                public const string FileCopy = "file_copy";
-                public const string FileDone = "task";
-                public const string FileRestore = "restore_page";
-                public const string FileOpen = "file_open";
-                public const string FileUploat = "file_upload";
-                public const string TextSnippet = "text_snippet";
+                public const string description = nameof(description);
+                public const string difference = nameof(difference);
+                public const string insert_drive_file = nameof(insert_drive_file);
+                public const string file_copy = nameof(file_copy);
+                public const string file_open = nameof(file_open);
+                public const string file_upload = nameof(file_upload);
+                public const string note_add = nameof(note_add);
+                public const string restore_page = nameof(restore_page);
+                public const string task = nameof(task);
+                public const string text_snippet = nameof(text_snippet);
             }
 
             public class Suitcases
             {
-                public const string BusinessCenter = "business_center";
-                public const string Cases = "cases";
-                public const string NextWeek = "next_week";
-                public const string Shop = "shop";
-                public const string Shop2 = "shop_two";
-                public const string Work = "work";
-                public const string WorkHistory = "work_history";
-                public const string WorkOff = "work_off";
-                public const string WorkOutline = "work_outline";
+                public const string business_center = nameof(business_center);
+                public const string cases = nameof(cases);
+                public const string next_week = nameof(next_week);
+                public const string shop = nameof(shop);
+                public const string shop_two = nameof(shop_two);
+                public const string work = nameof(work);
+                public const string work_history = nameof(work_history);
+                public const string work_off = nameof(work_off);
+                public const string work_outline = nameof(work_outline);
             }
         }
 
         public class Education
         {
-            public const string Backpack = "backpack";
-            public const string BackpackDisabled = "no_backpack";
-            public const string Book = "book";
-            public const string BookFold = "devices_fold";
-            public const string BookOnline = "book_online";
-            public const string BookOpen = "import_contacts";
-            public const string BookPage = "menu_book";
-            public const string BookTurnPage = "auto_stories";
-            public const string Bookmark = "bookmark";
-            public const string BookmarkAdd = "bookmark_add";
-            public const string BookmarkAdded = "bookmark_added";
-            public const string BookmarkBorder = "bookmark_border";
-            public const string BookmarkCollections = "collections_bookmark";
-            public const string BookmarkRemove = "bookmark_remove";
-            public const string Bookmarks = "bookmarks";
-            public const string Label = "label";
-            public const string LabelImportant = "label_important";
-            public const string LabelImportantOutline = "label_important_outline";
-            public const string LabelNew = "new_label";
-            public const string LabelOff = "label_off";
-            public const string Library = "local_library";
-            public const string More = "more";
-            public const string PlayLesson = "play_lesson";
-            public const string School = "school";
+            public const string auto_stories = nameof(auto_stories);
+            public const string backpack = nameof(backpack);
+            public const string book = nameof(book);
+            public const string book_online = nameof(book_online);
+            public const string bookmark = nameof(bookmark);
+            public const string bookmark_add = nameof(bookmark_add);
+            public const string bookmark_added = nameof(bookmark_added);
+            public const string bookmark_border = nameof(bookmark_border);
+            public const string bookmark_remove = nameof(bookmark_remove);
+            public const string bookmarks = nameof(bookmarks);
+            public const string collections_bookmark = nameof(collections_bookmark);
+            public const string devices_fold = nameof(devices_fold);
+            public const string import_contacts = nameof(import_contacts);
+            public const string label = nameof(label);
+            public const string label_important = nameof(label_important);
+            public const string label_important_outline = nameof(label_important_outline);
+            public const string label_off = nameof(label_off);
+            public const string local_library = nameof(local_library);
+            public const string menu_book = nameof(menu_book);
+            public const string more = nameof(more);
+            public const string new_label = nameof(new_label);
+            public const string no_backpack = nameof(no_backpack);
+            public const string play_lesson = nameof(play_lesson);
+            public const string school = nameof(school);
         }
 
         public class Food
         {
-            public const string BBQ = "outdoor_grill";
-            public const string Bakery = "bakery_dining";
-            public const string Bento = "bento";
-            public const string Breakfast = "breakfast_dining";
-            public const string Brunch = "brunch_dining";
-            public const string Cake = "cake";
-            public const string Cookie = "cookie";
-            public const string Dinner = "dinner_dining";
-            public const string Egg = "egg";
-            public const string EggCoocked = "egg_alt";
-            public const string Fastfood = "fastfood";
-            public const string FastfoodDisabled = "no_food";
-            public const string Flatware = "flatware";
-            public const string Fire = "whatshot";
-            public const string Fire2 = "local_fire_department";
-            public const string Fireplace = "fireplace";
-            public const string FishMeal = "set_meal";
-            public const string Hamburger = "lunch_dining";
-            public const string Icecream = "icecream";
-            public const string Kebab = "kebab_dining";
-            public const string Pizza = "local_pizza";
-            public const string Ramen = "ramen_dining";
-            public const string Rice = "rice_bowl";
-            public const string Restaurant = "food_bank";
-            public const string Restaurant2 = "dining";
-            public const string Restaurant3 = "restaurant";
-            public const string Restaurant4 = "restaurant_menu";
-            public const string RestaurantDisabled = "no_meals";
-            public const string Soup = "soup_kitchen";
-            public const string Takeout = "takeout_dining";
-            public const string Tapas = "tapas";
+            public const string bakery_dining = nameof(bakery_dining);
+            public const string bento = nameof(bento);
+            public const string breakfast_dining = nameof(breakfast_dining);
+            public const string brunch_dining = nameof(brunch_dining);
+            public const string cake = nameof(cake);
+            public const string cookie = nameof(cookie);
+            public const string dining = nameof(dining);
+            public const string dinner_dining = nameof(dinner_dining);
+            public const string egg = nameof(egg);
+            public const string egg_alt = nameof(egg_alt);
+            public const string fastfood = nameof(fastfood);
+            public const string flatware = nameof(flatware);
+            public const string food_bank = nameof(food_bank);
+            public const string fireplace = nameof(fireplace);
+            public const string icecream = nameof(icecream);
+            public const string kebab_dining = nameof(kebab_dining);
+            public const string local_fire_department = nameof(local_fire_department);
+            public const string local_pizza = nameof(local_pizza);
+            public const string lunch_dining = nameof(lunch_dining);
+            public const string no_food = nameof(no_food);
+            public const string no_meals = nameof(no_meals);
+            public const string outdoor_grill = nameof(outdoor_grill);
+            public const string ramen_dining = nameof(ramen_dining);
+            public const string restaurant = nameof(restaurant);
+            public const string restaurant_menu = nameof(restaurant_menu);
+            public const string rice_bowl = nameof(rice_bowl);
+            public const string set_meal = nameof(set_meal);
+            public const string soup_kitchen = nameof(soup_kitchen);
+            public const string takeout_dining = nameof(takeout_dining);
+            public const string tapas = nameof(tapas);
+            public const string whatshot = nameof(whatshot);
 
             public class Drinks
             {
-                public const string Bar = "local_bar";
-                public const string BarDisabled = "no_drinks";
-                public const string BarMusic = "nightlife";
-                public const string Bear = "sports_bar";
-                public const string Cafe = "local_cafe";
-                public const string Coffee = "coffee";
-                public const string CoffeeMaker = "coffee_maker";
-                public const string Drink = "local_drink";
-                public const string Tea = "emoji_food_beverage";
-                public const string Liquor = "liquor";
-                public const string Wine = "wine_bar";
+                public const string coffee = nameof(coffee);
+                public const string coffee_maker = nameof(coffee_maker);
+                public const string emoji_food_beverage = nameof(emoji_food_beverage);
+                public const string liquor = nameof(liquor);
+                public const string local_bar = nameof(local_bar);
+                public const string local_cafe = nameof(local_cafe);
+                public const string local_drink = nameof(local_drink);
+                public const string nightlife = nameof(nightlife);
+                public const string no_drinks = nameof(no_drinks);
+                public const string sports_bar = nameof(sports_bar);
+                public const string wine_bar = nameof(wine_bar);
             }
         }
 
         public class Fun
         {
-            public const string Celebration = "celebration";
-            public const string Gamepad = "gamepad";
-            public const string RSVP = "rsvp";
-            public const string Toy = "smart_toy";
-            public const string Toy2 = "toys";
-            public const string Videogame = "videogame_asset";
-            public const string VideogameDisabled = "videogame_asset_off";
-            public const string Xbox = "sports_esports";
+            public const string celebration = nameof(celebration);
+            public const string gamepad = nameof(gamepad);
+            public const string rsvp = nameof(rsvp);
+            public const string smart_toy = nameof(smart_toy);
+            public const string sports_esports = nameof(sports_esports);
+            public const string toys = nameof(toys);
+            public const string videogame_asset = nameof(videogame_asset);
+            public const string videogame_asset_off = nameof(videogame_asset_off);
         }
 
         public class Home
         {
-            public const string Balcony = "balcony";
-            public const string Cabin = "cabin";
-            public const string CameraIndoor = "camera_indoor";
-            public const string CameraOutdoor = "camera_outdoor";
-            public const string Chalet = "chalet";
-            public const string Cottage = "cottage";
-            public const string Doorbell = "doorbell";
-            public const string Fence = "fence";
-            public const string Flood = "flood";
-            public const string Foundation = "foundation";
-            public const string _Home = "home";
-            public const string Home2 = "house";
-            public const string HomeAdd = "add_home";
-            public const string HomeFilled = "home_filled";
-            public const string HomeSiding = "house_siding";
-            public const string HomeWork = "home_work";
-            public const string HomeWorkAdd = "add_home_work";
-            public const string NightShelter = "night_shelter";
-            public const string OtherHouses = "other_houses";
-            public const string Roof = "roofing";
-            public const string SolarPower = "solar_power";
-            public const string WaterDamage = "water_damage";
+            public const string add_home = nameof(add_home);
+            public const string add_home_work = nameof(add_home_work);
+            public const string balcony = nameof(balcony);
+            public const string cabin = nameof(cabin);
+            public const string camera_indoor = nameof(camera_indoor);
+            public const string camera_outdoor = nameof(camera_outdoor);
+            public const string chalet = nameof(chalet);
+            public const string cottage = nameof(cottage);
+            public const string doorbell = nameof(doorbell);
+            public const string fence = nameof(fence);
+            public const string flood = nameof(flood);
+            public const string foundation = nameof(foundation);
+            public const string home = nameof(home);
+            public const string home_filled = nameof(home_filled);
+            public const string home_siding = nameof(home_siding);
+            public const string home_work = nameof(home_work);
+            public const string house = nameof(house);
+            public const string house_siding = nameof(house_siding);
+            public const string night_shelter = nameof(night_shelter);
+            public const string other_houses = nameof(other_houses);
+            public const string roofing = nameof(roofing);
+            public const string solar_power = nameof(solar_power);
+            public const string water_damage = nameof(water_damage);
 
             public class Baby
             {
-                public const string BabyBedroom = "bedroom_baby";
-                public const string Carriage = "child_friendly";
-                public const string ChangingStation = "baby_changing_station";
-                public const string Crib = "crib";
-                public const string Stroller = "stroller";
-                public const string StrollerDisabled = "no_stroller";
+                public const string baby_changing_station = nameof(baby_changing_station);
+                public const string bedroom_baby = nameof(bedroom_baby);
+                public const string child_friendly = nameof(child_friendly);
+                public const string crib = nameof(crib);
+                public const string no_stroller = nameof(no_stroller);
+                public const string stroller = nameof(stroller);
             }
 
             public class Bathroom
             {
-                public const string BathTub = "bathtub";
-                public const string _Bathroom = "bathroom";
-                public const string HandsDry = "soap";
-                public const string HandsSoap = "soap";
-                public const string HandsWash = "wash";
-                public const string HotTub = "hot_tub";
-                public const string Sink = "countertops";
-                public const string Shower = "shower";
+                public const string bathroom = nameof(bathroom);
+                public const string bathtub = nameof(bathtub);
+                public const string countertops = nameof(countertops);
+                public const string dry = nameof(dry);
+                public const string hot_tub = nameof(hot_tub);
+                public const string shower = nameof(shower);
+                public const string soap = nameof(soap);
+                public const string wash = nameof(wash);
             }
 
             public class Bed
             {
-                public const string _Bed = "bed";
-                public const string BedKing = "king_bed";
-                public const string BedSingle = "single_bed";
-                public const string Bedroom = "bedroom_parent";
-                public const string BedroomChild = "bedroom_child";
-                public const string Chair = "chair";
-                public const string Chair2 = "chair_alt";
-                public const string Hotel = "hotel";
-                public const string Livingroom = "living";
-                public const string Sofa = "weekend";
+                public const string bed = nameof(bed);
+                public const string bedroom_child = nameof(bedroom_child);
+                public const string bedroom_parent = nameof(bedroom_parent);
+                public const string chair = nameof(chair);
+                public const string chair_alt = nameof(chair_alt);
+                public const string hotel = nameof(hotel);
+                public const string king_bed = nameof(king_bed);
+                public const string living = nameof(living);
+                public const string single_bed = nameof(single_bed);
+                public const string weekend = nameof(weekend);
             }
 
             public class Facilities
             {
-                public const string Blender = "blender";
-                public const string Blinds = "blinds";
-                public const string BlindsClosed = "blinds_closed";
-                public const string Checkroom = "checkroom";
-                public const string Curtains = "curtains";
-                public const string CurtainsClosed = "curtains_closed";
-                public const string Desk = "desk";
-                public const string DoorBack = "door_back";
-                public const string DoorFront = "door_front";
-                public const string DoorSensor = "sensor_door";
-                public const string DoorSliding = "door_sliding";
-                public const string DryCleaning = "dry_cleaning";
-                public const string Elevator = "elevator";
-                public const string FanOff = "mode_fan_off";
-                public const string Hvac = "hvac";
-                public const string Iron = "iron";
-                public const string Laundry = "local_laundry_service";
-                public const string Light = "light";
-                public const string Microwave = "microwave";
-                public const string Refrigerator = "kitchen";
-                public const string RollerShades = "roller_shades";
-                public const string RollerShadesClosed = "roller_shades_closed";
-                public const string Room = "meeting_room";
-                public const string RoomDisabled = "no_meeting_room";
-                public const string RoomPreferences = "room_preferences";
-                public const string Shelves = "shelves";
-                public const string Stairs = "stairs";
-                public const string Table = "table_restaurant";
-                public const string TableBar = "table_bar";
-                public const string VerticalShades = "vertical_shades";
-                public const string VerticalShadesClosed = "vertical_shades_closed";
-                public const string Window = "window";
-                public const string WindowSensor = "sensor_window";
+                public const string blender = nameof(blender);
+                public const string blinds = nameof(blinds);
+                public const string blinds_closed = nameof(blinds_closed);
+                public const string checkroom = nameof(checkroom);
+                public const string curtains = nameof(curtains);
+                public const string curtains_closed = nameof(curtains_closed);
+                public const string desk = nameof(desk);
+                public const string door_back = nameof(door_back);
+                public const string door_front = nameof(door_front);
+                public const string door_sensor = nameof(door_sensor);
+                public const string door_sliding = nameof(door_sliding);
+                public const string dry_cleaning = nameof(dry_cleaning);
+                public const string elevator = nameof(elevator);
+                public const string fan_off = nameof(fan_off);
+                public const string hvac = nameof(hvac);
+                public const string iron = nameof(iron);
+                public const string kitchen = nameof(kitchen);
+                public const string light = nameof(light);
+                public const string local_laundry_service = nameof(local_laundry_service);
+                public const string microwave = nameof(microwave);
+                public const string meeting_room = nameof(meeting_room);
+                public const string no_meeting_room = nameof(no_meeting_room);
+                public const string roller_shades = nameof(roller_shades);
+                public const string roller_shades_closed = nameof(roller_shades_closed);
+                public const string room_preferences = nameof(room_preferences);
+                public const string shelves = nameof(shelves);
+                public const string stairs = nameof(stairs);
+                public const string table_bar = nameof(table_bar);
+                public const string table_restaurant = nameof(table_restaurant);
+                public const string vertical_shades = nameof(vertical_shades);
+                public const string vertical_shades_closed = nameof(vertical_shades_closed);
+                public const string window = nameof(window);
+                public const string sensor_window = nameof(sensor_window);
             }
         }
 
@@ -835,44 +835,43 @@
         {
             public class Camera 
             {
-                public const string _Camera = "photo_camera";
-                public const string CameraAdd = "add_a_photo";
-                public const string CameraEnhance = "camera_enhance";
-                public const string CameraFlashOff = "no_flash";
-                public const string CameraFlip = "flip_camera_ios";
-                public const string CameraLinked = "linked_camera";
-                public const string CameraOff = "no_photography";
-                public const string CameraSwitch = "switch_camera";
-                public const string CameraSwitch2 = "cameraswitch";
-                public const string DirtyLens = "dirty_lens";
-                public const string FlashAuto = "flash_auto";
-                public const string FlashOff = "flash_off";
-                public const string FlashOn = "flash_on";
-                public const string Fps30 = "30fps_select";
-                public const string Fps60 = "60fps_select";
-                public const string FpsAuto = "autofps_select";
-                public const string HdrAuto = "hdr_auto";
-                public const string HdrAutoSelect = "hdr_auto_select";
-                public const string HdrEnhancedSelect = "hdr_enhanced_select";
-                public const string HdrOff = "hdr_off";
-                public const string HdrOffSelect = "hdr_off_select";
-                public const string HdrOn = "hdr_on";
-                public const string HdrOnSelect = "hdr_on_select";
-                public const string HdrPlus = "hdr_plus";
-                public const string Monochrome = "monochrome_photos";
-                public const string PartyMode = "party_mode";
-                public const string RawOn = "raw_on";
-                public const string RawOff = "raw_off";
-                public const string Shutter = "camera";
-                public const string ShutterSpeed = "shutter_speed";
-                public const string Timer3 = "timer_3";
-                public const string Timer3s = "timer_3_select";
-                public const string Timer10 = "timer_10";
-                public const string Timer10s = "timer_10_select";
+                public const string add_a_photo = nameof(add_a_photo);
+                public const string autofps_select = nameof(autofps_select);
+                public const string camera = nameof(camera);
+                public const string camera_enhance = nameof(camera_enhance);
+                public const string cameraswitch = nameof(cameraswitch);
+                public const string dirty_lens = nameof(dirty_lens);
+                public const string flash_auto = nameof(flash_auto);
+                public const string flash_off = nameof(flash_off);
+                public const string flash_on = nameof(flash_on);
+                public const string hdr_auto = nameof(hdr_auto);
+                public const string hdr_auto_select = nameof(hdr_auto_select);
+                public const string hdr_enhanced_select = nameof(hdr_enhanced_select);
+                public const string hdr_off = nameof(hdr_off);
+                public const string hdr_off_select = nameof(hdr_off_select);
+                public const string hdr_on = nameof(hdr_on);
+                public const string hdr_on_select = nameof(hdr_on_select);
+                public const string hdr_plus = nameof(hdr_plus);
+                public const string monochrome_photos = nameof(monochrome_photos);
+                public const string no_flash = nameof(no_flash);
+                public const string no_photography = nameof(no_photography);
+                public const string party_mode = nameof(party_mode);
+                public const string raw_off = nameof(raw_off);
+                public const string raw_on = nameof(raw_on);
+                public const string switch_camera = nameof(switch_camera);
+                public const string shutter = nameof(shutter);
+                public const string shutter_speed = nameof(shutter_speed);
+                public const string timer_10 = nameof(timer_10);
+                public const string timer_10_select = nameof(timer_10_select);
+                public const string timer_3 = nameof(timer_3);
+                public const string timer_3_select = nameof(timer_3_select);
+                public const string photo_camera = nameof(photo_camera);
+                public const string flip_camera_ios = nameof(flip_camera_ios);
+                public const string linked_camera = nameof(linked_camera);
 
                 public class Megapixles
                 {
-                    public const string _mp = "mp";
+                    public const string mp = nameof(mp);
                     public const string _2mp = "2mp";
                     public const string _3mp = "3mp";
                     public const string _4mp = "4mp";
@@ -897,125 +896,127 @@
                     public const string _23mp = "23mp";
                     public const string _24mp = "24mp";
                 }
-
             }
 
             public class Images
             {
-                public const string Album = "photo_album";
-                public const string ArtTrack = "art_track";
-                public const string BurstMode = "burst_mode";
-                public const string Compare = "compare";
-                public const string Filter = "filter";
-                public const string FilterBW = "filter_b_and_w";
-                public const string Gif = "gif";
-                public const string GifBox = "gif_box";
-                public const string Image = "image";
-                public const string ImageAdd = "add_photo_alternate";
-                public const string ImageBroken = "broken_image";
-                public const string ImageCamera = "photo_camera_back";
-                public const string ImageCrop = "crop_original";
-                public const string ImageHide = "hide_image";
-                public const string ImageLibrary = "photo_library";
-                public const string ImageSearch = "image_search";
-                public const string Panorama = "panorama";
-                public const string PanoramaHoriz = "panorama_horizontal";
-                public const string PanoramaVr = "vrpano";
-                public const string PermMedia = "perm_media";
-                public const string RemoveRedEye = "remove_red_eye";
-                public const string Satellite = "satellite";
-                public const string Wallpaper = "wallpaper";
+                public const string add_photo_alternate = nameof(add_photo_alternate);
+                public const string art_track = nameof(art_track);
+                public const string broken_image = nameof(broken_image);
+                public const string burst_mode = nameof(burst_mode);
+                public const string compare = nameof(compare);
+                public const string crop_original = nameof(crop_original);
+                public const string filter = nameof(filter);
+                public const string filter_b_and_w = nameof(filter_b_and_w);
+                public const string gif = nameof(gif);
+                public const string gif_box = nameof(gif_box);
+                public const string hide_image = nameof(hide_image);
+                public const string image = nameof(image);
+                public const string image_camera_back = nameof(image_camera_back);
+                public const string image_library = nameof(image_library);
+                public const string image_search = nameof(image_search);
+                public const string panorama = nameof(panorama);
+                public const string panorama_horizontal = nameof(panorama_horizontal);
+                public const string perm_media = nameof(perm_media);
+                public const string photo_album = nameof(photo_album);
+                public const string remove_red_eye = nameof(remove_red_eye);
+                public const string satellite = nameof(satellite);
+                public const string vrpano = nameof(vrpano);
+                public const string wallpaper = nameof(wallpaper);
             }
 
             public class Music 
             {
-                public const string AudioFile = "audio_file";
-                public const string Disc = "album";
-                public const string DiscFull = "disc_full";
-                public const string Earbuds = "earbuds";
-                public const string EarbudsBattery = "earbuds_battery";
-                public const string Headset = "headset";
-                public const string HeadsetBattery = "headphones_battery";
-                public const string HeadsetMic = "headset_mic";
-                public const string HeadsetOff = "headset_off";
-                public const string MicOff = "mic_external_off";
-                public const string MicOn = "mic_external_on";
-                public const string MusicBluetoothOff = "media_bluetooth_off";
-                public const string MusicBluetoothOn = "media_bluetooth_on";
-                public const string MusicLibrary = "library_music";
-                public const string MusicOff = "music_off";
-                public const string MusicOn = "music_note";
-                public const string MusicQueue = "queue_music";
-                public const string MusicVideo = "music_video";
-                public const string Piano = "piano";
-                public const string PianoOff = "piano_off";
-                public const string Radio = "radio";
-                public const string Speaker = "speaker";
-                public const string SpeakerGroup = "speaker_group";
+                public const string album = nameof(album);
+                public const string audio_file = nameof(audio_file);
+                public const string disc_full = nameof(disc_full);
+                public const string earbuds = nameof(earbuds);
+                public const string earbuds_battery = nameof(earbuds_battery);
+                public const string headset = nameof(headset);
+                public const string headphones_battery = nameof(headphones_battery);
+                public const string headset_mic = nameof(headset_mic);
+                public const string headset_off = nameof(headset_off);
+                public const string mic_external_off = nameof(mic_external_off);
+                public const string mic_external_on = nameof(mic_external_on);
+                public const string library_music = nameof(library_music);
+                public const string media_bluetooth_off = nameof(media_bluetooth_off);
+                public const string media_bluetooth_on = nameof(media_bluetooth_on);
+                public const string music_note = nameof(music_note);
+                public const string music_off = nameof(music_off);
+                public const string music_on = nameof(music_on);
+                public const string music_queue = nameof(music_queue);
+                public const string music_video = nameof(music_video);
+                public const string piano = nameof(piano);
+                public const string piano_off = nameof(piano_off);
+                public const string radio = nameof(radio);
+                public const string speaker = nameof(speaker);
+                public const string speaker_group = nameof(speaker_group);
             }
 
             public class Video
             {
-                public const string AdultContentOff = "no_adult_content";
-                public const string CameraRoll = "camera_roll";
-                public const string ClosedCaption = "closed_caption";
-                public const string ClosedCaptionDisabled = "closed_caption_disabled";
-                public const string ClosedCaptionOff = "closed_caption_off";
-                public const string Duo = "duo";
-                public const string DisabledVisible = "disabled_visible";
-                public const string EmergencyRecording = "emergency_recording";
-                public const string Explicit = "explicit";
-                public const string FiberDvr = "fiber_dvr";
-                public const string FiberNew = "fiber_new";
-                public const string FiberPin = "fiber_pin";
-                public const string Hevc = "hevc";
-                public const string MotionPhotosAuto = "motion_photos_auto";
-                public const string Movie = "movie";
-                public const string MovieEdit = "movie_edit";
-                public const string MovieFilter = "movie_filter";
-                public const string PhotoCameraFront = "photo_camera_front";
-                public const string Rated18 = "18_up_rating";
-                public const string Sd = "sd";
-                public const string SdCard = "sd_card";
-                public const string Subtitles = "subtitles";
-                public const string SubtitlesOff = "subtitles_off";
-                public const string TheaterComedy = "theater_comedy";
-                public const string Theaters = "theaters";
-                public const string VideoCall = "video_call";
-                public const string VideoCallMissed = "missed_video_call";
-                public const string VideoCamera = "videocam";
-                public const string VideoCameraBack = "video_camera_back";
-                public const string VideoCameraFront = "video_camera_front";
-                public const string VideoCameraOff = "videocam_off";
-                public const string VideoFile = "video_file";
-                public const string VideoStable = "video_stable";
-                public const string VideoSwitch = "switch_video";
-                public const string WbAuto = "wb_auto";
+                public const string _18_up_rating = "18_up_rating";
+                public const string adult_content_off = nameof(adult_content_off);
+                public const string camera_roll = nameof(camera_roll);
+                public const string closed_caption = nameof(closed_caption);
+                public const string closed_caption_disabled = nameof(closed_caption_disabled);
+                public const string closed_caption_off = nameof(closed_caption_off);
+                public const string disabled_visible = nameof(disabled_visible);
+                public const string duo = nameof(duo);
+                public const string emergency_recording = nameof(emergency_recording);
+                public const string _explicit = "explicit";
+                public const string fiber_dvr = nameof(fiber_dvr);
+                public const string fiber_new = nameof(fiber_new);
+                public const string fiber_pin = nameof(fiber_pin);
+                public const string hevc = nameof(hevc);
+                public const string movie = nameof(movie);
+                public const string movie_edit = nameof(movie_edit);
+                public const string movie_filter = nameof(movie_filter);
+                public const string motion_photos_auto = nameof(motion_photos_auto);
+                public const string photo_camera_front = nameof(photo_camera_front);
+                public const string rated_18 = nameof(rated_18);
+                public const string sd = nameof(sd);
+                public const string sd_card = nameof(sd_card);
+                public const string subtitles = nameof(subtitles);
+                public const string subtitles_off = nameof(subtitles_off);
+                public const string switch_video = nameof(switch_video);
+                public const string theater_comedy = nameof(theater_comedy);
+                public const string theaters = nameof(theaters);
+                public const string video_call = nameof(video_call);
+                public const string missed_video_call = nameof(missed_video_call);
+                public const string video_camera = nameof(video_camera);
+                public const string video_camera_back = nameof(video_camera_back);
+                public const string video_camera_front = nameof(video_camera_front);
+                public const string video_camera_off = nameof(video_camera_off);
+                public const string video_file = nameof(video_file);
+                public const string video_stable = nameof(video_stable);
+                public const string wb_auto = nameof(wb_auto);
+
 
                 public class Play
                 {
-                    public const string FastForward = "fast_forward";
-                    public const string FastRewind = "fast_rewind";
-                    public const string LiveTv = "live_tv";
-                    public const string OnDemandVideo = "ondemand_video";
-                    public const string Pause = "pause";
-                    public const string PauseCircle = "pause_circle";
-                    public const string PauseCircleOutline = "pause_circle_outline";
-                    public const string PauseMotionPhotos = "motion_photos_pause";
-                    public const string PausePresentation = "pause_presentation";
-                    public const string PlayArrow = "play_arrow";
-                    public const string PlayCircle = "play_circle";
-                    public const string PlayCircleOutline = "play_circle_outline";
-                    public const string PlayDisabled = "play_disabled";
-                    public const string SkipNext = "skip_next";
-                    public const string SkipPrevious = "skip_previous";
-                    public const string SmartDisplay = "smart_display";
-                    public const string Square = "square";
-                    public const string Stop = "stop";
-                    public const string StopCircle = "stop_circle";
-                    public const string Subscriptions = "subscriptions";
-                    public const string VideoLibrary = "video_library";
-                    public const string VideoSettings = "video_settings";
+                    public const string fast_forward = nameof(fast_forward);
+                    public const string fast_rewind = nameof(fast_rewind);
+                    public const string live_tv = nameof(live_tv);
+                    public const string ondemand_video = nameof(ondemand_video);
+                    public const string pause = nameof(pause);
+                    public const string pause_circle = nameof(pause_circle);
+                    public const string pause_circle_outline = nameof(pause_circle_outline);
+                    public const string motion_photos_pause = nameof(motion_photos_pause);
+                    public const string pause_presentation = nameof(pause_presentation);
+                    public const string play_arrow = nameof(play_arrow);
+                    public const string play_circle = nameof(play_circle);
+                    public const string play_circle_outline = nameof(play_circle_outline);
+                    public const string play_disabled = nameof(play_disabled);
+                    public const string skip_next = nameof(skip_next);
+                    public const string skip_previous = nameof(skip_previous);
+                    public const string smart_display = nameof(smart_display);
+                    public const string square = nameof(square);
+                    public const string stop = nameof(stop);
+                    public const string stop_circle = nameof(stop_circle);
+                    public const string subscriptions = nameof(subscriptions);
+                    public const string video_library = nameof(video_library);
+                    public const string video_settings = nameof(video_settings);
                 }
 
                 public class Quality
@@ -1039,57 +1040,68 @@
                     public const string _7kPlus = "7k_plus";
                     public const string _8kPlus = "8k_plus";
                     public const string _9kPlus = "9k_plus";
-                    public const string HD = "hd";
-                    public const string HQ = "high_quality";
+                    public const string hd = nameof(hd);
+                    public const string high_quality = nameof(high_quality);
                 }
             }
 
             public class Volume
             {
-                public const string CameraMic = "perm_camera_mic";
-                public const string Campaign = "campaign";
-                public const string ConnectWithoutContact = "connect_without_contact";
-                public const string Hearing = "hearing";
-                public const string HearingOff = "hearing_disabled";
-                public const string Mic = "mic";
-                public const string MicNone = "mic_none";
-                public const string MicOff = "mic_off";
-                public const string MicSettings = "settings_voice";
-                public const string SpatialAudio = "spatial_audio";
-                public const string VoiceOver = "record_voice_over";
-                public const string VoiceOverOff = "voice_over_off";
-                public const string VolumeDown = "volume_down";
-                public const string VolumeMute = "volume_mute";
-                public const string VolumeOff = "volume_off";
-                public const string VolumeUp = "volume_up";
+                public const string campaign = nameof(campaign);
+                public const string camera_mic = nameof(camera_mic);
+                public const string connect_without_contact = nameof(connect_without_contact);
+                public const string hearing = nameof(hearing);
+                public const string hearing_disabled = nameof(hearing_disabled);
+                public const string mic = nameof(mic);
+                public const string mic_none = nameof(mic_none);
+                public const string mic_off = nameof(mic_off);
+                public const string settings_voice = nameof(settings_voice);
+                public const string spatial_audio = nameof(spatial_audio);
+                public const string record_voice_over = nameof(record_voice_over);
+                public const string voice_over_off = nameof(voice_over_off);
+                public const string volume_down = nameof(volume_down);
+                public const string volume_mute = nameof(volume_mute);
+                public const string volume_off = nameof(volume_off);
+                public const string volume_up = nameof(volume_up);
             }
         }
 
         public class Professions
         {
-            public const string Balance = "balance";
-            public const string Carpenter = "carpenter";
-            public const string CleaningServices = "cleaning_services";
-            public const string Factory = "factory";
-            public const string FireHydrant = "fire_hydrant_alt";
-            public const string GasMeter = "gas_meter";
-            public const string Gavel = "gavel";
-            public const string HeatPump = "heat_pump";
-            public const string OilBarrel = "oil_barrel";
-            public const string Pallet = "pallet";
-            public const string Phishing = "phishing";
-            public const string Propane = "propane";
-            public const string PropaneTank = "propane_tank";
-            public const string RealEstateAgent = "real_estate_agent";
-            public const string Warehouse = "warehouse";
+            public const string carpenter = nameof(carpenter);
+            public const string cleaning_services = nameof(cleaning_services);
+            public const string factory = nameof(factory);
+            public const string fire_hydrant_alt = nameof(fire_hydrant_alt);
+            public const string gas_meter = nameof(gas_meter);
+            public const string gavel = nameof(gavel);
+            public const string heat_pump = nameof(heat_pump);
+            public const string oil_barrel = nameof(oil_barrel);
+            public const string pallet = nameof(pallet);
+            public const string phishing = nameof(phishing);
+            public const string propane = nameof(propane);
+            public const string propane_tank = nameof(propane_tank);
+            public const string real_estate_agent = nameof(real_estate_agent);
+            public const string warehouse = nameof(warehouse);
 
-            // continue from here 
             public class Construction
             {
-                public const string Architecture = "architecture";
-                public const string Scale = "scale";
+                public const string architecture = nameof(architecture);
+                public const string build = nameof(build);
+                public const string build_circle = nameof(build_circle);
+                public const string construction = nameof(construction);
+                public const string design_services = nameof(design_services);
+                public const string engineering = nameof(engineering);
+                public const string fire_extinguisher = nameof(fire_extinguisher);
+                public const string hardware = nameof(hardware);
+                public const string home_repair_service = nameof(home_repair_service);
+                public const string plumbing = nameof(plumbing);
+                public const string precision_manufacturing = nameof(precision_manufacturing);
+                public const string scale = nameof(scale);
+                public const string straighten = nameof(straighten);
+                public const string square_foot = nameof(square_foot);
             }
 
+            // continue from here 
             public class Electricity { }
 
             public class Medical
@@ -1264,25 +1276,25 @@
         {
             public const string Account_New = Social.SinglePerson.Person;
             public const string Account_Old = Social.SinglePerson.PersonOutline;
-            public const string Advanced = Documents.Wysiwyg;
-            public const string Analysis = Professions.Construction.Architecture;
-            public const string Department = Home.OtherHouses;
+            public const string Advanced = Documents.wysiwyg;
+            public const string Analysis = Professions.Construction.architecture;
+            public const string Department = Home.other_houses;
             public const string Excel = UiComponents.Table.GridOn;
             public const string Id = Symbols.Notifications.Info;
-            public const string Line = Data.LinearScale;
+            public const string Line = Data.linear_scale;
             public const string Location = Travel.Buildings.Domain;
             public const string Material = Professions.Medical.Science;
-            public const string Package = Documents.StickyNote;
+            public const string Package = Documents.sticky_note_2;
             public const string PackageCombine = Symbols.GroupWork;
-            public const string Process = Data.LineChart.Timeline;
-            public const string Properties = Home.Facilities.Window;
+            public const string Process = Data.LineChart.timeline;
+            public const string Properties = Home.Facilities.window;
             public const string Rule = "rule";
             public const string Status = UiComponents.Pending;
-            public const string Summary = Data.BarChart.Leaderboard;
-            public const string Transfer = Arrows.Swap.MultipleStop;
+            public const string Summary = Data.BarChart.leaderboard;
+            public const string Transfer = Arrows.Swap.multiple_stop;
             public const string Type = Symbols.Interests;
             public const string Unit = Social.Groups._Groups;
-            public const string Vessel = Food.Drinks.Cafe;
+            public const string Vessel = Food.Drinks.local_cafe;
             public const string Year = Time.CalanderMonth;
         }
     }

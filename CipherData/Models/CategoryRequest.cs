@@ -71,37 +71,140 @@
         }
 
         /// <summary>
+        /// Method to check if name is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckName(Tuple<bool,string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Tuple.Create(false, Translate(nameof(Name)));
+                }
+            }
+            
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if description is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (string.IsNullOrEmpty(Description))
+                {
+                    return Tuple.Create(false, Translate(nameof(Description)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if id mask is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckIdMask(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (IdMask.Count == 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(IdMask)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if creating processes is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckCreatingProcesses(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (CreatingProcesses.Count == 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(CreatingProcesses)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if consuming processes is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckConsumingProcesses(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                if (ConsumingProcesses.Count == 0)
+                {
+                    return Tuple.Create(false, Translate(nameof(ConsumingProcesses)));
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
+        /// Method to check if properties is applicable for this request
+        /// </summary>
+        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
+        /// <returns></returns>
+        public Tuple<bool, string> CheckProperties(Tuple<bool, string>? CurrCheckResult = null)
+        {
+            if (!Resource.CheckFailed(CurrCheckResult))
+            {
+                CurrCheckResult ??= Tuple.Create(true, string.Empty);
+
+                if (Properties != null && CurrCheckResult.Item1)
+                {
+                    // check uniqueness of the properties names
+                    List<string> props = Properties.Select(prop => prop.Name).ToList();
+                    CurrCheckResult = props.Count == props.Distinct().Count() ? CurrCheckResult : Tuple.Create(false, Translate(nameof(Properties)));
+
+                    if (CurrCheckResult.Item1)
+                    {
+                        // check inner logic of each property
+                        foreach (CategoryProperty prop in Properties)
+                        {
+                            var PropChecked = prop.Check();
+                            CurrCheckResult = (PropChecked.Item1) ? CurrCheckResult : PropChecked;
+                        }
+                    }
+                }
+            }
+
+            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+        }
+
+        /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = new(true, string.Empty);
-
-            result = (!string.IsNullOrEmpty(Name)) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.Name))); // required
-            result = (!string.IsNullOrEmpty(Description)) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.Description))); // required
-            result = (IdMask.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.IdMask))); // required
-            result = (CreatingProcesses.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.CreatingProcesses))); // event type is required
-            result = (ConsumingProcesses.Count > 0) ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.ConsumingProcesses))); // event type is required
-
-            // check properties
-            if (Properties != null && result.Item1)
-            {
-                // check uniqueness of the properties names
-                List<string> props = Properties.Select(prop => prop.Name).ToList();
-                result = props.Count == props.Distinct().Count() ? result : Tuple.Create(false, Category.Translate(nameof(RandomData.RandomCategory.Properties)));
-
-                if (result.Item1)
-                {
-                    // check inner logic of each property
-                    foreach (CategoryProperty prop in Properties)
-                    {
-                        result = prop.Check();
-                    }
-                }
-            }
-
+            Tuple<bool, string> result = CheckName();
+            result = CheckDescription(result);
+            result = CheckIdMask(result);
+            result = CheckCreatingProcesses(result);
+            result = CheckConsumingProcesses(result);
+            result = CheckProperties(result);
             return result;
         }
 
@@ -176,6 +279,11 @@
         public static CategoryRequest Empty()
         {
             return new CategoryRequest(name: string.Empty, description: string.Empty, idMask: new List<string>());
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(CategoryProperty), searchedAttribute);
         }
     }
 }

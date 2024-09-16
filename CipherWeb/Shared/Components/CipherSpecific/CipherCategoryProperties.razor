@@ -62,8 +62,6 @@
     {
         ChosenProperties.Remove(prop);
 
-        CustomDataGrid.Data = ChosenProperties;
-
         await CustomDataGrid.RefreshDataAsync();
 
         StateHasChanged();
@@ -76,7 +74,6 @@
     async Task DeleteAll()
     {
         ChosenProperties.Clear();
-        CustomDataGrid.Data = ChosenProperties;
 
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -85,7 +82,7 @@
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.DeleteSweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
         @if (ChosenProperties.Count() == 0)
@@ -101,12 +98,12 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Name" Width="100%" />
+                        <RadzenTextBox @bind-Value="prop.Name" Style="width:100%"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Description" Multiline="true" Width="100%" />
+                        <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CategoryProperty" Title="@(CategoryProperty.Translate(nameof(CachedData.CategoryPropertyExample.PropertyType)))" TextAlign="@TdTextAlign">
@@ -149,11 +146,11 @@
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {
-                            <CipherAutoComplete @bind-Value="@prop.DefaultValue" Width="100%" />
+                            <RadzenTextBox @bind-Value="prop.DefaultValue" Style="width:100%" />
                         }
                         else if (prop.PropertyType == PropertyType.Number)
                         {
-                            <CipherNumeric AmountChanged="@(args=> prop.DefaultValue = args.ToString())" Width="100%" />
+                            <CipherNumeric Amount="@(decimal.TryParse(prop.DefaultValue, out _) ? Convert.ToDecimal(prop.DefaultValue) : 0)" AmountChanged="@(args=> prop.DefaultValue = args.ToString())" Width="100%" />
                         }
                         else
                         {

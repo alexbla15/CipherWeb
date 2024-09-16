@@ -16,9 +16,9 @@
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId />
         <CipherComments @ref=PackDescription Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
-                        Icon="@Icons.Documents.Page.Description" Width="300px" Comments="@ChosenPackage?.Description" />
-        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.Scale" />
-        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.Scale" />
+                        Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
 
         <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" />
         <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" />

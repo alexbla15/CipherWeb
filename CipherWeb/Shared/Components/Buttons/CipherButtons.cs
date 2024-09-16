@@ -23,7 +23,7 @@ namespace CipherWeb.Shared.Components.Buttons
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
             Size = ButtonSize.Large;
-            Icon = Icons.Documents.Delete.Cancel;
+            Icon = Icons.Documents.Delete.cancel;
             Text = "ביטול";
         }
     }
@@ -34,7 +34,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
-            Icon = Icons.Documents.Delete.Close;
+            Icon = Icons.Documents.Delete.close;
         }
     }
 
@@ -44,7 +44,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
-            Icon = Icons.Documents.Delete._Delete;
+            Icon = Icons.Documents.Delete.delete;
         }
     }
     public partial class CipherDeleteAllButton : CipherButton
@@ -52,7 +52,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherDeleteAllButton() : base()
         {
             Variant = Variant.Outlined;
-            Icon = Icons.Documents.Delete.DeleteSweep;
+            Icon = Icons.Documents.Delete.delete_sweep;
         }
     }
 
@@ -62,7 +62,7 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             ColorStyle = ButtonStyle.Primary;
             ColorShade = Shade.Default;
-            Icon = Icons.Documents.Edit._Edit;
+            Icon = Icons.Documents.Edit.edit;
         }
     }
 
@@ -81,7 +81,7 @@ namespace CipherWeb.Shared.Components.Buttons
             Variant = Variant.Outlined;
             ButtonType = ButtonType.Submit;
             Size = ButtonSize.Large;
-            Icon = Icons.Documents.Edit.Save;
+            Icon = Icons.Documents.Edit.save;
             Text = "שמירה";
             ColorStyle = ButtonStyle.Success;
             ColorShade = Shade.Dark;
@@ -103,7 +103,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherPDFButton() : base()
         {
             HelpText = "ייצוא ל-PDF";
-            Icon = Icons.Documents.PDF;
+            Icon = Icons.Documents.picture_as_pdf;
             ColorStyle = ButtonStyle.Danger;
             ColorShade = Shade.Dark;
             Variant = Variant.Outlined;
