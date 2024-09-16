@@ -71,125 +71,58 @@
         }
 
         /// <summary>
-        /// Method to check if name is applicable for this request
+        /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckName(Tuple<bool,string>? CurrCheckResult = null)
+        public CheckField CheckName()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Name)));
-                }
-            }
-            
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Name, Translate(nameof(Name)));
         }
 
         /// <summary>
-        /// Method to check if description is applicable for this request
+        /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckDescription()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Description))
-                {
-                    return Tuple.Create(false, Translate(nameof(Description)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Description, Translate(nameof(Description)));
         }
 
         /// <summary>
-        /// Method to check if id mask is applicable for this request
+        /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckIdMask(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckIdMask()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (IdMask.Count == 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(IdMask)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.FullList(IdMask, Translate(nameof(IdMask)));
         }
 
         /// <summary>
-        /// Method to check if creating processes is applicable for this request
+        /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckCreatingProcesses(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckCreatingProcesses()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (CreatingProcesses.Count == 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(CreatingProcesses)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.FullList(CreatingProcesses, Translate(nameof(CreatingProcesses)));
         }
 
         /// <summary>
-        /// Method to check if consuming processes is applicable for this request
+        /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckConsumingProcesses(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckConsumingProcesses()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (ConsumingProcesses.Count == 0)
-                {
-                    return Tuple.Create(false, Translate(nameof(ConsumingProcesses)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.FullList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)));
         }
 
         /// <summary>
         /// Method to check if properties is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckProperties(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckProperties()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
+            CheckField result = new();
+
+            if (Properties != null)
             {
-                CurrCheckResult ??= Tuple.Create(true, string.Empty);
-
-                if (Properties != null && CurrCheckResult.Item1)
-                {
-                    // check uniqueness of the properties names
-                    List<string> props = Properties.Select(prop => prop.Name).ToList();
-                    CurrCheckResult = props.Count == props.Distinct().Count() ? CurrCheckResult : Tuple.Create(false, Translate(nameof(Properties)));
-
-                    if (CurrCheckResult.Item1)
-                    {
-                        // check inner logic of each property
-                        foreach (CategoryProperty prop in Properties)
-                        {
-                            var PropChecked = prop.Check();
-                            CurrCheckResult = (PropChecked.Item1) ? CurrCheckResult : PropChecked;
-                        }
-                    }
-                }
+                result = CheckField.Distinct(Properties, Translate(nameof(Properties)));
+                result = (result.Succeeded) ? CheckField.ListItems(Properties, Translate(nameof(Properties))) : result;
             }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return result;
         }
 
         /// <summary>
@@ -199,13 +132,14 @@
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = CheckName();
-            result = CheckDescription(result);
-            result = CheckIdMask(result);
-            result = CheckCreatingProcesses(result);
-            result = CheckConsumingProcesses(result);
-            result = CheckProperties(result);
-            return result;
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
+            result.Fields.Add(CheckIdMask());
+            result.Fields.Add(CheckCreatingProcesses());
+            result.Fields.Add(CheckConsumingProcesses());
+            result.Fields.Add(CheckProperties());
+            return result.Check();
         }
 
         /// <summary>
@@ -283,7 +217,7 @@
 
         public static string Translate(string searchedAttribute)
         {
-            return Resource.Translate(typeof(CategoryProperty), searchedAttribute);
+            return Resource.Translate(typeof(Category), searchedAttribute);
         }
     }
 }

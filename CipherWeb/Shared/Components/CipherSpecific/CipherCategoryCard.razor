@@ -25,12 +25,11 @@
                                         Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
                 <CipherAutoComplete Label="@Category.Translate(nameof(CachedData.CategoryExample.Description))" Icon="@Icons.Documents.Page.description" Multiline="true"
                 @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
-                <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
                 <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses))" @ref=InProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
                 <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses))" @ref=OutProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
-
+                <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
             </ChildContent>
         </CipherComponentCard>
         <CipherCategoryProperties @ref=CatProperties
@@ -97,12 +96,7 @@
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.Properties = CatProperties.ChosenProperties;
-
-        string cat_mask = CatMask.GetValue();
-        if (cat_mask != string.Empty)
-        {
-            cat.IdMask = new List<string>() { cat_mask };
-        }
+        cat.IdMask = CatMask.GetValue();
 
         return cat;
     }

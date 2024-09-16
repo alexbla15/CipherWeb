@@ -23,7 +23,7 @@
         /// Free-text description of the property
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
@@ -44,7 +44,7 @@
         /// <param name="description">Free-text description of the category</param>
         /// <param name="propertyType">Type of the property (string / decimal / bool)</param>
         /// <param name="value">Value that will be set for this category as default. User cannot change that.</param>
-        public CategoryProperty(string name, string? description = null, PropertyType propertyType = PropertyType.Text, 
+        public CategoryProperty(string name, string description, PropertyType propertyType = PropertyType.Text, 
             string? value = null)
         {
             Name = name;
@@ -56,19 +56,9 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckName(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckName()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Name)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Name, Translate(nameof(Name)));
         }
 
         /// <summary>
@@ -76,48 +66,27 @@
         /// </summary>
         /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
         /// <returns></returns>
-        public Tuple<bool, string> CheckDescription(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckDescription()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (string.IsNullOrEmpty(Name))
-                {
-                    return Tuple.Create(false, Translate(nameof(Description)));
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.Required(Description, Translate(nameof(Description)));
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public Tuple<bool, string> CheckDefaultValue(Tuple<bool, string>? CurrCheckResult = null)
+        public CheckField CheckDefaultValue()
         {
-            if (!Resource.CheckFailed(CurrCheckResult))
-            {
-                if (PropertyType == PropertyType.Number)
-                {
-                    return decimal.TryParse(DefaultValue, out _) ? (CurrCheckResult is null ? Tuple.Create(true, string.Empty) : CurrCheckResult) : Tuple.Create(false, $"תכונה {Name} היא מספרית. הערך שהוזן אינו תואם לכך.");
-                }
-                else if (PropertyType == PropertyType.Boolean)
-                {
-                    return bool.TryParse(DefaultValue, out _) ? (CurrCheckResult is null ? Tuple.Create(true, string.Empty) : CurrCheckResult) : Tuple.Create(false, $"תכונה {Name} היא בוליאנית. הערך שהוזן אינו תואם לכך.");
-                }
-            }
-
-            return (CurrCheckResult is null) ? Tuple.Create(true, string.Empty) : CurrCheckResult;
+            return CheckField.PropertyTypeValueCheck(PropertyType, DefaultValue, Translate(nameof(Name)));
         }
 
         public Tuple<bool, string> Check()
         {
-            Tuple<bool, string> result = CheckName();
-            result = CheckDescription(result);
-            result = CheckDefaultValue(result);
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
+            result.Fields.Add(CheckDefaultValue());
 
-            return result;
+            return result.Check();
         }
 
         /// <summary>

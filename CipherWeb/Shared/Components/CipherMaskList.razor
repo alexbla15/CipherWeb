@@ -1,0 +1,101 @@
+﻿@using System.Collections.Generic
+@using Radzen
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="newText" 
+AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
+@onkeydown="HandleKeyDown" Width="@Width" />
+
+<div class="chip-container">
+    @foreach (var text in SelectedTexts)
+    {
+        <div class="chip">
+            @text
+            <span class="chip-close" @onclick="() => RemoveText(text)">
+                <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+            </span>
+        </div>
+    }
+</div>
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public HashSet<string> SelectedTexts { get; set; } = new HashSet<string>();
+
+    [Parameter]
+    public string PlaceHolder { get; set; } = "כתבו ולחצו אנטר להוספה";
+
+    [Parameter]
+    public string Width { get; set; } = "300px";
+
+    [Parameter]
+    public string Icon { get; set; } = string.Empty;
+
+    [Parameter]
+    public string AllowedRegex { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    private CipherAutoComplete TextAdd = new();
+    private string newText;
+
+    private void AddText()
+    {
+        if (!string.IsNullOrWhiteSpace(newText))
+        {
+            if (TextAdd.Check())
+            {
+                SelectedTexts.Add(newText);
+                newText = string.Empty;
+            }
+        }
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            AddText();
+        }
+    }
+
+    private void RemoveText(string text)
+    {
+        SelectedTexts.Remove(text);
+    }
+}
+
+<style>
+
+    .chip-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .chip {
+        background-color: var(--rz-chip-background-color);
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .chip-close {
+        background-color: var(--rz-chip-background-color);
+        color: black;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+</style>

@@ -1,13 +1,13 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Label="@Label" Icon="@Icon" MinLength="1" MaxLength="3" @ref=Mask AllowedRegex="^[0-9]+$" Value="@Value" Disabled="@Disabled"/>
+<CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@Label"/>
 
 @code {
-    private CipherAutoComplete Mask = new();
+    private CipherMaskList Masks = new();
 
     protected override void OnInitialized()
     {
-        Label ??= "סדרה";
+        Label ??= Category.Translate(nameof(Category.IdMask));
         Icon ??= Icons.Security.Password;
     }
 
@@ -15,8 +15,8 @@
     /// Get the value set within the mask. Resets the value if it doesn't fullfill the check function.
     /// </summary>
     /// <returns></returns>
-    public string GetValue()
+    public List<string> GetValue()
     {
-        return Mask.Check() ? Mask.Value : string.Empty;
+        return Masks.SelectedTexts.ToList();
     }
 }
