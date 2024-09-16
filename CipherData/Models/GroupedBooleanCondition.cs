@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Groups of boolean conditions on a single object
@@ -73,6 +75,39 @@
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckConditions()
+        {
+            if (Conditions.Any())
+            {
+                if (Conditions.ToList()[0] is BooleanCondition)
+                {
+                    return CheckField.ListItems((List<BooleanCondition>)(object)Conditions, Translate(nameof(Conditions)));
+                }
+                else if(Conditions.ToList()[0] is GroupedBooleanCondition)
+                {
+                    return CheckField.ListItems((List<GroupedBooleanCondition>)(object)Conditions, Translate(nameof(Conditions)));
+                }
+            }
+            return new CheckField();
+
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckConditions());
+
+            return result.Check();
+        }
+
+        /// <summary>
         /// Create a random object.
         /// </summary>
         public static GroupedBooleanCondition Random()
@@ -90,6 +125,11 @@
             return new GroupedBooleanCondition(
                 conditions: new List<Condition>()
                 );
+        }
+
+        public static string Translate(string searchedAttribute)
+        {
+            return Resource.Translate(typeof(GroupedBooleanCondition), searchedAttribute);
         }
     }
 }

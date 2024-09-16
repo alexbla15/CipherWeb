@@ -76,6 +76,46 @@ namespace CipherData.Models
         }
 
         /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckName()
+        {
+            return CheckField.Required(Name, Translate(nameof(Name)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckDescription()
+        {
+            return CheckField.Required(Description, Translate(nameof(Description)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckCondition()
+        {
+            Tuple<bool, string> result = Condition.Check();
+            return new CheckField(result.Item1, result.Item2);
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckName());
+            result.Fields.Add(CheckDescription());
+            result.Fields.Add(CheckCondition());
+
+            return result.Check();
+        }
+
+        /// <summary>
         /// Hebrew-english translation
         /// </summary>
         public new static HashSet<Tuple<string, string>> Headers()

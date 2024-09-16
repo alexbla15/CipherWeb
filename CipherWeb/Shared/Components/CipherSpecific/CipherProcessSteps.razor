@@ -113,12 +113,12 @@
                             </RadzenDataGridColumn>
                             <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(CachedData.ProcessStepDefinitionExample.Name)))" TextAlign="@TdTextAlign">
                                 <Template Context="step">
-                                    <CipherAutoComplete @bind-Value="@step.Name" Width="100%"/>
+                                    <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%"/>
                                 </Template>
                             </RadzenDataGridColumn>
                             <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(CachedData.ProcessStepDefinitionExample.Description)))" TextAlign="@TdTextAlign">
                                 <Template Context="step">
-                                    <CipherAutoComplete @bind-Value="@step.Description" Multiline="true" Width="100%" />
+                                    <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" />
                                 </Template>
                             </RadzenDataGridColumn>
                         </Columns>

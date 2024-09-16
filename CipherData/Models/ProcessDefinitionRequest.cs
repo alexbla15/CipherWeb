@@ -57,7 +57,8 @@
         /// </summary>
         public CheckField CheckSteps()
         {
-            return CheckField.FullList(Steps, Translate(nameof(Steps)));
+            CheckField result = CheckField.FullList(Steps, Translate(nameof(Steps)));
+            return (result.Succeeded) ? CheckField.ListItems(Steps, Translate(nameof(Steps))) : result;
         }
 
         /// <summary>

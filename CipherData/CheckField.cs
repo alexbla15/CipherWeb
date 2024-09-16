@@ -19,6 +19,45 @@ namespace CipherData
             Message = message;
         }
 
+        public static CheckField ProperChars(string value, string field_name)
+        {
+            List<char> ImproperChars =
+            new() { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '_', '<', '>', '?', '/', '\\', '|', '{', '}', '~', ':' };
+
+            CheckField result = new();
+
+            result.Succeeded = !value.Any(x=>ImproperChars.Contains(x));
+
+            if (!result.Succeeded)
+            {
+                result.Message = $"השדה \"{field_name}\" מכיל תו אסור - {value.Where(x => ImproperChars.Contains(x)).First()}";
+            }
+
+            return result;
+        }
+
+        public static CheckField ProperWords(string value, string field_name)
+        {
+            CheckField result = new();
+
+            string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
+
+            result.Succeeded = !UnallowedWords.Any(x => value.ToUpper().Contains(x));
+
+            if (!result.Succeeded)
+            {
+                result.Message = $"השדה \"{field_name}\" מכיל מילה אסורה - {UnallowedWords.Where(x => value.ToUpper().Contains(x)).First()}";
+            }
+
+            return result;
+        }
+
+        public static CheckField CheckString(string value, string field_name)
+        {
+            CheckField result = ProperChars(value, field_name);
+            return (result.Succeeded)? ProperWords(value, field_name) : result;
+        }
+
         public static CheckField Greater(decimal value, decimal min_value, string field_name, string? min_field_name = null)
         {
             string ErrorMessage = (min_field_name is null) ?
@@ -60,14 +99,18 @@ namespace CipherData
 
         public static CheckField NotEq<T>(T value, T unwanted_value, string field_name)
         {
-            string ErrorMessage = $"השדה \"{field_name}\" חייב להיות שונה מ{unwanted_value}.";
+            CheckField result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name) : new();
 
-            bool condition = (value is null) ? unwanted_value != null : !value.Equals(unwanted_value);
+            if (result.Succeeded)
+            {
+                string ErrorMessage = $"השדה \"{field_name}\" חייב להיות שונה מ{unwanted_value}.";
+                bool condition = value is null;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+                result.Succeeded = condition ? unwanted_value != null : !value.Equals(unwanted_value);
+                result.Message = condition ? string.Empty : ErrorMessage;
+            }
+
+            return result;
         }
 
         public static CheckField Between(DateTime value, DateTime min_value, DateTime max_value, string field_name)
@@ -84,14 +127,21 @@ namespace CipherData
 
         public static CheckField Required<T>(T value, string field_name)
         {
+            CheckField result = new(); 
+            
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה.";
 
             bool condition = !string.IsNullOrEmpty(value?.ToString());
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            result.Succeeded = condition;
+            result.Message = condition ? string.Empty : ErrorMessage;
+
+            if (result.Succeeded)
+            {
+                result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name) : result;
+            }
+
+            return result;
         }
 
         public static CheckField FullList<T>(List<T> value, string field_name)
@@ -108,38 +158,39 @@ namespace CipherData
 
         public static CheckField ListItems<T>(List<T> value, string field_name)
         {
-            bool condition = true;
             string ErrorMessage = $"שגיאה בשדה \"{field_name}\".";
 
             // Get the type of the items in the list
             Type type = typeof(T);
 
-            // Find the Check method in the item's type
-            MethodInfo checkMethod = type.GetMethod("Check");
+            CheckField result = (type == typeof(string)) ? CheckString(value.ToString(), field_name) : new();
 
-            if (checkMethod == null)
+            if (result.Succeeded)
             {
-                condition = false;
-                ErrorMessage = "שגיאת מערכת";
-            }
-            else
-            {
-                foreach (var item in value)
+                // Find the Check method in the item's type
+                MethodInfo checkMethod = type.GetMethod("Check");
+
+                if (checkMethod == null)
                 {
-                    // Invoke the Check method and get the result
-                    Tuple<bool,string> result = (Tuple<bool, string>)checkMethod.Invoke(item, null);
-                    if (!result.Item1)
+                    result.Succeeded = false;
+                    result.Message = "שגיאת מערכת";
+                }
+                else
+                {
+                    foreach (var item in value)
                     {
-                        condition = false;
-                        ErrorMessage += " " + result.Item2;
+                        // Invoke the Check method and get the result
+                        Tuple<bool, string> resultItem = (Tuple<bool, string>)checkMethod.Invoke(item, null);
+                        if (!resultItem.Item1)
+                        {
+                            result.Succeeded = false;
+                            result.Message =  ErrorMessage + " " + resultItem.Item2;
+                        }
                     }
                 }
             }
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return result;
         }
 
         public static CheckField Distinct<T>(List<T> value, string field_name)

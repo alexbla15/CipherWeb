@@ -101,12 +101,12 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Name"/>
+                        <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <CipherAutoComplete @bind-Value="@prop.Value" Multiline="true"/>
+                        <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

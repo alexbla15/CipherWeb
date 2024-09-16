@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     public enum AttributeRelation
     {
@@ -117,6 +119,37 @@
             different |= Value != OtherObject?.Value;
 
             return different;
+        }
+
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckAttribute()
+        {
+            return CheckField.Required(Attribute, Translate(nameof(Attribute)));
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckValue()
+        {
+            return (Value is null) ? new CheckField() :CheckField.Required(Value, Translate(nameof(Value)));
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckAttribute());
+            result.Fields.Add(CheckValue());
+
+            return result.Check();
         }
 
         /// <summary>

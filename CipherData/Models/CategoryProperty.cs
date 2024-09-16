@@ -76,7 +76,13 @@
         /// </summary>
         public CheckField CheckDefaultValue()
         {
-            return CheckField.PropertyTypeValueCheck(PropertyType, DefaultValue, Translate(nameof(Name)));
+            CheckField result = new();
+            if (DefaultValue != null)
+            {
+                result = CheckField.CheckString(DefaultValue, Translate(nameof(DefaultValue)));
+            }
+
+            return result.Succeeded ? CheckField.PropertyTypeValueCheck(PropertyType, DefaultValue, Translate(nameof(Name))) : result;
         }
 
         public Tuple<bool, string> Check()
