@@ -1,0 +1,31 @@
+﻿@inherits CipherComponentCard
+
+@typeparam Cipher_TItem
+
+<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <HeaderContent>
+        @if (SetMode != FormMode.Create)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                @ObjectPicker
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ChildContent>
+        @ChildContent
+    </ChildContent>
+</CipherComponentCard>
+
+@code {
+    /// <summary>
+    /// Define the usage of this object-card
+    /// </summary>
+    [Parameter]
+    public FormMode SetMode { get; set; } = FormMode.Create;
+
+    /// <summary>
+    /// Object dropdown picker
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ObjectPicker { get; set; }
+}

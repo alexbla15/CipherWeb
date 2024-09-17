@@ -24,7 +24,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<ProcessDefinition,ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc)
         {
-            return GenericRequests.Request(RandomData.RandomProcessDefinition);
+            return GenericRequests.Request(proc.Create(ProcessDefinition.GetNextId()));
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace CipherData.Requests
         /// Update Unit's details
         /// Path: PUT /processDefinitions/{id}
         /// </summary>
-        public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
+        public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string id, ProcessDefinitionRequest proc)
         {
-            return GenericRequests.Request(RandomData.RandomProcessDefinition, canBeNotFound: true);
+            return GenericRequests.Request(proc.Create(id), canBeNotFound: true);
         }
     }
 }

@@ -5,7 +5,7 @@
     /// Width of the component.
     /// </summary>
     [Parameter]
-    public string DateFormat { get; set; }
+    public string? DateFormat { get; set; }
 
     /// <summary>
     /// Width of the component.
@@ -17,7 +17,7 @@
     /// Label of the component.
     /// </summary>
     [Parameter]
-    public string Label { get; set; }
+    public string? Label { get; set; }
 
     /// <summary>
     /// Icon aside the component.
@@ -73,13 +73,13 @@
     [Parameter]
     public DateTime Max { get; set; } = DateTime.MaxValue;
 
-    private DateTime? _value = DateTime.Now;
+    private DateTime _value = DateTime.Now;
 
     /// <summary>
     /// Set value of component.
     /// </summary>
     [Parameter]
-    public DateTime? Value
+    public DateTime Value
     {
         get => _value;
         set
@@ -98,7 +98,7 @@
 
     class Model
     {
-        public DateTime? value { get; set; } = DateTime.Now;
+        public DateTime value { get; set; } = DateTime.Now;
     }
 
     private Model model = new Model();
@@ -126,7 +126,7 @@
         }
     }
 
-    public DateTime? GetDateTime()
+    public DateTime GetDateTime()
     {
         return model.value;
     }

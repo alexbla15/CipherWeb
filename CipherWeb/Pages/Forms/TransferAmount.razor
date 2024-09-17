@@ -92,7 +92,7 @@
         if (Valid)
         {
             CreateEvent ev = RequestedEvent.Create();
-            JsonRequest += ev.ToJson();
+            JsonRequest = ev.ToJson();
             (ResultEvent, Error) = EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
             {

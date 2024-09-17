@@ -21,7 +21,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink? NavLink { get; set; }
+    public MySubNavLink NavLink { get; set; } = new();
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -69,11 +69,10 @@
     private CipherProcessCard procCard = new();
     private CipherCategoryCard catCard = new();
 
-
     /// <summary>
     /// Chosen objects mapping dictionary
     /// </summary>
-    private Dictionary<Type, Func<object?>>? chosenObjectMap;
+    private Dictionary<Type, Func<object?>> chosenObjectMap = new();
 
     protected override void OnInitialized()
     {
@@ -244,6 +243,11 @@
         if (requestResult != null)
         {
             (Result, Error) = requestResult.ToValueTuple();
+        }
+
+        if (Error == ErrorResponse.Success)
+        {
+            ChosenObject = Result;
         }
     }
 

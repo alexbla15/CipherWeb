@@ -21,22 +21,5 @@ namespace CipherData.Requests
         {
             return GenericRequests.Request(RandomData.RandomProcess, canBeNotFound: true, canBadRequest:false);
         }
-        /// <summary>
-        /// Create a new process definition
-        /// Path: POST /processDefinitions/
-        /// </summary>
-        public static Tuple<ProcessDefinition, ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc)
-        {
-            return GenericRequests.Request(RandomData.RandomProcessDefinition);
-        }
-
-        /// <summary>
-        /// Update a process-definition
-        /// Path: PUT /processDefinitions/{id}
-        /// </summary>
-        public static Tuple<ProcessDefinition, ErrorResponse> UpdateProcessDefinition(string proc_id, ProcessDefinitionRequest proc)
-        {
-            return GenericRequests.Request(RandomData.RandomProcessDefinition, canBeNotFound: true);
-        }
     }
 }

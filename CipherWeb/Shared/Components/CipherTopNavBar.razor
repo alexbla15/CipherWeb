@@ -2,9 +2,9 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center"
              Style="@($"padding-bottom:{PaddingBottom}; padding-top:{PaddingTop}; padding-right:{PaddingRight}; padding-left:{PaddingLeft}")">
-    @foreach (MyMenuItem item in items)
+    @foreach (MySubNavLink item in items)
     {
-        <CipherNavButton Icon="@item.Icon" Text="@item.Title" Width="@ButtonWidth()" Path="@item.Href" ColorShade="@ColorShade" ColorStyle="@ColorStyle" />
+        <CipherNavButton Icon="@item.Icon" Text="@item.Name" Width="@ButtonWidth()" Path="@item.Href" ColorShade="@ColorShade" ColorStyle="@ColorStyle" />
     }
 </RadzenStack>
 
@@ -49,16 +49,16 @@
     /// Buttons' content.
     /// </summary>
     [Parameter]
-    public List<MyMenuItem> items { get; set; } = new List<MyMenuItem>()
+    public List<MySubNavLink> items { get; set; } = new()
     {
-        new MyMenuItem(){
-            Title="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href
+        new MySubNavLink(){
+            Name="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href
         },
-        new MyMenuItem(){
-            Title="חיפוש", Icon=Icons.SearchAndFilter.Search, Href=CipherNavLinks.AdvancedSearch.Href
+        new MySubNavLink(){
+            Name="חיפוש", Icon=Icons.SearchAndFilter.Search, Href=CipherNavLinks.AdvancedSearch.Href
         },
-        new MyMenuItem(){
-            Title="דוחות", Icon=Icons.Documents.article, Href=CipherNavLinks.Reports.Href
+        new MySubNavLink(){
+            Name="דוחות", Icon=Icons.Documents.article, Href=CipherNavLinks.Reports.Href
         }
     };
 

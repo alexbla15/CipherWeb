@@ -17,7 +17,7 @@ namespace CipherData.Requests
         /// <returns></returns>
         public static Tuple<StorageSystem,ErrorResponse> CreateSystem(SystemRequest sys)
         {
-            return GenericRequests.Request(RandomData.RandomSystem);
+            return GenericRequests.Request(sys.Create(StorageSystem.GetNextId()));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<StorageSystem, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys)
         {
-            return GenericRequests.Request(RandomData.RandomSystem, canBeNotFound: true);
+            return GenericRequests.Request(sys.Create(sys_id), canBeNotFound: true);
         }
 
         /// <summary>

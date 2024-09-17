@@ -78,12 +78,10 @@
 
     public VesselRequest Value()
     {
-        VesselRequest newRequest = VesselRequest.Empty();
-
-        newRequest.Type = (VesType.Check()) ? VesType.Value : string.Empty;
-        newRequest.Name = (VesName.Check()) ? VesName.Value : string.Empty;
-        newRequest.SystemId = VesSys.ChosenSystem?.Id;
-
-        return newRequest;
+        return new VesselRequest(
+            type: VesType.Value, 
+            name: VesName.Value, 
+            systemId: VesSys.ChosenSystem?.Id
+        );
     }
 }

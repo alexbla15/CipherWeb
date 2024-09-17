@@ -42,7 +42,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Category, ErrorResponse> UpdateCategory(string id, CategoryRequest cat)
         {
-            return GenericRequests.Request(RandomData.RandomCategory, canBeNotFound: true);
+            return GenericRequests.Request(cat.Create(id), canBeNotFound: true);
         }
     }
 }

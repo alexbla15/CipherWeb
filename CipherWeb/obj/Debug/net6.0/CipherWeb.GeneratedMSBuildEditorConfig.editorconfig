@@ -420,6 +420,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJQcm9jZXNzQ2FyZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/ObjectCards/CipherResourceCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJSZXNvdXJjZUNhcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/FormUtils/ObjectCards/CipherSystemCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvcm1VdGlsc1xPYmplY3RDYXJkc1xDaXBoZXJTeXN0ZW1DYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

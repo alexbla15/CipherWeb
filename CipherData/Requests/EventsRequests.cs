@@ -19,7 +19,7 @@ namespace CipherData.Requests
         /// </summary>
         public static Tuple<Event,ErrorResponse> CreateEvent(CreateEvent ev)
         {
-            return GenericRequests.Request(RandomData.RandomEvent);
+            return GenericRequests.Request(ev.Create(Event.GetNextId()));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace CipherData.Requests
         /// Update event details.
         /// Path: PUT /events/{id}
         /// </summary>
-        public static Tuple<Event, ErrorResponse> UpdateEvent(string event_id)
+        public static Tuple<Event, ErrorResponse> UpdateEvent(string event_id, UpdateEvent ev)
         {
             return GenericRequests.Request(RandomData.RandomEvent, canBadRequest: false, canBeNotFound: true);
         }

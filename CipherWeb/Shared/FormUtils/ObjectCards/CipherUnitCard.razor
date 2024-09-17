@@ -83,12 +83,10 @@
 
     public UnitRequest Value()
     {
-        UnitRequest newRequest = UnitRequest.Empty();
-
-        newRequest.Name = (UnitName.Check()) ? UnitName.Value : string.Empty;
-        newRequest.Description = (UnitDescription.Check()) ? UnitDescription.Value : string.Empty;
-        newRequest.ParentId = UnitParent.ChosenUnit?.Id;
-
-        return newRequest;
+        return new UnitRequest(
+            name: UnitName.Value,
+            description: UnitDescription.Value,
+            parentId: UnitParent.ChosenUnit?.Id
+        );
     }
 }

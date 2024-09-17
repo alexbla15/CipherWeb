@@ -1,6 +1,7 @@
 ﻿using CipherData.Models;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace CipherData
@@ -19,21 +20,12 @@ namespace CipherData
             Message = message;
         }
 
-        public static CheckField ProperChars(string value, string field_name)
+        public static CheckField ProperChars(string value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת. \n?]+$")
         {
-            List<char> ImproperChars =
-            new() { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '_', '<', '>', '?', '/', '\\', '|', '{', '}', '~', ':' };
+            Regex regex = new(AllowedRegex, RegexOptions.IgnoreCase);
+            var invalidChars = value.Where(c => !regex.IsMatch(c.ToString())).ToList();
 
-            CheckField result = new();
-
-            result.Succeeded = !value.Any(x=>ImproperChars.Contains(x));
-
-            if (!result.Succeeded)
-            {
-                result.Message = $"השדה \"{field_name}\" מכיל תו אסור - {value.Where(x => ImproperChars.Contains(x)).First()}";
-            }
-
-            return result;
+            return invalidChars.Any() ? new CheckField(false, $"השדה \"{field_name}\" מכיל תו אסור - {invalidChars.First()}") : new CheckField();
         }
 
         public static CheckField ProperWords(string value, string field_name)
@@ -52,9 +44,9 @@ namespace CipherData
             return result;
         }
 
-        public static CheckField CheckString(string value, string field_name)
+        public static CheckField CheckString(string value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת. \n?]+$")
         {
-            CheckField result = ProperChars(value, field_name);
+            CheckField result = ProperChars(value, field_name, AllowedRegex);
             return (result.Succeeded)? ProperWords(value, field_name) : result;
         }
 
@@ -125,7 +117,7 @@ namespace CipherData
                 );
         }
 
-        public static CheckField Required<T>(T value, string field_name)
+        public static CheckField Required<T>(T value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת. \n?]+$")
         {
             CheckField result = new(); 
             
@@ -138,7 +130,7 @@ namespace CipherData
 
             if (result.Succeeded)
             {
-                result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name) : result;
+                result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name, AllowedRegex) : result;
             }
 
             return result;

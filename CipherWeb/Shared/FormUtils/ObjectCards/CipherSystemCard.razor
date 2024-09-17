@@ -76,13 +76,11 @@
 
     public SystemRequest Value()
     {
-        SystemRequest sys = SystemRequest.Empty();
-
-        sys.Name = SysName.Check() ? SysName.Value : string.Empty;
-        sys.Description = SysDescription.GetValue();
-        sys.ParentId = SysParent.ChosenSystem?.Id;
-        sys.UnitId = SysUnit.ChosenUnit?.Id;
-
-        return sys;
+        return new SystemRequest(
+            name: SysName.Value,
+            description: SysDescription.Comments,
+            parentId: SysParent.ChosenSystem?.Id,
+            unitId: SysUnit.ChosenUnit?.Id
+        );
     }
 }

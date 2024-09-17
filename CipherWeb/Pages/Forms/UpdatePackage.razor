@@ -73,37 +73,37 @@
     /// Json request that will be sent to the API server. (Specific for update package request)
     /// </summary>
     [Parameter]
-    public string UpdatePackJsonRequest { get; set; }
+    public string? UpdatePackJsonRequest { get; set; }
 
     /// <summary>
     /// Json request that will be sent to the API server. (specific for create event request)
     /// </summary>
     [Parameter]
-    public string CreateEventJsonRequest { get; set; }
+    public string? CreateEventJsonRequest { get; set; }
 
     /// <summary>
     /// API package result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Package UpdatePackResult { get; set; }
+    public Package? UpdatePackResult { get; set; }
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event CreateEventResult { get; set; }
+    public Event? CreateEventResult { get; set; }
 
     /// <summary>
     /// API response to submission.
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; }
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Error message upon improper submission.
     /// </summary>
     [Parameter]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     private CipherFormInfo FormInfo = new();
     private CipherSubmit submission = new();

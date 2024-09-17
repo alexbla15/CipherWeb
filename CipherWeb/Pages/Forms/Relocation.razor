@@ -71,7 +71,7 @@
             timestamp: FormInfo.GetDateTime(),
             targetSystem: FinalLocation.ChosenSystem,
             packages : RelocatedPacks.SelectedPackages,
-            comments: EventComments.GetValue()
+            comments: EventComments.Comments
         );
 
         (Valid, ErrorMessage) = RequestedEvent.Check();

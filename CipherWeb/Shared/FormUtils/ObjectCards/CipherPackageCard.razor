@@ -40,7 +40,7 @@
                 
                 @if (SetMode != FormMode.Create)
                 {
-                    <CipherDatePicker Value="@ChosenObject?.CreatedAt" Label="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@RowWidth" />
+                    <CipherDatePicker Value="@(ChosenObject?.CreatedAt ?? DateTime.Now)" Label="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@RowWidth" />
                     <CipherProcesses ChosenProcesses="@ChosenObject?.DestinationProcesses.ToList()" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
                 }
 
