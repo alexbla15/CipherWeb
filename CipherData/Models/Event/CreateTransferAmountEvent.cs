@@ -45,7 +45,7 @@
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// Create an event of transfering mass between donating and accepting packages.
@@ -120,6 +120,15 @@
 
             Tuple<bool,string> SpecificEventCheck = result.Check();
             return (SpecificEventCheck.Item1) ? Create().Check() : SpecificEventCheck;
+        }
+
+        /// <summary>
+        /// Create a copy of this object
+        /// </summary>
+        /// <returns></returns>
+        public CreateTranserAmountEvent Copy()
+        {
+            return new CreateTranserAmountEvent(Worker, Timestamp, Amount, DonatingPackage, AcceptingPackage, ProcessId, Comments);
         }
 
         /// <summary>

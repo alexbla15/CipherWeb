@@ -59,7 +59,9 @@
         public CheckField CheckPackages()
         {
             CheckField result = CheckField.Required(Packages, Translate(nameof(Packages)));
-            return (result.Succeeded) ? CheckField.FullList(Packages, Translate(nameof(Packages))) : result;
+            result = (result.Succeeded) ? CheckField.FullList(Packages, Translate(nameof(Packages))) : result;
+            result = (result.Succeeded) ? CheckField.Distinct(Packages, Translate(nameof(Packages))) : result;
+            return result;
         }
 
         /// <summary>
@@ -104,9 +106,17 @@
             result.Fields.Add(CheckTargetSystem());
             result.Fields.Add(CheckTargetSystemDifferent());
 
-
             Tuple<bool, string> SpecificEventCheck = result.Check();
             return (SpecificEventCheck.Item1) ? Create(true).Check() : SpecificEventCheck;
+        }
+
+        /// <summary>
+        /// Create a copy of this object.
+        /// </summary>
+        /// <returns></returns>
+        public CreateRelocationEvent Copy()
+        {
+            return new CreateRelocationEvent(Worker, Timestamp, TargetSystem, Packages, Comments);
         }
 
         /// <summary>

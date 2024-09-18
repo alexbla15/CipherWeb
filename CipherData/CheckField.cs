@@ -89,8 +89,17 @@ namespace CipherData
                 );
         }
 
-        public static CheckField NotEq<T>(T value, T unwanted_value, string field_name)
+        public static CheckField NotEq<T>(T? value, T? unwanted_value, string field_name)
         {
+            if (value == null)
+            {
+                return (unwanted_value == null) ? new CheckField() : new CheckField(false, $"השדה \"{field_name}\" ריק.");
+            }
+            else if (unwanted_value == null)
+            {
+                return new CheckField(false, $"השדה \"{field_name}\" צריך להיות ריק.");
+            }
+
             CheckField result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name) : new();
 
             if (result.Succeeded)

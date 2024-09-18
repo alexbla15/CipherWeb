@@ -39,8 +39,8 @@ namespace CipherData.Models.Tests
         public void CategoryTest()
         {
             // try to initialize a category with and without id
-            Assert.IsTrue(c1.Id != null);
-            Assert.IsTrue(c2.Id != null);
+            Assert.IsNotNull(c1.Id);
+            Assert.IsNotNull(c2.Id);
 
             // Material type must be assigned by the parent, if not specified specifically
             Category c4  = new(id: nameof(c2), name: nameof(c2), description: nameof(c2),

@@ -213,9 +213,9 @@ namespace CipherData.Models
         /// <summary>
         /// Get a random new object.
         /// </summary>
-        public static PackageRequest Random()
+        public static PackageRequest Random(string? id = null)
         {
-            return Package.Random().Request();
+            return Package.Random(id).Request();
         }
 
         public static PackageRequest Empty()

@@ -80,11 +80,32 @@
         }
 
         /// <summary>
+        /// Get an identical copy of this object
+        /// </summary>
+        /// <returns></returns>
+        public CreateEvent Copy()
+        {
+            return new CreateEvent(Worker, Timestamp, EventType, Actions, ProcessId, Comments);
+        }
+
+        /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckWorker()
         {
             return CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckProcessId()
+        {
+            if (!string.IsNullOrEmpty(ProcessId))
+            {
+                return CheckField.CheckString(ProcessId, Translate(nameof(ProcessId)));
+            }
+            return new CheckField();
         }
 
         /// <summary>
@@ -109,7 +130,7 @@
         public CheckField CheckTimeStamp()
         {
             CheckField result = CheckField.Required(Timestamp, Translate(nameof(Timestamp)));
-            result = (result.Succeeded) ? CheckField.Between((DateTime)Timestamp, DateTime.Parse("01/01/1900"), DateTime.Now, Translate(nameof(Timestamp))) : result;
+            result = (result.Succeeded) ? CheckField.Between(Timestamp, DateTime.Parse("01/01/1900"), DateTime.Now, Translate(nameof(Timestamp))) : result;
 
             return result;
         }
@@ -139,9 +160,16 @@
             result.Fields.Add(CheckComments());
             result.Fields.Add(CheckTimeStamp());
             result.Fields.Add(CheckActions());
+            result.Fields.Add(CheckProcessId());
 
             return result.Check();
         }
+
+        /// <summary>
+        /// Create an event object from this request, using a specified id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Event Create(string id)
         {
             return new Event(
