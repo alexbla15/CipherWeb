@@ -186,7 +186,7 @@
         // find the appropriate type, and then check if some details were changed relatively to the original object.
 
         bool FoundUnitChanges() => FoundChanges(unitRequest.Compare(ChosenObject as Unit));
-        bool FoundCategoryChanges() => FoundChanges(catRequest.Compare(ChosenObject as Category));
+        bool FoundCategoryChanges() => FoundChanges(catRequest.Different(ChosenObject as Category));
         bool FoundVesselChanges() => FoundChanges(vesRequest.Compare(ChosenObject as Vessel));
         bool FoundProcDefinitionChanges() => FoundChanges(procDefRequest.Compare(ChosenObject as ProcessDefinition));
         bool FoundSystemChanges() => FoundChanges(sysRequest.Compare(ChosenObject as StorageSystem));

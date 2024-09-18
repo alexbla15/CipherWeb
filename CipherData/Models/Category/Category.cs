@@ -1,6 +1,4 @@
 ﻿using CipherData.Requests;
-using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -89,9 +87,17 @@ namespace CipherData.Models
             Properties = properties;
         }
 
+        /// <summary>
+        /// API request for a new category / updated category.
+        /// Doesn't need a full object, but rather a ids of the relevant objects.
+        /// </summary>
+        /// <returns></returns>
         public CategoryRequest Request()
         {
-            return new CategoryRequest(name: Name, description: Description, idMask: IdMask,
+            return new CategoryRequest(
+                name: Name,
+                description: Description,
+                idMask: IdMask,
                 parent: Parent?.Id,
                 creatingProcesses: CreatingProcesses.Select(x => x.Id).ToList(),
                 consumingProcesses: ConsumingProcesses.Select(x => x.Id).ToList(),
@@ -99,15 +105,94 @@ namespace CipherData.Models
                 );
         }
 
+        /// <summary>
+        /// Create an identical copy of this object
+        /// </summary>
+        /// <returns></returns>
         public Category Copy()
         {
             return new Category(
-                name: Name, 
-                description: Description, idMask : IdMask,
-            creatingProcesses : CreatingProcesses, consumingProcesses: ConsumingProcesses,
-            parent : Parent, children: Children, materialType: MaterialType,
-            id : Id, properties: Properties
+                name: Name,
+                description: Description, idMask: IdMask,
+                creatingProcesses: CreatingProcesses, consumingProcesses: ConsumingProcesses,
+                parent: Parent, children: Children, materialType: MaterialType,
+                id: Id, properties: Properties
                 );
+        }
+
+        /// <summary>
+        /// Check if this object and other object are exactly the same
+        /// </summary>
+        public bool Equals(Category? OtherObject)
+        {
+            if (OtherObject is null) return false;
+            if (Id != OtherObject.Id) return false;
+            if (Name != OtherObject.Name) return false;
+            if (Description != OtherObject.Description) return false;
+
+            if (IdMask.Count != OtherObject.IdMask.Count) return false;
+            if (!IdMask.OrderBy(x=>x).SequenceEqual(OtherObject.IdMask.OrderBy(x=>x))) return false;
+
+            if (CreatingProcesses.Count != OtherObject.CreatingProcesses.Count) return false;
+            if (CreatingProcesses.Any())
+            {
+                foreach(ProcessDefinition proc in CreatingProcesses.OrderBy(x=>x.Id))
+                {
+                    if (!proc.Equals(OtherObject.CreatingProcesses[CreatingProcesses.IndexOf(proc)])) return false;
+                }
+            }
+
+            if (ConsumingProcesses.Count != OtherObject.ConsumingProcesses.Count) return false;
+            if (ConsumingProcesses.Any())
+            {
+                foreach (ProcessDefinition proc in ConsumingProcesses.OrderBy(x => x.Id))
+                {
+                    if (!proc.Equals(OtherObject.ConsumingProcesses[ConsumingProcesses.IndexOf(proc)])) return false;
+                }
+            }
+
+            if (Parent is null)
+            {
+                if (OtherObject.Parent != null) return false;
+            }
+            else
+            {
+                if (!Parent.Equals(OtherObject.Parent)) return false;
+            }
+
+            if (Children?.Count != OtherObject.Children?.Count) return false;
+            if (Children != null && OtherObject.Children != null)
+            {
+                if (Children.Any())
+                {
+                    foreach (Category child in Children.OrderBy(x => x.Id))
+                    {
+                        if (!child.Equals(OtherObject.Children[Children.IndexOf(child)])) return false;
+                    }
+                }
+            }
+
+            if (MaterialType is null)
+            {
+                if (OtherObject.MaterialType != null) return false;
+            }
+            else
+            {
+                if (!MaterialType.Equals(OtherObject.MaterialType)) return false;
+            }
+
+            if (Properties?.Count != OtherObject.Properties?.Count) return false;
+            if (Properties != null && OtherObject.Properties != null)
+            {
+                if (Properties.Any())
+                {
+                    foreach (CategoryProperty prop in Properties.OrderBy(x => x.Name))
+                    {
+                        if (!prop.Equals(OtherObject.Properties[Properties.IndexOf(prop)])) return false;
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -145,7 +230,7 @@ namespace CipherData.Models
         public static Category Random(string? id = null)
         {
             return new Category(
-                id: id,
+                id: id ?? GetNextId(),
                 name: RandomFuncs.RandomItem(RandomData.CategoriesNames),
                 description: RandomFuncs.RandomItem(RandomData.CategoriesDescriptions),
                 idMask: new List<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
@@ -186,9 +271,14 @@ namespace CipherData.Models
                 );
         }
 
-        public static string Translate(string searchedAttribute)
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
+        public static string Translate(string fieldName)
         {
-            return Translate(typeof(Category), searchedAttribute);
+            return Translate(typeof(Category), fieldName);
         }
 
         // API-RELATED FUNCTIONS
@@ -199,6 +289,11 @@ namespace CipherData.Models
         /// <param name="id">object ID</param>
         public static Tuple<Category, ErrorResponse> Get(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new (Empty(), ErrorResponse.BadRequest);
+            }
+
             return CategoriesRequests.GetCategory(id);
         }
 
@@ -215,6 +310,11 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> Containing(string SearchText)
         {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                return new(new(), ErrorResponse.BadRequest);
+            }
+
             return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
                 new (attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),

@@ -89,6 +89,21 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
+        public CheckField CheckParentId()
+        {
+            CheckField result = new();
+
+            if (!string.IsNullOrEmpty(ParentId))
+            {
+                return CheckField.Required(ParentId, Translate(nameof(ParentId)));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
         public CheckField CheckIdMask()
         {
             return CheckField.FullList(IdMask, Translate(nameof(IdMask)));
@@ -139,63 +154,114 @@
             result.Fields.Add(CheckCreatingProcesses());
             result.Fields.Add(CheckConsumingProcesses());
             result.Fields.Add(CheckProperties());
+            result.Fields.Add(CheckParentId());
             return result.Check();
+        }
+
+        /// <summary>
+        /// Create an identical copy of this object
+        /// </summary>
+        /// <returns></returns>
+        public CategoryRequest Copy()
+        {
+            return new CategoryRequest(
+                name: Name,
+                description: Description, idMask: IdMask,
+                creatingProcesses: CreatingProcesses, consumingProcesses: ConsumingProcesses,
+                parent: ParentId, properties: Properties
+                );
         }
 
         /// <summary>
         /// Checks for difference between this and another category
         /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Compare(Category? OtherObject)
+        public bool Different(Category? OtherObject)
         {
-            bool different = false;
+            if (OtherObject == null) return true;
 
-            different |= Name != OtherObject?.Name;
-            different |= Description != OtherObject?.Description;
-            different |= ParentId != OtherObject?.Parent?.Id;
-            different |= IdMask[0] != OtherObject?.IdMask[0];
+            if (Name != OtherObject.Name) return true;
+            if (Description != OtherObject.Description) return true;
+            if (ParentId != OtherObject.Parent?.Id) return true;
+            if (IdMask.Count() != OtherObject.IdMask.Count()) return true;
+            if (!IdMask.SequenceEqual(OtherObject.IdMask)) return true;
 
-            if ((CreatingProcesses != null) && (OtherObject?.CreatingProcesses != null))
+            if ((CreatingProcesses != null) && (OtherObject.CreatingProcesses != null))
             {
-                different |= !CreatingProcesses.ToHashSet().SetEquals(OtherObject.CreatingProcesses.Select(x => x.Id).ToList());
+                if (!CreatingProcesses.ToHashSet().SetEquals(OtherObject.CreatingProcesses.Select(x => x.Id).ToList())) return true;
 
             }
-            else if (((CreatingProcesses != null) && (OtherObject?.CreatingProcesses == null)) || ((CreatingProcesses == null) && (OtherObject?.CreatingProcesses != null)))
+            else if (((CreatingProcesses != null) && (OtherObject.CreatingProcesses == null)) || ((CreatingProcesses == null) && (OtherObject?.CreatingProcesses != null)))
             {
-                different = true;
+                return true;
             }
 
-            if ((ConsumingProcesses != null) && (OtherObject?.ConsumingProcesses != null))
+            if ((ConsumingProcesses != null) && (OtherObject.ConsumingProcesses != null))
             {
-                different |= !ConsumingProcesses.ToHashSet().SetEquals(OtherObject.ConsumingProcesses.Select(x => x.Id).ToList());
+                if(!ConsumingProcesses.ToHashSet().SetEquals(OtherObject.ConsumingProcesses.Select(x => x.Id).ToList())) return true;
 
             }
-            else if (((ConsumingProcesses != null) && (OtherObject?.ConsumingProcesses == null)) || ((ConsumingProcesses == null) && (OtherObject?.ConsumingProcesses != null)))
+            else if (((ConsumingProcesses != null) && (OtherObject.ConsumingProcesses == null)) || ((ConsumingProcesses == null) && (OtherObject?.ConsumingProcesses != null)))
             {
-                different = true;
+                return true;
             }
 
-            if ((Properties != null) && (OtherObject?.Properties != null))
+            if ((Properties != null) && (OtherObject.Properties != null))
             {
                 // check for same property names
-                different |= !Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList());
+                if (!Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList())) return true;
+                
                 // check for differences
-                if (!different)
+                foreach (CategoryProperty prop in Properties)
                 {
-                    foreach (CategoryProperty prop in Properties)
-                    {
-                        CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
-                        different |= prop.Compare(other_prop);
-                    }
+                    CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
+                    if (!prop.Equals(other_prop)) return true;
+                }
+            }
+            else if (((Properties != null) && (OtherObject.Properties == null)) || ((Properties == null) && (OtherObject.Properties != null)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks for difference between this and another category
+        /// </summary>
+        public bool Equals(CategoryRequest? OtherObject)
+        {
+            if(OtherObject == null) return false;
+
+            if (Name != OtherObject.Name) return false;
+            if (Description != OtherObject.Description) return false;
+            if (ParentId != OtherObject.ParentId) return false;
+
+            if (IdMask.Count() != OtherObject.IdMask.Count()) return false;
+            if (!IdMask.SequenceEqual(OtherObject.IdMask)) return false;
+
+            if (CreatingProcesses.Count() != OtherObject.CreatingProcesses.Count()) return false;
+            if (!CreatingProcesses.SequenceEqual(OtherObject.CreatingProcesses)) return false;
+
+            if (ConsumingProcesses.Count() != OtherObject.ConsumingProcesses.Count()) return false;
+            if (!ConsumingProcesses.SequenceEqual(OtherObject.ConsumingProcesses)) return false;
+
+            if ((Properties != null) && (OtherObject.Properties != null))
+            {
+                // check for same property names
+                if (!Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList())) return false;
+                // check for differences
+                foreach (CategoryProperty prop in Properties)
+                {
+                    CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
+                    if (!prop.Equals(other_prop)) return false;
                 }
             }
             else if (((Properties != null) && (OtherObject?.Properties == null)) || ((Properties == null) && (OtherObject?.Properties != null)))
             {
-                different = true;
+                return false;
             }
 
-            return different;
+            return true;
         }
 
         /// <summary>
@@ -207,6 +273,11 @@
             return Resource.ToJson(this);
         }
 
+        /// <summary>
+        /// Create (partially) a category from a request, specifying its id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Category Create(string id)
         {
             return new Category(
@@ -229,6 +300,11 @@
             return new CategoryRequest(name: string.Empty, description: string.Empty, idMask: new List<string>());
         }
 
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
         public static string Translate(string searchedAttribute)
         {
             return Resource.Translate(typeof(Category), searchedAttribute);

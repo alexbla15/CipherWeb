@@ -44,7 +44,7 @@ namespace CipherData
             return result;
         }
 
-        public static CheckField CheckString(string value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת. \n?]+$")
+        public static CheckField CheckString(string value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
         {
             CheckField result = ProperChars(value, field_name, AllowedRegex);
             return (result.Succeeded)? ProperWords(value, field_name) : result;
@@ -117,7 +117,7 @@ namespace CipherData
                 );
         }
 
-        public static CheckField Required<T>(T value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת. \n?]+$")
+        public static CheckField Required<T>(T value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
         {
             CheckField result = new(); 
             

@@ -106,7 +106,7 @@
                 {
                     foreach (ProcessStepDefinition step in Steps)
                     {
-                        different |= step.Compare(OtherObject.Steps.Where(x => x.Name == step.Name).First());
+                        different |= step.Equals(OtherObject.Steps.Where(x => x.Name == step.Name).First());
                     }
                 }
             }

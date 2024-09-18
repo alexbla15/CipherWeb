@@ -57,22 +57,16 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Checks for difference between this and another object
+        /// Check if this object and other object are exactly the same
         /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Compare(ProcessStepDefinition? OtherObject)
+        public bool Equals(ProcessStepDefinition? OtherObject)
         {
+            if (OtherObject is null) return false;
+            if (Id != OtherObject.Id) return false;
+            if (Name != OtherObject.Name) return false;
+            if (!Condition.Equals(OtherObject.Condition)) return false;
 
-            bool different = false;
-
-            different |= Name != OtherObject?.Name;
-            different |= Description != OtherObject?.Description;
-
-            // now for condition
-            different |= Condition.Compare(OtherObject?.Condition);
-
-            return different;
+            return true;
         }
 
         /// <summary>

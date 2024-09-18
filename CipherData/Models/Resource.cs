@@ -48,6 +48,17 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         public int Uuid { get; set; } = GetUuid();
 
+        /// <summary>
+        /// Compare two Resource-objects
+        /// </summary>
+        public static bool Compare(Resource r1, Resource r2)
+        {
+            if (r1.Id != r2.Id) return false;
+            if (r1.ClearenceLevel != r2.ClearenceLevel) return false;
+            if (r1.Uuid != r2.Uuid) return false;
+            return true;
+        }
+
         private static int UuidCounter { get; set; } = 0;
 
         private static int GetUuid()

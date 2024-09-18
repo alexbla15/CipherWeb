@@ -30,6 +30,19 @@ namespace CipherData.Models
             Operator = @operator;
         }
 
+        /// <summary>
+        /// Check if this object and other object are exactly the same
+        /// </summary>
+        public bool Equals(GroupedBooleanCondition? OtherObject)
+        {
+            if (OtherObject is null) return false;
+            if (Operator != OtherObject.Operator) return false;
+
+            if (Conditions.Count() != OtherObject.Conditions.Count()) return false;
+            if (!Conditions.SequenceEqual(OtherObject.Conditions)) return false;
+
+            return true;
+        }
 
         /// <summary>
         /// Checks for difference between this and another object

@@ -103,34 +103,35 @@
             return Resource.ToJson(this);
         }
 
-        public bool Equals(CategoryProperty other)
+        /// <summary>
+        /// Check if this object and other object are exactly the same
+        /// </summary>
+        public bool Equals(CategoryProperty? OtherObject)
         {
-            if (other == null) return false;
-            return Name == other.Name && DefaultValue == other.DefaultValue;
-        }
-
-        public override bool Equals(object obj) => Equals(obj as CategoryProperty);
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, DefaultValue);
+            if (OtherObject is null) return false;
+            if (Name != OtherObject.Name) return false;
+            if (Description != OtherObject.Description) return false;
+            if (PropertyType != OtherObject.PropertyType) return false;
+            if (DefaultValue != OtherObject.DefaultValue) return false;
+            return true;
         }
 
         /// <summary>
-        /// Checks for difference between this and another category
+        /// Create an identical object to this one.
         /// </summary>
-        /// <param name="OtherObject"></param>
         /// <returns></returns>
-        public bool Compare(CategoryProperty? OtherObject)
+        public CategoryProperty Copy()
         {
-            bool different = false;
+            return new CategoryProperty(
+                name: Name,
+                description: Description,
+                value: DefaultValue,
+                propertyType: PropertyType);
+        }
 
-            different |= Name != OtherObject?.Name;
-            different |= Description != OtherObject?.Description;
-            different |= PropertyType != OtherObject?.PropertyType;
-            different |= DefaultValue != OtherObject?.DefaultValue;
-
-            return different;
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Description, PropertyType, DefaultValue);
         }
 
         public static CategoryProperty Random(string? set_name = null)
@@ -141,7 +142,9 @@
 
             List<CategoryProperty> CategoryProperties = new() { TextOption, BoolOption, NumberOption};
 
-            return CategoryProperties[new Random().Next(CategoryProperties.Count)];
+            CategoryProperty result = CategoryProperties[new Random().Next(CategoryProperties.Count)];
+            if (set_name != null) result.Name = set_name;
+            return result;
         }
 
         /// <summary>
@@ -155,6 +158,9 @@
                 );
         }
 
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
         public static string Translate(string searchedAttribute)
         {
             return Resource.Translate(typeof(CategoryProperty), searchedAttribute);
