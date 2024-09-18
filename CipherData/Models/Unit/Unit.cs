@@ -162,9 +162,9 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                                    }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
+                                    }, @operator: Operator.Any));
         }
     }
 }

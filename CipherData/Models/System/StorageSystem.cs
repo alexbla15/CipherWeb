@@ -173,9 +173,9 @@ namespace CipherData.Models
                 new (attribute: $"System.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"System.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"System.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
                 new (attribute: $"System.{nameof(Unit)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText)
-            }, @operator: Operator.Or));
+            }, @operator: Operator.Any));
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace CipherData.Models
             return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
                 new (attribute: $"{typeof(Event).Name}.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Or));
+            }, @operator: Operator.Any));
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace CipherData.Models
             return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
                 new (attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Or));
+            }, @operator: Operator.Any));
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace CipherData.Models
             return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
                 new (attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Or));
+            }, @operator: Operator.Any));
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace CipherData.Models
             return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
             {
                 new (attribute: $"{typeof(Vessel).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Or));
+            }, @operator: Operator.Any));
         }
     }
 }

@@ -147,8 +147,8 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Or)
-                }, @operator: Operator.Or));
+                new (attribute: $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText,  @operator:Operator.Any)
+                }, @operator: Operator.Any));
         }
     }
 }

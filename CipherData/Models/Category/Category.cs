@@ -319,18 +319,18 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
                 new (attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(ProcessDefinition.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
+                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(ProcessDefinition.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
                 new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-            }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
+            }, @operator: Operator.Any));
         }
     }
 }

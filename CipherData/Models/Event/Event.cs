@@ -148,8 +148,8 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Package.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-            }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Package.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
+            }, @operator: Operator.Any));
         }
     }
 }

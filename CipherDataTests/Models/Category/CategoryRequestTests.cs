@@ -214,6 +214,38 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
+        public void CopyTest()
+        {
+            CategoryRequest req = new(name: nameof(req), description: nameof(req),
+                idMask: new() { "1", "22", "33" }, creatingProcesses: new(), consumingProcesses: new(),
+                properties: new(), parent: nameof(req));
+            CategoryRequest req2 = req.Copy();
+
+            Assert.IsNotNull(req2);
+            Assert.IsTrue(req2.Name == req.Name);
+            Assert.IsTrue(req2.Description == req.Description);
+            Assert.IsTrue(req2.ParentId == req.ParentId);
+            Assert.IsTrue(req2.Properties.SequenceEqual(req.Properties));
+            Assert.IsTrue(req2.CreatingProcesses.SequenceEqual(req.CreatingProcesses));
+            Assert.IsTrue(req2.ConsumingProcesses.SequenceEqual(req.ConsumingProcesses));
+        }
+
+        [TestMethod()]
+        public void EmptyTest()
+        {
+            // instanciation of an empty Category scheme
+            CategoryRequest EmptyCat = CategoryRequest.Empty();
+
+            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Name));
+            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Description));
+            Assert.IsTrue(!EmptyCat.IdMask.Any() || EmptyCat.IdMask is null);
+            Assert.IsTrue(!EmptyCat.CreatingProcesses.Any() || EmptyCat.CreatingProcesses is null);
+            Assert.IsTrue(!EmptyCat.ConsumingProcesses.Any() || EmptyCat.ConsumingProcesses is null);
+            Assert.IsNull(EmptyCat.ParentId);
+            Assert.IsNull(EmptyCat.Properties);
+        }
+
+        [TestMethod()]
         public void EqualsTest()
         {
             CategoryRequest req = new(name: nameof(req), description: nameof(req),
@@ -228,32 +260,32 @@ namespace CipherData.Models.Tests
             Assert.IsFalse(req.Equals(req2));
 
             // 2 - different description
-            req2.Name = nameof(req);
+            req2 = req.Copy();
             req2.Description = "C";
             Assert.IsFalse(req.Equals(req2));
 
             // 3 - different IdMask
-            req2.Description = nameof(req);
+            req2 = req.Copy();
             req2.IdMask = new() { "1", "2", "33" };
             Assert.IsFalse(req.Equals(req2));
 
             // 4 - different CreatingProcesses
-            req2.IdMask = new() { "1", "22", "33" };
+            req2 = req.Copy(); 
             req2.CreatingProcesses = new() { "1", "3" };
             Assert.IsFalse(req.Equals(req2));
 
             // 5 - different ConsumingProcesses
-            req2.CreatingProcesses = new() { "1", "2" };
+            req2 = req.Copy();
             req2.ConsumingProcesses = new() { "1", "3" };
             Assert.IsFalse(req.Equals(req2));
 
             // 6 - different Properties
-            req2.ConsumingProcesses = new() { "1", "2" };
+            req2 = req.Copy();
             req2.Properties = new() { CategoryProperty.Random() };
             Assert.IsFalse(req.Equals(req2));
 
             // 7 - different Parent
-            req2.Properties = new();
+            req2 = req.Copy();
             req2.ParentId = "1";
             Assert.IsFalse(req.Equals(req2));
 
@@ -346,21 +378,6 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(req.CreatingProcesses.SequenceEqual(cat2.CreatingProcesses.Select(x=>x.Id).ToList()));
             Assert.IsTrue(req.ConsumingProcesses.SequenceEqual(cat2.ConsumingProcesses.Select(x=>x.Id).ToList()));
             Assert.IsTrue(req.ParentId == cat2.Parent?.Id);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty Category scheme
-            CategoryRequest EmptyCat = CategoryRequest.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Name));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Description));
-            Assert.IsTrue(!EmptyCat.IdMask.Any() || EmptyCat.IdMask is null);
-            Assert.IsTrue(!EmptyCat.CreatingProcesses.Any() || EmptyCat.CreatingProcesses is null);
-            Assert.IsTrue(!EmptyCat.ConsumingProcesses.Any() || EmptyCat.ConsumingProcesses is null);
-            Assert.IsNull(EmptyCat.ParentId);
-            Assert.IsNull(EmptyCat.Properties);
         }
 
         [TestMethod()]

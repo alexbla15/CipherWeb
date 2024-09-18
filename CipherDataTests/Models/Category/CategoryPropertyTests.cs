@@ -118,7 +118,6 @@ namespace CipherData.Models.Tests
             c1.Description = "a";
             c1.DefaultValue = "@";
             Assert.IsFalse(c1.Check().Item1);
-
         }
 
         [TestMethod()]

@@ -31,17 +31,9 @@
         /// </summary>
         All,
         /// <summary>
-        /// 
-        /// </summary>
-        And, 
-        /// <summary>
         /// At least one of the items in the array must follow the condition.
         /// </summary>
-        Any,
-        /// <summary>
-        /// 
-        /// </summary>
-        Or
+        Any
     }
 
     /// <summary>
@@ -74,7 +66,7 @@
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
-        public Operator Operator { get; set; } = Operator.And;
+        public Operator Operator { get; set; } = Operator.All;
 
         /// <summary>
         /// Target value for comparision. 
@@ -91,7 +83,7 @@
         /// <param name="attributeRelation">Expected relation between attribute and a value.</param>
         /// <param name="operator">Operator used in case the attribute contains multiple values.</param>
         /// <param name="value">Target value for comparision. If null, the attributes are compared to themselves (all equal, any equal etc.)</param>
-        public BooleanCondition(string attribute, AttributeRelation attributeRelation, Operator @operator = Operator.And, 
+        public BooleanCondition(string attribute, AttributeRelation attributeRelation, Operator @operator = Operator.All, 
             string? value = null)
         {
             Attribute = attribute;
@@ -100,25 +92,31 @@
             Value = value;
         }
 
-
         /// <summary>
-        /// Checks for difference between this and another object
+        /// Checks if this and other object are identical
         /// </summary>
         /// <param name="OtherObject"></param>
         /// <returns></returns>
-        public bool Compare(BooleanCondition? OtherObject)
+        public bool Equals(BooleanCondition? OtherObject)
         {
+            if (OtherObject is null) return false;
 
-            bool different = false;
+            if (Attribute != OtherObject?.Attribute) return false;
+            if (AttributeRelation != OtherObject?.AttributeRelation) return false;
+            if (Operator != OtherObject?.Operator) return false;
+            if (Value != OtherObject?.Value) return false;
 
-            different |= Attribute != OtherObject?.Attribute;
-            different |= AttributeRelation != OtherObject?.AttributeRelation;
-            different |= Operator != OtherObject?.Operator;
-            different |= Value != OtherObject?.Value;
-
-            return different;
+            return true;
         }
 
+        /// <summary>
+        /// Create an identical object to this one.
+        /// </summary>
+        /// <returns></returns>
+        public BooleanCondition Copy()
+        {
+            return new BooleanCondition(Attribute, AttributeRelation, Operator, Value);
+        }
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -133,7 +131,7 @@
         /// </summary>
         public CheckField CheckValue()
         {
-            return (Value is null) ? new CheckField() :CheckField.Required(Value, Translate(nameof(Value)));
+            return (string.IsNullOrEmpty(Value)) ? new CheckField() :CheckField.Required(Value, Translate(nameof(Value)));
         }
 
         /// <summary>
@@ -158,9 +156,14 @@
             return new BooleanCondition(attribute: string.Empty, attributeRelation: AttributeRelation.Contains);
         }
 
-        public static string Translate(string searchedAttribute)
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
+        public static string Translate(string field_name)
         {
-            return Resource.Translate(typeof(BooleanCondition), searchedAttribute);
+            return Resource.Translate(typeof(BooleanCondition), field_name);
         }
     }
 }

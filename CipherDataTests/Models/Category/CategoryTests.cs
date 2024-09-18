@@ -150,8 +150,53 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void EqualsTest()
         {
+            // 1 - exactly the same
             Category c4 = c3.Copy();
             Assert.IsTrue(c4.Equals(c3));
+
+            // 2 - change name
+            c4 = c3.Copy();
+            c4.Name = "A";
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 3 - change description
+            c4 = c3.Copy();
+            c4.Description = "A";
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 4 - change CreatingProcesses
+            c4 = c3.Copy();
+            c4.CreatingProcesses = new();
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 5 - change ConsumingProcesses
+            c4 = c3.Copy();
+            c4.ConsumingProcesses = new();
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 6 - change Children
+            c4 = c3.Copy();
+            c4.Children = new();
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 7 - change Parent
+            c4 = c3.Copy();
+            c4.Parent = null;
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 8 - change Id
+            c4 = c3.Copy();
+            c4.Id = "A";
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 9 - change MaterialType
+            c4 = c3.Copy();
+            c4.MaterialType = Category.Empty();
+            Assert.IsFalse(c4.Equals(c2));
+
+            // 10 - change Properties
+            c4 = c3.Copy();
+            c4.Properties = new();
             Assert.IsFalse(c4.Equals(c2));
         }
 

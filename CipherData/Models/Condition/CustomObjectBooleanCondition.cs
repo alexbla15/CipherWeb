@@ -25,7 +25,7 @@
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
         [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Operator))]
-        public Operator Operator { get; set; } = Operator.And;
+        public Operator Operator { get; set; } = Operator.All;
 
         /// <summary>
         /// Complex boolean condition that is applied to custom 
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="conditions">List of object factory specifications and conditions on them</param>
         /// <param name="operator"></param>
-        public CustomObjectBooleanCondition(List<CustomCondition> conditions, Operator @operator = Operator.And)
+        public CustomObjectBooleanCondition(List<CustomCondition> conditions, Operator @operator = Operator.All)
         {
             Conditions = conditions;
             Operator = @operator;

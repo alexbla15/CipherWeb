@@ -17,17 +17,25 @@ namespace CipherData.Models
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
         [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
-        public Operator Operator { get; set; } = Operator.And;
+        public Operator Operator { get; set; } = Operator.All;
 
         /// <summary>
         /// Instanciation of GroupedBooleanCondition
         /// </summary>
         /// <param name="conditions">Any of BooleanCondition / GroupedBooleadCondition</param>
         /// <param name="operator">Operator used to resolve the multiple condition results to a single boolean.</param>
-        public GroupedBooleanCondition(IEnumerable<Condition> conditions, Operator @operator = Operator.And)
+        public GroupedBooleanCondition(IEnumerable<Condition> conditions, Operator @operator = Operator.All)
         {
             Conditions = conditions;
             Operator = @operator;
+        }
+
+        /// <summary>
+        /// Create an identical object to this one.
+        /// </summary>
+        public GroupedBooleanCondition Copy()
+        {
+            return new GroupedBooleanCondition(Conditions, Operator);
         }
 
         /// <summary>
@@ -39,52 +47,26 @@ namespace CipherData.Models
             if (Operator != OtherObject.Operator) return false;
 
             if (Conditions.Count() != OtherObject.Conditions.Count()) return false;
-            if (!Conditions.SequenceEqual(OtherObject.Conditions)) return false;
+            if (Conditions is List<BooleanCondition> boolConditions && OtherObject.Conditions is List<BooleanCondition> otherBoolConditions)
+            {
+                // check for same step names
+                if (!boolConditions.Select(x => x.Attribute).ToHashSet().SetEquals(otherBoolConditions.Select(x => x.Attribute).ToList())) return false;
+                // check for differences
+                
+                foreach (BooleanCondition cond in boolConditions)
+                {
+                    if (!cond.Equals(otherBoolConditions.Where(x => x.Attribute == cond.Attribute).First())) return false;
+                }
+            }
+            else if (Conditions is List<GroupedBooleanCondition> grouped_boolConditions && OtherObject.Conditions is List<GroupedBooleanCondition> grouped_otherBoolConditions)
+            {
+                foreach (GroupedBooleanCondition cond in grouped_boolConditions)
+                {
+                    if (!cond.Equals(grouped_otherBoolConditions[grouped_boolConditions.IndexOf(cond)])) return false;
+                }
+            }
 
             return true;
-        }
-
-        /// <summary>
-        /// Checks for difference between this and another object
-        /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Compare(GroupedBooleanCondition? OtherObject)
-        {
-
-            bool different = false;
-
-            different |= Operator != OtherObject?.Operator;
-
-            if (Conditions.Count() == OtherObject?.Conditions.Count())
-            {
-                if (Conditions is List<BooleanCondition> boolConditions && OtherObject.Conditions is List<BooleanCondition> otherBoolConditions)
-                {
-                    // check for same step names
-                    different |= !boolConditions.Select(x => x.Attribute).ToHashSet().SetEquals(otherBoolConditions.Select(x => x.Attribute).ToList());
-                    // check for differences
-                    if (!different)
-                    {
-                        foreach (BooleanCondition cond in boolConditions)
-                        {
-                            different |= cond.Compare(otherBoolConditions.Where(x => x.Attribute == cond.Attribute).First());
-                        }
-                    }
-                }
-                else if (Conditions is List<GroupedBooleanCondition> grouped_boolConditions && OtherObject.Conditions is List<GroupedBooleanCondition> grouped_otherBoolConditions)
-                {
-                    foreach (GroupedBooleanCondition cond in grouped_boolConditions)
-                    {
-                        different |= cond.Compare(grouped_otherBoolConditions[grouped_boolConditions.IndexOf(cond)]);
-                    }
-                }
-            }
-            else
-            {
-                different = true;
-            }
-
-            return different;
         }
 
         /// <summary>

@@ -153,8 +153,8 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Vessel).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-                    }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
+                    }, @operator: Operator.Any));
         }
     }
 }

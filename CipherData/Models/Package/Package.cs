@@ -240,8 +240,8 @@ namespace CipherData.Models
         public Tuple<List<Event>, ErrorResponse> Events()
         {
             return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
-                }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Any)
+                }, @operator: Operator.Any));
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace CipherData.Models
         public Tuple<List<Process>, ErrorResponse> Processes()
         {
             return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.Packages.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Or)
+                new (attribute: $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.Packages.Id", attributeRelation: AttributeRelation.Eq, value: searchText, @operator: Operator.Any)
                 }));
         }
 
@@ -283,8 +283,8 @@ namespace CipherData.Models
                 new (attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
                 new (attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
                 new (attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-                new (attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Or)
-                }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Any)
+                }, @operator: Operator.Any));
         }
     }
 }

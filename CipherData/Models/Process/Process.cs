@@ -124,9 +124,9 @@ namespace CipherData.Models
             return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
                 new (attribute: $"{typeof(Process).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Process).Name}.{nameof(Definition)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or),
-                new (attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Or)
-            }, @operator: Operator.Or));
+                new (attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
+                new (attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
+            }, @operator: Operator.Any));
         }
     }
 }
