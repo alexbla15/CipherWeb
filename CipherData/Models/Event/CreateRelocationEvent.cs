@@ -158,9 +158,14 @@
             return new CreateRelocationEvent(worker: string.Empty, timestamp: DateTime.Now);
         }
 
-        public static string Translate(string searchedAttribute)
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
+        public static string Translate(string fieldName)
         {
-            return Resource.Translate(typeof(CreateRelocationEvent), searchedAttribute);
+            return Resource.Translate(typeof(CreateRelocationEvent), fieldName);
         }
     }
 }

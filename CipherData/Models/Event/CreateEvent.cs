@@ -184,9 +184,14 @@
                 );
         }
 
-        public static string Translate(string searchedAttribute)
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
+        public static string Translate(string fieldName)
         {
-            return Resource.Translate(typeof(CreateEvent), searchedAttribute);
+            return Resource.Translate(typeof(CreateEvent), fieldName);
         }
 
         /// <summary>

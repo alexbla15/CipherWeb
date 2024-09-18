@@ -17,6 +17,12 @@ namespace CipherData.Models
         public int EventType { get; set; }
 
         /// <summary>
+        /// Validation status of event.
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Status))]
+        public int Status { get; set; }
+
+        /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(ProcessId))]
@@ -33,12 +39,6 @@ namespace CipherData.Models
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         public DateTime Timestamp { get; set; }
-
-        /// <summary>
-        /// Validation status of event.
-        /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Status))]
-        public int Status { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
@@ -71,7 +71,7 @@ namespace CipherData.Models
 
         public static Event Empty()
         {
-            return new Event(worker: string.Empty, eventType: 0, processId: "0", comments: string.Empty, 
+            return new Event(worker: string.Empty, eventType: 0, processId: null, comments: string.Empty, 
                 timestamp: DateTime.Now, status: 0,
                 packages: new List<Package>());
         }
@@ -111,7 +111,7 @@ namespace CipherData.Models
         public static Event Random(string? id = null)
         {
             return new Event(
-                id: id,
+                id: id ?? GetNextId(),
                 worker: Models.Worker.Random().Name,
                 eventType: new Random().Next(21, 27),
                 processId: new Random().Next(1, 20).ToString(),
@@ -122,9 +122,14 @@ namespace CipherData.Models
                 );
         }
 
-        public static string Translate(string searchedAttribute)
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        /// <param name="fieldName">name of the searched field</param>
+        /// <returns></returns>
+        public static string Translate(string fieldName)
         {
-            return Translate(typeof(Event), searchedAttribute);
+            return Translate(typeof(Event), fieldName);
         }
 
         // API-RELATED FUNCTIONS
@@ -140,8 +145,13 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all events which contain the searched text
         /// </summary>
-        public static Tuple<List<Event>, ErrorResponse> Containing(string SearchText)
+        public static Tuple<List<Event>, ErrorResponse> Containing(string? SearchText)
         {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                return new(new(), ErrorResponse.BadRequest);
+            }
+
             return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
                 new (attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
                 new (attribute: $"{typeof(Event).Name}.{nameof(Worker)}", attributeRelation: AttributeRelation.Contains, value: SearchText),

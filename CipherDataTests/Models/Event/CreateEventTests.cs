@@ -204,6 +204,19 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
+        public void EmptyTest()
+        {
+            // instanciation of an empty object scheme
+            CreateEvent ev = CreateEvent.Empty();
+
+            Assert.IsTrue(string.IsNullOrEmpty(ev.Comments));
+            Assert.IsTrue(string.IsNullOrEmpty(ev.ProcessId));
+            Assert.IsTrue(string.IsNullOrEmpty(ev.Worker));
+            Assert.IsTrue(ev.EventType == 0);
+            Assert.IsFalse(ev.Actions.Any());
+        }
+
+        [TestMethod()]
         public void TranslateTest()
         {
             // try to translate some field
@@ -215,19 +228,6 @@ namespace CipherData.Models.Tests
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(ev.Actions));
             Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(ev1.Packages)}"]);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            CreateEvent ev = CreateEvent.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Comments));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.ProcessId));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Worker));
-            Assert.IsTrue(ev.EventType == 0);
-            Assert.IsFalse(ev.Actions.Any());
         }
 
         [TestMethod()]
