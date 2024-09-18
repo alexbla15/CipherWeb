@@ -1,4 +1,5 @@
 ﻿using CipherData.Requests;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -146,14 +147,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return ToJson(this);
-        }
-
-        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;
@@ -221,10 +214,92 @@ namespace CipherData.Models
                     createdAt: DateTime.Now,
                     brutMass: 0,
                     netMass: 0,
-                    vessel: Vessel.Empty(),
                     system: StorageSystem.Empty(),
                     category: Category.Empty());
             return result;
+        }
+
+        /// <summary>
+        /// Check if this object and other object are exactly the same
+        /// </summary>
+        public bool Equals(Package? OtherObject)
+        {
+            if (OtherObject is null) return false;
+            if (Id != OtherObject.Id) return false;
+            if (Description != OtherObject.Description) return false;
+            if (BrutMass != OtherObject.BrutMass) return false;
+            if (NetMass != OtherObject.NetMass) return false;
+
+            if (Parent is null)
+            {
+                if (OtherObject.Parent != null) return false;
+            }
+            else
+            {
+                if (OtherObject.Parent is null) return false;
+                if (Parent.Equals(OtherObject.Parent)) return false;
+            }
+
+            if (Children is null)
+            {
+                if (OtherObject.Children != null) return false;
+            }
+            else
+            {
+                if (OtherObject.Children is null) return false;
+                if (Children.Count != OtherObject.Children.Count) return false;
+                if (Children.Any())
+                {
+                    foreach (Package p in Children.OrderBy(x => x.Id))
+                    {
+                        if (!p.Equals(OtherObject.Children[Children.IndexOf(p)])) return false;
+                    }
+                }
+            }
+
+            if (System is null)
+            {
+                if (OtherObject.System != null) return false;
+            }
+            else
+            {
+                if (OtherObject.System is null) return false;
+                if (!System.Equals(OtherObject.System)) return false;
+            }
+
+            if (Vessel is null)
+            {
+                if (OtherObject.Vessel != null) return false;
+            }
+            else
+            {
+                if (OtherObject.Vessel is null) return false;
+                if (!Vessel.Equals(OtherObject.Vessel)) return false;
+            }
+
+            if (Category is null)
+            {
+                if (OtherObject.Category != null) return false;
+            }
+            else
+            {
+                if (OtherObject.Category is null) return false;
+                if (!Category.Equals(OtherObject.Category)) return false;
+            }
+
+            if (Properties?.Count() != OtherObject.Properties?.Count()) return false;
+            if (Properties != null && OtherObject.Properties != null)
+            {
+                if (!Properties.Equals(OtherObject.Properties)) return false;
+            }
+
+            if (DestinationProcesses?.Count() != OtherObject.DestinationProcesses?.Count()) return false;
+            if (DestinationProcesses != null && OtherObject.DestinationProcesses != null)
+            {
+                if (!DestinationProcesses.SequenceEqual(OtherObject.DestinationProcesses)) return false;
+            }
+
+            return true;
         }
 
         public static string Translate(string searchedAttribute)
@@ -257,11 +332,16 @@ namespace CipherData.Models
         /// <summary>
         /// Get details about a single package given package ID
         /// </summary>
-        /// <param name="pack_id">package ID</param>
+        /// <param name="id">package ID</param>
         /// <returns></returns>
-        public static Tuple<Package, ErrorResponse> Get(string pack_id)
+        public static Tuple<Package, ErrorResponse> Get(string id)
         {
-            return PackagesRequests.GetPackage(pack_id);
+            if (string.IsNullOrEmpty(id))
+            {
+                return new(Empty(), ErrorResponse.BadRequest);
+            }
+
+            return PackagesRequests.GetPackage(id);
         }
 
         /// <summary>
@@ -277,13 +357,18 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> Containing(string SearchText)
         {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                return new(new(), ErrorResponse.BadRequest);
+            }
+
             return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
                 new (attribute: $"{typeof(Package).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
                 new (attribute: $"{typeof(Package).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: searchText),
                 new (attribute: $"{typeof(Package).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: searchText),
-                new (attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-                new (attribute: $"{typeof(Package).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText),
-                new (attribute: $"{typeof(Package).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Any)
+                new (attribute: $"{typeof(Package).Name}.{nameof(Vessel)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(System)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText),
+                new (attribute: $"{typeof(Package).Name}.{nameof(Children)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: searchText, @operator: Operator.Any)
                 }, @operator: Operator.Any));
         }
     }

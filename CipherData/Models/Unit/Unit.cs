@@ -55,7 +55,8 @@ namespace CipherData.Models
         /// <param name="children">Child systems contained in this one</param>
         /// <param name="systems">Systems under this unit</param>
         /// <param name="properties">JSON-like additional properties of the unit</param>
-        public Unit(string name, string? description = null, Unit? parent = null, List<Unit>? children = null, List<StorageSystem>? systems = null, string? properties = null,
+        public Unit(string name, string? description = null, Unit? parent = null, List<Unit>? children = null, 
+            List<StorageSystem>? systems = null, string? properties = null,
             string? id = null)
         {
             Id = id ?? GetNextId();
@@ -65,6 +66,61 @@ namespace CipherData.Models
             Children = children;
             Systems = systems;
             Properties = properties;
+        }
+
+        /// <summary>
+        /// Check if this object and other object are exactly the same
+        /// </summary>
+        public bool Equals(Unit? OtherObject)
+        {
+            if (OtherObject is null) return false;
+            if (Id != OtherObject.Id) return false;
+            if (Name != OtherObject.Name) return false;
+            if (Description != OtherObject.Description) return false;
+
+            if (Children is null)
+            {
+                if (OtherObject.Children != null) return false;
+            }
+            else
+            {
+                if (OtherObject.Children is null) return false;
+                if (Children.Count != OtherObject.Children.Count) return false;
+                if (Children.Any())
+                {
+                    foreach (Unit u in Children.OrderBy(x => x.Id))
+                    {
+                        if (!u.Equals(OtherObject.Children[Children.IndexOf(u)])) return false;
+                    }
+                }
+            }
+
+            if (Parent is null)
+            {
+                if (OtherObject.Parent != null) return false;
+            }
+            else
+            {
+                if (!Parent.Equals(OtherObject.Parent)) return false;
+            }
+
+            if (Systems is null)
+            {
+                if (OtherObject.Systems != null) return false;
+            }
+            else
+            {
+                if (!Systems.SequenceEqual(OtherObject.Systems)) return false;
+            }
+
+
+            if (Properties?.Count() != OtherObject.Properties?.Count()) return false;
+            if (Properties != null && OtherObject.Properties != null)
+            {
+                if (!Properties.Equals(OtherObject.Properties)) return false;
+            }
+
+            return true;
         }
 
         public UnitRequest Request()
