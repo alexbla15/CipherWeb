@@ -13,13 +13,13 @@
         [HebrewTranslation(typeof(Vessel), nameof(Name))]
         public string? Name { get { return _Name; } set { _Name = value?.Trim(); } }
 
-        private string _Type = string.Empty;
+        private string? _Type = string.Empty;
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string Type { get { return _Type; } set { _Type = value.Trim(); } }
+        public string? Type { get { return _Type; } set { _Type = value?.Trim(); } }
 
         /// <summary>
         /// Id of system containing vessel

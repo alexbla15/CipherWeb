@@ -14,38 +14,38 @@
     </CipherComponentCard>
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId />
-        <CipherComments @ref=PackDescription Label="@NewPack.Translate(nameof(Package.Description))"
+        <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)"/>
+        <CipherComments @ref=PackDescription Label="@NewPack.Translate(nameof(Package.Description))" Disabled="@(ChosenPackage == null)"
                         Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
-        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(NewPack.Translate(nameof(Package.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(NewPack.Translate(nameof(Package.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(NewPack.Translate(nameof(Package.BrutMass)))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(NewPack.Translate(nameof(Package.NetMass)))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
 
-        <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" />
-        <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" />
-        <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" />
+        <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" Disabled="@(ChosenPackage == null)"/>
+        <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" Disabled="@(ChosenPackage == null)"/>
+        <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" Disabled="@(ChosenPackage == null)" />
 
-        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@NewPack.Translate(nameof(Package.DestinationProcesses))" />
-        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(NewPack.Translate(nameof(Package.Parent)))" />
-        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(NewPack.Translate(nameof(Package.Children)))" />
+        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@NewPack.Translate(nameof(Package.DestinationProcesses))" Disabled="@(ChosenPackage == null)"/>
+        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(NewPack.Translate(nameof(Package.Parent)))" Disabled="@(ChosenPackage == null)" />
+        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(NewPack.Translate(nameof(Package.Children)))" Disabled="@(ChosenPackage == null)"/>
 
         @if (NewProps != null)
         {
             @foreach (PackageProperty prop in NewProps)
             {
-                <CipherAutoComplete Label="@prop.Name" @bind-Value="@prop.Value" Icon="@(Icons.Cipher.Properties)" />
+                <CipherAutoComplete Label="@prop.Name" @bind-Value="@prop.Value" Icon="@(Icons.Cipher.Properties)" Disabled="@(ChosenPackage == null)" />
             }
         }
 
     </CipherComponentCard>
 
     <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherComments @ref="EventComments" Width="300px" />
+        <CipherComments @ref="EventComments" Width="300px" Disabled="@(ChosenPackage == null)" />
     </CipherComponentCard>
 
     <CipherJsonCheck JsonValue="@UpdatePackJsonRequest"/>
     <CipherJsonCheck JsonValue="@CreateEventJsonRequest"/>
 
-    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenPackage != null)"/>
 
 </CipherComponentCard>
 
@@ -120,9 +120,9 @@
     private CipherLocation SetSystem = new();
     private CipherPackagesPicking SetChildren = new();
 
-    private Package? ChosenPackage;
-    private Package OriginalPack = new Package();
-    private Package NewPack = new Package();
+    private Package? ChosenPackage = null;
+    private Package OriginalPack = new Package("");
+    private Package NewPack = new Package("");
 
     private CipherData.Models.UpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
     private CreateEvent UpdatePackEvent = new();
@@ -207,7 +207,7 @@
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
         UpdatePackEvent = new();
-        NewPack = new Package();
+        NewPack = new Package("");
     }
 
     /// <summary>
@@ -262,9 +262,9 @@
         {
             NewPack.BrutMass = SetBrutMass.Amount;
             NewPack.NetMass = SetNetMass.Amount;
-            NewPack.Category = SetCategory.ChosenCategory ?? new();
+            NewPack.Category = SetCategory.ChosenCategory ?? new("");
             NewPack.Vessel = SetVessel.ChosenVessel;
-            NewPack.System = SetSystem.ChosenSystem ?? new();
+            NewPack.System = SetSystem.ChosenSystem ?? new("");
             NewPack.Parent = ParentPack.GetValue();
             NewPack.Children = SetChildren.SelectedPackages;
             NewPack.Properties = NewProps;

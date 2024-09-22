@@ -22,7 +22,7 @@
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public ProcessStepDefinition SelectedStep { get; set; } = new();
+    public GroupedBooleanCondition SelectedCondition { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -43,6 +43,11 @@
     protected override void OnInitialized()
     {
         Title ??= "תנאים נבחרים";
+
+        if (SelectedCondition != null)
+        {
+            FillDataFilter();
+        }
     }
 
     /// <summary>
@@ -91,11 +96,62 @@
         return translations;
     }
 
+    public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
+    {
+        CompositeFilterDescriptor new_filter = new();
+        new_filter.Property = cond.Attribute;
+        new_filter.FilterValue = cond.Value;
+
+        new_filter.FilterOperator = cond.AttributeRelation switch
+        {
+            AttributeRelation.Eq => FilterOperator.Equals,
+            AttributeRelation.Ne => FilterOperator.NotEquals,
+            AttributeRelation.Gt => FilterOperator.GreaterThan,
+            AttributeRelation.Ge => FilterOperator.GreaterThanOrEquals,
+            AttributeRelation.Lt => FilterOperator.LessThan,
+            AttributeRelation.Le => FilterOperator.LessThanOrEquals,
+            AttributeRelation.Contains => FilterOperator.Contains,
+            AttributeRelation.NotContains => FilterOperator.DoesNotContain,
+            AttributeRelation.IsEmpty => FilterOperator.IsEmpty,
+            AttributeRelation.IsNotEmpty => FilterOperator.IsNotEmpty,
+            AttributeRelation.IsNull => FilterOperator.IsNull,
+            AttributeRelation.IsNotNull => FilterOperator.IsNotNull,
+            _ => FilterOperator.In
+        };
+
+        return new_filter;
+    }
+
+    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(GroupedBooleanCondition cond)
+    {
+        CompositeFilterDescriptor new_filter = new();
+        new_filter.LogicalFilterOperator = (cond.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
+
+        if (cond.Conditions != null)
+        {
+            List<CompositeFilterDescriptor> sub_conds = new();
+
+            foreach (var sub_cond in cond.Conditions)
+            {
+                if (sub_cond is BooleanCondition)
+                {
+                    sub_conds.Add(AddBooleanConditionFilter(sub_cond as BooleanCondition));
+                }
+                else if (sub_cond is GroupedBooleanCondition)
+                {
+                    sub_conds.Add(AddGroupedBooleanConditionFilter(sub_cond as GroupedBooleanCondition));
+                }
+            }
+
+            new_filter.Filters = sub_conds;
+        }
+
+        return new_filter;
+    }
+
     /// <summary>
     /// Filter is a Boolean condition (no sub filters)
     /// </summary>
-    /// <param name="filter"></param>
-    /// <returns></returns>
     public BooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
     {
         BooleanCondition cond = new();
@@ -103,11 +159,11 @@
 
         if (filter.FilterValue != null)
         {
-            string filterVal= filter.FilterValue.ToString();
+            string filterVal = filter.FilterValue.ToString();
 
             if (filterVal.Contains("##"))
             {
-                cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any:Operator.All;
+                cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
             }
 
             cond.Value = filterVal.Split("##")[0];
@@ -167,10 +223,9 @@
 
     public void Save()
     {
-        GroupedBooleanCondition ChosenConditions = new();
         List<Condition> conditions = new();
 
-        ChosenConditions.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
+        SelectedCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
         foreach (var filter in dataFilter.GetFilters())
         {
@@ -187,11 +242,27 @@
 
         }
 
-        ChosenConditions.Conditions = conditions;
+        SelectedCondition.Conditions = conditions;
 
-        SelectedStep.Condition = ChosenConditions;
-        json_value = SelectedStep.Condition.ToJson();
+        json_value = SelectedCondition.ToJson();
 
+    }
+
+    public void FillDataFilter()
+    {
+        dataFilter.LogicalFilterOperator = (SelectedCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
+
+        foreach (var cond in SelectedCondition.Conditions)
+        {
+            if (cond is BooleanCondition)
+            {
+                dataFilter.AddFilter(AddBooleanConditionFilter(cond as BooleanCondition));
+            }
+            else if (cond is GroupedBooleanCondition)
+            {
+                dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as GroupedBooleanCondition));
+            }
+        }
     }
 }
 
@@ -211,37 +282,37 @@
                             {
                                 @if (field.IsList)
                                 {
-                                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
-                                    AlignItems="AlignItems.Center" Style="width:100%">
+                                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+                                                 AlignItems="AlignItems.Center" Style="width:100%">
                                         <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)" />
-                                        <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left"/>
+                                        <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
                                         <RadzenDropDown Style="width: 100%" TValue="Operator" ValueChanged="@(args=>context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"))" Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
                                             <ValueTemplate Context="operator_value_context">
                                                 @if (operator_value_context == Operator.All)
                                                 {
                                                     @(
-                                                                                        "כל האיברים"
-                                                                                                                                        )
+                                                        "כל האיברים"
+                                                        )
                                                 }
                                                 else
                                                 {
                                                     @(
-                                                                                        "לפחות אחד"
-                                                                                                                                        )
+                                                        "לפחות אחד"
+                                                        )
                                                 }
                                             </ValueTemplate>
                                             <Template Context="operator_context">
                                                 @if (operator_context == Operator.All)
                                                 {
                                                     @(
-                                                                                        "כל האיברים"
-                                                                                                                                        )
+                                                        "כל האיברים"
+                                                        )
                                                 }
                                                 else
                                                 {
                                                     @(
-                                                                                        "לפחות אחד"
-                                                                                                                                        )
+                                                        "לפחות אחד"
+                                                        )
                                                 }
                                             </Template>
                                         </RadzenDropDown>
@@ -249,7 +320,7 @@
                                 }
                                 else
                                 {
-                                    <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)"/>
+                                    <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)" />
                                 }
                             }
                             else

@@ -157,7 +157,7 @@ namespace CipherData.Models
         {
             Random random = new();
 
-            decimal curr_brutmass = Convert.ToDecimal(random.Next(0, 10)) / 10M;
+            decimal curr_brutmass = Convert.ToDecimal(random.Next(1, 10)) / 10M;
             List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
             Category cat = Category.Random();
 

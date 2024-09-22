@@ -82,8 +82,8 @@
     public Package Value()
     {
         ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
-        ChosenPackage.Category = packCategory.ChosenCategory ?? new();
-        ChosenPackage.System = ChosenSystem ?? new();
+        ChosenPackage.Category = packCategory.ChosenCategory ?? new("");
+        ChosenPackage.System = ChosenSystem ?? new("");
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
         ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => new PackageProperty { Name = x.Name, Value = x.Value }).ToList();

@@ -91,8 +91,8 @@
         CategoryRequest cat = new();
 
         cat.ParentId = ParentCat.ChosenCategory?.Id;
-        cat.Name = CatName.Check() ? CatName.Value : string.Empty;
-        cat.Description = CatDescription.Check() ? CatDescription.Value : string.Empty;
+        cat.Name = CatName.Value;
+        cat.Description = CatDescription.Value;
         cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
         cat.Properties = CatProperties.ChosenProperties;

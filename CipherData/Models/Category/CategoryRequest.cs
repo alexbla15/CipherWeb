@@ -123,7 +123,7 @@
 
             if (Properties != null)
             {
-                result = CheckField.Distinct(Properties, Translate(nameof(Properties)));
+                result = CheckField.Distinct(Properties.Select(x=>x.Name).ToList(), Translate(nameof(Properties)));
                 result = (result.Succeeded) ? CheckField.ListItems(Properties, Translate(nameof(Properties))) : result;
             }
             return result;

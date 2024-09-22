@@ -129,10 +129,10 @@
             if (AcceptingPackage != null && DonatingPackage != null)
             {
                 DonatingPackage.BrutMass -= Amount;
-                DonatingPackage.NetMass = DonatingPackage.BrutMass * DonatingPackage.Concentration;
+                DonatingPackage.NetMass = decimal.Round(DonatingPackage.BrutMass * DonatingPackage.Concentration, 2);
 
                 AcceptingPackage.BrutMass += Amount;
-                AcceptingPackage.NetMass = AcceptingPackage.BrutMass * AcceptingPackage.Concentration;
+                AcceptingPackage.NetMass = decimal.Round(AcceptingPackage.BrutMass * AcceptingPackage.Concentration, 2);
 
                 return new CreateEvent()
                 {
