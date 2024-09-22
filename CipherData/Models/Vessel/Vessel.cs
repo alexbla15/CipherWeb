@@ -97,11 +97,6 @@ namespace CipherData.Models
             };
         }
 
-        public static string Translate(string searchedAttribute)
-        {
-            return Translate(typeof(Vessel), searchedAttribute);
-        }
-
         // API-RELATED FUNCTIONS
 
         /// <summary>

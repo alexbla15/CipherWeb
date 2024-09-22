@@ -144,18 +144,5 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(example_copy.DonatingPackage?.Equals(ev.DonatingPackage));
             Assert.IsTrue(example_copy.AcceptingPackage?.Equals(ev.AcceptingPackage));
         }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            CreateTranserAmountEvent ev = new();
-            string translation = CreateTranserAmountEvent.Translate(nameof(ev.DonatingPackage));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(ev.DonatingPackage));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(CreateTranserAmountEvent)}_{nameof(ev.DonatingPackage)}"]);
-        }
     }
 }

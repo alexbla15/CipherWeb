@@ -161,11 +161,6 @@ namespace CipherData.Models
             };
         }
 
-        public static string Translate(string searchedAttribute)
-        {
-            return Translate(typeof(StorageSystem), searchedAttribute);
-        }
-
         // API related functions
 
         /// <summary>

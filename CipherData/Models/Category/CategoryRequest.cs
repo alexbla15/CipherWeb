@@ -3,7 +3,7 @@
     /// <summary>
     /// Create a new category or update it
     /// </summary>
-    public class CategoryRequest
+    public class CategoryRequest: CipherClass
     {
         private string? _Name = string.Empty;
 
@@ -249,15 +249,6 @@
         }
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        /// <summary>
         /// Create (partially) a category from a request, specifying its id
         /// </summary>
         /// <param name="id"></param>
@@ -274,16 +265,6 @@
                 Parent = Category.Random(ParentId),
                 Properties = Properties
             };
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Resource.Translate(typeof(Category), fieldName);
         }
     }
 }

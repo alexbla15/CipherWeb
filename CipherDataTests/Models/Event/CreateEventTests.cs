@@ -216,49 +216,5 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(ev.Timestamp == example.Timestamp);
             Assert.IsTrue(ev.Packages.Select(x=>x.BrutMass).SequenceEqual(example.Actions.Select(x => x.BrutMass).ToList()));
         }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            string translation = CreateEvent.Translate(nameof(CreateEvent.Actions));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(CreateEvent.Actions));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.Packages)}"]);
-        }
-
-        [TestMethod()]
-        public void ToJsonTest()
-        {
-            // 1 - one action
-            PackageRequest p = new() { Id="a", SystemId = "b", BrutMass = 5.4M, NetMass = 4.7M, CategoryId = "c" };
-            PackageRequest p2 = new() { Id="b", SystemId = "d", BrutMass = 1.4M, NetMass = 3.7M, CategoryId = "f" };
-            PackageRequest p3 = new() { Id="c", SystemId = "e", BrutMass = 2.4M, NetMass = 8.7M, CategoryId = "g" };
-
-            CreateEvent ev = new()
-            {
-                Worker = "a",
-                Timestamp = DateTime.Parse("01/01/2024"),
-                Actions = new() { p },
-                ProcessId = "b",
-                Comments = "c",
-                EventType = 1
-            };
-
-            // 2 - more than one action
-            string cat_json = ev.ToJson();
-            string result = "{\r\n  \"Worker\": \"a\",\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"EventType\": 1,\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    }\r\n  ]\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-
-            // 2 - many actions
-            ev.Actions = new() { p, p2, p3 };
-            cat_json = ev.ToJson();
-            result = "{\r\n  \"Worker\": \"a\",\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"EventType\": 1,\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    },\r\n    {\r\n      \"Id\": \"b\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"d\",\r\n      \"BrutMass\": 1.4,\r\n      \"NetMass\": 3.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"f\"\r\n    },\r\n    {\r\n      \"Id\": \"c\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"e\",\r\n      \"BrutMass\": 2.4,\r\n      \"NetMass\": 8.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"g\"\r\n    }\r\n  ]\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-        }
     }
 }

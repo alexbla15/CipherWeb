@@ -3,7 +3,7 @@
     [AttributeUsage(AttributeTargets.Property)]
     public class HebrewTranslationAttribute : Attribute
     {
-        public string? Translation { get; }
+        public string Translation { get; }
 
         public HebrewTranslationAttribute(string engWord)
         {
@@ -47,7 +47,7 @@
         public string? Icon { get; set; }
     }
 
-    public class Report
+    public class Report : CipherClass
     {
         /// <summary>
         /// Report unique identifier.
@@ -62,11 +62,6 @@
         public Report()
         {
             IdCounter++;
-        }
-
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
         }
 
         private static int IdCounter { get; set; } = 0;

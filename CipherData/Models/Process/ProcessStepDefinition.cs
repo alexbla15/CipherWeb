@@ -54,14 +54,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return ToJson(this);
-        }
-
-        /// <summary>
         /// Check if this object and other object are exactly the same
         /// </summary>
         public bool Equals(ProcessStepDefinition? OtherObject)
@@ -138,11 +130,6 @@ namespace CipherData.Models
                 Description = name,
                 Condition = GroupedBooleanCondition.Random()
             };
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Translate(typeof(ProcessStepDefinition), searchedAttribute);
         }
     }
 }

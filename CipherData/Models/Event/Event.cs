@@ -112,16 +112,6 @@ namespace CipherData.Models
             };
         }
 
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Translate(typeof(Event), fieldName);
-        }
-
         // API-RELATED FUNCTIONS
 
         /// <summary>

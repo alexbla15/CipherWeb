@@ -6,14 +6,14 @@
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Id))" Title="@(Category.Translate(nameof(Category.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Name))" Title="@(Category.Translate(nameof(Category.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Id))" Title="@(new Category().Translate(nameof(Category.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Name))" Title="@(new Category().Translate(nameof(Category.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(new Category().Translate(nameof(Category.MaterialType)))">
                 <Template>
                     @((context as Category).MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Category.IdMask))" Title="@(Category.Translate(nameof(Category.IdMask)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.IdMask))" Title="@(new Category().Translate(nameof(Category.IdMask)))">
                 <Template>
                     @(string.Join(", ", (context as Category).IdMask))
                 </Template>

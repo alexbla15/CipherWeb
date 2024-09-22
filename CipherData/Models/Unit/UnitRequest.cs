@@ -3,7 +3,7 @@
     /// <summary>
     /// Create a new unit or update it
     /// </summary>
-    public class UnitRequest
+    public class UnitRequest : CipherClass
     {
         private string _Name = string.Empty;
 
@@ -92,15 +92,6 @@
             return different;
         }
 
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
         public Unit Create(string id)
         {
             return new Unit(id)
@@ -110,11 +101,6 @@
                 Parent = Unit.Random(ParentId),
                 Properties = Properties
             };
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(UnitRequest), searchedAttribute);
         }
     }
 }

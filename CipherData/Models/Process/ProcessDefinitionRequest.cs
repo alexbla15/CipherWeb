@@ -3,7 +3,7 @@
     /// <summary>
     /// Create a new process definition or update it.
     /// </summary>
-    public class ProcessDefinitionRequest
+    public class ProcessDefinitionRequest : CipherClass
     {
         private string _Name = string.Empty;
 
@@ -76,14 +76,6 @@
         }
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        /// <summary>
         /// Checks for difference between this and another object
         /// </summary>
         /// <param name="OtherObject"></param>
@@ -120,11 +112,6 @@
         public ProcessDefinition Create(string id)
         {
             return new ProcessDefinition(id) { Name = Name, Description = Description, Steps=Steps };
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(ProcessDefinitionRequest), searchedAttribute);
         }
     }
 }

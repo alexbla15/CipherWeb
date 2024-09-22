@@ -8,19 +8,19 @@
         <CipherDataGrid Cipher_TItem="Vessel" DataSource="@Vessels" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Id))" Title="@(Vessel.Translate(nameof(Vessel.Id)))">
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Id))" Title="@(new Vessel().Translate(nameof(Vessel.Id)))">
                     <FooterTemplate>
                         <b>@($"כמות: {Vessels.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Name))" Title="@(Vessel.Translate(nameof(Vessel.Name)))" />
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Type))" Title="@(Vessel.Translate(nameof(Vessel.Type)))" />
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.System))" Title="@(Vessel.Translate(nameof(Vessel.System)))">
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Name))" Title="@(new Vessel().Translate(nameof(Vessel.Name)))" />
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Type))" Title="@(new Vessel().Translate(nameof(Vessel.Type)))" />
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.System))" Title="@(new Vessel().Translate(nameof(Vessel.System)))">
                     <Template>
                         @context.System?.Name
                     </Template>    
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.ContainingPackages))" Title="@(Vessel.Translate(nameof(Vessel.ContainingPackages)))">
+                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.ContainingPackages))" Title="@(new Vessel().Translate(nameof(Vessel.ContainingPackages)))">
                     <Template>
                         @(string.Join(", ", context.Id))
                     </Template>

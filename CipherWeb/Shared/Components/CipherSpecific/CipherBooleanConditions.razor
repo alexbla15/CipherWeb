@@ -40,7 +40,7 @@
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public ProcessStepDefinition SelectedStep { get; set; }
+    public ProcessStepDefinition SelectedStep { get; set; } = new();
 
     /// <summary>
     /// All chosen conditions
@@ -175,7 +175,7 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteCondition(cond))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Attribute)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Attribute)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
                         <RadzenDropDownDataGrid @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%" SearchTextPlaceholder="חיפוש..."
                                                 ValueProperty="Path" TextProperty="Translation">
@@ -194,7 +194,7 @@
                         </RadzenDropDownDataGrid>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.AttributeRelation)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.AttributeRelation)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
                         <RadzenDropDown @bind-Value="cond.AttributeRelation" Style="width: 100%" TValue="AttributeRelation"
                                         Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
@@ -235,12 +235,12 @@
                         </RadzenDropDown>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Value)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
                         <CipherAutoComplete @bind-Value="@cond.Value" Width="100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Operator)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Operator)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
                         <RadzenDropDown @bind-Value="cond.Operator" Style="width: 100%" TValue="Operator" Data="@(new List<Operator>() {Operator.Any, Operator.All, Operator.All, Operator.Any})">
                             <ValueTemplate>

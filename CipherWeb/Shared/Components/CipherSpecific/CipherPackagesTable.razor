@@ -21,27 +21,27 @@
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" WithCustomColumns="true">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Id))" Title="@(new Package().Translate(nameof(Package.Id)))">
                     <FooterTemplate>
                         סה"כ תעודות: <b>@packages.Count() </b>
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
                     <Template>
                         @context.Category.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Vessel)" Title="@(Package.Translate(nameof(Package.Vessel)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Vessel)" Title="@(new Package().Translate(nameof(Package.Vessel)))">
                     <Template>
                         @context.Vessel?.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.System)" Title="@(Package.Translate(nameof(Package.System)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.System)" Title="@(new Package().Translate(nameof(Package.System)))">
                     <Template>
                         @context.System.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.BrutMass)" Title="@(Package.Translate(nameof(Package.BrutMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.BrutMass)" Title="@(new Package().Translate(nameof(Package.BrutMass)))">
                     <FooterTemplate>
                         @if (packages != null)
                         {
@@ -49,7 +49,7 @@
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.NetMass)" Title="@(Package.Translate(nameof(Package.NetMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.NetMass)" Title="@(new Package().Translate(nameof(Package.NetMass)))">
 
                     <FooterTemplate>
                         @if (packages != null)
@@ -58,12 +58,12 @@
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Parent)" Title="@(Package.Translate(nameof(Package.Parent)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Parent)" Title="@(new Package().Translate(nameof(Package.Parent)))">
                     <Template>
                         @context.Parent?.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Children)" Title="@(Package.Translate(nameof(Package.Children)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Children)" Title="@(new Package().Translate(nameof(Package.Children)))">
                     <Template>
                         @if (context.Children != null)
                         {
@@ -71,9 +71,9 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.CreatedAt))" Title="@(Package.Translate(nameof(Package.CreatedAt)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Description))" Title="@(Package.Translate(nameof(Package.Description)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Properties)" Title="@(Package.Translate(nameof(Package.Properties)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.CreatedAt))" Title="@(new Package().Translate(nameof(Package.CreatedAt)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Description))" Title="@(new Package().Translate(nameof(Package.Description)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Properties)" Title="@(new Package().Translate(nameof(Package.Properties)))">
                     <Template>
                         @if (context.Properties != null)
                         {

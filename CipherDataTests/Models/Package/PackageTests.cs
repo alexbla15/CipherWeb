@@ -131,18 +131,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field of Category
-            // this depends on the TranslationDictionary.json config.
-
-            string translation = Package.Translate(nameof(example.Parent));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(example.Parent));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Package)}_{nameof(example.Parent)}"]);
-        }
-
-        [TestMethod()]
         public void EventsTest()
         {
             var result = example.Events();

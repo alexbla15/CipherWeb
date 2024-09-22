@@ -75,18 +75,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            string translation = Event.Translate(nameof(Event.EventType));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(Event.EventType));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.EventType)}"]);
-        }
-
-        [TestMethod()]
         public void AllTest()
         {
             var result = Event.All();

@@ -121,18 +121,5 @@ namespace CipherData.Models.Tests
 
             Assert.IsNotNull(rand_obj.Conditions);
         }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            GroupedBooleanCondition cond = new();
-            string translation = GroupedBooleanCondition.Translate(nameof(cond.Conditions));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(cond.Conditions));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(GroupedBooleanCondition)}_{nameof(cond.Conditions)}"]);
-        }
     }
 }

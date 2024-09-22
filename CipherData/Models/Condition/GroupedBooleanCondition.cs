@@ -96,10 +96,5 @@
         {
             return new GroupedBooleanCondition();
         }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(GroupedBooleanCondition), searchedAttribute);
-        }
     }
 }

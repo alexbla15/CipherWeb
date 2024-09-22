@@ -124,41 +124,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void ToJsonTest()
-        {
-            // 1 - minimal data, string
-            CategoryProperty cat = new() { Name = "A", Description= "B"};
-            string cat_json = cat.ToJson();
-            string result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 0,\r\n  \"DefaultValue\": null\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-
-            // 2 - full data, string
-            cat.PropertyType = PropertyType.Text;
-            cat.DefaultValue = "5";
-            cat_json = cat.ToJson();
-            result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 0,\r\n  \"DefaultValue\": \"5\"\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-
-            // 2 - full data, numeric
-            cat.PropertyType = PropertyType.Number;
-            cat.DefaultValue = "5.42";
-            cat_json = cat.ToJson();
-            result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 1,\r\n  \"DefaultValue\": \"5.42\"\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-
-            // 3 - full data, boolean
-            cat.PropertyType = PropertyType.Boolean;
-            cat.DefaultValue = "true";
-            cat_json = cat.ToJson();
-            result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 2,\r\n  \"DefaultValue\": \"true\"\r\n}";
-
-            Assert.IsTrue(cat_json == result);
-        }
-
-        [TestMethod()]
         public void EqualsTest()
         {
             CategoryProperty cat = new() { Name = "A", Description = "B", PropertyType = PropertyType.Number, DefaultValue = "5.42"};
@@ -224,19 +189,6 @@ namespace CipherData.Models.Tests
             // 2 - check for instanciation of random category-property with specific id
             CategoryProperty c5 = CategoryProperty.Random("c5");
             Assert.IsTrue(c5.Name == "c5");
-        }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field of Category
-            // this depends on the TranslationDictionary.json config.
-
-            CategoryProperty EmptyCat = new();
-            string translation = CategoryProperty.Translate(nameof(EmptyCat.DefaultValue));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(EmptyCat.DefaultValue));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(CategoryProperty)}_{nameof(EmptyCat.DefaultValue)}"]);
         }
     }
 }

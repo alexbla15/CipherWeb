@@ -3,7 +3,7 @@
     /// <summary>
     /// Property scheme of one of the package's properties.
     /// </summary>
-    public class PackageProperty
+    public class PackageProperty : CipherClass
     {
         private string? _Name = string.Empty;
 
@@ -56,11 +56,6 @@
             result.Fields.Add(CheckValue());
 
             return result.Check();
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(PackageProperty), searchedAttribute);
         }
     }
 }

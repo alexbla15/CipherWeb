@@ -23,7 +23,7 @@
     /// Component's Label.
     /// </summary>
     [Parameter]
-    public string? Label { get; set; } = Package.Translate(nameof(Package.Id));
+    public string? Label { get; set; } = new Package().Translate(nameof(Package.Id));
 
     /// <summary>
     /// Component's Label.
@@ -72,13 +72,13 @@
                             Style="@($"width: {Width}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(new Package().Translate(nameof(Package.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(new Category().Translate(nameof(Category.MaterialType)))">
                 <Template>
                     @((context as Package).Category.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
                 <Template>
                     @(string.Join(", ", (context as Package).Category.Name))
                 </Template>

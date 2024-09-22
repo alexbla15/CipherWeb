@@ -111,12 +111,12 @@
                                     <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(ProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                            <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(ProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                                 <Template Context="step">
                                     <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%"/>
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(ProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                            <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(ProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                                 <Template Context="step">
                                     <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" />
                                 </Template>

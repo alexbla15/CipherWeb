@@ -54,13 +54,13 @@
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
                             Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true" Disabled="@Disabled" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(new Package().Translate(nameof(Package.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
                 <Template>
                    @((context as Package).Category.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.System))" Title="@(Package.Translate(nameof(Package.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.System))" Title="@(new Package().Translate(nameof(Package.System)))">
                 <Template>
                     @((context as Package).System.Name)
                 </Template>

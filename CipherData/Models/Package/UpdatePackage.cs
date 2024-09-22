@@ -4,7 +4,7 @@
     /// Update package details contract.
     /// Ergo, only properties that are not changed using Event, are included.
     /// </summary>
-    public class UpdatePackage
+    public class UpdatePackage : CipherClass
     {
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
@@ -97,19 +97,6 @@
             }
 
             return result.Check();
-        }
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(UpdatePackage), searchedAttribute);
         }
     }
 }

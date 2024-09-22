@@ -3,7 +3,7 @@
     /// <summary>
     /// Create a new system or update it
     /// </summary>
-    public class SystemRequest
+    public class SystemRequest : CipherClass
     {
         private string _Name = string.Empty;
 
@@ -130,19 +130,6 @@
                 Properties = Properties,
                 Parent = StorageSystem.Random(ParentId),
             };
-        }
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(SystemRequest), searchedAttribute);
         }
     }
 }

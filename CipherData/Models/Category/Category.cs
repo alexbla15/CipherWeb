@@ -120,11 +120,6 @@ namespace CipherData.Models
             return (Category)MemberwiseClone();
         }
 
-        public string ToJson()
-        {
-            return ToJson(this);
-        }
-
         /// <summary>
         /// Check if this object and other object are exactly the same
         /// </summary>
@@ -260,16 +255,6 @@ namespace CipherData.Models
             };
 
             return MaterialType;
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Translate(typeof(Category), fieldName);
         }
 
         // API-RELATED FUNCTIONS

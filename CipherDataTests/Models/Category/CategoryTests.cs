@@ -199,18 +199,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field of Category
-            // this depends on the TranslationDictionary.json config.
-
-            string translation = Category.Translate(nameof(c3.Parent));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(c3.Parent));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Category)}_{nameof(c3.Parent)}"]);
-        }
-
-        [TestMethod()]
         public void GetTest()
         {
             // 1 - try to fetch object without stating id

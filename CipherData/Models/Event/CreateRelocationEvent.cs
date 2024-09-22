@@ -3,7 +3,7 @@
     /// <summary>
     /// An event of relocating several packages to a new location
     /// </summary>
-    public class CreateRelocationEvent
+    public class CreateRelocationEvent : CipherClass
     {
         private string? _Worker = string.Empty;
 
@@ -79,7 +79,7 @@
             {
                 foreach (Package p in Packages)
                 {
-                    result = (result.Succeeded) ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id, Package.Translate(nameof(p.System))) : result;
+                    result = (result.Succeeded) ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id, Translate(nameof(p.System))) : result;
                 }
             }
             else
@@ -150,15 +150,6 @@
                     p.System = TargetSystem;
                 }
             }
-        }
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Resource.Translate(typeof(CreateRelocationEvent), fieldName);
         }
     }
 }

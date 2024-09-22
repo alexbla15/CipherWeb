@@ -6,7 +6,7 @@
     /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
     /// In order to change other Package properties - use UpdatePackage.
     /// </summary>
-    public class PackageRequest
+    public class PackageRequest : CipherClass
     {
         /// <summary>
         /// ID of the package
@@ -61,14 +61,6 @@
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Category))]
         public string CategoryId { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -215,11 +207,6 @@
             }
 
             return true;
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(PackageRequest), searchedAttribute);
         }
 
         /// <summary>

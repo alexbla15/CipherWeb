@@ -101,18 +101,5 @@ namespace CipherData.Models.Tests
             c1.Value = "@";
             Assert.IsFalse(c1.Check().Item1);
         }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            BooleanCondition EmptyCat = new();
-            string translation = BooleanCondition.Translate(nameof(EmptyCat.Value));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(EmptyCat.Value));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(BooleanCondition)}_{nameof(EmptyCat.Value)}"]);
-        }
     }
 }

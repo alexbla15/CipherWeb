@@ -175,11 +175,6 @@ namespace CipherData.Models
             };
         }
 
-        public static string Translate(string searchedAttribute)
-        {
-            return Translate(typeof(Unit), searchedAttribute);
-        }
-
         // API-RELATED FUNCTIONS
 
         /// <summary>

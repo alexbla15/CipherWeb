@@ -10,39 +10,39 @@
         <CipherDataGrid Cipher_TItem="Category" DataSource="@categories" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Id))" Title="@(Category.Translate(nameof(Category.Id)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Id))" Title="@(new Category().Translate(nameof(Category.Id)))">
                     <FooterTemplate>
                         <b>@($"כמות: {categories.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Name))" Title="@(Category.Translate(nameof(Category.Name)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Description))" Title="@(Category.Translate(nameof(Category.Description)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Name))" Title="@(new Category().Translate(nameof(Category.Name)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Description))" Title="@(new Category().Translate(nameof(Category.Description)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.MaterialType))" Title="@(new Category().Translate(nameof(Category.MaterialType)))">
                     <Template>
                         @context.MaterialType?.Name
                     </Template>    
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.IdMask))" Title="@(Category.Translate(nameof(Category.IdMask)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.IdMask))" Title="@(new Category().Translate(nameof(Category.IdMask)))">
                     <Template>
                         @(string.Join(", ", context.IdMask))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.CreatingProcesses))" Title="@(Category.Translate(nameof(Category.CreatingProcesses)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.CreatingProcesses))" Title="@(new Category().Translate(nameof(Category.CreatingProcesses)))">
                     <Template>
                         @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.ConsumingProcesses))" Title="@(Category.Translate(nameof(Category.ConsumingProcesses)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.ConsumingProcesses))" Title="@(new Category().Translate(nameof(Category.ConsumingProcesses)))">
                     <Template>
                         @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Parent))" Title="@(Category.Translate(nameof(Category.Parent)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Parent))" Title="@(new Category().Translate(nameof(Category.Parent)))">
                     <Template>
                         @context.Parent?.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Children))" Title="@(Category.Translate(nameof(Category.Children)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Children))" Title="@(new Category().Translate(nameof(Category.Children)))">
                     <Template>
                         @if (context.Children != null)
                         {

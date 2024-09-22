@@ -19,15 +19,15 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@Category.Translate(nameof(Category.Name))" Icon="@Icons.Symbols.Category" @ref=CatName
+                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Name)))" Icon="@Icons.Symbols.Category" @ref=CatName
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name"/>
-                <CipherCategoryDropDown Label="@Category.Translate(nameof(Category.Parent))" @ref=ParentCat Change="@(args => ChangedParent((Category?)args))"
+                <CipherCategoryDropDown Label="@(new Category().Translate(nameof(Category.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((Category?)args))"
                                         Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
-                <CipherAutoComplete Label="@Category.Translate(nameof(Category.Description))" Icon="@Icons.Documents.Page.description" Multiline="true"
+                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true"
                 @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@Category.Translate(nameof(Category.CreatingProcesses))" @ref=InProcs
+                <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(new Category().Translate(nameof(Category.CreatingProcesses)))" @ref=InProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@Category.Translate(nameof(Category.ConsumingProcesses))" @ref=OutProcs
+                <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(new Category().Translate(nameof(Category.ConsumingProcesses)))" @ref=OutProcs
                                  Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
                 <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
             </ChildContent>

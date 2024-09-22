@@ -213,7 +213,7 @@
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
-        JsonRequest = Category.Random().ToJson();
+        JsonRequest = catRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.CreateCategory(catRequest);
     }
 

@@ -39,7 +39,7 @@
     /// <summary>
     /// Abstract class for union of BooleanCondition and GroupedBooleanCondition
     /// </summary>
-    public abstract class Condition
+    public abstract class Condition : CipherClass
     {
     }
 
@@ -140,16 +140,6 @@
             result.Fields.Add(CheckValue());
 
             return result.Check();
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string field_name)
-        {
-            return Resource.Translate(typeof(BooleanCondition), field_name);
         }
     }
 }

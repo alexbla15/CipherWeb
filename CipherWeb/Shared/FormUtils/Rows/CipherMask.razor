@@ -7,7 +7,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= Category.Translate(nameof(Category.IdMask));
+        Label ??= new Category().Translate(nameof(Category.IdMask));
         Icon ??= Icons.Security.Password;
     }
 

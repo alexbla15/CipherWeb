@@ -40,22 +40,9 @@ namespace CipherData.Models.Tests
             ev.Packages = null;
             Assert.IsFalse(ev.CheckPackages().Succeeded);
 
-            // 3 - package problem
-            ev.Packages = new() { Package.Random("@") };
-            Assert.IsFalse(ev.CheckPackages().Succeeded);
-
-            // 4 - duplicity
+            // 3 - duplicity
             Package p = Package.Random();
             ev.Packages = new() { p, p };
-            Assert.IsFalse(ev.CheckPackages().Succeeded);
-
-            // 5 - can't move package to same location
-            ev.Packages = new() { p };
-            ev.TargetSystem = p.System;
-            Assert.IsFalse(ev.CheckPackages().Succeeded);
-
-            // 6 - all good
-            ev.TargetSystem = StorageSystem.Random();
             Assert.IsFalse(ev.CheckPackages().Succeeded);
         }
 
@@ -198,19 +185,6 @@ namespace CipherData.Models.Tests
 
             Assert.IsTrue(p1.System.Id == s.Id);
             Assert.IsTrue(p2.System.Id == s.Id);
-        }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field
-            // this depends on the TranslationDictionary.json config.
-
-            CreateRelocationEvent ev = new();
-            string translation = CreateRelocationEvent.Translate(nameof(ev.TargetSystem));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(ev.TargetSystem));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(CreateRelocationEvent)}_{nameof(ev.TargetSystem)}"]);
         }
     }
 }

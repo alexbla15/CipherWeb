@@ -11,7 +11,7 @@
     /// Property scheme of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
     /// </summary>
-    public class CategoryProperty
+    public class CategoryProperty: CipherClass
     {
         private string? _Name = string.Empty;
 
@@ -91,14 +91,6 @@
         }
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        /// <summary>
         /// Check if this object and other object are exactly the same
         /// </summary>
         public bool Equals(CategoryProperty? OtherObject)
@@ -136,14 +128,6 @@
             CategoryProperty result = CategoryProperties[new Random().Next(CategoryProperties.Count)];
             if (set_name != null) result.Name = set_name.Trim();
             return result;
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(CategoryProperty), searchedAttribute);
         }
     }
 }

@@ -357,24 +357,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void ToJsonTest()
-        {
-            Category cat = new(nameof(cat))
-            {
-                Name = nameof(cat),
-                Description = nameof(cat),
-                IdMask = new() { "1", "2" },
-                Parent = Category.Random("C001")
-            };
-
-            CategoryRequest req = cat.Request();
-            string req_json = req.ToJson();
-            string result = "{\r\n  \"Name\": \"cat\",\r\n  \"Description\": \"cat\",\r\n  \"ParentId\": \"C001\",\r\n  \"CreatingProcesses\": [],\r\n  \"ConsumingProcesses\": [],\r\n  \"IdMask\": [\r\n    \"1\",\r\n    \"2\"\r\n  ],\r\n  \"Properties\": null\r\n}";
-
-            Assert.IsTrue(req_json == result);
-        }
-
-        [TestMethod()]
         public void CreateTest()
         {
 
@@ -397,19 +379,6 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(req.CreatingProcesses.SequenceEqual(cat2.CreatingProcesses.Select(x=>x.Id).ToList()));
             Assert.IsTrue(req.ConsumingProcesses.SequenceEqual(cat2.ConsumingProcesses.Select(x=>x.Id).ToList()));
             Assert.IsTrue(req.ParentId == cat2.Parent?.Id);
-        }
-
-        [TestMethod()]
-        public void TranslateTest()
-        {
-            // try to translate some field of Category
-            // this depends on the TranslationDictionary.json config.
-
-            CategoryRequest EmptyCat = new();
-            string translation = CategoryRequest.Translate(nameof(EmptyCat.Properties));
-            Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(EmptyCat.Properties));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Category)}_{nameof(EmptyCat.Properties)}"]);
         }
     }
 }

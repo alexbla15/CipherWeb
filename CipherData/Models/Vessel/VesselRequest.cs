@@ -3,7 +3,7 @@
     /// <summary>
     /// Create a new unit or update it
     /// </summary>
-    public class VesselRequest
+    public class VesselRequest : CipherClass
     {
         private string? _Name = null;
 
@@ -91,20 +91,6 @@
                 Type = Type,
                 System = StorageSystem.Random(SystemId)
             };
-        }
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
-        }
-
-        public static string Translate(string searchedAttribute)
-        {
-            return Resource.Translate(typeof(VesselRequest), searchedAttribute);
         }
     }
 }

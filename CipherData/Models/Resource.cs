@@ -25,10 +25,47 @@ namespace CipherData.Models
         }
     }
 
+    public abstract class CipherClass
+    {
+        /// <summary>
+        /// Translate the name of the field according to its hebrew translation.
+        /// </summary>
+        public string Translate(string searchedAttribute)
+        {
+            // Get the PropertyInfo for the property name
+            PropertyInfo? property = GetType().GetProperty(searchedAttribute);
+            if (property == null)
+            {
+                return searchedAttribute;
+            }
+
+            // Get the HebrewTranslationAttribute and return the translation
+            var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
+            return (attribute is null) ? searchedAttribute : attribute.Translation;
+        }
+
+        /// <summary>
+        /// Transfrom this object to JSON, readable by API
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
+                Converters = { new JsonDateTimeConverter() }, // Include custom DateTime converter
+                IncludeFields = true // Include private/protected fields (if necessary)
+            };
+
+            return JsonSerializer.Serialize(this, GetType(), options);
+        }
+    }
+
     /// <summary>
     /// Basic resource template for objects.
     /// </summary>
-    public abstract class Resource
+    public abstract class Resource: CipherClass
     {
         /// <summary>
         /// Searchable ID for the object
@@ -51,11 +88,11 @@ namespace CipherData.Models
         /// <summary>
         /// Compare two Resource-objects
         /// </summary>
-        public static bool Compare(Resource r1, Resource r2)
+        public bool Compare(Resource otherObject)
         {
-            if (r1.Id != r2.Id) return false;
-            if (r1.ClearenceLevel != r2.ClearenceLevel) return false;
-            if (r1.Uuid != r2.Uuid) return false;
+            if (Id != otherObject.Id) return false;
+            if (ClearenceLevel != otherObject.ClearenceLevel) return false;
+            if (Uuid != otherObject.Uuid) return false;
             return true;
         }
 
@@ -90,20 +127,6 @@ namespace CipherData.Models
             return QueryRequests.QueryObjects<T>(obj);
         }
 
-        public static string? Translate(Type type, string searchedAttribute)
-        {
-            // Get the PropertyInfo for the property name
-            PropertyInfo? property = type.GetProperty(searchedAttribute);
-            if (property == null)
-            {
-                return searchedAttribute;
-            }
-
-            // Get the HebrewTranslationAttribute and return the translation
-            var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
-            return (attribute is null) ? searchedAttribute : attribute.Translation;
-        }
-
         public static HashSet<Tuple<string, string>> GetHebrewTranslations<T>() where T : Resource
         {
             var translations = new HashSet<Tuple<string, string>>();
@@ -117,22 +140,6 @@ namespace CipherData.Models
                 }
             }
             return translations;
-        }
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
-        public static string ToJson<T>(T ChosenObject)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true, // Pretty print
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter() } // Include custom DateTime converter
-            };
-
-            return JsonSerializer.Serialize(ChosenObject, options);
         }
 
         // API RELATED FUNCTIONS

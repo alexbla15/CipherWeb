@@ -6,9 +6,9 @@
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Name))" Title="@(Unit.Translate(nameof(Unit.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Description))" Title="@(Unit.Translate(nameof(Unit.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Parent))" Title="@(Unit.Translate(nameof(Unit.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Name))" Title="@(new Unit().Translate(nameof(Unit.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Description))" Title="@(new Unit().Translate(nameof(Unit.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Parent))" Title="@(new Unit().Translate(nameof(Unit.Parent)))">
                 <Template>
                     @((context as Unit).Parent?.Name)
                 </Template>
@@ -31,7 +31,7 @@
     /// All units optional in the drop down.
     /// </summary>
     [Parameter]
-    public List<Unit> units { get; set; } = new List<Unit>();
+    public List<Unit> units { get; set; } = new();
 
     /// <summary>
     /// Error response for data fetching

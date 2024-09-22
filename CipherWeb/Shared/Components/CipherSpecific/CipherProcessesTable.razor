@@ -23,23 +23,23 @@
         <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes" WithCustomColumns="true" @ref=datagrid
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Id))" Title="@(Process.Translate(nameof(Process.Id)))">
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Id))" Title="@(new Process().Translate(nameof(Process.Id)))">
                     <FooterTemplate>
                         <b>סה"כ תהליכים:</b> @Processes.Count()
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Definition.Name))" Title="@(ProcessDefinition.Translate(nameof(Process.Definition.Name)))">
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Definition.Name))" Title="@(new ProcessDefinition().Translate(nameof(Process.Definition.Name)))">
                     <Template>
                         @context.Definition.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.UncompletedSteps))" Title="@(Process.Translate(nameof(Process.UncompletedSteps)))">
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.UncompletedSteps))" Title="@(new Process().Translate(nameof(Process.UncompletedSteps)))">
                     <Template>
                         @(string.Join(", ", context.UncompletedSteps.Select(x => x.Name).ToList()))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Start))" Title="@(Process.Translate(nameof(Process.Start)))" />
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.End))" Title="@(Process.Translate(nameof(Process.End)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Start))" Title="@(new Process().Translate(nameof(Process.Start)))" />
+                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.End))" Title="@(new Process().Translate(nameof(Process.End)))" />
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>
@@ -82,7 +82,7 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private CipherDataGrid<Process> datagrid = new CipherDataGrid<Process>();
+    private CipherDataGrid<Process> datagrid = new();
 
     protected override void OnInitialized()
     {

@@ -3,7 +3,7 @@
     /// <summary>
     /// An event of transfering mass between one package to another
     /// </summary>
-    public class CreateTranserAmountEvent
+    public class CreateTranserAmountEvent : CipherClass
     {
         private string? _Worker = null;
 
@@ -146,16 +146,6 @@
             }
 
             return new CreateEvent();
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Resource.Translate(typeof(CreateTranserAmountEvent), fieldName);
         }
     }
 }

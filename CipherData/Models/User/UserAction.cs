@@ -68,11 +68,6 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(UserAction), nameof(Status))]
         public int Status { get; set; } = -1;
 
-        public static string Translate(string searchedAttribute)
-        {
-            return Translate(typeof(UserAction), searchedAttribute);
-        }
-
         /// <summary>
         /// Hebrew-english translation
         /// </summary>

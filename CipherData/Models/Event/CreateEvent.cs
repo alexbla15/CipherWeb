@@ -3,7 +3,7 @@
     /// <summary>
     /// Create new event
     /// </summary>
-    public class CreateEvent
+    public class CreateEvent : CipherClass
     {
         private string? _Worker = null;
 
@@ -155,24 +155,6 @@
                 Status = 1,
                 Packages = Actions.Select(x => x.Create()).ToList(),
             };
-        }
-
-        /// <summary>
-        /// Translate the name of the field according to its hebrew translation.
-        /// </summary>
-        /// <param name="fieldName">name of the searched field</param>
-        /// <returns></returns>
-        public static string Translate(string fieldName)
-        {
-            return Resource.Translate(typeof(CreateEvent), fieldName);
-        }
-
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>s
-        public string ToJson()
-        {
-            return Resource.ToJson(this);
         }
     }
 }

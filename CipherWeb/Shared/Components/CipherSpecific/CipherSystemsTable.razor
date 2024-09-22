@@ -8,19 +8,19 @@
         <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@Systems" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Id))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Id)))">
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Id))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Id)))">
                     <FooterTemplate>
                         <b>@($"כמות: {Systems.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Name))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Name)))" />
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Description))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Description)))" />
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Parent))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Parent)))">
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Name))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Name)))" />
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Description))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Description)))" />
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Parent))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Parent)))">
                     <Template>
                         @context.Parent?.Name
                     </Template>    
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Children))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Children)))">
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Children))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Children)))">
                     <Template>
                         @if (context.Children != null)
                         {
@@ -28,12 +28,12 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Unit))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Unit)))">
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Unit))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Unit)))">
                     <Template>
                         @context.Unit?.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Properties))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Properties)))">
+                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Properties))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Properties)))">
                     <Template>
                         @if (context.Properties != null)
                         {
