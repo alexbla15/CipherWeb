@@ -7,24 +7,6 @@
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
     /// <summary>
-    /// Text shown in case no rows were added.
-    /// </summary>
-    [Parameter]
-    public string HelpText { get; set; } = "כאן ניתן להוסיף תנאים. להוספה לחצו על כפתור ההוספה למעלה";
-
-    /// <summary>
-    /// Help text for add-button.
-    /// </summary>
-    [Parameter]
-    public string AddText { get; set; } = "הוספת תנאי";
-
-    /// <summary>
-    /// Help text for delete-all-button.
-    /// </summary>
-    [Parameter]
-    public string DeleteAllText { get; set; } = "מחיקת תנאים";
-
-    /// <summary>
     /// Help text for save-button.
     /// </summary>
     [Parameter]
@@ -34,19 +16,13 @@
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
-    public List<CipherField> AvailableAttributes { get; set; } = new();
+    public List<CipherField> AvailableAttributes { get; set; } = GetTranslatedFields(typeof(Event));
 
     /// <summary>
     /// All chosen conditions
     /// </summary>
     [Parameter]
     public ProcessStepDefinition SelectedStep { get; set; } = new();
-
-    /// <summary>
-    /// All chosen conditions
-    /// </summary>
-    [Parameter]
-    public List<BooleanCondition> ChosenConditions { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -58,20 +34,21 @@
     {
         public string Path { get; set; } = string.Empty;
         public string Translation { get; set; } = string.Empty;
+        public bool IsList { get; set; } = false;
     }
 
-    private RadzenDataGrid<BooleanCondition> ConditionsDataGrid = new();
+    private CipherDataFilter<CipherField> dataFilter = new();
 
+    private string json_value = string.Empty;
     protected override void OnInitialized()
     {
         Title ??= "תנאים נבחרים";
-        AvailableAttributes = GetTranslatedFields(typeof(Event));
     }
 
     /// <summary>
     /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
     /// </summary>
-    public static List<CipherField> GetTranslatedFields(Type setType, string? main = null, int curr_depth = 0)
+    public static List<CipherField> GetTranslatedFields(Type setType, string? mainPath = null, string? mainTranslation = null, int curr_depth = 0)
     {
         int max_depth = 2;
 
@@ -87,23 +64,26 @@
                 if (attribute != null)
                 {
                     CipherField c = new();
-                    c.Path = !string.IsNullOrEmpty(main) ? $"{main}.{prop.Name}" : $"{setType.Name}.{prop.Name}";
-                    c.Translation = attribute.Translation;
+                    c.Path = !string.IsNullOrEmpty(mainPath) ? $"{mainPath}.{prop.Name}" : $"{setType.Name}.{prop.Name}";
+                    c.Translation = !string.IsNullOrEmpty(mainTranslation) ? $"{mainTranslation}.[{attribute.Translation}]" : $"[{attribute.Translation}]";
+                    c.IsList = false;
 
-                    translations.Add(c);
                     Type prop_type = prop.PropertyType;
                     if (OptionalTypes.Contains(prop_type))
                     {
-                        translations.AddRange(GetTranslatedFields(prop_type, c.Path, curr_depth + 1));
+                        translations.AddRange(GetTranslatedFields(prop_type, c.Path, c.Translation, curr_depth + 1));
                     }
                     if (prop_type.IsGenericType)
                     {
+                        c.IsList = true;
                         prop_type = prop_type.GetGenericArguments()[0];
                         if (OptionalTypes.Contains(prop_type))
                         {
-                            translations.AddRange(GetTranslatedFields(prop_type, c.Path, curr_depth + 1));
+                            translations.AddRange(GetTranslatedFields(prop_type, c.Path, c.Translation, curr_depth + 1));
                         }
                     }
+
+                    translations.Add(c);
                 }
             }
         }
@@ -112,161 +92,175 @@
     }
 
     /// <summary>
-    /// Add a condition to the memory.
+    /// Filter is a Boolean condition (no sub filters)
     /// </summary>
-    async Task AddCondition()
-    {
-        // Add the new restriction to the existing list
-        ChosenConditions.Add(new BooleanCondition());
-
-        StateHasChanged();
-
-        await ConditionsDataGrid.RefreshDataAsync();
-    }
-
-    /// <summary>
-    /// Deletes a condition from memory & view.
-    /// </summary>
-    /// <param name="cond">Condition to delete</param>
-    async Task DeleteCondition(BooleanCondition cond)
-    {
-        ChosenConditions.Remove(cond);
-
-        ConditionsDataGrid.Data = ChosenConditions;
-
-        await ConditionsDataGrid.RefreshDataAsync();
-
-        StateHasChanged();
-    }
-
-    /// <summary>
-    /// Clears all conditions from memory & view.
-    /// </summary>
+    /// <param name="filter"></param>
     /// <returns></returns>
-    async Task DeleteAllConditions()
+    public BooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
     {
-        ChosenConditions.Clear();
-        ConditionsDataGrid.Data = ChosenConditions;
+        BooleanCondition cond = new();
+        cond.Attribute = filter.Property;
 
-        await ConditionsDataGrid.RefreshDataAsync();
+        if (filter.FilterValue != null)
+        {
+            string filterVal= filter.FilterValue.ToString();
+
+            if (filterVal.Contains("##"))
+            {
+                cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any:Operator.All;
+            }
+
+            cond.Value = filterVal.Split("##")[0];
+        }
+
+        FilterOperator? filterOperator = filter.FilterOperator;
+
+        if (filterOperator != null)
+        {
+            cond.AttributeRelation = filterOperator switch
+            {
+                FilterOperator.Equals => AttributeRelation.Eq,
+                FilterOperator.NotEquals => AttributeRelation.Ne,
+                FilterOperator.GreaterThan => AttributeRelation.Gt,
+                FilterOperator.GreaterThanOrEquals => AttributeRelation.Ge,
+                FilterOperator.LessThan => AttributeRelation.Lt,
+                FilterOperator.LessThanOrEquals => AttributeRelation.Le,
+                FilterOperator.Contains => AttributeRelation.Contains,
+                FilterOperator.DoesNotContain => AttributeRelation.NotContains,
+                FilterOperator.IsEmpty => AttributeRelation.IsEmpty,
+                FilterOperator.IsNotEmpty => AttributeRelation.IsNotEmpty,
+                FilterOperator.IsNull => AttributeRelation.IsNull,
+                FilterOperator.IsNotNull => AttributeRelation.IsNotNull,
+                _ => AttributeRelation.Eq
+            };
+        }
+
+        return cond;
+    }
+
+    /// <summary>
+    /// Filter is a Grouped Boolean condition (no sub filters)
+    /// </summary>
+    public GroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
+    {
+        GroupedBooleanCondition cond = new();
+        cond.Operator = (filter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
+
+        List<Condition> conditions = new();
+
+        foreach (var sub_filter in filter.Filters)
+        {
+            if (sub_filter.Filters is null)
+            {
+                conditions.Add(SetBooleanCondition(sub_filter));
+            }
+            else
+            {
+                conditions.Add(SetGroupedBooleanCondition(sub_filter));
+            }
+        }
+
+        cond.Conditions = conditions;
+
+        return cond;
     }
 
     public void Save()
     {
-        SelectedStep.Condition = new GroupedBooleanCondition() { Conditions = ChosenConditions };
+        GroupedBooleanCondition ChosenConditions = new();
+        List<Condition> conditions = new();
+
+        ChosenConditions.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
+
+        foreach (var filter in dataFilter.GetFilters())
+        {
+            // decide if it is a GroupedCondition or BooleanCondition
+
+            if (filter.Filters is null)
+            {
+                conditions.Add(SetBooleanCondition(filter));
+            }
+            else
+            {
+                conditions.Add(SetGroupedBooleanCondition(filter));
+            }
+
+        }
+
+        ChosenConditions.Conditions = conditions;
+
+        SelectedStep.Condition = ChosenConditions;
+        json_value = SelectedStep.Condition.ToJson();
+
     }
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
-        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddCondition())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAllConditions())" HelpText="@DeleteAllText" />
         <CipherButton Icon="@Icons.Documents.Edit.save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
     </Buttons>
     <ChildContent>
-        @if (ChosenConditions.Count() == 0)
-        {
-            <CipherText Text="@HelpText" />
-        }
-        <RadzenDataGrid @ref="ConditionsDataGrid" Data="@ChosenConditions" TItem="BooleanCondition" AllowColumnResize="true" Visible="@(ChosenConditions.Count() != 0)">
-            <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="BooleanCondition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                    <Template Context="cond">
-                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteCondition(cond))" @onclick:stopPropagation="true" />
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Attribute)))" TextAlign="@TdTextAlign">
-                    <Template Context="cond">
-                        <RadzenDropDownDataGrid @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%" SearchTextPlaceholder="חיפוש..."
-                                                ValueProperty="Path" TextProperty="Translation">
-                            <Columns>
-                                <RadzenDropDownDataGridColumn Property="Path" Title="שם תכונה">
-                                    <Template>
-                                        @((context as CipherField).Path)
-                                    </Template>
-                                </RadzenDropDownDataGridColumn>
-                                <RadzenDropDownDataGridColumn Property="Translation" Title="תרגום">
-                                    <Template>
-                                        @((context as CipherField).Translation)
-                                    </Template>
-                                </RadzenDropDownDataGridColumn>
-                            </Columns>
-                        </RadzenDropDownDataGrid>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.AttributeRelation)))" TextAlign="@TdTextAlign">
-                    <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.AttributeRelation" Style="width: 100%" TValue="AttributeRelation"
-                                        Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
-                            <ValueTemplate>
-                                @if (cond.AttributeRelation == AttributeRelation.Eq)
-                                    @("שווה ל")
+        <CipherDataFilter @ref=dataFilter Cipher_TItem="CipherField" Data="@AvailableAttributes">
+            <FilterProperties>
+                @foreach (CipherField field in AvailableAttributes)
+                {
+                    <RadzenDataFilterProperty TItem="CipherField" Property="@field.Path" Title="@field.Translation">
 
-                                @if (cond.AttributeRelation == AttributeRelation.Ne)
-                                    @("שונה מ")
-
-                                @if (cond.AttributeRelation == AttributeRelation.Gt)
-                                    @("גדול מ")
-
-                                @if (cond.AttributeRelation == AttributeRelation.Lt)
-                                    @("קטן מ")
-
-                                @if (cond.AttributeRelation == AttributeRelation.Contains)
-                                    @("מכיל")
-
-                            </ValueTemplate>
-                            <Template>
-                                @if (context == AttributeRelation.Eq)
-                                    @("שווה ל")
-
-                                @if (context == AttributeRelation.Ne)
-                                    @("שונה מ")
-
-                                @if (context == AttributeRelation.Gt)
-                                    @("גדול מ")
-
-                                @if (context == AttributeRelation.Lt)
-                                    @("קטן מ")
-
-                                @if (context == AttributeRelation.Contains)
-                                    @("מכיל")
-
-                            </Template>
-                        </RadzenDropDown>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Value)))" TextAlign="@TdTextAlign">
-                    <Template Context="cond">
-                        <CipherAutoComplete @bind-Value="@cond.Value" Width="100%" />
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(new BooleanCondition().Translate(nameof(BooleanCondition.Operator)))" TextAlign="@TdTextAlign">
-                    <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.Operator" Style="width: 100%" TValue="Operator" Data="@(new List<Operator>() {Operator.Any, Operator.All, Operator.All, Operator.Any})">
-                            <ValueTemplate>
-                                @if (cond.Operator == Operator.All)
+                        <FilterTemplate>
+                            @if (context.FilterOperator != FilterOperator.IsNull && context.FilterOperator != FilterOperator.IsNotNull)
+                            {
+                                @if (field.IsList)
                                 {
-                                    @("כל האיברים")
+                                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
+                                    AlignItems="AlignItems.Center" Style="width:100%">
+                                        <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)" />
+                                        <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left"/>
+                                        <RadzenDropDown Style="width: 100%" TValue="Operator" ValueChanged="@(args=>context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"))" Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
+                                            <ValueTemplate Context="operator_value_context">
+                                                @if (operator_value_context == Operator.All)
+                                                {
+                                                    @(
+                                                                                        "כל האיברים"
+                                                                                                                                        )
+                                                }
+                                                else
+                                                {
+                                                    @(
+                                                                                        "לפחות אחד"
+                                                                                                                                        )
+                                                }
+                                            </ValueTemplate>
+                                            <Template Context="operator_context">
+                                                @if (operator_context == Operator.All)
+                                                {
+                                                    @(
+                                                                                        "כל האיברים"
+                                                                                                                                        )
+                                                }
+                                                else
+                                                {
+                                                    @(
+                                                                                        "לפחות אחד"
+                                                                                                                                        )
+                                                }
+                                            </Template>
+                                        </RadzenDropDown>
+                                    </RadzenStack>
                                 }
                                 else
                                 {
-                                    @("לפחות אחד")
+                                    <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)"/>
                                 }
-                            </ValueTemplate>
-                            <Template>
-                                @if (context == Operator.All)
-                                {
-                                    @("כל האיברים")
-                                }
-                                else
-                                {
-                                    @("לפחות אחד")
-                                }
-                            </Template>
-                        </RadzenDropDown>
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
+                            }
+                            else
+                            {
+                                <RadzenTextBox Style="width: 100%" Disabled="true" ValueChanged="@(args => context.FilterValue=null)" />
+                            }
+                        </FilterTemplate>
+                    </RadzenDataFilterProperty>
+                }
+            </FilterProperties>
+        </CipherDataFilter>
+        <CipherJsonCheck JsonValue="@json_value" />
     </ChildContent>
 </CipherComponentCard>

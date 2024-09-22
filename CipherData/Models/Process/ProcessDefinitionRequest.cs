@@ -5,28 +5,28 @@
     /// </summary>
     public class ProcessDefinitionRequest : CipherClass
     {
-        private string _Name = string.Empty;
+        private string? _Name = string.Empty;
 
         /// <summary>
         /// Name of the process
         /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
-        public string Name
+        public string? Name
         {
             get { return _Name; }
-            set { _Name = value.Trim(); }
+            set { _Name = value?.Trim(); }
         }
 
-        private string _Description = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Description of process
         /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
-        public string Description
+        public string? Description
         {
             get { return _Description; }
-            set { _Description = value.Trim(); }
+            set { _Description = value?.Trim(); }
         }
 
         /// <summary>

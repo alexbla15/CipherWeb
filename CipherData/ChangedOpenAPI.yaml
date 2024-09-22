@@ -177,8 +177,17 @@ components:
             - eq
             - ne
             - gt
+            - ge
             - lt
-            - contains  
+            - le
+            - starts_with,
+            - ends_With,
+            - contains,
+            - not_contains,
+            - is_null,
+            - Is_not_null,
+            - is_empty,
+            - is_not_empty,
         operator: 
           type: string
           default: and

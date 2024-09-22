@@ -63,13 +63,18 @@
         {
             if (Conditions.Any())
             {
-                if (Conditions.ToList()[0] is BooleanCondition)
+                foreach (var cond in Conditions)
                 {
-                    return CheckField.ListItems((List<BooleanCondition>)(object)Conditions, Translate(nameof(Conditions)));
-                }
-                else if(Conditions.ToList()[0] is GroupedBooleanCondition)
-                {
-                    return CheckField.ListItems((List<GroupedBooleanCondition>)(object)Conditions, Translate(nameof(Conditions)));
+                    Tuple<bool, string> result = Tuple.Create(true, string.Empty);
+                    if (cond is BooleanCondition)
+                    {
+                        result = (cond as BooleanCondition).Check();
+                    }
+                    else if (cond is GroupedBooleanCondition)
+                    {
+                        result = (cond as GroupedBooleanCondition).Check();
+                    }
+                    return new CheckField(result.Item1, result.Item2);
                 }
             }
             return new CheckField();

@@ -15,13 +15,25 @@
         /// </summary>
         Gt,
         /// <summary>
+        /// Greater Than or equal
+        /// </summary>
+        Ge,
+        /// <summary>
         /// Less than
         /// </summary>
         Lt,
         /// <summary>
-        /// Contains text
+        /// Less than or equal
         /// </summary>
-        Contains
+        Le,
+        StartsWith,
+        EndsWith,
+        Contains,
+        NotContains,
+        IsNull,
+        IsNotNull,
+        IsEmpty,
+        IsNotEmpty,
     }
 
     public enum Operator

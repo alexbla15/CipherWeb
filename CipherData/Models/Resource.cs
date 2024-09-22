@@ -24,6 +24,50 @@ namespace CipherData.Models
             writer.WriteStringValue(value.ToString(_dateTimeFormat));
         }
     }
+    
+    /// <summary>
+     /// Custom DateTime converter
+     /// </summary>
+    public class JsonConditionConverter : JsonConverter<Condition>
+    {
+        public override Condition Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            // Read the JSON object
+            using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
+            {
+                // Get the root element
+                JsonElement root = doc.RootElement;
+
+                // Check for a discriminator property or type identifier
+                if (root.TryGetProperty("Type", out JsonElement typeElement))
+                {
+                    string typeName = typeElement.GetString();
+
+                    // Create the appropriate object based on the type
+                    switch (typeName)
+                    {
+                        case "BooleanCondition":
+                            return JsonSerializer.Deserialize<BooleanCondition>(root.GetRawText(), options);
+                        case "GroupedBooleanCondition":
+                            return JsonSerializer.Deserialize<GroupedBooleanCondition>(root.GetRawText(), options);
+                        // Add cases for other derived types
+                        default:
+                            throw new NotSupportedException($"Type '{typeName}' is not supported.");
+                    }
+                }
+                else
+                {
+                    throw new JsonException("Missing type discriminator property.");
+                }
+            }
+        }
+
+        public override void Write(Utf8JsonWriter writer, Condition value, JsonSerializerOptions options)
+        {
+            // Serialize the resource, including the type
+            JsonSerializer.Serialize(writer, value, value.GetType(), options);
+        }
+    }
 
     public abstract class CipherClass
     {
@@ -54,7 +98,7 @@ namespace CipherData.Models
             {
                 WriteIndented = true, // Pretty print
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter() }, // Include custom DateTime converter
+                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter()}, // Include custom DateTime converter
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
 
