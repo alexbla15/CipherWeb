@@ -5,29 +5,40 @@
     /// </summary>
     public class CreateEvent
     {
+        private string? _Worker = null;
+
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
-        public string? Worker { get; set; }
+        public string? Worker { 
+            get { return _Worker; }
+            set { _Worker = value?.Trim(); } 
+        }
+
+        /// <summary>
+        /// Process ID of process containing to this even. If null, tries to estimate it from event details
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
+        public string? ProcessId { get; set; } = null;
+
+        private string? _Comments = null;
+
+        /// <summary>
+        /// Free-text comments on the event
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        public string? Comments
+        {
+            get { return _Comments; }
+            set { _Comments = value?.Trim(); }
+        }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.EventType))]
         public int EventType { get; set; }
-
-        /// <summary>
-        /// Process ID of process containing to this even. If null, tries to estimate it from event details
-        /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public string? ProcessId { get; set; }
-
-        /// <summary>
-        /// Free-text comments on the event
-        /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
-        public string? Comments { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
@@ -39,45 +50,7 @@
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Packages))]
-        public List<PackageRequest> Actions { get; set; }
-
-        /// <summary>
-        /// Create new event
-        /// </summary>
-        /// <param name="worker">Name of updating worker. Required</param>
-        /// <param name="eventType">Type of event. Required</param>
-        /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
-        /// <param name="comments">Free-text comments on the event</param>
-        /// <param name="timestamp">Timestamp when the event happend. Required</param>
-        /// <param name="actions">List of affected packages from actions, the items present the state of each package after the event</param>
-        public CreateEvent(string? worker, DateTime timestamp, int eventType, List<PackageRequest> actions, string? processId = null, string? comments = null)
-        {
-            Worker = worker;
-            EventType = eventType;
-            ProcessId = processId;
-            Comments = comments;
-            Timestamp = timestamp;
-            Actions = actions;
-        }
-
-        /// <summary>
-        /// Create new event (Use for one-package-event)
-        /// </summary>
-        /// <param name="worker">Name of updating worker. Required</param>
-        /// <param name="eventType">Type of event. Required</param>
-        /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
-        /// <param name="comments">Free-text comments on the event</param>
-        /// <param name="timestamp">Timestamp when the event happend. Required</param>
-        /// <param name="action">affected package, the item present the state of package after the event</param>
-        public CreateEvent(string? worker, DateTime timestamp, int eventType, PackageRequest action, string? processId = null, string? comments = null)
-        {
-            Worker = worker;
-            EventType = eventType;
-            ProcessId = processId;
-            Comments = comments;
-            Timestamp = timestamp;
-            Actions = new List<PackageRequest>() { action };
-        }
+        public List<PackageRequest> Actions { get; set; } = new();
 
         /// <summary>
         /// Get an identical copy of this object
@@ -85,7 +58,7 @@
         /// <returns></returns>
         public CreateEvent Copy()
         {
-            return new CreateEvent(Worker, Timestamp, EventType, Actions, ProcessId, Comments);
+            return (CreateEvent)MemberwiseClone();
         }
 
         /// <summary>
@@ -172,16 +145,16 @@
         /// <returns></returns>
         public Event Create(string id)
         {
-            return new Event(
-                worker: Worker,
-                eventType: EventType,
-                processId: ProcessId,
-                comments: Comments,
-                timestamp: Timestamp,
-                status: 1,
-                packages: Actions.Select(x => x.Create()).ToList(),
-                id: id
-                );
+            return new Event(id: id)
+            {
+                Worker = Worker,
+                EventType = EventType,
+                ProcessId = ProcessId,
+                Comments = Comments,
+                Timestamp = Timestamp,
+                Status = 1,
+                Packages = Actions.Select(x => x.Create()).ToList(),
+            };
         }
 
         /// <summary>
@@ -192,14 +165,6 @@
         public static string Translate(string fieldName)
         {
             return Resource.Translate(typeof(CreateEvent), fieldName);
-        }
-
-        /// <summary>
-        /// Return an empty CreateEvent object scheme.
-        /// </summary>
-        public static CreateEvent Empty()
-        {
-            return new CreateEvent(worker: string.Empty, timestamp: DateTime.Now, eventType: 0, actions: new List<PackageRequest>());
         }
 
         /// <summary>

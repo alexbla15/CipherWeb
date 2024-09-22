@@ -5,40 +5,36 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class EventTests
     {
-        private static readonly Event example = new(worker: "א", timestamp: DateTime.Now, packages: new() { Package.Random() },
-                processId: "b", comments: "c", eventType: 1, status: 0);
+        private static readonly Event example = new()
+        {
+            Worker = "א",
+            Timestamp = DateTime.Now,
+            Packages = new() { Package.Random() },
+            ProcessId = "b",
+            Comments = "c",
+            EventType = 1,
+            Status = 0
+        }; 
 
         [TestMethod()]
         public void EventTest()
         {
             // 1 - without stating id
             Assert.IsNotNull(example.Id);
-            Assert.IsNotNull(example.Worker);
-            Assert.IsNotNull(example.ProcessId);
-            Assert.IsNotNull(example.Comments);
 
             // 2 - with stating id
-            Event ev = new(worker: "א", timestamp: DateTime.Now, packages: new() { Package.Random() },
-                processId: "b", comments: "c", eventType: 1, status: 0, id: "1");
+            Event ev = new("1")
+            {
+                Worker = "א",
+                Timestamp = DateTime.Now,
+                Packages = new() { Package.Random() },
+                ProcessId = "b",
+                Comments = "c",
+                EventType = 1,
+                Status = 0
+            };
 
             Assert.IsNotNull(ev.Id);
-            Assert.IsNotNull(ev.Worker);
-            Assert.IsNotNull(ev.ProcessId);
-            Assert.IsNotNull(ev.Comments);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            Event ev = Event.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Comments));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.ProcessId));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Worker));
-            Assert.IsTrue(ev.EventType == 0);
-            Assert.IsTrue(ev.Status == 0);
-            Assert.IsFalse(ev.Packages.Any());
         }
 
         [TestMethod()]
@@ -84,11 +80,10 @@ namespace CipherData.Models.Tests
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            Event ev = Event.Empty();
-            string translation = Event.Translate(nameof(ev.EventType));
+            string translation = Event.Translate(nameof(Event.EventType));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(ev.EventType));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(ev.EventType)}"]);
+            Assert.IsFalse(translation == nameof(Event.EventType));
+            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.EventType)}"]);
         }
 
         [TestMethod()]

@@ -10,42 +10,36 @@
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Id))]
-        public string? PackageId { get; set; }
+        public string? PackageId { get; set; } = null;
+
+        private string? _PackageDescription = null;
 
         /// <summary>
         /// Description of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Description))]
-        public string? PackageDescription { get; set; }
+        public string? PackageDescription {
+            get { return _PackageDescription; }
+            set { _PackageDescription = value?.Trim(); } 
+        }
+
+        private string? _ActionComments = null;
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
         [HebrewTranslation(nameof(ActionComments))]
-        public string? ActionComments { get; set; }
+        public string? ActionComments
+        {
+            get { return _ActionComments; }
+            set { _ActionComments = value?.Trim(); }
+        }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Processes))]
-        public List<string>? DestinationProcessesIds { get; set; }
-
-        /// <summary>
-        /// Update package details contract
-        /// </summary>
-        /// <param name="uuid">Unique identifier of the resource</param>
-        /// <param name="id">Unique identifier of a package (if null, no change in package id).</param>
-        /// <param name="description">Description of the package</param>
-        /// <param name="comments">Free text comments on update. Ideally contains reason for change</param>
-        /// <param name="destinationProcesses">List of processes definitions (IDs) that may accept this package as input</param>
-        public UpdatePackage(string? description = null, string? comments = null, string? id = null,
-            List<string>? destinationProcesses = null)
-        {
-            PackageId = id;
-            PackageDescription = description;
-            ActionComments = comments;
-            DestinationProcessesIds = destinationProcesses;
-        }
+        public List<string>? DestinationProcessesIds { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -103,15 +97,6 @@
             }
 
             return result.Check();
-        }
-
-        /// <summary>
-        /// Get an empty update package object scheme.
-        /// </summary>
-        /// <returns></returns>
-        public static UpdatePackage Empty()
-        {
-            return new UpdatePackage();
         }
 
         /// <summary>

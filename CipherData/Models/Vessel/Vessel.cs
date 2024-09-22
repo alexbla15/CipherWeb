@@ -4,46 +4,43 @@ namespace CipherData.Models
 {
     public class Vessel : Resource
     {
+        private string? _Name = null;
+
         /// <summary>
         /// Name of vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public string? Name { get; set; }
+        public string? Name { get { return _Name; } set { _Name = value?.Trim(); } }
+
+        private string _Type = string.Empty;
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string Type { get; set; }
+        public string Type { get { return _Type; } set { _Type = value.Trim(); } }
 
         /// <summary>
         /// Packages within the vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
-        public List<Package>? ContainingPackages { get; set; }
+        public List<Package>? ContainingPackages { get; set; } = null;
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(System))]
-        public StorageSystem System { get; set; }
+        public StorageSystem System { get; set; } = new();
 
         /// <summary>
         /// Vessel containing some packages, inside some system
         /// </summary>
-        /// <param name="name">name of vessel</param>
-        /// <param name="type">User ID of user who made the action. Required.</param>
-        /// <param name="system">Full-text user comment on action.</param>
-        /// <param name="packages"> Safety restrictions in a list of (MaterialType, SubCategory, Amount)</param>
-        public Vessel(string type, StorageSystem system, List<Package>? packages = null, string? name = null, string? id = null)
+        public Vessel(string? id = null)
         {
             string nextId = GetNextId();
 
             Id = id ?? nextId;
-            Name = name ?? nextId;
-            Type = type;
-            ContainingPackages = packages;
-            System = system;
+            Name ??= nextId;
         }
 
         /// <summary>
@@ -52,25 +49,8 @@ namespace CipherData.Models
         /// <returns></returns>
         public VesselRequest Request()
         {
-            VesselRequest result = new(
-                    name: Name,
-                    type: Type,
-                    systemId: System.Id);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Method to get an empty Vessel object scheme
-        /// </summary>
-        public static Vessel Empty()
-        {
-            return new Vessel(
-                id: string.Empty,
-                name: string.Empty,
-                type: string.Empty,
-                system: StorageSystem.Empty()
-                );
+            return new VesselRequest()
+            { Name = Name, Type = Type, SystemId = System.Id };
         }
 
         /// <summary>
@@ -109,13 +89,12 @@ namespace CipherData.Models
         {
             List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
 
-            return new Vessel(
-                id: id,
-                name: id,
-                type: RandomFuncs.RandomItem(VesselTypes),
-                system: StorageSystem.Random(),
-                packages: new List<Package>() { RandomData.RandomPackage }
-                );
+            return new Vessel(id)
+            {
+                Type = RandomFuncs.RandomItem(VesselTypes),
+                System = StorageSystem.Random(),
+                ContainingPackages = new List<Package>() { RandomData.RandomPackage }
+            };
         }
 
         public static string Translate(string searchedAttribute)
@@ -148,13 +127,17 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(Type)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(System)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
-                    }, @operator: Operator.Any));
+            return GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Id)}", Value= SearchText },
+                new() { Attribute = $"{typeof(Vessel).Name}.{nameof(Name)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Type)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(System)}.{nameof(Id)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.{nameof(Id)}", Value= SearchText, Operator=Operator.Any }
+                    },
+                Operator = Operator.Any
+            });
         }
     }
 }

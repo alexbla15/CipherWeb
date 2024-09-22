@@ -1,26 +1,23 @@
-﻿namespace CipherData.Models
+﻿using CipherData.Requests;
+
+namespace CipherData.Models
 {
     public class Worker
     {
-        [HebrewTranslation(nameof(Worker))]
-        public string Name { get; set; }
+        private string _Name = string.Empty;
 
-        public Worker(string name)
-        {
-            Name = name;
-        }   
+        [HebrewTranslation(nameof(Worker))]
+        public string Name { get { return _Name; } set { _Name = value.Trim(); } }
 
         public static readonly List<Worker> AllWorkers = new() {
-            new Worker("אלי קופטר"),
-            new Worker("אבי רון"),
-            new Worker("עמית נקש")
+            new Worker() {Name = "אלי קופטר" },
+            new Worker() { Name = "אבי רון" },
+            new Worker() { Name = "עמית נקש" }
         };
 
         public static Worker Random()
         {
-            Random rand = new();
-            int idx = rand.Next(0, AllWorkers.Count);
-            return AllWorkers[idx];
+            return RandomFuncs.RandomItem(AllWorkers);
         }
     }
 }

@@ -2,11 +2,11 @@
 
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
     <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
-                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(CachedData.ProcessDefinitionExample.Name))"
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(ProcessDefinition.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Name))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.ProcessDefinitionExample.Description))" Title="@(ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Name))" Title="@(ProcessDefinition.Translate(nameof(ProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Description))" Title="@(ProcessDefinition.Translate(nameof(ProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @context

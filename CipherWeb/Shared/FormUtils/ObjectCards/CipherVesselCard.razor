@@ -19,9 +19,9 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Name))" Icon="@Icons.Cipher.Vessel"
+                <CipherAutoComplete Label="@Vessel.Translate(nameof(Vessel.Name))" Icon="@Icons.Cipher.Vessel"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
-                <CipherAutoComplete Label="@Vessel.Translate(nameof(CachedData.VesselExample.Type))" Icon="@Icons.Symbols.Category"
+                <CipherAutoComplete Label="@Vessel.Translate(nameof(Vessel.Type))" Icon="@Icons.Symbols.Category"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
                 <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenSystem="@ChosenObject?.System" @ref=VesSys />
 
@@ -78,10 +78,11 @@
 
     public VesselRequest Value()
     {
-        return new VesselRequest(
-            type: VesType.Value, 
-            name: VesName.Value, 
-            systemId: VesSys.ChosenSystem?.Id
-        );
+        return new VesselRequest()
+        {
+            Type = VesType.Value,
+            Name = VesName.Value,
+            SystemId = VesSys.ChosenSystem?.Id
+        };
     }
 }

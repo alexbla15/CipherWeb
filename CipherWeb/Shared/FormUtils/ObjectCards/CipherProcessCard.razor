@@ -19,9 +19,9 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Name))" Icon="@Icons.Cipher.Process" @ref=ProcName
+                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(ProcessDefinition.Name))" Icon="@Icons.Cipher.Process" @ref=ProcName
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
-                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(CachedData.ProcessDefinitionExample.Description))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
+                <CipherAutoComplete Label="@ProcessDefinition.Translate(nameof(ProcessDefinition.Description))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
             </ChildContent>
         </CipherComponentCard>
@@ -77,10 +77,10 @@
 
     public ProcessDefinitionRequest Value()
     {
-        ProcessDefinitionRequest proc = ProcessDefinitionRequest.Empty();
+        ProcessDefinitionRequest proc = new();
 
-        proc.Name = ProcName.Check() ? ProcName.Value : string.Empty;
-        proc.Description = ProcDescription.Check() ? ProcDescription.Value : string.Empty;
+        if (ProcName.Check()) proc.Name = ProcName.Value;
+        if (ProcDescription.Check()) proc.Description = ProcDescription.Value;
         proc.Steps = ProcSteps.ChosenSteps;
 
         return proc;

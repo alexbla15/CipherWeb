@@ -132,14 +132,14 @@ namespace CipherData
             
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה.";
 
-            bool condition = !string.IsNullOrEmpty(value?.ToString());
+            bool condition = !string.IsNullOrEmpty(value?.ToString().Trim()); // trim white spaces for more creative users
 
             result.Succeeded = condition;
             result.Message = condition ? string.Empty : ErrorMessage;
 
             if (result.Succeeded)
             {
-                result = (typeof(T) == typeof(string)) ? CheckString(value.ToString(), field_name, AllowedRegex) : result;
+                result = (typeof(T) == typeof(string)) ? CheckString(value?.ToString().Trim(), field_name, AllowedRegex) : result;
             }
 
             return result;

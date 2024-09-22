@@ -162,7 +162,7 @@
         {
             foreach (Vessel ves in vessels)
             {
-                Package pack = CachedData.PackageExample;
+                Package pack = new();
                 pack.System = sys;
                 pack.Vessel = ves;
                 pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.BrutMass).Sum();
@@ -176,9 +176,10 @@
 
     public async Task OpenSavingDialog()
     {
-        Report newReport = new Report(
-            title: ReportName.Value
-        );
+        Report newReport = new Report()
+        {
+            Title = ReportName.Value
+        };
 
         JsonRequest = newReport.ToJson();
 

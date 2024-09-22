@@ -4,8 +4,8 @@
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(CachedData.CreateRelocationEventExample.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(CachedData.CreateRelocationEventExample.Packages))" @ref="RelocatedPacks" />
+        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
@@ -57,7 +57,7 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private CreateRelocationEvent RequestedEvent = CreateRelocationEvent.Empty();
+    private CreateRelocationEvent RequestedEvent = new();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -66,13 +66,14 @@
     {
         Valid = true;
 
-        RequestedEvent = new CreateRelocationEvent(
-            worker: FormInfo.GetWorker(),
-            timestamp: FormInfo.GetDateTime(),
-            targetSystem: FinalLocation.ChosenSystem,
-            packages : RelocatedPacks.SelectedPackages,
-            comments: EventComments.Comments
-        );
+        RequestedEvent = new CreateRelocationEvent()
+        {
+            Worker = FormInfo.GetWorker(),
+            Timestamp = FormInfo.GetDateTime(),
+            TargetSystem = FinalLocation.ChosenSystem,
+            Packages = RelocatedPacks.SelectedPackages,
+            Comments = EventComments.Comments
+        };
 
         (Valid, ErrorMessage) = RequestedEvent.Check();
 

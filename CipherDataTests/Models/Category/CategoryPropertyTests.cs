@@ -5,12 +5,12 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class CategoryPropertyTests
     {
+        private readonly CategoryProperty propWithoutValue = new() { Name = nameof(propWithoutValue), Description = nameof(propWithoutValue) };
+        private readonly CategoryProperty propWithValue = new() { Name = nameof(propWithValue), Description = nameof(propWithValue), DefaultValue = "10" };
+
         [TestMethod()]
         public void CategoryPropertyTest()
         {
-            CategoryProperty propWithoutValue = new(name: nameof(propWithoutValue), description: nameof(propWithoutValue));
-            CategoryProperty propWithValue = new(name: nameof(propWithValue), description: nameof(propWithValue), value: "10");
-
             // 1 - try to initialize a category without value
             Assert.IsFalse(string.IsNullOrEmpty(propWithoutValue.Name));
             Assert.IsFalse(string.IsNullOrEmpty(propWithoutValue.Description));
@@ -24,9 +24,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckNameTest()
         {
-            CategoryProperty cat = CategoryProperty.Empty();
-
-            cat.Name = "תכונה"; // Good name
+            CategoryProperty cat = new()
+            {
+                Name = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckName().Succeeded);
 
             cat.Name = "@תכונה"; // Improper chars
@@ -45,9 +46,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDescriptionTest()
         {
-            CategoryProperty cat = CategoryProperty.Empty();
-
-            cat.Description = "תכונה"; // Good name
+            CategoryProperty cat = new()
+            {
+                Description = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckDescription().Succeeded);
 
             cat.Description = "@תכונה"; // Improper chars
@@ -66,9 +68,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDefaultValueTest()
         {
-            CategoryProperty cat = CategoryProperty.Empty();
-
-            cat.DefaultValue = "תכונה"; // Good name
+            CategoryProperty cat = new()
+            {
+                DefaultValue = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckDefaultValue().Succeeded);
 
             cat.DefaultValue = "@תכונה"; // Improper chars
@@ -124,28 +127,31 @@ namespace CipherData.Models.Tests
         public void ToJsonTest()
         {
             // 1 - minimal data, string
-            CategoryProperty cat = new(name: "A", description: "B");
+            CategoryProperty cat = new() { Name = "A", Description= "B"};
             string cat_json = cat.ToJson();
             string result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 0,\r\n  \"DefaultValue\": null\r\n}";
 
             Assert.IsTrue(cat_json == result);
 
             // 2 - full data, string
-            cat = new(name: "A", description: "B", propertyType: PropertyType.Text, value: "5");
+            cat.PropertyType = PropertyType.Text;
+            cat.DefaultValue = "5";
             cat_json = cat.ToJson();
             result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 0,\r\n  \"DefaultValue\": \"5\"\r\n}";
 
             Assert.IsTrue(cat_json == result);
 
             // 2 - full data, numeric
-            cat = new(name: "A", description: "B", propertyType: PropertyType.Number, value: "5.42");
+            cat.PropertyType = PropertyType.Number;
+            cat.DefaultValue = "5.42";
             cat_json = cat.ToJson();
             result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 1,\r\n  \"DefaultValue\": \"5.42\"\r\n}";
 
             Assert.IsTrue(cat_json == result);
 
             // 3 - full data, boolean
-            cat = new(name: "A", description: "B", propertyType: PropertyType.Boolean, value: "true");
+            cat.PropertyType = PropertyType.Boolean;
+            cat.DefaultValue = "true";
             cat_json = cat.ToJson();
             result = "{\r\n  \"Name\": \"A\",\r\n  \"Description\": \"B\",\r\n  \"PropertyType\": 2,\r\n  \"DefaultValue\": \"true\"\r\n}";
 
@@ -155,7 +161,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void EqualsTest()
         {
-            CategoryProperty cat = new(name: "A", description: "B", propertyType: PropertyType.Number, value: "5.42");
+            CategoryProperty cat = new() { Name = "A", Description = "B", PropertyType = PropertyType.Number, DefaultValue = "5.42"};
             CategoryProperty cat2 = cat.Copy();
 
             Assert.IsTrue(cat.Equals(cat2));
@@ -183,7 +189,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void GetHashCodeTest()
         {
-            CategoryProperty cat = new(name: "A", description: "B", propertyType: PropertyType.Number, value: "5.42");
+            CategoryProperty cat = new() { Name = "A", Description = "B", PropertyType = PropertyType.Number, DefaultValue = "5.42"};
             CategoryProperty cat2 = cat.Copy();
 
             Assert.IsTrue(cat.GetHashCode() == cat2.GetHashCode());
@@ -221,23 +227,12 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            CategoryProperty EmptyCat = CategoryProperty.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Name));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Description));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.DefaultValue));
-        }
-
-        [TestMethod()]
         public void TranslateTest()
         {
             // try to translate some field of Category
             // this depends on the TranslationDictionary.json config.
 
-            CategoryProperty EmptyCat = CategoryProperty.Empty();
+            CategoryProperty EmptyCat = new();
             string translation = CategoryProperty.Translate(nameof(EmptyCat.DefaultValue));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(EmptyCat.DefaultValue));

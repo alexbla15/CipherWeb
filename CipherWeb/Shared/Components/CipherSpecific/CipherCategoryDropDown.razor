@@ -2,18 +2,18 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Category" Disabled="@Disabled" AllowClear="true"
-                            Data=@categories TextProperty="@(nameof(CachedData.CategoryExample.Name))" @bind-Value="ChosenCategory"
+                            Data=@categories TextProperty="@(nameof(Category.Name))" @bind-Value="ChosenCategory"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Id))" Title="@(Category.Translate(nameof(Category.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Name))" Title="@(Category.Translate(nameof(Category.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
                 <Template>
                     @((context as Category).MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.IdMask))" Title="@(Category.Translate(nameof(Category.IdMask)))">
                 <Template>
                     @(string.Join(", ", (context as Category).IdMask))
                 </Template>

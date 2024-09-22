@@ -5,9 +5,9 @@
         <CipherDataGrid Cipher_TItem="UserAction" DataSource="@ObjectChanges?.UserActions" RowsPerPage="@Constants.RowsPerPage"
                         WithCustomColumns="true">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.At))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.At)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.ActionParameters))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.ActionParameters)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.ActionType))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.ActionType)))">
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.At))" Title="@(UserAction.Translate(nameof(UserAction.At)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.ActionParameters))" Title="@(UserAction.Translate(nameof(UserAction.ActionParameters)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.ActionType))" Title="@(UserAction.Translate(nameof(UserAction.ActionType)))">
                     <Template>
                         @if (context.ActionType == ActionType.Created)
                         {
@@ -22,9 +22,9 @@
                             @("פעולה אושרה")
                         }
                     </Template>
-                </RadzenDataGridColumn><RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.Comments))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.Comments)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.By))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.By)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(CachedData.UserActionExample.Status))" Title="@(UserAction.Translate(nameof(CachedData.UserActionExample.Status)))" />
+                </RadzenDataGridColumn><RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.Comments))" Title="@(UserAction.Translate(nameof(UserAction.Comments)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.By))" Title="@(UserAction.Translate(nameof(UserAction.By)))" />
+                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.Status))" Title="@(UserAction.Translate(nameof(UserAction.Status)))" />
             </CustomColumns>
         </CipherDataGrid>
     </ComponentContent>

@@ -5,26 +5,13 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class BooleanConditionTests
     {
-        private readonly BooleanCondition cond = new(attribute: "A", attributeRelation: AttributeRelation.Eq,
-                @operator: Operator.Any, value: "5"); 
-
-        [TestMethod()]
-        public void BooleanConditionTest()
+        private readonly BooleanCondition cond = new()
         {
-            Assert.IsNotNull(cond);
-            Assert.IsNotNull(cond.Attribute);
-            Assert.IsNotNull(cond.Value);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            BooleanCondition EmptyCat = BooleanCondition.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Attribute));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Value));
-        }
+            Attribute = "A",
+            AttributeRelation = AttributeRelation.Eq,
+            Operator = Operator.Any,
+            Value = "5"
+        }; 
 
         [TestMethod()]
         public void EqualsTest()
@@ -57,9 +44,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckAttributeTest()
         {
-            BooleanCondition cat = BooleanCondition.Empty();
-
-            cat.Attribute = "תכונה"; // Good name
+            BooleanCondition cat = new()
+            {
+                Attribute = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckAttribute().Succeeded);
 
             cat.Attribute = "@תכונה"; // Improper chars
@@ -78,9 +66,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckValueTest()
         {
-            BooleanCondition cat = BooleanCondition.Empty();
-
-            cat.Value = "תכונה"; // Good name
+            BooleanCondition cat = new()
+            {
+                Value = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckValue().Succeeded);
 
             cat.Value = "@תכונה"; // Improper chars
@@ -119,7 +108,7 @@ namespace CipherData.Models.Tests
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            BooleanCondition EmptyCat = BooleanCondition.Empty();
+            BooleanCondition EmptyCat = new();
             string translation = BooleanCondition.Translate(nameof(EmptyCat.Value));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(EmptyCat.Value));

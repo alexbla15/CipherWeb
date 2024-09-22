@@ -5,36 +5,27 @@
     /// </summary>
     public class VesselRequest
     {
-        /// <summary>
-        /// Vessel name
-        /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Vessel.Name))]
-        public string? Name { get; set; }
+        private string? _Name = null;
 
         /// <summary>
-        /// Vessel type
+        /// Name of vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Vessel.Type))]
-        public string Type { get; set; }
+        [HebrewTranslation(typeof(Vessel), nameof(Name))]
+        public string? Name { get { return _Name; } set { _Name = value?.Trim(); } }
+
+        private string _Type = string.Empty;
+
+        /// <summary>
+        /// Vessel type (bottle / pot / ...)
+        /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Type))]
+        public string Type { get { return _Type; } set { _Type = value.Trim(); } }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
-        public string? SystemId { get; set; }
-
-        /// <summary>
-        /// Create a new unit or update it
-        /// </summary>
-        /// <param name="name">Vessel name</param>
-        /// <param name="type">Vessel type</param>
-        /// <param name="systemId">Id of system containing vessel</param>
-        public VesselRequest(string type, string? systemId = null, string? name = null)
-        {
-            Name = name;
-            Type = type;
-            SystemId = systemId;
-        }
+        public string? SystemId { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -94,20 +85,12 @@
 
         public Vessel Create(string id)
         {
-            return new Vessel(
-                    id: id,
-                    name: Name,
-                    type: Type,
-                    system: StorageSystem.Random(SystemId)
-                );
-        }
-
-        /// <summary>
-        /// Return an empty object scheme.
-        /// </summary>
-        public static VesselRequest Empty()
-        {
-            return new VesselRequest(type: string.Empty);
+            return new Vessel(id)
+            {
+                Name = Name,
+                Type = Type,
+                System = StorageSystem.Random(SystemId)
+            };
         }
 
         /// <summary>

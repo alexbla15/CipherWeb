@@ -8,8 +8,14 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CreateRelocationEventTest()
         {
-            CreateRelocationEvent ev = new(worker: "a", timestamp: DateTime.Now, packages: new() { Package.Random() }, 
-                comments: "c", targetSystem: StorageSystem.Random());
+            CreateRelocationEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Now,
+                Packages = new() { Package.Random() },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random()
+            };
 
             Assert.IsNotNull(ev.Worker);
             Assert.IsNotNull(ev.Comments);
@@ -20,7 +26,14 @@ namespace CipherData.Models.Tests
         public void CheckPackagesTest()
         {
             // 1 - no packages
-            CreateRelocationEvent ev = new(worker: "a", timestamp: DateTime.Now, packages: new(), comments: "c", targetSystem: StorageSystem.Random());
+            CreateRelocationEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Now,
+                Packages = new(),
+                Comments = "c",
+                TargetSystem = StorageSystem.Random()
+            };
             Assert.IsFalse(ev.CheckPackages().Succeeded);
 
             // 2 - null
@@ -51,8 +64,14 @@ namespace CipherData.Models.Tests
         {
             // 1 - good event
             Package p = Package.Random();
-            CreateRelocationEvent ev = new(worker: "a", timestamp: DateTime.Now, packages: new() { p}, 
-                comments: "c", targetSystem: StorageSystem.Random());
+            CreateRelocationEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Now,
+                Packages = new() { p },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random()
+            };
             Assert.IsTrue(ev.CheckTargetSystem().Succeeded);
 
             // 2 - can't be without target
@@ -65,8 +84,14 @@ namespace CipherData.Models.Tests
         {
             // 1 - good event
             Package p = Package.Random();
-            CreateRelocationEvent ev = new(worker: "a", timestamp: DateTime.Now, packages: new() { p },
-                comments: "c", targetSystem: StorageSystem.Random());
+            CreateRelocationEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Now,
+                Packages = new() { p },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random()
+            };
             Assert.IsTrue(ev.CheckTargetSystemDifferent().Succeeded);
 
             // 2 - can't move package to the same location
@@ -80,8 +105,14 @@ namespace CipherData.Models.Tests
             // 1 - good fields
             Package p = Package.Random();
             p.System.Id = "2";
-            CreateRelocationEvent ev_main = new(worker: "אבי", timestamp: DateTime.Now, packages: new() { p },
-                comments: "c", targetSystem: StorageSystem.Random("1"));
+            CreateRelocationEvent ev_main = new()
+            {
+                Worker = "אבי",
+                Timestamp = DateTime.Now,
+                Packages = new() { p },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random("1")
+            };
             Assert.IsTrue(ev_main.Check().Item1);
 
             // 2 - bad packages
@@ -105,8 +136,14 @@ namespace CipherData.Models.Tests
         { 
             Package p = Package.Random();
             p.System.Id = "2";
-            CreateRelocationEvent ev_main = new(worker: "אבי", timestamp: DateTime.Now, packages: new() { p },
-                comments: "c", targetSystem: StorageSystem.Random("1"));
+            CreateRelocationEvent ev_main = new()
+            {
+                Worker = "אבי",
+                Timestamp = DateTime.Now,
+                Packages = new() { p },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random("1")
+            };
 
             CreateEvent ev = ev_main.Create(true);
 
@@ -121,8 +158,14 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CopyTest()
         {
-            CreateRelocationEvent ev_main = new(worker: "אבי", timestamp: DateTime.Now, packages: new() { Package.Random() },
-                comments: "c", targetSystem: StorageSystem.Random());
+            CreateRelocationEvent ev_main = new()
+            {
+                Worker = "אבי",
+                Timestamp = DateTime.Now,
+                Packages = new() { Package.Random() },
+                Comments = "c",
+                TargetSystem = StorageSystem.Random()
+            };
             CreateRelocationEvent example_copy = ev_main.Copy();
 
             Assert.IsNotNull(example_copy);
@@ -139,8 +182,14 @@ namespace CipherData.Models.Tests
             Package p1 = Package.Random();
             Package p2 = Package.Random();
             StorageSystem s = StorageSystem.Random();
-            CreateRelocationEvent ev_main = new(worker: "אבי", timestamp: DateTime.Now, packages: new() { p1, p2 },
-                comments: "c", targetSystem: s);
+            CreateRelocationEvent ev_main = new()
+            {
+                Worker = "אבי",
+                Timestamp = DateTime.Now,
+                Packages = new() { p1, p2 },
+                Comments = "c",
+                TargetSystem = s
+            };
 
             Assert.IsFalse(p1.System.Id == s.Id);
             Assert.IsFalse(p2.System.Id == s.Id);
@@ -152,24 +201,12 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            CreateRelocationEvent ev = CreateRelocationEvent.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Comments));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Worker));
-            Assert.IsNull(ev.Packages);
-            Assert.IsNull(ev.TargetSystem);
-        }
-
-        [TestMethod()]
         public void TranslateTest()
         {
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            CreateRelocationEvent ev = CreateRelocationEvent.Empty();
+            CreateRelocationEvent ev = new();
             string translation = CreateRelocationEvent.Translate(nameof(ev.TargetSystem));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(ev.TargetSystem));

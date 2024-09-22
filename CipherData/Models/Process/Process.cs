@@ -11,19 +11,28 @@ namespace CipherData.Models
         /// a collection of steps that make a single definition
         /// </summary>
         [HebrewTranslation(typeof(Process), nameof(Definition))]
-        public ProcessDefinition Definition { get; set; }
+        public ProcessDefinition Definition { get; set; } = new();
+
+        private List<Event> _Events = new();
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
         [HebrewTranslation(typeof(Process), nameof(Events))]
-        public List<Event> Events { get; set; }
+        public List<Event> Events {
+            get { return _Events; }
+            set { 
+                _Events = value;
+                Start = Events.Select(x => x.Timestamp).Min();
+                End = Events.Select(x => x.Timestamp).Max();
+            } 
+        }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
         [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
-        public List<ProcessStepDefinition> UncompletedSteps { get; set; }
+        public List<ProcessStepDefinition> UncompletedSteps { get; set; } = new();
 
         [HebrewTranslation(typeof(Process), nameof(Start))]
         public DateTime Start { get; set; }
@@ -34,20 +43,10 @@ namespace CipherData.Models
         /// <summary>
         /// An instance of a specific processes
         /// </summary>
-        /// <param name="definition">a collection of steps that make a single definition</param>
-        /// <param name="events">Events taking place during a process</param>
-        /// <param name="uncompletedSteps">Uncompleted steps for completing the process</param>
         /// <param name="id">Only if you want process to have specific id</param>
-        public Process(ProcessDefinition definition, List<Event> events, List<ProcessStepDefinition> uncompletedSteps,
-            string? id = null)
+        public Process(string? id = null)
         {
             Id = id ?? GetNextId();
-            Definition = definition;
-            Events = events;
-            UncompletedSteps = uncompletedSteps;
-
-            Start = Events.Select(x => x.Timestamp).Min();
-            End = Events.Select(x => x.Timestamp).Max();
         }
 
         /// <summary>
@@ -84,12 +83,12 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Process Random(string? id = null)
         {
-            return new Process(
-                id: id,
-                definition: ProcessDefinition.Random(),
-                events: Enumerable.Range(0, 3).Select(_ => Event.Random()).ToList(),
-                uncompletedSteps: Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToList()
-                );
+            return new Process(id)
+            {
+                Definition = ProcessDefinition.Random(),
+                Events = Enumerable.Range(0, 3).Select(_ => Event.Random()).ToList(),
+                UncompletedSteps = Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToList()
+            };
         }
 
         public string Duration()
@@ -121,12 +120,16 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Process>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Process).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Process).Name}.{nameof(Definition)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Process).Name}.{nameof(Events)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.Name", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
-            }, @operator: Operator.Any));
+            return GetObjects<Process>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(Id)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(Definition)}.{nameof(ProcessDefinition.Name)}", Value = SearchText},
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(Events)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any},
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(UncompletedSteps)}.{nameof(ProcessDefinition.Name)}", Value = SearchText, Operator = Operator.Any }
+            },
+                Operator = Operator.Any
+            });
         }
     }
 }

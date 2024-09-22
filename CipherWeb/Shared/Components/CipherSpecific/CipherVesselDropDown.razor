@@ -3,14 +3,14 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(CachedData.VesselExample.Id))" AllowClear="true"
+    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(Vessel.Id))" AllowClear="true"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@ChosenVessel" Change="@Change" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Id))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Name))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.Type))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.Type)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.VesselExample.System))" Title="@(Vessel.Translate(nameof(CachedData.VesselExample.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Id))" Title="@(Vessel.Translate(nameof(Vessel.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Name))" Title="@(Vessel.Translate(nameof(Vessel.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Type))" Title="@(Vessel.Translate(nameof(Vessel.Type)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.System))" Title="@(Vessel.Translate(nameof(Vessel.System)))">
                 <Template>
                     @((context as Vessel)?.System.Name)
                 </Template>
@@ -55,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= Vessel.Translate(nameof(CachedData.VesselExample.Name));
+        Label ??= Vessel.Translate(nameof(Vessel.Name));
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 

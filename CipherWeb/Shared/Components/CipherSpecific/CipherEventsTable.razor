@@ -18,21 +18,21 @@
         <CipherDataGrid Cipher_TItem="Event" DataSource="@Events" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Id))" Title="@(Event.Translate(nameof(CachedData.EventExample.Id)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Id))" Title="@(Event.Translate(nameof(Event.Id)))">
                     <FooterTemplate>
                         <b>@($"כמות: {Events.Count()}")</b>
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.EventType))" Title="@(Event.Translate(nameof(CachedData.EventExample.EventType)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.ProcessId))" Title="@(Event.Translate(nameof(CachedData.EventExample.ProcessId)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Timestamp))" Title="@(Event.Translate(nameof(CachedData.EventExample.Timestamp)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Packages))" Title="@(Event.Translate(nameof(CachedData.EventExample.Packages)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(Event.Translate(nameof(Event.EventType)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(Event.Translate(nameof(Event.ProcessId)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(Event.Translate(nameof(Event.Timestamp)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Packages))" Title="@(Event.Translate(nameof(Event.Packages)))">
                     <Template>
                         @(string.Join(", ", context.Packages.Select(x => x.Id)))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Comments))" Title="@(Event.Translate(nameof(CachedData.EventExample.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Status))" Title="@(Event.Translate(nameof(CachedData.EventExample.Status)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(Event.Translate(nameof(Event.Comments)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(Event.Translate(nameof(Event.Status)))">
                     <Template>
                         @((context.Status == 0) ? "מאומתת" : "לא מאומתת")
                     </Template>

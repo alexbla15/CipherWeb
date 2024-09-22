@@ -7,8 +7,15 @@ namespace CipherData.Models.Tests
     {
         private static readonly Package p1 = Package.Random("1");
         private static readonly Package p2 = Package.Random("2");
-        private static readonly CreateTranserAmountEvent ev = new(worker: "אבי", timestamp: DateTime.Now, donatingPackage: p1, acceptingPackage: p2,
-                comments: "c", amount: 0.1M);
+        private static readonly CreateTranserAmountEvent ev = new()
+        {
+            Worker = "אבי",
+            Timestamp = DateTime.Now,
+            DonatingPackage = p1,
+            AcceptingPackage = p2,
+            Comments = "c",
+            Amount = 0.1M
+        };
 
         [TestMethod()]
         public void CreateTranserAmountEventTest()
@@ -139,25 +146,12 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            CreateTranserAmountEvent ev_copy = CreateTranserAmountEvent.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(ev_copy.Comments));
-            Assert.IsTrue(string.IsNullOrEmpty(ev_copy.Worker));
-            Assert.IsNull(ev_copy.DonatingPackage);
-            Assert.IsNull(ev_copy.AcceptingPackage);
-            Assert.IsTrue(string.IsNullOrEmpty(ev.ProcessId));
-        }
-
-        [TestMethod()]
         public void TranslateTest()
         {
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            CreateTranserAmountEvent ev = CreateTranserAmountEvent.Empty();
+            CreateTranserAmountEvent ev = new();
             string translation = CreateTranserAmountEvent.Translate(nameof(ev.DonatingPackage));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(ev.DonatingPackage));

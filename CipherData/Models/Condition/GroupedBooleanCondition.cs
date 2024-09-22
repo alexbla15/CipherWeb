@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// Groups of boolean conditions on a single object
@@ -11,7 +9,7 @@ namespace CipherData.Models
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
         [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
-        public IEnumerable<Condition> Conditions { get; set; }
+        public IEnumerable<Condition> Conditions { get; set; } = new List<Condition>();
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
@@ -20,22 +18,11 @@ namespace CipherData.Models
         public Operator Operator { get; set; } = Operator.All;
 
         /// <summary>
-        /// Instanciation of GroupedBooleanCondition
-        /// </summary>
-        /// <param name="conditions">Any of BooleanCondition / GroupedBooleadCondition</param>
-        /// <param name="operator">Operator used to resolve the multiple condition results to a single boolean.</param>
-        public GroupedBooleanCondition(IEnumerable<Condition> conditions, Operator @operator = Operator.All)
-        {
-            Conditions = conditions;
-            Operator = @operator;
-        }
-
-        /// <summary>
         /// Create an identical object to this one.
         /// </summary>
         public GroupedBooleanCondition Copy()
         {
-            return new GroupedBooleanCondition(Conditions, Operator);
+            return (GroupedBooleanCondition)MemberwiseClone();
         }
 
         /// <summary>
@@ -107,19 +94,7 @@ namespace CipherData.Models
         /// </summary>
         public static GroupedBooleanCondition Random()
         {
-            return new GroupedBooleanCondition(
-                conditions: new List<Condition>()
-                );
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static GroupedBooleanCondition Empty()
-        {
-            return new GroupedBooleanCondition(
-                conditions: new List<Condition>()
-                );
+            return new GroupedBooleanCondition();
         }
 
         public static string Translate(string searchedAttribute)

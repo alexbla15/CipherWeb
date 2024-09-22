@@ -11,20 +11,11 @@ namespace CipherData.Models
         /// List of all user actions found
         /// </summary>
         [HebrewTranslation(nameof(UserActions))]
-        public List<UserAction> UserActions { get; set; }
-
-        /// <summary>
-        /// Create a new process definition or update it
-        /// </summary>
-        /// <param name="userActions">List of all user actions found</param>
-        public UserActionResponse(List<UserAction> userActions) 
-        { 
-            UserActions = userActions;
-        }
+        public List<UserAction> UserActions { get; set; } = new();
 
         public static UserActionResponse Random()
         {
-            return new UserActionResponse(RandomFuncs.FillRandomObjects(2, UserAction.Random));
+            return new UserActionResponse() { UserActions = RandomFuncs.FillRandomObjects(2, UserAction.Random)};
         }
     }
 }

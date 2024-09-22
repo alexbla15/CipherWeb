@@ -4,68 +4,66 @@ namespace CipherData.Models
 {
     public class Unit : Resource
     {
-        /// <summary>
-        /// Name of unit.
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string Name { get; set; }
+        private string _Name = string.Empty;
 
         /// <summary>
-        /// Description of unit.
+        /// Name of the Unit
+        /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Name))]
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
+
+        private string? _Description = string.Empty;
+
+        /// <summary>
+        /// Description of Unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Description))]
-        public string? Description { get; set; }
+        public string? Description
+        {
+            get { return _Description; }
+            set { _Description = value?.Trim(); }
+        }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Properties))]
-        public string? Properties { get; set; }
+        public string? Properties { get; set; } = null;
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Parent))]
-        public Unit? Parent { get; set; }
+        public Unit? Parent { get; set; } = null;
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Children))]
-        public List<Unit>? Children { get; set; }
+        public List<Unit>? Children { get; set; } = null;
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Systems))]
-        public List<StorageSystem>? Systems { get; set; }
+        public List<StorageSystem>? Systems { get; set; } = null;
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Conditions))]
-        public GroupedBooleanCondition? Conditions { get; set; }
+        public GroupedBooleanCondition? Conditions { get; set; } = null;
 
         /// <summary>
         /// Instanciation of new unit.
         /// </summary>
-        /// <param name="name">Name of unit</param>
-        /// <param name="description">Description of unit</param>
-        /// <param name="parent">Parent system containing this one</param>
-        /// <param name="children">Child systems contained in this one</param>
-        /// <param name="systems">Systems under this unit</param>
-        /// <param name="properties">JSON-like additional properties of the unit</param>
-        public Unit(string name, string? description = null, Unit? parent = null, List<Unit>? children = null, 
-            List<StorageSystem>? systems = null, string? properties = null,
-            string? id = null)
+        public Unit(string? id = null)
         {
             Id = id ?? GetNextId();
-            Name = name;
-            Description = description;
-            Parent = parent;
-            Children = children;
-            Systems = systems;
-            Properties = properties;
         }
 
         /// <summary>
@@ -125,8 +123,13 @@ namespace CipherData.Models
 
         public UnitRequest Request()
         {
-            return new UnitRequest(name: Name, description: Description, properties: Properties, parentId: Parent?.Id,
-                conditions: GroupedBooleanCondition.Empty());
+            return new UnitRequest()
+            {
+                Name = Name,
+                Description = Description,
+                Properties = Properties,
+                ParentId = Parent?.Id
+            };
         }
 
         /// <summary>
@@ -165,22 +168,11 @@ namespace CipherData.Models
         {
             List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
 
-            return new Unit(
-                    id: id,
-                    name: GetNextId(),
-                    description: RandomFuncs.RandomItem(UnitDescriptions)
-                );
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static Unit Empty()
-        {
-            return new Unit(
-                    id: string.Empty,
-                    name: string.Empty
-                );
+            return new Unit(id)
+            {
+                Name = GetNextId(),
+                Description = RandomFuncs.RandomItem(UnitDescriptions)
+            };
         }
 
         public static string Translate(string searchedAttribute)
@@ -212,15 +204,19 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Unit>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Unit).Name}.{nameof(Systems)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
-                                    }, @operator: Operator.Any));
+            return GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Unit).Name}.{nameof(Name)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Description)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Properties)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Parent)}.{nameof(Id)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Children)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Systems)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
+                                    },
+                Operator = Operator.Any
+            });
         }
     }
 }

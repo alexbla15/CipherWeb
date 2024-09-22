@@ -5,7 +5,7 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class CustomObjectBooleanConditionTests
     {
-        private readonly CustomObjectBooleanCondition cond = new(conditions: new(), @operator: Operator.All);
+        private readonly CustomObjectBooleanCondition cond = new();
 
 
         [TestMethod()]

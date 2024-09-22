@@ -37,9 +37,9 @@
                                       Size="ButtonSize.Medium" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.EventType))" Title="@(Event.Translate(nameof(CachedData.EventExample.EventType)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.ProcessId))" Title="@(Event.Translate(nameof(CachedData.EventExample.ProcessId)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Timestamp))" Title="@(Event.Translate(nameof(CachedData.EventExample.Timestamp)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(Event.Translate(nameof(Event.EventType)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(Event.Translate(nameof(Event.ProcessId)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(Event.Translate(nameof(Event.Timestamp)))" />
                 <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
                     <Template>
                         @if (context.Packages.ToList().Count() > 0)
@@ -74,8 +74,8 @@
                         <RadzenText Text="5"></RadzenText>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Comments))" Title="@(Event.Translate(nameof(CachedData.EventExample.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(CachedData.EventExample.Status))" Title="@(Event.Translate(nameof(CachedData.EventExample.Status)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(Event.Translate(nameof(Event.Comments)))" />
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(Event.Translate(nameof(Event.Status)))">
                     <Template>
                         @((context.Status == 0) ? "מאומתת" : "לא מאומתת")
                     </Template>
@@ -99,7 +99,7 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    RadzenDataGrid<Event> CustomDataGrid;
+    RadzenDataGrid<Event> CustomDataGrid = new();
 
     private List<Tuple<string, string>> FilterFields = new List<Tuple<string, string>>();
 
@@ -109,7 +109,7 @@
 
         FilterFields.AddRange(new List<Tuple<string, string>>()
         {
-        new (nameof(CachedData.EventExample.Timestamp), Event.Translate(nameof(CachedData.EventExample.Timestamp))),
+        new (nameof(Event.Timestamp), Event.Translate(nameof(Event.Timestamp))),
         new ("DonatingSystem", "מערכת מוסרת"),
         new ("AcceptingSystem", "מערכת מקבלת"),
         new ("DonatingPackage", "תעודה מוסרת"),

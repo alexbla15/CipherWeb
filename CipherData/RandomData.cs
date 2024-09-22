@@ -15,7 +15,6 @@ namespace CipherData
 
         public static readonly Category RandomCategory = Category.Random();
         public static readonly CategoryProperty RandomCategoryProperty = CategoryProperty.Random();
-        public static readonly CreateEvent RandomCreateEvent = CreateEvent.Empty();
         public static readonly Event RandomEvent = Event.Random();
         public static readonly Package RandomPackage = Package.Random();
         public static readonly Process RandomProcess = Process.Random();

@@ -99,12 +99,12 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Name)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(PackageProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(CachedData.PackagePropertyExample.Value)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(PackageProperty.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" />
                     </Template>

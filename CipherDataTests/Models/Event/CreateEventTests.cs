@@ -6,23 +6,36 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class CreateEventTests
     {
-        private static readonly CreateEvent example = new(worker: "א", timestamp: DateTime.Now, action: PackageRequest.Random(),
-                processId: "b", comments: "c", eventType: 1);
+        private static readonly CreateEvent example = new()
+        {
+            Worker = "א",
+            Timestamp = DateTime.Now,
+            Actions = new() { PackageRequest.Random() },
+            ProcessId = "b",
+            Comments = "c",
+            EventType = 1
+        };
 
         [TestMethod()]
         public void CreateEventTest()
         {
             // 1 - only one action
-            CreateEvent ev = new(worker: "a", timestamp: DateTime.Now, action: PackageRequest.Random(),
-                processId: "b", comments: "c", eventType: 1);
+            CreateEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Now,
+                Actions = new() { PackageRequest.Random() },
+                ProcessId = "b",
+                Comments = "c",
+                EventType = 1
+            };
 
             Assert.IsNotNull(ev.Worker);
             Assert.IsNotNull(ev.ProcessId);
             Assert.IsNotNull(ev.Comments);
 
             // 2 - more than one action
-            ev = new(worker: "a", timestamp: DateTime.Now, actions: RandomFuncs.FillRandomObjects(3, PackageRequest.Random),
-                processId: "b", comments: "c", eventType: 1);
+            ev.Actions = RandomFuncs.FillRandomObjects(3, PackageRequest.Random);
 
             Assert.IsNotNull(ev.Worker);
             Assert.IsNotNull(ev.ProcessId);
@@ -101,9 +114,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckProcessIdTest()
         {
-            CreateEvent ev = example.Copy();
-
-            ev.ProcessId = "תכונה"; // Good name
+            CreateEvent ev = new()
+            {
+                ProcessId = "תכונה" // Good name
+            };
             Assert.IsTrue(ev.CheckProcessId().Succeeded);
 
             ev.ProcessId = "@תכונה"; // Improper chars
@@ -144,7 +158,7 @@ namespace CipherData.Models.Tests
             ev.Actions = new(); // empty list
             Assert.IsFalse(ev.CheckActions().Succeeded);
 
-            ev.Actions = new() { PackageRequest.Empty()}; // bad request
+            ev.Actions = new() { new PackageRequest()}; // bad request
             Assert.IsFalse(ev.CheckActions().Succeeded);
 
             PackageRequest p = PackageRequest.Random();
@@ -204,57 +218,47 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            CreateEvent ev = CreateEvent.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Comments));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.ProcessId));
-            Assert.IsTrue(string.IsNullOrEmpty(ev.Worker));
-            Assert.IsTrue(ev.EventType == 0);
-            Assert.IsFalse(ev.Actions.Any());
-        }
-
-        [TestMethod()]
         public void TranslateTest()
         {
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            CreateEvent ev = CreateEvent.Empty();
-            Event ev1 = ev.Create("1");
-            string translation = CreateEvent.Translate(nameof(ev.Actions));
+            string translation = CreateEvent.Translate(nameof(CreateEvent.Actions));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
-            Assert.IsFalse(translation == nameof(ev.Actions));
-            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(ev1.Packages)}"]);
+            Assert.IsFalse(translation == nameof(CreateEvent.Actions));
+            Assert.IsTrue(translation == Translator.TranslationsDictionary[$"{nameof(Event)}_{nameof(Event.Packages)}"]);
         }
 
         [TestMethod()]
         public void ToJsonTest()
         {
             // 1 - one action
-            PackageRequest p = new(id: "a", system: "b", brutMass: 5.4M, netMass:4.7M, category: "c");
-            PackageRequest p2 = new(id: "b", system: "d", brutMass: 1.4M, netMass:3.7M, category: "f");
-            PackageRequest p3 = new(id: "c", system: "e", brutMass: 2.4M, netMass:8.7M, category: "g");
+            PackageRequest p = new() { Id="a", SystemId = "b", BrutMass = 5.4M, NetMass = 4.7M, CategoryId = "c" };
+            PackageRequest p2 = new() { Id="b", SystemId = "d", BrutMass = 1.4M, NetMass = 3.7M, CategoryId = "f" };
+            PackageRequest p3 = new() { Id="c", SystemId = "e", BrutMass = 2.4M, NetMass = 8.7M, CategoryId = "g" };
 
-            CreateEvent ev = new(worker: "a", timestamp: DateTime.Parse("01/01/2024"), action: p,
-                processId: "b", comments: "c", eventType: 1);
+            CreateEvent ev = new()
+            {
+                Worker = "a",
+                Timestamp = DateTime.Parse("01/01/2024"),
+                Actions = new() { p },
+                ProcessId = "b",
+                Comments = "c",
+                EventType = 1
+            };
 
             // 2 - more than one action
             string cat_json = ev.ToJson();
-            string result = "{\r\n  \"Worker\": \"a\",\r\n  \"EventType\": 1,\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    }\r\n  ]\r\n}";
+            string result = "{\r\n  \"Worker\": \"a\",\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"EventType\": 1,\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    }\r\n  ]\r\n}";
 
             Assert.IsTrue(cat_json == result);
 
-            // 2 - two actions
-            ev = new(worker: "a", timestamp: DateTime.Parse("01/01/2024"), actions: new() { p, p2, p3},
-                processId: "b", comments: "c", eventType: 1);
+            // 2 - many actions
+            ev.Actions = new() { p, p2, p3 };
             cat_json = ev.ToJson();
-            result = "{\r\n  \"Worker\": \"a\",\r\n  \"EventType\": 1,\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    },\r\n    {\r\n      \"Id\": \"b\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"d\",\r\n      \"BrutMass\": 1.4,\r\n      \"NetMass\": 3.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"f\"\r\n    },\r\n    {\r\n      \"Id\": \"c\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"e\",\r\n      \"BrutMass\": 2.4,\r\n      \"NetMass\": 8.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"g\"\r\n    }\r\n  ]\r\n}";
+            result = "{\r\n  \"Worker\": \"a\",\r\n  \"ProcessId\": \"b\",\r\n  \"Comments\": \"c\",\r\n  \"EventType\": 1,\r\n  \"Timestamp\": \"2024-01-01 00:00\",\r\n  \"Actions\": [\r\n    {\r\n      \"Id\": \"a\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"b\",\r\n      \"BrutMass\": 5.4,\r\n      \"NetMass\": 4.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"c\"\r\n    },\r\n    {\r\n      \"Id\": \"b\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"d\",\r\n      \"BrutMass\": 1.4,\r\n      \"NetMass\": 3.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"f\"\r\n    },\r\n    {\r\n      \"Id\": \"c\",\r\n      \"Properties\": null,\r\n      \"VesselId\": null,\r\n      \"SystemId\": \"e\",\r\n      \"BrutMass\": 2.4,\r\n      \"NetMass\": 8.7,\r\n      \"ParentId\": null,\r\n      \"ChildrenIds\": null,\r\n      \"CategoryId\": \"g\"\r\n    }\r\n  ]\r\n}";
 
             Assert.IsTrue(cat_json == result);
-
         }
     }
 }

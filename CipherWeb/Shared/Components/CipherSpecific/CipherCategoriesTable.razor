@@ -10,39 +10,39 @@
         <CipherDataGrid Cipher_TItem="Category" DataSource="@categories" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Id))" Title="@(Category.Translate(nameof(Category.Id)))">
                     <FooterTemplate>
                         <b>@($"כמות: {categories.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Description))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Description)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))" >
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Name))" Title="@(Category.Translate(nameof(Category.Name)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Description))" Title="@(Category.Translate(nameof(Category.Description)))" />
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
                     <Template>
                         @context.MaterialType?.Name
                     </Template>    
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.IdMask))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.IdMask)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.IdMask))" Title="@(Category.Translate(nameof(Category.IdMask)))">
                     <Template>
                         @(string.Join(", ", context.IdMask))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.CreatingProcesses))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.CreatingProcesses)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.CreatingProcesses))" Title="@(Category.Translate(nameof(Category.CreatingProcesses)))">
                     <Template>
                         @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.ConsumingProcesses))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.ConsumingProcesses)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.ConsumingProcesses))" Title="@(Category.Translate(nameof(Category.ConsumingProcesses)))">
                     <Template>
                         @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Parent))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Parent)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Parent))" Title="@(Category.Translate(nameof(Category.Parent)))">
                     <Template>
                         @context.Parent?.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(CachedData.CategoryExample.Children))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Children)))">
+                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Children))" Title="@(Category.Translate(nameof(Category.Children)))">
                     <Template>
                         @if (context.Children != null)
                         {

@@ -4,61 +4,60 @@ namespace CipherData.Models
 {
     public class StorageSystem : Resource
     {
+        private string _Name = string.Empty;
+
         /// <summary>
-        /// Name of system
+        /// Name of the system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
+
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Description of system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string Description { get; set; }
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value.Trim(); }
+        }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
-        public Dictionary<string,string> Properties { get; set; }
+        public Dictionary<string, string>? Properties { get; set; } = null;
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
-        public StorageSystem? Parent { get; set; }
+        public StorageSystem? Parent { get; set; } = null;
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
-        public List<StorageSystem>? Children { get; set; }
+        public List<StorageSystem>? Children { get; set; } = null;
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
-        public Unit Unit { get; set; }
+        public Unit Unit { get; set; } = new();
 
         /// <summary>
         /// Instanciation of StorageSystem
         /// </summary>
-        /// <param name="name">Name of system</param>
-        /// <param name="description">Description of system</param>
-        /// <param name="properties">JSON-like additional properties of the system</param>
-        /// <param name="unit">Unit responsible for this system.</param>
-        /// <param name="parent">Parent system containing this one</param>
-        /// <param name="children">Child systems contained in this one</param>
-        public StorageSystem(string description, Unit unit, string name, Dictionary<string, string>? properties = null,
-            StorageSystem? parent = null, List<StorageSystem>? children = null, string? id = null)
+        public StorageSystem(string? id = null)
         {
             Id = id ?? GetNextId();
-            Name = name;
-            Description = description;
-            Properties = properties ?? new Dictionary<string, string>();
-            Parent = parent;
-            Children = children;
-            Unit = unit;
         }
 
         /// <summary>
@@ -153,28 +152,13 @@ namespace CipherData.Models
         {
             List<string> SystemsDescriptions = new() { "תחום", "מעבדה", "מבנה" };
 
-            return new(
-                id: id,
-                name: id ?? GetNextId(),
-                description: RandomFuncs.RandomItem(SystemsDescriptions),
-                properties: new Dictionary<string,string>(),
-                unit: Unit.Random(),
-                parent: (new Random().Next(0, 5) == 0) ? Random() : null
-                );
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static StorageSystem Empty()
-        {
-            return new(
-                id: string.Empty,
-                name: string.Empty,
-                description: string.Empty,
-                properties: new Dictionary<string,string>(),
-                unit: Unit.Empty()
-                );
+            return new(id)
+            {
+                Name = id ?? GetNextId(),
+                Description = RandomFuncs.RandomItem(SystemsDescriptions),
+                Unit = Unit.Random(),
+                Parent = (new Random().Next(0, 5) == 0) ? Random() : null
+            };
         }
 
         public static string Translate(string searchedAttribute)
@@ -223,15 +207,19 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> Containing(string SearchText)
         {
-            return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"System.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Properties)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Parent)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"System.{nameof(Children)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"System.{nameof(Unit)}.Id", attributeRelation: AttributeRelation.Contains, value: SearchText)
-            }, @operator: Operator.Any));
+            return GetObjects<StorageSystem>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{nameof(System)}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{nameof(System)}.{nameof(Name)}", Value = SearchText },
+                new() {Attribute = $"{nameof(System)}.{nameof(Description)}", Value = SearchText },
+                new() {Attribute = $"{nameof(System)}.{nameof(Properties)}", Value = SearchText },
+                new() {Attribute = $"{nameof(System)}.{nameof(Parent)}.{nameof(Id)}", Value = SearchText },
+                new() {Attribute = $"{nameof(System)}.{nameof(Children)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any },
+                new() {Attribute = $"{nameof(System)}.{nameof(Unit)}.{nameof(Id)}", Value = SearchText }
+            },
+                Operator = Operator.Any
+            });
         }
 
         /// <summary>
@@ -240,10 +228,15 @@ namespace CipherData.Models
         /// <param name="SelectedSystem">selected system for query</param>
         public static Tuple<List<Event>, ErrorResponse> Events(string SelectedSystem)
         {
-            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
+            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
             {
-                new (attribute: $"{typeof(Event).Name}.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Any));
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{nameof(Event)}.{nameof(Event.Packages)}.{nameof(Package.System)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
         }
 
         /// <summary>
@@ -253,10 +246,16 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<List<Process>, ErrorResponse> Processes(string SelectedSystem)
         {
-            return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
+            return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
             {
-                new (attribute: $"{typeof(Process).Name}.Events.Packages.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Any));
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{nameof(Process)}.{nameof(Process.Events)}.{nameof(Event.Packages)}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
         }
 
         /// <summary>
@@ -264,10 +263,15 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> Packages(string SelectedSystem)
         {
-            return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
+            return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
             {
-                new (attribute: $"{typeof(Package).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Any));
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{typeof(Package).Name}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            }, Operator = Operator.Any 
+            });
         }
 
         /// <summary>
@@ -275,10 +279,16 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> Vessels(string SelectedSystem)
         {
-            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition(conditions: new List<BooleanCondition>()
+            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
             {
-                new (attribute: $"{typeof(Vessel).Name}.System.Id", attributeRelation: AttributeRelation.Eq, value: SelectedSystem)
-            }, @operator: Operator.Any));
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
         }
     }
 }

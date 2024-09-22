@@ -50,17 +50,17 @@
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
-                            Data=@packs TextProperty="@(nameof(CachedData.PackageExample.Id))" SelectedItemsText="אפשרויות נבחרו"
+                            Data=@packs TextProperty="@(nameof(Package.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
                             Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true" Disabled="@Disabled" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
                 <Template>
                    @((context as Package).Category.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.System))" Title="@(Package.Translate(nameof(CachedData.PackageExample.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.System))" Title="@(Package.Translate(nameof(Package.System)))">
                 <Template>
                     @((context as Package).System.Name)
                 </Template>

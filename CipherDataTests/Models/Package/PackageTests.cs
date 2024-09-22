@@ -10,9 +10,19 @@ namespace CipherData.Models.Tests
         private static readonly Category cat = Category.Random();
         private static readonly Vessel ves = Vessel.Random();
 
-        private static readonly Package example = new(system: s, brutMass: 10, netMass: 5, createdAt: DateTime.Now,
-                vessel: ves, parent: parent, children: new(), destinationProcesses: new(),
-                description: "A", properties: new(), category: cat);
+        private static readonly Package example = new()
+        {
+            System = s,
+            BrutMass = 10,
+            NetMass = 5,
+            CreatedAt = DateTime.Now,
+            Vessel = ves,
+            Parent = parent,
+            Children = new(),
+            Description = "A",
+            Properties = new(),
+            Category = cat
+        };
 
         [TestMethod()]
         public void PackageTest()
@@ -28,17 +38,40 @@ namespace CipherData.Models.Tests
             Assert.IsNotNull(example.Category);
 
             // initialize with id
-            Package p2 = new(system: s, brutMass: 10, netMass: 5, createdAt: DateTime.Now,
-                vessel: ves, parent: parent, children: new(), destinationProcesses: new(),
-                description: "A", properties: new(), category: cat, id : "1");
+            Package p2 = new(id:"1")
+            {
+                System = s,
+                BrutMass = 10,
+                NetMass = 5,
+                CreatedAt = DateTime.Now,
+                Vessel = ves,
+                Parent = parent,
+                Children = new(),
+                Description = "A",
+                Properties = new(),
+                Category = cat,
+                DestinationProcesses = new() { ProcessDefinition.Random()}
+            };
 
             Assert.IsNotNull(p2.Id);
             Assert.AreEqual(p2.Id, "1");
+            Assert.IsNotNull(p2.DestinationProcesses);
+            Assert.IsFalse(p2.DestinationProcesses.SequenceEqual(p2.Category.ConsumingProcesses));
 
             // initialize without destination processes
-            Package p3 = new(system: s, brutMass: 10, netMass: 5, createdAt: DateTime.Now,
-                vessel: ves, parent: parent, children: new(), description: "A", properties: new(), category: cat, id: "1");
-
+            Package p3 = new(id: "1")
+            {
+                System = s,
+                BrutMass = 10,
+                NetMass = 5,
+                CreatedAt = DateTime.Now,
+                Vessel = ves,
+                Parent = parent,
+                Children = new(),
+                Description = "A",
+                Properties = new(),
+                Category = cat
+            };
             Assert.IsNotNull(p3.DestinationProcesses);
             Assert.IsTrue(p3.DestinationProcesses.SequenceEqual(p3.Category.ConsumingProcesses));
         }
@@ -81,30 +114,20 @@ namespace CipherData.Models.Tests
         {
             // checking request of c3
             PackageRequest req = example.Request();
-            PackageRequest new_request = new(id: example.Id, system: s.Id,
-                brutMass: example.BrutMass, netMass: example.NetMass, category: cat.Id,
-                vessel: ves.Id, children: example.Children?.Select(x => x.Id).ToList(),
-                parent: parent.Id, properties: example.Properties);
+            PackageRequest new_request = new()
+            {
+                Id = example.Id,
+                SystemId = s.Id,
+                BrutMass = example.BrutMass,
+                NetMass = example.NetMass,
+                CategoryId = cat.Id,
+                VesselId = ves.Id,
+                ChildrenIds = example.Children?.Select(x => x.Id).ToList(),
+                ParentId = parent.Id,
+                Properties = example.Properties
+            };
 
             Assert.IsTrue(req.Equals(new_request));
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty Category scheme
-            Package p = Package.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(p.Id));
-            Assert.AreEqual(p.BrutMass, 0);
-            Assert.AreEqual(p.NetMass, 0);
-            Assert.IsTrue(p.Category.Equals(Category.Empty()));
-            Assert.IsTrue(p.System.Equals(StorageSystem.Empty()));
-            Assert.IsNull(p.Parent);
-            Assert.IsNull(p.Children);
-            Assert.IsNull(p.Vessel);
-            Assert.IsFalse(p.DestinationProcesses.Any());
-            Assert.IsNull(p.Properties);
         }
 
         [TestMethod()]
@@ -143,15 +166,14 @@ namespace CipherData.Models.Tests
         public void GetTest()
         {
             // 1 - try to fetch object without stating id
-            var result = Package.Get("");
+            var result = Package.Get(string.Empty);
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Item1.Equals(Package.Empty())); // runs through empty tests
             Assert.IsTrue(result.Item2 == ErrorResponse.BadRequest);
 
             // 2 - try to fetch object with specific id
             result = Package.Get("1");
             Assert.IsNotNull(result);
-            Assert.IsTrue(!result.Item1.Equals(Package.Empty())); // runs through empty tests
+            Assert.IsTrue(!result.Item1.Equals(new())); // runs through empty tests
             Assert.IsTrue(result.Item2 == ErrorResponse.Success);
         }
 

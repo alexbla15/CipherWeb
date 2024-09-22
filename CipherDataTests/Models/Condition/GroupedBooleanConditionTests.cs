@@ -5,32 +5,41 @@ namespace CipherData.Models.Tests
     [TestClass()]
     public class GroupedBooleanConditionTests
     {
-        private static readonly BooleanCondition cond1 = new(attribute: "A", attributeRelation: AttributeRelation.Eq,
-                @operator: Operator.Any, value: "5");
+        private static readonly BooleanCondition cond1 = new()
+        {
+            Attribute = "A",
+            AttributeRelation = AttributeRelation.Eq,
+            Operator = Operator.Any,
+            Value = "5"
+        };
 
-        private static readonly BooleanCondition cond2 = new(attribute: "B", attributeRelation: AttributeRelation.Ne,
-                @operator: Operator.All, value: "4");
+        private static readonly BooleanCondition cond2 = new()
+        {
+            Attribute = "B",
+            AttributeRelation = AttributeRelation.Ne,
+            Operator = Operator.All,
+            Value = "4"
+        };
 
-        private static readonly BooleanCondition cond3 = new(attribute: "C", attributeRelation: AttributeRelation.Gt,
-                @operator: Operator.Any, value: "3");
+        private static readonly BooleanCondition cond3 = new()
+        {
+            Attribute = "C",
+            AttributeRelation = AttributeRelation.Gt,
+            Operator = Operator.Any,
+            Value = "3"
+        };
 
-        private readonly GroupedBooleanCondition cond = new(conditions: new List<BooleanCondition> { cond1, cond2, cond3 }, 
-            @operator: Operator.Any);
+        private readonly GroupedBooleanCondition cond = new()
+        {
+            Conditions = new List<BooleanCondition> { cond1, cond2, cond3 },
+            Operator = Operator.Any
+        };
 
         [TestMethod()]
         public void GroupedBooleanConditionTest()
         {
             Assert.IsNotNull(cond);
             Assert.IsNotNull(cond.Conditions);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty object scheme
-            GroupedBooleanCondition cond = GroupedBooleanCondition.Empty();
-
-            Assert.IsFalse(cond.Conditions.Any());
         }
 
         [TestMethod()]
@@ -80,13 +89,15 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(cond_copy.CheckConditions().Succeeded);
 
             // bad boolean condition
-            BooleanCondition bool_cond = BooleanCondition.Empty();
+            BooleanCondition bool_cond = new();
             cond_copy.Conditions = new List<BooleanCondition> () { bool_cond };
             Assert.IsFalse(cond_copy.CheckConditions().Succeeded);
 
             // bad grouped condition
-            GroupedBooleanCondition grouped_bool_cond = GroupedBooleanCondition.Empty();
-            grouped_bool_cond.Conditions = new List<BooleanCondition>() { bool_cond };
+            GroupedBooleanCondition grouped_bool_cond = new()
+            {
+                Conditions = new List<BooleanCondition>() { bool_cond }
+            };
             cond_copy.Conditions = new List<GroupedBooleanCondition>() { grouped_bool_cond };
             Assert.IsFalse(cond_copy.CheckConditions().Succeeded);
         }
@@ -98,7 +109,7 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(cond.Check().Item1);
 
             // 2 - bad conditions
-            BooleanCondition bool_cond = BooleanCondition.Empty();
+            BooleanCondition bool_cond = new();
             cond.Conditions = new List<BooleanCondition>() { bool_cond };
             Assert.IsFalse(cond.Check().Item1);
         }
@@ -117,7 +128,7 @@ namespace CipherData.Models.Tests
             // try to translate some field
             // this depends on the TranslationDictionary.json config.
 
-            GroupedBooleanCondition cond = GroupedBooleanCondition.Empty();
+            GroupedBooleanCondition cond = new();
             string translation = GroupedBooleanCondition.Translate(nameof(cond.Conditions));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(cond.Conditions));

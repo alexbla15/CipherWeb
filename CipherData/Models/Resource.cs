@@ -86,11 +86,11 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<List<T>, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
         {
-            ObjectFactory obj = new(filter: createCondition(searchText));
+            ObjectFactory obj = new() { Filter = createCondition(searchText)};
             return QueryRequests.QueryObjects<T>(obj);
         }
 
-        public static string Translate(Type type, string searchedAttribute)
+        public static string? Translate(Type type, string searchedAttribute)
         {
             // Get the PropertyInfo for the property name
             PropertyInfo? property = type.GetProperty(searchedAttribute);
@@ -143,23 +143,6 @@ namespace CipherData.Models
         public Tuple<UserActionResponse, ErrorResponse> UserActions()
         {
             return LogsRequests.GetObjectLogs(uuid: Uuid);
-        }
-
-        /// <summary>
-        /// Check if check has allready failed.
-        /// </summary>
-        /// <param name="CurrCheckResult"></param>
-        /// <returns></returns>
-        public static bool CheckFailed(Tuple<bool, string>? CurrCheckResult = null)
-        {
-            if (CurrCheckResult != null)
-            {
-                if (!CurrCheckResult.Item1)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

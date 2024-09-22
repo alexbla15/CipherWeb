@@ -23,7 +23,7 @@
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public Package ChosenPackage { get; set; } = Package.Empty();
+    public Package ChosenPackage { get; set; } = new();
 
     /// <summary>
     /// Processes which can use the current package.
@@ -71,8 +71,8 @@
     private CipherPackagesPicking InnerPacks = new();
     private CipherInputComponents InputPacks = new();
 
-    private Package NewPackage = Package.Empty();
-    private List<PackageProperty> ChosenProperties = new List<PackageProperty>();
+    private Package NewPackage = new();
+    private List<PackageProperty> ChosenProperties = new();
 
     protected override void OnInitialized()
     {
@@ -82,12 +82,12 @@
     public Package Value()
     {
         ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
-        ChosenPackage.Category = packCategory.ChosenCategory ?? Category.Empty();
-        ChosenPackage.System = ChosenSystem ?? StorageSystem.Empty();
+        ChosenPackage.Category = packCategory.ChosenCategory ?? new();
+        ChosenPackage.System = ChosenSystem ?? new();
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
-        ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => new PackageProperty(x.Name, x.Value)).ToList();
-        ChosenPackage.Children = InnerPacks.SelectedPackages ?? new List<Package>();
+        ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => new PackageProperty { Name = x.Name, Value = x.Value }).ToList();
+        ChosenPackage.Children = InnerPacks.SelectedPackages ?? new();
 
         return ChosenPackage;
     }
@@ -95,8 +95,8 @@
     public void ChangedCategory()
     {
         ChosenCategory = packCategory.ChosenCategory;
-        DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new List<ProcessDefinition>();
-        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty(name: x.Name, value: x.DefaultValue)).ToList() ?? new List<PackageProperty>();
+        DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new();
+        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty { Name = x.Name, Value = x.DefaultValue }).ToList() ?? new List<PackageProperty>();
         StateHasChanged();
     }
 
@@ -148,7 +148,7 @@
 
     public void SetNewPackage()
     {
-        NewPackage = Package.Empty();
+        NewPackage = new Package();
 
         NewPackage = Value();
 
@@ -191,17 +191,17 @@
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete Label="@Package.Translate(nameof(CachedData.PackageExample.Id))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+    <CipherAutoComplete Label="@Package.Translate(nameof(Package.Id))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory"/>
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
-    <CipherPackageId Label="@Package.Translate(nameof(CachedData.PackageExample.Parent))" @ref=ParentPackage />
+    <CipherPackageId Label="@Package.Translate(nameof(Package.Parent))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" Label="@Package.Translate(nameof(CachedData.PackageExample.Description))" Icon="@Icons.Documents.Page.description" Width="300px" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.BrutMass))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(CachedData.PackageExample.NetMass))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherProcesses Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" ChosenProcesses="@DestinationProcesses" />
+        <CipherComments @ref="PackDescription" Label="@Package.Translate(nameof(Package.Description))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(Package.BrutMass))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@Package.Translate(nameof(Package.NetMass))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherProcesses Label="@Package.Translate(nameof(Package.DestinationProcesses))" ChosenProcesses="@DestinationProcesses" />
     }
 </CipherComponentCard>
 

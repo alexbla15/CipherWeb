@@ -19,7 +19,7 @@
         /// List of object factory specifications and conditions on them
         /// </summary>
         [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
-        public List<CustomCondition> Conditions { get; set; }
+        public List<CustomCondition> Conditions { get; set; } = new();
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean
@@ -28,23 +28,11 @@
         public Operator Operator { get; set; } = Operator.All;
 
         /// <summary>
-        /// Complex boolean condition that is applied to custom 
-        /// objects created from an object factory
-        /// </summary>
-        /// <param name="conditions">List of object factory specifications and conditions on them</param>
-        /// <param name="operator"></param>
-        public CustomObjectBooleanCondition(List<CustomCondition> conditions, Operator @operator = Operator.All)
-        {
-            Conditions = conditions;
-            Operator = @operator;
-        }
-
-        /// <summary>
         /// Create a random object.
         /// </summary>
         public static CustomObjectBooleanCondition Random()
         {
-            return new CustomObjectBooleanCondition(conditions: new List<CustomCondition>());
+            return new CustomObjectBooleanCondition();
         }
     }
 }

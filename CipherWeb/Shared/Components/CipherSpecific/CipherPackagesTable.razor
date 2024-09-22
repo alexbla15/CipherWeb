@@ -21,49 +21,49 @@
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" WithCustomColumns="true">
             <CustomColumns>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))">
                     <FooterTemplate>
                         סה"כ תעודות: <b>@packages.Count() </b>
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
                     <Template>
                         @context.Category.Name
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Vessel)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Vessel)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Vessel)" Title="@(Package.Translate(nameof(Package.Vessel)))">
                     <Template>
                         @context.Vessel?.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.System)" Title="@(Package.Translate(nameof(CachedData.PackageExample.System)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.System)" Title="@(Package.Translate(nameof(Package.System)))">
                     <Template>
                         @context.System.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.BrutMass)" Title="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.BrutMass)" Title="@(Package.Translate(nameof(Package.BrutMass)))">
                     <FooterTemplate>
                         @if (packages != null)
                         {
-                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(CachedData.PackageExample.BrutMass))?.GetValue(s)))</b>
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(Package.BrutMass))?.GetValue(s)))</b>
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.NetMass)" Title="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.NetMass)" Title="@(Package.Translate(nameof(Package.NetMass)))">
 
                     <FooterTemplate>
                         @if (packages != null)
                         {
-                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(CachedData.PackageExample.NetMass))?.GetValue(s)))</b>
+                            <b>@string.Format("{0:0.00;0.00-}", packages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(Package.NetMass))?.GetValue(s)))</b>
                         }
                     </FooterTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Parent)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Parent)" Title="@(Package.Translate(nameof(Package.Parent)))">
                     <Template>
                         @context.Parent?.Id
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Children)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Children)))">
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Children)" Title="@(Package.Translate(nameof(Package.Children)))">
                     <Template>
                         @if (context.Children != null)
                         {
@@ -71,9 +71,9 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.CreatedAt))" Title="@(Package.Translate(nameof(CachedData.PackageExample.CreatedAt)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(CachedData.PackageExample.Description))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Description)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(CachedData.PackageExample.Properties)" Title="@(Package.Translate(nameof(CachedData.PackageExample.Properties)))">
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.CreatedAt))" Title="@(Package.Translate(nameof(Package.CreatedAt)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Description))" Title="@(Package.Translate(nameof(Package.Description)))" />
+                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Properties)" Title="@(Package.Translate(nameof(Package.Properties)))">
                     <Template>
                         @if (context.Properties != null)
                         {

@@ -5,27 +5,27 @@
     /// </summary>
     public class PackageProperty
     {
+        private string? _Name = string.Empty;
+
         /// <summary>
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(PackageProperty), nameof(Name))]
-        public string Name { get; set; }
+        public string? Name {
+            get { return _Name; }
+            set { _Name = value?.Trim(); } 
+        }
+
+        private string? _Value = null;
 
         /// <summary>
         /// Property value.
         /// </summary>
         [HebrewTranslation(typeof(PackageProperty), nameof(Value))]
-        public string? Value { get; set; }
-
-        /// <summary>
-        /// Instanciation of new Category.
-        /// </summary>
-        /// <param name="name">Name of the property</param>
-        /// <param name="value">Property value.</param>
-        public PackageProperty(string name = "", string? value = null)
+        public string? Value
         {
-            Name = name;
-            Value = value;
+            get { return _Value; }
+            set { _Value = value?.Trim(); }
         }
 
         /// <summary>

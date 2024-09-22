@@ -6,7 +6,7 @@
         /// Error message
         /// </summary>
         [HebrewTranslation(typeof(ErrorResponse), nameof(Message))]
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         /// <summary>
         /// Error code
@@ -14,20 +14,9 @@
         [HebrewTranslation(typeof(ErrorResponse), nameof(Code))]
         public int Code { get; set; }
 
-        /// <summary>
-        /// Response of API request
-        /// </summary>
-        /// <param name="msg">Error message</param>
-        /// <param name="code">Error code</param>
-        public ErrorResponse(string msg, int code)
-        {
-            Message = msg;
-            Code = code;
-        }
-
-        public static readonly ErrorResponse Success = new(Translator.TranslationsDictionary["RequestResult_200"], 200);
-        public static readonly ErrorResponse BadRequest = new(Translator.TranslationsDictionary["RequestResult_400"], 400);
-        public static readonly ErrorResponse Unauthorized = new(Translator.TranslationsDictionary["RequestResult_401"], 401);
-        public static readonly ErrorResponse NotFound = new(Translator.TranslationsDictionary["RequestResult_404"], 404);
+        public static readonly ErrorResponse Success = new() { Message = Translator.TranslationsDictionary["RequestResult_200"], Code = 200 };
+        public static readonly ErrorResponse BadRequest = new() { Message = Translator.TranslationsDictionary["RequestResult_400"], Code = 400 };
+        public static readonly ErrorResponse Unauthorized = new() { Message = Translator.TranslationsDictionary["RequestResult_401"], Code = 401 };
+        public static readonly ErrorResponse NotFound = new() { Message = Translator.TranslationsDictionary["RequestResult_404"], Code = 404 };
     }
 }

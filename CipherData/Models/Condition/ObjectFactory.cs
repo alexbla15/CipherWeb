@@ -12,63 +12,55 @@
 
     public class OrderedItem
     {
+        private string _Attribute = string.Empty;
+
         /// <summary>
         /// Attribute to order by
         /// </summary>
         [HebrewTranslation(typeof(OrderedItem), nameof(Attribute))]
-        public string Attribute { get; set; }
+        public string Attribute { 
+            get { return _Attribute; }
+            set { _Attribute = value.Trim(); }
+        }
 
         /// <summary>
         /// Desired order on the attribute
         /// </summary>
         [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
-        public Order Order { get; set; }
-
-        /// <summary>
-        /// Instanciation of OrderedItem
-        /// </summary>
-        /// <param name="attribute">Attribute to order by</param>
-        /// <param name="order">Desired order on the attribute</param>
-        public OrderedItem (string attribute, Order order = Order.asc)
-        {
-            Attribute = attribute;
-            Order = order;
-        }
+        public Order Order { get; set; } = Order.asc;
     }
 
     public class AggregateItem
     {
+        private string _Attribute = string.Empty;
+
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
-        public string Attribute { get; set; } = string.Empty;
+        public string Attribute {
+            get { return _Attribute; }
+            set { _Attribute = value.Trim(); }
+        }
+
+        private string? _As = null;
 
         /// <summary>
         /// New name to give to the aggregated field. 
         /// if null, name is auto generated
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(As))]
-        public string? As { get; set; }
+        public string? As
+        {
+            get { return _As; }
+            set { _As = value?.Trim(); }
+        }
 
         /// <summary>
         /// Method to aggregate the field by
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
         public Method Method { get; set; }
-
-        /// <summary>
-        /// Instanciation of AggregateItem
-        /// </summary>
-        /// <param name="attribute">Attribute path to aggregate on</param>
-        /// <param name="method">Method to aggregate the field by</param>
-        /// <param name="as">New name to give to the aggregated field. If null, name is auto generated</param>
-        public AggregateItem(string attribute, Method method, string? @as = null)
-        {
-            Attribute = attribute;
-            As = @as;
-            Method = method;
-        }
     }
 
     /// <summary>
@@ -87,14 +79,14 @@
         /// Define order to the filtered objects
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(OrderBy))]
-        public List<OrderedItem>? OrderBy { get; set; }
+        public List<OrderedItem>? OrderBy { get; set; } = null;
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
-        public List<string>? GroupBy { get; set; }
+        public List<string>? GroupBy { get; set; } = null;
 
         /// <summary>
         ///  List of aggregate methods defining the new object.
@@ -102,22 +94,6 @@
         ///  exist. If null, returns the filtered objects
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
-        public List<AggregateItem>? Aggregate { get; set; }
-
-        /// <summary>
-        /// Method to get desired objects by filtering and aggregating the database
-        /// </summary>
-        /// <param name="filter">Conditions to apply to get the desired objects. All conditions must have the same target object.</param>
-        /// <param name="orderBy">Define order to the filtered objects</param>
-        /// <param name="groupBy">List of object attributes to group by. If null, aggregates all the objects to a single one.</param>
-        /// <param name="aggregate">List of aggregate methods defining the new object. by default returns the grouped by fields if they exist. If null, returns the filtered objects</param>
-        public ObjectFactory(
-            GroupedBooleanCondition filter, List<OrderedItem>? orderBy = null, List<string>? groupBy = null, List<AggregateItem>? aggregate = null)
-        {
-            Filter = filter;
-            OrderBy = orderBy;
-            GroupBy = groupBy;
-            Aggregate = aggregate;
-        }
+        public List<AggregateItem>? Aggregate { get; set; } = null;
     }
 }

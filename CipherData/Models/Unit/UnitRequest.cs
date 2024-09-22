@@ -5,52 +5,47 @@
     /// </summary>
     public class UnitRequest
     {
-        /// <summary>
-        /// Name of unit
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Unit.Name))]
-        public string Name { get; set; }
+        private string _Name = string.Empty;
 
         /// <summary>
-        /// Description of unit
+        /// Name of the Unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Unit.Description))]
-        public string? Description { get; set; }
+        [HebrewTranslation(typeof(Unit), nameof(Name))]
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
+
+        private string? _Description = string.Empty;
+
+        /// <summary>
+        /// Description of Unit
+        /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Description))]
+        public string? Description
+        {
+            get { return _Description; }
+            set { _Description = value?.Trim(); }
+        }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Properties))]
-        public string? Properties { get; set; }
+        public string? Properties { get; set; } = null;
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Parent))]
-        public string? ParentId { get; set; }
+        public string? ParentId { get; set; } = null;
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Conditions))]
-        public GroupedBooleanCondition? Conditions { get; set; }
-
-        /// <summary>
-        /// Create a new unit or update it
-        /// </summary>
-        /// <param name="description">Description of system</param>
-        /// <param name="properties">JSON-like additional properties of the unit</param>
-        /// <param name="parentId">ID of parent unit</param>
-        /// <param name="conditions">Conditions on the unit to make sure it is valid.</param>
-        public UnitRequest(string name, string? description, GroupedBooleanCondition? conditions = null, string? properties = null,
-            string? parentId = null)
-        {
-            Name = name;
-            Description = description;
-            Properties = properties;
-            ParentId = parentId;
-            Conditions = conditions;
-        }
+        public GroupedBooleanCondition? Conditions { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -108,27 +103,18 @@
 
         public Unit Create(string id)
         {
-            return new Unit(
-                name: Name,
-                description: Description,
-                parent: Unit.Random(ParentId),
-                properties: Properties,
-                id: id
-                );
+            return new Unit(id)
+            {
+                Name = Name,
+                Description = Description,
+                Parent = Unit.Random(ParentId),
+                Properties = Properties
+            };
         }
 
         public static string Translate(string searchedAttribute)
         {
             return Resource.Translate(typeof(UnitRequest), searchedAttribute);
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        /// <returns></returns>
-        public static UnitRequest Empty()
-        {
-            return new UnitRequest(name: string.Empty, description: string.Empty);
         }
     }
 }

@@ -23,7 +23,7 @@
     /// Component's Label.
     /// </summary>
     [Parameter]
-    public string? Label { get; set; } = Package.Translate(nameof(CachedData.PackageExample.Id));
+    public string? Label { get; set; } = Package.Translate(nameof(Package.Id));
 
     /// <summary>
     /// Component's Label.
@@ -68,17 +68,17 @@
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Package" AllowClear="true"
-                            Data=@AllPacks TextProperty="@(nameof(CachedData.PackageExample.Id))" AllowFilteringByAllStringColumns="true"
+                            Data=@AllPacks TextProperty="@(nameof(Package.Id))" AllowFilteringByAllStringColumns="true"
                             Style="@($"width: {Width}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Id))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category.MaterialType))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(Package.Translate(nameof(Package.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.MaterialType))" Title="@(Category.Translate(nameof(Category.MaterialType)))">
                 <Template>
                     @((context as Package).Category.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.PackageExample.Category))" Title="@(Package.Translate(nameof(CachedData.PackageExample.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(Package.Translate(nameof(Package.Category)))">
                 <Template>
                     @(string.Join(", ", (context as Package).Category.Name))
                 </Template>

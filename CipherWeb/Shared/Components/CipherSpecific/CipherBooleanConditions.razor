@@ -34,7 +34,7 @@
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
-    public List<Tuple<string, string>> AvailableAttributes { get; set; } = new();
+    public List<CipherField> AvailableAttributes { get; set; } = new();
 
     /// <summary>
     /// All chosen conditions
@@ -54,6 +54,12 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    public class CipherField
+    {
+        public string Path { get; set; } = string.Empty;
+        public string Translation { get; set; } = string.Empty;
+    }
+
     private RadzenDataGrid<BooleanCondition> ConditionsDataGrid = new();
 
     protected override void OnInitialized()
@@ -65,24 +71,43 @@
     /// <summary>
     /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
     /// </summary>
-    public static List<Tuple<string, string>> GetTranslatedFields(Type setType)
+    public static List<CipherField> GetTranslatedFields(Type setType, string? main = null, int curr_depth = 0)
     {
-        List<Type> OptionalTypes = new() { typeof(Package), typeof(Vessel), typeof(StorageSystem), typeof(Category), typeof(ProcessDefinition) };
-        List<Tuple<string,string>> translations = new();
+        int max_depth = 2;
 
-        foreach (PropertyInfo prop in setType.GetProperties())
+        List<Type> OptionalTypes = new() { typeof(Package), typeof(Vessel), typeof(StorageSystem), typeof(Category), typeof(ProcessDefinition),
+        new Event().Packages.GetType()};
+        List<CipherField> translations = new();
+
+        if (curr_depth <= max_depth)
         {
-            var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
-            if (attribute != null)
+            foreach (PropertyInfo prop in setType.GetProperties())
             {
-                translations.Add(Tuple.Create(prop.Name, attribute.Translation));
-                if (OptionalTypes.Contains(prop.GetType()))
+                var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
+                if (attribute != null)
                 {
-                    translations.AddRange(GetTranslatedFields(prop.GetType()));
+                    CipherField c = new();
+                    c.Path = !string.IsNullOrEmpty(main) ? $"{main}.{prop.Name}" : $"{setType.Name}.{prop.Name}";
+                    c.Translation = attribute.Translation;
+
+                    translations.Add(c);
+                    Type prop_type = prop.PropertyType;
+                    if (OptionalTypes.Contains(prop_type))
+                    {
+                        translations.AddRange(GetTranslatedFields(prop_type, c.Path, curr_depth + 1));
+                    }
+                    if (prop_type.IsGenericType)
+                    {
+                        prop_type = prop_type.GetGenericArguments()[0];
+                        if (OptionalTypes.Contains(prop_type))
+                        {
+                            translations.AddRange(GetTranslatedFields(prop_type, c.Path, curr_depth + 1));
+                        }
+                    }
                 }
-                // not finished
             }
         }
+
         return translations;
     }
 
@@ -92,7 +117,7 @@
     async Task AddCondition()
     {
         // Add the new restriction to the existing list
-        ChosenConditions.Add(BooleanCondition.Empty());
+        ChosenConditions.Add(new BooleanCondition());
 
         StateHasChanged();
 
@@ -128,7 +153,7 @@
 
     public void Save()
     {
-        SelectedStep.Condition = new GroupedBooleanCondition(conditions: ChosenConditions);
+        SelectedStep.Condition = new GroupedBooleanCondition() { Conditions = ChosenConditions };
     }
 }
 
@@ -150,97 +175,82 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteCondition(cond))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Attribute)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Attribute)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDownDataGrid @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%">
-                            <RadzenDropDownDataGridColumn Property="Item1" Title="שם תכונה">
-                                <Template>
-                                    @((context as Tuple<string,string>).Item1)
-                                </Template>
-                            </RadzenDropDownDataGridColumn>
-                            <RadzenDropDownDataGridColumn Property="Item2" Title="תרגום">
-                                <Template>
-                                    @((context as Tuple<string, string>).Item2)
-                                </Template>
-                            </RadzenDropDownDataGridColumn>
+                        <RadzenDropDownDataGrid @bind-Value="@cond.Attribute" AllowFiltering="true" Data="@AvailableAttributes" Style="width: 100%" SearchTextPlaceholder="חיפוש..."
+                                                ValueProperty="Path" TextProperty="Translation">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Path" Title="שם תכונה">
+                                    <Template>
+                                        @((context as CipherField).Path)
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
+                                <RadzenDropDownDataGridColumn Property="Translation" Title="תרגום">
+                                    <Template>
+                                        @((context as CipherField).Translation)
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
+                            </Columns>
                         </RadzenDropDownDataGrid>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.AttributeRelation)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.AttributeRelation)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.AttributeRelation" Style="width: 100%" TValue="AttributeRelation" 
-                        Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
+                        <RadzenDropDown @bind-Value="cond.AttributeRelation" Style="width: 100%" TValue="AttributeRelation"
+                                        Data="@(new List<AttributeRelation>() {AttributeRelation.Eq, AttributeRelation.Ne, AttributeRelation.Contains, AttributeRelation.Gt, AttributeRelation.Lt})">
                             <ValueTemplate>
                                 @if (cond.AttributeRelation == AttributeRelation.Eq)
-                                {
                                     @("שווה ל")
-                                }
-                                else if (cond.AttributeRelation == AttributeRelation.Ne)
-                                {
+
+                                @if (cond.AttributeRelation == AttributeRelation.Ne)
                                     @("שונה מ")
-                                }
-                                else if (cond.AttributeRelation == AttributeRelation.Gt)
-                                {
+
+                                @if (cond.AttributeRelation == AttributeRelation.Gt)
                                     @("גדול מ")
-                                }
-                                else if (cond.AttributeRelation == AttributeRelation.Lt)
-                                {
+
+                                @if (cond.AttributeRelation == AttributeRelation.Lt)
                                     @("קטן מ")
-                                }
-                                else
-                                {
+
+                                @if (cond.AttributeRelation == AttributeRelation.Contains)
                                     @("מכיל")
-                                }
+
                             </ValueTemplate>
                             <Template>
                                 @if (context == AttributeRelation.Eq)
-                                {
                                     @("שווה ל")
-                                }
-                                else if (context == AttributeRelation.Ne)
-                                {
+
+                                @if (context == AttributeRelation.Ne)
                                     @("שונה מ")
-                                }
-                                else if (context == AttributeRelation.Gt)
-                                {
+
+                                @if (context == AttributeRelation.Gt)
                                     @("גדול מ")
-                                }
-                                else if (context == AttributeRelation.Lt)
-                                {
+
+                                @if (context == AttributeRelation.Lt)
                                     @("קטן מ")
-                                }
-                                else
-                                {
+
+                                @if (context == AttributeRelation.Contains)
                                     @("מכיל")
-                                }
+
                             </Template>
                         </RadzenDropDown>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Value)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <CipherAutoComplete @bind-Value="@cond.Value" Width="100%"/>
+                        <CipherAutoComplete @bind-Value="@cond.Value" Width="100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(CachedData.BooleanConditionExample.Operator)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="BooleanCondition" Title="@(BooleanCondition.Translate(nameof(BooleanCondition.Operator)))" TextAlign="@TdTextAlign">
                     <Template Context="cond">
-                        <RadzenDropDown @bind-Value="cond.Operator" Style="width: 100%" TValue="Operator" Data="@(new List<Operator>() {Operator.All, Operator.Any, Operator.And, Operator.Or})">
+                        <RadzenDropDown @bind-Value="cond.Operator" Style="width: 100%" TValue="Operator" Data="@(new List<Operator>() {Operator.Any, Operator.All, Operator.All, Operator.Any})">
                             <ValueTemplate>
                                 @if (cond.Operator == Operator.All)
                                 {
                                     @("כל האיברים")
                                 }
-                                else if (cond.Operator == Operator.Any)
-                                {
-                                    @("לפחות אחד")
-                                }
-                                else if (cond.Operator == Operator.Or)
-                                {
-                                    @("או")
-                                }
                                 else
                                 {
-                                    @("גם")
+                                    @("לפחות אחד")
                                 }
                             </ValueTemplate>
                             <Template>
@@ -248,17 +258,9 @@
                                 {
                                     @("כל האיברים")
                                 }
-                                else if (context == Operator.Any)
-                                {
-                                    @("לפחות אחד")
-                                }
-                                else if (context == Operator.Or)
-                                {
-                                    @("או")
-                                }
                                 else
                                 {
-                                    @("גם")
+                                    @("לפחות אחד")
                                 }
                             </Template>
                         </RadzenDropDown>

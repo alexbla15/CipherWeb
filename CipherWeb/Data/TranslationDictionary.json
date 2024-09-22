@@ -122,7 +122,7 @@
   "UserAction_Status": "סטטוס",
 
   "Vessel_Name": "שם כלי",
-  "Vessel_Packages": "תעודות",
+  "Vessel_ContainingPackages": "תעודות",
   "Vessel_System": "מערכת",
   "Vessel_Type": "סוג"
 }

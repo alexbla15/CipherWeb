@@ -52,19 +52,16 @@
         /// <summary>
         /// Report unique identifier.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; set; } = IdCounter;
 
         /// <summary>
         /// Report title, as will be shown to user.
         /// </summary>
-        public string? Title { get; set; }
+        public string? Title { get; set; } = null;
 
-        public Report(string? title = null)
+        public Report()
         {
             IdCounter++;
-
-            Id = IdCounter;
-            Title = title;
         }
 
         public string ToJson()

@@ -9,31 +9,30 @@
         /// New process ID for event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public int? ProcessId { get; set; }
+        public string? ProcessId { get; set; } = null;
+
+        private string? _EventComment = null;
 
         /// <summary>
         /// Updated comment for event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
-        public string? EventComment { get; set; }
+        public string? EventComment
+        {
+            get { return _EventComment; }
+            set { _EventComment = value?.Trim(); }
+        }
+
+        private string? _ActionComments = null;
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
         [HebrewTranslation(nameof(ActionComments))]
-        public string? ActionComments { get; set; }
-
-        /// <summary>
-        /// Update event's process or comments
-        /// </summary>
-        /// <param name="processId">New process ID for event</param>
-        /// <param name="eventComment">Updated comment for event</param>
-        /// <param name="actionComments">Free text comments on update. Ideally contains reason for change</param>
-        public UpdateEvent(int? processId = null, string? eventComment = null, string? actionComments = null)
+        public string? ActionComments
         {
-            ProcessId = processId;
-            EventComment = eventComment;
-            ActionComments = actionComments;
+            get { return _ActionComments; }
+            set { _ActionComments = value?.Trim(); }
         }
     }
 }

@@ -5,36 +5,35 @@
     /// </summary>
     public class ProcessDefinitionRequest
     {
+        private string _Name = string.Empty;
+
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Name))]
-        public string Name { get; set; }
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
+
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Description of process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Description))]
-        public string Description { get; set; }
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value.Trim(); }
+        }
 
         /// <summary>
         /// Steps of the process
         /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
-        public List<ProcessStepDefinition> Steps { get; set; }
-
-        /// <summary>
-        /// Create a new process definition or update it.
-        /// </summary>
-        /// <param name="name">Name of the process</param>
-        /// <param name="description">Description of process</param>
-        /// <param name="steps">Steps of the process</param>
-        public ProcessDefinitionRequest(string name, string description, List<ProcessStepDefinition> steps)
-        {
-            Name = name;
-            Description = description;
-            Steps = steps;
-        }
+        public List<ProcessStepDefinition> Steps { get; set; } = new();
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -120,20 +119,7 @@
 
         public ProcessDefinition Create(string id)
         {
-            return new ProcessDefinition(
-                name: Name,
-                description: Description,
-                steps: Steps,
-                id: id
-                );
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static ProcessDefinitionRequest Empty()
-        {
-            return new ProcessDefinitionRequest(name: string.Empty, description: string.Empty, steps: new List<ProcessStepDefinition>());
+            return new ProcessDefinition(id) { Name = Name, Description = Description, Steps=Steps };
         }
 
         public static string Translate(string searchedAttribute)

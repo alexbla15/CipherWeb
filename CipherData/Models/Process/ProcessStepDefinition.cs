@@ -8,23 +8,34 @@ namespace CipherData.Models
     /// </summary>
     public class ProcessStepDefinition: Resource
     {
-        /// <summary>
-        /// Unique name of the process step, two steps in the same process should not have the same name.
-        /// </summary>
-        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Name))]
-        public string Name { get; set; }
+        private string _Name = string.Empty;
 
         /// <summary>
-        /// Description of the process step
+        /// Name of the process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Description))]
-        public string Description { get; set; }
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
 
+        private string _Description = string.Empty;
+
+        /// <summary>
+        /// Description of process
+        /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value.Trim(); }
+        }
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
         [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
-        public GroupedBooleanCondition Condition { get; set; }
+        public GroupedBooleanCondition Condition { get; set; } = new();
 
         private static int IdCounter { get; set; } = 0;
 
@@ -37,15 +48,9 @@ namespace CipherData.Models
         /// <summary>
         /// A collection of steps that make a single definition
         /// </summary>
-        /// <param name="name">Unique name of the process step, two steps in the same process should not have the same name.</param>
-        /// <param name="description">Description of the process step</param>
-        /// <param name="condition">Condition on event to be associated with the process step </param>
-        public ProcessStepDefinition(string name, string description, GroupedBooleanCondition condition, string? id = null)
+        public ProcessStepDefinition(string? id = null)
         {
             Id = id ?? GetId();
-            Name = name;
-            Description = description;
-            Condition = condition;
         }
 
         /// <summary>
@@ -127,22 +132,12 @@ namespace CipherData.Models
             List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };
             string name = RandomFuncs.RandomItem(ProcessesStepNames);
 
-            return new ProcessStepDefinition(
-                id: id,
-                name: name,
-                description:name,
-                condition: GroupedBooleanCondition.Random()
-                );
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        /// <returns></returns>
-        public static ProcessStepDefinition Empty()
-        {
-            return new ProcessStepDefinition(name: string.Empty, description: string.Empty,
-                condition: GroupedBooleanCondition.Empty());
+            return new ProcessStepDefinition(id)
+            {
+                Name = name,
+                Description = name,
+                Condition = GroupedBooleanCondition.Random()
+            };
         }
 
         public static string Translate(string searchedAttribute)

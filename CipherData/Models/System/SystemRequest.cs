@@ -5,53 +5,47 @@
     /// </summary>
     public class SystemRequest
     {
+        private string _Name = string.Empty;
+
         /// <summary>
-        /// Name of system
+        /// Name of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Name))]
-        public string Name { get; set; }
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
+        public string Name
+        {
+            get { return _Name; }
+            set { _Name = value.Trim(); }
+        }
+
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Description))]
-        public string Description { get; set; }
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value.Trim(); }
+        }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Properties))]
-        public Dictionary<string,string>? Properties { get; set; }
+        public Dictionary<string,string>? Properties { get; set; } = null;
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Unit))]
-        public string? UnitId { get; set; }
+        public string? UnitId { get; set; } = null;
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Parent))]
-        public string? ParentId { get; set; }
-
-        /// <summary>
-        /// Create a new system or update it
-        /// </summary>
-        /// <param name="name">Name of system</param>
-        /// <param name="description">Description of system</param>
-        /// <param name="properties">JSON-like properties of the system</param>
-        /// <param name="parentId">ID of parent system containing this one</param>
-        /// <param name="unitId">ID of unit responsible for this system.</param>
-        public SystemRequest(string name, string description, string? unitId = null, 
-            Dictionary<string,string>? properties = null, string? parentId=null)
-        {
-            Name = name;
-            Description = description;
-            Properties = properties;
-            ParentId = parentId;
-            UnitId = unitId;
-        }
+        public string? ParentId { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -128,22 +122,14 @@
 
         public StorageSystem Create(string id)
         {
-            return new StorageSystem(
-                description: Description,
-                unit: Unit.Random(UnitId),
-                name: Name,
-                properties: Properties,
-                parent: StorageSystem.Random(ParentId),
-                id: id
-                );
-        }
-
-        /// <summary>
-        /// Return an empty object scheme.
-        /// </summary>
-        public static SystemRequest Empty()
-        {
-            return new SystemRequest(name: string.Empty, description: string.Empty, unitId: string.Empty, properties: new Dictionary<string, string>());
+            return new StorageSystem(id)
+            {
+                Description = Description,
+                Unit = Unit.Random(UnitId),
+                Name = Name,
+                Properties = Properties,
+                Parent = StorageSystem.Random(ParentId),
+            };
         }
 
         /// <summary>

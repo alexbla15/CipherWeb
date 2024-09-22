@@ -57,7 +57,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(Package.Empty());
+        chosenPacks.Add(new Package());
 
         StateHasChanged();
 
@@ -115,7 +115,7 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(Package.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         @if (string.IsNullOrEmpty(pack.Id))
                         {
@@ -127,7 +127,7 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Title="@(Package.Translate(nameof(Package.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherNumeric Width="100%" Amount="Package.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>

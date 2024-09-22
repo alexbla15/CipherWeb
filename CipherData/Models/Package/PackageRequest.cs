@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
-using System;
-using System.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -17,25 +12,25 @@ namespace CipherData.Models
         /// ID of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Id))]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
-        public List<PackageProperty>? Properties { get; set; }
+        public List<PackageProperty>? Properties { get; set; } = null;
 
         /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Vessel))]
-        public string? VesselId { get; set; }
+        public string? VesselId { get; set; } = null;
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.System))]
-        public string SystemId { get; set; }
+        public string SystemId { get; set; } = string.Empty;
 
         /// <summary>
         /// Total mass of the package
@@ -53,45 +48,19 @@ namespace CipherData.Models
         /// Parent (Id) containing this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Parent))]
-        public string? ParentId { get; set; }
+        public string? ParentId { get; set; } = null;
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Children))]
-        public List<string>? ChildrenIds { get; set; }
+        public List<string>? ChildrenIds { get; set; } = null;
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Category))]
-        public string CategoryId { get; set; }
-
-        /// <summary>
-        /// Instanciation of a new package request
-        /// </summary>
-        /// <param name="properties">JSON-like additional properties of the package</param>
-        /// <param name="system">Location (Id) which contains the package</param>
-        /// <param name="brutMass">Total mass of the package</param>
-        /// <param name="netMass">Net mass of the package</param>
-        /// <param name="category">Category (Id) of package</param>
-        /// <param name="vessel">Vessel (Id) which contains the package</param>
-        /// <param name="children">Packages (Ids) contained in this one</param>
-        /// <param name="id">Id of new package</param>
-        public PackageRequest(string id, string system, decimal brutMass, decimal netMass, string category,
-            string? vessel = null, List<string>? children = null, string? parent = null,
-            List<PackageProperty>? properties = null)
-        {
-            Id = id;
-            Properties = properties;
-            VesselId = vessel;
-            SystemId = system;
-            BrutMass = brutMass;
-            NetMass = netMass;
-            ParentId = parent;
-            ChildrenIds = children;
-            CategoryId = category;
-        }
+        public string CategoryId { get; set; } = string.Empty;
 
         /// <summary>
         /// Transfrom this object to JSON, readable by API
@@ -192,18 +161,18 @@ namespace CipherData.Models
 
         public Package Create(string? id = null)
         {
-            return new Package(
-                system: StorageSystem.Random(SystemId),
-                brutMass: BrutMass,
-                netMass: NetMass,
-                createdAt: DateTime.Now,
-                category: Category.Random(CategoryId),
-                vessel: VesselId == null ? null: Vessel.Random(VesselId),
-                parent: Package.Random(ParentId),
-                children: ChildrenIds?.Select(x=>Package.Random(x)).ToList(),
-                id: id ?? Id,
-                properties: Properties
-                );
+            return new Package(id ?? Id)
+            {
+                System = StorageSystem.Random(SystemId),
+                BrutMass = BrutMass,
+                NetMass = NetMass,
+                CreatedAt = DateTime.Now,
+                Category = Category.Random(CategoryId),
+                Vessel = VesselId == null ? null : Vessel.Random(VesselId),
+                Parent = Package.Random(ParentId),
+                Children = ChildrenIds?.Select(x => Package.Random(x)).ToList(),
+                Properties = Properties
+            };
         }
 
         /// <summary>
@@ -247,6 +216,7 @@ namespace CipherData.Models
 
             return true;
         }
+
         public static string Translate(string searchedAttribute)
         {
             return Resource.Translate(typeof(PackageRequest), searchedAttribute);
@@ -259,12 +229,5 @@ namespace CipherData.Models
         {
             return Package.Random(id).Request();
         }
-
-        public static PackageRequest Empty()
-        {
-            return new PackageRequest(id: string.Empty, system: string.Empty, brutMass: 0, netMass: 0, category: string.Empty);
-        }
-
-        // API-RELATED FUNCTIONS
     }
 }

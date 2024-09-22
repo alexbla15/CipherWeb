@@ -5,17 +5,29 @@
     /// </summary>
     public class CreateRelocationEvent
     {
+        private string? _Worker = string.Empty;
+
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
-        public string? Worker { get; set; }
+        public string? Worker
+        {
+            get { return _Worker; }
+            set { _Worker = value?.Trim(); }
+        }
+
+        private string? _Comments = null;
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get { return _Comments; }
+            set { _Comments = value?.Trim(); }
+        }
 
         /// <summary>
         /// Timestamp when the event happend. Required
@@ -27,31 +39,13 @@
         /// Package that relocate in this event.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(Packages))]
-        public List<Package>? Packages { get; set; }
+        public List<Package>? Packages { get; set; } = null;
 
         /// <summary>
         /// System to which the packages are relocated.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
-        public StorageSystem? TargetSystem { get; set; }
-
-        /// <summary>
-        /// Create an event of transfering mass between donating and accepting packages.
-        /// </summary>
-        /// <param name="worker">Name of updating worker. Required</param>
-        /// <param name="targetSystem">system to which the packages are relocated</param>
-        /// <param name="timestamp">Timestamp when the event happend. Required</param>
-        /// <param name="comments">Free-text comments on the event</param>
-        /// <returns></returns>
-        public CreateRelocationEvent(string? worker, DateTime timestamp, StorageSystem? targetSystem = null,
-            List<Package>? packages = null, string? comments = null)
-        {
-            TargetSystem = targetSystem;
-            Worker = worker;
-            Timestamp = timestamp;
-            Comments = comments;
-            Packages = packages;
-        }
+        public StorageSystem? TargetSystem { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -59,8 +53,10 @@
         public CheckField CheckPackages()
         {
             CheckField result = CheckField.Required(Packages, Translate(nameof(Packages)));
-            result = (result.Succeeded) ? CheckField.FullList(Packages, Translate(nameof(Packages))) : result;
-            result = (result.Succeeded) ? CheckField.Distinct(Packages, Translate(nameof(Packages))) : result;
+            if (result.Succeeded && Packages != null)
+            {
+                result = (result.Succeeded) ? CheckField.FullList(Packages, Translate(nameof(Packages))) : result;
+                result = (result.Succeeded) ? CheckField.Distinct(Packages, Translate(nameof(Packages))) : result;            }
             return result;
         }
 
@@ -111,12 +107,12 @@
         }
 
         /// <summary>
-        /// Create a copy of this object.
+        /// Get an identical copy of this object
         /// </summary>
         /// <returns></returns>
         public CreateRelocationEvent Copy()
         {
-            return new CreateRelocationEvent(Worker, Timestamp, TargetSystem, Packages, Comments);
+            return (CreateRelocationEvent)MemberwiseClone();
         }
 
         /// <summary>
@@ -132,11 +128,17 @@
                     ChangeLocations();
                 }
 
-                return new CreateEvent(worker: Worker, timestamp: Timestamp, eventType: 24, comments: Comments,
-                    actions: Packages.Select(x=>x.Request()).ToList());
+                return new CreateEvent()
+                {
+                    Worker = Worker,
+                    Timestamp = Timestamp,
+                    EventType = 24,
+                    Comments = Comments,
+                    Actions = Packages.Select(x => x.Request()).ToList()
+                };
             }
 
-            return CreateEvent.Empty();
+            return new CreateEvent();
         }
 
         public void ChangeLocations()
@@ -149,15 +151,6 @@
                 }
             }
         }
-
-        /// <summary>
-        /// Return an empty CreateEvent object scheme.
-        /// </summary>
-        public static CreateRelocationEvent Empty()
-        {
-            return new CreateRelocationEvent(worker: string.Empty, timestamp: DateTime.Now);
-        }
-
         /// <summary>
         /// Translate the name of the field according to its hebrew translation.
         /// </summary>

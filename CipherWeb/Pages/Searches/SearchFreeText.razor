@@ -8,7 +8,7 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete @ref=autoComplete Data="@Options" TextProperty="@(nameof(CachedData.PackageExample.Id))" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
+        <CipherAutoComplete @ref=autoComplete Data="@Options" TextProperty="@(nameof(Package.Id))" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">

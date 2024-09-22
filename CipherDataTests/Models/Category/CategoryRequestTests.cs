@@ -9,37 +9,36 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CategoryRequestTest()
         {
-            CategoryRequest req = new(name: nameof(req), description: nameof(req),
-                idMask: new() { "1","22","33"}, creatingProcesses: new(), consumingProcesses: new(),
-                properties: new(), parent: nameof(req));
-
             // test full assignement
+            CategoryRequest req = new() { Name = nameof(req), Description = nameof(req),
+                IdMask = new() { "1", "22", "33" }, Properties = new(), ParentId = nameof(req)};
+
             Assert.IsFalse(string.IsNullOrEmpty(req.Name));
             Assert.IsFalse(string.IsNullOrEmpty(req.Description));
             Assert.IsFalse(string.IsNullOrEmpty(req.ParentId));
             Assert.IsNotNull(req.CreatingProcesses);
             Assert.IsNotNull(req.ConsumingProcesses);
             Assert.IsNotNull(req.Properties);
-            Assert.IsTrue(req.IdMask.Count() == 3);
+            Assert.IsTrue(req.IdMask.Count == 3);
 
-            req = new(name: nameof(req), description: nameof(req),
-                idMask: new() { "1", "22", "33" });
+            // test empty assignement
+            req = new();
 
-            // test full assignement
-            Assert.IsFalse(string.IsNullOrEmpty(req.Name));
-            Assert.IsFalse(string.IsNullOrEmpty(req.Description));
+            Assert.IsTrue(string.IsNullOrEmpty(req.Name));
+            Assert.IsTrue(string.IsNullOrEmpty(req.Description));
             Assert.IsNotNull(req.CreatingProcesses);
             Assert.IsNotNull(req.ConsumingProcesses);
             Assert.IsNull(req.Properties);
-            Assert.IsTrue(req.IdMask.Count() == 3);
+            Assert.IsNotNull(req.IdMask);
         }
 
         [TestMethod()]
         public void CheckNameTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
-
-            cat.Name = "תכונה"; // Good name
+            CategoryRequest cat = new()
+            {
+                Name = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckName().Succeeded);
 
             cat.Name = "@תכונה"; // Improper chars
@@ -58,9 +57,10 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDescriptionTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
-
-            cat.Description = "תכונה"; // Good name
+            CategoryRequest cat = new()
+            {
+                Description = "תכונה" // Good name
+            };
             Assert.IsTrue(cat.CheckDescription().Succeeded);
 
             cat.Description = "@תכונה"; // Improper chars
@@ -79,7 +79,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckIdMaskTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
+            CategoryRequest cat = new();
             
             // 1 - empty list
             cat.IdMask = new();
@@ -93,7 +93,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckCreatingProcessesTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
+            CategoryRequest cat = new();
 
             // 1 - empty list
             cat.CreatingProcesses = new();
@@ -107,7 +107,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckConsumingProcessesTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
+            CategoryRequest cat = new();
 
             // 1 - empty list
             cat.ConsumingProcesses = new();
@@ -121,7 +121,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckPropertiesTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
+            CategoryRequest cat = new();
 
             // 1 - null
             cat.Properties = null;
@@ -150,7 +150,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckParentIdTest()
         {
-            CategoryRequest cat = CategoryRequest.Empty();
+            CategoryRequest cat = new();
 
             cat.ParentId = "1"; // Good id
             Assert.IsTrue(cat.CheckParentId().Succeeded);
@@ -172,9 +172,16 @@ namespace CipherData.Models.Tests
         public void CheckTest()
         {
             // 1 - good fields
-            CategoryRequest req = new(name: nameof(req), description: nameof(req),
-                idMask: new() { "1", "22", "33" }, creatingProcesses: new() { "1", "2" }, consumingProcesses: new() { "1", "2" },
-                properties: new(), parent: nameof(req));
+            CategoryRequest req = new()
+            {
+                Name = nameof(req),
+                Description = nameof(req),
+                IdMask = new() { "1", "22", "33" },
+                CreatingProcesses = new() { "1", "2" },
+                ConsumingProcesses = new() { "1", "2" },
+                Properties = new(),
+                ParentId = nameof(req)
+            };
             Assert.IsTrue(req.Check().Item1);
 
             // 2 - bad name
@@ -216,41 +223,40 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CopyTest()
         {
-            CategoryRequest req = new(name: nameof(req), description: nameof(req),
-                idMask: new() { "1", "22", "33" }, creatingProcesses: new(), consumingProcesses: new(),
-                properties: new(), parent: nameof(req));
+            CategoryRequest req = new()
+            {
+                Name = nameof(req),
+                Description = nameof(req),
+                IdMask = new() { "1", "22", "33" },
+                Properties = new(),
+                ParentId = nameof(req)
+            };
+
             CategoryRequest req2 = req.Copy();
 
             Assert.IsNotNull(req2);
             Assert.IsTrue(req2.Name == req.Name);
             Assert.IsTrue(req2.Description == req.Description);
             Assert.IsTrue(req2.ParentId == req.ParentId);
-            Assert.IsTrue(req2.Properties.SequenceEqual(req.Properties));
+            Assert.IsTrue(req2.Properties?.SequenceEqual(req.Properties));
             Assert.IsTrue(req2.CreatingProcesses.SequenceEqual(req.CreatingProcesses));
             Assert.IsTrue(req2.ConsumingProcesses.SequenceEqual(req.ConsumingProcesses));
         }
 
         [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty Category scheme
-            CategoryRequest EmptyCat = CategoryRequest.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Name));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Description));
-            Assert.IsTrue(!EmptyCat.IdMask.Any() || EmptyCat.IdMask is null);
-            Assert.IsTrue(!EmptyCat.CreatingProcesses.Any() || EmptyCat.CreatingProcesses is null);
-            Assert.IsTrue(!EmptyCat.ConsumingProcesses.Any() || EmptyCat.ConsumingProcesses is null);
-            Assert.IsNull(EmptyCat.ParentId);
-            Assert.IsNull(EmptyCat.Properties);
-        }
-
-        [TestMethod()]
         public void EqualsTest()
         {
-            CategoryRequest req = new(name: nameof(req), description: nameof(req),
-                idMask: new() { "1", "22", "33" }, creatingProcesses: new() { "1", "2" }, consumingProcesses: new() { "1", "2" },
-                properties: new(), parent: nameof(req));
+            CategoryRequest req = new()
+            {
+                Name = nameof(req),
+                Description = nameof(req),
+                IdMask = new() { "1", "22", "33" },
+                CreatingProcesses = new() { "1", "2" },
+                ConsumingProcesses = new() { "1", "2" },
+                Properties = new(),
+                ParentId = nameof(req)
+            };
+
             CategoryRequest req2 = req.Copy();
 
             Assert.IsTrue(req.Equals(req2));
@@ -300,9 +306,13 @@ namespace CipherData.Models.Tests
             List<ProcessDefinition> CreatingProcs = RandomFuncs.FillRandomObjects(3, ProcessDefinition.Random);
             List<ProcessDefinition> ConsumingProcs = RandomFuncs.FillRandomObjects(3, ProcessDefinition.Random);
 
-            Category cat = new(id: nameof(cat), name: nameof(cat), description: nameof(cat),
-                idMask: IdMasks, creatingProcesses: new(), consumingProcesses: new(),
-                parent: Category.Random());
+            Category cat = new(nameof(cat))
+            {
+                Name = nameof(cat),
+                Description = nameof(cat),
+                IdMask = IdMasks,
+                Parent = Category.Random()
+            };
 
             CategoryRequest req = cat.Request();
 
@@ -349,9 +359,13 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void ToJsonTest()
         {
-            Category cat = new(id: nameof(cat), name: nameof(cat), description: nameof(cat),
-                idMask: new() { "1","2"}, creatingProcesses: new(), consumingProcesses: new(),
-                parent: Category.Random("C001"));
+            Category cat = new(nameof(cat))
+            {
+                Name = nameof(cat),
+                Description = nameof(cat),
+                IdMask = new() { "1", "2" },
+                Parent = Category.Random("C001")
+            };
 
             CategoryRequest req = cat.Request();
             string req_json = req.ToJson();
@@ -363,9 +377,14 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CreateTest()
         {
-            Category cat = new(id: "2", name: nameof(cat), description: nameof(cat),
-                idMask: new() { "1", "2" }, creatingProcesses: new(), consumingProcesses: new(),
-                parent: Category.Random());
+
+            Category cat = new("2")
+            {
+                Name = nameof(cat),
+                Description = nameof(cat),
+                IdMask = new() { "1", "2" },
+                Parent = Category.Random("C001")
+            };
 
             CategoryRequest req = cat.Request();
 
@@ -386,7 +405,7 @@ namespace CipherData.Models.Tests
             // try to translate some field of Category
             // this depends on the TranslationDictionary.json config.
 
-            CategoryRequest EmptyCat = CategoryRequest.Empty();
+            CategoryRequest EmptyCat = new();
             string translation = CategoryRequest.Translate(nameof(EmptyCat.Properties));
             Assert.IsFalse(string.IsNullOrEmpty(translation));
             Assert.IsFalse(translation == nameof(EmptyCat.Properties));

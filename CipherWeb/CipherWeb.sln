@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherWeb", "CipherWeb.cspr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherData", "..\CipherData\CipherData.csproj", "{B6ACBB4D-70B3-4B16-ABF9-17F1CAA0B33F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherDataTests", "..\CipherDataTests\CipherDataTests.csproj", "{35C43E44-60AB-4D86-BF4A-C51DBA9D65CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CipherDataTests", "..\CipherDataTests\CipherDataTests.csproj", "{35C43E44-60AB-4D86-BF4A-C51DBA9D65CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

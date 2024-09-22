@@ -13,24 +13,39 @@ namespace CipherData.Models.Tests
         /// <summary>
         /// minimally detailed category, without set-id
         /// </summary>
-        private static readonly Category c1 = new(name: nameof(c1), description: nameof(c1),
-                idMask: IdMasks, creatingProcesses: new(), consumingProcesses: new());
+        private static readonly Category c1 = new()
+        {
+            Name = nameof(c1),
+            Description = nameof(c1),
+            IdMask = IdMasks
+        };
 
         /// <summary>
         /// minimally detailed category, with set-id
         /// </summary>
-        private static readonly Category c2 = new(id: nameof(c2), name: nameof(c2), description: nameof(c2),
-                idMask: IdMasks, creatingProcesses: new(), consumingProcesses: new(),
-                materialType: c1);
+        private static readonly Category c2 = new(nameof(c2))
+        {
+            Name = nameof(c2),
+            Description = nameof(c2),
+            IdMask = IdMasks,
+            MaterialType = c1
+        };
 
         /// <summary>
         /// fully detailed category, with set-id
         /// </summary>
-        private readonly Category c3 = new(id: nameof(c3), name: nameof(c3), description: nameof(c3),
-                idMask: IdMasks,  parent: c1,
-                creatingProcesses: CreatingProcs, consumingProcesses: ConsumingProcs,
-                materialType: Category.Random(), children: new () { c2},
-                properties: new() { CategoryProperty.Random()});
+        private readonly Category c3 = new(nameof(c3))
+        { 
+            Name = nameof(c3), 
+            Description = nameof(c3),
+            IdMask = IdMasks,  
+            Parent = c1,
+            CreatingProcesses = CreatingProcs, 
+            ConsumingProcesses = ConsumingProcs,
+            MaterialType = Category.Random(), 
+            Children = new() { c2 },
+            Properties = new() { CategoryProperty.Random()}
+        };
 
         /// <summary>
         /// Test many issues with initiallizing category
@@ -43,9 +58,13 @@ namespace CipherData.Models.Tests
             Assert.IsNotNull(c2.Id);
 
             // Material type must be assigned by the parent, if not specified specifically
-            Category c4  = new(id: nameof(c2), name: nameof(c2), description: nameof(c2),
-                idMask: IdMasks, creatingProcesses: new(), consumingProcesses: new(),
-                parent: c2);
+            Category c4 = new(nameof(c2))
+            {
+                Name = nameof(c2),
+                Description = nameof(c2),
+                IdMask = IdMasks,
+                Parent = c2
+            };
             Assert.IsTrue(c4.MaterialType == c2.MaterialType);
         }
 
@@ -54,12 +73,15 @@ namespace CipherData.Models.Tests
         {
             // checking request of c3
             CategoryRequest c3_request = c3.Request();
-            CategoryRequest new_request = new(name: nameof(c3), description: nameof(c3),
-                idMask: IdMasks,
-                creatingProcesses: CreatingProcs.Select(x => x.Id).ToList(),
-                consumingProcesses: ConsumingProcs.Select(x => x.Id).ToList(),
-                parent: c1.Id, properties: c3.Properties
-                );
+            CategoryRequest new_request = new() { 
+                Name = nameof(c3), 
+                Description = nameof(c3),
+                IdMask = IdMasks,
+                CreatingProcesses = CreatingProcs.Select(x => x.Id).ToList(),
+                ConsumingProcesses = ConsumingProcs.Select(x => x.Id).ToList(),
+                ParentId = c1.Id, 
+                Properties = c3.Properties
+                };
 
             Assert.IsTrue(c3_request.Equals(new_request));
         }
@@ -73,29 +95,11 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(c4.Name == c3.Name);
             Assert.IsTrue(c4.Description == c3.Description);
             Assert.IsTrue(c4.Parent == c3.Parent);
-            Assert.IsTrue(c4.Children.SequenceEqual(c3.Children));
-            Assert.IsTrue(c4.Properties.SequenceEqual(c4.Properties));
-            Assert.IsTrue(c4.CreatingProcesses.SequenceEqual(c4.CreatingProcesses));
-            Assert.IsTrue(c4.ConsumingProcesses.SequenceEqual(c4.ConsumingProcesses));
+            Assert.IsTrue(c4.Children?.SequenceEqual(c3.Children));
+            Assert.IsTrue(c4.Properties?.SequenceEqual(c3.Properties));
+            Assert.IsTrue(c4.CreatingProcesses.SequenceEqual(c3.CreatingProcesses));
+            Assert.IsTrue(c4.ConsumingProcesses.SequenceEqual(c3.ConsumingProcesses));
             Assert.IsTrue(c4.MaterialType == c3.MaterialType);
-        }
-
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            // instanciation of an empty Category scheme
-            Category EmptyCat = Category.Empty();
-
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Id));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Name));
-            Assert.IsTrue(string.IsNullOrEmpty(EmptyCat.Description));
-            Assert.IsTrue(!EmptyCat.IdMask.Any() || EmptyCat.IdMask is null);
-            Assert.IsTrue(!EmptyCat.CreatingProcesses.Any() || EmptyCat.CreatingProcesses is null);
-            Assert.IsTrue(!EmptyCat.ConsumingProcesses.Any() || EmptyCat.ConsumingProcesses is null);
-            Assert.IsNull(EmptyCat.Parent);
-            Assert.IsNull(EmptyCat.Children);
-            Assert.IsNull(EmptyCat.MaterialType);
-            Assert.IsNull(EmptyCat.Properties);
         }
 
         [TestMethod()]
@@ -142,7 +146,7 @@ namespace CipherData.Models.Tests
 
             // 9 - change MaterialType
             c4 = c3.Copy();
-            c4.MaterialType = Category.Empty();
+            c4.MaterialType = new();
             Assert.IsFalse(c4.Equals(c2));
 
             // 10 - change Properties
@@ -212,13 +216,12 @@ namespace CipherData.Models.Tests
             // 1 - try to fetch object without stating id
             var result = Category.Get("");
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Item1.Equals(Category.Empty())); // runs through empty tests
             Assert.IsTrue(result.Item2 == ErrorResponse.BadRequest);
 
             // 2 - try to fetch object with specific id
             result = Category.Get("1");
             Assert.IsNotNull(result);
-            Assert.IsTrue(!result.Item1.Equals(Category.Empty())); // runs through empty tests
+            Assert.IsTrue(!result.Item1.Equals(new("1"))); // runs through empty tests
             Assert.IsTrue(result.Item2 == ErrorResponse.Success);
         }
 

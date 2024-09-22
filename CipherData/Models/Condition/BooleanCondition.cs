@@ -48,19 +48,24 @@
     /// </summary>
     public class BooleanCondition : Condition
     {
+        private string? _Attribute = string.Empty;
+
         /// <summary>
         /// Attribute's name in event's object. 
         /// Can be chained to include sub-objects.
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Attribute))]
-        public string Attribute { get; set; }
+        public string? Attribute { 
+            get { return _Attribute; }
+            set { _Attribute = value?.Trim(); }
+        }
 
         /// <summary>
         /// Expected relation between attribute and a value.
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(AttributeRelation))]
-        public AttributeRelation AttributeRelation { get; set; }
+        public AttributeRelation AttributeRelation { get; set; } = AttributeRelation.Contains;
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
@@ -68,28 +73,17 @@
         [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.All;
 
+        private string? _Value = null;
+
         /// <summary>
         /// Target value for comparision. 
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Value))]
-        public string? Value { get; set; }
-
-        /// <summary>
-        /// User's instanciation of a boolean condition.
-        /// </summary>
-        /// <param name="attribute">Attribute's name in event's object. Can be chained to include sub-objects. Example: obj.eventType, obj.system.id, obj.packages.category</param>
-        /// <param name="attributeRelation">Expected relation between attribute and a value.</param>
-        /// <param name="operator">Operator used in case the attribute contains multiple values.</param>
-        /// <param name="value">Target value for comparision. If null, the attributes are compared to themselves (all equal, any equal etc.)</param>
-        public BooleanCondition(string attribute, AttributeRelation attributeRelation, Operator @operator = Operator.All, 
-            string? value = null)
-        {
-            Attribute = attribute;
-            AttributeRelation = attributeRelation;
-            Operator = @operator;
-            Value = value;
+        public string? Value {
+            get { return _Value; }
+            set { _Value = value?.Trim(); }
         }
 
         /// <summary>
@@ -115,7 +109,7 @@
         /// <returns></returns>
         public BooleanCondition Copy()
         {
-            return new BooleanCondition(Attribute, AttributeRelation, Operator, Value);
+            return (BooleanCondition)MemberwiseClone();
         }
 
         /// <summary>
@@ -146,14 +140,6 @@
             result.Fields.Add(CheckValue());
 
             return result.Check();
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static BooleanCondition Empty()
-        {
-            return new BooleanCondition(attribute: string.Empty, attributeRelation: AttributeRelation.Contains);
         }
 
         /// <summary>

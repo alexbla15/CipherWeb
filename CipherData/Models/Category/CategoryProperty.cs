@@ -13,45 +13,40 @@
     /// </summary>
     public class CategoryProperty
     {
+        private string? _Name = string.Empty;
+
         /// <summary>
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
-        public string Name { get; set; }
+        public string? Name {
+            get { return _Name; }
+            set { _Name = value?.Trim(); } 
+        }
+
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
-        public string Description { get; set; }
+        public string? Description
+        {
+            get { return _Description; }
+            set { _Description = value?.Trim(); }
+        }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
-        public PropertyType PropertyType { get; set; }
+        public PropertyType PropertyType { get; set; } = PropertyType.Text;
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
-        public string? DefaultValue { get; set; }
-
-        /// <summary>
-        /// Instanciation of new Category.
-        /// </summary>
-        /// <param name="name">Name of the property</param>
-        /// <param name="description">Free-text description of the category</param>
-        /// <param name="propertyType">Type of the property (string / decimal / bool)</param>
-        /// <param name="value">Value that will be set for this category as default. User cannot change that.</param>
-        public CategoryProperty(string name, string description, PropertyType propertyType = PropertyType.Text, 
-            string? value = null)
-        {
-            Name = name;
-            Description = description;
-            PropertyType = propertyType;
-            DefaultValue = value;
-        }
+        public string? DefaultValue { get; set; } = null;
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -122,11 +117,7 @@
         /// <returns></returns>
         public CategoryProperty Copy()
         {
-            return new CategoryProperty(
-                name: Name,
-                description: Description,
-                value: DefaultValue,
-                propertyType: PropertyType);
+            return (CategoryProperty)MemberwiseClone();
         }
 
         public override int GetHashCode()
@@ -136,26 +127,15 @@
 
         public static CategoryProperty Random(string? set_name = null)
         {
-            CategoryProperty TextOption = new(name: "צבע", description: "צבע נראה לעין", value: "אדום");
-            CategoryProperty NumberOption = new(name: "כמות", description: "כמות יחידות", value: "5", propertyType: PropertyType.Number);
-            CategoryProperty BoolOption = new(name: "מיועד לאיחסון", description: "עבר בדיקה, כעת מוכן לאיחסון", value: "True", propertyType: PropertyType.Boolean);
+            CategoryProperty TextOption = new() { Name = "צבע", Description = "צבע נראה לעין", DefaultValue = "אדום" };
+            CategoryProperty NumberOption = new() { Name = "כמות", Description = "כמות יחידות", DefaultValue = "5", PropertyType = PropertyType.Number };
+            CategoryProperty BoolOption = new() { Name = "מיועד לאיחסון", Description = "עבר בדיקה, כעת מוכן לאיחסון", DefaultValue = "True", PropertyType = PropertyType.Boolean};
 
             List<CategoryProperty> CategoryProperties = new() { TextOption, BoolOption, NumberOption};
 
             CategoryProperty result = CategoryProperties[new Random().Next(CategoryProperties.Count)];
-            if (set_name != null) result.Name = set_name;
+            if (set_name != null) result.Name = set_name.Trim();
             return result;
-        }
-
-        /// <summary>
-        /// Get an empty object scheme.
-        /// </summary>
-        public static CategoryProperty Empty()
-        {
-            return new CategoryProperty(
-                name: string.Empty,
-                description: string.Empty
-                );
         }
 
         /// <summary>

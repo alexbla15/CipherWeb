@@ -5,18 +5,18 @@
     {
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
-    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(CachedData.SystemExample.Name))"
+    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(StorageSystem.Name))"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled" Change="@Change">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Name))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Description))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Parent))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Name))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Description))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Parent))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Parent)))">
                 <Template>
                     @((context as StorageSystem).Parent?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.SystemExample.Unit))" Title="@(StorageSystem.Translate(nameof(CachedData.SystemExample.Unit)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Unit))" Title="@(StorageSystem.Translate(nameof(StorageSystem.Unit)))">
                 <Template>
                     @((context as StorageSystem).Unit?.Description)
                 </Template>
@@ -85,7 +85,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= StorageSystem.Translate(nameof(CachedData.SystemExample.Name));
+        Label ??= StorageSystem.Translate(nameof(StorageSystem.Name));
         Icon ??= Icons.Cipher.Location;
 
         (AvailableSystems, Error) = CachedData.AllSystems;

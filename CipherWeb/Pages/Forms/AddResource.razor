@@ -54,13 +54,13 @@
     private CipherFormInfo FormInfo = new();
     private CipherProcess EventProc = new();
 
-    private Package NewPackage = Package.Empty();
-    private UnitRequest unitRequest = UnitRequest.Empty();
-    private CategoryRequest catRequest = CategoryRequest.Empty();
-    private VesselRequest vesRequest = VesselRequest.Empty();
-    private ProcessDefinitionRequest procDefRequest = ProcessDefinitionRequest.Empty();
-    private SystemRequest sysRequest = SystemRequest.Empty();
-    private CreateEvent packRequest = CreateEvent.Empty();
+    private Package NewPackage = new();
+    private UnitRequest unitRequest = new();
+    private CategoryRequest catRequest = new();
+    private VesselRequest vesRequest = new();
+    private ProcessDefinitionRequest procDefRequest = new();
+    private SystemRequest sysRequest = new();
+    private CreateEvent packRequest = new();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -108,14 +108,15 @@
         {
             List<PackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
 
-            packRequest = new CreateEvent(
-            worker: FormInfo.GetWorker(),
-            processId: EventProc.ChosenProcess?.Id,
-            timestamp: FormInfo.GetDateTime(),
-            eventType: 21,
-            actions: ChangedPacks,
-            comments: EventComments.GetValue()
-            );
+            packRequest = new CreateEvent()
+            {
+                Worker = FormInfo.GetWorker(),
+                ProcessId = EventProc.ChosenProcess?.Id,
+                Timestamp = FormInfo.GetDateTime(),
+                EventType = 21,
+                Actions = ChangedPacks,
+                Comments = EventComments.GetValue()
+            };
 
             return packRequest.Check();
         }
@@ -212,7 +213,7 @@
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
-        JsonRequest = catRequest.ToJson();
+        JsonRequest = Category.Random().ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.CreateCategory(catRequest);
     }
 
@@ -244,7 +245,7 @@
         }
         else
         {
-            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(Package.Empty(), evResult.Item2);
+            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(new Package(), evResult.Item2);
         }
     }
 

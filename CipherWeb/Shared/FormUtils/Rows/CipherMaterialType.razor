@@ -4,8 +4,8 @@
     <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
                             Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Id))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.CategoryExample.Name))" Title="@(Category.Translate(nameof(CachedData.CategoryExample.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Id))" Title="@(Category.Translate(nameof(Category.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Category.Name))" Title="@(Category.Translate(nameof(Category.Name)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @((context as Category).Name)

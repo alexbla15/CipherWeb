@@ -15,18 +15,18 @@
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId />
-        <CipherComments @ref=PackDescription Label="@Package.Translate(nameof(CachedData.PackageExample.Description))"
+        <CipherComments @ref=PackDescription Label="@Package.Translate(nameof(Package.Description))"
                         Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
-        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(CachedData.PackageExample.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(Package.Translate(nameof(Package.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(Package.Translate(nameof(Package.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
 
         <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" />
         <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" />
         <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" />
 
-        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@Package.Translate(nameof(CachedData.PackageExample.DestinationProcesses))" />
-        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(Package.Translate(nameof(CachedData.PackageExample.Parent)))" />
-        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(Package.Translate(nameof(CachedData.PackageExample.Children)))" />
+        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@Package.Translate(nameof(Package.DestinationProcesses))" />
+        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(Package.Translate(nameof(Package.Parent)))" />
+        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(Package.Translate(nameof(Package.Children)))" />
 
         @if (NewProps != null)
         {
@@ -121,11 +121,11 @@
     private CipherPackagesPicking SetChildren = new();
 
     private Package? ChosenPackage;
-    private Package OriginalPack = Package.Empty();
-    private Package NewPack = Package.Empty();
+    private Package OriginalPack = new Package();
+    private Package NewPack = new Package();
 
-    private CipherData.Models.UpdatePackage RequestedPackUpdate = CipherData.Models.UpdatePackage.Empty();
-    private CreateEvent UpdatePackEvent = CreateEvent.Empty();
+    private CipherData.Models.UpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
+    private CreateEvent UpdatePackEvent = new();
 
     private List<PackageProperty>? NewProps = new();
 
@@ -206,8 +206,8 @@
         (Valid, ErrorMessage) = (true, string.Empty);
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
-        UpdatePackEvent = CreateEvent.Empty();
-        NewPack = Package.Empty();
+        UpdatePackEvent = new();
+        NewPack = new Package();
     }
 
     /// <summary>
@@ -262,9 +262,9 @@
         {
             NewPack.BrutMass = SetBrutMass.Amount;
             NewPack.NetMass = SetNetMass.Amount;
-            NewPack.Category = SetCategory.ChosenCategory ?? Category.Empty();
+            NewPack.Category = SetCategory.ChosenCategory ?? new();
             NewPack.Vessel = SetVessel.ChosenVessel;
-            NewPack.System = SetSystem.ChosenSystem ?? StorageSystem.Empty();
+            NewPack.System = SetSystem.ChosenSystem ?? new();
             NewPack.Parent = ParentPack.GetValue();
             NewPack.Children = SetChildren.SelectedPackages;
             NewPack.Properties = NewProps;

@@ -5,23 +5,35 @@
     /// </summary>
     public class CreateTranserAmountEvent
     {
+        private string? _Worker = null;
+
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
-        public string Worker { get; set; }
+        public string? Worker
+        {
+            get { return _Worker; }
+            set { _Worker = value?.Trim(); }
+        }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public string? ProcessId { get; set; }
+        public string? ProcessId { get; set; } = null;
+
+        private string? _Comments = null;
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get { return _Comments; }
+            set { _Comments = value?.Trim(); }
+        }
 
         /// <summary>
         /// Timestamp when the event happend. Required
@@ -33,42 +45,19 @@
         /// Package that loses mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
-        public Package? DonatingPackage { get; set; }
+        public Package? DonatingPackage { get; set; } = null;
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
-        public Package? AcceptingPackage { get; set; }
+        public Package? AcceptingPackage { get; set; } = null;
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
         public decimal Amount { get; set; }
-
-        /// <summary>
-        /// Create an event of transfering mass between donating and accepting packages.
-        /// </summary>
-        /// <param name="worker">Name of updating worker. Required</param>
-        /// <param name="timestamp">Timestamp when the event happend. Required</param>
-        /// <param name="donatingPackage">package losing mass</param>
-        /// <param name="acceptingPackage">package gaining mass</param>
-        /// <param name="processId">Process ID of process containing to this even. If null, tries to estimate it from event detailst</param>
-        /// <param name="comments">Free-text comments on the event</param>
-        /// <returns></returns>
-        public CreateTranserAmountEvent(string worker, DateTime timestamp, decimal amount,
-            Package? donatingPackage = null, Package? acceptingPackage = null, 
-            string? processId = null, string? comments = null)
-        {
-            Amount = amount;
-            Worker = worker;
-            Timestamp = timestamp;
-            ProcessId = processId;
-            Comments = comments;
-            DonatingPackage = donatingPackage;
-            AcceptingPackage = acceptingPackage;
-        }
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -128,7 +117,7 @@
         /// <returns></returns>
         public CreateTranserAmountEvent Copy()
         {
-            return new CreateTranserAmountEvent(Worker, Timestamp, Amount, DonatingPackage, AcceptingPackage, ProcessId, Comments);
+            return (CreateTranserAmountEvent)MemberwiseClone();
         }
 
         /// <summary>
@@ -145,19 +134,18 @@
                 AcceptingPackage.BrutMass += Amount;
                 AcceptingPackage.NetMass = AcceptingPackage.BrutMass * AcceptingPackage.Concentration;
 
-                return new CreateEvent(worker: Worker, timestamp: Timestamp, eventType: 23, processId: ProcessId, comments: Comments,
-                    actions: new List<PackageRequest>() { AcceptingPackage.Request(), DonatingPackage.Request() });
+                return new CreateEvent()
+                {
+                    Worker = Worker,
+                    Timestamp = Timestamp,
+                    EventType = 23,
+                    ProcessId = ProcessId,
+                    Comments = Comments,
+                    Actions = new() { AcceptingPackage.Request(), DonatingPackage.Request() }
+                };
             }
 
-            return CreateEvent.Empty();
-        }
-
-        /// <summary>
-        /// Return an empty CreateEvent object scheme.
-        /// </summary>
-        public static CreateTranserAmountEvent Empty()
-        {
-            return new CreateTranserAmountEvent(amount: 0, worker: string.Empty, timestamp: DateTime.Now);
+            return new CreateEvent();
         }
 
         /// <summary>

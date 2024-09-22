@@ -5,12 +5,6 @@ namespace CipherData.Models
     public class Event : Resource
     {
         /// <summary>
-        /// Name of worker that fulfilled the form
-        /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
-        public string? Worker { get; set; }
-
-        /// <summary>
         /// Type of event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(EventType))]
@@ -22,17 +16,34 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Event), nameof(Status))]
         public int Status { get; set; }
 
+        private string? _Worker = null;
+
+        /// <summary>
+        /// Name of worker that fulfilled the form
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        public string? Worker {
+            get { return _Worker; }
+            set { _Worker = value?.Trim(); } 
+        }
+
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         public string? ProcessId { get; set; }
 
+        private string? _Comments = null;
+
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Comments))]
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get { return _Comments; }
+            set { _Comments = value?.Trim(); }
+        }
 
         /// <summary>
         /// Timestamp when the event happend
@@ -44,36 +55,15 @@ namespace CipherData.Models
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Packages))]
-        public List<Package> Packages { get; set; }
+        public List<Package> Packages { get; set; } = new();
 
         /// <summary>
         /// Instanciation of a new Event.
         /// </summary>
-        /// <param name="eventType">Type of event</param>
-        /// <param name="processId">Process ID of process containing to this event</param>
-        /// <param name="comments">Free-text comments on the event</param>
-        /// <param name="timestamp">Timestamp when the event happend</param>
-        /// <param name="status">Validation status of event</param>
-        /// <param name="packages">List of affected packages from actions, the items present the state of each package after the event</param>
         /// <param name="id">only if you want object to have a certain id</param>
-        public Event(string? worker, int eventType, string? processId, string? comments, DateTime timestamp, 
-            int status, List<Package> packages, string? id = null)
+        public Event(string? id = null)
         {
             Id = id ?? GetNextId();
-            Worker = worker;
-            EventType = eventType;
-            ProcessId = processId;
-            Comments = comments;
-            Timestamp = timestamp;
-            Status = status;
-            Packages = packages;
-        }
-
-        public static Event Empty()
-        {
-            return new Event(worker: string.Empty, eventType: 0, processId: null, comments: string.Empty, 
-                timestamp: DateTime.Now, status: 0,
-                packages: new List<Package>());
         }
 
         /// <summary>
@@ -110,16 +100,16 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Event Random(string? id = null)
         {
-            return new Event(
-                id: id ?? GetNextId(),
-                worker: Models.Worker.Random().Name,
-                eventType: new Random().Next(21, 27),
-                processId: new Random().Next(1, 20).ToString(),
-                comments: "תנועה לדוגמה",
-                timestamp: RandomFuncs.RandomDateTime(),
-                status: new Random().Next(0, 2),
-                packages: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random) : new List<Package>()
-                );
+            return new Event(id: id ?? GetNextId())
+            {
+                Worker = Models.Worker.Random().Name,
+                EventType = new Random().Next(21, 27),
+                ProcessId = new Random().Next(1, 20).ToString(),
+                Comments = "תנועה לדוגמה",
+                Timestamp = RandomFuncs.RandomDateTime(),
+                Status = new Random().Next(0, 2),
+                Packages = (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random) : new List<Package>()
+            };
         }
 
         /// <summary>
@@ -152,14 +142,18 @@ namespace CipherData.Models
                 return new(new(), ErrorResponse.BadRequest);
             }
 
-            return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Event).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(Worker)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(EventType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(ProcessId)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(Comments)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Package.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
-            }, @operator: Operator.Any));
+            return GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(Worker)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(EventType)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(ProcessId)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(Comments)}",Value = SearchText },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
+            },
+                Operator = Operator.Any
+            });
         }
     }
 }

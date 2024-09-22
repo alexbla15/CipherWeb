@@ -4,87 +4,93 @@ namespace CipherData.Models
 {
     public class Category : Resource
     {
+        private string _Name = string.Empty;
+
         /// <summary>
         /// Name of the category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Name))]
-        public string Name { get; set; }
+        public string Name { 
+            get { return _Name; }
+            set { _Name = value.Trim(); } 
+        }
+
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Description))]
-        public string Description { get; set; }
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value.Trim(); }
+        }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(IdMask))]
-        public List<string> IdMask { get; set; }
+        public List<string> IdMask { get; set; } = new();
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Properties))]
-        public List<CategoryProperty>? Properties { get; set; }
+        public List<CategoryProperty>? Properties { get; set; } = null;
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
-        public List<ProcessDefinition> CreatingProcesses { get; set; }
+        public List<ProcessDefinition> CreatingProcesses { get; set; } = new();
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
-        public List<ProcessDefinition> ConsumingProcesses { get; set; }
+        public List<ProcessDefinition> ConsumingProcesses { get; set; } = new();
+
+        private Category? _MaterialType = null;
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(MaterialType))]
-        public Category? MaterialType { get; set; }
+        public Category? MaterialType {
+            get { return _MaterialType; }
+            set {
+                _MaterialType = value ?? _MaterialType;
+            }
+        }
+
+        private Category? _Parent = null;
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Parent))]
-        public Category? Parent { get; set; }
+        public Category? Parent {
+            get { return _Parent; }
+            set
+            {
+                _Parent = value;
+                MaterialType = value?.MaterialType;
+            }
+        }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Children))]
-        public List<Category>? Children { get; set; }
+        public List<Category>? Children { get; set; } = null;
 
         /// <summary>
         /// Instanciation of new Category.
         /// </summary>
-        /// <param name="name">Name of the category</param>
-        /// <param name="description">Free-text description of the category</param>
-        /// <param name="idMask">List of ID masks to identify the category from the package ID</param>
-        /// <param name="materialType">Type of material of this category (highest-level cateogry)</param>
-        /// <param name="creatingProcesses">List of processes definitions creating this category</param>
-        /// <param name="consumingProcesses">List of processes defintions consuming this category</param>
-        /// <param name="parent">Parent Category containing this one</param>
-        /// <param name="children">Child categories contained in this one</param>
-        /// <param name="properties">Properties that are accurate to most of the packages of this category.</param>
-        public Category(string name, string description, List<string> idMask,
-            List<ProcessDefinition> creatingProcesses, List<ProcessDefinition> consumingProcesses,
-            Category? parent = null, List<Category>? children = null, Category? materialType = null,
-            string? id = null, List<CategoryProperty>? properties = null)
+        public Category(string? id = null)
         {
             Id = id ?? GetNextId();
-            Name = name;
-            Description = description;
-            IdMask = idMask;
-            MaterialType = materialType ?? parent?.MaterialType;
-            CreatingProcesses = creatingProcesses;
-            ConsumingProcesses = consumingProcesses;
-            Parent = parent;
-            Children = children;
-            Properties = properties;
         }
 
         /// <summary>
@@ -94,30 +100,29 @@ namespace CipherData.Models
         /// <returns></returns>
         public CategoryRequest Request()
         {
-            return new CategoryRequest(
-                name: Name,
-                description: Description,
-                idMask: IdMask,
-                parent: Parent?.Id,
-                creatingProcesses: CreatingProcesses.Select(x => x.Id).ToList(),
-                consumingProcesses: ConsumingProcesses.Select(x => x.Id).ToList(),
-                properties: Properties
-                );
+            return new CategoryRequest()
+            {
+                Name = Name,
+                Description = Description,
+                IdMask = IdMask,
+                ParentId = Parent?.Id,
+                CreatingProcesses = CreatingProcesses.Select(x => x.Id).ToList(),
+                ConsumingProcesses = ConsumingProcesses.Select(x => x.Id).ToList(),
+                Properties = Properties
+            };
         }
 
         /// <summary>
         /// Create an identical copy of this object
         /// </summary>
-        /// <returns></returns>
         public Category Copy()
         {
-            return new Category(
-                name: Name,
-                description: Description, idMask: IdMask,
-                creatingProcesses: CreatingProcesses, consumingProcesses: ConsumingProcesses,
-                parent: Parent, children: Children, materialType: MaterialType,
-                id: Id, properties: Properties
-                );
+            return (Category)MemberwiseClone();
+        }
+
+        public string ToJson()
+        {
+            return ToJson(this);
         }
 
         /// <summary>
@@ -229,18 +234,18 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Category Random(string? id = null)
         {
-            return new Category(
-                id: id ?? GetNextId(),
-                name: RandomFuncs.RandomItem(RandomData.CategoriesNames),
-                description: RandomFuncs.RandomItem(RandomData.CategoriesDescriptions),
-                idMask: new List<string>() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
-                creatingProcesses: new List<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
-                consumingProcesses: new List<ProcessDefinition>() { ProcessDefinition.Random(), ProcessDefinition.Random() },
-                materialType: RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes)),
-                parent: (new Random().Next(0, 2) == 0) ? Random() : null,
-                children: (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random) : null,
-                properties: RandomFuncs.FillRandomObjects(3, CategoryProperty.Random).Distinct().ToList()
-                );
+            return new Category(id)
+            {
+                Name = RandomFuncs.RandomItem(RandomData.CategoriesNames),
+                Description = RandomFuncs.RandomItem(RandomData.CategoriesDescriptions),
+                IdMask = new() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
+                CreatingProcesses = RandomFuncs.FillRandomObjects(2, ProcessDefinition.Random),
+                ConsumingProcesses = RandomFuncs.FillRandomObjects(2, ProcessDefinition.Random),
+                MaterialType = RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes)),
+                Parent = (new Random().Next(0, 2) == 0) ? Random() : null,
+                Children = (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random) : null,
+                Properties = RandomFuncs.FillRandomObjects(3, CategoryProperty.Random).Distinct().ToList()
+            };
         }
 
         /// <summary>
@@ -249,26 +254,12 @@ namespace CipherData.Models
         /// <param name="name">name of material type</param>
         public static Category RandomMaterialType(string name)
         {
-            Category MaterialType = Empty();
-            MaterialType.Name = name;
+            Category MaterialType = new()
+            {
+                Name = name
+            };
 
             return MaterialType;
-        }
-
-        /// <summary>
-        /// Get an empty category scheme.
-        /// </summary>
-        public static Category Empty()
-        {
-            return new Category(
-                id: string.Empty,
-                name: string.Empty,
-                description: string.Empty,
-                idMask: new List<string>(),
-                creatingProcesses: new List<ProcessDefinition>(),
-                consumingProcesses: new List<ProcessDefinition>(),
-                materialType: null
-                );
         }
 
         /// <summary>
@@ -291,7 +282,7 @@ namespace CipherData.Models
         {
             if (string.IsNullOrEmpty(id))
             {
-                return new (Empty(), ErrorResponse.BadRequest);
+                return new (new Category(), ErrorResponse.BadRequest);
             }
 
             return CategoriesRequests.GetCategory(id);
@@ -315,22 +306,22 @@ namespace CipherData.Models
                 return new(new(), ErrorResponse.BadRequest);
             }
 
-            return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition(conditions: new List<BooleanCondition>() {
-                new (attribute: $"{typeof(Category).Name}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(IdMask)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(MaterialType)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(ProcessDefinition.Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any),
-                new (attribute: $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", attributeRelation: AttributeRelation.Contains, value: SearchText, @operator:Operator.Any)
-            }, @operator: Operator.Any));
+            return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition() { Conditions = new List<BooleanCondition>() {
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Category).Name}.{nameof(Name)}", Value = SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Description)}", Value = SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(IdMask)}", Value = SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(MaterialType)}", Value = SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", Value = SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(Id)}", Value= SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Id)}", Value= SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Name)}", Value= SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", Value= SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", Value= SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", Value= SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", Value= SearchText, Operator = Operator.Any },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", Value= SearchText, Operator = Operator.Any }
+            }, Operator = Operator.Any });
         }
     }
 }

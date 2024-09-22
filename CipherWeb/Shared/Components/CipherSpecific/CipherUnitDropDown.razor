@@ -2,13 +2,13 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Unit" Disabled="@Disabled" AllowClear="true"
-                            Data=@units TextProperty="@(nameof(CachedData.UnitExample.Name))" @bind-Value="ChosenUnit"
+                            Data=@units TextProperty="@(nameof(Unit.Name))" @bind-Value="ChosenUnit"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.UnitExample.Name))" Title="@(Unit.Translate(nameof(CachedData.UnitExample.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.UnitExample.Description))" Title="@(Unit.Translate(nameof(CachedData.UnitExample.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(CachedData.UnitExample.Parent))" Title="@(Unit.Translate(nameof(CachedData.UnitExample.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Name))" Title="@(Unit.Translate(nameof(Unit.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Description))" Title="@(Unit.Translate(nameof(Unit.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Parent))" Title="@(Unit.Translate(nameof(Unit.Parent)))">
                 <Template>
                     @((context as Unit).Parent?.Name)
                 </Template>

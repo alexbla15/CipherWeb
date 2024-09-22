@@ -20,11 +20,11 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Name))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                <CipherAutoComplete Label="@StorageSystem.Translate(nameof(StorageSystem.Name))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" />
-                <CipherComments @ref="SysDescription" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Description))"
+                <CipherComments @ref="SysDescription" Label="@StorageSystem.Translate(nameof(StorageSystem.Description))"
                                 Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@StorageSystem.Translate(nameof(CachedData.SystemExample.Parent))" ChosenSystem="@ChosenObject?.Parent" />
+                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@StorageSystem.Translate(nameof(StorageSystem.Parent))" ChosenSystem="@ChosenObject?.Parent" />
                 <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
             </ChildContent>
         </CipherComponentCard>
@@ -76,11 +76,12 @@
 
     public SystemRequest Value()
     {
-        return new SystemRequest(
-            name: SysName.Value,
-            description: SysDescription.Comments,
-            parentId: SysParent.ChosenSystem?.Id,
-            unitId: SysUnit.ChosenUnit?.Id
-        );
+        return new SystemRequest()
+        {
+            Name = SysName.Value,
+            Description = SysDescription.Comments,
+            ParentId = SysParent.ChosenSystem?.Id,
+            UnitId = SysUnit.ChosenUnit?.Id
+        };
     }
 }
