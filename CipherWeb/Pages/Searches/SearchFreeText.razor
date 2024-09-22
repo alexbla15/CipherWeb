@@ -19,35 +19,35 @@
                         <CipherComponentCard>
                             @if (data.Item2 is List<Package>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@Package.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@(new Package().Headers())"/>
                             }
                             else if (data.Item2 is List<Event>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@Event.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@(new Event().Headers())"/>
                             }
                             else if (data.Item2 is List<StorageSystem>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@StorageSystem.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@(new StorageSystem().Headers())"/>
                             }
                             else if (data.Item2 is List<Process>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@Process.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@(new Process().Headers())"/>
                             }
                             else if (data.Item2 is List<ProcessDefinition>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@ProcessDefinition.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@(new ProcessDefinition().Headers())"/>
                             }
                             else if (data.Item2 is List<Vessel>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@Vessel.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@(new Vessel().Headers())"/>
                             }
                             else if (data.Item2 is List<Unit>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@Unit.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@(new Unit().Headers())"/>
                             }
                             else if (data.Item2 is List<Category>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@Category.Headers()"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@(new Category().Headers())"/>
                             }
                         </CipherComponentCard>
                     </RadzenAccordionItem>

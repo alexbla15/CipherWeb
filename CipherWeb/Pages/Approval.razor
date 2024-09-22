@@ -116,7 +116,7 @@
         new ("AcceptingPackage", "תעודה מקבלת"),
         new ("EventMass", "מסת תנועה"),
         });
-        FilterFields.AddRange(Event.GetHebrewTranslations<Event>().ToList());
+        FilterFields.AddRange(new Event().Headers().ToList());
     }
 
     ButtonStyle GetStatusColor(string status)

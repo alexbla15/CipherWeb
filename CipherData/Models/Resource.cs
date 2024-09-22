@@ -96,6 +96,24 @@ namespace CipherData.Models
             return true;
         }
 
+        /// <summary>
+        /// Method to get all (english, hebrew) translations of the above attributes.
+        /// </summary>
+        public HashSet<Tuple<string, string>> Headers()
+        {
+            var translations = new HashSet<Tuple<string, string>>();
+
+            foreach (var prop in GetType().GetProperties())
+            {
+                var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
+                if (attribute != null)
+                {
+                    translations.Add(Tuple.Create(prop.Name, attribute.Translation));
+                }
+            }
+            return translations;
+        }
+
         private static int UuidCounter { get; set; } = 0;
 
         private static int GetUuid()
@@ -105,13 +123,14 @@ namespace CipherData.Models
         }
 
         public static readonly List<string> clearences = new() { "מוגבל", "מוגבל מאוד", "חופשי" };
+        // API RELATED FUNCTIONS
 
         /// <summary>
-        /// Method to get all (english, hebrew) translations of the above attributes.
+        /// Fetch all user actions that occured to this package.
         /// </summary>
-        public static HashSet<Tuple<string, string>> Headers()
+        public Tuple<UserActionResponse, ErrorResponse> UserActions()
         {
-            return GetHebrewTranslations<Resource>();
+            return LogsRequests.GetObjectLogs(uuid: Uuid);
         }
 
         /// <summary>
@@ -123,33 +142,8 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<List<T>, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
         {
-            ObjectFactory obj = new() { Filter = createCondition(searchText)};
+            ObjectFactory obj = new() { Filter = createCondition(searchText) };
             return QueryRequests.QueryObjects<T>(obj);
-        }
-
-        public static HashSet<Tuple<string, string>> GetHebrewTranslations<T>() where T : Resource
-        {
-            var translations = new HashSet<Tuple<string, string>>();
-
-            foreach (var prop in typeof(T).GetProperties())
-            {
-                var attribute = prop.GetCustomAttribute<HebrewTranslationAttribute>();
-                if (attribute != null)
-                {
-                    translations.Add(Tuple.Create(prop.Name, attribute.Translation));
-                }
-            }
-            return translations;
-        }
-
-        // API RELATED FUNCTIONS
-
-        /// <summary>
-        /// Fetch all user actions that occured to this package.
-        /// </summary>
-        public Tuple<UserActionResponse, ErrorResponse> UserActions()
-        {
-            return LogsRequests.GetObjectLogs(uuid: Uuid);
         }
     }
 }

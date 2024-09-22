@@ -44,16 +44,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void HeadersTest()
-        {
-            int resource_headers = Resource.Headers().Count;
-            List<string> event_headers = new() { nameof(example.Worker), nameof(example.Timestamp),
-            nameof(example.Packages), nameof(example.ProcessId), nameof(example.Comments), nameof(example.EventType),
-            nameof(example.Status)};
-            Assert.IsTrue(Event.Headers().Count == (resource_headers + event_headers.Count));
-        }
-
-        [TestMethod()]
         public void RandomTest()
         {
             // 1 - check for good instanciation of random object

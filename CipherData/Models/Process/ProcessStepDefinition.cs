@@ -106,19 +106,6 @@ namespace CipherData.Models
             return result.Check();
         }
 
-        /// <summary>
-        /// Hebrew-english translation
-        /// </summary>
-        public new static HashSet<Tuple<string, string>> Headers()
-        {
-            List<Tuple<string, string>> result = new();
-
-            result.AddRange(Resource.Headers());
-            result.AddRange(GetHebrewTranslations<ProcessStepDefinition>());
-
-            return result.ToHashSet();
-        }
-
         public static ProcessStepDefinition Random(string? id = null)
         {
             List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };

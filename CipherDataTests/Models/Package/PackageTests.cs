@@ -83,17 +83,6 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void HeadersTest()
-        {
-            int resource_headers = Resource.Headers().Count;
-            List<string> pack_headers = new() { nameof(example.CreatedAt), nameof(example.System),
-            nameof(example.Properties), nameof(example.Children), nameof(example.Parent), nameof(example.DestinationProcesses),
-            nameof(example.BrutMass), nameof(example.NetMass), nameof(example.Vessel), nameof(example.Description),
-                nameof(example.Category),};
-            Assert.IsTrue(Package.Headers().Count == (resource_headers + pack_headers.Count));
-        }
-
-        [TestMethod()]
         public void RandomTest()
         {
             // 1 - check for good instanciation of random category

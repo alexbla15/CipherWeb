@@ -9,13 +9,13 @@ namespace CipherWeb
         public static HashSet<Tuple<string, string>> BuildDictionary()
         {
             List<Tuple<string, string>> BuildHeaders = new();
-            BuildHeaders.AddRange(Event.Headers());
-            BuildHeaders.AddRange(Package.Headers());
-            BuildHeaders.AddRange(Category.Headers());
-            BuildHeaders.AddRange(Process.Headers());
-            BuildHeaders.AddRange(ProcessDefinition.Headers());
-            BuildHeaders.AddRange(StorageSystem.Headers());
-            BuildHeaders.AddRange(Unit.Headers());
+            BuildHeaders.AddRange(new Event().Headers());
+            BuildHeaders.AddRange(new Package().Headers());
+            BuildHeaders.AddRange(new Category().Headers());
+            BuildHeaders.AddRange(new Process().Headers());
+            BuildHeaders.AddRange(new ProcessDefinition().Headers());
+            BuildHeaders.AddRange(new StorageSystem().Headers());
+            BuildHeaders.AddRange(new Unit().Headers());
 
             BuildHeaders.Add(new("Value", "ערך"));
             BuildHeaders.Add(new("Month", "חודש"));

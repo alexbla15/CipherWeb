@@ -69,19 +69,6 @@ namespace CipherData.Models
         public int Status { get; set; } = -1;
 
         /// <summary>
-        /// Hebrew-english translation
-        /// </summary>
-        public new static HashSet<Tuple<string, string>> Headers()
-        {
-            List<Tuple<string, string>> result = new();
-
-            result.AddRange(Resource.Headers());
-            result.AddRange(GetHebrewTranslations<UserAction>());
-
-            return result.ToHashSet();
-        }
-
-        /// <summary>
         /// Get a Random object scheme
         /// </summary>
         /// <returns></returns>

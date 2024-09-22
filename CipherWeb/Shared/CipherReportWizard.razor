@@ -25,7 +25,7 @@
             <Buttons>
                 <CipherButton Icon="@Icons.Arrows.Rounded.refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
                 <CipherButton Icon="@Icons.Documents.Edit.save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
-                <CipherExcelButton Data="@db_events"></CipherExcelButton>
+                <CipherExcelButton Data="@events"></CipherExcelButton>
                 <CipherPDFButton></CipherPDFButton>
             </Buttons>
             <ChildContent>
@@ -62,7 +62,7 @@
     public string? JsonRequest { get; set; }
 
 
-    private List<Event> db_events = new List<Event>();
+    private List<Event> events = new();
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper<Package> dataGrouper = new CipherDataGrouper<Package>();
@@ -70,14 +70,14 @@
     private CipherDataFilter_WithDataGrid<Package> dataFilterPackages = new CipherDataFilter_WithDataGrid<Package>();
     private CipherDataAggregater dataAggregater = new CipherDataAggregater();
 
-    private List<Package> rows = new List<Package>();
+    private List<Package> rows = new();
     private Dictionary<string, int> rowsColumnsOrder = new Dictionary<string, int> { };
 
     private ErrorResponse error = ErrorResponse.Success;
 
-    private List<Package> packs = new List<Package>();
-    private List<StorageSystem> systems = new List<StorageSystem>();
-    private List<Vessel> vessels = new List<Vessel>();
+    private List<Package> packs = new();
+    private List<StorageSystem> systems = new ();
+    private List<Vessel> vessels = new();
 
     private int ReportId;
 
@@ -89,12 +89,12 @@
         public decimal NetMass { get; set; }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
 
         ReportId = new Random().Next(1000, 9999);
 
-        (db_events, error) = CachedData.AllEvents;
+        (events, error) = CachedData.AllEvents;
         (packs, error) = CachedData.AllPackages;
         (rows, error) = CachedData.AllPackages;
         (systems, error) = CachedData.AllSystems;

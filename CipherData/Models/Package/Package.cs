@@ -150,19 +150,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Hebrew-english translation
-        /// </summary>
-        public new static HashSet<Tuple<string, string>> Headers()
-        {
-            List<Tuple<string, string>> result = new();
-
-            result.AddRange(Resource.Headers());
-            result.AddRange(GetHebrewTranslations<Package>());
-
-            return result.ToHashSet();
-        }
-
-        /// <summary>
         /// Get a random new object.
         /// </summary>
         /// <param name="id">only use if you want the object to have a specific id</param>
@@ -260,13 +247,13 @@ namespace CipherData.Models
                 if (!Category.Equals(OtherObject.Category)) return false;
             }
 
-            if (Properties?.Count() != OtherObject.Properties?.Count()) return false;
+            if (Properties?.Count != OtherObject.Properties?.Count) return false;
             if (Properties != null && OtherObject.Properties != null)
             {
                 if (!Properties.Equals(OtherObject.Properties)) return false;
             }
 
-            if (DestinationProcesses?.Count() != OtherObject.DestinationProcesses?.Count()) return false;
+            if (DestinationProcesses?.Count != OtherObject.DestinationProcesses?.Count) return false;
             if (DestinationProcesses != null && OtherObject.DestinationProcesses != null)
             {
                 if (!DestinationProcesses.SequenceEqual(OtherObject.DestinationProcesses)) return false;

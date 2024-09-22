@@ -69,19 +69,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Hebrew-english translation
-        /// </summary>
-        public new static HashSet<Tuple<string, string>> Headers()
-        {
-            List<Tuple<string, string>> result = new();
-
-            result.AddRange(Resource.Headers());
-            result.AddRange(GetHebrewTranslations<Vessel>());
-
-            return result.ToHashSet();
-        }
-
-        /// <summary>
         /// Get a random new object.
         /// </summary>
         /// <param name="id">only use if you want the object to have a specific id</param>
