@@ -126,7 +126,7 @@
             List<CategoryProperty> CategoryProperties = new() { TextOption, BoolOption, NumberOption};
 
             CategoryProperty result = CategoryProperties[new Random().Next(CategoryProperties.Count)];
-            if (set_name != null) result.Name = set_name.Trim();
+            if (set_name != null) result.Name = set_name;
             return result;
         }
     }

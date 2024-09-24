@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -93,7 +93,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<Vessel, ErrorResponse> Get(string id)
         {
-            return VesselsRequests.GetVessel(id);
+            return Config.VesselsRequests.GetVessel(id);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Vessel>, ErrorResponse> All()
         {
-            return VesselsRequests.GetVessels();
+            return Config.VesselsRequests.GetVessels();
         }
 
         /// <summary>

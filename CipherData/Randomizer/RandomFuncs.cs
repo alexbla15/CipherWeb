@@ -1,4 +1,4 @@
-﻿namespace CipherData.Requests
+﻿namespace CipherData.Randomizer
 {
     public class RandomFuncs
     {
@@ -11,7 +11,7 @@
         {
             Random random = new();
             int range = 20;  // Calculate the total number of days between the two dates
-                                            
+
             // Generate a random date
             DateTime randomDate = DateTime.Now.AddDays(-random.Next(range));
 

@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -113,7 +113,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<ProcessDefinition>, ErrorResponse> All()
         {
-            return ProcessDefinitionsRequests.GetProcessDefinitions();
+            return Config.ProcessesDefinitionsRequests.GetProcessDefinitions();
         }
 
         /// <summary>

@@ -4,7 +4,6 @@
 @typeparam Cipher_TItem
 
 @inject ICipherInfo _db
-@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
 @inherits RadzenDataGrid<Cipher_TItem>
@@ -14,25 +13,25 @@
     /// Translator from (english, hebrew) of column names.
     /// </summary>
     [Parameter]
-    public HashSet<Tuple<string, string>> ColumnNames { get; set; }
+    public HashSet<Tuple<string, string>> ColumnNames { get; set; } = new();
 
     /// <summary>
     /// Customized columns to be used within datagrid.
     /// </summary>
     [Parameter]
-    public RenderFragment CustomColumns { get; set; }
+    public RenderFragment? CustomColumns { get; set; }
 
     /// <summary>
     /// Data of datagrid.
     /// </summary>
     [Parameter]
-    public IEnumerable<Cipher_TItem> DataSource { get; set; }
+    public IEnumerable<Cipher_TItem>? DataSource { get; set; }
 
     /// <summary>
     /// Function to fetch the data for the datagrid.
     /// </summary>
     [Parameter]
-    public Func<Task<IEnumerable<Cipher_TItem>>> FetchDataFunc { get; set; } = null;
+    public Func<Task<IEnumerable<Cipher_TItem>>>? FetchDataFunc { get; set; } = null;
 
     /// <summary>
     /// Selected filteration mode. Must be a FilterMode-enum.
@@ -104,17 +103,16 @@
     /// Ordering dictionary of the columns within the data grid (name, place).
     /// </summary>
     [Parameter]
-    public Dictionary<string, int> ColumnsOrder { get; set; }
+    public Dictionary<string, int> ColumnsOrder { get; set; } = new();
 
     [Parameter]
-    public Action<DataGridRenderEventArgs<Cipher_TItem>> RenderFunc { get; set; }
+    public Action<DataGridRenderEventArgs<Cipher_TItem>>? RenderFunc { get; set; }
 
-    private RadzenDataGrid<Cipher_TItem> CustomDataGrid;
+    private RadzenDataGrid<Cipher_TItem> CustomDataGrid = new();
     private Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
     private DateTime dynamicDate;
 
-    private IList<Cipher_TItem> selectedRow;
-    private NavigationManager Navigation;
+    private IList<Cipher_TItem>? selectedRow;
 
     protected override async Task OnInitializedAsync()
     {

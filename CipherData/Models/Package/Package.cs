@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -110,6 +110,11 @@ namespace CipherData.Models
         public Package(string? id = null)
         {
             Id = id ?? GetNextId();
+        }
+
+        public Package Copy()
+        {
+            return (Package)MemberwiseClone();
         }
 
         /// <summary>
@@ -272,7 +277,7 @@ namespace CipherData.Models
             return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition()
             {
                 Conditions = new List<BooleanCondition>() {
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.Packages)}.Id", AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any }
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.FinalStatePackages)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any }
                 },
                 Operator = Operator.Any
             });
@@ -286,7 +291,7 @@ namespace CipherData.Models
             return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition()
             {
                 Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.{nameof(Event.Packages)}.{nameof(Id)}",
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Id)}",
                     AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any}
                 }
             });
@@ -304,7 +309,7 @@ namespace CipherData.Models
                 return new(new Package(), ErrorResponse.BadRequest);
             }
 
-            return PackagesRequests.GetPackage(id);
+            return Config.PackagesRequests.GetPackage(id);
         }
 
         /// <summary>
@@ -312,7 +317,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> All()
         {
-            return PackagesRequests.GetPackages();
+            return Config.PackagesRequests.GetPackages();
         }
 
         /// <summary>

@@ -26,9 +26,7 @@
         @* -- ACCOUNT BLOCK --*@
         <RadzenCard Variant="Variant.Text" Style="@($"{AccountStyle()}; width:{Account_Width};")">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                <RadzenLink Path="Personal" Text="אזור אישי">
-                    <CipherAccountImage />
-                </RadzenLink>
+                <CipherAccountImage />
                 <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
                     <CipherText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
@@ -37,8 +35,6 @@
                                       Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
 
                         @* -- FAST ACTIONS -- *@
-                        <CipherNavButton Icon="@Icons.UiComponents.Settings" HelpText="הגדרות" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                         Path="/Settings" HelpTextPosition="TooltipPosition.Bottom" />
                         <CipherNavButton Icon="@Icons.Symbols.QuestionMark._QuestionMark" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
                                          Path="@CipherNavLinks.Information.Href" HelpTextPosition="TooltipPosition.Bottom" />
                     </RadzenStack>

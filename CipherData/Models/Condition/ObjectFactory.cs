@@ -10,7 +10,7 @@
         sum, avg, count, first, last
     }
 
-    public class OrderedItem
+    public class OrderedItem : CipherClass
     {
         private string _Attribute = string.Empty;
 
@@ -30,7 +30,7 @@
         public Order Order { get; set; } = Order.asc;
     }
 
-    public class AggregateItem
+    public class AggregateItem : CipherClass
     {
         private string _Attribute = string.Empty;
 
@@ -66,14 +66,14 @@
     /// <summary>
     /// Method to get desired objects by filtering and aggregating the database
     /// </summary>
-    public class ObjectFactory
+    public class ObjectFactory : CipherClass
     {
         /// <summary>
         /// Conditions to apply to get the desired objects. 
         /// All conditions must have the same target object.
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(Attribute))]
-        public GroupedBooleanCondition Filter { get; set; }
+        public GroupedBooleanCondition Filter { get; set; } = new();
 
         /// <summary>
         /// Define order to the filtered objects
@@ -95,5 +95,15 @@
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
         public List<AggregateItem>? Aggregate { get; set; } = null;
+
+        public void AddOrderBy(OrderedItem nextOrder)
+        {
+            if (OrderBy == null)
+            {
+                OrderBy = new List<OrderedItem>();
+            }
+
+            OrderBy.Add(nextOrder);
+        }
     }
 }

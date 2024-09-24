@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {

@@ -83,7 +83,7 @@
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
-        public Operator Operator { get; set; } = Operator.All;
+        public Operator Operator { get; set; }
 
         private string? _Value = null;
 
@@ -129,7 +129,7 @@
         /// </summary>
         public CheckField CheckAttribute()
         {
-            return CheckField.Required(Attribute, Translate(nameof(Attribute)));
+            return CheckField.Required(Attribute, Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
         }
 
         /// <summary>

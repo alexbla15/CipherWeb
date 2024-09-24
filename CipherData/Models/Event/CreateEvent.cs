@@ -49,7 +49,7 @@
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Packages))]
+        [HebrewTranslation(typeof(Event), nameof(Actions))]
         public List<PackageRequest> Actions { get; set; } = new();
 
         /// <summary>
@@ -153,7 +153,7 @@
                 Comments = Comments,
                 Timestamp = Timestamp,
                 Status = 1,
-                Packages = Actions.Select(x => x.Create()).ToList(),
+                FinalStatePackages = Actions.Select(x => x.Create()).ToList(),
             };
         }
     }

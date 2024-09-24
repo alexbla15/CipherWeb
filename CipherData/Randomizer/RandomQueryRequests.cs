@@ -1,17 +1,12 @@
 ﻿using CipherData.Models;
-using System.ComponentModel.DataAnnotations;
+using CipherData.RequestsInterface;
 using System.Reflection;
 
-namespace CipherData.Requests
+namespace CipherData.Randomizer
 {
-    public class QueryRequests
+    public class RandomQueryRequests : IQueryRequests
     {
-        /// <summary>
-        /// Query the database for specific objects or aggregations.
-        /// Can Be Any array of resources. 
-        /// Path: POST /query
-        /// </summary>
-        public static Tuple<List<T>, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
+        public Tuple<List<T>, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
         {
             // Get the type of T
             Type type = typeof(T);
@@ -32,11 +27,11 @@ namespace CipherData.Requests
                 List<T> list = RandomFuncs.FillRandomObjects(new Random().Next(1, 20), randomFunc);
 
                 // return a successful result / error, according to logic set in Request()
-                return GenericRequests.Request(list, canBeNotFound: true, canFail: canFail);
+                return new RandomGenericRequests().Request(list, canBeNotFound: true, canFail: canFail);
             }
 
             // If the type doesn't have a Random method, return an empty list.
-            return GenericRequests.Request(new List<T>(), canBeNotFound: true, canFail: canFail);
+            return new RandomGenericRequests().Request(new List<T>(), canBeNotFound: true, canFail: canFail);
         }
     }
 }

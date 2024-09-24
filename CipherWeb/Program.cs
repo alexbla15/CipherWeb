@@ -1,7 +1,4 @@
 using CipherData;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.DependencyInjection;
 using Radzen;
 using System.Globalization;
 
@@ -16,7 +13,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<ISqlDataAcess, SqlDataAcess>();
 builder.Services.AddTransient<ICipherInfo, CipherInfo>(); 
 builder.Services.AddScoped<ExcelService>();
-builder.Services.AddScoped<NotificationService>(); 
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 

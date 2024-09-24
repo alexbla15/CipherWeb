@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -173,7 +173,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public static Tuple<StorageSystem, ErrorResponse> Get(string id)
         {
-            return SystemsRequests.GetSystem(id);
+            return Config.SystemsRequests.GetSystem(id);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<StorageSystem>, ErrorResponse> All()
         {
-            return SystemsRequests.GetSystems();
+            return Config.SystemsRequests.GetSystems();
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace CipherData.Models
             {
                 Conditions = new List<BooleanCondition>()
             {
-                new() {Attribute = $"{nameof(Event)}.{nameof(Event.Packages)}.{nameof(Package.System)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq,
+                new() {Attribute = $"{nameof(Event)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq,
                     Value = SelectedSystem}
             },
                 Operator = Operator.Any
@@ -232,7 +232,7 @@ namespace CipherData.Models
             {
                 Conditions = new List<BooleanCondition>()
             {
-                new() {Attribute = $"{nameof(Process)}.{nameof(Process.Events)}.{nameof(Event.Packages)}.{nameof(Package.System)}.{nameof(Id)}",
+                new() {Attribute = $"{nameof(Process)}.{nameof(Process.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}",
                     AttributeRelation = AttributeRelation.Eq,
                     Value = SelectedSystem}
             },

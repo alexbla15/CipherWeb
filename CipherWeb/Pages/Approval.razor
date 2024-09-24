@@ -2,140 +2,203 @@
 
 @using System.Reflection
 
-@inject ICipherInfo _db
-@inject IJSRuntime JSRuntime
-@inject ExcelService excelService
 @inject DialogService DialogService
 
-@code {
-    TextStyle HeaderTextStyle = TextStyle.H5;
-}
+@inherits CipherComponentCard
 
-<PageTitle>אישור תנועות</PageTitle>
+<PageTitle>@Title</PageTitle>
 
-<CipherDataFilter_WithDataGrid Title="סינון תנועות לאישור" Cipher_TItem="Event" WithCustomDataGrid=true FilterFields="@FilterFields">
+<CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined"></CipherButton>
-        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined"></CipherButton>
-        <CipherExcelButton Data="@events"></CipherExcelButton>
-        <CipherPDFButton></CipherPDFButton>
+        <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents"/>
+        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
+        <CipherExcelButton Data="@PendingEvents"></CipherExcelButton>
+        <CipherPDFButton/>
     </Buttons>
-    <CustomDataGrid>
-        <CipherDataGrid @ref="CustomDataGrid" WithCustomColumns="true"
-                        GridFilterMode="FilterMode.Simple" AllowFilter="false"
-                        AllowSort="true" AllowGroup="false" HideGroupedColumn="true"
-                        AllGroupsExpanded="false"
-                        DataSource="@events">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Event" Title="אישור" Width="100px">
-                    <Template>
-                        <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
-                                      Variant="Variant.Flat" ColorShade="Shade.Default"
-                                      Size="ButtonSize.Medium" />
-                        <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
-                                      Variant="Variant.Flat" ColorShade="Shade.Default"
-                                      Size="ButtonSize.Medium" />
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(new Event().Translate(nameof(Event.ProcessId)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(new Event().Translate(nameof(Event.Timestamp)))" />
-                <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
-                    <Template>
-                        @if (context.Packages.ToList().Count() > 0)
-                        {
-                            @context.Packages.ToList().First().Id
-                            ;
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
+    <ChildContent>
+        <CipherComponentCard WithCard=false>
+            <ChildContent>
+                <RadzenStack Orientation="Orientation.Vertical">
+                    <CipherBooleanConditions @ref="EventsFilter" Title="" OnSave="@RefreshEvents"/>
+                    <RadzenDataGrid @ref="CustomDataGrid" TItem="Event"
+                                    FilterMode="FilterMode.Simple" AllowFiltering="false"
+                                    AllowSorting="true" AllowGrouping="false" HideGroupedColumn="true"
+                                    AllGroupsExpanded="false"
+                                    Data="@PendingEvents">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Event" Title="אישור" Width="100px">
+                                <Template Context="ev">
+                                    <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
+                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
+                                                  Size="ButtonSize.Medium" Click="@(args => ApproveEvent(ev))"/>
+                                    <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
+                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
+                                                  Size="ButtonSize.Medium" Click="@(args => DeclineEvent(ev))" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
+                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(new Event().Translate(nameof(Event.ProcessId)))" />
+                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(new Event().Translate(nameof(Event.Timestamp)))" />
+                            <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
+                                <Template>
+                                    @* @if (context.Packages.ToList().Count() > 0)
+                                    {
+                                        @context.Packages.ToList().First().Id
+                                        ;
+                                    } *@
+                                </Template>
+                            </RadzenDataGridColumn>
 
-                <RadzenDataGridColumn TItem="Event" Title="מערכת מוסרת">
-                    <Template>
-                        <RadzenText Text="A"></RadzenText>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Title="תעודה מקבלת">
-                    <Template>
-                        @if (context.Packages.ToList().Count() > 0)
-                        {
-                            @context.Packages.ToList().Last().Id
-                            ;
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Title="מערכת מקבלת">
-                    <Template>
-                        <RadzenText Text="B"></RadzenText>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Title="מסת תנועה">
-                    <Template>
-                        <RadzenText Text="5"></RadzenText>
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(new Event().Translate(nameof(Event.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(new Event().Translate(nameof(Event.Status)))">
-                    <Template>
-                        @((context.Status == 0) ? "מאומתת" : "לא מאומתת")
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
-    </CustomDataGrid>
-</CipherDataFilter_WithDataGrid>
-<CipherButton Icon="@Icons.Documents.Edit.save" Text="שמירת אישורים" Variant="Variant.Outlined" Width="100%"></CipherButton>
+                            <RadzenDataGridColumn TItem="Event" Title="מערכת מוסרת">
+                                <Template>
+                                    <RadzenText Text="A"></RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Title="תעודה מקבלת">
+                                <Template>
+                                    @if (context.FinalStatePackages.ToList().Count() > 0)
+                                    {
+                                        @context.FinalStatePackages.ToList().Last().Id
+                                        ;
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Title="מערכת מקבלת">
+                                <Template>
+                                    <RadzenText Text="B"></RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Title="מסת תנועה">
+                                @* <Template>
+                                    @(context.)
+                                </Template> *@
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(new Event().Translate(nameof(Event.Comments)))" />
+                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(new Event().Translate(nameof(Event.Status)))">
+                                <Template>
+                                    @((context.Status == 0) ? "בהמתנה לאישור" : (context.Status == 1 ? "מאושר" : "נדחה"));
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                    <CipherJsonCheck JsonValue="@JsonRequest" />
+                </RadzenStack>
+            </ChildContent>
+        </CipherComponentCard>
+    </ChildContent>
+</CipherComponentCard>
 
 @code {
     /// <summary>
-    /// All events available
+    /// All events in queue for approval
     /// </summary>
     [Parameter]
-    public List<Event> events { get; set; } = new();
+    public List<Event> PendingEvents { get; set; } = CachedData.AllEvents.Item1;
 
     /// <summary>
-    /// Error response for fetching data
+    /// Update result, send from the api
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public Event? Result { get; set; }
 
-    RadzenDataGrid<Event> CustomDataGrid = new();
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private List<Tuple<string, string>> FilterFields = new();
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server. 
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; } = string.Empty;
+
+    private RadzenDataGrid<Event> CustomDataGrid = new();
+    private CipherBooleanConditions EventsFilter = new();
 
     protected override void OnInitialized()
     {
-        (events, error) = CachedData.AllEvents;
-
-        FilterFields.AddRange(new List<Tuple<string, string>>()
-        {
-        new (nameof(Event.Timestamp), new Event().Translate(nameof(Event.Timestamp))),
-        new ("DonatingSystem", "מערכת מוסרת"),
-        new ("AcceptingSystem", "מערכת מקבלת"),
-        new ("DonatingPackage", "תעודה מוסרת"),
-        new ("AcceptingPackage", "תעודה מקבלת"),
-        new ("EventMass", "מסת תנועה"),
-        });
-        FilterFields.AddRange(new Event().Headers().ToList());
-    }
-
-    ButtonStyle GetStatusColor(string status)
-    {
-        return status switch
-        {
-            EventStatus.Pending => ButtonStyle.Secondary,
-            EventStatus.Accepted => ButtonStyle.Success,
-            EventStatus.Denied => ButtonStyle.Danger,
-            EventStatus.Warning => ButtonStyle.Warning,
-            _ => ButtonStyle.Primary
-        };
+        Title ??= CipherNavLinks.Approval.Name;
     }
 
     public async Task OpenEvent()
     {
         await DialogService.OpenAsync("תנועה",
 
-        ds =>
+    ds =>
     @<CipherEventCard dir="rtl" WithCard=false ReadOnly=false></CipherEventCard>, Constants.SetDialogOptions);
+    }
+
+    public void ForSingleEvent(Func<UpdateEvent> singleFunc, Event ev)
+    {
+        UpdateEvent setUpdate = singleFunc();
+        (Result, Error) = ev.Update(setUpdate);
+        JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
+    }
+
+    public void ForAllEvents(Action<Event> singleFunc)
+    {
+        string NewJsonRequest = string.Empty;
+        foreach (Event ev in PendingEvents)
+        {
+            singleFunc(ev);
+            NewJsonRequest += JsonRequest + "\n\n";
+        }
+        JsonRequest = NewJsonRequest;
+    }
+
+    public void ApproveAllEvents()
+    {
+        ForAllEvents(ApproveEvent);
+    }
+
+    public void DeclineAllEvents()
+    {
+        ForAllEvents(DeclineEvent);
+    }
+
+    public void ApproveEvent(Event ev)
+    {
+        ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
+    }
+
+    public void DeclineEvent(Event ev)
+    {
+        ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
+    }
+
+    public void RefreshEvents()
+    {
+        GroupedBooleanCondition filterValue = EventsFilter.SelectedCondition;
+        ObjectFactory objectFactory = new();
+
+        // add to filter - only pending events
+        List<Condition> originalFilterValue = filterValue.Conditions.ToList();
+        originalFilterValue.Add(new BooleanCondition() { Attribute = $"[{nameof(Event)}].[{nameof(Event.Status)}]", AttributeRelation = AttributeRelation.Eq, Value = "0" });
+        filterValue.Conditions = originalFilterValue;
+
+        objectFactory.Filter = filterValue;
+
+        // order by time (1), and system-id (2)
+        objectFactory.AddOrderBy(new OrderedItem()
+            {
+                Attribute = $"[{nameof(Event)}].[{nameof(Event.Timestamp)}]",
+                Order = Order.desc
+            });
+        objectFactory.AddOrderBy(new OrderedItem()
+            {
+                Attribute = $"[{nameof(Event)}].[{nameof(Event.FinalStatePackages)}].[{nameof(Package.System)}].[{nameof(StorageSystem.Id)}]",
+                Order = Order.desc
+            });
+
+        (PendingEvents, Error) = Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        JsonRequest = objectFactory.ToJson();
+        StateHasChanged();
     }
 }

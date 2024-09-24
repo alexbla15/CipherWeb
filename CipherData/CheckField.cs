@@ -1,8 +1,6 @@
 ﻿using CipherData.Models;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace CipherData
 {

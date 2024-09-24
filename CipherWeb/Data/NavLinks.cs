@@ -6,8 +6,7 @@ namespace CipherWeb.Data
     public class CipherNavLinks
     {
         public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home.home, Name = "מסך הבית" };
-        public static readonly MyNavLink Personal = new() { Href = "Personal", Icon = Icons.Social.SinglePerson.AccountCircle, Name = "אזור אישי" };
-
+        
         public static readonly MySubNavLink AddPackage = new() { Href = "Forms/AddPackage", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.AddCircleOutline };
         public static readonly MySubNavLink TransferAmount = new() { Href = "Forms/TransferAmount", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
         public static readonly MySubNavLink Relocation = new() { Href = "Forms/Relocation", Name = "העברת מיקום", Icon = Icons.Cipher.Location };
@@ -83,7 +82,7 @@ namespace CipherWeb.Data
 
         public static readonly List<MyNavLink> links = new()
         {
-            Home, Personal,Forms, Update, Approval, Reports, Search, Information
+            Home, Forms, Update, Approval, Reports, Search, Information
         };
     }
 }

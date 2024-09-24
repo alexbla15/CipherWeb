@@ -157,7 +157,12 @@ components:
             processId:
               type: integer
               description: Process ID of process containing to this event
-            packages: 
+            initialStatePackages: 
+              type: array
+              description: List of affected packages from actions, the items present the state of each package before the event
+              items:
+                $ref: "#/components/schemas/Package"
+            finalStatePackages: 
               type: array
               description: List of affected packages from actions, the items present the state of each package after the event
               items:
@@ -596,12 +601,16 @@ components:
                 items:
                   $ref: "#/components/responses/PackageRequest"
     UpdateEvent:
-      description: Update event's process or comments
+      description: Update event's process or comments or status
       content:
         application/json:
           schema:
             type: object
             properties:
+              status:
+                type: int
+                nullable: false
+                description: Validation status of event.
               eventComment:
                 type: string
                 nullable: true

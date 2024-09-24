@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Encodings.Web;
@@ -98,7 +98,8 @@ namespace CipherData.Models
             {
                 WriteIndented = true, // Pretty print
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter()}, // Include custom DateTime converter
+                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(), 
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)},
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
 
@@ -174,7 +175,7 @@ namespace CipherData.Models
         /// </summary>
         public Tuple<UserActionResponse, ErrorResponse> UserActions()
         {
-            return LogsRequests.GetObjectLogs(uuid: Uuid);
+            return Config.logsRequests.GetObjectLogs(uuid: Uuid);
         }
 
         /// <summary>
@@ -187,7 +188,7 @@ namespace CipherData.Models
         public static Tuple<List<T>, ErrorResponse> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
         {
             ObjectFactory obj = new() { Filter = createCondition(searchText) };
-            return QueryRequests.QueryObjects<T>(obj);
+            return Config.QueryRequests.QueryObjects<T>(obj);
         }
     }
 }

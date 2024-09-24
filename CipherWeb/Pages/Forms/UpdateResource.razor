@@ -269,31 +269,31 @@
     public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)UnitsRequests.UpdateUnit((ChosenObject as Unit)?.Id, unitRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.UnitsRequests.UpdateUnit((ChosenObject as Unit)?.Id, unitRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)CategoriesRequests.UpdateCategory((ChosenObject as Category)?.Id, catRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.CategoriesRequests.UpdateCategory((ChosenObject as Category)?.Id, catRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)VesselsRequests.UpdateVessel((ChosenObject as Vessel)?.Id, vesRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.VesselsRequests.UpdateVessel((ChosenObject as Vessel)?.Id, vesRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)ProcessDefinitionsRequests.UpdateProcessDefinition((ChosenObject as ProcessDefinition)?.Id, procDefRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.ProcessesDefinitionsRequests.UpdateProcessDefinition((ChosenObject as ProcessDefinition)?.Id, procDefRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
     {
         JsonRequest = sysRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)SystemsRequests.UpdateSystem((ChosenObject as StorageSystem)?.Id, sysRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.SystemsRequests.UpdateSystem((ChosenObject as StorageSystem)?.Id, sysRequest);
     }
 
     /// <summary>

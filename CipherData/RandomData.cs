@@ -1,5 +1,5 @@
 ﻿using CipherData.Models;
-using CipherData.Requests;
+using CipherData.Randomizer;
 
 namespace CipherData
 {

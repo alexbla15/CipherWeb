@@ -1,4 +1,6 @@
-﻿using CipherData.Models;
+﻿using CipherData;
+using CipherData.Models;
+using CipherData.RequestsInterface;
 
 namespace CipherWeb
 {
@@ -12,5 +14,7 @@ namespace CipherWeb
         public static readonly Tuple<List<StorageSystem>, ErrorResponse> AllSystems = StorageSystem.All();
         public static readonly Tuple<List<Vessel>, ErrorResponse> AllVessels = Vessel.All();
         public static readonly Tuple<List<Unit>, ErrorResponse> AllUnits = Unit.All();
+
+        public static readonly List<Type> CipherTypes = CommonFuncs.GetCipherClasses();
     }
 }

@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -257,7 +257,7 @@ namespace CipherData.Models
                 return new (new Category(), ErrorResponse.BadRequest);
             }
 
-            return CategoriesRequests.GetCategory(id);
+            return Config.CategoriesRequests.GetCategory(id);
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> All()
         {
-            return CategoriesRequests.GetCategories();
+            return Config.CategoriesRequests.GetCategories();
         }
 
         /// <summary>

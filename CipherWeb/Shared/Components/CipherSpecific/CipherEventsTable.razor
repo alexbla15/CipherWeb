@@ -26,9 +26,9 @@
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(new Event().Translate(nameof(Event.ProcessId)))" />
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(new Event().Translate(nameof(Event.Timestamp)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Packages))" Title="@(new Event().Translate(nameof(Event.Packages)))">
+                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.FinalStatePackages))" Title="@(new Event().Translate(nameof(Event.FinalStatePackages)))">
                     <Template>
-                        @(string.Join(", ", context.Packages.Select(x => x.Id)))
+                        @(string.Join(", ", context.FinalStatePackages.Select(x => x.Id)))
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(new Event().Translate(nameof(Event.Comments)))" />

@@ -3,8 +3,14 @@
     /// <summary>
     /// Update event's process or comments
     /// </summary>
-    public class UpdateEvent
+    public class UpdateEvent : CipherClass
     {
+        /// <summary>
+        /// Validation status of event.
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Status))]
+        public int Status { get; set; } = 0;
+
         /// <summary>
         /// New process ID for event
         /// </summary>
@@ -33,6 +39,22 @@
         {
             get { return _ActionComments; }
             set { _ActionComments = value?.Trim(); }
+        }
+
+        /// <summary>
+        /// get an approved - UpdateEvent
+        /// </summary>
+        public static UpdateEvent ApprovedEvent()
+        {
+            return new UpdateEvent { Status = 1 };
+        }
+
+        /// <summary>
+        /// get an approved - UpdateEvent
+        /// </summary>
+        public static UpdateEvent DeclinedEvent()
+        {
+            return new UpdateEvent { Status = 2 };
         }
     }
 }

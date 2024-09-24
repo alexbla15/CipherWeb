@@ -6,7 +6,7 @@ namespace CipherData
     public interface ICipherInfo
     {
         Task<List<Event>> GetEvents();
-        Task<List<Models.StorageSystem>> GetSystems();
+        Task<List<StorageSystem>> GetSystems();
         Task<List<Category>> GetSubCategories();
         Task<List<Vessel>> GetVessels();
     }
@@ -16,10 +16,10 @@ namespace CipherData
         public byte[] GenerateExcel<T>(IEnumerable<T> data)
         {
             // Create a MemoryStream to write the Excel XML
-            using (MemoryStream stream = new MemoryStream())
+            using (MemoryStream stream = new())
             {
                 // Create an XML document
-                XmlDocument xmlDoc = new XmlDocument();
+                XmlDocument xmlDoc = new();
 
                 // Create XML declaration
                 XmlDeclaration xmlDeclaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);

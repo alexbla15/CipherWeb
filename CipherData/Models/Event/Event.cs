@@ -1,7 +1,83 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
+    public class LegacyEvent: Resource
+    {
+        /// <summary>
+        /// Type of event
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(EventType))]
+        public int EventType { get; set; }
+
+        /// <summary>
+        /// Validation status of event.
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Status))]
+        public int Status { get; set; }
+
+        private string? _Worker = null;
+
+        /// <summary>
+        /// Name of worker that fulfilled the form
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        public string? Worker
+        {
+            get { return _Worker; }
+            set { _Worker = value?.Trim(); }
+        }
+
+        /// <summary>
+        /// Process ID of process containing to this event
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
+        public string? ProcessId { get; set; }
+
+        private string? _Comments = null;
+
+        /// <summary>
+        /// Free-text comments on the event
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Comments))]
+        public string? Comments
+        {
+            get { return _Comments; }
+            set { _Comments = value?.Trim(); }
+        }
+
+        /// <summary>
+        /// Timestamp when the event happend
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
+        public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// package donating package
+        /// </summary>
+        [HebrewTranslation(typeof(LegacyEvent), nameof(DonatingPackage))]
+        public Package? DonatingPackage { get; set; } = null;
+
+        /// <summary>
+        /// package accepting package
+        /// </summary>
+        [HebrewTranslation(typeof(LegacyEvent), nameof(AcceptingPackage))]
+        public Package? AcceptingPackage { get; set; } = null;
+
+        /// <summary>
+        /// package donating system
+        /// </summary>
+        [HebrewTranslation(typeof(LegacyEvent), nameof(DonatingSystem))]
+        public StorageSystem? DonatingSystem { get; set; } = null;
+
+        /// <summary>
+        /// package accepting system
+        /// </summary>
+        [HebrewTranslation(typeof(LegacyEvent), nameof(AcceptingSystem))]
+        public StorageSystem? AcceptingSystem { get; set; } = null;
+
+    }
+
     public class Event : Resource
     {
         /// <summary>
@@ -52,10 +128,16 @@ namespace CipherData.Models
         public DateTime Timestamp { get; set; }
 
         /// <summary>
+        /// List of affected packages from actions, the items present the state of each package before the event
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(InitialStatePackages))]
+        public List<Package> InitialStatePackages { get; set; } = new();
+
+        /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Packages))]
-        public List<Package> Packages { get; set; } = new();
+        [HebrewTranslation(typeof(Event), nameof(FinalStatePackages))]
+        public List<Package> FinalStatePackages { get; set; } = new();
 
         /// <summary>
         /// Instanciation of a new Event.
@@ -87,7 +169,7 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Event Random(string? id = null)
         {
-            return new Event(id: id ?? GetNextId())
+            Event ev = new (id: id ?? GetNextId())
             {
                 Worker = Models.Worker.Random().Name,
                 EventType = new Random().Next(21, 27),
@@ -95,18 +177,51 @@ namespace CipherData.Models
                 Comments = "תנועה לדוגמה",
                 Timestamp = RandomFuncs.RandomDateTime(),
                 Status = new Random().Next(0, 2),
-                Packages = (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random) : new List<Package>()
+                InitialStatePackages = (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Package.Random) : new List<Package>(),
             };
+
+            List<Package> FinalPacks = ev.InitialStatePackages;
+            foreach (Package p in FinalPacks)
+            {
+                p.System = StorageSystem.Random("1111");
+            }
+
+            ev.FinalStatePackages = FinalPacks;
+            return ev;
+        }
+
+        public List<LegacyEvent> TransformToLegacyEvents()
+        {
+            List<LegacyEvent> events = new();
+
+            for(int i = 0; i< InitialStatePackages.Count; i++)
+            {
+                // if there is a change of location
+                if (InitialStatePackages[i].System.Id != FinalStatePackages[i].System.Id)
+                {
+                    events.Add(new LegacyEvent() { 
+                        DonatingSystem = InitialStatePackages[i].System, 
+                        AcceptingSystem = FinalStatePackages[i].System 
+                    });
+                }
+            }
+
+            return events;
         }
 
         // API-RELATED FUNCTIONS
+
+        public Tuple<Event, ErrorResponse> Update(UpdateEvent update_details)
+        {
+            return Config.EventsRequests.UpdateEvent(Id, update_details);
+        }
 
         /// <summary>
         /// All objects
         /// </summary>
         public static Tuple<List<Event>, ErrorResponse> All()
         {
-            return EventsRequests.GetEvents();
+            return Config.EventsRequests.GetEvents();
         }
 
         /// <summary>
@@ -127,7 +242,8 @@ namespace CipherData.Models
                 new() { Attribute = $"{typeof(Event).Name}.{nameof(EventType)}", Value = SearchText },
                 new() { Attribute = $"{typeof(Event).Name}.{nameof(ProcessId)}", Value = SearchText },
                 new() { Attribute = $"{typeof(Event).Name}.{nameof(Comments)}",Value = SearchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(Packages)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(InitialStatePackages)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any },
+                new() { Attribute = $"{typeof(Event).Name}.{nameof(FinalStatePackages)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
             },
                 Operator = Operator.Any
             });

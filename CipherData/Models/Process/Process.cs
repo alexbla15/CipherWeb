@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -89,12 +89,17 @@ namespace CipherData.Models
 
         // API-RELATED FUNCTIONS
 
+        public static Tuple<Process,ErrorResponse> Get(string? id = null)
+        {
+            return (id is null)? Tuple.Create(new Process(""), ErrorResponse.BadRequest) : Config.ProcessesRequests.GetProcess(id);
+        }
+
         /// <summary>
         /// All objects
         /// </summary>
         public static Tuple<List<Process>, ErrorResponse> All()
         {
-            return ProcessesRequests.GetProcesses();
+            return Config.ProcessesRequests.GetProcesses();
         }
 
         /// <summary>

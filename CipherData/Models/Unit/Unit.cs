@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 
 namespace CipherData.Models
 {
@@ -170,7 +170,7 @@ namespace CipherData.Models
         /// <param name="id">unit ID</param>
         public static Tuple<Unit, ErrorResponse> Get(string id)
         {
-            return UnitsRequests.GetUnit(id);
+            return Config.UnitsRequests.GetUnit(id);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace CipherData.Models
         /// </summary>
         public static Tuple<List<Unit>, ErrorResponse> All()
         {
-            return UnitsRequests.GetUnits();
+            return Config.UnitsRequests.GetUnits();
         }
 
         /// <summary>

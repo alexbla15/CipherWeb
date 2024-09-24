@@ -383,7 +383,7 @@
         {
             CreateEventJsonRequest = UpdatePackEvent.ToJson();
 
-            (CreateEventResult, Error) = EventsRequests.CreateEvent(UpdatePackEvent);
+            (CreateEventResult, Error) = Config.EventsRequests.CreateEvent(UpdatePackEvent);
             if (Error != ErrorResponse.Success)
             {
                 submission.Valid = false;
@@ -410,7 +410,7 @@
         {
             UpdatePackJsonRequest = RequestedPackUpdate.ToJson();
 
-            (UpdatePackResult, Error) = PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
+            (UpdatePackResult, Error) = Config.PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
             if (Error != ErrorResponse.Success)
             {
                 submission.Valid = false;
