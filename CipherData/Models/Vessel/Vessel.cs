@@ -80,7 +80,7 @@ namespace CipherData.Models
             {
                 Type = RandomFuncs.RandomItem(VesselTypes),
                 System = StorageSystem.Random(),
-                ContainingPackages = new List<Package>() { RandomData.RandomPackage }
+                ContainingPackages = new List<Package>() { new Package("VP") }
             };
         }
 

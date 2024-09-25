@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Text.Json;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// An event of transfering mass between one package to another
@@ -109,15 +111,6 @@
 
             Tuple<bool,string> SpecificEventCheck = result.Check();
             return (SpecificEventCheck.Item1) ? Create().Check() : SpecificEventCheck;
-        }
-
-        /// <summary>
-        /// Create a copy of this object
-        /// </summary>
-        /// <returns></returns>
-        public CreateTranserAmountEvent Copy()
-        {
-            return (CreateTranserAmountEvent)MemberwiseClone();
         }
 
         /// <summary>

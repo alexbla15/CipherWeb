@@ -10,12 +10,6 @@
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
     /// <summary>
-    /// Help text for save-button.
-    /// </summary>
-    [Parameter]
-    public string SaveConditionsText { get; set; } = "שמירת תנאים";
-
-    /// <summary>
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
@@ -38,6 +32,12 @@
     /// </summary>
     [Parameter]
     public EventCallback<object> OnSave { get; set; }
+
+    /// <summary>
+    /// Help text for save-button.
+    /// </summary>
+    [Parameter]
+    public string SaveConditionsText { get; set; } = "רענון נתונים";
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -242,7 +242,8 @@
     <Buttons>
         @if (WithSaveButton)
         {
-            <CipherButton Icon="@Icons.Documents.Edit.save" Variant="Variant.Outlined" Click="@(args => Save())" HelpText="@SaveConditionsText" />
+            <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined" 
+            Click="@(args => Save())" HelpText="@SaveConditionsText" />
         }
     </Buttons>
     <ChildContent>

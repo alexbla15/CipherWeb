@@ -103,17 +103,17 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(ev_main.Check().Item1);
 
             // 2 - bad packages
-            CreateRelocationEvent ev = ev_main.Copy();
+            CreateRelocationEvent ev = CipherClass.Copy(ev_main);
             ev.Packages = new();
             Assert.IsFalse(ev.Check().Item1);
 
             // 3 - bad target
-            ev = ev_main.Copy();
+            ev = CipherClass.Copy(ev_main);
             ev.TargetSystem = null;
             Assert.IsFalse(ev.Check().Item1);
 
             // 4 - bad target-package
-            ev = ev_main.Copy();
+            ev = CipherClass.Copy(ev_main);
             ev.TargetSystem = p.System;
             Assert.IsFalse(ev.Check().Item1);
         }
@@ -140,27 +140,6 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(ev.EventType == 24);
             Assert.IsTrue(ev.Timestamp == ev_main.Timestamp);
             Assert.IsTrue(ev.Actions.Select(x => x.BrutMass).SequenceEqual(ev_main.Packages.Select(x => x.BrutMass).ToList()));
-        }
-
-        [TestMethod()]
-        public void CopyTest()
-        {
-            CreateRelocationEvent ev_main = new()
-            {
-                Worker = "אבי",
-                Timestamp = DateTime.Now,
-                Packages = new() { Package.Random() },
-                Comments = "c",
-                TargetSystem = StorageSystem.Random()
-            };
-            CreateRelocationEvent example_copy = ev_main.Copy();
-
-            Assert.IsNotNull(example_copy);
-            Assert.IsTrue(example_copy.Worker == ev_main.Worker);
-            Assert.IsTrue(example_copy.Timestamp == ev_main.Timestamp);
-            Assert.IsTrue(example_copy.Comments == ev_main.Comments);
-            Assert.IsTrue(example_copy.TargetSystem?.Equals(ev_main.TargetSystem));
-            Assert.IsTrue(example_copy.Packages?.SequenceEqual(ev_main.Packages));
         }
 
         [TestMethod()]

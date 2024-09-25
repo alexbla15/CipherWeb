@@ -1,4 +1,6 @@
 ﻿using CipherData.Randomizer;
+using System.Linq;
+using System.Text.Json;
 
 namespace CipherData.Models
 {
@@ -11,8 +13,8 @@ namespace CipherData.Models
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Description))]
         public string? Description {
-            get { return _Description; }
-            set { _Description = value?.Trim(); } 
+            get => _Description; 
+            set => _Description = value?.Trim(); 
         }
 
         /// <summary>
@@ -75,17 +77,10 @@ namespace CipherData.Models
                 _Category = value;
                 DestinationProcesses = value.ConsumingProcesses;
 
-                if (value.Properties != null)
-                {
-                    Properties = new List<PackageProperty>();
-                    foreach (CategoryProperty prop in value.Properties)
-                    {
-                        if (!Properties.Any(x => x.Name == prop.Name))
-                        {
-                            Properties.Add(new PackageProperty() { Name = prop.Name ?? string.Empty, Value = prop.DefaultValue });
-                        }
-                    }
-                }
+                Properties = value.Properties?
+                .DistinctBy(prop => prop.Name)
+                .Select(prop => new PackageProperty { Name = prop.Name ?? string.Empty, Value = prop.DefaultValue })
+                .ToList();
             } 
         }
 
@@ -110,11 +105,6 @@ namespace CipherData.Models
         public Package(string? id = null)
         {
             Id = id ?? GetNextId();
-        }
-
-        public Package Copy()
-        {
-            return (Package)MemberwiseClone();
         }
 
         /// <summary>
@@ -166,8 +156,8 @@ namespace CipherData.Models
             List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
             Category cat = Category.Random();
 
-            List<Package> random_packs = RandomFuncs.FillRandomObjects(new Random().Next(0, 3), Random);
-            Package? Parent = (random_packs.Count > 0) ? random_packs.First() : null;
+            List<Package> random_packs = new() { new("PP1"), new("PP2"), new("PP3")};
+            Package Parent = RandomFuncs.RandomItem(random_packs);
 
             Package result = new(id: id)
             {
@@ -176,95 +166,12 @@ namespace CipherData.Models
                 BrutMass = curr_brutmass,
                 NetMass = curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
                 Parent = Parent,
-                Children = (Parent is null) ? null : random_packs.Where(x => x.Id != Parent.Id).ToList(),
+                Children = new() { new("PC1"), new("PC2"), new("PC3") },
                 System = StorageSystem.Random(),
                 Vessel = Vessel.Random(),
                 Category = cat
             };
             return result;
-        }
-
-        /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(Package? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Id != OtherObject.Id) return false;
-            if (Description != OtherObject.Description) return false;
-            if (BrutMass != OtherObject.BrutMass) return false;
-            if (NetMass != OtherObject.NetMass) return false;
-
-            if (Parent is null)
-            {
-                if (OtherObject.Parent != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Parent is null) return false;
-                if (Parent.Equals(OtherObject.Parent)) return false;
-            }
-
-            if (Children is null)
-            {
-                if (OtherObject.Children != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Children is null) return false;
-                if (Children.Count != OtherObject.Children.Count) return false;
-                if (Children.Any())
-                {
-                    foreach (Package p in Children.OrderBy(x => x.Id))
-                    {
-                        if (!p.Equals(OtherObject.Children[Children.IndexOf(p)])) return false;
-                    }
-                }
-            }
-
-            if (System is null)
-            {
-                if (OtherObject.System != null) return false;
-            }
-            else
-            {
-                if (OtherObject.System is null) return false;
-                if (!System.Equals(OtherObject.System)) return false;
-            }
-
-            if (Vessel is null)
-            {
-                if (OtherObject.Vessel != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Vessel is null) return false;
-                if (!Vessel.Equals(OtherObject.Vessel)) return false;
-            }
-
-            if (Category is null)
-            {
-                if (OtherObject.Category != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Category is null) return false;
-                if (!Category.Equals(OtherObject.Category)) return false;
-            }
-
-            if (Properties?.Count != OtherObject.Properties?.Count) return false;
-            if (Properties != null && OtherObject.Properties != null)
-            {
-                if (!Properties.Equals(OtherObject.Properties)) return false;
-            }
-
-            if (DestinationProcesses?.Count != OtherObject.DestinationProcesses?.Count) return false;
-            if (DestinationProcesses != null && OtherObject.DestinationProcesses != null)
-            {
-                if (!DestinationProcesses.SequenceEqual(OtherObject.DestinationProcesses)) return false;
-            }
-
-            return true;
         }
 
         // API-RELATED FUNCTIONS

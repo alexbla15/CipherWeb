@@ -54,19 +54,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(ProcessStepDefinition? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Id != OtherObject.Id) return false;
-            if (Name != OtherObject.Name) return false;
-            if (!Condition.Equals(OtherObject.Condition)) return false;
-
-            return true;
-        }
-
-        /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckName()

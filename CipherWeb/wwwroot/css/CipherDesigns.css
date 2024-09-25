@@ -299,10 +299,18 @@
     text-align: right;
 }
 
-.rz-datatable .rzi-chevron-circle-right,
+.rz-datatable .rzi-chevron-circle-right, 
 .rz-datatable .rzi-chevron-circle-down {
     vertical-align: middle;
-    color: var(--rz-primary-darker);
+    color: white;
+    font-size: x-large;
+    /*border: 3px solid var(--rz-primary-darker);*/
+    border-radius: 5px;
+    /*padding: 15px;*/
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    /*background-color: var(--rz-primary-darker);*/
 }
 
     .rz-datatable .rzi-chevron-circle-right:hover,
@@ -312,16 +320,28 @@
     }
 
     .rz-datatable .rzi-chevron-circle-right:before {
-        content: "arrow_circle_down";
+        content: "keyboard_double_arrow_down";
+        color: white;
+        border: 3px solid var(--rz-primary-darker);
+        border-radius: 5px;
+        background-color: var(--rz-primary-darker);
+        padding: 3.5px;
+        margin: 1px;    
     }
 
     .rz-datatable .rzi-chevron-circle-down:before {
-        content: "arrow_circle_up";
+        content: "keyboard_double_arrow_up";
+        color: var(--rz-primary-darker);
+        border: 3px solid var(--rz-primary-lighter);
+        border-radius: 5px;
+        background-color: var(--rz-primary-lighter);
+        padding: 3.5px;
+        margin:1px;
     }
 
 .rz-datatable .rz-col-icon {
     background-color: var(--rz-primary-light);
-    width: 30px;
+    width: 37px;
 }
 
 /* ------------------ GROUP HEADER ------------------ */

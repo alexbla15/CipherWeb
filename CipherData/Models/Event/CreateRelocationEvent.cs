@@ -107,15 +107,6 @@
         }
 
         /// <summary>
-        /// Get an identical copy of this object
-        /// </summary>
-        /// <returns></returns>
-        public CreateRelocationEvent Copy()
-        {
-            return (CreateRelocationEvent)MemberwiseClone();
-        }
-
-        /// <summary>
         /// Create a general CreateEvent object, out of this object parameters.
         /// </summary>
         /// <returns></returns>

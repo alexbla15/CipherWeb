@@ -14,40 +14,10 @@ namespace CipherData.Models.Tests
         }; 
 
         [TestMethod()]
-        public void EqualsTest()
-        {
-            // 1 - exactly the same
-            BooleanCondition cond2 = cond.Copy();
-            Assert.IsTrue(cond2.Equals(cond));
-
-            // 2 - change Attribute
-            cond2 = cond.Copy();
-            cond2.Attribute = "b";
-            Assert.IsFalse(cond2.Equals(cond));
-
-            // 3 - change AttributeRelation
-            cond2 = cond.Copy();
-            cond2.AttributeRelation = AttributeRelation.Ne;
-            Assert.IsFalse(cond2.Equals(cond));
-
-            // 4 - change Operator
-            cond2 = cond.Copy();
-            cond2.Operator = Operator.All;
-            Assert.IsFalse(cond2.Equals(cond));
-
-            // 5 - change Value
-            cond2 = cond.Copy();
-            cond2.Value = "4";
-            Assert.IsFalse(cond2.Equals(cond));
-        }
-
-        [TestMethod()]
         public void CheckAttributeTest()
         {
-            BooleanCondition cat = new()
-            {
-                Attribute = "תכונה" // Good name
-            };
+            BooleanCondition cat = new() { Attribute = "תכונה" }; // Good name
+
             Assert.IsTrue(cat.CheckAttribute().Succeeded);
 
             cat.Attribute = "@תכונה"; // Improper chars
@@ -89,7 +59,7 @@ namespace CipherData.Models.Tests
         public void CheckTest()
         {
             // 1 - good fields
-            BooleanCondition c1 = cond.Copy();
+            BooleanCondition c1 = CipherClass.Copy(cond);
             Assert.IsTrue(c1.Check().Item1);
 
             // 2 - bad Attribute
@@ -97,7 +67,7 @@ namespace CipherData.Models.Tests
             Assert.IsFalse(c1.Check().Item1);
 
             // 3 - bad value
-            c1 = cond.Copy();
+            c1 = CipherClass.Copy(cond);
             c1.Value = "@";
             Assert.IsFalse(c1.Check().Item1);
         }

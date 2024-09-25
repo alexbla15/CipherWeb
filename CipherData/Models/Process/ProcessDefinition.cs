@@ -53,28 +53,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(ProcessDefinition? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Id != OtherObject.Id) return false;
-            if (Name != OtherObject.Name) return false;
-            if (Description != OtherObject.Description) return false;
-
-            if (Steps.Count != OtherObject.Steps.Count) return false;
-            if (Steps.Any())
-            {
-                foreach (ProcessStepDefinition step in Steps.OrderBy(x => x.Id))
-                {
-                    if (!step.Equals(OtherObject.Steps[Steps.IndexOf(step)])) return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;

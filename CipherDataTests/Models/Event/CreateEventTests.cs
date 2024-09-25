@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
@@ -44,23 +44,9 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void CopyTest()
-        {
-            CreateEvent example_copy = example.Copy();
-
-            Assert.IsNotNull(example_copy);
-            Assert.IsTrue(example_copy.Worker == example.Worker);
-            Assert.IsTrue(example_copy.Timestamp == example.Timestamp);
-            Assert.IsTrue(example_copy.ProcessId == example.ProcessId);
-            Assert.IsTrue(example_copy.Comments == example.Comments);
-            Assert.IsTrue(example_copy.EventType == example.EventType);
-            Assert.IsTrue(example_copy.Actions.SequenceEqual(example.Actions));
-        }
-
-        [TestMethod()]
         public void CheckWorkerTest()
         {
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
 
             ev.Worker = "תכונה"; // Good name
             Assert.IsTrue(ev.CheckWorker().Succeeded);
@@ -81,7 +67,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckEventTypeTest()
         {
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
 
             ev.EventType = 12; // Good value
             Assert.IsTrue(ev.CheckEventType().Succeeded);
@@ -93,7 +79,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckCommentsTest()
         {
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
 
             ev.Comments = "תכונה"; // Good name
             Assert.IsTrue(ev.CheckComments().Succeeded);
@@ -136,7 +122,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckTimeStampTest()
         {
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
 
             ev.Timestamp = DateTime.Now; // Good value
             Assert.IsTrue(ev.CheckTimeStamp().Succeeded);
@@ -151,7 +137,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckActionsTest()
         {
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
 
             Assert.IsTrue(ev.CheckActions().Succeeded); // full list
 
@@ -170,7 +156,7 @@ namespace CipherData.Models.Tests
         public void CheckTest()
         {
             // 1 - good fields
-            CreateEvent ev = example.Copy();
+            CreateEvent ev = CipherClass.Copy(example);
             Assert.IsTrue(ev.Check().Item1);
 
             // 2 - bad worker
@@ -178,27 +164,27 @@ namespace CipherData.Models.Tests
             Assert.IsFalse(ev.Check().Item1);
 
             // 3 - bad event type
-            ev = example.Copy();
+            ev = CipherClass.Copy(example);
             ev.EventType = 0;
             Assert.IsFalse(ev.Check().Item1);
 
             // 4 - bad Process Id
-            ev = example.Copy();
+            ev = CipherClass.Copy(example);
             ev.ProcessId = "@";
             Assert.IsFalse(ev.Check().Item1);
 
             // 5 - bad comments
-            ev = example.Copy();
+            ev = CipherClass.Copy(example);
             ev.Comments = "@";
             Assert.IsFalse(ev.Check().Item1);
 
             // 6 - bad timestamp
-            ev = example.Copy();
+            ev = CipherClass.Copy(example);
             ev.Timestamp = DateTime.Now.AddYears(1);
             Assert.IsFalse(ev.Check().Item1);
 
             // 7 - bad actions
-            ev = example.Copy();
+            ev = CipherClass.Copy(example);
             ev.Actions = new();
             Assert.IsFalse(ev.Check().Item1);
         }
@@ -214,7 +200,7 @@ namespace CipherData.Models.Tests
             Assert.IsTrue(ev.ProcessId == example.ProcessId);
             Assert.IsTrue(ev.EventType == example.EventType);
             Assert.IsTrue(ev.Timestamp == example.Timestamp);
-            Assert.IsTrue(ev.Packages.Select(x=>x.BrutMass).SequenceEqual(example.Actions.Select(x => x.BrutMass).ToList()));
+            Assert.IsTrue(ev.FinalStatePackages.Select(x=>x.BrutMass).SequenceEqual(example.Actions.Select(x => x.BrutMass).ToList()));
         }
     }
 }

@@ -43,47 +43,17 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EqualsTest()
-        {
-            GroupedBooleanCondition cond_copy = cond.Copy();
-
-            Assert.IsTrue(cond.Equals(cond_copy));
-
-            // 1 - different Conditions
-            cond.Conditions = new List<BooleanCondition>() { cond1, cond2 };
-            Assert.IsFalse(cond.Equals(cond_copy));
-
-            // 2 - different Operator
-            cond_copy = cond.Copy();
-            cond_copy.Operator = Operator.All;
-            Assert.IsFalse(cond.Equals(cond_copy));
-
-            // 3 - null
-            Assert.IsFalse(cond.Equals(null));
-        }
-
-        [TestMethod()]
-        public void CopyTest()
-        {
-            GroupedBooleanCondition cond_copy = cond.Copy();
-
-            Assert.IsNotNull(cond_copy);
-            Assert.IsTrue(cond_copy.Conditions.SequenceEqual(cond.Conditions));
-            Assert.IsTrue(cond_copy.Operator == cond.Operator);
-        }
-
-        [TestMethod()]
         public void CheckConditionsTest()
         {
             // empty list
-            GroupedBooleanCondition cond_copy = cond.Copy();
+            GroupedBooleanCondition cond_copy = CipherClass.Copy(cond);
             cond_copy.Conditions = new List<BooleanCondition>();
             Assert.IsTrue(cond_copy.CheckConditions().Succeeded);
             cond_copy.Conditions = new List<GroupedBooleanCondition>();
             Assert.IsTrue(cond_copy.CheckConditions().Succeeded);
 
             // full list
-            cond_copy = cond.Copy();
+            cond_copy = CipherClass.Copy(cond);
             Assert.IsTrue(cond_copy.CheckConditions().Succeeded);
             cond_copy.Conditions = new List<GroupedBooleanCondition>() { GroupedBooleanCondition.Random() };
             Assert.IsTrue(cond_copy.CheckConditions().Succeeded);

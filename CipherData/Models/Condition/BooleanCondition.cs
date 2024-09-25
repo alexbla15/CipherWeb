@@ -99,32 +99,6 @@
         }
 
         /// <summary>
-        /// Checks if this and other object are identical
-        /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Equals(BooleanCondition? OtherObject)
-        {
-            if (OtherObject is null) return false;
-
-            if (Attribute != OtherObject?.Attribute) return false;
-            if (AttributeRelation != OtherObject?.AttributeRelation) return false;
-            if (Operator != OtherObject?.Operator) return false;
-            if (Value != OtherObject?.Value) return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Create an identical object to this one.
-        /// </summary>
-        /// <returns></returns>
-        public BooleanCondition Copy()
-        {
-            return (BooleanCondition)MemberwiseClone();
-        }
-
-        /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckAttribute()

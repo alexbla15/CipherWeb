@@ -61,62 +61,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(StorageSystem? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Id != OtherObject.Id) return false;
-            if (Name != OtherObject.Name) return false;
-            if (Description != OtherObject.Description) return false;
-
-            if (Children is null)
-            {
-                if (OtherObject.Children != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Children is null) return false;
-                if (Children.Count != OtherObject.Children.Count) return false;
-                if (Children.Any())
-                {
-                    foreach (StorageSystem sys in Children.OrderBy(x => x.Id))
-                    {
-                        if (!sys.Equals(OtherObject.Children[Children.IndexOf(sys)])) return false;
-                    }
-                }
-            }
-            
-            if (Parent is null)
-            {
-                if (OtherObject.Parent != null) return false;
-            }
-            else
-            {
-                if (!Parent.Equals(OtherObject.Parent)) return false;
-            }
-
-            if (Unit is null)
-            {
-                if (OtherObject.Unit != null) return false;
-            }
-            else
-            {
-                if (!Unit.Equals(OtherObject.Unit)) return false;
-            }
-
-
-            if (Properties?.Count != OtherObject.Properties?.Count) return false;
-            if (Properties != null && OtherObject.Properties != null)
-            {
-                if (!Properties.Keys.SequenceEqual(OtherObject.Properties.Keys)) return false;
-                if (!Properties.Values.SequenceEqual(OtherObject.Properties.Values)) return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;
@@ -144,7 +88,7 @@ namespace CipherData.Models
                 Name = id ?? GetNextId(),
                 Description = RandomFuncs.RandomItem(SystemsDescriptions),
                 Unit = Unit.Random(),
-                Parent = (new Random().Next(0, 5) == 0) ? Random() : null
+                Parent = (new Random().Next(0, 5) == 0) ? new StorageSystem() { Name= GetNextId() } : null
             };
         }
 

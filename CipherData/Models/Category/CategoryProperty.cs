@@ -90,28 +90,6 @@
             return result.Check();
         }
 
-        /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(CategoryProperty? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Name != OtherObject.Name) return false;
-            if (Description != OtherObject.Description) return false;
-            if (PropertyType != OtherObject.PropertyType) return false;
-            if (DefaultValue != OtherObject.DefaultValue) return false;
-            return true;
-        }
-
-        /// <summary>
-        /// Create an identical object to this one.
-        /// </summary>
-        /// <returns></returns>
-        public CategoryProperty Copy()
-        {
-            return (CategoryProperty)MemberwiseClone();
-        }
-
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, Description, PropertyType, DefaultValue);

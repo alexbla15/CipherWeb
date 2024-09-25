@@ -54,7 +54,7 @@
         /// </summary>
         public static UpdateEvent DeclinedEvent()
         {
-            return new UpdateEvent { Status = 2 };
+            return new UpdateEvent { Status = -1 };
         }
     }
 }

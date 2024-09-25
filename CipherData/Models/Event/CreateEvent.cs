@@ -53,15 +53,6 @@
         public List<PackageRequest> Actions { get; set; } = new();
 
         /// <summary>
-        /// Get an identical copy of this object
-        /// </summary>
-        /// <returns></returns>
-        public CreateEvent Copy()
-        {
-            return (CreateEvent)MemberwiseClone();
-        }
-
-        /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckWorker()
@@ -145,8 +136,9 @@
         /// <returns></returns>
         public Event Create(string id)
         {
-            return new Event(id: id)
+            return new Event()
             {
+                Id = id,
                 Worker = Worker,
                 EventType = EventType,
                 ProcessId = ProcessId,

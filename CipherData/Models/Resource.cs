@@ -72,6 +72,24 @@ namespace CipherData.Models
     public abstract class CipherClass
     {
         /// <summary>
+        /// Check if this object and another object of the same type are exactly the same.
+        /// </summary>
+        public bool Equals<T>(T? otherObject) where T : CipherClass
+        {
+            if (otherObject is null) return false;
+
+            // Compare both objects by their serialized JSON representations
+            return ToJson() == otherObject.ToJson();
+        }
+
+        // generic static copy of two objected
+        public static T Copy<T>(T obj) where T: CipherClass
+        {
+            var json = obj.ToJson();
+            return FromJson<T>(json); // Deserialize to the actual type
+        }
+
+        /// <summary>
         /// Translate the name of the field according to its hebrew translation.
         /// </summary>
         public string Translate(string searchedAttribute)
@@ -105,6 +123,23 @@ namespace CipherData.Models
 
             return JsonSerializer.Serialize(this, GetType(), options);
         }
+
+        /// <summary>
+        /// Transfrom Json to an object
+        /// </summary>
+        /// <returns></returns>
+        public static T FromJson<T>(string json)
+        {
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
+                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(),
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+                IncludeFields = true // Include private/protected fields (if necessary)
+            };
+
+            return JsonSerializer.Deserialize<T>(json, options);
+        }
     }
 
     /// <summary>
@@ -129,17 +164,6 @@ namespace CipherData.Models
         /// </summary>
         [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         public int Uuid { get; set; } = GetUuid();
-
-        /// <summary>
-        /// Compare two Resource-objects
-        /// </summary>
-        public bool Compare(Resource otherObject)
-        {
-            if (Id != otherObject.Id) return false;
-            if (ClearenceLevel != otherObject.ClearenceLevel) return false;
-            if (Uuid != otherObject.Uuid) return false;
-            return true;
-        }
 
         /// <summary>
         /// Method to get all (english, hebrew) translations of the above attributes.
@@ -168,6 +192,7 @@ namespace CipherData.Models
         }
 
         public static readonly List<string> clearences = new() { "מוגבל", "מוגבל מאוד", "חופשי" };
+        
         // API RELATED FUNCTIONS
 
         /// <summary>

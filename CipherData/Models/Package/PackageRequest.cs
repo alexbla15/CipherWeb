@@ -168,48 +168,6 @@
         }
 
         /// <summary>
-        /// Checks for difference between this and another category
-        /// </summary>
-        public bool Equals(PackageRequest? OtherObject)
-        {
-            if (OtherObject == null) return false;
-
-            if (Id != OtherObject.Id) return false;
-            if (SystemId != OtherObject.SystemId) return false;
-            if (ParentId != OtherObject.ParentId) return false;
-            if (BrutMass != OtherObject.BrutMass) return false;
-            if (NetMass != OtherObject.NetMass) return false;
-            if (CategoryId != OtherObject.CategoryId) return false;
-            if (VesselId != OtherObject.VesselId) return false;
-            if (ParentId != OtherObject.ParentId) return false;
-
-            if (ChildrenIds is null)
-            {
-                if (OtherObject.ChildrenIds != null) return false;
-            }
-            else
-            {
-                if (OtherObject.ChildrenIds is null) return false;
-                if (ChildrenIds.Count != OtherObject.ChildrenIds.Count) return false;
-                if (!ChildrenIds.SequenceEqual(OtherObject.ChildrenIds)) return false;
-            }
-
-
-            if (Properties is null)
-            {
-                if (OtherObject.Properties != null) return false;
-            }
-            else
-            {
-                if (OtherObject.Properties is null) return false;
-                if (Properties.Count != OtherObject.Properties.Count) return false;
-                if (!Properties.SequenceEqual(OtherObject.Properties)) return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Get a random new object.
         /// </summary>
         public static PackageRequest Random(string? id = null)

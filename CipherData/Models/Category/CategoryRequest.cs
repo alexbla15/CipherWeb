@@ -148,15 +148,6 @@
         }
 
         /// <summary>
-        /// Create an identical copy of this object
-        /// </summary>
-        /// <returns></returns>
-        public CategoryRequest Copy()
-        {
-            return (CategoryRequest)MemberwiseClone();
-        }
-
-        /// <summary>
         /// Checks for difference between this and another category
         /// </summary>
         public bool Different(Category? OtherObject)
@@ -207,45 +198,6 @@
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Checks for difference between this and another category
-        /// </summary>
-        public bool Equals(CategoryRequest? OtherObject)
-        {
-            if (OtherObject == null) return false;
-
-            if (Name != OtherObject.Name) return false;
-            if (Description != OtherObject.Description) return false;
-            if (ParentId != OtherObject.ParentId) return false;
-
-            if (IdMask.Count != OtherObject.IdMask.Count) return false;
-            if (!IdMask.SequenceEqual(OtherObject.IdMask)) return false;
-
-            if (CreatingProcesses.Count != OtherObject.CreatingProcesses.Count) return false;
-            if (!CreatingProcesses.SequenceEqual(OtherObject.CreatingProcesses)) return false;
-
-            if (ConsumingProcesses.Count != OtherObject.ConsumingProcesses.Count) return false;
-            if (!ConsumingProcesses.SequenceEqual(OtherObject.ConsumingProcesses)) return false;
-
-            if ((Properties != null) && (OtherObject.Properties != null))
-            {
-                // check for same property names
-                if (!Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList())) return false;
-                // check for differences
-                foreach (CategoryProperty prop in Properties)
-                {
-                    CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
-                    if (!prop.Equals(other_prop)) return false;
-                }
-            }
-            else if (((Properties != null) && (OtherObject?.Properties == null)) || ((Properties == null) && (OtherObject?.Properties != null)))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>

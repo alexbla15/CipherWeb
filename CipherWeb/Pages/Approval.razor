@@ -2,104 +2,47 @@
 
 @using System.Reflection
 
-@inject DialogService DialogService
-
-@inherits CipherComponentCard
-
 <PageTitle>@Title</PageTitle>
 
-<CipherComponentCard Title="@Title">
-    <Buttons>
-        <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents"/>
-        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
-        <CipherExcelButton Data="@PendingEvents"></CipherExcelButton>
-        <CipherPDFButton/>
-    </Buttons>
-    <ChildContent>
-        <CipherComponentCard WithCard=false>
-            <ChildContent>
-                <RadzenStack Orientation="Orientation.Vertical">
-                    <CipherBooleanConditions @ref="EventsFilter" Title="" OnSave="@RefreshEvents"/>
-                    <RadzenDataGrid @ref="CustomDataGrid" TItem="Event"
-                                    FilterMode="FilterMode.Simple" AllowFiltering="false"
-                                    AllowSorting="true" AllowGrouping="false" HideGroupedColumn="true"
-                                    AllGroupsExpanded="false"
-                                    Data="@PendingEvents">
-                        <Columns>
-                            <RadzenDataGridColumn TItem="Event" Title="אישור" Width="100px">
-                                <Template Context="ev">
-                                    <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
-                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
-                                                  Size="ButtonSize.Medium" Click="@(args => ApproveEvent(ev))"/>
-                                    <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
-                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
-                                                  Size="ButtonSize.Medium" Click="@(args => DeclineEvent(ev))" />
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
-                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(new Event().Translate(nameof(Event.ProcessId)))" />
-                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(new Event().Translate(nameof(Event.Timestamp)))" />
-                            <RadzenDataGridColumn TItem="Event" Title="תעודה מוסרת">
-                                <Template>
-                                    @* @if (context.Packages.ToList().Count() > 0)
-                                    {
-                                        @context.Packages.ToList().First().Id
-                                        ;
-                                    } *@
-                                </Template>
-                            </RadzenDataGridColumn>
-
-                            <RadzenDataGridColumn TItem="Event" Title="מערכת מוסרת">
-                                <Template>
-                                    <RadzenText Text="A"></RadzenText>
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Event" Title="תעודה מקבלת">
-                                <Template>
-                                    @if (context.FinalStatePackages.ToList().Count() > 0)
-                                    {
-                                        @context.FinalStatePackages.ToList().Last().Id
-                                        ;
-                                    }
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Event" Title="מערכת מקבלת">
-                                <Template>
-                                    <RadzenText Text="B"></RadzenText>
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Event" Title="מסת תנועה">
-                                @* <Template>
-                                    @(context.)
-                                </Template> *@
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(new Event().Translate(nameof(Event.Comments)))" />
-                            <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(new Event().Translate(nameof(Event.Status)))">
-                                <Template>
-                                    @((context.Status == 0) ? "בהמתנה לאישור" : (context.Status == 1 ? "מאושר" : "נדחה"));
-                                </Template>
-                            </RadzenDataGridColumn>
-                        </Columns>
-                    </RadzenDataGrid>
-                    <CipherJsonCheck JsonValue="@JsonRequest" />
-                </RadzenStack>
-            </ChildContent>
-        </CipherComponentCard>
-    </ChildContent>
-</CipherComponentCard>
+<RadzenStack Orientation="Orientation.Vertical">
+    <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnSave="@RefreshEvents" />
+    <CipherJsonCheck JsonValue="@JsonRequest" />
+    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents"
+        WithRowButtons="true"/>
+    <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-Events="@ApprovedEvents" />
+    <CipherDisplayedEventsCard Title="תנועות דחויות" @bind-Events="@DeclinedEvents" />
+</RadzenStack>
 
 @code {
     /// <summary>
     /// All events in queue for approval
     /// </summary>
     [Parameter]
-    public List<Event> PendingEvents { get; set; } = CachedData.AllEvents.Item1;
+    public List<Event> PendingEvents { get; set; } = new();
 
     /// <summary>
-    /// Update result, send from the api
+    /// All approved events
     /// </summary>
     [Parameter]
-    public Event? Result { get; set; }
+    public List<Event> ApprovedEvents { get; set; } = new();
+
+    /// <summary>
+    /// All declined events
+    /// </summary>
+    [Parameter]
+    public List<Event> DeclinedEvents { get; set; } = new();
+
+    /// <summary>
+    /// Page Title.
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; } = string.Empty;
 
     /// <summary>
     /// API response to submission.
@@ -107,73 +50,19 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    /// <summary>
-    /// Error message upon improper submission.
-    /// </summary>
-    [Parameter]
-    public string? ErrorMessage { get; set; }
-
-    /// <summary>
-    /// Json request that will be sent to the API server. 
-    /// </summary>
-    [Parameter]
-    public string JsonRequest { get; set; } = string.Empty;
-
-    private RadzenDataGrid<Event> CustomDataGrid = new();
     private CipherBooleanConditions EventsFilter = new();
+    private CipherDisplayedEventsCard FilterableEvents = new();
 
     protected override void OnInitialized()
     {
         Title ??= CipherNavLinks.Approval.Name;
+
+        (PendingEvents, Error) = Event.PendingEvents();
+        (ApprovedEvents, Error) = Event.ApprovedEvents();
+        (DeclinedEvents, Error) = Event.DeclinedEvents();
     }
-
-    public async Task OpenEvent()
-    {
-        await DialogService.OpenAsync("תנועה",
-
-    ds =>
-    @<CipherEventCard dir="rtl" WithCard=false ReadOnly=false></CipherEventCard>, Constants.SetDialogOptions);
-    }
-
-    public void ForSingleEvent(Func<UpdateEvent> singleFunc, Event ev)
-    {
-        UpdateEvent setUpdate = singleFunc();
-        (Result, Error) = ev.Update(setUpdate);
-        JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
-    }
-
-    public void ForAllEvents(Action<Event> singleFunc)
-    {
-        string NewJsonRequest = string.Empty;
-        foreach (Event ev in PendingEvents)
-        {
-            singleFunc(ev);
-            NewJsonRequest += JsonRequest + "\n\n";
-        }
-        JsonRequest = NewJsonRequest;
-    }
-
-    public void ApproveAllEvents()
-    {
-        ForAllEvents(ApproveEvent);
-    }
-
-    public void DeclineAllEvents()
-    {
-        ForAllEvents(DeclineEvent);
-    }
-
-    public void ApproveEvent(Event ev)
-    {
-        ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
-    }
-
-    public void DeclineEvent(Event ev)
-    {
-        ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
-    }
-
-    public void RefreshEvents()
+    
+    public async Task RefreshEvents()
     {
         GroupedBooleanCondition filterValue = EventsFilter.SelectedCondition;
         ObjectFactory objectFactory = new();
@@ -199,6 +88,6 @@
 
         (PendingEvents, Error) = Config.QueryRequests.QueryObjects<Event>(objectFactory);
         JsonRequest = objectFactory.ToJson();
-        StateHasChanged();
+        await FilterableEvents.ChangeEvents(PendingEvents);
     }
 }

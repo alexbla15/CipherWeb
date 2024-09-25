@@ -1,0 +1,186 @@
+﻿@inherits CipherComponentCard
+
+@code {
+
+    private List<DisplayedEvent> DisplayedEvents = new();
+
+    private List<Event> _Events = new();
+
+    /// <summary>
+    /// All events
+    /// </summary>
+    [Parameter]
+    public List<Event> Events
+    {
+        get { return _Events; }
+        set
+        {
+            _Events = value;
+            foreach (Event ev in _Events)
+            {
+                DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
+            }
+        }
+    }
+
+    /// <summary>
+    /// Update result, send from the api
+    /// </summary>
+    [Parameter]
+    public Event? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    [Parameter]
+    public bool WithRowButtons { get; set; } = false;
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string JsonRequest { get; set; } = string.Empty;
+
+    private RadzenDataGrid<DisplayedEvent> CustomDataGrid = new();
+
+    public void OnRender(DataGridRenderEventArgs<DisplayedEvent> args)
+    {
+        if (args.FirstRender)
+        {
+            args.Grid.Groups.Add(new GroupDescriptor()
+                {
+                    Title = new DisplayedEvent().Translate(nameof(DisplayedEvent.Id)),
+                    Property = nameof(DisplayedEvent.Id),
+                    SortOrder = SortOrder.Descending
+                });
+            StateHasChanged();
+        }
+    }
+
+    public void ForSingleEvent(Func<UpdateEvent> singleFunc, Event ev)
+    {
+        UpdateEvent setUpdate = singleFunc();
+        (Result, Error) = ev.Update(setUpdate);
+        JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
+    }
+
+    public void ApproveEvent(Event ev)
+    {
+        ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
+    }
+
+    public void DeclineEvent(Event ev)
+    {
+        ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
+    }
+
+    public void ForAllEvents(Action<Event> singleFunc)
+    {
+        string NewJsonRequest = string.Empty;
+        foreach (Event ev in Events)
+        {
+            singleFunc(ev);
+            NewJsonRequest += JsonRequest + "\n\n";
+        }
+        JsonRequest = NewJsonRequest;
+    }
+
+    public void ApproveAllEvents()
+    {
+        ForAllEvents(ApproveEvent);
+    }
+
+    public void DeclineAllEvents()
+    {
+        ForAllEvents(DeclineEvent);
+    }
+
+    public async Task ChangeEvents(List<Event> newEvents)
+    {
+        _Events = newEvents;
+        DisplayedEvents = new();
+        foreach (Event ev in _Events)
+        {
+            DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
+        }
+        StateHasChanged();
+        await CustomDataGrid.RefreshDataAsync();
+    }
+
+}
+
+<CipherComponentCard Title="@Title">
+    <Buttons>
+        @if (WithRowButtons)
+        {
+            <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
+            <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
+        }
+        <CipherExcelButton Data="@DisplayedEvents"></CipherExcelButton>
+        <CipherPDFButton />
+    </Buttons>
+    <ChildContent>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenDataGrid TItem="DisplayedEvent"  @ref=CustomDataGrid
+                            FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
+                            AllowSorting="true" HideGroupedColumn="true"
+                            AllGroupsExpanded="true" Render="@OnRender"
+                            Data="@DisplayedEvents">
+                <GroupHeaderTemplate>
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
+                        @if (WithRowButtons)
+                        {
+                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                                <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
+                                              Variant="Variant.Flat" ColorShade="Shade.Default"
+                                              Size="ButtonSize.Medium" Click="@(args => ApproveEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
+                                <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
+                                              Variant="Variant.Flat" ColorShade="Shade.Default"
+                                              Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
+                            </RadzenStack>
+                        }
+                        <CipherText Text="@($@"{new DisplayedEvent().Translate(nameof(DisplayedEvent.Id))} : {context.Data.Key},
+                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.EventType))} : {context.Data.Items.Cast<DisplayedEvent>().First().EventType},
+                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.ProcessId))} : {context.Data.Items.Cast<DisplayedEvent>().First().ProcessId},
+                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.Timestamp))} : {context.Data.Items.Cast<DisplayedEvent>().First().Timestamp},
+                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.Comments))} : {context.Data.Items.Cast<DisplayedEvent>().First().Comments}
+                                ")" Bold="true" MarginTop="3px" MarginBottom="3px" />
+                    </RadzenStack>
+                </GroupHeaderTemplate>
+                <Columns>
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.Id))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.Id)))" MinWidth="20px" />
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.DonatingPackage))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.DonatingPackage)))">
+                        <Template>
+                            @context.DonatingPackage?.Item1.Id
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.DonatingSystem))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.DonatingSystem)))">
+                        <Template>
+                            @context.DonatingSystem?.Name
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.AcceptingPackage))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.AcceptingPackage)))">
+                        <Template>
+                            @context.AcceptingPackage?.Item1.Id
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.AcceptingSystem))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.AcceptingSystem)))">
+                        <Template>
+                            @context.AcceptingSystem?.Name
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.EventMass))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.EventMass)))" />
+                </Columns>
+            </RadzenDataGrid>
+
+
+            @if (WithRowButtons)
+            {
+                <CipherJsonCheck JsonValue="@JsonRequest" />
+            }
+        </RadzenStack>
+    </ChildContent>
+</CipherComponentCard>

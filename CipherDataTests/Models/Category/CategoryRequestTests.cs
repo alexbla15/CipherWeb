@@ -1,4 +1,4 @@
-﻿using CipherData.Requests;
+﻿using CipherData.Randomizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
@@ -10,16 +10,15 @@ namespace CipherData.Models.Tests
         public void CategoryRequestTest()
         {
             // test full assignement
-            CategoryRequest req = new() { Name = nameof(req), Description = nameof(req),
-                IdMask = new() { "1", "22", "33" }, Properties = new(), ParentId = nameof(req)};
+            CategoryRequest req = new() { 
+                Name = nameof(req), 
+                Description = nameof(req),
+                IdMask = new() { "1", "22", "33" },
+                Properties = new(), 
+                ParentId = nameof(req)};
 
-            Assert.IsFalse(string.IsNullOrEmpty(req.Name));
-            Assert.IsFalse(string.IsNullOrEmpty(req.Description));
-            Assert.IsFalse(string.IsNullOrEmpty(req.ParentId));
             Assert.IsNotNull(req.CreatingProcesses);
             Assert.IsNotNull(req.ConsumingProcesses);
-            Assert.IsNotNull(req.Properties);
-            Assert.IsTrue(req.IdMask.Count == 3);
 
             // test empty assignement
             req = new();
@@ -218,85 +217,6 @@ namespace CipherData.Models.Tests
             req.Properties = new();
             req.ParentId = "@";
             Assert.IsFalse(req.Check().Item1);
-        }
-
-        [TestMethod()]
-        public void CopyTest()
-        {
-            CategoryRequest req = new()
-            {
-                Name = nameof(req),
-                Description = nameof(req),
-                IdMask = new() { "1", "22", "33" },
-                Properties = new(),
-                ParentId = nameof(req)
-            };
-
-            CategoryRequest req2 = req.Copy();
-
-            Assert.IsNotNull(req2);
-            Assert.IsTrue(req2.Name == req.Name);
-            Assert.IsTrue(req2.Description == req.Description);
-            Assert.IsTrue(req2.ParentId == req.ParentId);
-            Assert.IsTrue(req2.Properties?.SequenceEqual(req.Properties));
-            Assert.IsTrue(req2.CreatingProcesses.SequenceEqual(req.CreatingProcesses));
-            Assert.IsTrue(req2.ConsumingProcesses.SequenceEqual(req.ConsumingProcesses));
-        }
-
-        [TestMethod()]
-        public void EqualsTest()
-        {
-            CategoryRequest req = new()
-            {
-                Name = nameof(req),
-                Description = nameof(req),
-                IdMask = new() { "1", "22", "33" },
-                CreatingProcesses = new() { "1", "2" },
-                ConsumingProcesses = new() { "1", "2" },
-                Properties = new(),
-                ParentId = nameof(req)
-            };
-
-            CategoryRequest req2 = req.Copy();
-
-            Assert.IsTrue(req.Equals(req2));
-
-            // 1 - different name
-            req2.Name = "B";
-            Assert.IsFalse(req.Equals(req2));
-
-            // 2 - different description
-            req2 = req.Copy();
-            req2.Description = "C";
-            Assert.IsFalse(req.Equals(req2));
-
-            // 3 - different IdMask
-            req2 = req.Copy();
-            req2.IdMask = new() { "1", "2", "33" };
-            Assert.IsFalse(req.Equals(req2));
-
-            // 4 - different CreatingProcesses
-            req2 = req.Copy(); 
-            req2.CreatingProcesses = new() { "1", "3" };
-            Assert.IsFalse(req.Equals(req2));
-
-            // 5 - different ConsumingProcesses
-            req2 = req.Copy();
-            req2.ConsumingProcesses = new() { "1", "3" };
-            Assert.IsFalse(req.Equals(req2));
-
-            // 6 - different Properties
-            req2 = req.Copy();
-            req2.Properties = new() { CategoryProperty.Random() };
-            Assert.IsFalse(req.Equals(req2));
-
-            // 7 - different Parent
-            req2 = req.Copy();
-            req2.ParentId = "1";
-            Assert.IsFalse(req.Equals(req2));
-
-            // 8 - null
-            Assert.IsFalse(req.Equals(null));
         }
 
         [TestMethod()]

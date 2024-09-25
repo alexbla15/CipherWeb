@@ -124,38 +124,10 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void EqualsTest()
-        {
-            CategoryProperty cat = new() { Name = "A", Description = "B", PropertyType = PropertyType.Number, DefaultValue = "5.42"};
-            CategoryProperty cat2 = cat.Copy();
-
-            Assert.IsTrue(cat.Equals(cat2));
-
-            // 1 - different name
-            cat2.Name = "B";
-            Assert.IsFalse(cat.Equals(cat2));
-            
-            // 2 - different description
-            cat2.Name = "A";
-            cat2.Description = "C";
-            Assert.IsFalse(cat.Equals(cat2));
-
-            // 3 - different PropertyType
-            cat2.Description = "B";
-            cat2.PropertyType = PropertyType.Boolean;
-            Assert.IsFalse(cat.Equals(cat2));
-
-            // 4 - different default value
-            cat2.PropertyType = PropertyType.Number;
-            cat2.DefaultValue = "1";
-            Assert.IsFalse(cat.Equals(cat2));
-        }
-
-        [TestMethod()]
         public void GetHashCodeTest()
         {
             CategoryProperty cat = new() { Name = "A", Description = "B", PropertyType = PropertyType.Number, DefaultValue = "5.42"};
-            CategoryProperty cat2 = cat.Copy();
+            CategoryProperty cat2 = CipherClass.Copy(cat);
 
             Assert.IsTrue(cat.GetHashCode() == cat2.GetHashCode());
 

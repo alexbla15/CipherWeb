@@ -9,7 +9,7 @@ namespace CipherData.Models.Tests
         {
             Worker = "א",
             Timestamp = DateTime.Now,
-            Packages = new() { Package.Random() },
+            FinalStatePackages = new() { Package.Random() },
             ProcessId = "b",
             Comments = "c",
             EventType = 1,
@@ -23,11 +23,12 @@ namespace CipherData.Models.Tests
             Assert.IsNotNull(example.Id);
 
             // 2 - with stating id
-            Event ev = new("1")
+            Event ev = new()
             {
+                Id = "1",
                 Worker = "א",
                 Timestamp = DateTime.Now,
-                Packages = new() { Package.Random() },
+                FinalStatePackages = new() { Package.Random() },
                 ProcessId = "b",
                 Comments = "c",
                 EventType = 1,

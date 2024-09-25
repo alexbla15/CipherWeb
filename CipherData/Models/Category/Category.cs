@@ -113,89 +113,6 @@ namespace CipherData.Models
         }
 
         /// <summary>
-        /// Create an identical copy of this object
-        /// </summary>
-        public Category Copy()
-        {
-            return (Category)MemberwiseClone();
-        }
-
-        /// <summary>
-        /// Check if this object and other object are exactly the same
-        /// </summary>
-        public bool Equals(Category? OtherObject)
-        {
-            if (OtherObject is null) return false;
-            if (Id != OtherObject.Id) return false;
-            if (Name != OtherObject.Name) return false;
-            if (Description != OtherObject.Description) return false;
-
-            if (IdMask.Count != OtherObject.IdMask.Count) return false;
-            if (!IdMask.OrderBy(x=>x).SequenceEqual(OtherObject.IdMask.OrderBy(x=>x))) return false;
-
-            if (CreatingProcesses.Count != OtherObject.CreatingProcesses.Count) return false;
-            if (CreatingProcesses.Any())
-            {
-                foreach(ProcessDefinition proc in CreatingProcesses.OrderBy(x=>x.Id))
-                {
-                    if (!proc.Equals(OtherObject.CreatingProcesses[CreatingProcesses.IndexOf(proc)])) return false;
-                }
-            }
-
-            if (ConsumingProcesses.Count != OtherObject.ConsumingProcesses.Count) return false;
-            if (ConsumingProcesses.Any())
-            {
-                foreach (ProcessDefinition proc in ConsumingProcesses.OrderBy(x => x.Id))
-                {
-                    if (!proc.Equals(OtherObject.ConsumingProcesses[ConsumingProcesses.IndexOf(proc)])) return false;
-                }
-            }
-
-            if (Parent is null)
-            {
-                if (OtherObject.Parent != null) return false;
-            }
-            else
-            {
-                if (!Parent.Equals(OtherObject.Parent)) return false;
-            }
-
-            if (Children?.Count != OtherObject.Children?.Count) return false;
-            if (Children != null && OtherObject.Children != null)
-            {
-                if (Children.Any())
-                {
-                    foreach (Category child in Children.OrderBy(x => x.Id))
-                    {
-                        if (!child.Equals(OtherObject.Children[Children.IndexOf(child)])) return false;
-                    }
-                }
-            }
-
-            if (MaterialType is null)
-            {
-                if (OtherObject.MaterialType != null) return false;
-            }
-            else
-            {
-                if (!MaterialType.Equals(OtherObject.MaterialType)) return false;
-            }
-
-            if (Properties?.Count != OtherObject.Properties?.Count) return false;
-            if (Properties != null && OtherObject.Properties != null)
-            {
-                if (Properties.Any())
-                {
-                    foreach (CategoryProperty prop in Properties.OrderBy(x => x.Name))
-                    {
-                        if (!prop.Equals(OtherObject.Properties[Properties.IndexOf(prop)])) return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Counts how many packages were created.
         /// </summary>
         private static int IdCounter { get; set; } = 0;
@@ -216,16 +133,18 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static Category Random(string? id = null)
         {
+            string Name = RandomFuncs.RandomItem(RandomData.CategoriesNames);
+
             return new Category(id)
             {
-                Name = RandomFuncs.RandomItem(RandomData.CategoriesNames),
+                Name = Name,
                 Description = RandomFuncs.RandomItem(RandomData.CategoriesDescriptions),
                 IdMask = new() { new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3"), new Random().Next(0, 999).ToString("D3") },
                 CreatingProcesses = RandomFuncs.FillRandomObjects(2, ProcessDefinition.Random),
                 ConsumingProcesses = RandomFuncs.FillRandomObjects(2, ProcessDefinition.Random),
                 MaterialType = RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes)),
-                Parent = (new Random().Next(0, 2) == 0) ? Random() : null,
-                Children = (new Random().Next(0, 2) == 0) ? RandomFuncs.FillRandomObjects(new Random().Next(0, 2), Random) : null,
+                Parent = (new Random().Next(0, 4) == 0) ? RandomMaterialType($"P{Name}") : null,
+                Children = (new Random().Next(0, 4) == 0) ? new List<Category>() { RandomMaterialType($"C1{Name}"), RandomMaterialType($"C2{Name}") } : null,
                 Properties = RandomFuncs.FillRandomObjects(3, CategoryProperty.Random).Distinct().ToList()
             };
         }

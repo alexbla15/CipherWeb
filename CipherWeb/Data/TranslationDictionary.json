@@ -35,9 +35,17 @@
   "Condition_Relation": "יחס",
   "Condition_Value": "ערך",
 
+  "DisplayedEvent_AcceptingPackage": "תעודה מקבלת",
+  "DisplayedEvent_AcceptingSystem": "מערכת מקבלת",
+  "DisplayedEvent_DonatingPackage": "תעודה מוסרת",
+  "DisplayedEvent_DonatingSystem": "מערכת מוסרת",
+  "DisplayedEvent_EventMass": "מסה מועברת [גר']",
+  "DisplayedEvent_Id": "מספר תנועה",
+
   "Event_Actions": "תעודות מעורבות",
   "Event_Comments": "הערות",
-  "Event_Packages": "תעודות מעורבות",
+  "Event_InitialStatePackages": "תעודות מעורבות - מצב התחלתי",
+  "Event_FinalStatePackages": "תעודות מעורבות - מצב סופי",
   "Event_ProcessId": "מספר תהליך",
   "Event_Status": "סטטוס",
   "Event_Timestamp": "תאריך תנועה",
