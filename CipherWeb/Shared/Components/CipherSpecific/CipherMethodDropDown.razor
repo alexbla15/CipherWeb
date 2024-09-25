@@ -1,0 +1,76 @@
+﻿@code {
+    /// <summary>
+    /// Chosen method
+    /// </summary>
+    [Parameter]
+    public Method? ChosenMethod { get; set; }
+
+    /// <summary>
+    /// Is the value associated with the method is a numeric type.
+    /// </summary>
+    [Parameter]
+    public bool IsNumeric { get; set; } = false;
+
+    /// <summary>
+    /// Is the value associated with the method is a date.
+    /// </summary>
+    [Parameter]
+    public bool IsDate { get; set; } = false;
+
+    /// <summary>
+    /// Is the component visible.
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// All available options in this component.
+    /// </summary>
+    [Parameter]
+    public List<Method> Options { get; set; } = new();
+
+    public List<Method> NumericOptions = new() { Method.sum, Method.avg, Method.first, Method.last, Method.count, Method.max, Method.min };
+    public List<Method> DateOptions = new() { Method.first, Method.last, Method.count, Method.max, Method.min };
+    public List<Method> GeneralOptions = new() { Method.first, Method.last, Method.count };
+
+    public Dictionary<Method, string> MethodTranslations = new()
+    {
+        {Method.count, "כמות" },
+        {Method.avg, "ממוצע" },
+        {Method.sum, "סכום" },
+        {Method.max, "מקסימום" },
+        {Method.min, "מינימום" },
+        {Method.first, "ראשון" },
+        {Method.last, "אחרון" },
+    };
+
+    // Use OnParametersSet instead of OnInitialized to handle changes in IsNumeric or IsDate
+    protected override void OnParametersSet()
+    {
+        Options = IsNumeric ? NumericOptions : (IsDate ? DateOptions : GeneralOptions);
+    }
+    private string GetMethodTranslation(Method? method)
+    {
+        if (method != null)
+        {
+            return MethodTranslations[(Method)method];
+        }
+        return "לא ידוע"; // Default translation when not found
+    }
+}
+
+<RadzenDropDown Style="width: 100%" TValue="Method?" Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
+Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))">
+    <ValueTemplate Context="met">
+        @if (met != null)
+        {
+            @GetMethodTranslation(met)
+        }
+    </ValueTemplate>
+    <Template Context="met2">
+        @if (met2 != null)
+        {
+            @GetMethodTranslation(met2)
+        }
+    </Template>
+</RadzenDropDown>

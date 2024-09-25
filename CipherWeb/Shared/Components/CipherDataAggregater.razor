@@ -25,11 +25,17 @@
     [Parameter]
     public string DeleteAllAggregatesText { get; set; } = "מחיקת כל הפונקציות";
 
+    /// <summary>
+    /// All available aggregation fields
+    /// </summary>
+    [Parameter]
+    public List<CipherField> AggregationFields { get; set; } = CommonFuncs.GetAllCipherFields();
+
     [Parameter]
     public List<AggregateItem> ChosenAggregates { get; set; } = new();
 
     private RadzenDataGrid<AggregateItem> CustomDataGrid = new();
-    private AggregateItem old_agg = new();
+    private CipherAttributeDropDown AttDropDown = new();
 
     private bool typeIncompatibleAlertVisible = false;
 
@@ -88,6 +94,24 @@
     {
         return CustomDataGrid?.Data?.ToList() ?? new();
     }
+
+    public bool IsDate(AggregateItem agg)
+    {
+        if (string.IsNullOrEmpty(agg.Attribute)) return false;
+        Type t = AggregationFields.Where(x => x.Path == agg.Attribute).First().FieldType;
+        return (t == typeof(DateTime));
+
+    }
+
+    public bool IsNumeric(AggregateItem agg)
+    {
+        if (!string.IsNullOrEmpty(agg.Attribute))
+        {
+            Type t = AggregationFields.Where(x => x.Path == agg.Attribute).First().FieldType;
+            return (t == typeof(decimal) || t == typeof(int));
+        }
+        return false;
+    }
 }
 
 <CipherComponentCard Title="@Title">
@@ -110,7 +134,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Attribute)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <RadzenTextBox @bind-Value="@agg.Attribute" Style="width:100%"/>
+                        <CipherAttributeDropDown @ref=AttDropDown ChosenAttribute="@agg.Attribute" Change="@(args => agg.Attribute=AttDropDown.ChosenAttribute)"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.As)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.As)))" TextAlign="TextAlign.Center">
@@ -120,69 +144,8 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Method)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <RadzenDropDown Style="width: 100%" TValue="Method" @bind-Value="@agg.Method" Data="@(new List<Method>() {Method.sum, Method.avg, Method.first, Method.last, Method.count, Method.max, Method.min})"
-                                        Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))">
-                            <ValueTemplate Context="met">
-                                @if (met == Method.count)
-                                {
-                                    @("כמות")
-                                }
-                                else if (met == Method.avg)
-                                {
-                                @("ממוצע")
-                                }
-                                else if (met == Method.sum)
-                                {
-                                    @("סכום")
-                                }
-                                else if (met == Method.max)
-                                {
-                                    @("מקסימום")
-                                }
-                                else if (met == Method.min)
-                                {
-                                    @("מינימום")
-                                }
-                                else if (met == Method.first)
-                                {
-                                    @("ראשון")
-                                }
-                                else
-                                {
-                                    @("אחרון")
-                                }
-                            </ValueTemplate>
-                            <Template Context="met2">
-                                @if (met2 == Method.count)
-                                {
-                                    @("כמות")
-                                }
-                                else if (met2 == Method.avg)
-                                {
-                                    @("ממוצע")
-                                }
-                                else if (met2 == Method.sum)
-                                {
-                                    @("סכום")
-                                }
-                                else if (met2 == Method.max)
-                                {
-                                    @("מקסימום")
-                                }
-                                else if (met2 == Method.min)
-                                {
-                                    @("מינימום")
-                                }
-                                else if (met2 == Method.first)
-                                {
-                                    @("ראשון")
-                                }
-                                else
-                                {
-                                    @("אחרון")
-                                }
-                            </Template>
-                        </RadzenDropDown>
+                        <CipherMethodDropDown ChosenMethod="@agg.Method" Visible="@(!string.IsNullOrEmpty(agg.Attribute))"
+                        IsDate="@IsDate(agg)" IsNumeric="@IsNumeric(agg)"/>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

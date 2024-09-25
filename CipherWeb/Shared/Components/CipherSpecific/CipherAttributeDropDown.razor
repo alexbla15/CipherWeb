@@ -1,0 +1,26 @@
+﻿@code {
+    /// <summary>
+    /// Chosen method
+    /// </summary>
+    [Parameter]
+    public string? ChosenAttribute { get; set; }
+
+    /// <summary>
+    /// Is the component visible.
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// All available aggregation fields
+    /// </summary>
+    [Parameter]
+    public List<CipherField> AggregationFields { get; set; } = CommonFuncs.GetAllCipherFields();
+
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+}
+
+<RadzenDropDown @bind-Value="@ChosenAttribute" Data=@AggregationFields TextProperty="Translation" ValueProperty="Path" Visible="@Visible"
+                Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" AllowClear="true" AllowFiltering="true" 
+                Style="width: 100%" Change="@Change"/>

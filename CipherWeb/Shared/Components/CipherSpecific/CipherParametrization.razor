@@ -22,29 +22,12 @@
 
     private RadzenDataGrid<ReportParameter> CustomDataGrid = new();
 
-    private List<CipherField> OptionalTypes = new();
+    private List<CipherField> OptionalTypes = CommonFuncs.GetAllCipherFields();
     private ReportParameter old_param = new();
 
     protected override void OnInitialized()
     {
         Title ??= "פרמטרי משתמש";
-
-        AddTypeAttributes(typeof(Package), "אריזה");
-        AddTypeAttributes(typeof(Vessel), "כלי");
-        AddTypeAttributes(typeof(StorageSystem), "מיקום");
-        AddTypeAttributes(typeof(Category), "קטגוריה");
-        AddTypeAttributes(typeof(Event), "תנועה");
-        AddTypeAttributes(typeof(Process), "תהליך");
-    }
-
-    /// <summary>
-    /// Adds all available attributes of a specific data-model.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="type_heb_name"></param>
-    private void AddTypeAttributes(Type type, string type_heb_name)
-    {
-        OptionalTypes.AddRange(CommonFuncs.GetCipherTypeFields(type));
     }
 
     /// <summary>

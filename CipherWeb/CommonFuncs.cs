@@ -114,5 +114,21 @@ namespace CipherWeb
             fields.AddRange(new_fields);
             return fields;
         }
+
+        /// <summary>
+        /// Method to get all available cipher fields
+        /// </summary>
+        /// <returns></returns>
+        public static List<CipherField> GetAllCipherFields()
+        {
+            List<CipherField> fields = new();
+
+            foreach (Type type in GetCipherClasses())
+            {
+                fields.AddRange(GetCipherTypeFields(type));
+            }
+
+            return fields.DistinctBy(x=>x.Translation).OrderBy(x => x.Translation).ToList();
+        }
     }
 }

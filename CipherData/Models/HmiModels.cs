@@ -11,11 +11,11 @@ namespace CipherData.Models
         {
             if (Translator.TranslationsDictionary.ContainsKey(engWord))
             {
-                Translation = Translator.TranslationsDictionary[engWord];
+                Translation = Translator.TranslationsDictionary[engWord].Trim();
             }
             else
             {
-                Translation = engWord;
+                Translation = engWord.Trim();
             }
         }
 
@@ -25,11 +25,11 @@ namespace CipherData.Models
 
             if (Translator.TranslationsDictionary.ContainsKey(FullWord))
             {
-                Translation = Translator.TranslationsDictionary[FullWord];
+                Translation = Translator.TranslationsDictionary[FullWord].Trim();
             }
             else
             {
-                Translation = FullWord;
+                Translation = FullWord.Trim();
             }
         }
     }

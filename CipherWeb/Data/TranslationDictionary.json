@@ -59,6 +59,7 @@
   "GroupedBooleanCondition_Operator": "אופרטור",
 
   "ObjectFactory_Aggregate": "אגרגטים",
+  "ObjectFactory_Attribute": "תכונה",
   "ObjectFactory_Filter": "סינון לפי",
   "ObjectFactory_OrderBy": "סידור לפי",
   "ObjectFactory_GroupBy": "קיבוץ לפי",
@@ -88,7 +89,7 @@
   "Process_Start": "התחלה",
   "Process_UncompletedSteps": "שלבים שטרם הושלמו",
 
-  "ProcessDefinition_Description": " תיאור תהליך",
+  "ProcessDefinition_Description": "תיאור תהליך",
   "ProcessDefinition_Name": "שם תהליך",
   "ProcessDefinition_Steps": "שלבים",
 

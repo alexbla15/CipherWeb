@@ -254,33 +254,26 @@
                                                      AlignItems="AlignItems.Center" Style="width:100%">
                                             <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)" />
                                             <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" ValueChanged="@(args=>context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"))" Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
+                                            <RadzenDropDown Style="width: 100%" TValue="Operator" ValueChanged="@(args=>context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"))" 
+                                                Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
                                                 <ValueTemplate Context="operator_value_context">
                                                     @if (operator_value_context == Operator.All)
                                                     {
-                                                        @(
-                                                            "כל האיברים"
-                                                            )
+                                                        @("כל האיברים")
                                                     }
                                                     else
                                                     {
-                                                        @(
-                                                            "לפחות אחד"
-                                                            )
+                                                        @("לפחות אחד")
                                                     }
                                                 </ValueTemplate>
                                                 <Template Context="operator_context">
                                                     @if (operator_context == Operator.All)
                                                     {
-                                                        @(
-                                                            "כל האיברים"
-                                                            )
+                                                        @("כל האיברים")
                                                     }
                                                     else
                                                     {
-                                                        @(
-                                                            "לפחות אחד"
-                                                            )
+                                                        @("לפחות אחד")
                                                     }
                                                 </Template>
                                             </RadzenDropDown>

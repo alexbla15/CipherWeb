@@ -32,15 +32,15 @@
 
     public class AggregateItem : CipherClass
     {
-        private string _Attribute = string.Empty;
+        private string? _Attribute = null;
 
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
-        public string Attribute {
+        public string? Attribute {
             get { return _Attribute; }
-            set { _Attribute = value.Trim(); }
+            set { _Attribute = value?.Trim(); }
         }
 
         private string? _As = null;
@@ -60,7 +60,7 @@
         /// Method to aggregate the field by
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
-        public Method Method { get; set; }
+        public Method? Method { get; set; }
     }
 
     /// <summary>
