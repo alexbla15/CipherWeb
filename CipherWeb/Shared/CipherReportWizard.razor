@@ -5,14 +5,14 @@
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            <CipherAutoComplete Label="מספר סידורי" Icon="@Icons.Cipher.Id" Value="@Report.GetNextId().ToString()" Disabled="true"></CipherAutoComplete>
-            <CipherAutoComplete Label="שם הדוח" Icon="@Icons.Documents.Edit.edit" @ref="ReportName"/>
+            <CipherAutoComplete @bind-Value="ChosenReport.Id" Label="מספר סידורי" Icon="@Icons.Cipher.Id" Disabled="true"/>
+            <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="שם הדוח" Icon="@Icons.Documents.Edit.edit" @ref="ReportName" />
         </CipherComponentCard>
-        <CipherParametrization />
+        <CipherParametrization ChosenParameters="@ChosenReport.Parameters"/>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="אובייקטים לתצוגה">
-        <SearchAdvanced />
+        <SearchAdvanced/>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="בניית תצוגה">
@@ -61,6 +61,8 @@
     [Parameter]
     public string? JsonRequest { get; set; }
 
+    [Parameter]
+    public Report ChosenReport { get; set; } = new();
 
     private List<Event> events = new();
 
@@ -79,21 +81,8 @@
     private List<StorageSystem> systems = new ();
     private List<Vessel> vessels = new();
 
-    private int ReportId;
-
-    class ExampleSummary
-    {
-        public string Location { get; set; }
-        public string Vessel { get; set; }
-        public decimal BrutMass { get; set; }
-        public decimal NetMass { get; set; }
-    }
-
     protected override void OnInitialized()
     {
-
-        ReportId = new Random().Next(1000, 9999);
-
         (events, error) = CachedData.AllEvents;
         (packs, error) = CachedData.AllPackages;
         (rows, error) = CachedData.AllPackages;
@@ -107,17 +96,7 @@
     /// <returns></returns>
     private HashSet<Tuple<string, string>> GetColumns()
     {
-        if (dataGrouper.chosenGroups.Keys.Count() == 0 && dataAggregater.GetData().Count() == 0)
-        {
-            return HebrewDictionary.Headers;
-        }
-        else
-        {
-            return HebrewDictionary.Headers.Where(x =>
-                dataGrouper.chosenGroups.ContainsValue(x.Item2) ||
-                dataAggregater.GetData().Select(x => x.Parameter).ToList().Contains(x.Item2)
-            ).ToHashSet();
-        }
+        return HebrewDictionary.Headers;
     }
 
     /// <summary>
@@ -139,13 +118,13 @@
         int counter = dataGrouper.groupLevels;
 
         // next columns according to the order of the aggregation
-        List<CipherDataAggregater.Aggregate> aggregates = dataAggregater.GetData();
+        List<AggregateItem> aggregates = dataAggregater.GetData();
 
-        foreach (CipherDataAggregater.Aggregate agg in aggregates)
+        foreach (AggregateItem agg in aggregates)
         {
-            if (!rowsColumnsOrder.ContainsKey(agg.Parameter))
+            if (!rowsColumnsOrder.ContainsKey(agg.Attribute))
             {
-                rowsColumnsOrder.Add(agg.Parameter, agg.Id);
+                rowsColumnsOrder.Add(agg.Attribute, aggregates.IndexOf(agg));
             }
             counter += 1;
         }
@@ -176,12 +155,9 @@
 
     public async Task OpenSavingDialog()
     {
-        Report newReport = new Report()
-        {
-            Title = ReportName.Value
-        };
+        ChosenReport.Title = ReportName.Value;
 
-        JsonRequest = newReport.ToJson();
+        JsonRequest = ChosenReport.ToJson();
 
         await DialogService.OpenAsync("דוח חדש",
 

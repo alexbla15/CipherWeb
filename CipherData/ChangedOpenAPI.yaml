@@ -258,6 +258,8 @@ components:
             - count
             - first
             - last
+            - max
+            - min
     ObjectFactory:
       type: object
       description: Method to get desired objects by filtering and aggregating the database

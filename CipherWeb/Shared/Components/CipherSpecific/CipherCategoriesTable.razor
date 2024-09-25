@@ -1,18 +1,18 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@categories" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenCategories" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Category" DataSource="@categories" WithCustomColumns="true"
+        <CipherDataGrid Cipher_TItem="Category" DataSource="@ChosenCategories" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Id))" Title="@(new Category().Translate(nameof(Category.Id)))">
                     <FooterTemplate>
-                        <b>@($"כמות: {categories.Count()}")</b>
+                        <b>@($"כמות: {ChosenCategories.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Name))" Title="@(new Category().Translate(nameof(Category.Name)))" />
@@ -79,7 +79,7 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<Category> categories { get; set; } = new List<Category>();
+    public IEnumerable<Category> ChosenCategories { get; set; } = new List<Category>();
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -90,6 +90,6 @@
     protected override void OnInitialized()
     {
         Title ??= "סוגים";
-        (categories, error) = CachedData.AllCategories;
+        (ChosenCategories, error) = CachedData.AllCategories;
     }
 }

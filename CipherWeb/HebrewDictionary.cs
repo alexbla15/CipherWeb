@@ -9,9 +9,12 @@ namespace CipherWeb
             List<Tuple<string, string>> BuildHeaders = new();
             foreach (Type t in CommonFuncs.GetCipherClasses())
             {
-                if (Activator.CreateInstance(t) is Resource r)
+                if (!t.IsAbstract)
                 {
-                    BuildHeaders.AddRange(r.Headers());
+                    if (Activator.CreateInstance(t) is Resource r)
+                    {
+                        BuildHeaders.AddRange(r.Headers());
+                    }
                 }
             }
             return BuildHeaders.ToHashSet();

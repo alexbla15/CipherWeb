@@ -20,12 +20,12 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Process" DataSource="@Processes" WithCustomColumns="true" @ref=datagrid
+        <CipherDataGrid Cipher_TItem="Process" DataSource="@ChosenProcesses" WithCustomColumns="true" @ref=datagrid
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Id))" Title="@(new Process().Translate(nameof(Process.Id)))">
                     <FooterTemplate>
-                        <b>סה"כ תהליכים:</b> @Processes.Count()
+                        <b>סה"כ תהליכים:</b> @ChosenProcesses.Count()
                     </FooterTemplate>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Definition.Name))" Title="@(new ProcessDefinition().Translate(nameof(Process.Definition.Name)))">
@@ -74,7 +74,7 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public IEnumerable<Process> Processes { get; set; } = new List<Process>();
+    public IEnumerable<Process> ChosenProcesses { get; set; } = new List<Process>();
 
     /// <summary>
     /// Error response for fetching data
@@ -88,9 +88,9 @@
     {
         Title ??= "דוח תהליכים";
 
-        if (Processes is null)
+        if (ChosenProcesses is null)
         {
-            (Processes, error) = CachedData.AllProcesses;
+            (ChosenProcesses, error) = CachedData.AllProcesses;
         }
     }
 

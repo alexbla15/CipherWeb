@@ -21,7 +21,7 @@
     /// Customized datagrid
     /// </summary>
     [Parameter]
-    public RenderFragment CustomDataGrid { get; set; }
+    public RenderFragment? CustomDataGrid { get; set; }
 
     /// <summary>
     /// Set if the component utilizes a customized datagrid, rather than using the suggested default.
@@ -72,27 +72,27 @@
             }
             else if (typeof(Cipher_TItem) == typeof(Package))
             {
-                <CipherPackagesTable packages="@((IQueryable<Package>)FilteredRows ?? (IEnumerable<Package>)GeneralDataSource)" />
+                <CipherPackagesTable ChosenPackages="@((IQueryable<Package>)FilteredRows ?? (IEnumerable<Package>)GeneralDataSource)" />
             }
             else if (typeof(Cipher_TItem) == typeof(Category))
             {
-                <CipherCategoriesTable categories="@((IQueryable<Category>)FilteredRows ?? (IEnumerable<Category>)GeneralDataSource)" />
+                <CipherCategoriesTable ChosenCategories="@((IQueryable<Category>)FilteredRows ?? (IEnumerable<Category>)GeneralDataSource)" />
             }
             else if (typeof(Cipher_TItem) == typeof(Event))
             {
-                <CipherEventsTable Events="@((IQueryable<Event>)FilteredRows ?? (IEnumerable<Event>)GeneralDataSource)" />
+                <CipherEventsTable ChosenEvents="@((IQueryable<Event>)FilteredRows ?? (IEnumerable<Event>)GeneralDataSource)" />
             }
             else if (typeof(Cipher_TItem) == typeof(Process))
             {
-                <CipherProcessesTable Processes="@((IQueryable<Process>)FilteredRows ?? (IEnumerable<Process>)GeneralDataSource)" />
+                <CipherProcessesTable ChosenProcesses="@((IQueryable<Process>)FilteredRows ?? (IEnumerable<Process>)GeneralDataSource)" />
             }
             else if (typeof(Cipher_TItem) == typeof(Vessel))
             {
-                <CipherVesselsTable Vessels="@((IQueryable<Vessel>)FilteredRows ?? (IEnumerable<Vessel>)GeneralDataSource)" />
+                <CipherVesselsTable ChosenVessels="@((IQueryable<Vessel>)FilteredRows ?? (IEnumerable<Vessel>)GeneralDataSource)" />
             }
             else if (typeof(Cipher_TItem) == typeof(StorageSystem))
             {
-                <CipherSystemsTable Systems="@((IQueryable<StorageSystem>)FilteredRows ?? (IEnumerable<StorageSystem>)GeneralDataSource)" />
+                <CipherSystemsTable ChosenSystems="@((IQueryable<StorageSystem>)FilteredRows ?? (IEnumerable<StorageSystem>)GeneralDataSource)" />
             }
             else
             {

@@ -63,7 +63,7 @@
 
         <CipherPackageProperties @ref="PackProps" ChosenProperties="@((ChosenObject?.Category is null)? new List<PackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=>new PackageProperty() {Name= x.Name, Value = x.DefaultValue}).ToList())" />
 
-        <CipherProcessesTable WithCard="true" Title="תנועות" Processes="@PackProcesses" WithHeaderContent="false" />
+        <CipherProcessesTable WithCard="true" Title="תנועות" ChosenProcesses="@PackProcesses" WithHeaderContent="false" />
     </ChildContent>
 </CipherComponentCard>
 

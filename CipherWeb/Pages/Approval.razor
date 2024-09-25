@@ -64,7 +64,7 @@
     
     public async Task RefreshEvents()
     {
-        GroupedBooleanCondition filterValue = EventsFilter.SelectedCondition;
+        GroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
         ObjectFactory objectFactory = new();
 
         // add to filter - only pending events

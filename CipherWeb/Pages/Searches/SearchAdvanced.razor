@@ -13,63 +13,63 @@
     </RadzenSelectBar>
 </CipherComponentCard>
 @RenderCipherDataFilter(objectId)
+@RenderCipherDataGrid(objectId)
 
 @code {
     [Parameter]
     public int objectId { get; set; }
 
     [Parameter]
-    public List<string> objectTypes { get; set; } =
-    new List<string> { "תעודות", "כלים", "מערכות", "תנועות", "תהליכים", "סוגים" };
+    public List<string> objectTypes { get; set; } = new () { "תעודות", "כלים", "מערכות", "תנועות", "תהליכים", "סוגים" };
 
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    string width = "width: 200px";
+    [Parameter]
+    public GroupedBooleanCondition Condition { get; set; } = new();
 
-    private ErrorResponse error = ErrorResponse.Success;
+    private CipherBooleanConditions DataFilter = new();
 
-    private CipherDataFilter_WithDataGrid<Category> CategoryFilter = new();
-    private CipherDataFilter_WithDataGrid<Event> EventFilter = new();
-    private CipherDataFilter_WithDataGrid<Package> PackageFilter = new();
-    private CipherDataFilter_WithDataGrid<Process> ProcessFilter = new();
-    private CipherDataFilter_WithDataGrid<StorageSystem> SystemFilter = new();
-    private CipherDataFilter_WithDataGrid<Vessel> VesselFilter = new();
-
-    private List<Package> packs = new List<Package>();
-    private List<Vessel> vessels = new List<Vessel>();
-    private List<StorageSystem> systems = new List<StorageSystem>();
-    private List<Event> events = new List<Event>();
-    private List<Process> procs = new List<Process>();
-    private List<Category> categories = new List<Category>();
-
-    protected override void OnInitialized()
-    {
-        (packs, error) = CachedData.AllPackages;
-        (vessels, error) = CachedData.AllVessels;
-        (systems, error) = CachedData.AllSystems;
-        (events, error) = CachedData.AllEvents;
-        (procs, error) = CachedData.AllProcesses;
-        (categories, error) = CachedData.AllCategories;
-    }
+    private List<Package> packs = new();
+    private List<Vessel> vessels = new();
+    private List<StorageSystem> systems = new();
+    private List<Event> events = new();
+    private List<Process> procs = new();
+    private List<Category> categories = new();
 
     private RenderFragment? RenderCipherDataFilter(int objectId) => objectId switch
     {
-        0 => @<CipherDataFilter_WithDataGrid @ref=PackageFilter Cipher_TItem="Package" Title="סינון נתונים" GeneralDataSource="@packs" />,
-        1 => @<CipherDataFilter_WithDataGrid @ref=VesselFilter Cipher_TItem="Vessel" Title="סינון נתונים" GeneralDataSource="@vessels" />,
-        2 => @<CipherDataFilter_WithDataGrid @ref=SystemFilter Cipher_TItem="StorageSystem" Title="סינון נתונים" GeneralDataSource="@systems" />,
-        3 => @<CipherDataFilter_WithDataGrid @ref=EventFilter Cipher_TItem="Event" Title="סינון נתונים" GeneralDataSource="@events" />,
-        4 => @<CipherDataFilter_WithDataGrid @ref=ProcessFilter Cipher_TItem="Process" Title="סינון נתונים" GeneralDataSource="@procs" />,
-        5 => @<CipherDataFilter_WithDataGrid @ref=CategoryFilter Cipher_TItem="Category" Title="סינון נתונים" GeneralDataSource="@categories" />,
+        0 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Package)))" />,
+        1 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Vessel)))" />,
+        2 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(StorageSystem)))" />,
+        3 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Event)))" />,
+        4 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Process)))" />,
+        5 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Category)))" />,
         _ => null
     };
 
-    public IEnumerable<object>? GetFilteredValues() => objectId switch
+    private RenderFragment? RenderCipherDataGrid(int objectId) => objectId switch
     {
-        0 => PackageFilter.FilteredRows,
-        1 => VesselFilter.FilteredRows,
-        2 => SystemFilter.FilteredRows,
-        3 => EventFilter.FilteredRows,
-        4 => ProcessFilter.FilteredRows,
-        5 => CategoryFilter.FilteredRows,
+        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" />,
+        1 => @<CipherVesselsTable ChosenVessels="@(GetFilteredObjects<Vessel>())" />,
+        2 => @<CipherSystemsTable ChosenSystems="@(GetFilteredObjects<StorageSystem>())" />,
+        3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" />,
+        4 => @<CipherProcessesTable ChosenProcesses="@(GetFilteredObjects<Process>())" />,
+        5 => @<CipherCategoriesTable ChosenCategories="@(GetFilteredObjects<Category>())" />,
         _ => null
     };
+
+
+    public List<T> GetFilteredObjects<T>() where T : Resource
+    {
+        List<T> objects = new();
+        ObjectFactory obj = new() { Filter = Condition };
+        (objects, Error) = Config.QueryRequests.QueryObjects<T>(obj);
+        return objects;
+    }
+
+    public void GetCondition()
+    {
+        Condition = DataFilter.ChosenCondition;
+    }
 }

@@ -5,12 +5,12 @@
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddVessel.Href" HelpText="הוספת כלי" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Vessel" DataSource="@Vessels" WithCustomColumns="true"
+        <CipherDataGrid Cipher_TItem="Vessel" DataSource="@ChosenVessels" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Id))" Title="@(new Vessel().Translate(nameof(Vessel.Id)))">
                     <FooterTemplate>
-                        <b>@($"כמות: {Vessels.Count()}")</b>
+                        <b>@($"כמות: {ChosenVessels.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Name))" Title="@(new Vessel().Translate(nameof(Vessel.Name)))" />
@@ -54,7 +54,7 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<Vessel> Vessels { get; set; } = new List<Vessel>();
+    public IEnumerable<Vessel> ChosenVessels { get; set; } = new List<Vessel>();
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -65,6 +65,6 @@
     protected override void OnInitialized()
     {
         Title ??= "כלים";
-        (Vessels, error) = CachedData.AllVessels;
+        (ChosenVessels, error) = CachedData.AllVessels;
     }
 }

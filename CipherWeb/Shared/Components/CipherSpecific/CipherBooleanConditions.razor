@@ -19,7 +19,7 @@
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public GroupedBooleanCondition SelectedCondition { get; set; } = new();
+    public GroupedBooleanCondition ChosenCondition { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -45,23 +45,15 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
-    public class CipherField
-    {
-        public string Path { get; set; } = string.Empty;
-        public string Translation { get; set; } = string.Empty;
-        public bool IsList { get; set; } = false;
-        public Type FieldType { get; set; } = typeof(CipherClass);
-    }
-
     private CipherDataFilter<CipherField> dataFilter = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= "תנאים נבחרים";
 
-        if (SelectedCondition != null)
+        if (ChosenCondition != null)
         {
-            FillDataFilter();
+            await FillDataFilter();
         }
     }
 
@@ -194,7 +186,7 @@
     {
         List<Condition> conditions = new();
 
-        SelectedCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
+        ChosenCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
         foreach (var filter in dataFilter.GetFilters())
         {
@@ -211,9 +203,9 @@
 
         }
 
-        SelectedCondition.Conditions = conditions;
+        ChosenCondition.Conditions = conditions;
 
-        JsonRequest = SelectedCondition.ToJson();
+        JsonRequest = ChosenCondition.ToJson();
 
         OnSave.InvokeAsync();
     }
@@ -222,9 +214,9 @@
     {
         await dataFilter.ClearFilters();
 
-        dataFilter.LogicalFilterOperator = (SelectedCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
+        dataFilter.LogicalFilterOperator = (ChosenCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
 
-        foreach (var cond in SelectedCondition.Conditions)
+        foreach (var cond in ChosenCondition.Conditions)
         {
             if (cond is BooleanCondition)
             {

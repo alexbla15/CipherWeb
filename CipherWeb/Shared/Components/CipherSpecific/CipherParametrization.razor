@@ -1,4 +1,6 @@
-﻿@inject DialogService DialogService
+﻿@using CipherWeb.Shared.Components.CipherSpecific;
+
+@inject DialogService DialogService
 
 @inherits CipherComponentCard
 
@@ -15,36 +17,15 @@
     [Parameter]
     public string HelpText { get; set; } = "במסך זה ניתן להוסיף פרמטרים אותם יצטרך להזין המשתמש. להוספה לחצו על כפתור ההוספה למעלה";
 
-    public class Parameter
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string pType { get; set; }
-    }
+    [Parameter]
+    public List<ReportParameter> ChosenParameters { get; set; } = new();
 
-    public class Attribute
-    {
-        public string Class { get; set; }
-        public string ParameterName { get; set; }
-        public string Path { get; set; }
+    private RadzenDataGrid<ReportParameter> CustomDataGrid = new();
 
-        public Attribute(string att_class, string att_param_name)
-        {
-            Class = att_class;
-            ParameterName = att_param_name;
-            Path = $"{Class}.{ParameterName}";
-        }
-    }
+    private List<CipherField> OptionalTypes = new();
+    private ReportParameter old_param = new();
 
-    private RadzenDataGrid<Parameter> CustomDataGrid = new RadzenDataGrid<Parameter>();
-
-    private List<Attribute> OptionalTypes = new List<Attribute>();
-    private List<Parameter> set_params = new List<Parameter>() { };
-    private Parameter old_param = new Parameter();
-
-    int components = 0;
-
-    protected override async void OnInitialized()
+    protected override void OnInitialized()
     {
         Title ??= "פרמטרי משתמש";
 
@@ -63,12 +44,7 @@
     /// <param name="type_heb_name"></param>
     private void AddTypeAttributes(Type type, string type_heb_name)
     {
-        List<Tuple<string, string>> typeAttributes = CommonFuncs.GetTranslatedFields(type);
-
-        foreach (Tuple<string, string> att in typeAttributes)
-        {
-            OptionalTypes.Add(new Attribute(type_heb_name, att.Item2));
-        }
+        OptionalTypes.AddRange(CommonFuncs.GetCipherTypeFields(type));
     }
 
     /// <summary>
@@ -76,18 +52,10 @@
     /// </summary>
     async Task AddComponent()
     {
-        if (components == set_params.Count)
-        {
-            int next_id = components + 1;
-            Parameter new_param = new Parameter() { Id = next_id };
+        ChosenParameters.Add(new ReportParameter() { Id = ChosenParameters.Count + 1 });
+        StateHasChanged();
 
-            set_params.Add(new_param);
-            StateHasChanged();
-
-            components = set_params.Count;
-
-            await CustomDataGrid.RefreshDataAsync();
-        }
+        await CustomDataGrid.RefreshDataAsync();
     }
 
     /// <summary>
@@ -95,13 +63,9 @@
     /// </summary>
     /// <param name="param"></param>
     /// <returns></returns>
-    async Task DeleteRow(Parameter param)
+    async Task DeleteRow(ReportParameter param)
     {
-        set_params.Remove(param);
-
-        CustomDataGrid.Data = set_params;
-
-        components --;
+        ChosenParameters.Remove(param);
 
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -112,10 +76,8 @@
     /// <returns></returns>
     async Task DeleteAll()
     {
-        set_params = new List<Parameter>();
-        components = 0;
-        CustomDataGrid.Data = set_params;
-
+        ChosenParameters = new List<ReportParameter>();
+        
         await CustomDataGrid.RefreshDataAsync();
     }
 }
@@ -127,33 +89,27 @@
     </Buttons>
 
     <ChildContent>
-        @if (set_params.Count() == 0)
+        @if (ChosenParameters.Count() == 0)
         {
             <CipherText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="set_params" TItem="Parameter" AllowColumnResize="true" Visible="set_params.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="ChosenParameters" TItem="ReportParameter" AllowColumnResize="true" Visible="ChosenParameters.Count() != 0">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="Parameter" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn Width="10%" TItem="ReportParameter" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="param">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(param))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Parameter" Property="Id" Title="#" TextAlign="@TdTextAlign" Width="5%" />
-                <RadzenDataGridColumn TItem="Parameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
+                <RadzenDataGridColumn TItem="ReportParameter" Property="Id" Title="#" TextAlign="@TdTextAlign" Width="5%" />
+                <RadzenDataGridColumn TItem="ReportParameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
                     <Template Context="param">
-                        <CipherAutoComplete @bind-Value="@param.Name" Width="100%" />
+                        <RadzenTextBox @bind-Value="@param.Name" Style="width: 100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Parameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
+                <RadzenDataGridColumn TItem="ReportParameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
                     <Template Context="param">
-                        <RadzenDropDownDataGrid @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Path" ValueProperty="Path"
-                                                Placeholder="חיפוש פרמטר" SearchTextPlaceholder="חיפוש..." AllowSorting=false
-                                                AllowColumnResize="true" AllowFilteringByAllStringColumns="true">
-                            <Columns>
-                                <RadzenDropDownDataGridColumn Property="Class" Title="קטגוריה" OrderIndex="1" />
-                                <RadzenDropDownDataGridColumn Property="ParameterName" Title="שם פרמטר" OrderIndex="2" />
-                            </Columns>
-                        </RadzenDropDownDataGrid>
+                        <RadzenDropDown @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Translation"
+                                                Placeholder="חיפוש פרמטר" AllowClear="true" AllowFiltering="true" Style="width: 100%"/>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

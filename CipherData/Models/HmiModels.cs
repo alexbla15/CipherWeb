@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Diagnostics.Metrics;
+
+namespace CipherData.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class HebrewTranslationAttribute : Attribute
@@ -47,28 +49,49 @@
         public string? Icon { get; set; }
     }
 
+    public class CipherField
+    {
+        public string Path { get; set; } = string.Empty;
+        public string Translation { get; set; } = string.Empty;
+        public bool IsList { get; set; } = false;
+        public Type FieldType { get; set; } = typeof(CipherClass);
+    }
+
+    public class ReportParameter
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public CipherField? pType { get; set; }
+    }
+
     public class Report : CipherClass
     {
+        private string? _Id = IdCounter.ToString();
         /// <summary>
         /// Report unique identifier.
         /// </summary>
-        public int Id { get; set; } = IdCounter;
+        public string? Id {
+            get { return _Id; }
+            set { _Id = value ?? GetNextId(); } }
 
         /// <summary>
         /// Report title, as will be shown to user.
         /// </summary>
         public string? Title { get; set; } = null;
 
-        public Report()
-        {
-            IdCounter++;
-        }
+        /// <summary>
+        /// All user-set parameters (changable by user)
+        /// </summary>
+        public List<ReportParameter> Parameters { get; set; } = new();
+
+        public ObjectFactory ObjectFactory { get; set; } = new();
 
         private static int IdCounter { get; set; } = 0;
 
-        public static int GetNextId()
+        public static string GetNextId()
         {
-            return IdCounter += 1;
+            IdCounter += 1;
+            return IdCounter.ToString();
         }
     }
 }

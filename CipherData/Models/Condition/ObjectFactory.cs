@@ -7,7 +7,7 @@
 
     public enum Method
     {
-        sum, avg, count, first, last
+        sum, avg, count, first, last, max, min
     }
 
     public class OrderedItem : CipherClass

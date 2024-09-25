@@ -5,12 +5,12 @@
         <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddStorageSystem.Href" HelpText="הוספת מערכת" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@Systems" WithCustomColumns="true"
+        <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@ChosenSystems" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Id))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Id)))">
                     <FooterTemplate>
-                        <b>@($"כמות: {Systems.Count()}")</b>
+                        <b>@($"כמות: {ChosenSystems.Count()}")</b>
                     </FooterTemplate>
                     </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Name))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Name)))" />
@@ -70,7 +70,7 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<StorageSystem> Systems { get; set; } = new List<StorageSystem>();
+    public IEnumerable<StorageSystem> ChosenSystems { get; set; } = new List<StorageSystem>();
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -81,6 +81,6 @@
     protected override void OnInitialized()
     {
         Title ??= "מערכות";
-        (Systems, error) = CachedData.AllSystems;
+        (ChosenSystems, error) = CachedData.AllSystems;
     }
 }

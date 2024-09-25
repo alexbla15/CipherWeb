@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 using CipherData.Models;
-using CipherWeb.Shared.Components.CipherSpecific;
-using static CipherWeb.Shared.Components.CipherSpecific.CipherBooleanConditions;
 
 namespace CipherWeb
 {

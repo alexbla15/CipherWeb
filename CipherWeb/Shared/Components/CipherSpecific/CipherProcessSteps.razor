@@ -149,7 +149,7 @@
         <ChildContent>
             @if (SelectedStep != null)
             {
-                <CipherBooleanConditions @ref="StepCondition" OnSave="@OnSave" @bind-SelectedCondition="@SelectedCondition" />
+                <CipherBooleanConditions Cipher_TItem="Event" @ref="StepCondition" OnSave="@OnSave" @bind-ChosenCondition="@SelectedCondition" />
             }
         </ChildContent>
     </CipherComponentCard>

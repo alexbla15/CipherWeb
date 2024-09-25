@@ -2,26 +2,10 @@
 
 @code {
     /// <summary>
-    /// Fields available for aggregation
+    /// Text shown in case no rows were added.
     /// </summary>
     [Parameter]
-    public List<Tuple<string, string>> AggregationFields { get; set; }
-
-    /// <summary>
-    /// Mathematical / Logical functions for aggregation.
-    /// </summary>
-    [Parameter]
-    public List<Tuple<string, string>> AvailableFunctions { get; set; } = new List<Tuple<string, string>>()
-    {
-        new ("",""),
-        new ("סכום","SUM"),
-        new("מקסימום","MAX"),
-        new("מינימום","MIN"),
-        new("ממוצע", "AVG"),
-        new("חציון","MED"),
-        new("כמות","COUNT"),
-        new("סטיית תקן","AVG") 
-    };
+    public string HelpText { get; set; } = "כאן ניתן להוסיף פונקציות חדשות. להוספה לחצו על כפתור ההוספה למעלה";
 
     /// <summary>
     /// Text to be shown when type cannot accept the selected aggregation function.
@@ -41,94 +25,40 @@
     [Parameter]
     public string DeleteAllAggregatesText { get; set; } = "מחיקת כל הפונקציות";
 
+    [Parameter]
+    public List<AggregateItem> ChosenAggregates { get; set; } = new();
 
-    public class Aggregate
-    {
-        public int Id { get; set; }
-        public string Parameter { get; set; }
-        public string Function { get; set; }
-    }
+    private RadzenDataGrid<AggregateItem> CustomDataGrid = new();
+    private AggregateItem old_agg = new();
 
-    private RadzenDataGrid<Aggregate> CustomDataGrid;
-    private List<Aggregate> chosenFuncs = new List<Aggregate>();
-    private Aggregate old_agg = new Aggregate();
-
-    private int AggregationAmount = 0;
     private bool typeIncompatibleAlertVisible = false;
 
     /// <summary>
     /// Add an aggregation row.
     /// </summary>
-    private void AddRow()
+    private async Task AddRow()
     {
-        int next_id = AggregationAmount + 1;
-        Aggregate new_agg = new Aggregate() { Id = next_id };
-
-        AggregationAmount += 1;
-        CustomDataGrid.InsertRow(new_agg);
-    }
-
-    /// <summary>
-    /// Edit a selected aggregation
-    /// </summary>
-    /// <param name="agg"></param>
-    /// <returns></returns>
-    private async Task EditRow(Aggregate agg)
-    {
-        // prevent editing of two rows in parallel
-        if (CustomDataGrid.Count == AggregationAmount)
-        {
-            old_agg.Id = agg.Id;
-            old_agg.Parameter = agg.Parameter;
-            old_agg.Function = agg.Function;
-
-            chosenFuncs.Remove(agg);
-            await CustomDataGrid.EditRow(agg);
-        }
-    }
-
-    /// <summary>
-    /// Revert to original aggregation row.
-    /// </summary>
-    /// <param name="agg"></param>
-    /// <returns></returns>
-    private async Task CancelEdit(Aggregate agg)
-    {
-        agg.Id = old_agg.Id;
-        agg.Parameter = old_agg.Parameter;
-        agg.Function = old_agg.Function;
-
-        await SaveRow(agg);
+        ChosenAggregates.Add(new AggregateItem());
+        StateHasChanged();
+        await CustomDataGrid.RefreshDataAsync();
     }
 
     /// <summary>
     /// Delete selected aggregation.
     /// </summary>
-    /// <param name="agg"></param>
-    /// <returns></returns>
-    private async Task DeleteRow(Aggregate agg)
+    private async Task DeleteRow(AggregateItem agg)
     {
-        chosenFuncs.Remove(agg);
-
-        foreach (Aggregate p in chosenFuncs)
-        {
-            p.Id = chosenFuncs.IndexOf(p) + 1;
-        }
-
-        CustomDataGrid.Data = chosenFuncs;
-
-        AggregationAmount -= 1;
+        ChosenAggregates.Remove(agg);
+        StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
 
     /// <summary>
     /// Save changes to the aggregation selected.
     /// </summary>
-    /// <param name="agg"></param>
-    /// <returns></returns>
-    private async Task SaveRow(Aggregate agg)
+    private async Task SaveRow(AggregateItem agg)
     {
-        chosenFuncs.Add(agg);
+        ChosenAggregates.Add(agg);
 
         await CustomDataGrid.UpdateRow(agg);
         await CustomDataGrid.RefreshDataAsync();
@@ -139,9 +69,7 @@
     /// </summary>
     private void DeleteAggregation()
     {
-        AggregationAmount = 0;
-        chosenFuncs = new List<Aggregate>();
-        CustomDataGrid.Data = chosenFuncs;
+        ChosenAggregates = new();
     }
 
     /// <summary>
@@ -156,9 +84,9 @@
     /// Get list of all chosen aggregates.
     /// </summary>
     /// <returns></returns>
-    public List<Aggregate> GetData()
+    public List<AggregateItem> GetData()
     {
-        return CustomDataGrid?.Data?.ToList() ?? new List<Aggregate>();
+        return CustomDataGrid?.Data?.ToList() ?? new();
     }
 }
 
@@ -169,30 +97,93 @@
     </Buttons>
 
     <ChildContent>
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenFuncs" TItem="Aggregate" AllowColumnResize="true" Visible="AggregationAmount>0">
+        @if (ChosenAggregates.Count() == 0)
+        {
+            <CipherText Text="@HelpText" />
+        }
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenAggregates" TItem="AggregateItem" AllowColumnResize="true" Visible="@(ChosenAggregates.Count>0)">
             <Columns>
-                <RadzenDataGridColumn TItem="Aggregate" Property="Id" Title="#" Width="25px" TextAlign="TextAlign.Center">
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Aggregate" Property="Parameter" Title="פרמטר" Width="75px" TextAlign="TextAlign.Center">
-                    <EditTemplate Context="agg">
-                        <RadzenDropDown Data="@AggregationFields.Select(x=>x.Item2).ToList()" @bind-Value="@agg.Parameter" />
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Aggregate" Property="Function" Title="פונקציה" Width="75px" TextAlign="TextAlign.Center">
-                    <EditTemplate Context="agg">
-                        <RadzenDropDown Data="@AvailableFunctions.Select(x=>x.Item1).ToList()" @bind-Value="@agg.Function" />
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-
-                <RadzenDataGridColumn Width="25px" TItem="Aggregate" Context="agg" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn Width="10%" TItem="AggregateItem" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherEditButton Click="@(args => EditRow(agg))" @onclick:stopPropagation="true" />
-                        <CipherDeleteButton Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
+                        <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
-                    <EditTemplate Context="agg">
-                        <CipherSuccessButton Click="@((args) => SaveRow(agg))" />
-                        <CipherCloseButton Click="@((args) => CancelEdit(agg))" />
-                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Attribute)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" TextAlign="TextAlign.Center">
+                    <Template Context="agg">
+                        <RadzenTextBox @bind-Value="@agg.Attribute" Style="width:100%"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.As)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.As)))" TextAlign="TextAlign.Center">
+                    <Template Context="agg">
+                        <RadzenTextBox @bind-Value="@agg.As" Style="width:100%"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Method)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" TextAlign="TextAlign.Center">
+                    <Template Context="agg">
+                        <RadzenDropDown Style="width: 100%" TValue="Method" @bind-Value="@agg.Method" Data="@(new List<Method>() {Method.sum, Method.avg, Method.first, Method.last, Method.count, Method.max, Method.min})"
+                                        Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))">
+                            <ValueTemplate Context="met">
+                                @if (met == Method.count)
+                                {
+                                    @("כמות")
+                                }
+                                else if (met == Method.avg)
+                                {
+                                @("ממוצע")
+                                }
+                                else if (met == Method.sum)
+                                {
+                                    @("סכום")
+                                }
+                                else if (met == Method.max)
+                                {
+                                    @("מקסימום")
+                                }
+                                else if (met == Method.min)
+                                {
+                                    @("מינימום")
+                                }
+                                else if (met == Method.first)
+                                {
+                                    @("ראשון")
+                                }
+                                else
+                                {
+                                    @("אחרון")
+                                }
+                            </ValueTemplate>
+                            <Template Context="met2">
+                                @if (met2 == Method.count)
+                                {
+                                    @("כמות")
+                                }
+                                else if (met2 == Method.avg)
+                                {
+                                    @("ממוצע")
+                                }
+                                else if (met2 == Method.sum)
+                                {
+                                    @("סכום")
+                                }
+                                else if (met2 == Method.max)
+                                {
+                                    @("מקסימום")
+                                }
+                                else if (met2 == Method.min)
+                                {
+                                    @("מינימום")
+                                }
+                                else if (met2 == Method.first)
+                                {
+                                    @("ראשון")
+                                }
+                                else
+                                {
+                                    @("אחרון")
+                                }
+                            </Template>
+                        </RadzenDropDown>
+                    </Template>
                 </RadzenDataGridColumn>
             </Columns>
         </RadzenDataGrid>

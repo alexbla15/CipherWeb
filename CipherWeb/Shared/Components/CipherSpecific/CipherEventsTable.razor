@@ -1,6 +1,6 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@Events" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenEvents" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
@@ -15,12 +15,12 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Event" DataSource="@Events" WithCustomColumns="true"
+        <CipherDataGrid Cipher_TItem="Event" DataSource="@ChosenEvents" WithCustomColumns="true"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
             <CustomColumns>
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Id))" Title="@(new Event().Translate(nameof(Event.Id)))">
                     <FooterTemplate>
-                        <b>@($"כמות: {Events.Count()}")</b>
+                        <b>@($"כמות: {ChosenEvents.Count()}")</b>
                     </FooterTemplate>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
@@ -71,7 +71,7 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public IEnumerable<Event> Events { get; set; } = new List<Event>();
+    public IEnumerable<Event> ChosenEvents { get; set; } = new List<Event>();
 
     /// <summary>
     /// Error response of fetching data
@@ -85,7 +85,7 @@
     {
         Title ??= "דוח תנועות";
 
-        if (Events is null)
+        if (ChosenEvents is null)
         {
             SearchFunc();
         }
@@ -98,11 +98,11 @@
     {
         if (ChosenSystem.ChosenSystem is null)
         {
-            Events = new List<Event>();
+            ChosenEvents = new List<Event>();
         }
         else
         {
-            (Events, error) = ChosenSystem.ChosenSystem.Events();
+            (ChosenEvents, error) = ChosenSystem.ChosenSystem.Events();
         }
     }
 }
