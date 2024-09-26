@@ -5,6 +5,7 @@ namespace CipherData.Models
     public class Unit : Resource
     {
         private string _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the Unit
@@ -12,11 +13,9 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Unit), nameof(Name))]
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value.Trim(); }
+            get => _Name; 
+            set => _Name = value.Trim(); 
         }
-
-        private string? _Description = string.Empty;
 
         /// <summary>
         /// Description of Unit
@@ -24,51 +23,48 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Unit), nameof(Description))]
         public string? Description
         {
-            get { return _Description; }
-            set { _Description = value?.Trim(); }
+            get => _Description; 
+            set => _Description = value?.Trim(); 
         }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Properties))]
-        public string? Properties { get; set; } = null;
+        public string? Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Parent))]
-        public Unit? Parent { get; set; } = null;
+        public Unit? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Children))]
-        public List<Unit>? Children { get; set; } = null;
+        public List<Unit>? Children { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Systems))]
-        public List<StorageSystem>? Systems { get; set; } = null;
+        public List<StorageSystem>? Systems { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Conditions))]
-        public GroupedBooleanCondition? Conditions { get; set; } = null;
+        public GroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
         /// Instanciation of new unit.
         /// </summary>
-        public Unit(string? id = null)
-        {
-            Id = id ?? GetNextId();
-        }
+        public Unit(string? id = null) => Id = id ?? GetNextId();
 
         public UnitRequest Request()
         {
-            return new UnitRequest()
+            return new()
             {
                 Name = Name,
                 Description = Description,
@@ -86,11 +82,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"U{IdCounter:D3}";
-        }
+        public static string GetNextId() => $"U{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -113,18 +105,12 @@ namespace CipherData.Models
         /// Get details about a single unit given unit ID
         /// </summary>
         /// <param name="id">unit ID</param>
-        public static Tuple<Unit, ErrorResponse> Get(string id)
-        {
-            return Config.UnitsRequests.GetUnit(id);
-        }
+        public static Tuple<Unit, ErrorResponse> Get(string id) => Config.UnitsRequests.GetUnit(id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Unit>, ErrorResponse> All()
-        {
-            return Config.UnitsRequests.GetUnits();
-        }
+        public static Tuple<List<Unit>, ErrorResponse> All() => Config.UnitsRequests.GetUnits();
 
         /// <summary>
         /// Fetch all units which contain the searched text

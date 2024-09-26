@@ -23,7 +23,7 @@
     /// Controls the CSS-class of the component's text.
     /// </summary>
     [Parameter]
-    public string StyleClass { get; set; }
+    public string? StyleClass { get; set; }
 
     /// <summary>
     /// Text-width.
@@ -35,85 +35,85 @@
     /// Text height.
     /// </summary>
     [Parameter]
-    public string Height { get; set; }
+    public string? Height { get; set; }
 
     /// <summary>
     /// Text size.
     /// </summary>
     [Parameter]
-    public string FontSize { get; set; }
+    public string? FontSize { get; set; }
 
     /// <summary>
     /// Text boldness.
     /// </summary>
     [Parameter]
-    public string FontWeight { get; set; }
+    public string? FontWeight { get; set; }
 
     /// <summary>
     /// Color of text.
     /// </summary>
     [Parameter]
-    public string Color { get; set; }
+    public string? Color { get; set; }
 
     /// <summary>
     /// Background color of component.
     /// </summary>
     [Parameter]
-    public string BackgroundColor { get; set; }
+    public string? BackgroundColor { get; set; }
 
     /// <summary>
     /// Space outside of text, inside of component. (Bottom)
     /// </summary>
     [Parameter]
-    public string PaddingBottom { get; set; }
+    public string? PaddingBottom { get; set; }
 
     /// <summary>
     /// Space outside of text, inside of component. (Top)
     /// </summary>
     [Parameter]
-    public string PaddingTop { get; set; }
+    public string? PaddingTop { get; set; }
 
     /// <summary>
     /// Space outside of text, inside of component. (Right)
     /// </summary>
     [Parameter]
-    public string PaddingRight { get; set; }
+    public string? PaddingRight { get; set; }
 
     /// <summary>
     /// Space outside of text, inside of component. (Left)
     /// </summary>
     [Parameter]
-    public string PaddingLeft { get; set; }
+    public string? PaddingLeft { get; set; }
 
     /// <summary>
     /// Space outside of component. (Bottom)
     /// </summary>
     [Parameter]
-    public string MarginBottom { get; set; }
+    public string? MarginBottom { get; set; }
 
     /// <summary>
     /// Space outside of component. (Top)
     /// </summary>
     [Parameter]
-    public string MarginTop { get; set; }
+    public string? MarginTop { get; set; }
 
     /// <summary>
     /// Space outside of component. (Right)
     /// </summary>
     [Parameter]
-    public string MarginRight { get; set; }
+    public string? MarginRight { get; set; }
 
     /// <summary>
     /// Space outside of component. (Left)
     /// </summary>
     [Parameter]
-    public string MarginLeft { get; set; }
+    public string? MarginLeft { get; set; }
 
     /// <summary>
     /// Text decoration of text
     /// </summary>
     [Parameter]
-    public string TextDecoration { get; set; }
+    public string? TextDecoration { get; set; }
 
     /// <summary>
     /// Text direction (rtl / ltr)
@@ -122,7 +122,7 @@
     public string Dirction { get; set; } = "rtl";
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         StyleClass = (Wrap) ? "rz-text-wrap" : "rz-text-nowrap";
         TextDecoration = (Underline) ? "underline" : TextDecoration;

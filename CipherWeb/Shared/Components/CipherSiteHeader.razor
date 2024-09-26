@@ -55,7 +55,7 @@
     /// Width of logo within the header.
     /// </summary>
     [Parameter]
-    public string Logo_Width { get; set; }
+    public string? Logo_Width { get; set; }
 
     // ACCOUNT PROPERTIES
 
@@ -63,7 +63,7 @@
     /// Width of account-block within header.
     /// </summary>
     [Parameter]
-    public string Account_Width { get; set; }
+    public string? Account_Width { get; set; }
 
     /// <summary>
     /// Space outside content within account-block.
@@ -75,9 +75,9 @@
     /// Width of seach-row.
     /// </summary>
     [Parameter]
-    public string Search_Width { get; set; }
+    public string? Search_Width { get; set; }
 
-    public string NewRole;
+    public string NewRole = string.Empty;
 
     public async Task ChangeRole()
     {
@@ -98,7 +98,6 @@
     /// <summary>
     /// Set a different role, and close the dialog.
     /// </summary>
-    /// <returns></returns>
     public bool ChangeRoleView()
     {
         Roles.CurrnetRole = NewRole;
@@ -108,7 +107,6 @@
     /// <summary>
     /// Set the style for account-block.
     /// </summary>
-    /// <returns></returns>
     public string AccountStyle()
     {
         return $@"
@@ -120,9 +118,5 @@
     /// <summary>
     /// Set the common-width of each block.
     /// </summary>
-    /// <returns></returns>
-    public string BlockWidth()
-    {
-        return $"width:{100 / 3}% ";
-    }
+    public string BlockWidth() => $"width:{100 / 3}% ";
 }

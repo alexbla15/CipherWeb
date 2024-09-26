@@ -44,7 +44,7 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new List<Package>();
+    public List<Package> ChosenPackages { get; set; } = new ();
 
     /// <summary>
     /// Error response for fetching data
@@ -52,20 +52,17 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private CipherAutoComplete autoComplete;
+    private CipherAutoComplete autoComplete = new();
     private string SearchText = string.Empty;
 
     protected override void OnInitialized()
     {
         LabelText ??= "חיפוש תעודה";
 
-        (packs, error) = CachedData.AllPackages;
+        (ChosenPackages, error) = CachedData.AllPackages;
 
         // Set default OnKeyDown if not provided
-        if (!OnKeyDown.HasDelegate)
-        {
-            OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, SearchFunc);
-        }
+        if (!OnKeyDown.HasDelegate) OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, SearchFunc);
     }
 
     /// <summary>
@@ -74,10 +71,7 @@
     /// <param name="args"></param>
     private async Task EnteredSearchFunc(KeyboardEventArgs args)
     {
-        if (args.Key == "Enter")
-        {
-            await SearchFunc();
-        }
+        if (args.Key == "Enter") await SearchFunc();
     }
 
     private async Task SearchFunc()
@@ -98,7 +92,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Start" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
     <CipherAutoComplete @ref=autoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" @bind-value="SearchText"
-                        Data="@packs" TextProperty="Id" OnKeyDown="EnteredSearchFunc" Change="SearchFunc"></CipherAutoComplete>
+                        Data="@ChosenPackages" TextProperty="Id" OnKeyDown="EnteredSearchFunc" Change="SearchFunc"></CipherAutoComplete>
     <CipherButton Icon="@Icons.SearchAndFilter.Search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px"
                   Click="SearchFunc" Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
 </RadzenStack>

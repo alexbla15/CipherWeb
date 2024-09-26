@@ -11,15 +11,9 @@
 
     private RadzenDataFilter<Cipher_TItem> datafilter = new();
 
-    public List<CompositeFilterDescriptor> GetFilters()
-    {
-        return datafilter.Filters.ToList();
-    }
+    public List<CompositeFilterDescriptor> GetFilters() => datafilter.Filters.ToList();
 
-    public LogicalFilterOperator GetLogicalFieldOperator()
-    {
-        return datafilter.LogicalFilterOperator;
-    }
+    public LogicalFilterOperator GetLogicalFieldOperator() => datafilter.LogicalFilterOperator;
 }
 
 <RadzenDataFilter Auto=true ViewChanged=@ViewChanged @ref=datafilter

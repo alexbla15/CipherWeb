@@ -12,7 +12,7 @@
     [Parameter]
     public List<Event> Events
     {
-        get { return _Events; }
+        get => _Events;
         set
         {
             _Events = value;
@@ -67,15 +67,9 @@
         JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
     }
 
-    public void ApproveEvent(Event ev)
-    {
-        ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
-    }
+    public void ApproveEvent(Event ev) => ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
 
-    public void DeclineEvent(Event ev)
-    {
-        ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
-    }
+    public void DeclineEvent(Event ev) => ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
 
     public void ForAllEvents(Action<Event> singleFunc)
     {
@@ -88,15 +82,9 @@
         JsonRequest = NewJsonRequest;
     }
 
-    public void ApproveAllEvents()
-    {
-        ForAllEvents(ApproveEvent);
-    }
+    public void ApproveAllEvents() => ForAllEvents(ApproveEvent);
 
-    public void DeclineAllEvents()
-    {
-        ForAllEvents(DeclineEvent);
-    }
+    public void DeclineAllEvents() => ForAllEvents(DeclineEvent);
 
     public async Task ChangeEvents(List<Event> newEvents)
     {

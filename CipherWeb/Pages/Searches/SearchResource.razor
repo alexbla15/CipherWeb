@@ -78,7 +78,7 @@
     /// <summary>
     /// Chosen objects mapping dictionary
     /// </summary>
-    private Dictionary<Type, Func<object?>> chosenObjectMap;
+    private Dictionary<Type, Func<object?>> chosenObjectMap = new();
 
     protected override void OnInitialized()
     {
@@ -126,10 +126,7 @@
     /// <summary>
     /// Retrieve the object's ID for URL changes.
     /// </summary>
-    private string? GetObjectId(object? obj)
-    {
-        return (obj as Resource)?.Id;
-    }
+    private string? GetObjectId(object? obj) => (obj as Resource)?.Id;
 
     /// <summary>
     /// Method to get object history from UserActions function within the Resource-object

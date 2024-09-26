@@ -39,7 +39,7 @@ namespace CipherData.Models
         public string? Name { get; set; }
         public string? Href { get; set; }
         public string? Icon { get; set; }
-        public List<MySubNavLink> SubLinks { get; set; } = new List<MySubNavLink>();
+        public List<MySubNavLink> SubLinks { get; set; } = new();
     }
 
     public class MySubNavLink
@@ -70,14 +70,12 @@ namespace CipherData.Models
         /// <summary>
         /// Report unique identifier.
         /// </summary>
-        public string? Id {
-            get { return _Id; }
-            set { _Id = value ?? GetNextId(); } }
+        public string? Id { get => _Id; set => _Id = value ?? GetNextId(); }
 
         /// <summary>
         /// Report title, as will be shown to user.
         /// </summary>
-        public string? Title { get; set; } = null;
+        public string? Title { get; set; }
 
         /// <summary>
         /// All user-set parameters (changable by user)
@@ -85,6 +83,8 @@ namespace CipherData.Models
         public List<ReportParameter> Parameters { get; set; } = new();
 
         public ObjectFactory ObjectFactory { get; set; } = new();
+
+        // STATIC METHODS
 
         private static int IdCounter { get; set; } = 0;
 

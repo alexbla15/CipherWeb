@@ -100,10 +100,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckProcessIdTest()
         {
-            CreateEvent ev = new()
-            {
-                ProcessId = "תכונה" // Good name
-            };
+            CreateEvent ev = new() { ProcessId = "תכונה" }; // Good name
             Assert.IsTrue(ev.CheckProcessId().Succeeded);
 
             ev.ProcessId = "@תכונה"; // Improper chars

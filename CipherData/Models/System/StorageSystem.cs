@@ -5,6 +5,7 @@ namespace CipherData.Models
     public class StorageSystem : Resource
     {
         private string _Name = string.Empty;
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Name of the system
@@ -12,11 +13,9 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value.Trim(); }
+            get => _Name;
+            set => _Name = value.Trim(); 
         }
-
-        private string _Description = string.Empty;
 
         /// <summary>
         /// Description of system
@@ -24,27 +23,27 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
         public string Description
         {
-            get { return _Description; }
-            set { _Description = value.Trim(); }
+            get => _Description;
+            set => _Description = value.Trim();
         }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
-        public Dictionary<string, string>? Properties { get; set; } = null;
+        public Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
-        public StorageSystem? Parent { get; set; } = null;
+        public StorageSystem? Parent { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
-        public List<StorageSystem>? Children { get; set; } = null;
+        public List<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
@@ -55,10 +54,9 @@ namespace CipherData.Models
         /// <summary>
         /// Instanciation of StorageSystem
         /// </summary>
-        public StorageSystem(string? id = null)
-        {
-            Id = id ?? GetNextId();
-        }
+        public StorageSystem(string? id = null) => Id = id ?? GetNextId();
+
+        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -69,11 +67,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"S{IdCounter:D3}";
-        }
+        public static string GetNextId() => $"S{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -97,36 +91,23 @@ namespace CipherData.Models
         /// <summary>
         /// All events that took place in this system
         /// </summary>
-        public Tuple<List<Event>, ErrorResponse> Events()
-        {
-            return Events(Id);
-        }
+        public Tuple<List<Event>, ErrorResponse> Events() => Events(Id);
 
         /// <summary>
         /// All packages that took place in this system
         /// </summary>
-        public Tuple<List<Package>, ErrorResponse> Packages()
-        {
-            return Packages(Id);
-        }
+        public Tuple<List<Package>, ErrorResponse> Packages() => Packages(Id);
 
         /// <summary>
         /// Get details about a system vessel given system ID
         /// </summary>
         /// <param name="id">system ID</param>
-        /// <returns></returns>
-        public static Tuple<StorageSystem, ErrorResponse> Get(string id)
-        {
-            return Config.SystemsRequests.GetSystem(id);
-        }
+        public static Tuple<StorageSystem, ErrorResponse> Get(string id) => Config.SystemsRequests.GetSystem(id);
 
         /// <summary>
         /// All systems that took place in a certain system
         /// </summary>
-        public static Tuple<List<StorageSystem>, ErrorResponse> All()
-        {
-            return Config.SystemsRequests.GetSystems();
-        }
+        public static Tuple<List<StorageSystem>, ErrorResponse> All() => Config.SystemsRequests.GetSystems();
 
         /// <summary>
         /// Fetch all systems which contain the searched text

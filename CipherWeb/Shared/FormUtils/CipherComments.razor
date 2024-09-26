@@ -35,17 +35,7 @@
         Icon ??= Icons.Communication.Chat.comment;
     }
 
-    public string GetValue()
-    {
-        if (Check())
-        {
-            return Comments;
-        }
-        else
-        {
-            return string.Empty;
-        }
-    }
+    public string GetValue() => Check() ? Comments : string.Empty;
 }
 
 <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Disabled="@Disabled"

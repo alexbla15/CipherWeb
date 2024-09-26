@@ -11,19 +11,19 @@
     /// Place-holder text.
     /// </summary>
     [Parameter]
-    public string Label { get; set; }
+    public string? Label { get; set; }
 
     /// <summary>
     /// Set style of component
     /// </summary>
     [Parameter]
-    public string Style { get; set; }
+    public string? Style { get; set; }
 
     /// <summary>
     /// Set component's icon.
     /// </summary>
     [Parameter]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Is the component enabled.
@@ -59,12 +59,9 @@
     [Parameter]
     public EventCallback<decimal> AmountChanged { get; set; }
 
-    private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+    private RadzenRequiredValidator RequiredValidator = new();
 
-    protected override void OnInitialized()
-    {
-        AmountChanged.InvokeAsync(Amount);
-    }
+    protected override void OnInitialized() => AmountChanged.InvokeAsync(Amount);
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">

@@ -13,10 +13,7 @@ namespace CipherData.Models
         [HebrewTranslation(nameof(UserActions))]
         public List<UserAction> UserActions { get; set; } = new();
 
-        public static UserActionResponse Random()
-        {
-            return new UserActionResponse() { UserActions = RandomFuncs.FillRandomObjects(2, UserAction.Random)};
-        }
+        public static UserActionResponse Random() => new() { UserActions = RandomFuncs.FillRandomObjects(2, UserAction.Random)};
     }
 }
 

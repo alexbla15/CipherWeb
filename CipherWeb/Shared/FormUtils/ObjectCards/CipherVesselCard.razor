@@ -63,10 +63,7 @@
         Title ??= "פרטי הכלי";
 
         // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null)
-        {
-            StateHasChanged();
-        }
+        if (ChosenObject != null) StateHasChanged();
     }
 
     public void Change()
@@ -78,7 +75,7 @@
 
     public VesselRequest Value()
     {
-        return new VesselRequest()
+        return new()
         {
             Type = VesType.Value,
             Name = VesName.Value,

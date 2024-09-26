@@ -19,19 +19,19 @@
     /// Space outside the buttons, inside the component. (Top)
     /// </summary>
     [Parameter]
-    public string PaddingTop { get; set; }
+    public string? PaddingTop { get; set; }
 
     /// <summary>
     /// Space outside the buttons, inside the component. (Right)
     /// </summary>
     [Parameter]
-    public string PaddingRight { get; set; }
+    public string? PaddingRight { get; set; }
 
     /// <summary>
     /// Space outside the buttons, inside the component. (Left)
     /// </summary>
     [Parameter]
-    public string PaddingLeft { get; set; }
+    public string? PaddingLeft { get; set; }
 
     /// <summary>
     /// Shade of buttons. Must be a Shade-enum.
@@ -51,23 +51,13 @@
     [Parameter]
     public List<MySubNavLink> items { get; set; } = new()
     {
-        new MySubNavLink(){
-            Name="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href
-        },
-        new MySubNavLink(){
-            Name="חיפוש", Icon=Icons.SearchAndFilter.Search, Href=CipherNavLinks.AdvancedSearch.Href
-        },
-        new MySubNavLink(){
-            Name="דוחות", Icon=Icons.Documents.article, Href=CipherNavLinks.Reports.Href
-        }
+        new() { Name="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href },
+        new() { Name="חיפוש", Icon=Icons.SearchAndFilter.Search, Href=CipherNavLinks.AdvancedSearch.Href },
+        new() { Name="דוחות", Icon=Icons.Documents.article, Href=CipherNavLinks.Reports.Href }
     };
 
     /// <summary>
     /// Width of each button.
     /// </summary>
-    /// <returns></returns>
-    public string ButtonWidth()
-    {
-        return $"{(100 / items.Count)}%";
-    }
+    public string ButtonWidth() => $"{(100 / items.Count)}%";
 }

@@ -7,21 +7,11 @@
 
 @code {
     private CipherWorker Worker = new();
-
     private CipherDatePicker DatePicker = new();
 
-    protected override void OnInitialized()
-    {
-        Title ??= "פרטי ההזנה";
-    }
+    protected override void OnInitialized() => Title ??= "פרטי ההזנה";
 
-    public DateTime GetDateTime()
-    {
-        return DatePicker.GetDateTime();
-    }
+    public DateTime GetDateTime() => DatePicker.GetDateTime();
 
-    public string GetWorker()
-    {
-        return Worker.GetWorker();
-    }
+    public string GetWorker() => Worker.GetWorker();
 }

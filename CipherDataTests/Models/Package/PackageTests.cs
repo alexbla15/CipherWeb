@@ -77,10 +77,7 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void GetNextIdTest()
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(Package.GetNextId()));
-        }
+        public void GetNextIdTest() => Assert.IsFalse(string.IsNullOrEmpty(Package.GetNextId()));
 
         [TestMethod()]
         public void RandomTest()

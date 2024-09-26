@@ -5,6 +5,9 @@
     /// </summary>
     public class UpdateEvent : CipherClass
     {
+        private string? _EventComment;
+        private string? _ActionComments = null;
+
         /// <summary>
         /// Validation status of event.
         /// </summary>
@@ -15,9 +18,7 @@
         /// New process ID for event
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public string? ProcessId { get; set; } = null;
-
-        private string? _EventComment = null;
+        public string? ProcessId { get; set; }
 
         /// <summary>
         /// Updated comment for event
@@ -25,11 +26,9 @@
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? EventComment
         {
-            get { return _EventComment; }
-            set { _EventComment = value?.Trim(); }
+            get => _EventComment;
+            set => _EventComment = value?.Trim();
         }
-
-        private string? _ActionComments = null;
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
@@ -37,24 +36,18 @@
         [HebrewTranslation(nameof(ActionComments))]
         public string? ActionComments
         {
-            get { return _ActionComments; }
-            set { _ActionComments = value?.Trim(); }
+            get => _ActionComments;
+            set => _ActionComments = value?.Trim();
         }
 
         /// <summary>
         /// get an approved - UpdateEvent
         /// </summary>
-        public static UpdateEvent ApprovedEvent()
-        {
-            return new UpdateEvent { Status = 1 };
-        }
+        public static UpdateEvent ApprovedEvent() => new() { Status = 1 };
 
         /// <summary>
         /// get an approved - UpdateEvent
         /// </summary>
-        public static UpdateEvent DeclinedEvent()
-        {
-            return new UpdateEvent { Status = -1 };
-        }
+        public static UpdateEvent DeclinedEvent() => new() { Status = -1 };
     }
 }

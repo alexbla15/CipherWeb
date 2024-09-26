@@ -39,10 +39,7 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void GetNextIdTest()
-        {
-            Assert.IsFalse(string.IsNullOrEmpty(Event.GetNextId()));
-        }
+        public void GetNextIdTest() => Assert.IsFalse(string.IsNullOrEmpty(Event.GetNextId()));
 
         [TestMethod()]
         public void RandomTest()

@@ -66,24 +66,19 @@
         Title ??= "פרטי היחידה";
 
         // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null)
-        {
-            StateHasChanged();
-        }
+        if (ChosenObject != null) StateHasChanged();
     }
 
     public void Change()
     {
         ChosenObject = UnitId.ChosenUnit;
-
         ChangeObject.InvokeAsync();
-
         StateHasChanged();
     }
 
     public UnitRequest Value()
     {
-        return new UnitRequest()
+        return new()
         {
             Name = UnitName.Value,
             Description = UnitDescription.Value,

@@ -10,6 +10,8 @@ namespace CipherData.Models
     public class UserAction : Resource
     {
         private string _By = string.Empty;
+        private string? _Comments;
+        private string? _ActionParameters;
 
         /// <summary>
         /// User ID of user who made the action. Required.
@@ -17,11 +19,9 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(UserAction), nameof(By))]
         public string By
         {
-            get { return _By; }
-            set { _By = value.Trim(); }
+            get => _By;
+            set => _By = value.Trim();
         }
-
-        private string? _Comments = null;
 
         /// <summary>
         /// Full-text user comment on action.
@@ -29,19 +29,17 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(UserAction), nameof(Comments))]
         public string? Comments
         {
-            get { return _Comments; }
-            set { _Comments = value?.Trim(); }
+            get => _Comments;
+            set => _Comments = value?.Trim(); 
         }
-
-        private string? _ActionParameters = null;
 
         /// <summary>
         /// Parameters changed by the action. (JSON)
         /// </summary>
         [HebrewTranslation(typeof(UserAction), nameof(ActionParameters))]
         public string? ActionParameters {
-            get { return _ActionParameters; }
-            set { _ActionParameters = value?.Trim(); }
+            get => _ActionParameters; 
+            set => _ActionParameters = value?.Trim(); 
         }
 
         /// <summary>
@@ -49,6 +47,12 @@ namespace CipherData.Models
         /// </summary>
         [HebrewTranslation(typeof(UserAction), nameof(ObjectId))]
         public int ObjectId { get; set; }
+
+        /// <summary>
+        /// Validation status of this user action.
+        /// </summary>
+        [HebrewTranslation(typeof(UserAction), nameof(Status))]
+        public int Status { get; set; } = -1;
 
         /// <summary>
         /// Timestamp of when the action was made. Required.
@@ -63,18 +67,12 @@ namespace CipherData.Models
         public ActionType ActionType { get; set; }
 
         /// <summary>
-        /// Validation status of this user action.
-        /// </summary>
-        [HebrewTranslation(typeof(UserAction), nameof(Status))]
-        public int Status { get; set; } = -1;
-
-        /// <summary>
         /// Get a Random object scheme
         /// </summary>
         /// <returns></returns>
         public static UserAction Random(string? comments = null)
         {
-            return new UserAction()
+            return new()
             {
                 By = Worker.Random().Name,
                 ObjectId = new Random().Next(1000),

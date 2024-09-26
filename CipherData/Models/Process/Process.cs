@@ -7,20 +7,20 @@ namespace CipherData.Models
     /// </summary>
     public class Process : Resource
     {
+        private List<Event> _Events = new();
+
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
         [HebrewTranslation(typeof(Process), nameof(Definition))]
         public ProcessDefinition Definition { get; set; } = new();
 
-        private List<Event> _Events = new();
-
         /// <summary>
         /// Events taking place during a process
         /// </summary>
         [HebrewTranslation(typeof(Process), nameof(Events))]
         public List<Event> Events {
-            get { return _Events; }
+            get => _Events;
             set { 
                 _Events = value;
                 Start = Events.Select(x => x.Timestamp).Min();
@@ -44,10 +44,18 @@ namespace CipherData.Models
         /// An instance of a specific processes
         /// </summary>
         /// <param name="id">Only if you want process to have specific id</param>
-        public Process(string? id = null)
+        public Process(string? id = null) => Id = id ?? GetNextId();
+
+        public string Duration()
         {
-            Id = id ?? GetNextId();
+            TimeSpan difference = End - Start;
+            int days = difference.Days;
+            int hours = difference.Hours;
+
+            return $"{days} ימים, {hours} שעות";
         }
+
+        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -58,11 +66,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        private static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"PR{IdCounter:D3}";
-        }
+        private static string GetNextId() => $"PR{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -78,15 +82,6 @@ namespace CipherData.Models
             };
         }
 
-        public string Duration()
-        {
-            TimeSpan difference = End - Start;
-            int days = difference.Days;
-            int hours = difference.Hours;
-
-            return $"{days} ימים, {hours} שעות";
-        }
-
         // API-RELATED FUNCTIONS
 
         public static Tuple<Process,ErrorResponse> Get(string? id = null)
@@ -97,10 +92,7 @@ namespace CipherData.Models
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Process>, ErrorResponse> All()
-        {
-            return Config.ProcessesRequests.GetProcesses();
-        }
+        public static Tuple<List<Process>, ErrorResponse> All() => Config.ProcessesRequests.GetProcesses();
 
         /// <summary>
         /// Fetch all processes which contain the searched text

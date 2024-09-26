@@ -27,9 +27,6 @@ namespace CipherWeb.Data
         public static readonly List<string> Reactants = new() { "מגיב א", "מגיב ב", "מגיב ג" };
         public static readonly List<string> Products = new() { "תוצר א", "תוצר ב", "תוצר ג" };
 
-        public static readonly List<char> ImproperChars =
-            new () { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '_', '<', '>', '?', '/', '\\', '|', '{', '}', '~', ':' };
-
         public static readonly string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
     }
 }

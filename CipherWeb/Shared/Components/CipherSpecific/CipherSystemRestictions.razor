@@ -45,7 +45,7 @@
     /// Text shown in case no rows were added.
     /// </summary>
     [Parameter]
-    public string HelpText { get; set; }
+    public string? HelpText { get; set; }
 
     /// <summary>
     /// Help text for add-button.
@@ -62,13 +62,13 @@
     public class Restriction
     {
         public int Id { get; set; }
-        public string Material { get; set; }
-        public string Category { get; set; }
-        public decimal MaxAmount { get; set; }
+        public string? Material { get; set; }
+        public string? Category { get; set; }
+        public decimal? MaxAmount { get; set; }
     }
 
-    private RadzenDataGrid<Restriction> CustomDataGrid;
-    private List<Restriction> restrictions = new List<Restriction>();
+    private RadzenDataGrid<Restriction> CustomDataGrid =new();
+    private List<Restriction> restrictions = new();
 
     protected override void OnInitialized()
     {
@@ -76,10 +76,7 @@
         HelpText = GetHelpText();
     }
 
-    private string GetHelpText()
-    {
-        return $"במסך זה ניתן להוסיף מגבלות אחסון ל{ObjectName}. להוספה לחצו על כפתור ההוספה למעלה";
-    }
+    private string GetHelpText() => $"במסך זה ניתן להוסיף מגבלות אחסון ל{ObjectName}. להוספה לחצו על כפתור ההוספה למעלה";
 
     /// <summary>
     /// Add a component to the memory.
@@ -99,7 +96,7 @@
         restrictions.Add(newRestriction);
 
         // Ensure the grid is properly bound by reassigning the list
-        restrictions = new List<Restriction>(restrictions);
+        restrictions = new(restrictions);
 
         // Trigger the UI to re-render with the updated data
         StateHasChanged();
@@ -138,8 +135,6 @@
     async Task DeleteAll()
     {
         restrictions.Clear();
-        CustomDataGrid.Data = restrictions;
-
         await CustomDataGrid.RefreshDataAsync();
     }
 }

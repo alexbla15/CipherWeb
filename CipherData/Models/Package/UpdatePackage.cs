@@ -6,24 +6,23 @@
     /// </summary>
     public class UpdatePackage : CipherClass
     {
+        private string? _PackageDescription;
+        private string? _ActionComments;
+
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Id))]
-        public string? PackageId { get; set; } = null;
-
-        private string? _PackageDescription = null;
+        public string? PackageId { get; set; }
 
         /// <summary>
         /// Description of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Description))]
         public string? PackageDescription {
-            get { return _PackageDescription; }
-            set { _PackageDescription = value?.Trim(); } 
+            get => _PackageDescription; 
+            set => _PackageDescription = value?.Trim();
         }
-
-        private string? _ActionComments = null;
 
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
@@ -31,39 +30,30 @@
         [HebrewTranslation(nameof(ActionComments))]
         public string? ActionComments
         {
-            get { return _ActionComments; }
-            set { _ActionComments = value?.Trim(); }
+            get => _ActionComments;
+            set => _ActionComments = value?.Trim();
         }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Processes))]
-        public List<string>? DestinationProcessesIds { get; set; } = null;
+        public List<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckActionComments()
-        {
-            return CheckField.Required(ActionComments, Translate(nameof(ActionComments)));
-        }
+        public CheckField CheckActionComments() => CheckField.Required(ActionComments, Translate(nameof(ActionComments)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckPackageId()
-        {
-            return CheckField.Required(PackageId, Translate(nameof(PackageId)));
-        }
+        public CheckField CheckPackageId() => CheckField.Required(PackageId, Translate(nameof(PackageId)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckPackageDescription()
-        {
-            return CheckField.Required(PackageDescription, Translate(nameof(PackageDescription)));
-        }
+        public CheckField CheckPackageDescription() => CheckField.Required(PackageDescription, Translate(nameof(PackageDescription)));
 
         /// <summary>
         /// Method to check if field is applicable for this request

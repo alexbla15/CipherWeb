@@ -80,6 +80,12 @@
     /// </summary>
     [Parameter]
     public string? CreateEventJsonRequest { get; set; }
+    
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// API package result to submission. Empty if the submission was unsuccessful.
@@ -99,12 +105,6 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    /// <summary>
-    /// Error message upon improper submission.
-    /// </summary>
-    [Parameter]
-    public string? ErrorMessage { get; set; }
-
     private CipherFormInfo FormInfo = new();
     private CipherSubmit submission = new();
     private CipherComments PackDescription = new();
@@ -120,9 +120,9 @@
     private CipherLocation SetSystem = new();
     private CipherPackagesPicking SetChildren = new();
 
-    private Package? ChosenPackage = null;
-    private Package OriginalPack = new Package("");
-    private Package NewPack = new Package("");
+    private Package? ChosenPackage;
+    private Package OriginalPack = new("");
+    private Package NewPack = new("");
 
     private CipherData.Models.UpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
     private CreateEvent UpdatePackEvent = new();
@@ -131,10 +131,7 @@
 
     private bool FirstInitialization = true;
 
-    protected override void OnInitialized()
-    {
-        GetPackageFromUrl();
-    }
+    protected override void OnInitialized() => GetPackageFromUrl();
 
     public void ChangeNewProps(string prop_name, string new_value)
     {
@@ -189,10 +186,7 @@
             NewPack = ChosenPackage;
         }
 
-        if (!FirstInitialization)
-        {
-            ChangeUrl();
-        }
+        if (!FirstInitialization) ChangeUrl();
 
         StateHasChanged();
     }
@@ -207,7 +201,7 @@
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
         UpdatePackEvent = new();
-        NewPack = new Package("");
+        NewPack = new("");
     }
 
     /// <summary>
@@ -218,10 +212,7 @@
     {
         bool IsChosen = OriginalPackage.ChosenPackage != null;
 
-        if (!IsChosen)
-        {
-            (Valid, ErrorMessage) = (false, "נא לבחור בתעודה אותה רוצים לעדכן.");
-        }
+        if (!IsChosen) (Valid, ErrorMessage) = (false, "נא לבחור בתעודה אותה רוצים לעדכן.");
 
         return IsChosen;
     }

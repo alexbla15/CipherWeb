@@ -39,12 +39,12 @@
 
     private RenderFragment? RenderCipherDataFilter(int objectId) => objectId switch
     {
-        0 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Package)))" />,
-        1 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Vessel)))" />,
-        2 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(StorageSystem)))" />,
-        3 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Event)))" />,
-        4 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Process)))" />,
-        5 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@GetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Category)))" />,
+        0 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Package)))" />,
+        1 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Vessel)))" />,
+        2 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(StorageSystem)))" />,
+        3 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Event)))" />,
+        4 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Process)))" />,
+        5 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Category)))" />,
         _ => null
     };
 
@@ -68,8 +68,5 @@
         return objects;
     }
 
-    public void GetCondition()
-    {
-        Condition = DataFilter.ChosenCondition;
-    }
+    public void SetCondition() => Condition = DataFilter.ChosenCondition;
 }

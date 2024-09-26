@@ -9,17 +9,16 @@ namespace CipherData.Models
     public class ProcessDefinition: Resource
     {
         private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the process
         /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
         public string? Name {
-            get { return _Name; }
-            set { _Name = value?.Trim(); } 
+            get => _Name; 
+            set => _Name = value?.Trim(); 
         }
-
-        private string? _Description = string.Empty;
 
         /// <summary>
         /// Description of process
@@ -27,8 +26,8 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
         public string? Description
         {
-            get { return _Description; }
-            set { _Description = value?.Trim(); }
+            get => _Description;
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
@@ -47,10 +46,9 @@ namespace CipherData.Models
         /// a collection of steps that make a single definitio
         /// </summary>
         /// <param name="id">Only if you want object to have a specific id</param>
-        public ProcessDefinition(string? id = null)
-        {
-            Id = id ?? GetNextId();
-        }
+        public ProcessDefinition(string? id = null) => Id = id ?? GetNextId();
+
+        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -60,12 +58,7 @@ namespace CipherData.Models
         /// <summary>
         /// Get the id of a new object
         /// </summary>
-        /// <returns></returns>
-        public static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"PD{IdCounter:D3}";
-        }
+        public static string GetNextId() => $"PD{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -73,7 +66,6 @@ namespace CipherData.Models
         /// <param name="id">only use if you want the object to have a specific id</param>
         public static ProcessDefinition Random(string? id = null)
         {
-
             string proc_name = RandomFuncs.RandomItem(ProcessesNames);
 
             return new ProcessDefinition(id)
@@ -89,10 +81,7 @@ namespace CipherData.Models
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<ProcessDefinition>, ErrorResponse> All()
-        {
-            return Config.ProcessesDefinitionsRequests.GetProcessDefinitions();
-        }
+        public static Tuple<List<ProcessDefinition>, ErrorResponse> All() => Config.ProcessesDefinitionsRequests.GetProcessDefinitions();
 
         /// <summary>
         /// Fetch all processes definitions which contain the searched text

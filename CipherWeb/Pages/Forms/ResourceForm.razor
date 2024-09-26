@@ -50,12 +50,7 @@
     public void ChangeUrl(NavigationManager Navigation, MySubNavLink CurrNavLink, string? Id = null)
     {
         string? newUrl = CurrNavLink.Href;
-
-        if (Id != null)
-        {
-            newUrl = $"{newUrl}?Id={Id}";
-        }
-
+        if (Id != null) newUrl = $"{newUrl}?Id={Id}";
         Navigation.NavigateTo(newUrl ?? string.Empty);
     }
 }

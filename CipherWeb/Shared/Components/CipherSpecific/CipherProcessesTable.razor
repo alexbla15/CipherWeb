@@ -1,9 +1,4 @@
-﻿@inject ICipherInfo _db
-
-@using OfficeOpenXml
-@using System.IO
-@using OfficeOpenXml.Core.ExcelPackage;
-@inject NavigationManager Navigation
+﻿@using System.IO
 
 @inherits CipherTableCard
 
@@ -88,14 +83,8 @@
     {
         Title ??= "דוח תהליכים";
 
-        if (ChosenProcesses is null)
-        {
-            (ChosenProcesses, error) = CachedData.AllProcesses;
-        }
+        if (ChosenProcesses is null) (ChosenProcesses, error) = CachedData.AllProcesses;
     }
 
-    public IEnumerable<object> values()
-    {
-        return datagrid.View;
-    }
+    public IEnumerable<object> values() => datagrid.View;
 }

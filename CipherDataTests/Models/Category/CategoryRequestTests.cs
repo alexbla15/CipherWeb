@@ -34,10 +34,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckNameTest()
         {
-            CategoryRequest cat = new()
-            {
-                Name = "תכונה" // Good name
-            };
+            CategoryRequest cat = new() { Name = "תכונה" };
             Assert.IsTrue(cat.CheckName().Succeeded);
 
             cat.Name = "@תכונה"; // Improper chars
@@ -56,10 +53,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDescriptionTest()
         {
-            CategoryRequest cat = new()
-            {
-                Description = "תכונה" // Good name
-            };
+            CategoryRequest cat = new() { Description = "תכונה" };
             Assert.IsTrue(cat.CheckDescription().Succeeded);
 
             cat.Description = "@תכונה"; // Improper chars
@@ -78,10 +72,8 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckIdMaskTest()
         {
-            CategoryRequest cat = new();
-            
             // 1 - empty list
-            cat.IdMask = new();
+            CategoryRequest cat = new() { IdMask = new() };
             Assert.IsFalse(cat.CheckIdMask().Succeeded);
 
             // 2 - full list
@@ -92,10 +84,8 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckCreatingProcessesTest()
         {
-            CategoryRequest cat = new();
-
             // 1 - empty list
-            cat.CreatingProcesses = new();
+            CategoryRequest cat = new() { CreatingProcesses = new() };
             Assert.IsFalse(cat.CheckCreatingProcesses().Succeeded);
 
             // 2 - full list
@@ -106,10 +96,8 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckConsumingProcessesTest()
         {
-            CategoryRequest cat = new();
-
             // 1 - empty list
-            cat.ConsumingProcesses = new();
+            CategoryRequest cat = new() { ConsumingProcesses = new() };
             Assert.IsFalse(cat.CheckConsumingProcesses().Succeeded);
 
             // 2 - full list
@@ -120,10 +108,8 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckPropertiesTest()
         {
-            CategoryRequest cat = new();
-
             // 1 - null
-            cat.Properties = null;
+            CategoryRequest cat = new() { Properties = null };
             Assert.IsTrue(cat.CheckProperties().Succeeded);
 
             // 2 - empty
@@ -149,9 +135,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckParentIdTest()
         {
-            CategoryRequest cat = new();
-
-            cat.ParentId = "1"; // Good id
+            CategoryRequest cat = new() { ParentId = "1" }; // Good id
             Assert.IsTrue(cat.CheckParentId().Succeeded);
 
             cat.ParentId = "@1"; // Improper chars
@@ -220,66 +204,8 @@ namespace CipherData.Models.Tests
         }
 
         [TestMethod()]
-        public void DifferentTest()
-        {
-            List<string> IdMasks = new() { "1", "234", "345" };
-            List<ProcessDefinition> CreatingProcs = RandomFuncs.FillRandomObjects(3, ProcessDefinition.Random);
-            List<ProcessDefinition> ConsumingProcs = RandomFuncs.FillRandomObjects(3, ProcessDefinition.Random);
-
-            Category cat = new(nameof(cat))
-            {
-                Name = nameof(cat),
-                Description = nameof(cat),
-                IdMask = IdMasks,
-                Parent = Category.Random()
-            };
-
-            CategoryRequest req = cat.Request();
-
-            Assert.IsFalse(req.Different(cat));
-
-            // 1 - different name
-            req.Name = "B";
-            Assert.IsTrue(req.Different(cat));
-
-            // 2 - different description
-            req.Name = nameof(cat);
-            req.Description = "C";
-            Assert.IsTrue(req.Different(cat));
-
-            // 3 - different IdMask
-            req.Description = nameof(req);
-            req.IdMask = new() { "1", "2", "33" };
-            Assert.IsTrue(req.Different(cat));
-
-            // 4 - different CreatingProcesses
-            req.IdMask = IdMasks;
-            req.CreatingProcesses = new() { "1", "3" };
-            Assert.IsTrue(req.Different(cat));
-
-            // 5 - different ConsumingProcesses
-            req.CreatingProcesses = CreatingProcs.Select(x=>x.Id).ToList();
-            req.ConsumingProcesses = new() { "1", "3" };
-            Assert.IsTrue(req.Different(cat));
-
-            // 6 - different Properties
-            req.ConsumingProcesses = ConsumingProcs.Select(x => x.Id).ToList();
-            req.Properties = new() { CategoryProperty.Random() };
-            Assert.IsTrue(req.Different(cat));
-
-            // 7 - different Parent
-            req.Properties = new();
-            req.ParentId = "001";
-            Assert.IsTrue(req.Different(cat));
-
-            // 8 - null
-            Assert.IsTrue(req.Different(null));
-        }
-
-        [TestMethod()]
         public void CreateTest()
         {
-
             Category cat = new("2")
             {
                 Name = nameof(cat),

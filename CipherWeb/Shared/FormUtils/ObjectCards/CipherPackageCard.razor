@@ -84,7 +84,7 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new List<Package>();
+    public List<Package> packs { get; set; } = new();
 
     /// <summary>
     /// Chosen package to view within card.
@@ -113,10 +113,7 @@
     protected override void OnInitialized()
     {
         // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null)
-        {
-            StateHasChanged();
-        }
+        if (ChosenObject != null) StateHasChanged();
 
         (packs, error) = CachedData.AllPackages;
     }
@@ -131,7 +128,7 @@
         }
         else
         {
-            (PackProcesses, error) = (new List<Process>(), ErrorResponse.Success);
+            (PackProcesses, error) = (new(), ErrorResponse.Success);
         }
 
         ChangeObject.InvokeAsync();

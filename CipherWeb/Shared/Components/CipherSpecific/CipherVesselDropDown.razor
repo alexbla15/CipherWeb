@@ -59,9 +59,6 @@
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 
-        if (AllVessels.Count == 0)
-        {
-            (AllVessels, Error) = CachedData.AllVessels;
-        }
+        if (AllVessels.Count == 0) (AllVessels, Error) = CachedData.AllVessels;
     }
 }

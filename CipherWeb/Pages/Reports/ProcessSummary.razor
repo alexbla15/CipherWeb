@@ -108,58 +108,58 @@
 
     public class ProductionData
     {
-        public string Month { get; set; }
+        public string? Month { get; set; }
+        public string? Process { get; set; }
+        public string? Reagent { get; set; }
+        public string? Product { get; set; }
         public double Mass { get; set; }
-        public string Process { get; set; }
-        public string Reagent { get; set; }
-        public string Product { get; set; }
     }
 
     public static readonly ProductionData[] productionData = new ProductionData[]
     {
-        new ProductionData {Month="1", Mass=10, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="3", Mass=8, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="4", Mass=9, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="6", Mass=9, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="7", Mass=8, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="9", Mass=10, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="10", Mass=9, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
-        new ProductionData {Month="12", Mass=9, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
+        new () {Month="1", Mass=10, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
+        new () {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
+        new () {Month="3", Mass=8, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
+        new () {Month="4", Mass=9, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
+        new () {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
+        new () {Month="6", Mass=9, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
+        new () {Month="7", Mass=8, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
+        new () {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
+        new () {Month="9", Mass=10, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
+        new () {Month="10", Mass=9, Reagent="מגיב א", Product="תוצר א", Process="תהליך א"},
+        new () {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר א", Process="תהליך א"},
+        new () {Month="12", Mass=9, Reagent="מגיב ג", Product="תוצר א", Process="תהליך א"},
 
-        new ProductionData {Month="1", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
-        new ProductionData {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
-        new ProductionData {Month="3", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
-        new ProductionData {Month="4", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
-        new ProductionData {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
-        new ProductionData {Month="6", Mass=9, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
-        new ProductionData {Month="7", Mass=8, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
-        new ProductionData {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
-        new ProductionData {Month="9", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
-        new ProductionData {Month="10", Mass=9, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
-        new ProductionData {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
-        new ProductionData {Month="12", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
+        new () {Month="1", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
+        new () {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
+        new () {Month="3", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
+        new () {Month="4", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
+        new () {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
+        new () {Month="6", Mass=9, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
+        new () {Month="7", Mass=8, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
+        new () {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
+        new () {Month="9", Mass=10, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
+        new () {Month="10", Mass=9, Reagent="מגיב ב", Product="תוצר ב", Process="תהליך ב"},
+        new () {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ב"},
+        new () {Month="12", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ב"},
 
-        new ProductionData {Month="1", Mass=10, Reagent="מגיב א", Product="תוצר א", Process="תהליך ג"},
-        new ProductionData {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ג"},
-        new ProductionData {Month="3", Mass=8, Reagent="מגיב ג", Product="תוצר ב", Process="תהליך ג"},
-        new ProductionData {Month="4", Mass=9, Reagent="מגיב א", Product="תוצר ב", Process="תהליך ג"},
-        new ProductionData {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ג"},
-        new ProductionData {Month="6", Mass=9, Reagent="מגיב ג", Product="תוצר ג", Process="תהליך ג"},
-        new ProductionData {Month="7", Mass=8, Reagent="מגיב א", Product="תוצר א", Process="תהליך ג"},
-        new ProductionData {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ג"},
-        new ProductionData {Month="9", Mass=10, Reagent="מגיב ג", Product="תוצר ב", Process="תהליך ג"},
-        new ProductionData {Month="10", Mass=9, Reagent="מגיב א", Product="תוצר ב", Process="תהליך ג"},
-        new ProductionData {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ג"},
-        new ProductionData {Month="12", Mass=9, Reagent="מגיב ג", Product="תוצר ג", Process="תהליך ג"}
+        new () {Month="1", Mass=10, Reagent="מגיב א", Product="תוצר א", Process="תהליך ג"},
+        new () {Month="2", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ג"},
+        new () {Month="3", Mass=8, Reagent="מגיב ג", Product="תוצר ב", Process="תהליך ג"},
+        new () {Month="4", Mass=9, Reagent="מגיב א", Product="תוצר ב", Process="תהליך ג"},
+        new () {Month="5", Mass=10, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ג"},
+        new () {Month="6", Mass=9, Reagent="מגיב ג", Product="תוצר ג", Process="תהליך ג"},
+        new () {Month="7", Mass=8, Reagent="מגיב א", Product="תוצר א", Process="תהליך ג"},
+        new () {Month="8", Mass=9, Reagent="מגיב ב", Product="תוצר א", Process="תהליך ג"},
+        new () {Month="9", Mass=10, Reagent="מגיב ג", Product="תוצר ב", Process="תהליך ג"},
+        new () {Month="10", Mass=9, Reagent="מגיב א", Product="תוצר ב", Process="תהליך ג"},
+        new () {Month="11", Mass=8, Reagent="מגיב ב", Product="תוצר ג", Process="תהליך ג"},
+        new () {Month="12", Mass=9, Reagent="מגיב ג", Product="תוצר ג", Process="תהליך ג"}
     };
 
     public List<ProductionData> GetProductionData()
     {
-        List<ProductionData> resultData = new List<ProductionData> { };
+        List<ProductionData> resultData = new();
 
         foreach (ProductionData data in productionData)
         {
@@ -176,7 +176,7 @@
     {
         List<ProductionData> resultData = GetProductionData();
 
-        Dictionary<string, Dictionary<string, double>> values = new Dictionary<string, Dictionary<string, double>>();
+        Dictionary<string, Dictionary<string, double>> values = new();
 
         foreach (ProductionData data in resultData)
         {
@@ -198,18 +198,13 @@
             }
         }
 
-        List<string> monthOrder = new List<string>
-        {
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
-        };
+        List<string> monthOrder = new() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
 
         // Order by months
         var orderedValues = values.ToDictionary(
             product => product.Key,
             product => product.Value.OrderBy(month => monthOrder.IndexOf(month.Key)).ToDictionary(pair => pair.Key, pair => pair.Value)
         );
-
-
 
         ProdA.Clear();
         ProdB.Clear();
@@ -219,20 +214,9 @@
         {
             foreach (string month in orderedValues[proc].Keys)
             {
-                if (proc == "תוצר א")
-                {
-                    ProdA.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
-                }
-
-                if (proc == "תוצר ב")
-                {
-                    ProdB.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
-                }
-
-                if (proc == "תוצר ג")
-                {
-                    ProdC.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
-                }
+                if (proc == "תוצר א") ProdA.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
+                if (proc == "תוצר ב") ProdB.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
+                if (proc == "תוצר ג") ProdC.Add(new DataItem { Month = month, Mass = orderedValues[proc][month] });
             }
         }
 
@@ -241,29 +225,18 @@
 
     public Production production = new Production
         {
-            dataItems = new List<List<DataItem>> { ProdA, ProdB, ProdC },
+            dataItems = new() { ProdA, ProdB, ProdC },
             Titles = output_options,
             ShowDataItems = new bool[] { true, true, true }
         };
 
-    public class SearchParameter
-    {
-        public string Icon { get; set; }
-        public string Label { get; set; }
-        public List<string> Options { get; set; }
-        public IEnumerable<string> BindValue { get; set; }
-    }
-
-    List<SearchParameter> searchParameters = new List<SearchParameter> {
-        new SearchParameter {Icon=Icons.Cipher.Process, Label="תהליכים", Options=proc_options, BindValue=selectedProcs},
-        new SearchParameter {Icon=Icons.Arrows.Squared.input, Label="חומרי הגלם", Options=input_options, BindValue=selectedReagents},
-        new SearchParameter {Icon=Icons.Arrows.Squared.output, Label="תוצרים", Options=output_options, BindValue=selectedProducts }
+    List<SearchParameter> searchParameters = new() {
+        new() {Icon=Icons.Cipher.Process, Label="תהליכים", Options=proc_options, BindValue=selectedProcs},
+        new() {Icon=Icons.Arrows.Squared.input, Label="חומרי הגלם", Options=input_options, BindValue=selectedReagents},
+        new() {Icon=Icons.Arrows.Squared.output, Label="תוצרים", Options=output_options, BindValue=selectedProducts }
     };
 
-    void SwitchView()
-    {
-        summaryView = (summaryView == "graph") ? "table" : "graph";
-    }
+    void SwitchView() => summaryView = (summaryView == "graph") ? "table" : "graph";
 
     void SelectionChanged()
     {

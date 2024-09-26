@@ -18,24 +18,24 @@
     public class Report
     {
         public int Uid { get; set; }
-        public string Name { get; set; }
-        public string Creator { get; set; }
+        public string? Name { get; set; }
+        public string? Creator { get; set; }
+        public string? Path { get; set; }
         public DateTime CreationDate { get; set; }
-        public string Path { get; set; }
     }
 
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
     [Parameter]
-    public List<Report> AllReports { get; set; } = new List<Report>()
+    public List<Report> AllReports { get; set; } = new()
     {
-        new Report(){Uid=1, Name="דוח תעודות", Creator="אבי", CreationDate=DateTime.Today, Path=CipherNavLinks.PackagesReport.Href},
-        new Report(){Uid=2, Name="דוח תנועות", Creator="אבי", CreationDate=DateTime.Today.AddDays(1), Path=CipherNavLinks.EventsReport.Href},
-        new Report(){Uid=3, Name="דוח סוגים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddMonths(1), Path=CipherNavLinks.CategoriesReport.Href},
-        new Report(){Uid=4, Name="דוח מיקומים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href},
-        new Report(){Uid=5, Name="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href}
+        new() {Uid=1, Name="דוח תעודות", Creator="אבי", CreationDate=DateTime.Today, Path=CipherNavLinks.PackagesReport.Href},
+        new() {Uid=2, Name="דוח תנועות", Creator="אבי", CreationDate=DateTime.Today.AddDays(1), Path=CipherNavLinks.EventsReport.Href},
+        new() {Uid=3, Name="דוח סוגים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddMonths(1), Path=CipherNavLinks.CategoriesReport.Href},
+        new() {Uid=4, Name="דוח מיקומים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href},
+        new() {Uid=5, Name="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href}
     };
 
-    private RadzenDataGrid<Report> CustomDataGrid;
+    private RadzenDataGrid<Report> CustomDataGrid = new();
 }

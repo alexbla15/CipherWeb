@@ -102,7 +102,7 @@
     }
 
     private Model model = new Model();
-    private RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
+    private RadzenRequiredValidator RequiredValidator = new();
 
     protected override void OnInitialized()
     {
@@ -126,15 +126,9 @@
         }
     }
 
-    public DateTime GetDateTime()
-    {
-        return model.value;
-    }
+    public DateTime GetDateTime() => model.value;
 
-    public bool Check()
-    {
-        return RequiredValidator.IsValid;
-    }
+    public bool Check() => RequiredValidator.IsValid;
 }
 
 <RadzenTemplateForm TItem="Model" Data=@model>

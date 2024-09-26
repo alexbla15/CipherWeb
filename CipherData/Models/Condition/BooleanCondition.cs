@@ -61,6 +61,7 @@
     public class BooleanCondition : Condition
     {
         private string? _Attribute = string.Empty;
+        private string? _Value = null;
 
         /// <summary>
         /// Attribute's name in event's object. 
@@ -69,8 +70,8 @@
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Attribute))]
         public string? Attribute { 
-            get { return _Attribute; }
-            set { _Attribute = value?.Trim(); }
+            get => _Attribute;
+            set => _Attribute = value?.Trim();
         }
 
         /// <summary>
@@ -84,8 +85,6 @@
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; }
-
-        private string? _Value = null;
 
         /// <summary>
         /// Target value for comparision. 
@@ -101,10 +100,7 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckAttribute()
-        {
-            return CheckField.Required(Attribute, Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
-        }
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -118,7 +114,6 @@
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
-        /// <returns></returns>
         public Tuple<bool, string> Check()
         {
             CheckClass result = new();

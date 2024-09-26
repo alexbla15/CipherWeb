@@ -37,8 +37,7 @@ namespace CipherWeb.Data
             Href = $"{nameof(Forms)}/{nameof(Updates)}",
             Icon = Icons.Design.rebase_edit,
             Name = "עריכת נתונים",
-            SubLinks = new()
-                { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
+            SubLinks = new() { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
         };
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.Done, Name = "אישור תנועות" };
@@ -80,9 +79,6 @@ namespace CipherWeb.Data
 
         public static readonly MyNavLink Information = new() { Href = nameof(Information), Icon = Icons.Communication.Chat.question_answer, Name = "הסברים ותמיכה" };
 
-        public static readonly List<MyNavLink> links = new()
-        {
-            Home, Forms, Updates, Approval, Reports, Searches, Information
-        };
+        public static readonly List<MyNavLink> links = new() { Home, Forms, Updates, Approval, Reports, Searches, Information };
     }
 }

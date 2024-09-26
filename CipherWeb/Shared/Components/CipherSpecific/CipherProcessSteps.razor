@@ -53,9 +53,7 @@
     {
         // Add the new restriction to the existing list
         ChosenSteps.Add(new());
-
         StateHasChanged();
-
         await StepsDataGrid.RefreshDataAsync();
     }
 
@@ -66,11 +64,7 @@
     async Task DeleteStep(ProcessStepDefinition step)
     {
         ChosenSteps.Remove(step);
-
-        StepsDataGrid.Data = ChosenSteps;
-
         await StepsDataGrid.RefreshDataAsync();
-
         StateHasChanged();
     }
 
@@ -81,8 +75,6 @@
     async Task DeleteAllSteps()
     {
         ChosenSteps.Clear();
-        StepsDataGrid.Data = ChosenSteps;
-
         await StepsDataGrid.RefreshDataAsync();
     }
 

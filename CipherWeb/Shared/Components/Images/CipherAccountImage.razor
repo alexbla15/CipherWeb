@@ -31,28 +31,17 @@
     [Inject]
     public IJSRuntime JSRuntime { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Path = "Images/UserPic.jpg";
-    }
+    protected override void OnInitialized() => Path = "Images/UserPic.jpg";
 
     /// <summary>
     /// Change border style on mouse over
     /// </summary>
-    /// <returns></returns>
-    private async Task OnMouseOver()
-    {
-        Border = $"1.5px solid var(--cipher-header-color)";
-    }
+    private void OnMouseOver() => Border = $"1.5px solid var(--cipher-header-color)";
 
     /// <summary>
     /// Reset border style on mouse out
     /// </summary>
-    /// <returns></returns>
-    private async Task OnMouseOut()
-    {
-        Border = "";
-    }
+    private void OnMouseOut() => Border = "";
 }
 
 <RadzenImage Path="@Path"

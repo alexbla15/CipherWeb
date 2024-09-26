@@ -9,18 +9,7 @@
 
         public static string CurrnetRole { get; set; } = SysManager;
 
-        public static List<string> Get()
-        {
-            return new List<string>() { Manager, SysManager, Authorizer, Engineer};
-        }
-    }
-
-    public class EventStatus
-    {
-        public const string Pending = "מחכה לאישור";
-        public const string Warning = "תנועה תקולה";
-        public const string Accepted = "תנועה מאושרת";
-        public const string Denied = "תנועה נדחתה";
+        public static List<string> Get() => new() { Manager, SysManager, Authorizer, Engineer};
     }
 
     /// <summary>

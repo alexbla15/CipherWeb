@@ -4,27 +4,26 @@ namespace CipherData.Models
 {
     public class Vessel : Resource
     {
-        private string? _Name = null;
+        private string? _Name;
+        private string? _Type = string.Empty;
 
         /// <summary>
         /// Name of vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public string? Name { get { return _Name; } set { _Name = value?.Trim(); } }
-
-        private string _Type = string.Empty;
+        public string? Name { get => _Name; set => _Name = value?.Trim(); }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string Type { get { return _Type; } set { _Type = value.Trim(); } }
-
+        public string? Type { get => _Type; set => _Type = value?.Trim(); }       
+            
         /// <summary>
         /// Packages within the vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
-        public List<Package>? ContainingPackages { get; set; } = null;
+        public List<Package>? ContainingPackages { get; set; }
 
         /// <summary>
         /// System in which vessel is at
@@ -47,11 +46,9 @@ namespace CipherData.Models
         /// Transfrom package object to a VesselRequest object
         /// </summary>
         /// <returns></returns>
-        public VesselRequest Request()
-        {
-            return new VesselRequest()
-            { Name = Name, Type = Type, SystemId = System.Id };
-        }
+        public VesselRequest Request() => new() { Name = Name, Type = Type, SystemId = System.Id };
+
+        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -62,11 +59,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"V{IdCounter:D3}";
-        }
+        public static string GetNextId() => $"V{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -80,7 +73,7 @@ namespace CipherData.Models
             {
                 Type = RandomFuncs.RandomItem(VesselTypes),
                 System = StorageSystem.Random(),
-                ContainingPackages = new List<Package>() { new Package("VP") }
+                ContainingPackages = new List<Package>() { new("VP") }
             };
         }
 
@@ -91,18 +84,12 @@ namespace CipherData.Models
         /// </summary>
         /// <param name="id">vessel ID</param>
         /// <returns></returns>
-        public static Tuple<Vessel, ErrorResponse> Get(string id)
-        {
-            return Config.VesselsRequests.GetVessel(id);
-        }
+        public static Tuple<Vessel, ErrorResponse> Get(string id) => Config.VesselsRequests.GetVessel(id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Vessel>, ErrorResponse> All()
-        {
-            return Config.VesselsRequests.GetVessels();
-        }
+        public static Tuple<List<Vessel>, ErrorResponse> All() => Config.VesselsRequests.GetVessels();
 
         /// <summary>
         /// Fetch all vessels which contain the searched text

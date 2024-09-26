@@ -51,16 +51,12 @@
         {
             CheckClass result = new();
             result.Fields.Add(CheckConditions());
-
             return result.Check();
         }
 
         /// <summary>
         /// Create a random object.
         /// </summary>
-        public static GroupedBooleanCondition Random()
-        {
-            return new GroupedBooleanCondition();
-        }
+        public static GroupedBooleanCondition Random() => new();
     }
 }

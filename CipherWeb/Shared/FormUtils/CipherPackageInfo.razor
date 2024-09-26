@@ -74,10 +74,7 @@
     private Package NewPackage = new();
     private List<PackageProperty> ChosenProperties = new();
 
-    protected override void OnInitialized()
-    {
-        (AllVessels, Error) = CachedData.AllVessels;
-    }
+    protected override void OnInitialized() => (AllVessels, Error) = CachedData.AllVessels;
 
     public Package Value()
     {
@@ -126,14 +123,7 @@
     /// </summary>
     private void ChangeView()
     {
-        if (InnerPacks.SelectedPackages is null)
-        {
-            AssemblyOfPackages = false;
-        }
-        else
-        {
-            AssemblyOfPackages = (InnerPacks.SelectedPackages.Count() > 0);
-        }
+        AssemblyOfPackages = (InnerPacks.SelectedPackages is null) ?  false : (InnerPacks.SelectedPackages.Count() > 0);
     }
 
     /// <summary>
@@ -148,7 +138,7 @@
 
     public void SetNewPackage()
     {
-        NewPackage = new Package();
+        NewPackage = new();
 
         NewPackage = Value();
 

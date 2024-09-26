@@ -88,7 +88,6 @@ namespace CipherData.Models.Tests
         public void RandomTest()
         {
             GroupedBooleanCondition rand_obj = GroupedBooleanCondition.Random();
-
             Assert.IsNotNull(rand_obj.Conditions);
         }
     }

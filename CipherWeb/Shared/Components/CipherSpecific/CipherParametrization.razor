@@ -25,10 +25,7 @@
     private List<CipherField> OptionalTypes = CommonFuncs.GetAllCipherFields();
     private ReportParameter old_param = new();
 
-    protected override void OnInitialized()
-    {
-        Title ??= "פרמטרי משתמש";
-    }
+    protected override void OnInitialized() => Title ??= "פרמטרי משתמש";
 
     /// <summary>
     /// Add a parameter to the memory.
@@ -49,7 +46,6 @@
     async Task DeleteRow(ReportParameter param)
     {
         ChosenParameters.Remove(param);
-
         await CustomDataGrid.RefreshDataAsync();
     }
 
@@ -59,8 +55,7 @@
     /// <returns></returns>
     async Task DeleteAll()
     {
-        ChosenParameters = new List<ReportParameter>();
-        
+        ChosenParameters = new();
         await CustomDataGrid.RefreshDataAsync();
     }
 }

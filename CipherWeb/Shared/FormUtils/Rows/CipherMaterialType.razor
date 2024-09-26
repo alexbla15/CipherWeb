@@ -27,7 +27,7 @@
     public Category? ChosenMaterialType { get; set; }
 
     private ErrorResponse error = ErrorResponse.Success;
-    private List<Category> categories = new List<Category>();
+    private List<Category> categories = new();
 
     protected override void OnInitialized()
     {

@@ -4,27 +4,28 @@ namespace CipherData.Models
 {
     public class Category : Resource
     {
-        private string _Name = string.Empty;
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
+        private Category? _MaterialType = null;
+        private Category? _Parent = null;
 
         /// <summary>
         /// Name of the category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Name))]
-        public string Name { 
-            get { return _Name; }
-            set { _Name = value.Trim(); } 
+        public string? Name { 
+            get => _Name; 
+            set => _Name = value?.Trim();  
         }
-
-        private string _Description = string.Empty;
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Description))]
-        public string Description
+        public string? Description
         {
-            get { return _Description; }
-            set { _Description = value.Trim(); }
+            get => _Description;
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace CipherData.Models
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Properties))]
-        public List<CategoryProperty>? Properties { get; set; } = null;
+        public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
@@ -51,27 +52,21 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
         public List<ProcessDefinition> ConsumingProcesses { get; set; } = new();
 
-        private Category? _MaterialType = null;
-
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(MaterialType))]
         public Category? MaterialType {
-            get { return _MaterialType; }
-            set {
-                _MaterialType = value ?? _MaterialType;
-            }
+            get => _MaterialType;
+            set => _MaterialType = value ?? _MaterialType;
         }
-
-        private Category? _Parent = null;
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Parent))]
         public Category? Parent {
-            get { return _Parent; }
+            get => _Parent;
             set
             {
                 _Parent = value;
@@ -83,7 +78,7 @@ namespace CipherData.Models
         /// Child categories contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Children))]
-        public List<Category>? Children { get; set; } = null;
+        public List<Category>? Children { get; set; }
 
         /// <summary>
         /// Instanciation of new Category.
@@ -112,6 +107,8 @@ namespace CipherData.Models
             };
         }
 
+        // STATIC METHODS
+
         /// <summary>
         /// Counts how many packages were created.
         /// </summary>
@@ -121,11 +118,7 @@ namespace CipherData.Models
         /// Get the id of a new object
         /// </summary>
         /// <returns></returns>
-        private static string GetNextId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter:D3}";
-        }
+        private static string GetNextId() => $"C{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.
@@ -153,15 +146,7 @@ namespace CipherData.Models
         /// Get a random new object of Material type category.
         /// </summary>
         /// <param name="name">name of material type</param>
-        public static Category RandomMaterialType(string name)
-        {
-            Category MaterialType = new()
-            {
-                Name = name
-            };
-
-            return MaterialType;
-        }
+        public static Category RandomMaterialType(string name) => new() { Name = name }; 
 
         // API-RELATED FUNCTIONS
 
@@ -171,35 +156,25 @@ namespace CipherData.Models
         /// <param name="id">object ID</param>
         public static Tuple<Category, ErrorResponse> Get(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new (new Category(), ErrorResponse.BadRequest);
-            }
-
+            if (string.IsNullOrEmpty(id)) return new (new Category(), ErrorResponse.BadRequest);
             return Config.CategoriesRequests.GetCategory(id);
         }
 
         /// <summary>
         /// All categories
         /// </summary>
-        public static Tuple<List<Category>, ErrorResponse> All()
-        {
-            return Config.CategoriesRequests.GetCategories();
-        }
+        public static Tuple<List<Category>, ErrorResponse> All() => Config.CategoriesRequests.GetCategories();
 
         /// <summary>
         /// Fetch all categories which contain the searched text
         /// </summary>
         public static Tuple<List<Category>, ErrorResponse> Containing(string SearchText)
         {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return new(new(), ErrorResponse.BadRequest);
-            }
+            if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
 
             return GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition() { Conditions = new List<BooleanCondition>() {
                 new () { Attribute = $"{typeof(Category).Name}.{nameof(Id)}", Value = SearchText },
-                new() { Attribute = $"{typeof(Category).Name}.{nameof(Name)}", Value = SearchText },
+                new () { Attribute = $"{typeof(Category).Name}.{nameof(Name)}", Value = SearchText },
                 new () { Attribute = $"{typeof(Category).Name}.{nameof(Description)}", Value = SearchText },
                 new () { Attribute = $"{typeof(Category).Name}.{nameof(IdMask)}", Value = SearchText, Operator = Operator.Any },
                 new () { Attribute = $"{typeof(Category).Name}.{nameof(MaterialType)}", Value = SearchText },

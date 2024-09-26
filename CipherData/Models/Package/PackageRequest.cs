@@ -15,22 +15,28 @@
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
-        /// JSON-like additional properties of the package
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
-        public List<PackageProperty>? Properties { get; set; } = null;
-
-        /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Vessel))]
-        public string? VesselId { get; set; } = null;
+        public string? VesselId { get; set; }
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.System))]
         public string SystemId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Category (Id) of package
+        /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Category))]
+        public string CategoryId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// JSON-like additional properties of the package
+        /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
+        public List<PackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Total mass of the package
@@ -48,59 +54,38 @@
         /// Parent (Id) containing this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Parent))]
-        public string? ParentId { get; set; } = null;
+        public string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Children))]
-        public List<string>? ChildrenIds { get; set; } = null;
-
-        /// <summary>
-        /// Category (Id) of package
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Category))]
-        public string CategoryId { get; set; } = string.Empty;
+        public List<string>? ChildrenIds { get; set; } 
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckId()
-        {
-            return CheckField.Required(Id, Translate(nameof(Id)));
-        }
+        public CheckField CheckId() => CheckField.Required(Id, Translate(nameof(Id)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckCategoryId()
-        {
-            return CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
-        }
+        public CheckField CheckCategoryId() => CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckSystemId()
-        {
-            return CheckField.Required(SystemId, Translate(nameof(SystemId)));
-        }
+        public CheckField CheckSystemId() => CheckField.Required(SystemId, Translate(nameof(SystemId)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckBrutMass()
-        {
-            return CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
-        }
+        public CheckField CheckBrutMass() => CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckNetMass()
-        {
-            return CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
-        }
+        public CheckField CheckNetMass() => CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -170,9 +155,6 @@
         /// <summary>
         /// Get a random new object.
         /// </summary>
-        public static PackageRequest Random(string? id = null)
-        {
-            return Package.Random(id).Request();
-        }
+        public static PackageRequest Random(string? id = null) => Package.Random(id).Request();
     }
 }

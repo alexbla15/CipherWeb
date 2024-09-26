@@ -76,20 +76,11 @@
     /// <summary>
     /// Close the shown alert.
     /// </summary>
-    private void CloseAlert()
-    {
-        alertVisible = false;
-    }
+    private void CloseAlert() => alertVisible = false;
 
-    public void SetValid(bool value)
-    {
-        Valid = value;
-    }
+    public void SetValid(bool value) => Valid = value;
 
-    public void SetErrorMessage(string msg)
-    {
-        ErrorMessage = msg;
-    }
+    public void SetErrorMessage(string msg) => ErrorMessage = msg;
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard" ButtonsGap="10px" ContentPadding="" Visible="@Visible">

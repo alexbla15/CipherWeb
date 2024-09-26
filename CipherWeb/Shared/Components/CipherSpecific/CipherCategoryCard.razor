@@ -73,10 +73,7 @@
         Title ??= "פרטי הקטגוריה";
 
         // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null)
-        {
-            StateHasChanged();
-        }
+        if (ChosenObject != null) StateHasChanged();
     }
 
     public void Change()
@@ -88,16 +85,16 @@
 
     public CategoryRequest Value()
     {
-        CategoryRequest cat = new();
-
-        cat.ParentId = ParentCat.ChosenCategory?.Id;
-        cat.Name = CatName.Value;
-        cat.Description = CatDescription.Value;
-        cat.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        cat.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        cat.Properties = CatProperties.ChosenProperties;
-        cat.IdMask = CatMask.GetValue();
-
+        CategoryRequest cat = new()
+        {
+            ParentId = ParentCat.ChosenCategory?.Id,
+            Name = CatName.Value,
+            Description = CatDescription.Value,
+            CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList(),
+            ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList(),
+            Properties = CatProperties.ChosenProperties,
+            IdMask = CatMask.GetValue()
+        };
         return cat;
     }
 
@@ -111,10 +108,7 @@
 
         if (parent != null)
         {
-            if (parent.Properties != null)
-            {
-                ParentProps = parent?.Properties;
-            }
+            if (parent.Properties != null) ParentProps = parent?.Properties;
         }
     }
 }

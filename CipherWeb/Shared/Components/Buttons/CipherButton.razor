@@ -26,91 +26,86 @@
     /// Text that will be shown within a popup to explain shortly the button's purpose.
     /// </summary>
     [Parameter]
-    public string HelpText { get; set; }
+    public string HelpText { get; set; } = string.Empty;
 
     /// <summary>
     /// Button's width. Units: px / %.
     /// </summary>
     [Parameter]
-    public string Width { get; set; }
+    public string Width { get; set; } = string.Empty;
 
     /// <summary>
     /// Maximal width of button. 
     /// Pay attention to match the units with the Width attribute.
     /// </summary>
     [Parameter]
-    public string MaxWidth { get; set; }
+    public string MaxWidth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 
-    // Minimal width of button.
+    /// Minimal width of button.
     /// Pay attention to match the units with the Width attribute.
     /// </summary>
     [Parameter]
-    public string MinWidth { get; set; }
+    public string MinWidth { get; set; } = string.Empty;
 
     /// <summary>
     /// Button's height. Units: px / %.
     /// </summary>
     [Parameter]
-    public string Height { get; set; }
+    public string Height { get; set; } = string.Empty;
 
     /// <summary>
     /// Maximal height of button.
     /// Pay attention to match the units with the Height attribute.
     /// </summary>
     [Parameter]
-    public string MaxHeight { get; set; }
+    public string MaxHeight { get; set; } = string.Empty;
 
     /// <summary>
     /// Minimal height of button.
     /// Pay attention to match the units with the Height attribute.
     /// </summary>
     [Parameter]
-    public string MinHeight { get; set; }
+    public string MinHeight { get; set; } = string.Empty;
 
     /// <summary>
     /// Alignment of the text within the button.
     /// </summary>
     [Parameter]
-    public string ButtonTextAlign { get; set; }
+    public string ButtonTextAlign { get; set; } = string.Empty;
 
     /// <summary>
     /// Define amount of space at the right-outside the button.
     /// </summary>
     [Parameter]
-    public string MarginRight { get; set; }
+    public string MarginRight { get; set; } = string.Empty;
 
     /// <summary>
     /// Define amount of space at the left-outside the button.
     /// </summary>
     [Parameter]
-    public string MarginLeft { get; set; }
+    public string MarginLeft { get; set; } = string.Empty;
 
     /// <summary>
     /// Define amount of space at the top-outside the button.
     /// </summary>
     [Parameter]
-    public string MarginTop { get; set; }
+    public string MarginTop { get; set; } = string.Empty;
 
     /// <summary>
     /// Define amount of space at the bottom-outside the button.
     /// </summary>
     [Parameter]
-    public string MarginBottom { get; set; }
+    public string MarginBottom { get; set; } = string.Empty;
 
     /// <summary>
     /// Define amount of space outside the content of the button.
     /// </summary>
     [Parameter]
-    public string Padding { get; set; }
+    public string Padding { get; set; } = string.Empty;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private string StyleClass = "";
+    private string StyleClass = string.Empty;
     
-
     void ShowTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
     {
         if (!string.IsNullOrWhiteSpace(HelpText))
@@ -159,7 +154,6 @@
         string btn_cls = "CipherButton ";
         if (Disabled)
         {
-
             btn_cls += " Disabled";
         }
         else

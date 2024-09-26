@@ -17,7 +17,7 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new List<Package>();
+    public List<Package> packs { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -29,7 +29,7 @@
     /// All packages chosen
     /// </summary>
     [Parameter]
-    public List<Package> SelectedPackages { get; set; } = new List<Package>();
+    public List<Package> SelectedPackages { get; set; } = new();
 
     /// <summary>
     /// Change event

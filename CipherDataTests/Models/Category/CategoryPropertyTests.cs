@@ -24,10 +24,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckNameTest()
         {
-            CategoryProperty cat = new()
-            {
-                Name = "תכונה" // Good name
-            };
+            CategoryProperty cat = new() { Name = "תכונה" }; // Good name
             Assert.IsTrue(cat.CheckName().Succeeded);
 
             cat.Name = "@תכונה"; // Improper chars
@@ -46,10 +43,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDescriptionTest()
         {
-            CategoryProperty cat = new()
-            {
-                Description = "תכונה" // Good name
-            };
+            CategoryProperty cat = new() { Description = "תכונה" }; 
             Assert.IsTrue(cat.CheckDescription().Succeeded);
 
             cat.Description = "@תכונה"; // Improper chars
@@ -68,10 +62,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckDefaultValueTest()
         {
-            CategoryProperty cat = new()
-            {
-                DefaultValue = "תכונה" // Good name
-            };
+            CategoryProperty cat = new() { DefaultValue = "תכונה" };
             Assert.IsTrue(cat.CheckDefaultValue().Succeeded);
 
             cat.DefaultValue = "@תכונה"; // Improper chars

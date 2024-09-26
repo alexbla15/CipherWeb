@@ -17,7 +17,6 @@ namespace CipherData.Models.Tests
         public void CheckAttributeTest()
         {
             BooleanCondition cat = new() { Attribute = "תכונה" }; // Good name
-
             Assert.IsTrue(cat.CheckAttribute().Succeeded);
 
             cat.Attribute = "@תכונה"; // Improper chars
@@ -36,10 +35,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckValueTest()
         {
-            BooleanCondition cat = new()
-            {
-                Value = "תכונה" // Good name
-            };
+            BooleanCondition cat = new() { Value = "תכונה" };
             Assert.IsTrue(cat.CheckValue().Succeeded);
 
             cat.Value = "@תכונה"; // Improper chars

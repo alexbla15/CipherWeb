@@ -92,17 +92,17 @@
     /// Schudler events are set by selected system.
     /// </summary>
     [Parameter]
-    public string SelectedSystem { get; set; }
+    public string SelectedSystem { get; set; } = string.Empty;
 
     /// <summary>
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<Process> Processes { get; set; } = new List<Process>();
+    public List<Process> Processes { get; set; } = new();
 
-    private RadzenScheduler<Process> scheduler;
+    private RadzenScheduler<Process> scheduler = new();
 
-    private Dictionary<string, string> ProcessColoring = new Dictionary<string, string>()
+    private Dictionary<string, string> ProcessColoring = new()
             {
                 [ProcessDefinition.ProcessesNames[0]] = Colors.Primary,
                 [ProcessDefinition.ProcessesNames[1]] = Colors.Danger,
@@ -210,10 +210,6 @@
     /// <summary>
     /// Closes tooltip at the end of the hovering on an event.
     /// </summary>
-    /// <param name="args"></param>
-    void OnProcessMouseLeave(SchedulerAppointmentMouseEventArgs<Process> args)
-    {
-        TooltipService.Close();
-    }
+    void OnProcessMouseLeave(SchedulerAppointmentMouseEventArgs<Process> args) => TooltipService.Close();
 
 }

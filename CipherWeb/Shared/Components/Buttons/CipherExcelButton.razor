@@ -20,13 +20,13 @@
     /// Name of output file.
     /// </summary>
     [Parameter]
-    public string FileName { get; set; }
+    public string? FileName { get; set; }
 
     /// <summary>
     /// Data that will be exported to Excel.
     /// </summary>
     [Parameter]
-    public IEnumerable<object> Data { get; set; }
+    public IEnumerable<object>? Data { get; set; }
 
     protected override void OnInitialized()
     {
@@ -36,10 +36,7 @@
 
     private async Task ExportToCSV()
     {
-        if (Data == null || !Data.Any())
-        {
-            return; // Exit if there's no data
-        }
+        if (Data == null || !Data.Any()) return; // Exit if there's no data
 
         var csvData = GenerateCSV(Data);
         var fileName = $"{FileName}.csv"; // Change the file extension to .csv
@@ -56,43 +53,6 @@
         // Trigger download
         await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", url, fileName);
     }
-
-    //private string GenerateCSV(IEnumerable<object> data)
-    //{
-    //    using (MemoryStream stream = new MemoryStream())
-    //    {
-    //        using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-    //        {
-    //            // Write header row
-    //            Type modelType = data.First().GetType();
-    //            var properties = modelType.GetProperties();
-    //            // writer.WriteLine(string.Join(",", properties.Select(p => p.Name)));
-
-    //            List<string> heb_properties = new List<string>();
-    //            foreach (var prop in properties)
-    //            {
-    //                // prop.Name
-    //                foreach (Tuple<string, string> head in HebrewDictionary.Headers)
-    //                {
-    //                    if (head.Item1 == prop.Name)
-    //                    {
-    //                        heb_properties.Add(head.Item2);
-    //                    }
-    //                }
-    //            }
-    //            writer.WriteLine(string.Join(",", heb_properties));
-
-    //            // Write data rows
-    //            foreach (var item in data)
-    //            {
-    //                var values = properties.Select(p => Convert.ToString(p.GetValue(item)).Replace(",", ";"));
-    //                writer.WriteLine(string.Join(",", values));
-    //            }
-    //        }
-
-    //        return Encoding.UTF8.GetString(stream.ToArray());
-    //    }
-    //}
 
     private string GenerateCSV(IEnumerable<object> data)
     {
@@ -143,10 +103,7 @@
                                     if (idProperty != null)
                                     {
                                         var idValue = idProperty.GetValue(subItem)?.ToString();
-                                        if (idValue != null)
-                                        {
-                                            idList.Add(idValue);
-                                        }
+                                        if (idValue != null) idList.Add(idValue);
                                     }
                                     // all contained ids within item
                                     else
@@ -155,10 +112,7 @@
                                         if (idProperty != null)
                                         {
                                             var idValue = idProperty.GetValue(subItem)?.ToString();
-                                            if (idValue != null)
-                                            {
-                                                idList.Add(idValue);
-                                            }
+                                            if (idValue != null) idList.Add(idValue);
                                         }
                                     }
                                 }
@@ -176,12 +130,8 @@
                                 else
                                 {
                                     idProperty = valueType.GetProperty("Id");
-                                    if (idProperty != null)
-                                    {
-                                        return idProperty.GetValue(value)?.ToString();
-                                    }
+                                    if (idProperty != null) return idProperty.GetValue(value)?.ToString();
                                 }
-
                                 return value.ToString()?.Replace(",", ";");
                             }
                         }

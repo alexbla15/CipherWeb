@@ -9,6 +9,7 @@ namespace CipherData.Models
     public class ProcessStepDefinition: Resource
     {
         private string _Name = string.Empty;
+        private string _Description = string.Empty;
 
         /// <summary>
         /// Name of the process
@@ -16,11 +17,9 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value.Trim(); }
+            get => _Name; 
+            set => _Name = value.Trim();
         }
-
-        private string _Description = string.Empty;
 
         /// <summary>
         /// Description of process
@@ -28,8 +27,8 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
         public string Description
         {
-            get { return _Description; }
-            set { _Description = value.Trim(); }
+            get => _Description; 
+            set => _Description = value.Trim(); 
         }
         /// <summary>
         /// Condition on event to be associated with the process step 
@@ -37,37 +36,26 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
         public GroupedBooleanCondition Condition { get; set; } = new();
 
+        // STATIC METHODS
+
         private static int IdCounter { get; set; } = 0;
 
-        public static string GetId()
-        {
-            IdCounter += 1;
-            return $"C{IdCounter}";
-        }
+        public static string GetId() => $"C{++IdCounter}";
 
         /// <summary>
         /// A collection of steps that make a single definition
         /// </summary>
-        public ProcessStepDefinition(string? id = null)
-        {
-            Id = id ?? GetId();
-        }
+        public ProcessStepDefinition(string? id = null) => Id = id ?? GetId();
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription()
-        {
-            return CheckField.Required(Description, Translate(nameof(Description)));
-        }
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Method to check if field is applicable for this request

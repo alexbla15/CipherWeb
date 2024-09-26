@@ -14,17 +14,16 @@
     public class CategoryProperty: CipherClass
     {
         private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
         public string? Name {
-            get { return _Name; }
-            set { _Name = value?.Trim(); } 
+            get => _Name; 
+            set => _Name = value?.Trim();
         }
-
-        private string? _Description = string.Empty;
 
         /// <summary>
         /// Free-text description of the property
@@ -32,8 +31,8 @@
         [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
         public string? Description
         {
-            get { return _Description; }
-            set { _Description = value?.Trim(); }
+            get => _Description;       
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
@@ -51,20 +50,12 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        /// <param name="CurrCheckResult">Older state of checking, will be returned if condition is applicable</param>
-        /// <returns></returns>
-        public CheckField CheckDescription()
-        {
-            return CheckField.Required(Description, Translate(nameof(Description)));
-        }
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -90,10 +81,7 @@
             return result.Check();
         }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Description, PropertyType, DefaultValue);
-        }
+        public override int GetHashCode() => HashCode.Combine(Name, Description, PropertyType, DefaultValue);
 
         public static CategoryProperty Random(string? set_name = null)
         {

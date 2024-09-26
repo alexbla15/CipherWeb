@@ -6,6 +6,7 @@
     public class UnitRequest : CipherClass
     {
         private string _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the Unit
@@ -13,11 +14,9 @@
         [HebrewTranslation(typeof(Unit), nameof(Name))]
         public string Name
         {
-            get { return _Name; }
-            set { _Name = value.Trim(); }
+            get => _Name;
+            set => _Name = value.Trim();
         }
-
-        private string? _Description = string.Empty;
 
         /// <summary>
         /// Description of Unit
@@ -25,43 +24,37 @@
         [HebrewTranslation(typeof(Unit), nameof(Description))]
         public string? Description
         {
-            get { return _Description; }
-            set { _Description = value?.Trim(); }
+            get => _Description;
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Properties))]
-        public string? Properties { get; set; } = null;
+        public string? Properties { get; set; } 
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Parent))]
-        public string? ParentId { get; set; } = null;
+        public string? ParentId { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Unit.Conditions))]
-        public GroupedBooleanCondition? Conditions { get; set; } = null;
+        public GroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription()
-        {
-            return CheckField.Required(Description, Translate(nameof(Description)));
-        }
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -76,25 +69,9 @@
             return result.Check();
         }
 
-        /// <summary>
-        /// Checks for difference between this and another object
-        /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Compare(Unit? OtherObject)
-        {
-            bool different = false;
-
-            different |= Name != OtherObject?.Name;
-            different |= Description != OtherObject?.Description;
-            different |= ParentId != OtherObject?.Parent?.Id;
-
-            return different;
-        }
-
         public Unit Create(string id)
         {
-            return new Unit(id)
+            return new(id)
             {
                 Name = Name,
                 Description = Description,

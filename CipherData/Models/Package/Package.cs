@@ -6,7 +6,8 @@ namespace CipherData.Models
 {
     public class Package : Resource
     {
-        private string? _Description = null;
+        private string? _Description;
+        private Category _Category = new();
 
         /// <summary>
         /// Description of the package
@@ -21,13 +22,13 @@ namespace CipherData.Models
         /// Dictionary of additional properties of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public List<PackageProperty>? Properties { get; set; } = null;
+        public List<PackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Vessel))]
-        public Vessel? Vessel { get; set; } = null;
+        public Vessel? Vessel { get; set; }
 
         /// <summary>
         /// Location which contains the package
@@ -57,22 +58,20 @@ namespace CipherData.Models
         /// Parent package containing this one.
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Parent))]
-        public Package? Parent { get; set; } = null;
+        public Package? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Children))]
-        public List<Package>? Children { get; set; } = null;
-
-        private Category _Category = new();
+        public List<Package>? Children { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Category))]
         public Category Category { 
-            get { return _Category; }
+            get => _Category;
             set {
                 _Category = value;
                 DestinationProcesses = value.ConsumingProcesses;
@@ -93,19 +92,13 @@ namespace CipherData.Models
         /// <summary>
         /// Calculated from the ratio between net to brut mass
         /// </summary>
-        public decimal Concentration
-        {
-            get { return (BrutMass > 0) ? NetMass / BrutMass : 0; }
-        }
+        public decimal Concentration => (BrutMass > 0) ? NetMass / BrutMass : 0;
 
         /// <summary>
         /// Instanciation of a new package
         /// </summary>
         /// <param name="id">only use if you want the package to have a specific id</param>
-        public Package(string? id = null)
-        {
-            Id = id ?? GetNextId();
-        }
+        public Package(string? id = null) => Id = id ?? GetNextId();
 
         /// <summary>
         /// Transfrom package object to a PackageRequest object
@@ -113,7 +106,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public PackageRequest Request()
         {
-            PackageRequest result = new()
+            return new()
             {
                 Id = Id,
                 BrutMass = BrutMass,
@@ -125,9 +118,9 @@ namespace CipherData.Models
                 VesselId = Vessel?.Id,
                 CategoryId = Category.Id
             };
-
-            return result;
         }
+
+        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -140,8 +133,7 @@ namespace CipherData.Models
         /// <returns></returns>
         public static string GetNextId()
         {
-            IdCounter += 1;
-            return $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{IdCounter:D3}";
+            return $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{++IdCounter:D3}";
         }
 
         /// <summary>
@@ -208,34 +200,22 @@ namespace CipherData.Models
         /// Get details about a single package given package ID
         /// </summary>
         /// <param name="id">package ID</param>
-        /// <returns></returns>
         public static Tuple<Package, ErrorResponse> Get(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new(new Package(), ErrorResponse.BadRequest);
-            }
-
-            return Config.PackagesRequests.GetPackage(id);
+            return (string.IsNullOrEmpty(id)) ?  new(new Package(), ErrorResponse.BadRequest) : Config.PackagesRequests.GetPackage(id);
         }
 
         /// <summary>
         /// All packages
         /// </summary>
-        public static Tuple<List<Package>, ErrorResponse> All()
-        {
-            return Config.PackagesRequests.GetPackages();
-        }
+        public static Tuple<List<Package>, ErrorResponse> All() => Config.PackagesRequests.GetPackages();
 
         /// <summary>
         /// Fetch all packages which contain the searched text
         /// </summary>
         public static Tuple<List<Package>, ErrorResponse> Containing(string SearchText)
         {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return new(new(), ErrorResponse.BadRequest);
-            }
+            if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
 
             return GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition()
             {

@@ -59,9 +59,6 @@
         Width = "";
         MinWidth ??= "300px";
 
-        if (Processes.Count() == 0)
-        {
-            (Processes, Error) = CachedData.AllProcessDefinitions;
-        }
+        if (Processes.Count() == 0) (Processes, Error) = CachedData.AllProcessDefinitions;
     }
 }

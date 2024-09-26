@@ -33,17 +33,16 @@
     public class AggregateItem : CipherClass
     {
         private string? _Attribute = null;
+        private string? _As = null;
 
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
         public string? Attribute {
-            get { return _Attribute; }
-            set { _Attribute = value?.Trim(); }
+            get => _Attribute; 
+            set => _Attribute = value?.Trim();
         }
-
-        private string? _As = null;
 
         /// <summary>
         /// New name to give to the aggregated field. 
@@ -52,8 +51,8 @@
         [HebrewTranslation(typeof(AggregateItem), nameof(As))]
         public string? As
         {
-            get { return _As; }
-            set { _As = value?.Trim(); }
+            get => _As; 
+            set => _As = value?.Trim();
         }
 
         /// <summary>
@@ -79,14 +78,14 @@
         /// Define order to the filtered objects
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(OrderBy))]
-        public List<OrderedItem>? OrderBy { get; set; } = null;
+        public List<OrderedItem>? OrderBy { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
-        public List<string>? GroupBy { get; set; } = null;
+        public List<string>? GroupBy { get; set; }
 
         /// <summary>
         ///  List of aggregate methods defining the new object.
@@ -94,15 +93,11 @@
         ///  exist. If null, returns the filtered objects
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
-        public List<AggregateItem>? Aggregate { get; set; } = null;
+        public List<AggregateItem>? Aggregate { get; set; }
 
         public void AddOrderBy(OrderedItem nextOrder)
         {
-            if (OrderBy == null)
-            {
-                OrderBy = new List<OrderedItem>();
-            }
-
+            OrderBy ??= new List<OrderedItem>();
             OrderBy.Add(nextOrder);
         }
     }

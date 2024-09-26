@@ -39,19 +39,19 @@
     /// Content within the card.
     /// </summary>
     [Parameter]
-    public RenderFragment ComponentContent { get; set; }
+    public RenderFragment? ComponentContent { get; set; }
 
     /// <summary>
     /// Data needed for Excel-export.
     /// </summary>
     [Parameter]
-    public IEnumerable<object> DataSource { get; set; }
+    public IEnumerable<object>? DataSource { get; set; }
 
     /// <summary>
     /// File name for excel export.
     /// </summary>
     [Parameter]
-    public string FileTitle { get; set; }
+    public string? FileTitle { get; set; }
 
     /// <summary>
     /// Path for the expanded version of a table.
@@ -93,16 +93,13 @@
     /// More buttons for table card
     /// </summary>
     [Parameter]
-    public RenderFragment AdditionalButtons { get; set; }
+    public RenderFragment? AdditionalButtons { get; set; }
 
     /// <summary>
     /// Needed datagrid.
     /// </summary>
     [Parameter]
-    public RadzenDataGrid<Process> grid { get; set; }
+    public RadzenDataGrid<Process> grid { get; set; } = new();
 
-    public void Toggle()
-    {
-        IsFavourite = !IsFavourite;
-    }
+    public void Toggle() => IsFavourite = !IsFavourite;
 }

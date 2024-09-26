@@ -5,51 +5,41 @@
     /// </summary>
     public class VesselRequest : CipherClass
     {
-        private string? _Name = null;
+        private string? _Name;
+        private string? _Type = string.Empty;
 
         /// <summary>
         /// Name of vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public string? Name { get { return _Name; } set { _Name = value?.Trim(); } }
-
-        private string? _Type = string.Empty;
+        public string? Name { get => _Name; set => _Name = value?.Trim(); }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string? Type { get { return _Type; } set { _Type = value?.Trim(); } }
-
+        public string? Type { get => _Type; set => _Type = value?.Trim(); }        
+        
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
-        public string? SystemId { get; set; } = null;
+        public string? SystemId { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckType()
-        {
-            return CheckField.Required(Type, Translate(nameof(Type)));
-        }
+        public CheckField CheckType() => CheckField.Required(Type, Translate(nameof(Type)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckSystemId()
-        {
-            return CheckField.Required(SystemId, Translate(nameof(SystemId)));
-        }
+        public CheckField CheckSystemId() => CheckField.Required(SystemId, Translate(nameof(SystemId)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -66,31 +56,6 @@
             return result.Check();
         }
 
-        /// <summary>
-        /// Checks for difference between this and another object
-        /// </summary>
-        /// <param name="OtherObject"></param>
-        /// <returns></returns>
-        public bool Compare(Vessel? OtherObject)
-        {
-
-            bool different = false;
-
-            different |= Name != OtherObject?.Name;
-            different |= Type != OtherObject?.Type;
-            different |= SystemId != OtherObject?.System?.Id;
-
-            return different;
-        }
-
-        public Vessel Create(string id)
-        {
-            return new Vessel(id)
-            {
-                Name = Name,
-                Type = Type,
-                System = StorageSystem.Random(SystemId)
-            };
-        }
+        public Vessel Create(string id) => new (id) { Name = Name, Type = Type, System = StorageSystem.Random(SystemId) };
     }
 }

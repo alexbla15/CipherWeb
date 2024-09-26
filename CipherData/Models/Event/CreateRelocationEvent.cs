@@ -6,6 +6,7 @@
     public class CreateRelocationEvent : CipherClass
     {
         private string? _Worker = string.Empty;
+        private string? _Comments;
 
         /// <summary>
         /// Name of worker that fulfilled the form
@@ -13,11 +14,9 @@
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         public string? Worker
         {
-            get { return _Worker; }
-            set { _Worker = value?.Trim(); }
+            get => _Worker; 
+            set => _Worker = value?.Trim();
         }
-
-        private string? _Comments = null;
 
         /// <summary>
         /// Free-text comments on the event
@@ -25,8 +24,8 @@
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? Comments
         {
-            get { return _Comments; }
-            set { _Comments = value?.Trim(); }
+            get => _Comments; 
+            set => _Comments = value?.Trim(); 
         }
 
         /// <summary>
@@ -39,13 +38,13 @@
         /// Package that relocate in this event.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(Packages))]
-        public List<Package>? Packages { get; set; } = null;
+        public List<Package>? Packages { get; set; }
 
         /// <summary>
         /// System to which the packages are relocated.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
-        public StorageSystem? TargetSystem { get; set; } = null;
+        public StorageSystem? TargetSystem { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -63,28 +62,20 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckTargetSystem()
-        {
-            return CheckField.Required(TargetSystem, Translate(nameof(TargetSystem)));
-        }
+        public CheckField CheckTargetSystem() => CheckField.Required(TargetSystem, Translate(nameof(TargetSystem)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckTargetSystemDifferent()
         {
+            if (Packages is null) return CheckPackages();
+
             CheckField result = new();
 
-            if (Packages != null)
+            foreach (Package p in Packages)
             {
-                foreach (Package p in Packages)
-                {
-                    result = (result.Succeeded) ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id, Translate(nameof(p.System))) : result;
-                }
-            }
-            else
-            {
-                return CheckPackages();
+                result = (result.Succeeded) ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id, Translate(nameof(p.System))) : result;
             }
 
             return result;
@@ -114,10 +105,7 @@
         {
             if (Packages != null && TargetSystem != null)
             {
-                if (!Checking)
-                {
-                    ChangeLocations();
-                }
+                if (!Checking) ChangeLocations();
 
                 return new CreateEvent()
                 {

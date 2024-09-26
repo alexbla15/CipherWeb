@@ -21,7 +21,7 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
 
 @code {
     [Parameter]
-    public HashSet<string> SelectedTexts { get; set; } = new HashSet<string>();
+    public HashSet<string> SelectedTexts { get; set; } = new();
 
     [Parameter]
     public string PlaceHolder { get; set; } = "כתבו ולחצו אנטר להוספה";
@@ -39,7 +39,7 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
     public bool Disabled { get; set; } = false;
 
     private CipherAutoComplete TextAdd = new();
-    private string newText;
+    private string newText = string.Empty;
 
     private void AddText()
     {
@@ -55,16 +55,10 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
 
     private void HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
-        {
-            AddText();
-        }
+        if (e.Key == "Enter") AddText();
     }
 
-    private void RemoveText(string text)
-    {
-        SelectedTexts.Remove(text);
-    }
+    private void RemoveText(string text) => SelectedTexts.Remove(text);
 }
 
 <style>

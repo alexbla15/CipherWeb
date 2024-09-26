@@ -34,6 +34,12 @@
     public string? JsonRequest { get; set; }
 
     /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
@@ -44,12 +50,6 @@
     /// </summary>
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    /// <summary>
-    /// Error message upon improper submission.
-    /// </summary>
-    [Parameter]
-    public string? ErrorMessage { get; set; }
 
     private CipherFormInfo FormInfo = new();
     private CipherLocation FinalLocation = new();

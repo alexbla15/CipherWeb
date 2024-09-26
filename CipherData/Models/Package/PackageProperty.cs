@@ -6,17 +6,16 @@
     public class PackageProperty : CipherClass
     {
         private string? _Name = string.Empty;
+        private string? _Value ;
 
         /// <summary>
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(PackageProperty), nameof(Name))]
         public string? Name {
-            get { return _Name; }
-            set { _Name = value?.Trim(); } 
+            get => _Name;
+            set => _Name = value?.Trim();
         }
-
-        private string? _Value = null;
 
         /// <summary>
         /// Property value.
@@ -24,25 +23,19 @@
         [HebrewTranslation(typeof(PackageProperty), nameof(Value))]
         public string? Value
         {
-            get { return _Value; }
-            set { _Value = value?.Trim(); }
+            get => _Value;
+            set => _Value = value?.Trim();
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckValue()
-        {
-            return CheckField.Required(Value, Translate(nameof(Value)));
-        }
+        public CheckField CheckValue() => CheckField.Required(Value, Translate(nameof(Value)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

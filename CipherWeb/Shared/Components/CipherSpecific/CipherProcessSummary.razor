@@ -66,18 +66,17 @@
     [Parameter]
     public string View { get; set; } = "month";
 
-    private string SummaryTitle;
+    private string? SummaryTitle;
 
     private Variant DayVariant;
     private Variant MonthVariant;
     private Variant YearVariant;
 
-    List<Event> events = new List<Event>();
+    List<Event> events = new();
 
     protected override async Task OnInitializedAsync()
     {
         events = await _db.GetEvents();
-
         MonthView();
     }
 

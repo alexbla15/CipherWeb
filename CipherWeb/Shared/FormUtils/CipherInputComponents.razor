@@ -28,13 +28,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> allPacks { get; set; } = new List<Package>();
+    public List<Package> allPacks { get; set; } = new();
 
     /// <summary>
     /// All chosen packeges
     /// </summary>
     [Parameter]
-    public List<Package> chosenPacks { get; set; } = new List<Package>();
+    public List<Package> chosenPacks { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -42,7 +42,7 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private RadzenDataGrid<Package> CustomDataGrid;
+    private RadzenDataGrid<Package> CustomDataGrid = new();
 
     protected override void OnInitialized()
     {
@@ -58,20 +58,14 @@
     {
         // Add the new restriction to the existing list
         chosenPacks.Add(new Package(""));
-
         StateHasChanged();
-
         await CustomDataGrid.RefreshDataAsync();
     }
 
     /// <summary>
     /// Get total sum of masses of package-components.
     /// </summary>
-    /// <returns></returns>
-    public decimal GetTotal()
-    {
-        return chosenPacks.Sum(pack => pack.BrutMass);
-    }
+    public decimal GetTotal() => chosenPacks.Sum(pack => pack.BrutMass);
 
     /// <summary>
     /// Deletes a package-component from memory & view.
@@ -80,9 +74,7 @@
     async Task DeleteRow(Package pack)
     {
         chosenPacks.Remove(pack);
-
         await CustomDataGrid.RefreshDataAsync();
-
         StateHasChanged();
     }
 
@@ -93,7 +85,6 @@
     async Task DeleteAll()
     {
         chosenPacks.Clear();
-
         await CustomDataGrid.RefreshDataAsync();
     }
 }

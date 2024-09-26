@@ -48,14 +48,14 @@
     /// User-chosen groups (place, property)
     /// </summary>
     [Parameter]
-    public Dictionary<int, string> chosenGroups { get; set; } = new Dictionary<int, string>();
+    public Dictionary<int, string> chosenGroups { get; set; } = new();
 
     private bool emptyGroupsAlertVisible = false;
     private bool limitedGroupsAlertVisible = false;
     private bool duplicityAlertVisible = false;
-    private string limitedGroupsAlertText;
+    private string? limitedGroupsAlertText;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         limitedGroupsAlertText = GetLimitedGroupsAlertText();
         chosenGroups = SetChosenGroups();
@@ -65,10 +65,7 @@
     /// Alert-text for reached limit of groups
     /// </summary>
     /// <returns></returns>
-    private string GetLimitedGroupsAlertText()
-    {
-        return "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
-    }
+    private string GetLimitedGroupsAlertText() => "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
 
     private Dictionary<int, string> SetChosenGroups()
     {

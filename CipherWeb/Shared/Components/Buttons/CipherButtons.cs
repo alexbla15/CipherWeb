@@ -116,14 +116,11 @@ namespace CipherWeb.Shared.Components.Buttons
         public string? Path { get; set; }
 
         [Inject]
-        private NavigationManager NavigationManager { get; set; }
+        private NavigationManager? NavigationManager { get; set; }
 
         private void NavigateToPath(MouseEventArgs args)
         {
-            if (Path != null)
-            {
-                NavigationManager.NavigateTo(Path, forceLoad: true);
-            }
+            if (Path != null && NavigationManager != null) NavigationManager.NavigateTo(Path, forceLoad: true);
         }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)

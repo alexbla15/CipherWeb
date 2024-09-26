@@ -51,10 +51,7 @@
     {
         Title ??= "תנאים נבחרים";
 
-        if (ChosenCondition != null)
-        {
-            await FillDataFilter();
-        }
+        if (ChosenCondition != null) await FillDataFilter();
     }
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
@@ -122,11 +119,7 @@
         {
             string filterVal = filter.FilterValue.ToString();
 
-            if (filterVal.Contains("##"))
-            {
-                cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
-            }
-
+            if (filterVal.Contains("##")) cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
             cond.Value = filterVal.Split("##")[0];
         }
 
@@ -178,7 +171,6 @@
         }
 
         cond.Conditions = conditions;
-
         return cond;
     }
 
@@ -204,9 +196,7 @@
         }
 
         ChosenCondition.Conditions = conditions;
-
         JsonRequest = ChosenCondition.ToJson();
-
         OnSave.InvokeAsync();
     }
 

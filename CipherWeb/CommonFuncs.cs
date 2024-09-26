@@ -32,10 +32,7 @@ namespace CipherWeb
             List<Tuple<string, string>> hebFields = new();
             foreach (Tuple<string, string> h in HebrewDictionary.Headers)
             {
-                if (fields.Contains(h.Item1))
-                {
-                    hebFields.Add(h);
-                }
+                if (fields.Contains(h.Item1)) hebFields.Add(h);
             }
             return hebFields;
         }
@@ -49,10 +46,7 @@ namespace CipherWeb
         {
             foreach (Tuple<string, string> h in HebrewDictionary.Headers)
             {
-                if (h.Item2 == heb_field)
-                {
-                    return h.Item1;
-                }
+                if (h.Item2 == heb_field) return h.Item1;
             }
             return null;
         }

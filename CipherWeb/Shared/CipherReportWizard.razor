@@ -67,7 +67,7 @@
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper<Package> dataGrouper = new();
-    private CipherDataAggregater dataAggregater = new CipherDataAggregater();
+    private CipherDataAggregater dataAggregater = new();
 
     private List<Package> rows = new();
     private Dictionary<string, int> rowsColumnsOrder = new ();
@@ -90,11 +90,7 @@
     /// <summary>
     /// Get translation between (english, hebrew) column names for table.
     /// </summary>
-    /// <returns></returns>
-    private HashSet<Tuple<string, string>> GetColumns()
-    {
-        return HebrewDictionary.Headers;
-    }
+    private HashSet<Tuple<string, string>> GetColumns() => HebrewDictionary.Headers;
 
     /// <summary>
     ///  Set the columns order within datagrid.
@@ -132,7 +128,7 @@
     /// </summary>
     public void OnRefresh()
     {
-        rows = new List<Package>();
+        rows = new();
 
         foreach (StorageSystem sys in systems)
         {

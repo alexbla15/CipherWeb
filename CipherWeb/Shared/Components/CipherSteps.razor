@@ -5,7 +5,7 @@
     /// Content of steps.
     /// </summary>
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
     /// Width of steps-block.
@@ -19,7 +19,7 @@
     [Parameter]
     public string MaxWidth { get; set; } = "100%";
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         PreviousText = "שלב קודם";
         NextText = "שלב הבא";

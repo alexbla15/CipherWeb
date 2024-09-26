@@ -11,10 +11,7 @@ namespace CipherWeb
             {
                 if (!t.IsAbstract)
                 {
-                    if (Activator.CreateInstance(t) is Resource r)
-                    {
-                        BuildHeaders.AddRange(r.Headers());
-                    }
+                    if (Activator.CreateInstance(t) is Resource r) BuildHeaders.AddRange(r.Headers());
                 }
             }
             return BuildHeaders.ToHashSet();

@@ -30,9 +30,6 @@
         /// <summary>
         /// Create a random object.
         /// </summary>
-        public static CustomObjectBooleanCondition Random()
-        {
-            return new CustomObjectBooleanCondition();
-        }
+        public static CustomObjectBooleanCondition Random() => new();
     }
 }

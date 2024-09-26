@@ -51,10 +51,7 @@
     }
     private string GetMethodTranslation(Method? method)
     {
-        if (method != null)
-        {
-            return MethodTranslations[(Method)method];
-        }
+        if (method != null) return MethodTranslations[(Method)method];
         return "לא ידוע"; // Default translation when not found
     }
 }

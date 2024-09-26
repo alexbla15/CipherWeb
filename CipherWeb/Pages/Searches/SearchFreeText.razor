@@ -19,35 +19,35 @@
                         <CipherComponentCard>
                             @if (data.Item2 is List<Package>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@(new Package().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@(new Package().Headers())" />
                             }
                             else if (data.Item2 is List<Event>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@(new Event().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@(new Event().Headers())" />
                             }
                             else if (data.Item2 is List<StorageSystem>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@(new StorageSystem().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@(new StorageSystem().Headers())" />
                             }
                             else if (data.Item2 is List<Process>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@(new Process().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@(new Process().Headers())" />
                             }
                             else if (data.Item2 is List<ProcessDefinition>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@(new ProcessDefinition().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@(new ProcessDefinition().Headers())" />
                             }
                             else if (data.Item2 is List<Vessel>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@(new Vessel().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@(new Vessel().Headers())" />
                             }
                             else if (data.Item2 is List<Unit>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@(new Unit().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@(new Unit().Headers())" />
                             }
                             else if (data.Item2 is List<Category>)
                             {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@(new Category().Headers())"/>
+                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@(new Category().Headers())" />
                             }
                         </CipherComponentCard>
                     </RadzenAccordionItem>
@@ -65,22 +65,22 @@
     public string SearchText { get; set; } = string.Empty;
 
     /// <summary>
+    /// Path to be searched in case on Enter pressed.
+    /// </summary>
+    [Parameter]
+    public string? SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
+
+    /// <summary>
     /// Event in case a key was pressed within AutoComplete box.
     /// </summary>
     [Parameter]
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
     /// <summary>
-    /// Path to be searched in case on Enter pressed.
-    /// </summary>
-    [Parameter]
-    public string SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
-
-    /// <summary>
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> Options { get; set; } = new List<Package>();
+    public List<Package> Options { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -88,15 +88,15 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private static List<Package>? packs = new List<Package>();
-    private static List<Vessel>? vessels = new List<Vessel>();
-    private static List<StorageSystem>? systems = new List<StorageSystem>();
-    private static List<Unit>? units = new List<Unit>();
-    private static List<Category>? categories = new List<Category>();
-    private static List<Event>? events = new List<Event>();
-    private static List<Package>? packages = new List<Package>();
-    private static List<Process>? processes = new List<Process>();
-    private static List<ProcessDefinition>? processes_definitions = new List<ProcessDefinition>();
+    private static List<Package>? packs = new();
+    private static List<Vessel>? vessels = new();
+    private static List<StorageSystem>? systems = new();
+    private static List<Unit>? units = new();
+    private static List<Category>? categories = new();
+    private static List<Event>? events = new();
+    private static List<Package>? packages = new();
+    private static List<Process>? processes = new();
+    private static List<ProcessDefinition>? processes_definitions = new();
 
     private List<Tuple<string, IEnumerable<Resource>?>> AllData = new(){
         new("תעודות", packs),
@@ -107,11 +107,11 @@
         new("סוגי תהליכים", processes_definitions),
         new("כלים", vessels),
         new("קטגוריות", categories),
-                    };
+                                };
 
     private CipherAutoComplete autoComplete = new CipherAutoComplete();
 
-    protected override async void OnParametersSet()
+    protected override void OnParametersSet()
     {
         // get current URI
         var uri = new Uri(navigationManager.Uri);
@@ -140,16 +140,10 @@
         (processes_definitions, error) = ProcessDefinition.Containing(SearchText);
 
         // Show error dialog if something went wrong fetching data
-        if (error != ErrorResponse.Success)
-        {
-            await ShowError();
-        }
+        if (error != ErrorResponse.Success) await ShowError();
 
         // Set default OnKeyDown if not provided
-        if (!OnKeyDown.HasDelegate)
-        {
-            OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, EnteredSearchFunc);
-        }
+        if (!OnKeyDown.HasDelegate) OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, EnteredSearchFunc);
     }
 
     /// <summary>
@@ -157,10 +151,7 @@
     /// </summary>
     public async Task EnteredSearchFunc(KeyboardEventArgs args)
     {
-        if (args.Key == "Enter")
-        {
-            await SearchFunc();
-        }
+        if (args.Key == "Enter") await SearchFunc();
     }
 
     /// <summary>
@@ -199,13 +190,9 @@
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
-
-                ds =>
+    ds =>
         @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SearchText" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
-
-,
+        ,
         new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
-
-
     }
 }

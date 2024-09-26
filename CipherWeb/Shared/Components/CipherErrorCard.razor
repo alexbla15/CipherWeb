@@ -9,15 +9,9 @@
     [Parameter]
     public string? ErroredAction { get; set; }
 
-    protected override void OnInitialized()
-    {
-        MarginBottom ??= "0px";
-    }
+    protected override void OnInitialized() => MarginBottom ??= "0px";
 
-    public void Refresh()
-    {
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
-    }
+    public void Refresh() => Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
 }
 
 <CipherComponentCard Float="none" MarginBottom="@MarginBottom" MarginTop="@MarginTop" Visible=@Visible>

@@ -41,19 +41,12 @@
     /// Set button's width.
     /// </summary>
     /// <returns></returns>
-    public string ButtonWidth()
-    {
-        return $"{99M / AmountPerRow}%";
-    }
+    public string ButtonWidth() => $"{99M / AmountPerRow}%";
 
     /// <summary>
     /// Set card width.
     /// </summary>
-    /// <returns></returns>
-    public string CardWidth()
-    {
-        return $"100%";
-    }
+    public string CardWidth() => "100%";
 }
 
 <CipherComponentCard Title=@Title Width="@CardWidth()">

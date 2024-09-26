@@ -6,6 +6,7 @@
     public class CategoryRequest: CipherClass
     {
         private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the category
@@ -13,11 +14,9 @@
         [HebrewTranslation(typeof(Category), nameof(Category.Name))]
         public string? Name
         {
-            get { return _Name; }
-            set { _Name = value?.Trim(); }
+            get => _Name;
+            set => _Name = value?.Trim();
         }
-
-        private string? _Description = string.Empty;
 
         /// <summary>
         /// Free-text description of the category
@@ -25,15 +24,15 @@
         [HebrewTranslation(typeof(Category), nameof(Category.Description))]
         public string? Description
         {
-            get { return _Description; }
-            set { _Description = value?.Trim(); }
+            get => _Description;
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.Parent))]
-        public string? ParentId { get; set; } = null;
+        public string? ParentId { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
@@ -57,62 +56,41 @@
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.Properties))]
-        public List<CategoryProperty>? Properties { get; set; } = null;
+        public List<CategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName()
-        {
-            return CheckField.Required(Name, Translate(nameof(Name)));
-        }
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription()
-        {
-            return CheckField.Required(Description, Translate(nameof(Description)));
-        }
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckParentId()
         {
-            CheckField result = new();
-
-            if (!string.IsNullOrEmpty(ParentId))
-            {
-                return CheckField.Required(ParentId, Translate(nameof(ParentId)));
-            }
-
-            return result;
+            if (!string.IsNullOrEmpty(ParentId)) return CheckField.Required(ParentId, Translate(nameof(ParentId)));
+            return new();
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckIdMask()
-        {
-            return CheckField.FullList(IdMask, Translate(nameof(IdMask)));
-        }
+        public CheckField CheckIdMask() => CheckField.FullList(IdMask, Translate(nameof(IdMask)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckCreatingProcesses()
-        {
-            return CheckField.FullList(CreatingProcesses, Translate(nameof(CreatingProcesses)));
-        }
+        public CheckField CheckCreatingProcesses() => CheckField.FullList(CreatingProcesses, Translate(nameof(CreatingProcesses)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckConsumingProcesses()
-        {
-            return CheckField.FullList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)));
-        }
+        public CheckField CheckConsumingProcesses() => CheckField.FullList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)));
 
         /// <summary>
         /// Method to check if properties is applicable for this request
@@ -145,59 +123,6 @@
             result.Fields.Add(CheckProperties());
             result.Fields.Add(CheckParentId());
             return result.Check();
-        }
-
-        /// <summary>
-        /// Checks for difference between this and another category
-        /// </summary>
-        public bool Different(Category? OtherObject)
-        {
-            if (OtherObject == null) return true;
-
-            if (Name != OtherObject.Name) return true;
-            if (Description != OtherObject.Description) return true;
-            if (ParentId != OtherObject.Parent?.Id) return true;
-            if (IdMask.Count != OtherObject.IdMask.Count) return true;
-            if (!IdMask.SequenceEqual(OtherObject.IdMask)) return true;
-
-            if ((CreatingProcesses != null) && (OtherObject.CreatingProcesses != null))
-            {
-                if (!CreatingProcesses.ToHashSet().SetEquals(OtherObject.CreatingProcesses.Select(x => x.Id).ToList())) return true;
-
-            }
-            else if (((CreatingProcesses != null) && (OtherObject.CreatingProcesses == null)) || ((CreatingProcesses == null) && (OtherObject?.CreatingProcesses != null)))
-            {
-                return true;
-            }
-
-            if ((ConsumingProcesses != null) && (OtherObject.ConsumingProcesses != null))
-            {
-                if (!ConsumingProcesses.ToHashSet().SetEquals(OtherObject.ConsumingProcesses.Select(x => x.Id).ToList())) return true;
-
-            }
-            else if (((ConsumingProcesses != null) && (OtherObject.ConsumingProcesses == null)) || ((ConsumingProcesses == null) && (OtherObject?.ConsumingProcesses != null)))
-            {
-                return true;
-            }
-
-            if ((Properties != null) && (OtherObject.Properties != null))
-            {
-                // check for same property names
-                if (!Properties.Select(x => x.Name).ToHashSet().SetEquals(OtherObject.Properties.Select(x => x.Name).ToList())) return true;
-
-                // check for differences
-                foreach (CategoryProperty prop in Properties)
-                {
-                    CategoryProperty other_prop = OtherObject.Properties.Where(x => x.Name == prop.Name).ToList()[0];
-                    if (!prop.Equals(other_prop)) return true;
-                }
-            }
-            else if (((Properties != null) && (OtherObject.Properties == null)) || ((Properties == null) && (OtherObject.Properties != null)))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>

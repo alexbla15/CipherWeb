@@ -41,14 +41,10 @@
     [Parameter]
     public IQueryable<Cipher_TItem>? FilteredRows { get; set; }
 
-    private CipherDataFilter<Cipher_TItem> dataFilter = new CipherDataFilter<Cipher_TItem>();
-    private CipherDataGrid<Cipher_TItem> rowsGrid = new CipherDataGrid<Cipher_TItem>();
+    private CipherDataFilter<Cipher_TItem> dataFilter = new();
+    private CipherDataGrid<Cipher_TItem> rowsGrid = new();
 
-
-    public void ViewChanged(IQueryable<Cipher_TItem> view)
-    {
-        FilteredRows = view;
-    }
+    public void ViewChanged(IQueryable<Cipher_TItem> view) => FilteredRows = view;
 }
 
 <CipherComponentCard Title="@Title">

@@ -1,13 +1,5 @@
 ﻿@page "/Reports/CustomReport"
 
-<PageTitle>@Title</PageTitle>
+<PageTitle>@CipherNavLinks.CustomReport.Name</PageTitle>
 
 <CipherReportWizard />
-
-@code {
-    /// <summary>
-    /// Page title
-    /// </summary>
-    [Parameter]
-    public string? Title { get; set; } = CipherNavLinks.CustomReport.Name;
-}

@@ -1,10 +1,10 @@
 ﻿@code {
     public class IconInfo
     {
-        public string IconName { get; set; }
-        public string MainClass { get; set; }
-        public string SubClass { get; set; }
-        public string ThirdClass { get; set; }
+        public string IconName { get; set; } = string.Empty;
+        public string MainClass { get; set; } = string.Empty;
+        public string SubClass { get; set; } = string.Empty;
+        public string ThirdClass { get; set; } = string.Empty;
     }
 
     public List<IconInfo> GetIcons()
@@ -66,14 +66,11 @@
         return icons;
     }
 
-    private List<IconInfo> icons;
+    private List<IconInfo> icons = new();
 
-    private string searchText;
+    private string searchText = string.Empty;
 
-    protected override void OnInitialized()
-    {
-        icons = GetIcons();
-    }
+    protected override void OnInitialized() => icons = GetIcons();
 
     public void ChangeSearchText()
     {

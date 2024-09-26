@@ -37,8 +37,5 @@
     [Parameter]
     public UserActionResponse? ObjectChanges { get; set; }
 
-    protected override void OnInitialized()
-    {
-        Title ??= "היסטוריית שינויים";
-    }
+    protected override void OnInitialized() => Title ??= "היסטוריית שינויים";
 }

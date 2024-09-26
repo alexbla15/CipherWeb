@@ -3,9 +3,6 @@
 
 @typeparam Cipher_TItem
 
-@inject ICipherInfo _db
-@inject IJSRuntime JSRuntime
-
 @inherits RadzenDataGrid<Cipher_TItem>
 
 @code {
@@ -31,7 +28,7 @@
     /// Function to fetch the data for the datagrid.
     /// </summary>
     [Parameter]
-    public Func<Task<IEnumerable<Cipher_TItem>>>? FetchDataFunc { get; set; } = null;
+    public Func<Task<IEnumerable<Cipher_TItem>>>? FetchDataFunc { get; set; }
 
     /// <summary>
     /// Selected filteration mode. Must be a FilterMode-enum.
@@ -109,17 +106,14 @@
     public Action<DataGridRenderEventArgs<Cipher_TItem>>? RenderFunc { get; set; }
 
     private RadzenDataGrid<Cipher_TItem> CustomDataGrid = new();
-    private Dictionary<string, object> dynamicRow = new Dictionary<string, object>();
+    private Dictionary<string, object> dynamicRow = new();
     private DateTime dynamicDate;
 
     private IList<Cipher_TItem>? selectedRow;
 
     protected override async Task OnInitializedAsync()
     {
-        if (FetchDataFunc != null)
-        {
-            DataSource = (await FetchDataFunc()).ToList();
-        }
+        if (FetchDataFunc != null) DataSource = (await FetchDataFunc()).ToList();
         ColumnNames = ColumnNames ?? HebrewDictionary.Headers;
     }
 
@@ -128,10 +122,7 @@
     /// </summary>
     /// <param name="columnName"></param>
     /// <returns></returns>
-    int? GetOrder(string columnName)
-    {
-        return ColumnsOrder?.TryGetValue(columnName, out var order) == true ? order : null;
-    }
+    int? GetOrder(string columnName) => ColumnsOrder?.TryGetValue(columnName, out var order) == true ? order : null;
 
     public async void Navigate(string path)
     {
@@ -149,10 +140,7 @@
             _ => null // or handle the default case if needed
         };
 
-        if (href != null)
-        {
-            Navigate(href);
-        }
+        if (href != null) Navigate(href);
     }
 }
 

@@ -11,7 +11,7 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> AllPacks { get; set; } = new List<Package>();
+    public List<Package> AllPacks { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -51,15 +51,9 @@
 
     private CipherAutoComplete component = new CipherAutoComplete();
 
-    protected override void OnInitialized()
-    {
-        (AllPacks, Error) = CachedData.AllPackages;
-    }
+    protected override void OnInitialized() => (AllPacks, Error) = CachedData.AllPackages;
 
-    public Package? GetValue()
-    {
-        return ChosenPackage;
-    }
+    public Package? GetValue() => ChosenPackage;
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">

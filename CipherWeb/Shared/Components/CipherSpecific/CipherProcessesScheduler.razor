@@ -78,8 +78,8 @@
     [Parameter]
     public string SelectedSystem { get; set; } = "S1";
 
-    private CipherLocation cipherLocation = new CipherLocation();
-    private List<Process>? procs = new List<Process>();
+    private CipherLocation cipherLocation = new();
+    private List<Process>? procs = new();
 
     public enum View
     {
@@ -95,7 +95,7 @@
         Authorizer
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
@@ -103,15 +103,9 @@
         FileName = $"processes_{SelectedSystem}";
     }
 
-    private void TableView()
-    {
-        SetView = View.Table;
-    }
+    private void TableView() => SetView = View.Table;
 
-    private void CalendarView()
-    {
-        SetView = View.Calendar;
-    }
+    private void CalendarView() => SetView = View.Calendar;
 
     /// <summary>
     /// Function taking place upon clicking Enter.

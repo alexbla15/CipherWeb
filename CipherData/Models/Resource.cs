@@ -32,33 +32,27 @@ namespace CipherData.Models
     {
         public override Condition Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            // Read the JSON object
-            using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
+
+            // Parse the JSON object without consuming the reader's input
+            JsonDocument doc = JsonDocument.ParseValue(ref reader);
+
+            // Get the root element of the parsed JSON object
+            JsonElement root = doc.RootElement;
+
+            // Infer type by checking for specific properties
+            if (root.TryGetProperty("Attribute", out _))
             {
-                // Get the root element
-                JsonElement root = doc.RootElement;
-
-                // Check for a discriminator property or type identifier
-                if (root.TryGetProperty("Type", out JsonElement typeElement))
-                {
-                    string typeName = typeElement.GetString();
-
-                    // Create the appropriate object based on the type
-                    switch (typeName)
-                    {
-                        case "BooleanCondition":
-                            return JsonSerializer.Deserialize<BooleanCondition>(root.GetRawText(), options);
-                        case "GroupedBooleanCondition":
-                            return JsonSerializer.Deserialize<GroupedBooleanCondition>(root.GetRawText(), options);
-                        // Add cases for other derived types
-                        default:
-                            throw new NotSupportedException($"Type '{typeName}' is not supported.");
-                    }
-                }
-                else
-                {
-                    throw new JsonException("Missing type discriminator property.");
-                }
+                // This is likely a BooleanCondition
+                return JsonSerializer.Deserialize<BooleanCondition>(root.GetRawText(), options);
+            }
+            else if (root.TryGetProperty("Conditions", out _))
+            {
+                // This is likely a GroupedBooleanCondition
+                return JsonSerializer.Deserialize<GroupedBooleanCondition>(root.GetRawText(), options);
+            }
+            else
+            {
+                throw new JsonException("Unknown condition type based on JSON content.");
             }
         }
 
@@ -77,8 +71,6 @@ namespace CipherData.Models
         public bool Equals<T>(T? otherObject) where T : CipherClass
         {
             if (otherObject is null) return false;
-
-            // Compare both objects by their serialized JSON representations
             return ToJson() == otherObject.ToJson();
         }
 
@@ -96,10 +88,7 @@ namespace CipherData.Models
         {
             // Get the PropertyInfo for the property name
             PropertyInfo? property = GetType().GetProperty(searchedAttribute);
-            if (property == null)
-            {
-                return searchedAttribute;
-            }
+            if (property == null) return searchedAttribute;
 
             // Get the HebrewTranslationAttribute and return the translation
             var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
@@ -183,13 +172,11 @@ namespace CipherData.Models
             return translations;
         }
 
+        // STATIC METHODS
+
         private static int UuidCounter { get; set; } = 0;
 
-        private static int GetUuid()
-        {
-            UuidCounter += 1;
-            return UuidCounter;
-        }
+        private static int GetUuid() => ++UuidCounter;
 
         public static readonly List<string> clearences = new() { "מוגבל", "מוגבל מאוד", "חופשי" };
         
@@ -198,10 +185,7 @@ namespace CipherData.Models
         /// <summary>
         /// Fetch all user actions that occured to this package.
         /// </summary>
-        public Tuple<UserActionResponse, ErrorResponse> UserActions()
-        {
-            return Config.logsRequests.GetObjectLogs(uuid: Uuid);
-        }
+        public Tuple<UserActionResponse, ErrorResponse> UserActions() => Config.logsRequests.GetObjectLogs(uuid: Uuid);
 
         /// <summary>
         /// Get resources which contain a certain text within one of their parameters

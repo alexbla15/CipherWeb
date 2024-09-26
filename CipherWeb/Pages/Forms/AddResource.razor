@@ -107,8 +107,7 @@
         else if (typeof(Cipher_TItem) == typeof(Package))
         {
             List<PackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
-
-            packRequest = new CreateEvent()
+            packRequest = new()
             {
                 Worker = FormInfo.GetWorker(),
                 ProcessId = EventProc.ChosenProcess?.Id,
@@ -117,11 +116,10 @@
                 Actions = ChangedPacks,
                 Comments = EventComments.GetValue()
             };
-
             return packRequest.Check();
         }
 
-        return new Tuple<bool, string>(false, "שגיאת מערכת");
+        return new (false, "שגיאת מערכת");
     }
 
     /// <summary>
@@ -199,10 +197,7 @@
     private void HandleRequest(Func<Tuple<Cipher_TItem, ErrorResponse>?> sendRequest)
     {
         var requestResult = sendRequest();
-        if (requestResult != null)
-        {
-            (Result, Error) = requestResult.ToValueTuple();
-        }
+        if (requestResult != null) (Result, Error) = requestResult.ToValueTuple();
     }
 
     public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()

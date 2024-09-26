@@ -5,24 +5,24 @@
     /// </summary>
     public class CreateEvent : CipherClass
     {
-        private string? _Worker = null;
+        private string? _Worker;
+        private string? _Comments;
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
-        public string? Worker { 
-            get { return _Worker; }
-            set { _Worker = value?.Trim(); } 
+        public string? Worker
+        {
+            get => _Worker;
+            set => _Worker = value?.Trim();
         }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public string? ProcessId { get; set; } = null;
-
-        private string? _Comments = null;
+        public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
@@ -30,8 +30,8 @@
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? Comments
         {
-            get { return _Comments; }
-            set { _Comments = value?.Trim(); }
+            get => _Comments;
+            set => _Comments = value?.Trim();
         }
 
         /// <summary>
@@ -55,38 +55,26 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckWorker()
-        {
-            return CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
-        }
+        public CheckField CheckWorker() => CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckProcessId()
         {
-            if (!string.IsNullOrEmpty(ProcessId))
-            {
-                return CheckField.CheckString(ProcessId, Translate(nameof(ProcessId)));
-            }
+            if (!string.IsNullOrEmpty(ProcessId)) return CheckField.CheckString(ProcessId, Translate(nameof(ProcessId)));
             return new CheckField();
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckEventType()
-        {
-            return CheckField.NotEq(EventType, 0, Translate(nameof(EventType)));
-        }
+        public CheckField CheckEventType() => CheckField.NotEq(EventType, 0, Translate(nameof(EventType)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckComments()
-        {
-            return CheckField.Required(Comments, Translate(nameof(Comments)));
-        }
+        public CheckField CheckComments() => CheckField.Required(Comments, Translate(nameof(Comments)));
 
         /// <summary>
         /// Method to check if field is applicable for this request

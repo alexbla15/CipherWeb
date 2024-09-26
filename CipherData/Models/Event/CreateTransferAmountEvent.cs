@@ -8,6 +8,7 @@ namespace CipherData.Models
     public class CreateTranserAmountEvent : CipherClass
     {
         private string? _Worker = null;
+        private string? _Comments;
 
         /// <summary>
         /// Name of worker that fulfilled the form
@@ -15,17 +16,15 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         public string? Worker
         {
-            get { return _Worker; }
-            set { _Worker = value?.Trim(); }
+            get => _Worker;
+            set => _Worker = value?.Trim();
         }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
-        public string? ProcessId { get; set; } = null;
-
-        private string? _Comments = null;
+        public string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
@@ -33,8 +32,8 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? Comments
         {
-            get { return _Comments; }
-            set { _Comments = value?.Trim(); }
+            get => _Comments;
+            set => _Comments = value?.Trim();
         }
 
         /// <summary>
@@ -47,13 +46,13 @@ namespace CipherData.Models
         /// Package that loses mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
-        public Package? DonatingPackage { get; set; } = null;
+        public Package? DonatingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
-        public Package? AcceptingPackage { get; set; } = null;
+        public Package? AcceptingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.
@@ -74,18 +73,12 @@ namespace CipherData.Models
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckAcceptingPackage()
-        {
-            return CheckField.Required(AcceptingPackage, Translate(nameof(AcceptingPackage)));
-        }
+        public CheckField CheckAcceptingPackage() => CheckField.Required(AcceptingPackage, Translate(nameof(AcceptingPackage)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckAmount()
-        {
-            return CheckField.Greater(Amount, 0, Translate(nameof(Amount)));
-        }
+        public CheckField CheckAmount() => CheckField.Greater(Amount, 0, Translate(nameof(Amount)));
 
         /// <summary>
         /// Method to check if field is applicable for this request

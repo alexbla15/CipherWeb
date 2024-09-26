@@ -102,7 +102,7 @@
     /// AutoComplete options.
     /// </summary>
     [Parameter]
-    public IEnumerable<object> Data { get; set; }
+    public IEnumerable<object>? Data { get; set; }
 
     /// <summary>
     /// Minimal amount of chars.
@@ -134,22 +134,19 @@
     [Parameter]
     public string[] UnallowedWords { get; set; } = Constants.UnallowedWords;
 
-    private string LengthValidatorText()
-    {
-        return $"{MinLength}-{MaxLength} תווים";
-    }
+    private string LengthValidatorText() => $"{MinLength}-{MaxLength} תווים";
 
     class Model
     {
         public string value = string.Empty;
     }
 
-    Model model = new Model() { value = string.Empty };
-    RadzenRequiredValidator RequiredValidator = new RadzenRequiredValidator();
-    RadzenLengthValidator LengthValidator = new RadzenLengthValidator();
-    RadzenRegexValidator ImproperCharsValidator = new RadzenRegexValidator();
-    RadzenCustomValidator SqlInjectionValidator = new RadzenCustomValidator();
-    RadzenCustomValidator ValueExistsValidator = new RadzenCustomValidator();
+    Model model = new() { value = string.Empty };
+    RadzenRequiredValidator RequiredValidator = new();
+    RadzenLengthValidator LengthValidator = new();
+    RadzenRegexValidator ImproperCharsValidator = new();
+    RadzenCustomValidator SqlInjectionValidator = new();
+    RadzenCustomValidator ValueExistsValidator = new();
 
     public string ImproperCharsValidatorText()
     {
@@ -186,10 +183,7 @@
     /// </summary>
     /// <param name="set_value"></param>
     /// <returns></returns>
-    public bool UnallowedWordsValidate(string set_value)
-    {
-        return !UnallowedWordsRegex().IsMatch(set_value);
-    }
+    public bool UnallowedWordsValidate(string set_value) => !UnallowedWordsRegex().IsMatch(set_value);
 
     /// <summary>
     /// Get the error message for using unallowed words.

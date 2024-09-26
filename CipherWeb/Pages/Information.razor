@@ -1,14 +1,6 @@
 ﻿@page "/Information"
 
-@inject ICipherInfo _db
-@inject ExcelService excelService
-@inject IJSRuntime JSRuntime
-
-@code {
-    TextStyle HeaderTextStyle = TextStyle.H5;
-}
-
-<PageTitle>מסך פתיחה</PageTitle>
+<PageTitle>@CipherNavLinks.Information.Name</PageTitle>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
     <CipherText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת" TextAlign="TextAlign.Center" Width="" />
@@ -36,21 +28,23 @@
 </RadzenStack>
 
 @code {
+    private TextStyle HeaderTextStyle = TextStyle.H5;
+
     class InfoBox
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string ButtonText { get; set; }
-        public string ButtonIcon { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public string? ButtonText { get; set; }
+        public string? ButtonIcon { get; set; }
     }
 
-    List<InfoBox> infoBoxes = new List<InfoBox>
+    List<InfoBox> infoBoxes = new()
     {
-        new InfoBox {Title="איך משתמשים?", Description="CIPHER שמה לעצמה כמטרה לפשט את התהליכים ככל הניתן, כך שכל אחד יכול ללמוד איך להשתמש בה בקלות!",
+        new () {Title="איך משתמשים?", Description="CIPHER שמה לעצמה כמטרה לפשט את התהליכים ככל הניתן, כך שכל אחד יכול ללמוד איך להשתמש בה בקלות!",
         ButtonIcon=Icons.Education.school, ButtonText="למדו בקלות כאן"},
-        new InfoBox {Title="אפשר לשפר משהו?", Description="אנחנו מאמינים שתמיד יש לאן לשאוף. נשמח לקבל הצעות ייעול, תוספות וביקורת",
+        new () {Title="אפשר לשפר משהו?", Description="אנחנו מאמינים שתמיד יש לאן לשאוף. נשמח לקבל הצעות ייעול, תוספות וביקורת",
         ButtonIcon=Icons.Creative.lightbulb, ButtonText="הציעו רעיונות"},
-        new InfoBox {Title="יש לך שאלה?", Description="ריכזנו כמות גדולה של שאלות ותשובות נפוצות. אם יש שאלה שלא נענתה, נשמח לעזור!",
+        new () {Title="יש לך שאלה?", Description="ריכזנו כמות גדולה של שאלות ותשובות נפוצות. אם יש שאלה שלא נענתה, נשמח לעזור!",
         ButtonIcon=Icons.Communication.Chat.question_answer, ButtonText="לעמוד שאלות - תשובות"}
     };
 }

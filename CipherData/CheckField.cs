@@ -55,10 +55,7 @@ namespace CipherData
 
             bool condition = value > min_value;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new(condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField GreaterEqual(decimal value, decimal min_value, string field_name, string? min_field_name = null)
@@ -68,10 +65,7 @@ namespace CipherData
 
             bool condition = value >= min_value;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new(condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField LowerEqual(decimal value, decimal min_value, string field_name, string? min_field_name = null)
@@ -81,10 +75,7 @@ namespace CipherData
 
             bool condition = value <= min_value;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new (condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField NotEq<T>(T? value, T? unwanted_value, string field_name)
@@ -118,10 +109,7 @@ namespace CipherData
 
             bool condition = value >= min_value && value < max_value;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new (condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField Required<T>(T value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
@@ -146,13 +134,9 @@ namespace CipherData
         public static CheckField FullList<T>(List<T> value, string field_name)
         {
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה. יש להוסיף לפחות איבר אחד לרשימה.";
-
             bool condition = value != null && value.Count > 0;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new(condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField ListItems<T>(List<T> value, string field_name)
@@ -198,10 +182,7 @@ namespace CipherData
 
             bool condition = value.Distinct().Count() == value.Count;
 
-            return new CheckField(
-                succeeded: condition,
-                message: condition ? string.Empty : ErrorMessage
-                );
+            return new(condition, condition ? string.Empty : ErrorMessage);
         }
 
         public static CheckField PropertyTypeValueCheck(PropertyType propType, string? value, string field_name)
@@ -232,7 +213,7 @@ namespace CipherData
 
     public class CheckClass
     {
-        public List<CheckField> Fields { get; set; } = new List<CheckField>();
+        public List<CheckField> Fields { get; set; } = new();
 
         public Tuple<bool, string> Check()
         {
