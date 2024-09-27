@@ -33,6 +33,9 @@
     [Parameter]
     public EventCallback<object> OnSave { get; set; }
 
+    [Parameter]
+    public EventCallback<GroupedBooleanCondition> ChosenConditionChanged { get; set; }
+
     /// <summary>
     /// Help text for save-button.
     /// </summary>
@@ -52,6 +55,8 @@
         Title ??= "תנאים נבחרים";
 
         if (ChosenCondition != null) await FillDataFilter();
+
+        await ParamsChanged();
     }
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
@@ -103,6 +108,7 @@
 
             new_filter.Filters = sub_conds;
         }
+
 
         return new_filter;
     }
@@ -174,7 +180,7 @@
         return cond;
     }
 
-    public void Save()
+    public void Save(IQueryable<CipherField>? fields = null)
     {
         List<Condition> conditions = new();
 
@@ -182,6 +188,11 @@
 
         foreach (var filter in dataFilter.GetFilters())
         {
+            if (fields!=null)
+            {
+                filter.Property ??= fields.ToList()[dataFilter.GetFilters().IndexOf(filter)].Path;
+            }
+
             // decide if it is a GroupedCondition or BooleanCondition
 
             if (filter.Filters is null)
@@ -218,19 +229,25 @@
             }
         }
     }
+
+    async Task ParamsChanged(IQueryable<CipherField>? fields = null)
+    {
+        Save(fields);
+        await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
+    }
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
         @if (WithSaveButton)
         {
-            <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined" 
-            Click="@(args => Save())" HelpText="@SaveConditionsText" />
+            <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined"
+                          Click="@(async args => {await ParamsChanged();})" HelpText="@SaveConditionsText" />
         }
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
-            <CipherDataFilter @ref=dataFilter Cipher_TItem="CipherField" Data="@AvailableAttributes">
+            <CipherDataFilter @ref=dataFilter Cipher_TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})">
                 <FilterProperties>
                     @foreach (CipherField field in AvailableAttributes)
                     {
@@ -242,9 +259,9 @@
                                     {
                                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
                                                      AlignItems="AlignItems.Center" Style="width:100%">
-                                            <RadzenTextBox Style="width: 100%" ValueChanged="@(args => context.FilterValue=(object)args)" />
+                                            <RadzenTextBox Style="width: 100%" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
                                             <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" ValueChanged="@(args=>context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"))" 
+                                            <RadzenDropDown Style="width: 100%" TValue="Operator" Value="Operator.All" ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
                                                 Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
                                                 <ValueTemplate Context="operator_value_context">
                                                     @if (operator_value_context == Operator.All)
@@ -271,12 +288,12 @@
                                     }
                                     else
                                     {
-                                        <RadzenTextBox Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(args => context.FilterValue=(object)args)" />
+                                        <RadzenTextBox Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
                                     }
                                 }
                                 else
                                 {
-                                    <RadzenTextBox Style="width: 100%" Disabled="true" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(args => context.FilterValue=(object)args)" />
+                                    <RadzenTextBox Style="width: 100%" Disabled="true" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
                                 }
                             </FilterTemplate>
                         </RadzenDataFilterProperty>

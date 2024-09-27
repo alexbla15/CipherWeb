@@ -2,6 +2,7 @@
 
 namespace CipherData.Models
 {
+    [HebrewTranslation(nameof(Worker))]
     public class Worker
     {
         private string _Name = string.Empty;

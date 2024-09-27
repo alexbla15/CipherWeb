@@ -6,6 +6,7 @@ namespace CipherData.Models
     /// <summary>
     /// Regular event object is too complicated for HMI display, ergo - we have this object.
     /// </summary>
+    [HebrewTranslation(nameof(DisplayedEvent))]
     public class DisplayedEvent: CipherClass
     {
         private string? _Worker = null;
@@ -94,6 +95,7 @@ namespace CipherData.Models
     /// Event consists of several classicaly defined events (called LegacyEvent)
     /// Each event can include many sub events of mass-transfer, and relocation.
     /// </summary>
+    [HebrewTranslation(nameof(Event))]
     public class Event : Resource
     {
         private string? _Worker;

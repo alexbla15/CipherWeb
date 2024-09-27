@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -6,6 +8,7 @@
     /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
     /// In order to change other Package properties - use UpdatePackage.
     /// </summary>
+    [HebrewTranslation(nameof(PackageRequest))]
     public class PackageRequest : CipherClass
     {
         /// <summary>
@@ -60,36 +63,14 @@
         /// Packages (Ids) contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Children))]
-        public List<string>? ChildrenIds { get; set; } 
+        public List<string>? ChildrenIds { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckId() => CheckField.Required(Id, Translate(nameof(Id)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckCategoryId() => CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckSystemId() => CheckField.Required(SystemId, Translate(nameof(SystemId)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckBrutMass() => CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
+        public CheckField CheckNetMass() => CheckField.GreaterEqual(NetMass, 0, Translate(nameof(NetMass)));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckNetMass() => CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckMass()
         {
             CheckField result = CheckBrutMass();
@@ -103,9 +84,6 @@
             return result;
         }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckProperties()
         {
             CheckField result = new();

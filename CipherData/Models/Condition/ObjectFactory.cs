@@ -10,6 +10,7 @@
         sum, avg, count, first, last, max, min
     }
 
+    [HebrewTranslation(nameof(OrderedItem))]
     public class OrderedItem : CipherClass
     {
         private string _Attribute = string.Empty;
@@ -30,6 +31,7 @@
         public Order Order { get; set; } = Order.asc;
     }
 
+    [HebrewTranslation(nameof(AggregateItem))]
     public class AggregateItem : CipherClass
     {
         private string? _Attribute = null;
@@ -65,6 +67,7 @@
     /// <summary>
     /// Method to get desired objects by filtering and aggregating the database
     /// </summary>
+    [HebrewTranslation(nameof(ObjectFactory))]
     public class ObjectFactory : CipherClass
     {
         /// <summary>
@@ -85,7 +88,7 @@
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
-        public List<string>? GroupBy { get; set; }
+        public List<string>? GroupBy { get; set; } = new();
 
         /// <summary>
         ///  List of aggregate methods defining the new object.

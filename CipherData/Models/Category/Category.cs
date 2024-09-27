@@ -2,6 +2,7 @@
 
 namespace CipherData.Models
 {
+    [HebrewTranslation(nameof(Category))]
     public class Category : Resource
     {
         private string? _Name = string.Empty;

@@ -1,10 +1,9 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// An instance of a specific processes
     /// </summary>
+    [HebrewTranslation(nameof(Process))]
     public class Process : Resource
     {
         private List<Event> _Events = new();

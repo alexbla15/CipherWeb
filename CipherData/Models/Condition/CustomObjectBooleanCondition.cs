@@ -13,6 +13,7 @@
     /// Complex boolean condition that is applied to custom 
     /// objects created from an object factory
     /// </summary>
+    [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
     public class CustomObjectBooleanCondition
     {
         /// <summary>

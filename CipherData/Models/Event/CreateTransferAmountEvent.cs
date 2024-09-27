@@ -5,6 +5,7 @@ namespace CipherData.Models
     /// <summary>
     /// An event of transfering mass between one package to another
     /// </summary>
+    [HebrewTranslation(nameof(CreateTranserAmountEvent))]
     public class CreateTranserAmountEvent : CipherClass
     {
         private string? _Worker = null;

@@ -1,5 +1,11 @@
 ﻿@code {
     /// <summary>
+    /// drop-down text when no value is chosen
+    /// </summary>
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    /// <summary>
     /// Chosen method
     /// </summary>
     [Parameter]
@@ -19,8 +25,13 @@
 
     [Parameter]
     public EventCallback<object> Change { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Placeholder ??= (new AggregateItem()).Translate(nameof(AggregateItem.Attribute));
+    }
 }
 
 <RadzenDropDown @bind-Value="@ChosenAttribute" Data=@AggregationFields TextProperty="Translation" ValueProperty="Path" Visible="@Visible"
-                Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" AllowClear="true" AllowFiltering="true" 
+                Placeholder="@Placeholder" AllowClear="true" AllowFiltering="true" 
                 Style="width: 100%" Change="@Change"/>

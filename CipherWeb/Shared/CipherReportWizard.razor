@@ -1,22 +1,20 @@
 ﻿@inject DialogService DialogService
 
-@inherits CipherSteps
-
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
             <CipherAutoComplete @bind-Value="ChosenReport.Id" Label="מספר סידורי" Icon="@Icons.Cipher.Id" Disabled="true"/>
             <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="שם הדוח" Icon="@Icons.Documents.Edit.edit" @ref="ReportName" />
         </CipherComponentCard>
-        <CipherParametrization ChosenParameters="@ChosenReport.Parameters"/>
+        <CipherParametrization ChosenParameters="@ChosenReport.Parameters" ChosenParametersChanged="@OnParametersChanged"/>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="אובייקטים לתצוגה">
-        <SearchAdvanced/>
+        <SearchAdvanced ChosenCondition="@ChosenReport.ObjectFactory.Filter" ChosenConditionChanged="@OnFilterChanged" />
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="בניית תצוגה">
-        <CipherDataGrouper Cipher_TItem="Package" Title="בחירת קבוצות" groupLevels=1 @ref=dataGrouper></CipherDataGrouper>
+        <CipherDataGrouper Cipher_TItem="Package" Title="בחירת קבוצות" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
 
         <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות"/>
 
@@ -52,6 +50,7 @@
         </CipherComponentCard>
     </RadzenStepsItem>
 </CipherSteps>
+<CipherJsonCheck JsonValue="@ChosenReport.ToJson()" />
 
 @code {
     /// <summary>
@@ -87,6 +86,23 @@
         (vessels, error) = CachedData.AllVessels;
     }
 
+    private void OnFilterChanged(GroupedBooleanCondition newFilter)
+    {
+        ChosenReport.ObjectFactory.Filter = newFilter;
+    }
+
+    private void OnParametersChanged(List<ReportParameter> newParameters)
+    {
+        ChosenReport.Parameters = newParameters;
+    }
+
+    private void OnGroupsChanged(List<string> newGroups)
+    {
+        ChosenReport.ObjectFactory.GroupBy = newGroups;
+    }
+
+    // OLD - NEED TO REVISE
+
     /// <summary>
     /// Get translation between (english, hebrew) column names for table.
     /// </summary>
@@ -100,15 +116,15 @@
         rowsColumnsOrder.Clear();
 
         // first columns must be the grouped-by columns
-        foreach (int order in dataGrouper.chosenGroups.Keys)
+        foreach (string group in dataGrouper.ChosenGroups)
         {
-            if (!string.IsNullOrEmpty(dataGrouper.chosenGroups[order]))
+            if (!string.IsNullOrEmpty(group))
             {
-                rowsColumnsOrder.Add(CipherWeb.CommonFuncs.DeTranslateField(dataGrouper.chosenGroups[order]), order);
+                rowsColumnsOrder.Add(CipherWeb.CommonFuncs.DeTranslateField(group), dataGrouper.ChosenGroups.IndexOf(group));
             }
         }
 
-        int counter = dataGrouper.groupLevels;
+        int counter = dataGrouper.ChosenGroups.Count;
 
         // next columns according to the order of the aggregation
         List<AggregateItem> aggregates = dataAggregater.GetData();

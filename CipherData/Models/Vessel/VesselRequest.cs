@@ -3,6 +3,7 @@
     /// <summary>
     /// Create a new unit or update it
     /// </summary>
+    [HebrewTranslation(nameof(VesselRequest))]
     public class VesselRequest : CipherClass
     {
         private string? _Name;

@@ -32,7 +32,6 @@ namespace CipherData.Models
     {
         public override Condition Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-
             // Parse the JSON object without consuming the reader's input
             JsonDocument doc = JsonDocument.ParseValue(ref reader);
 
@@ -131,6 +130,7 @@ namespace CipherData.Models
         }
     }
 
+    [HebrewTranslation(nameof(Resource))]
     /// <summary>
     /// Basic resource template for objects.
     /// </summary>

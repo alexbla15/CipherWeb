@@ -3,6 +3,7 @@
     /// <summary>
     /// Groups of boolean conditions on a single object
     /// </summary>
+    [HebrewTranslation(nameof(GroupedBooleanCondition))]
     public class GroupedBooleanCondition : Condition
     {
         /// <summary>

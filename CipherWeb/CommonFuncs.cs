@@ -52,6 +52,15 @@ namespace CipherWeb
         }
 
         /// <summary>
+        /// Method to get all classes that inherit from Resource
+        /// </summary>
+        /// <returns></returns>
+        public static List<Type> GetResourceClasses()
+        {
+            return typeof(Resource).Assembly.GetTypes().Where(x => x.BaseType?.Name == nameof(Resource)).ToList();
+        }
+
+        /// <summary>
         /// Method to get all classes that inherit from CipherClass
         /// </summary>
         /// <returns></returns>
@@ -70,11 +79,18 @@ namespace CipherWeb
         public static List<CipherField> GetCipherTypeFields_SingleLayer(Type type, string? mainPath = null, string? mainTranslation = null)
         {
             List<PropertyInfo> fields = type.GetProperties().Where(x => x.GetCustomAttribute<HebrewTranslationAttribute>() != null).ToList();
+
+
+            string? type_translation = type.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation;
+
             return fields.Select(x => new CipherField()
             {
                 FieldType = x.PropertyType,
-                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]" : $"[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]",
-                Path = mainPath != null ? $"{mainPath}.[{type.Name}].[{x.Name}]" : $"[{type.Name}].[{x.Name}]", IsList = x.PropertyType.IsGenericType
+
+
+                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]" : $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]",
+                Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]",
+                IsList = x.PropertyType.IsGenericType
             }).ToList();
         }
 
@@ -94,13 +110,18 @@ namespace CipherWeb
                 {
                     if (CachedData.CipherTypes.Contains(field.FieldType))
                     {
-                        new_fields.AddRange(GetCipherTypeFields(setType, mainPath: $"[{field.Path}]",
+                        new_fields.AddRange(GetCipherTypeFields(setType, mainPath: $"{field.Path}",
                         mainTranslation: $"{field.Translation}", curr_depth+1));
                     }
                     else if (field.IsList)
                     {
-                        new_fields.AddRange(GetCipherTypeFields(field.FieldType.GetGenericArguments()[0], mainPath: $"[{field.Path}]",
-                        mainTranslation: $"{field.Translation}", curr_depth+1));
+                        List<CipherField> addition_fields = GetCipherTypeFields(field.FieldType.GetGenericArguments()[0], mainPath: $"{field.Path}",
+                        mainTranslation: $"{field.Translation}", curr_depth+1);
+                        foreach (CipherField addition in addition_fields)
+                        {
+                            addition.IsList = true;
+                        }
+                        new_fields.AddRange(addition_fields);
                     }
                 }
             }
@@ -123,6 +144,23 @@ namespace CipherWeb
             }
 
             return fields.DistinctBy(x=>x.Translation).OrderBy(x => x.Translation).ToList();
+        }
+
+
+        /// <summary>
+        /// Method to get all available resource fields
+        /// </summary>
+        /// <returns></returns>
+        public static List<CipherField> GetAllResourceFields()
+        {
+            List<CipherField> fields = new();
+
+            foreach (Type type in GetResourceClasses())
+            {
+                fields.AddRange(GetCipherTypeFields(type));
+            }
+
+            return fields.DistinctBy(x => x.Path).OrderBy(x => x.Translation).ToList();
         }
     }
 }

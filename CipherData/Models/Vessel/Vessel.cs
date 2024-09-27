@@ -2,6 +2,7 @@
 
 namespace CipherData.Models
 {
+    [HebrewTranslation(nameof(Vessel))]
     public class Vessel : Resource
     {
         private string? _Name;

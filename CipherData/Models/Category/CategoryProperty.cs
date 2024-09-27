@@ -11,6 +11,7 @@
     /// Property scheme of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
     /// </summary>
+    [HebrewTranslation(nameof(CategoryProperty))]
     public class CategoryProperty: CipherClass
     {
         private string? _Name = string.Empty;
@@ -47,19 +48,9 @@
         [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
         public string? DefaultValue { get; set; } = null;
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDefaultValue()
         {
             CheckField result = new();

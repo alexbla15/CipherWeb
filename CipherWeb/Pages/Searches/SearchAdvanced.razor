@@ -3,7 +3,7 @@
 <PageTitle>חיפוש מתקדם</PageTitle>
 
 <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
-    <RadzenSelectBar @bind-Value="@objectId" Multiple="false" TValue="int">
+    <RadzenSelectBar @bind-Value="@objectId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new() ; await ParamsChanged();})">
         <Items>
             @foreach (string objType in objectTypes)
             {
@@ -26,7 +26,10 @@
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     [Parameter]
-    public GroupedBooleanCondition Condition { get; set; } = new();
+    public GroupedBooleanCondition ChosenCondition { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<GroupedBooleanCondition> ChosenConditionChanged { get; set; }
 
     private CipherBooleanConditions DataFilter = new();
 
@@ -39,12 +42,12 @@
 
     private RenderFragment? RenderCipherDataFilter(int objectId) => objectId switch
     {
-        0 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Package)))" />,
-        1 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Vessel)))" />,
-        2 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(StorageSystem)))" />,
-        3 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Event)))" />,
-        4 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Process)))" />,
-        5 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Category)))" />,
+        0 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Package)))" ChosenConditionChanged="@ParamsChanged" />,
+        1 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Vessel)))" ChosenConditionChanged="@ParamsChanged"/>,
+        2 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(StorageSystem)))" ChosenConditionChanged="@ParamsChanged" />,
+        3 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Event)))" ChosenConditionChanged="@ParamsChanged" />,
+        4 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Process)))" ChosenConditionChanged="@ParamsChanged"/>,
+        5 => @<CipherBooleanConditions @ref="DataFilter" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(typeof(Category)))" ChosenConditionChanged="@ParamsChanged" />,
         _ => null
     };
 
@@ -63,10 +66,16 @@
     public List<T> GetFilteredObjects<T>() where T : Resource
     {
         List<T> objects = new();
-        ObjectFactory obj = new() { Filter = Condition };
+        ObjectFactory obj = new() { Filter = ChosenCondition };
         (objects, Error) = Config.QueryRequests.QueryObjects<T>(obj);
         return objects;
     }
 
-    public void SetCondition() => Condition = DataFilter.ChosenCondition;
+    public void SetCondition() => ChosenCondition = DataFilter.ChosenCondition;
+
+
+    async Task ParamsChanged()
+    {
+        await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
+    }
 }

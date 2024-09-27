@@ -3,6 +3,7 @@
     /// <summary>
     /// Create a new process definition or update it.
     /// </summary>
+    [HebrewTranslation(nameof(ProcessDefinitionRequest))]
     public class ProcessDefinitionRequest : CipherClass
     {
         private string? _Name = string.Empty;

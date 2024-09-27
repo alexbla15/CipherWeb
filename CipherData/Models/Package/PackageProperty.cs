@@ -3,6 +3,7 @@
     /// <summary>
     /// Property scheme of one of the package's properties.
     /// </summary>
+    [HebrewTranslation(nameof(PackageProperty))]
     public class PackageProperty : CipherClass
     {
         private string? _Name = string.Empty;
@@ -27,14 +28,7 @@
             set => _Value = value?.Trim();
         }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckValue() => CheckField.Required(Value, Translate(nameof(Value)));
 
         /// <summary>

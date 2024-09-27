@@ -7,6 +7,7 @@ namespace CipherData.Models
         Created, Approved, Modified
     }
 
+    [HebrewTranslation(nameof(UserAction))]
     public class UserAction : Resource
     {
         private string _By = string.Empty;

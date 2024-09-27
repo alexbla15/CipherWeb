@@ -6,6 +6,7 @@ namespace CipherData.Models
     /// Definition of a process - 
     /// a collection of steps that make a single definition
     /// </summary>
+    [HebrewTranslation(nameof(ProcessStepDefinition))]
     public class ProcessStepDefinition: Resource
     {
         private string _Name = string.Empty;

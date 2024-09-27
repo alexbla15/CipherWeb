@@ -1,9 +1,8 @@
 ﻿using CipherData.Randomizer;
-using System.Linq;
-using System.Text.Json;
 
 namespace CipherData.Models
 {
+    [HebrewTranslation(nameof(Package))]
     public class Package : Resource
     {
         private string? _Description;

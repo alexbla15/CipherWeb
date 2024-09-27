@@ -3,6 +3,7 @@
     /// <summary>
     /// Create new event
     /// </summary>
+    [HebrewTranslation(nameof(CreateEvent))]
     public class CreateEvent : CipherClass
     {
         private string? _Worker;
@@ -52,29 +53,21 @@
         [HebrewTranslation(typeof(Event), nameof(Actions))]
         public List<PackageRequest> Actions { get; set; } = new();
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckWorker() => CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
+        public CheckField CheckComments() => CheckField.Required(Comments, Translate(nameof(Comments)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckProcessId()
         {
-            if (!string.IsNullOrEmpty(ProcessId)) return CheckField.CheckString(ProcessId, Translate(nameof(ProcessId)));
-            return new CheckField();
+            return (!string.IsNullOrEmpty(ProcessId)) ? CheckField.CheckString(ProcessId, Translate(nameof(ProcessId))) : new();
         }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckEventType() => CheckField.NotEq(EventType, 0, Translate(nameof(EventType)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckComments() => CheckField.Required(Comments, Translate(nameof(Comments)));
 
         /// <summary>
         /// Method to check if field is applicable for this request

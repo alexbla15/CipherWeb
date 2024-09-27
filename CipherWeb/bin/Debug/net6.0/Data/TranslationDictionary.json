@@ -1,13 +1,16 @@
 ﻿{
+  "AggregateItem": "אגרגט",
   "AggregateItem_Attribute": "תכונה",
   "AggregateItem_As": "כינוי",
   "AggregateItem_Method": "פונקציה",
 
+  "BooleanCondition": "תנאי פשוט",
   "BooleanCondition_Attribute": "תכונה",
   "BooleanCondition_AttributeRelation": "יחס",
   "BooleanCondition_Operator": "אופרטור",
   "BooleanCondition_Value": "ערך",
 
+  "Category": "קטגוריה",
   "Category_Children": "קטגוריות מוכלות",
   "Category_ConsumingProcesses": "תהליכים יוצרים",
   "Category_CreatingProcesses": "תהליכים צורכים",
@@ -18,23 +21,22 @@
   "Category_Parent": "קטגוריית אב",
   "Category_Properties": "תכונות",
 
+  "CategoryProperty": "תכונת קטגוריה",
   "CategoryProperty_Name": "תכונה",
   "CategoryProperty_Description": "תיאור",
   "CategoryProperty_PropertyType": "טיפוס",
   "CategoryProperty_DefaultValue": "ערך ברירת מחדל",
 
+  "CreateTranserAmountEvent": "תנועה 23",
   "CreateTranserAmountEvent_DonatingPackage": "תעודה מוסרת",
   "CreateTranserAmountEvent_AcceptingPackage": "תעודה מקבלת",
   "CreateTranserAmountEvent_Amount": "מסה מועברת [גר']",
 
+  "CreateRelocationEvent": "תנועה 24",
   "CreateRelocationEvent_TargetSystem": "מערכת יעד",
   "CreateRelocationEvent_Packages": "תעודות מועברות",
 
-  "Condition_Attribute": "תכונה",
-  "Condition_Operator": "אופרטור",
-  "Condition_Relation": "יחס",
-  "Condition_Value": "ערך",
-
+  "DisplayedEvent": "תנועה מוצגת",
   "DisplayedEvent_AcceptingPackage": "תעודה מקבלת",
   "DisplayedEvent_AcceptingSystem": "מערכת מקבלת",
   "DisplayedEvent_DonatingPackage": "תעודה מוסרת",
@@ -42,6 +44,7 @@
   "DisplayedEvent_EventMass": "מסה מועברת [גר']",
   "DisplayedEvent_Id": "מספר תנועה",
 
+  "Event": "תנועה",
   "Event_Actions": "תעודות מעורבות",
   "Event_Comments": "הערות",
   "Event_InitialStatePackages": "תעודות מעורבות - מצב התחלתי",
@@ -55,18 +58,22 @@
   "Error_Code": "קוד שגיאה",
   "Error_Message": "הודעת שגיאה",
 
+  "GroupedBooleanCondition": "תנאי מרוכב",
   "GroupedBooleanCondition_Conditions": "תנאים",
   "GroupedBooleanCondition_Operator": "אופרטור",
 
+  "ObjectFactory": "מחולל אובייקטים",
   "ObjectFactory_Aggregate": "אגרגטים",
   "ObjectFactory_Attribute": "תכונה",
   "ObjectFactory_Filter": "סינון לפי",
   "ObjectFactory_OrderBy": "סידור לפי",
   "ObjectFactory_GroupBy": "קיבוץ לפי",
 
+  "OrderedItem": "איבר מסדר",
   "OrderedItem_Attribute": "תכונה",
   "OrderedItem_Order": "אופן סידור",
 
+  "Package": "תעודה",
   "Package_BrutMass": "מסה ברוטו [גר']",
   "Package_Category": "קטגוריה",
   "Package_Children": "תעודות מוכלות",
@@ -80,23 +87,28 @@
   "Package_System": "מערכת",
   "Package_Vessel": "כלי",
 
+  "PackageProperty": "תכונת תעודה",
   "PackageProperty_Name": "תכונה",
   "PackageProperty_Value": "ערך",
 
+  "Process": "תהליך",
   "Process_Definition": "הגדרה",
   "Process_End": "סיום",
   "Process_Events": "תנועות",
   "Process_Start": "התחלה",
   "Process_UncompletedSteps": "שלבים שטרם הושלמו",
 
+  "ProcessDefinition": "סכמת תהליך",
   "ProcessDefinition_Description": "תיאור תהליך",
   "ProcessDefinition_Name": "שם תהליך",
   "ProcessDefinition_Steps": "שלבים",
 
+  "ProcessStepDefinition": "שלב",
   "ProcessStepDefinition_Condition": "תנאי",
   "ProcessStepDefinition_Description": "תיאור שלב",
   "ProcessStepDefinition_Name": "שם שלב",
 
+  "Resource": "משאב",
   "Resource_ClearenceLevel": "מידור",
   "Resource_Id": "מספר סידורי",
   "Resource_Uuid": "מספר סידורי אוניברסלי",
@@ -106,6 +118,7 @@
   "RequestResult_401": "אין הרשאה",
   "RequestResult_404": "בעיה בכתובת המבוקשת",
 
+  "System": "מערכת",
   "System_Children": "מערכות מוכלות",
   "System_Name": "שם מערכת",
   "System_Description": "תיאור",
@@ -113,6 +126,7 @@
   "System_Properties": "תכונות",
   "System_Unit": "יחידה",
 
+  "Unit": "יחידה",
   "Unit_Children": "יחידות מוכלות",
   "Unit_Conditions": "מגבלות",
   "Unit_Description": "תיאור",
@@ -121,6 +135,7 @@
   "Unit_Properties": "תכונות",
   "Unit_Systems": "מערכות",
 
+  "UserAction": "פעולת משתמש",
   "UserActions": "פעולות משתמש",
   "UserAction_ActionParameters": "פרמטרים שהשתנו",
   "UserAction_ActionType": "סוג פעולה",
@@ -130,6 +145,7 @@
   "UserAction_ObjectId": "מספר סידורי",
   "UserAction_Status": "סטטוס",
 
+  "Vessel": "כלי",
   "Vessel_Name": "שם כלי",
   "Vessel_ContainingPackages": "תעודות",
   "Vessel_System": "מערכת",

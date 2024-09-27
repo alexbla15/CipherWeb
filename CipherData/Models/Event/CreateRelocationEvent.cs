@@ -3,6 +3,7 @@
     /// <summary>
     /// An event of relocating several packages to a new location
     /// </summary>
+    [HebrewTranslation(nameof(CreateRelocationEvent))]
     public class CreateRelocationEvent : CipherClass
     {
         private string? _Worker = string.Empty;

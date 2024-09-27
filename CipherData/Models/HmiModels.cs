@@ -1,13 +1,13 @@
-﻿using System.Diagnostics.Metrics;
+﻿using System.Text.Json.Serialization;
 
 namespace CipherData.Models
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class HebrewTranslationAttribute : Attribute
     {
-        public string Translation { get; }
+        public string? Translation { get; set; } = string.Empty;
 
-        public HebrewTranslationAttribute(string engWord)
+        public void SetTranslation(string engWord)
         {
             if (Translator.TranslationsDictionary.ContainsKey(engWord))
             {
@@ -19,18 +19,12 @@ namespace CipherData.Models
             }
         }
 
+        public HebrewTranslationAttribute(string engWord) => SetTranslation(engWord);
+
         public HebrewTranslationAttribute(Type ObjType, string engWord)
         {   
             string FullWord = (ObjType == typeof(StorageSystem)) ? $"System_{engWord}" : $"{ObjType.Name}_{engWord}";
-
-            if (Translator.TranslationsDictionary.ContainsKey(FullWord))
-            {
-                Translation = Translator.TranslationsDictionary[FullWord].Trim();
-            }
-            else
-            {
-                Translation = FullWord.Trim();
-            }
+            SetTranslation(FullWord);
         }
     }
 
@@ -54,6 +48,8 @@ namespace CipherData.Models
         public string Path { get; set; } = string.Empty;
         public string Translation { get; set; } = string.Empty;
         public bool IsList { get; set; } = false;
+
+        [JsonIgnore]
         public Type FieldType { get; set; } = typeof(CipherClass);
     }
 
@@ -61,7 +57,8 @@ namespace CipherData.Models
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public CipherField? pType { get; set; }
+
+        public CipherField? ParamType { get; set; }
     }
 
     public class Report : CipherClass
@@ -86,12 +83,8 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        private static int IdCounter { get; set; } = 0;
+        private static int IdCounter = 0;
 
-        public static string GetNextId()
-        {
-            IdCounter += 1;
-            return IdCounter.ToString();
-        }
+        public static string GetNextId() => (IdCounter++).ToString();
     }
 }

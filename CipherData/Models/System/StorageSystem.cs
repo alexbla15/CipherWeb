@@ -2,6 +2,7 @@
 
 namespace CipherData.Models
 {
+    [HebrewTranslation("System")]
     public class StorageSystem : Resource
     {
         private string _Name = string.Empty;

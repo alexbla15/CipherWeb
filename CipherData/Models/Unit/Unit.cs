@@ -2,6 +2,7 @@
 
 namespace CipherData.Models
 {
+    [HebrewTranslation(nameof(Unit))]
     public class Unit : Resource
     {
         private string _Name = string.Empty;

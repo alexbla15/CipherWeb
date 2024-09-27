@@ -3,6 +3,7 @@
     /// <summary>
     /// Create a new unit or update it
     /// </summary>
+    [HebrewTranslation(nameof(UnitRequest))]
     public class UnitRequest : CipherClass
     {
         private string _Name = string.Empty;

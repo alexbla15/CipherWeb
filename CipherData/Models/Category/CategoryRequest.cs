@@ -3,6 +3,7 @@
     /// <summary>
     /// Create a new category or update it
     /// </summary>
+    [HebrewTranslation(nameof(CategoryRequest))]
     public class CategoryRequest: CipherClass
     {
         private string? _Name = string.Empty;
@@ -58,23 +59,12 @@
         [HebrewTranslation(typeof(Category), nameof(Category.Properties))]
         public List<CategoryProperty>? Properties { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckParentId()
         {
-            if (!string.IsNullOrEmpty(ParentId)) return CheckField.Required(ParentId, Translate(nameof(ParentId)));
-            return new();
+            return (!string.IsNullOrEmpty(ParentId)) ? CheckField.Required(ParentId, Translate(nameof(ParentId))) : new();
         }
 
         /// <summary>

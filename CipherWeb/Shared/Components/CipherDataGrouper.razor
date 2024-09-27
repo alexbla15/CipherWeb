@@ -7,19 +7,13 @@
     /// Available fields for grouping.
     /// </summary>
     [Parameter]
-    public List<string> GroupFields { get; set; } = CommonFuncs.GetTranslatedFields(typeof(Cipher_TItem)).Select(x => x.Item2).ToList();
+    public List<CipherField> GroupFields { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(Cipher_TItem));
 
     /// <summary>
     /// Max amount of grouping levels.
     /// </summary>
     [Parameter]
     public int maxGroupLevels { get; set; } = 4;
-
-    /// <summary>
-    /// Current amount of group levels
-    /// </summary>
-    [Parameter]
-    public int groupLevels { get; set; } = 0;
 
     /// <summary>
     /// Alert text for an empty group.
@@ -48,17 +42,20 @@
     /// User-chosen groups (place, property)
     /// </summary>
     [Parameter]
-    public Dictionary<int, string> chosenGroups { get; set; } = new();
+    public List<string> ChosenGroups { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<string>> ChosenGroupsChanged { get; set; }
 
     private bool emptyGroupsAlertVisible = false;
     private bool limitedGroupsAlertVisible = false;
     private bool duplicityAlertVisible = false;
     private string? limitedGroupsAlertText;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         limitedGroupsAlertText = GetLimitedGroupsAlertText();
-        chosenGroups = SetChosenGroups();
+        await AddGroup();
     }
 
     /// <summary>
@@ -67,27 +64,17 @@
     /// <returns></returns>
     private string GetLimitedGroupsAlertText() => "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
 
-    private Dictionary<int, string> SetChosenGroups()
-    {
-        Dictionary<int, string> initialGroups = new Dictionary<int, string>();
-
-        for (int i = 0; i < maxGroupLevels; i++)
-        {
-            initialGroups[i] = string.Empty;
-        }
-        return initialGroups;
-    }
-
     /// <summary>
     /// Add a grouping parameter
     /// </summary>
-    private void AddGroup()
+    private async Task AddGroup()
     {
-        if (!chosenGroups.Where(x => x.Key < groupLevels).Any(x => string.IsNullOrEmpty(x.Value)))
+        if (!ChosenGroups.Where(x => ChosenGroups.IndexOf(x) < ChosenGroups.Count).Any(x => string.IsNullOrEmpty(x)))
         {
-            if (groupLevels < maxGroupLevels)
+            if (ChosenGroups.Count < maxGroupLevels)
             {
-                groupLevels += 1;
+                ChosenGroups.Add(string.Empty);
+                StateHasChanged();
             }
             else
             {
@@ -98,24 +85,26 @@
         {
             emptyGroupsAlertVisible = true;
         }
+
+        await GroupsChanged();
     }
 
     /// <summary>
     /// Validate if there are two identical groups.
     /// </summary>
     /// <param name="index"></param>
-    private void CheckDuplicity(int index)
+    private async Task CheckDuplicity(int index)
     {
-        HashSet<string> hashed_groups = new HashSet<string>();
+        HashSet<string> hashed_groups = new();
 
-        foreach (string group in chosenGroups.Values)
+        foreach (string group in ChosenGroups)
         {
             if (!string.IsNullOrEmpty(group))
             {
                 if (!hashed_groups.Add(group))
                 {
+                    await DeleteGroup();
                     duplicityAlertVisible = true;
-                    chosenGroups[index] = string.Empty;
                 }
                 else
                 {
@@ -125,16 +114,24 @@
         }
     }
 
+    private async Task ChangedValue(int index, string? val)
+    {
+        ChosenGroups[index] = val ?? string.Empty;
+        CheckDuplicity(index);
+
+        await GroupsChanged();
+    }
+
     /// <summary>
     /// Delete last-inserted group.
     /// </summary>
-    private void DeleteGroup()
+    private async Task DeleteGroup()
     {
-        if (groupLevels > 0)
-        {
-            chosenGroups[groupLevels - 1] = string.Empty;
-            groupLevels -= 1;
-        }
+        bool cond = ChosenGroups.Count > 0;
+
+        if (cond) ChosenGroups.RemoveAt(ChosenGroups.Count - 1);
+        StateHasChanged();
+        await GroupsChanged();
     }
 
     /// <summary>
@@ -146,6 +143,11 @@
         limitedGroupsAlertVisible = false;
         duplicityAlertVisible = false;
     }
+
+    async Task GroupsChanged()
+    {
+        await ChosenGroupsChanged.InvokeAsync(ChosenGroups); // Trigger change event
+    }
 }
 
 <CipherComponentCard Title="@Title">
@@ -156,12 +158,11 @@
 
     <ChildContent>
         <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" Style="padding-bottom:20px;" Gap="20px">
-            @for (int i = 0; i < groupLevels; i++)
+            @foreach(string gr in ChosenGroups)
             {
-                int index = i;
-                <CipherFormRow Icon="@($"filter_{index+1}")" Width="240px">
-                    <RadzenDropDown @bind-Value="@chosenGroups[index]" TValue="string" Change="@(args => CheckDuplicity(index))" Placeholder="@($"רמה {index+1}")"
-                                    Data="@GroupFields"/>
+                <CipherFormRow Icon="@($"filter_{ChosenGroups.IndexOf(gr)+1}")" Width="240px">
+                    <CipherAttributeDropDown AggregationFields="@GroupFields" Change="@(args => ChangedValue(ChosenGroups.IndexOf(gr), args?.ToString()))"
+                                             Placeholder="@($"רמה {ChosenGroups.IndexOf(gr)+1}")" ChosenAttribute="@gr" />
                 </CipherFormRow>
             }
         </RadzenStack>

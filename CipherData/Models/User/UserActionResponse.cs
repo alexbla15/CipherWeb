@@ -5,6 +5,7 @@ namespace CipherData.Models
     /// <summary>
     /// Get user actions contract
     /// </summary>
+    [HebrewTranslation(nameof(UserActionResponse))]
     public class UserActionResponse
     {
         /// <summary>

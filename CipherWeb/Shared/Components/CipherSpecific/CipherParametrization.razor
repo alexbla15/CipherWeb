@@ -20,9 +20,12 @@
     [Parameter]
     public List<ReportParameter> ChosenParameters { get; set; } = new();
 
+    [Parameter]
+    public EventCallback<List<ReportParameter>> ChosenParametersChanged { get; set; }
+
     private RadzenDataGrid<ReportParameter> CustomDataGrid = new();
 
-    private List<CipherField> OptionalTypes = CommonFuncs.GetAllCipherFields();
+    private List<CipherField> OptionalTypes = CommonFuncs.GetAllResourceFields();
     private ReportParameter old_param = new();
 
     protected override void OnInitialized() => Title ??= "פרמטרי משתמש";
@@ -32,10 +35,10 @@
     /// </summary>
     async Task AddComponent()
     {
-        ChosenParameters.Add(new ReportParameter() { Id = ChosenParameters.Count + 1 });
+        ChosenParameters.Add(new() { Id = ChosenParameters.Count + 1 });
         StateHasChanged();
-
         await CustomDataGrid.RefreshDataAsync();
+        await ParamsChanged(); // Trigger change event
     }
 
     /// <summary>
@@ -47,6 +50,7 @@
     {
         ChosenParameters.Remove(param);
         await CustomDataGrid.RefreshDataAsync();
+        await ParamsChanged(); // Trigger change event
     }
 
     /// <summary>
@@ -57,6 +61,12 @@
     {
         ChosenParameters = new();
         await CustomDataGrid.RefreshDataAsync();
+        await ParamsChanged(); // Trigger change event
+    }
+
+    async Task ParamsChanged()
+    {
+        await ChosenParametersChanged.InvokeAsync(ChosenParameters); // Trigger change event
     }
 }
 
@@ -81,12 +91,12 @@
                 <RadzenDataGridColumn TItem="ReportParameter" Property="Id" Title="#" TextAlign="@TdTextAlign" Width="5%" />
                 <RadzenDataGridColumn TItem="ReportParameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
                     <Template Context="param">
-                        <RadzenTextBox @bind-Value="@param.Name" Style="width: 100%" />
+                        <RadzenTextBox @bind-Value="@param.Name" Style="width: 100%" Change="@ParamsChanged" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ReportParameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
                     <Template Context="param">
-                        <RadzenDropDown @bind-Value=@param.pType Data=@OptionalTypes TextProperty="Translation"
+                        <RadzenDropDown @bind-Value=@param.ParamType Data=@OptionalTypes TextProperty="Translation" Change="@ParamsChanged"
                                                 Placeholder="חיפוש פרמטר" AllowClear="true" AllowFiltering="true" Style="width: 100%"/>
                     </Template>
                 </RadzenDataGridColumn>

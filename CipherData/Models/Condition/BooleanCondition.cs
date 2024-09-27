@@ -58,6 +58,7 @@
     /// <summary>
     /// Condition function on a single object
     /// </summary>
+    [HebrewTranslation(nameof(BooleanCondition))]
     public class BooleanCondition : Condition
     {
         private string? _Attribute = string.Empty;
@@ -78,7 +79,7 @@
         /// Expected relation between attribute and a value.
         /// </summary>
         [HebrewTranslation(typeof(BooleanCondition), nameof(AttributeRelation))]
-        public AttributeRelation AttributeRelation { get; set; } = AttributeRelation.Contains;
+        public AttributeRelation AttributeRelation { get; set; } = AttributeRelation.Eq;
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
@@ -107,7 +108,7 @@
         /// </summary>
         public CheckField CheckValue()
         {
-            return (string.IsNullOrEmpty(Value)) ? new CheckField() :CheckField.Required(Value, Translate(nameof(Value)));
+            return (string.IsNullOrEmpty(Value)) ? new CheckField() : CheckField.Required(Value, Translate(nameof(Value)));
         }
 
         /// <summary>

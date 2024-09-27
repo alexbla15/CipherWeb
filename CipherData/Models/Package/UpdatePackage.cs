@@ -4,6 +4,7 @@
     /// Update package details contract.
     /// Ergo, only properties that are not changed using Event, are included.
     /// </summary>
+    [HebrewTranslation(nameof(UpdatePackage))]
     public class UpdatePackage : CipherClass
     {
         private string? _PackageDescription;
@@ -40,24 +41,9 @@
         [HebrewTranslation(typeof(Package), nameof(Package.Processes))]
         public List<string>? DestinationProcessesIds { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckActionComments() => CheckField.Required(ActionComments, Translate(nameof(ActionComments)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckPackageId() => CheckField.Required(PackageId, Translate(nameof(PackageId)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckPackageDescription() => CheckField.Required(PackageDescription, Translate(nameof(PackageDescription)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDestinationProcessesIds()
         {
             CheckField result = CheckField.Required(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds)));
