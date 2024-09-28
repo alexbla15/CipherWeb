@@ -19,7 +19,7 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Name)))" Icon="@Icons.Symbols.Category" @ref=CatName
+                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Name)))" Icon="@Icons.Symbols.category" @ref=CatName
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name"/>
                 <CipherCategoryDropDown Label="@(new Category().Translate(nameof(Category.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((Category?)args))"
                                         Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />

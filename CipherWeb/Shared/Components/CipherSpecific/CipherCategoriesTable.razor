@@ -4,7 +4,7 @@
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.AddCircleOutline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
+        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="Category" DataSource="@ChosenCategories" WithCustomColumns="true"

@@ -21,7 +21,7 @@
             <ChildContent>
                 <CipherAutoComplete Label="@(new Vessel().Translate(nameof(Vessel.Name)))" Icon="@Icons.Cipher.Vessel"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
-                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(Vessel.Type)))" Icon="@Icons.Symbols.Category"
+                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(Vessel.Type)))" Icon="@Icons.Symbols.category"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
                 <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenSystem="@ChosenObject?.System" @ref=VesSys />
 

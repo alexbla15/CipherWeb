@@ -1,4 +1,15 @@
-﻿namespace CipherWeb.Data
+﻿using static CipherWeb.Data.Icons.Symbols;
+using static CipherWeb.Data.Icons;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
+using System.Threading;
+using CipherData.Models;
+using System;
+using static CipherWeb.Data.Icons.Travel.Vehicles;
+using static Dapper.SqlMapper;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+
+namespace CipherWeb.Data
 {
     public class Icons
     {
@@ -1101,90 +1112,477 @@
                 public const string square_foot = nameof(square_foot);
             }
 
-            // continue from here 
-            public class Electricity { }
+            public class Electricity 
+            {
+                public const string cable = nameof(cable);
+                public const string electric_bolt = nameof(electric_bolt);
+                public const string electric_meter = nameof(electric_meter);
+                public const string electrical_services = nameof(electrical_services);
+                public const string energy_savings_leaf = nameof(energy_savings_leaf);
+                public const string flashlight_off = nameof(flashlight_off);
+                public const string flashlight_on = nameof(flashlight_on);
+                public const string highlight = nameof(highlight);
+                public const string outlet = nameof(outlet);
+                public const string power = nameof(power);
+                public const string power_input = nameof(power_input);
+                public const string power_off = nameof(power_off);
+                public const string settings_input_composite = nameof(settings_input_composite);
+                public const string settings_input_svideo = nameof(settings_input_svideo);
+                public const string wind_power = nameof(wind_power);
+            }
 
             public class Medical
             {
-                public const string Science = "science";
+                public const string biotech = nameof(biotech);
+                public const string bloodtype = nameof(bloodtype);
+                public const string clean_hands = nameof(clean_hands);
+                public const string co2 = nameof(co2);
+                public const string coronavirus = nameof(coronavirus);
+                public const string emergency = nameof(emergency);
+                public const string healing = nameof(healing);
+                public const string health_and_safety = nameof(health_and_safety);
+                public const string local_hospital = nameof(local_hospital);
+                public const string local_pharmacy = nameof(local_pharmacy);
+                public const string masks = nameof(masks);
+                public const string medical_information = nameof(medical_information);
+                public const string medical_services = nameof(medical_services);
+                public const string medication = nameof(medication);
+                public const string medication_liquid = nameof(medication_liquid);
+                public const string monitor_heart = nameof(monitor_heart);
+                public const string sanitizer = nameof(sanitizer);
+                public const string personal_injury = nameof(personal_injury);
+                public const string science = nameof(science);
+                public const string sos = nameof(sos);
+                public const string support = nameof(support);
+                public const string vaccines = nameof(vaccines);
             }
         }
 
         public class SearchAndFilter
         {
-            public const string Search = "search";
+            public const string content_paste = nameof(content_paste);
+            public const string filter_alt = nameof(filter_alt);
+            public const string filter_alt_off = nameof(filter_alt_off);
+            public const string filter_list = nameof(filter_list);
+            public const string filter_list_off = nameof(filter_list_off);
+            public const string find_in_page = nameof(find_in_page);
+            public const string find_replace = nameof(find_replace);
+            public const string low_priority = nameof(low_priority);
+            public const string manage_search = nameof(manage_search);
+            public const string pageview = nameof(pageview);
+            public const string plagiarism = nameof(plagiarism);
+            public const string saved_search = nameof(saved_search);
+            public const string search = nameof(search);
+            public const string search_off = nameof(search_off);
+            public const string sort = nameof(sort);
+            public const string troubleshoot = nameof(troubleshoot);
+            public const string youtube_searched_for = nameof(youtube_searched_for);
+            public const string zoom_in = nameof(zoom_in);
+            public const string zoom_out = nameof(zoom_out);
         }
 
         public class Security
         {
-            public const string Lock = "lock";
-            public const string Password = "password";
-            public const string Shield = "shield";
+            public const string add_moderator = nameof(add_moderator); 
+            public const string admin_panel_settings = nameof(admin_panel_settings); 
+            public const string enhanced_encryption = nameof(enhanced_encryption); 
+            public const string fingerprint = nameof(fingerprint); 
+            public const string gpp_bad = nameof(gpp_bad); 
+            public const string gpp_good = nameof(gpp_good); 
+            public const string gpp_maybe = nameof(gpp_maybe); 
+            public const string key = nameof(key); 
+            public const string key_off = nameof(key_off); 
+            public const string _lock = "lock";
+            public const string lock_open = nameof(lock_open);
+            public const string lock_outline = nameof(lock_outline);
+            public const string lock_person = nameof(lock_person);
+            public const string local_police = nameof(local_police);
+            public const string lock_reset = nameof(lock_reset);
+            public const string nest_cam_wired_stand = nameof(nest_cam_wired_stand);
+            public const string no_encryption = nameof(no_encryption);
+            public const string no_encryption_gmailerrorred = nameof(no_encryption_gmailerrorred);
+            public const string password = nameof(password);
+            public const string policy = nameof(policy);
+            public const string private_connectivity = nameof(private_connectivity);
+            public const string remove_moderator = nameof(remove_moderator);
+            public const string safety_check = nameof(safety_check);
+            public const string security = nameof(security);
+            public const string shield = nameof(shield);
+            public const string vpn_key = nameof(vpn_key);
+            public const string vpn_key_off = nameof(vpn_key_off);
         }
-
+ 
         public class Social
         {
+            public const string accessibility = nameof(accessibility);
+            public const string attribution = nameof(attribution);
+            public const string boy = nameof(boy);
+            public const string emoji_people = nameof(emoji_people);
+            public const string escalator_warning = nameof(escalator_warning);
+            public const string family_restroom = nameof(family_restroom);
+            public const string female = nameof(female);
+            public const string girl = nameof(girl);
+            public const string hail = nameof(hail);
+            public const string male = nameof(male);
+            public const string man = nameof(man);
+            public const string man_2 = nameof(man_2);
+            public const string man_3 = nameof(man_3);
+            public const string man_4 = nameof(man_4);
+            public const string self_improvement = nameof(self_improvement);
+            public const string settings_accessibility = nameof(settings_accessibility);
+            public const string transgender = nameof(transgender);
+            public const string wc = nameof(wc);
+            public const string woman = nameof(woman);
+            public const string woman_2 = nameof(woman_2);
+
             public class SinglePerson
             {
-                public const string AccountCircle = "account_circle";
-                public const string Person = "person";
-                public const string PersonOutline = "person_outline";
+                public const string _3p = nameof(_3p);
+                public const string account_box = nameof(account_box);
+                public const string account_circle = nameof(account_circle);
+                public const string assignment_ind = nameof(assignment_ind);
+                public const string badge = nameof(badge);
+                public const string camera_front = nameof(camera_front);
+                public const string co_present = nameof(co_present);
+                public const string contact_page = nameof(contact_page);
+                public const string contacts = nameof(contacts);
+                public const string how_to_reg = nameof(how_to_reg);
+                public const string no_accounts = nameof(no_accounts);
+                public const string perm_contact_calendar = nameof(perm_contact_calendar);
+                public const string person = nameof(person);
+                public const string person_2 = nameof(person_2);
+                public const string person_3 = nameof(person_3);
+                public const string person_4 = nameof(person_4);
+                public const string person_add = nameof(person_add);
+                public const string person_add_alt = nameof(person_add_alt);
+                public const string person_add_alt_1 = nameof(person_add_alt_1);
+                public const string person_add_disabled = nameof(person_add_disabled);
+                public const string person_off = nameof(person_off);
+                public const string person_outline = nameof(person_outline);
+                public const string person_pin = nameof(person_pin);
+                public const string person_pin_circle = nameof(person_pin_circle);
+                public const string person_remove = nameof(person_remove);
+                public const string person_search = nameof(person_search);
+                public const string portrait = nameof(portrait);
+                public const string recent_actors = nameof(recent_actors);
+                public const string sensor_occupied = nameof(sensor_occupied);
+                public const string switch_account = nameof(switch_account);
+
             }
 
             public class Groups
             {
-                public const string _Groups = "groups";
+                public const string _6_ft_apart = nameof(_6_ft_apart);
+                public const string diversity_1 = nameof(diversity_1);
+                public const string diversity_2 = nameof(diversity_2);
+                public const string diversity_3 = nameof(diversity_3);
+                public const string group_add = nameof(group_add);
+                public const string group_off = nameof(group_off);
+                public const string group_remove = nameof(group_remove);
+                public const string groups = nameof(groups);
+                public const string groups_2 = nameof(groups_2);
+                public const string groups_3 = nameof(groups_3);
+                public const string interpreter_mode = nameof(interpreter_mode);
+                public const string people = nameof(people);
+                public const string people_alt = nameof(people_alt);
+                public const string people_outline = nameof(people_outline);
+                public const string reduce_capacity = nameof(reduce_capacity);
+                public const string safety_divider = nameof(safety_divider);
+                public const string social_distance = nameof(social_distance);
+                public const string supervised_user_circle = nameof(supervised_user_circle);
+
             }
 
-            public class Emojis { }
+            public class Emojis 
+            {
+                public const string add_reaction = nameof(add_reaction);
+                public const string child_care = nameof(child_care);
+                public const string emoji_emotions = nameof(emoji_emotions);
+                public const string face = nameof(face);
+                public const string face_2 = nameof(face_2);
+                public const string face_3 = nameof(face_3);
+                public const string face_4 = nameof(face_4);
+                public const string face_5 = nameof(face_5);
+                public const string face_6 = nameof(face_6);
+                public const string face_retouching_natural = nameof(face_retouching_natural);
+                public const string face_retouching_off = nameof(face_retouching_off);
+                public const string mood_bad = nameof(mood_bad);
+                public const string recommend = nameof(recommend);
+                public const string sentiment_dissatisfied = nameof(sentiment_dissatisfied);
+                public const string sentiment_neutral = nameof(sentiment_neutral);
+                public const string sentiment_satisfied_alt = nameof(sentiment_satisfied_alt);
+                public const string sentiment_very_dissatisfied = nameof(sentiment_very_dissatisfied);
+                public const string sentiment_very_satisfied = nameof(sentiment_very_satisfied);
+                public const string sentiment_satisfied = nameof(sentiment_satisfied); 
+                public const string sick = nameof(sick);
+                public const string support_agent = nameof(support_agent);
+                public const string thumbs_up_down = nameof(thumbs_up_down);
+                public const string thumb_down = nameof(thumb_down);
+                public const string thumb_down_off_alt = nameof(thumb_down_off_alt);
+                public const string thumb_up = nameof(thumb_up);
+                public const string thumb_up_off_alt = nameof(thumb_up_off_alt);
+            }
         }
 
         public class Shopping
         {
-            public class CreditCard { }
-            public class Currency { }
+            public const string account_balance = nameof(account_balance);
+            public const string account_balance_wallet = nameof(account_balance_wallet);
+            public const string add_business = nameof(add_business);
+            public const string add_shopping_cart = nameof(add_shopping_cart);
+            public const string approval = nameof(approval);
+            public const string assured_workload = nameof(assured_workload);
+            public const string atm = nameof(atm);
+            public const string ballot = nameof(ballot);
+            public const string barcode_reader = nameof(barcode_reader);
+            public const string confirmation_number = nameof(confirmation_number);
+            public const string diamond = nameof(diamond);
+            public const string discount = nameof(discount);
+            public const string generating_tokens = nameof(generating_tokens);
+            public const string how_to_vote = nameof(how_to_vote);
+            public const string local_convenience_store = nameof(local_convenience_store);
+            public const string local_mall = nameof(local_mall);
+            public const string local_offer = nameof(local_offer);
+            public const string money = nameof(money);
+            public const string payments = nameof(payments);
+            public const string percent = nameof(percent);
+            public const string point_of_sale = nameof(point_of_sale); // Note: was "point_of _sale" in original list, corrected here
+            public const string production_quantity_limits = nameof(production_quantity_limits);
+            public const string receipt = nameof(receipt);
+            public const string receipt_long = nameof(receipt_long);
+            public const string remove_shopping_cart = nameof(remove_shopping_cart);
+            public const string savings = nameof(savings);
+            public const string sell = nameof(sell);
+            public const string shopping_bag = nameof(shopping_bag);
+            public const string shopping_basket = nameof(shopping_basket);
+            public const string shopping_cart = nameof(shopping_cart);
+            public const string shopping_cart_checkout = nameof(shopping_cart_checkout);
+            public const string storefront = nameof(storefront);
+            public const string store = nameof(store);
+            public const string wallet = nameof(wallet);
+
+            public class CreditCard 
+            {
+                public const string add_card = nameof(add_card);
+                public const string card_giftcard = nameof(card_giftcard);
+                public const string card_membership = nameof(card_membership);
+                public const string card_travel = nameof(card_travel);
+                public const string credit_card = nameof(credit_card);
+                public const string credit_card_off = nameof(credit_card_off);
+                public const string credit_score = nameof(credit_score);
+            }
+
+            public class Currency 
+            {
+                public const string attach_money = nameof(attach_money);
+                public const string currency_bitcoin = nameof(currency_bitcoin);
+                public const string currency_exchange = nameof(currency_exchange);
+                public const string currency_franc = nameof(currency_franc);
+                public const string currency_lira = nameof(currency_lira);
+                public const string currency_pound = nameof(currency_pound);
+                public const string currency_ruble = nameof(currency_ruble);
+                public const string currency_rupee = nameof(currency_rupee);
+                public const string currency_yen = nameof(currency_yen);
+                public const string currency_yuan = nameof(currency_yuan);
+                public const string euro = nameof(euro);
+                public const string local_atm = nameof(local_atm);
+                public const string monetization_on = nameof(monetization_on);
+                public const string money_off = nameof(money_off);
+                public const string paid = nameof(paid);
+                public const string price_change = nameof(price_change);
+                public const string price_check = nameof(price_check);
+                public const string request_page = nameof(request_page);
+                public const string request_quote = nameof(request_quote);
+            }
         }
 
         public class Sports
         {
-            public class Ball { }
-            public class Water { }
+            public const string directions_bike = nameof(directions_bike);
+            public const string directions_run = nameof(directions_run);
+            public const string directions_walk = nameof(directions_walk);
+            public const string downhill_skiing = nameof(downhill_skiing);
+            public const string follow_the_signs = nameof(follow_the_signs);
+            public const string hiking = nameof(hiking);
+            public const string ice_skating = nameof(ice_skating);
+            public const string monitor_weight = nameof(monitor_weight);
+            public const string nordic_walking = nameof(nordic_walking);
+            public const string paragliding = nameof(paragliding);
+            public const string roller_skating = nameof(roller_skating);
+            public const string run_circle = nameof(run_circle);
+            public const string scoreboard = nameof(scoreboard);
+            public const string sledding = nameof(sledding);
+            public const string snowboarding = nameof(snowboarding);
+            public const string snowmobile = nameof(snowmobile);
+            public const string snowshoeing = nameof(snowshoeing);
+            public const string sports = nameof(sports);
+            public const string sports_gymnastics = nameof(sports_gymnastics);
+            public const string sports_hockey = nameof(sports_hockey);
+            public const string sports_kabaddi = nameof(sports_kabaddi);
+            public const string sports_martial_arts = nameof(sports_martial_arts);
+            public const string sports_mma = nameof(sports_mma);
+            public const string sports_motorsports = nameof(sports_motorsports);
+            public const string transfer_within_a_station = nameof(transfer_within_a_station);
+
+            public class Ball 
+            {
+                public const string catching_pokemon = nameof(catching_pokemon);
+                public const string golf_course = nameof(golf_course);
+                public const string sports_basketball = nameof(sports_basketball);
+                public const string sports_baseball = nameof(sports_baseball);
+                public const string sports_cricket = nameof(sports_cricket);
+                public const string sports_football = nameof(sports_football);
+                public const string sports_golf = nameof(sports_golf);
+                public const string sports_handball = nameof(sports_handball);
+                public const string sports_rugby = nameof(sports_rugby);
+                public const string sports_soccer = nameof(sports_soccer);
+                public const string sports_tennis = nameof(sports_tennis);
+                public const string sports_volleyball = nameof(sports_volleyball);
+            }
+
+            public class Water 
+            {
+                public const string kayaking = nameof(kayaking);
+                public const string kitesurfing = nameof(kitesurfing);
+                public const string rowing = nameof(rowing);
+                public const string scuba_diving = nameof(scuba_diving);
+                public const string skateboarding = nameof(skateboarding);
+                public const string surfing = nameof(surfing);
+                public const string waves = nameof(waves);
+            }
         }
 
         public class Symbols
         {
-            public const string Category = "category";
-            public const string GroupWork = "group_work";
-            public const string Interests = "interests";
+            public const string adjust = nameof(adjust);
+            public const string auto_awesome = nameof(auto_awesome);
+            public const string category = nameof(category);
+            public const string circle = nameof(circle);
+            public const string change_history = nameof(change_history);
+            public const string commit = nameof(commit);
+            public const string details = nameof(details);
+            public const string eject = nameof(eject);
+            public const string filter_tilt_shift = nameof(filter_tilt_shift);
+            public const string fitbit = nameof(fitbit);
+            public const string grain = nameof(grain);
+            public const string hexagon = nameof(hexagon);
+            public const string interests = nameof(interests);
+            public const string motion_photos_off = nameof(motion_photos_off);
+            public const string motion_photos_on = nameof(motion_photos_on);
+            public const string noise_aware = nameof(noise_aware);
+            public const string noise_control_off = nameof(noise_control_off);
+            public const string pentagon = nameof(pentagon);
+            public const string pix = nameof(pix);
+            public const string polymer = nameof(polymer);
+            public const string radio_button_checked = nameof(radio_button_checked);
+            public const string radio_button_unchecked = nameof(radio_button_unchecked);
+            public const string shape_line = nameof(shape_line);
+            public const string trip_origin = nameof(trip_origin);
+            public const string vignette = nameof(vignette);
+            public const string widgets = nameof(widgets);
+            public const string workspaces = nameof(workspaces);
+            public const string workspaces_outline = nameof(workspaces_outline);
+            public const string group_work = nameof(group_work);
 
-            public class Heart { }
+            public class Heart 
+            {
+                public const string favorite = nameof(favorite);
+                public const string favorite_border = nameof(favorite_border);
+                public const string heart_broken = nameof(heart_broken);
+                public const string loyalty = nameof(loyalty);
+                public const string volunteer_activism = nameof(volunteer_activism);
+            }
 
             public class Notifications
             {
-                public const string Info = "info";
-                public const string Warning = "warning";
+                public const string add_alert = nameof(add_alert);
+                public const string assignment_late = nameof(assignment_late);
+                public const string block = nameof(block);
+                public const string block_flipped = nameof(block_flipped);
+                public const string circle_notifications = nameof(circle_notifications);
+                public const string crisis_alert = nameof(crisis_alert);
+                public const string edit_notifications = nameof(edit_notifications);
+                public const string fmd_bad = nameof(fmd_bad);
+                public const string info = nameof(info);
+                public const string info_outline = nameof(info_outline);
+                public const string new_releases = nameof(new_releases);
+                public const string notification_add = nameof(notification_add);
+                public const string notification_important = nameof(notification_important);
+                public const string notifications = nameof(notifications);
+                public const string notifications_active = nameof(notifications_active);
+                public const string notifications_none = nameof(notifications_none);
+                public const string notifications_off = nameof(notifications_off);
+                public const string notifications_paused = nameof(notifications_paused);
+                public const string priority_high = nameof(priority_high);
+                public const string privacy_tip = nameof(privacy_tip);
+                public const string report = nameof(report);
+                public const string report_gmailerrorred = nameof(report_gmailerrorred);
+                public const string report_off = nameof(report_off);
+                public const string warning = nameof(warning);
+                public const string warning_amber = nameof(warning_amber);
+
             }
 
             public class Plus
             {
-                public const string AddCircleOutline = "add_circle_outline";
+                public const string add = nameof(add);
+                public const string add_box = nameof(add_box);
+                public const string add_circle = nameof(add_circle);
+                public const string add_circle_outline = nameof(add_circle_outline);
+                public const string add_location = nameof(add_location);
+                public const string library_add = nameof(library_add);
+                public const string loupe = nameof(loupe);
             }
 
             public class QuestionMark
             {
-                public const string _QuestionMark = "question_mark";
+                public const string contact_support = nameof(contact_support);
+                public const string help = nameof(help);
+                public const string help_center = nameof(help_center);
+                public const string help_outline = nameof(help_outline);
+                public const string live_help = nameof(live_help);
+                public const string not_listed_location = nameof(not_listed_location);
+                public const string quiz = nameof(quiz);
+                public const string question_mark = nameof(question_mark);
             }
 
-            public class Rectangle { }
+            public class Rectangle 
+            {
+                public const string browser_not_supported = nameof(browser_not_supported);
+                public const string check_box_outline_blank = nameof(check_box_outline_blank);
+                public const string crop_16_9 = nameof(crop_16_9);
+                public const string crop_3_2 = nameof(crop_3_2);
+                public const string crop_5_4 = nameof(crop_5_4);
+                public const string crop_7_5 = nameof(crop_7_5);
+                public const string crop_portrait = nameof(crop_portrait);
+                public const string rectangle = nameof(rectangle);
+            }
 
             public class V
             {
-                public const string Check = "check";
-                public const string Done = "done";
-                public const string DoneAll = "done_all";
+                public const string add_task = nameof(add_task);
+                public const string assignment_turned_in = nameof(assignment_turned_in);
+                public const string beenhere = nameof(beenhere);
+                public const string check = nameof(check);
+                public const string check_box = nameof(check_box);
+                public const string check_circle = nameof(check_circle);
+                public const string check_circle_outline = nameof(check_circle_outline);
+                public const string done = nameof(done);
+                public const string done_all = nameof(done_all);
+                public const string done_outline = nameof(done_outline);
+                public const string download_done = nameof(download_done);
+                public const string domain_verification = nameof(domain_verification);
+                public const string file_download_done = nameof(file_download_done);
+                public const string library_add_check = nameof(library_add_check);
+                public const string offline_pin = nameof(offline_pin);
+                public const string remove_done = nameof(remove_done);
+                public const string task_alt = nameof(task_alt);
+                public const string verified = nameof(verified);
+                public const string verified_user = nameof(verified_user);
             }
         }
 
+        // continue from here
         public class Tech
         {
             public class Battery { }
@@ -1274,26 +1672,26 @@
 
         public class Cipher
         {
-            public const string Account_New = Social.SinglePerson.Person;
-            public const string Account_Old = Social.SinglePerson.PersonOutline;
+            public const string Account_New = Social.SinglePerson.person;
+            public const string Account_Old = Social.SinglePerson.person_outline;
             public const string Advanced = Documents.wysiwyg;
             public const string Analysis = Professions.Construction.architecture;
             public const string Department = Home.other_houses;
             public const string Excel = UiComponents.Table.GridOn;
-            public const string Id = Symbols.Notifications.Info;
+            public const string Id = Symbols.Notifications.info;
             public const string Line = Data.linear_scale;
             public const string Location = Travel.Buildings.Domain;
-            public const string Material = Professions.Medical.Science;
+            public const string Material = Professions.Medical.science;
             public const string Package = Documents.sticky_note_2;
-            public const string PackageCombine = Symbols.GroupWork;
+            public const string PackageCombine = Symbols.group_work;
             public const string Process = Data.LineChart.timeline;
             public const string Properties = Home.Facilities.window;
             public const string Rule = "rule";
             public const string Status = UiComponents.Pending;
             public const string Summary = Data.BarChart.leaderboard;
             public const string Transfer = Arrows.Swap.multiple_stop;
-            public const string Type = Symbols.Interests;
-            public const string Unit = Social.Groups._Groups;
+            public const string Type = Symbols.interests;
+            public const string Unit = Social.Groups.groups;
             public const string Vessel = Food.Drinks.local_cafe;
             public const string Year = Time.CalanderMonth;
         }

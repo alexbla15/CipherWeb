@@ -104,7 +104,7 @@
     <Buttons>
         @if (WithRowButtons)
         {
-            <CipherButton Icon="@Icons.Symbols.V.DoneAll" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
+            <CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
             <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
         }
         <CipherExcelButton Data="@DisplayedEvents"></CipherExcelButton>
@@ -122,7 +122,7 @@
                         @if (WithRowButtons)
                         {
                             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-                                <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.Check"
+                                <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.check"
                                               Variant="Variant.Flat" ColorShade="Shade.Default"
                                               Size="ButtonSize.Medium" Click="@(args => ApproveEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
                                 <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"

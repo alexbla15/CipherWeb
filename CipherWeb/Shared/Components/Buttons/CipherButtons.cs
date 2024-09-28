@@ -10,7 +10,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherAddBtn() : base()
         {
-            Icon = Icons.Symbols.Plus.AddCircleOutline;
+            Icon = Icons.Symbols.Plus.add_circle_outline;
             Padding = "5px";
         }
     }
@@ -70,7 +70,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherSearchButton() : base()
         { 
-            Icon = Icons.SearchAndFilter.Search;
+            Icon = Icons.SearchAndFilter.search;
         }
     }
 
@@ -92,7 +92,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherSuccessButton() : base()
         {
-            Icon = Icons.Symbols.V.Done;
+            Icon = Icons.Symbols.V.done;
             ColorStyle = ButtonStyle.Success;
             ColorShade = Shade.Dark;
         }
