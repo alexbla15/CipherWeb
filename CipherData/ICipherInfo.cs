@@ -5,10 +5,8 @@ namespace CipherData
 {
     public interface ICipherInfo
     {
-        Task<List<Event>> GetEvents();
-        Task<List<StorageSystem>> GetSystems();
-        Task<List<Category>> GetSubCategories();
-        Task<List<Vessel>> GetVessels();
+        Task<int> GetLastReportId();
+        Task InsertReport(Report new_report);
     }
     
     public class ExcelService

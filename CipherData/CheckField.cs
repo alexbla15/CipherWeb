@@ -146,7 +146,14 @@ namespace CipherData
             // Get the type of the items in the list
             Type type = typeof(T);
 
-            CheckField result = (type == typeof(string)) ? CheckString(value.ToString(), field_name) : new();
+            CheckField result = new();
+            if (type == typeof(string))
+            {
+                foreach (string x in value as List<string>)
+                {
+                    if (result.Succeeded) result = CheckString(x, field_name);
+                }
+            }
 
             if (result.Succeeded)
             {

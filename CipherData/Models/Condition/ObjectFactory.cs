@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Text.RegularExpressions;
+
+namespace CipherData.Models
 {
     public enum Order
     {
@@ -29,6 +31,20 @@
         /// </summary>
         [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
         public Order Order { get; set; } = Order.asc;
+
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckAttribute());
+
+            return result.Check();
+        }
     }
 
     [HebrewTranslation(nameof(AggregateItem))]
@@ -62,6 +78,23 @@
         /// </summary>
         [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
         public Method? Method { get; set; }
+
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
+
+        public CheckField CheckAs() => (As != null) ? CheckField.CheckString(As, Translate(nameof(As))) : new();
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckAttribute());
+            result.Fields.Add(CheckAs());
+
+            return result.Check();
+        }
     }
 
     /// <summary>
@@ -102,6 +135,54 @@
         {
             OrderBy ??= new List<OrderedItem>();
             OrderBy.Add(nextOrder);
+        }
+
+        public CheckField CheckFilter()
+        {
+            Tuple<bool, string> result = Filter.Check();
+            return new() { Succeeded = result.Item1, Message = result.Item2 };
+        }
+
+        public CheckField CheckOrderBy()
+        {
+            CheckField result = new();
+            if (OrderBy is null) return new();
+            if (OrderBy.Any()) result = CheckField.Distinct(OrderBy.Select(x=>x.Attribute).ToList(), Translate(nameof(OrderBy)));
+            if (result.Succeeded) result = CheckField.ListItems(OrderBy, Translate(nameof(OrderBy)));
+            return result;
+        }
+
+        public CheckField CheckGroupBy()
+        {
+            CheckField result = new();
+            if (GroupBy is null) return new();
+            if (GroupBy.Any()) result = CheckField.Distinct(GroupBy, Translate(nameof(GroupBy)));
+            if (result.Succeeded) result = CheckField.ListItems(GroupBy, Translate(nameof(GroupBy)));
+            return result;
+        }
+
+        public CheckField CheckAggregate()
+        {
+            CheckField result = new();
+            if (Aggregate is null) return new();
+            if (Aggregate.Any()) result = CheckField.Distinct(Aggregate.Select(x => x.Attribute).ToList(), Translate(nameof(Aggregate)));
+            if (result.Succeeded) result = CheckField.ListItems(Aggregate, Translate(nameof(Aggregate)));
+            return result;
+        }
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        public Tuple<bool, string> Check()
+        {
+            CheckClass result = new();
+            result.Fields.Add(CheckFilter());
+            result.Fields.Add(CheckOrderBy());
+            result.Fields.Add(CheckGroupBy());
+            result.Fields.Add(CheckAggregate());
+
+            return result.Check();
         }
     }
 }

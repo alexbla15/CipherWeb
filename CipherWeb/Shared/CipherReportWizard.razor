@@ -1,10 +1,12 @@
 ﻿@inject DialogService DialogService
 
+@inject ICipherInfo _db
+
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            <CipherAutoComplete @bind-Value="ChosenReport.Id" Label="מספר סידורי" Icon="@Icons.Cipher.Id" Disabled="true"/>
-            <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="שם הדוח" Icon="@Icons.Documents.Edit.edit" @ref="ReportName" />
+            <CipherAutoComplete Value="@(ChosenReport.Id.ToString())" Label="@ChosenReport.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
+            <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@ChosenReport.Translate(nameof(Report.Title))" Icon="@Icons.Documents.Edit.edit" @ref="ReportName" />
         </CipherComponentCard>
         <CipherParametrization ChosenParameters="@ChosenReport.Parameters" ChosenParametersChanged="@OnParametersChanged"/>
     </RadzenStepsItem>
@@ -15,41 +17,47 @@
 
     <RadzenStepsItem Text="בניית תצוגה">
         <CipherDataGrouper ComponentType="@ChosenReport.ObjectType"
-                           Title="בחירת קבוצות" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
+                           Title="@(new ObjectFactory().Translate(nameof(ObjectFactory.GroupBy)))" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
 
         <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
         AggregationFields="@ChosenReport.ObjectFactory.GroupBy" ChosenAggregates="@(ChosenReport.ObjectFactory.Aggregate ?? new())" 
         ChosenAggregatesChanged="@OnAggregatesChanged" />
-
-        <CipherComponentCard Title="תצוגה מקדימה">
-            <Buttons>
-                <CipherButton Icon="@Icons.Arrows.Rounded.refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"/>
-                <CipherButton Icon="@Icons.Documents.Edit.save" HelpText="שמירת דוח" Variant="Variant.Outlined"/>
-                <CipherExcelButton Data="@events"></CipherExcelButton>
-                <CipherPDFButton></CipherPDFButton>
-            </Buttons>
-            <ChildContent>
-                <CipherDataGrid ColumnNames="@GetColumns()" DataSource="@rows" ColumnsOrder="@rowsColumnsOrder" />
-            </ChildContent>
-        </CipherComponentCard>
     </RadzenStepsItem>
     <RadzenStepsItem Text="תצוגה מקדימה ושמירה">
 
         <CipherComponentCard BackgroundColor="@Colors.PrimaryLight">
-            <CipherRestriction></CipherRestriction>
-            <br />
             <CipherComponentCard Title="פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-                <CipherDatePicker Label="תאריך התחלה"></CipherDatePicker>
-                <CipherDatePicker Label="תאריך סיום"></CipherDatePicker>
+                @foreach (ReportParameter param in ChosenReport.Parameters)
+                {
+                    if (param.ParamType.FieldType == typeof(DateTime))
+                    {
+                        <CipherDatePicker @ref=cipherDate Label="@param.Name" ValueChanged="@(args=> param.Value = cipherDate.Value.ToString())"/>
+                    }
+                    else if (param.ParamType.FieldType == typeof(Unit))
+                    {
+                        <CipherUnitDropDown @ref=cipherUnit Label="@param.Name" Change="@(args=>param.Value =cipherUnit.ChosenUnit?.Id)" />
+                    }
+                    else if (param.ParamType.FieldType == typeof(Vessel))
+                    {
+                        <CipherVesselDropDown @ref=cipherVes Label="@param.Name" Change="@(args=>param.Value =cipherVes.ChosenVessel?.Id)" />
+                    }
+                    else if (param.ParamType.FieldType == typeof(StorageSystem))
+                    {
+                        <CipherLocation @ref=cipherSys Label="@param.Name" Change="@(args=>param.Value = cipherSys.ChosenSystem?.Id)" />
+                    }
+                    else if (param.ParamType.FieldType == typeof(decimal))
+                    {
+                        <CipherNumeric @ref=cipherNumber Label="@param.Name" AmountChanged="@(args=>param.Value = cipherNumber.Amount.ToString())" />
+                    }
+                    else
+                    {
+                        <CipherAutoComplete @ref=cipherText Placeholder="@param.Name" Change="@(args=>param.Value = cipherText.Value)" />
+                    }
+                }
             </CipherComponentCard>
-            <CipherEventsTable WithHeaderContent="false" WithCard="true"></CipherEventsTable>
-            <CipherComponentCard Title="סיום" >
-                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
-                    <CipherSubmitButton Size="ButtonSize.Medium" Click="@OpenSavingDialog"/>
-                    <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" 
-                    Text="ביטול" Path="@CipherNavLinks.Reports.Href" Size="ButtonSize.Medium"></CipherNavButton>
-                </RadzenStack>
-            </CipherComponentCard>
+            <CipherFilterObjects ChosenType="@ChosenReport.ObjectType" ChosenCondition="@ChosenReport.ObjectFactory.Filter" WithFilter="false"/>
+
+            <CipherSubmit Click="@OnSave" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
         </CipherComponentCard>
     </RadzenStepsItem>
 </CipherSteps>
@@ -57,37 +65,43 @@
 
 @code {
     /// <summary>
+    /// Is report valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
     /// Json request that will be sent to the API server.
     /// </summary>
     [Parameter]
     public string? JsonRequest { get; set; }
 
+    /// <summary>
+    /// Error message that will be presented to user upon bad submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
     [Parameter]
     public Report ChosenReport { get; set; } = new();
-
-    private List<Event> events = new();
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper dataGrouper = new();
     private CipherDataAggregater dataAggregater = new();
     private CipherFilterObjects ReportFilter = new();
 
-    private List<Package> rows = new();
-    private Dictionary<string, int> rowsColumnsOrder = new ();
+    private CipherDatePicker cipherDate = new();
+    private CipherUnitDropDown cipherUnit = new();
+    private CipherVesselDropDown cipherVes = new();
+    private CipherLocation cipherSys = new();
+    private CipherNumeric cipherNumber = new();
+    private CipherAutoComplete cipherText = new();
 
-    private ErrorResponse error = ErrorResponse.Success;
+    private CipherSubmit submission = new();
 
-    private List<Package> packs = new();
-    private List<StorageSystem> systems = new ();
-    private List<Vessel> vessels = new();
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        (events, error) = CachedData.AllEvents;
-        (packs, error) = CachedData.AllPackages;
-        (rows, error) = CachedData.AllPackages;
-        (systems, error) = CachedData.AllSystems;
-        (vessels, error) = CachedData.AllVessels;
+        ChosenReport.Id = await _db.GetLastReportId() + 1;
     }
 
     private void OnFilterChanged(Tuple<GroupedBooleanCondition,Type> newFilter)
@@ -96,101 +110,61 @@
         ChosenReport.ObjectType = newFilter.Item2;
     }
 
-    private void OnParametersChanged(List<ReportParameter> newParameters)
+    private void OnParametersChanged(List<ReportParameter> newParameters) => ChosenReport.Parameters = newParameters;
+
+    private void OnGroupsChanged(List<string> newGroups) => ChosenReport.ObjectFactory.GroupBy = newGroups;
+
+    private void OnAggregatesChanged(List<AggregateItem> newAggregates) => ChosenReport.ObjectFactory.Aggregate = newAggregates;
+
+    public async Task OnSave()
     {
-        ChosenReport.Parameters = newParameters;
-    }
+        Valid = true;
+        ErrorMessage = string.Empty;
 
-    private void OnGroupsChanged(List<string> newGroups)
-    {
-        ChosenReport.ObjectFactory.GroupBy = newGroups;
-    }
+        ChosenReport.Title = ReportName.Value;
+        ChosenReport.CreationDate = DateTime.Now;
+        ChosenReport.Creator = Constants.SetUser.Name;
 
-    private void OnAggregatesChanged(List<AggregateItem> newAggregates)
-    {
-        ChosenReport.ObjectFactory.Aggregate = newAggregates;
-    }
+        var Result = ChosenReport.Check();
 
-    // OLD - NEED TO REVISE
-
-    /// <summary>
-    /// Get translation between (english, hebrew) column names for table.
-    /// </summary>
-    private HashSet<Tuple<string, string>> GetColumns() => HebrewDictionary.Headers;
-
-    /// <summary>
-    ///  Set the columns order within datagrid.
-    /// </summary>
-    void SetColumnsOrder()
-    {
-        rowsColumnsOrder.Clear();
-
-        // first columns must be the grouped-by columns
-        foreach (string group in dataGrouper.ChosenGroups)
+        if (Result.Item1)
         {
-            if (!string.IsNullOrEmpty(group))
-            {
-                rowsColumnsOrder.Add(CipherWeb.CommonFuncs.DeTranslateField(group), dataGrouper.ChosenGroups.IndexOf(group));
-            }
+            JsonRequest = ChosenReport.ToJson();
+
+            await _db.InsertReport(ChosenReport);
+            await OpenSavingDialog();
+        }
+        else
+        {
+            Valid = false;
+            ErrorMessage = Result.Item2;
         }
 
-        int counter = dataGrouper.ChosenGroups.Count;
-
-        // next columns according to the order of the aggregation
-        List<AggregateItem> aggregates = dataAggregater.GetData();
-
-        foreach (AggregateItem agg in aggregates)
-        {
-            if (!rowsColumnsOrder.ContainsKey(agg.Attribute))
-            {
-                rowsColumnsOrder.Add(agg.Attribute, aggregates.IndexOf(agg));
-            }
-            counter += 1;
-        }
+        UpdateSubmissionSummary();
     }
 
-    /// <summary>
-    /// Updating datagrid table to show results.
-    /// </summary>
-    public void OnRefresh()
+    private void UpdateSubmissionSummary()
     {
-        rows = new();
-
-        foreach (StorageSystem sys in systems)
-        {
-            foreach (Vessel ves in vessels)
-            {
-                Package pack = new();
-                pack.System = sys;
-                pack.Vessel = ves;
-                pack.BrutMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.BrutMass).Sum();
-                pack.NetMass = packs.Where<Package>(x => x.System.Id == sys.Id && x.Vessel?.Id == ves.Id).Select(x => x.NetMass).Sum();
-                rows.Add(pack);
-            }
-        }
-        SetColumnsOrder();
+        submission.Valid = Valid;
+        submission.ErrorMessage = ErrorMessage;
     }
-
 
     public async Task OpenSavingDialog()
     {
-        ChosenReport.Title = ReportName.Value;
-
-        JsonRequest = ChosenReport.ToJson();
-
         await DialogService.OpenAsync("דוח חדש",
 
         ds =>
     @<CipherComponentCard WithCard="false">
         <CipherComponentCard WithCard="false" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            <CipherAutoComplete Label="מספר הדוח" Value="111111"/>
-            <CipherAutoComplete Label="שם הדוח" Value="הדוח שלי"/>
-            <CipherAutoComplete Label="מידור" Value="מוגבל"/>
+            <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="@ChosenReport.Translate(nameof(ChosenReport.Id))" Value="@ChosenReport.Id.ToString()"/>
+            <CipherAutoComplete Icon="@Icons.Cipher.Package" Label="@ChosenReport.Translate(nameof(ChosenReport.Title))" Value="@ChosenReport.Title" />
+            <CipherAutoComplete Icon="@Icons.Social.SinglePerson.person" Label="@ChosenReport.Translate(nameof(ChosenReport.Creator))" Value="@ChosenReport.Creator" />
+            <CipherDatePicker Label="@ChosenReport.Translate(nameof(ChosenReport.CreationDate))" Value="@ChosenReport.CreationDate" />
         </CipherComponentCard>
         <br/>
         <CipherJsonCheck JsonValue="@JsonRequest" />
         <br/>
-        <CipherButton Text="קישור לדוח" Icon="@Icons.Arrows.Squared.open_in_new" Width="100%" />
+        <CipherNavButton Path="@ChosenReport.Path()" Text="קישור לדוח" Icon="@Icons.Arrows.Squared.open_in_new" Width="100%" />
     </CipherComponentCard>
     
     , Constants.SetDialogOptions);

@@ -1,15 +1,6 @@
 ﻿using CipherData.Models;
-using CipherData;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
-using Microsoft.VisualBasic;
+using System.Text.Json;
 
 namespace CipherData
 {
@@ -22,32 +13,34 @@ namespace CipherData
             _db = db;
         }
 
-        public Task<List<Event>> GetEvents()
+        public Task<int> GetLastReportId()
         {
-            string sql = "SELECT * FROM EventsView";
+            string sql = "SELECT COALESCE(MAX(Id), 0) FROM Reports";
 
-            return _db.LoadData<Event, dynamic>(sql, new { });
+            // Assuming _db.LoadData returns the result as a List<int>, 
+            // and you want to return the first (and only) element.
+            return _db.LoadData<int, dynamic>(sql, new { })
+                      .ContinueWith(task => task.Result.FirstOrDefault());
         }
 
-        public Task<List<Models.StorageSystem>> GetSystems()
+        public Task InsertReport(Report new_report)
         {
-            string sql = "SELECT * FROM StorageSystem";
+            string sql = "INSERT INTO Reports (Id, Title, Creator, CreationDate, ObjectFactory, ObjectType, Path, Parameters) " +
+                "VALUES (@Id, @Title, @Creator, @CreationDate, @ObjectFactory , @ObjectType, @Path, @Parameters)";
 
-            return _db.LoadData<Models.StorageSystem, dynamic>(sql, new { });
-        }
+            var parameters = new
+            {
+                Id = new_report.Id,
+                Title = new_report.Title,
+                Creator = new_report.Creator,
+                CreationDate = new_report.CreationDate,
+                ObjectFactory = new_report.ObjectFactory.ToJson(),
+                ObjectType = new_report.ObjectType.Name,
+                Path = new_report.Path(),
+                Parameters = JsonSerializer.Serialize(new_report.Parameters)
+            };
 
-        public Task<List<Category>> GetSubCategories()
-        {
-            string sql = "SELECT * FROM SubCategory";
-
-            return _db.LoadData<Category, dynamic>(sql, new { });
-        }
-
-        public Task<List<Vessel>> GetVessels()
-        {
-            string sql = "SELECT * FROM Vessels";
-
-            return _db.LoadData<Vessel, dynamic>(sql, new { });
+            return _db.SaveData(sql, parameters);
         }
     }
 }

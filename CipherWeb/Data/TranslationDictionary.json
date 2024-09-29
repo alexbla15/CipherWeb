@@ -112,6 +112,12 @@
   "ProcessStepDefinition_Description": "תיאור שלב",
   "ProcessStepDefinition_Name": "שם שלב",
 
+  "Report": "דוח",
+  "Report_Creator": "שם יוצר",
+  "Report_CreationDate": "תאריך יצירה",
+  "Report_Id": "מספר סידורי",
+  "Report_Title": "כותרת",
+
   "Resource": "משאב",
   "Resource_ClearenceLevel": "מידור",
   "Resource_Id": "מספר סידורי",

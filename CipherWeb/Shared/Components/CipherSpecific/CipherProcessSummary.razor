@@ -74,9 +74,9 @@
 
     List<Event> events = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        events = await _db.GetEvents();
+        events = CachedData.AllEvents.Item1;
         MonthView();
     }
 

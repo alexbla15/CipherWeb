@@ -78,7 +78,7 @@
 
     protected override void OnInitialized()
     {
-        Title ??= "סוגים";
+        Title ??= Translator.GetTranslation("Units");
         (ChosenUnits, error) = CachedData.AllUnits;
     }
 }

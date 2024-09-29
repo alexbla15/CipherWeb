@@ -1,14 +1,17 @@
-﻿<CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
-    <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new() ; await ParamsChanged();})">
-        <Items>
-            @foreach (string objType in objectTypes)
-            {
-                <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
-            }
-        </Items>
-    </RadzenSelectBar>
-</CipherComponentCard>
-<CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
+﻿@if (WithFilter)
+{
+    <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
+        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new() ; await ParamsChanged();})">
+            <Items>
+                @foreach (string objType in objectTypes)
+                {
+                    <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
+                }
+            </Items>
+        </RadzenSelectBar>
+    </CipherComponentCard>
+    <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
+}
 @RenderCipherDataGrid()
 
 @code {
@@ -16,18 +19,21 @@
     private int _ChosenId = 0;
 
     [Parameter]
-    public Type ChosenType { get => _ChosenType; set { _ChosenType= value; SetType(); } }
+    public Type ChosenType { get => _ChosenType; set { _ChosenType = value; SetType(); } }
 
     [Parameter]
-    public List<string> objectTypes { get; set; } = new() { 
-        Translator.GetTranslation("Packages"), 
-        Translator.GetTranslation("Vessels"), 
-        Translator.GetTranslation("Systems"), 
-        Translator.GetTranslation("Events"), 
-        Translator.GetTranslation("Processes"), 
-        Translator.GetTranslation("Categories"), 
-        Translator.GetTranslation("Units"), 
-        };
+    public List<string> objectTypes { get; set; } = new() {
+        Translator.GetTranslation("Packages"),
+        Translator.GetTranslation("Vessels"),
+        Translator.GetTranslation("Systems"),
+        Translator.GetTranslation("Events"),
+        Translator.GetTranslation("Processes"),
+        Translator.GetTranslation("Categories"),
+        Translator.GetTranslation("Units"),
+                };
+
+    [Parameter]
+    public bool WithFilter { get; set; } = true;
 
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
@@ -40,15 +46,21 @@
 
     private CipherBooleanConditions DataFilter = new();
 
+    public int GetTypeId(Type t)
+    {
+        if (t == typeof(Package)) return 0;
+        if (t == typeof(Vessel)) return 1;
+        if (t == typeof(StorageSystem)) return 2;
+        if (t == typeof(Event)) return 3;
+        if (t == typeof(Process)) return 4;
+        if (t == typeof(Category)) return 5;
+        if (t == typeof(Unit)) return 6;
+        return 0;
+    }
+
     public void SetType()
     {
-        if (ChosenType == typeof(Package)) _ChosenId = 0;
-        if (ChosenType == typeof(Vessel)) _ChosenId = 1;
-        if (ChosenType == typeof(StorageSystem)) _ChosenId = 2;
-        if (ChosenType == typeof(Event)) _ChosenId = 3;
-        if (ChosenType == typeof(Process)) _ChosenId = 4;
-        if (ChosenType == typeof(Category)) _ChosenId = 5;
-        if (ChosenType == typeof(Unit)) _ChosenId = 6;
+        _ChosenId = GetTypeId(ChosenType);
     }
 
     public Type GetReportType() => _ChosenId switch
@@ -63,18 +75,25 @@
         _ => typeof(CipherClass)
     };
 
-    private RenderFragment? RenderCipherDataGrid() => _ChosenId switch
+    public RenderFragment? RenderCipherDataGrid(int id) => id switch
     {
-        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" />,
+        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" WithHeaderContent="false"/>,
         1 => @<CipherVesselsTable ChosenVessels="@(GetFilteredObjects<Vessel>())" />,
         2 => @<CipherSystemsTable ChosenSystems="@(GetFilteredObjects<StorageSystem>())" />,
-        3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" />,
-        4 => @<CipherProcessesTable ChosenProcesses="@(GetFilteredObjects<Process>())" />,
+        3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" WithHeaderContent="false" />,
+        4 => @<CipherProcessesTable ChosenProcesses="@(GetFilteredObjects<Process>())" WithHeaderContent="false" />,
         5 => @<CipherCategoriesTable ChosenCategories="@(GetFilteredObjects<Category>())" />,
         6 => @<CipherUnitsTable ChosenUnits="@(GetFilteredObjects<Unit>())" />,
         _ => null
     };
 
+    public RenderFragment? RenderCipherDataGrid(Type type)
+    {
+        int id = GetTypeId(type);
+        return RenderCipherDataGrid(id);
+    }
+
+    public RenderFragment? RenderCipherDataGrid() => RenderCipherDataGrid(_ChosenId);
 
     public List<T> GetFilteredObjects<T>() where T : Resource
     {
@@ -99,7 +118,7 @@
         Type oldChosenType = ChosenType;
         ChosenType = GetReportType();
 
-        if (oldChosenType != ChosenType) 
+        if (oldChosenType != ChosenType)
         {
             ChosenCondition = new();
             await DataFilter.Clear();
