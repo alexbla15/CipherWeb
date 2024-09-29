@@ -14,9 +14,22 @@
     public List<CompositeFilterDescriptor> GetFilters() => datafilter.Filters.ToList();
 
     public LogicalFilterOperator GetLogicalFieldOperator() => datafilter.LogicalFilterOperator;
+
+    public void AddCipherFilter(CompositeFilterDescriptor filter)
+    {
+        List<CompositeFilterDescriptor> oldFilters = datafilter.Filters.ToList();
+        oldFilters.Add(filter);
+        datafilter.Filters = oldFilters;
+    }
+
+    public async Task Clear() 
+    {
+        await datafilter.ClearFilters();
+        StateHasChanged();
+    }
 }
 
-<RadzenDataFilter Auto=true ViewChanged=@ViewChanged @ref=datafilter
+<RadzenDataFilter Auto=true ViewChanged=@ViewChanged @ref=datafilter 
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                 TItem="Cipher_TItem"
                 Data="@Data" Style="text-align: right" RemoveFilterText="הסרת מסנן"

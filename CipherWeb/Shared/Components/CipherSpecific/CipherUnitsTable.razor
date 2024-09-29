@@ -1,0 +1,84 @@
+﻿@inherits CipherTableCard
+
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenUnits" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" IsReport="@IsReport"
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
+    <AdditionalButtons>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddUnit.Href" HelpText="הוספת יחידה" Variant="Variant.Outlined" />
+    </AdditionalButtons>
+    <ComponentContent>
+        <CipherDataGrid Cipher_TItem="Unit" DataSource="@ChosenUnits" WithCustomColumns="true"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
+            <CustomColumns>
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Id))" Title="@(new Unit().Translate(nameof(Unit.Id)))">
+                    <FooterTemplate>
+                        <b>@($"כמות: {ChosenUnits.Count()}")</b>
+                    </FooterTemplate>
+                    </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Name))" Title="@(new Unit().Translate(nameof(Unit.Name)))" />
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Description))" Title="@(new Unit().Translate(nameof(Unit.Description)))" />
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Properties))" Title="@(new Unit().Translate(nameof(Unit.Properties)))"/>
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Parent))" Title="@(new Unit().Translate(nameof(Unit.Parent)))">
+                    <Template>
+                        @context.Parent?.Name
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Children))" Title="@(new Unit().Translate(nameof(Unit.Children)))">
+                    <Template>
+                        @if (context.Children != null)
+                        {
+                            @(string.Join(", ", context.Children.Select(x => x.Name)))
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Systems))" Title="@(new Unit().Translate(nameof(Unit.Systems)))">
+                    <Template>
+                        @if (context.Systems != null)
+                        {
+                            @(string.Join(", ", context.Systems.Select(x => x.Name)))
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+            </CustomColumns>
+        </CipherDataGrid>
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// Defaults to SimpleWithMenu.
+    /// </summary>
+    [Parameter]
+    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Allows/disabled filtering.
+    /// </summary>
+    [Parameter]
+    public bool Filter { get; set; } = false;
+
+    /// <summary>
+    /// Allows/disables grouping.
+    /// </summary>
+    [Parameter]
+    public bool Group { get; set; } = false;
+
+    /// <summary>
+    /// All available object options
+    /// </summary>
+    [Parameter]
+    public IEnumerable<Unit> ChosenUnits { get; set; } = new List<Unit>();
+
+    /// <summary>
+    /// State of rsponse for data fetching in this component
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    protected override void OnInitialized()
+    {
+        Title ??= "סוגים";
+        (ChosenUnits, error) = CachedData.AllUnits;
+    }
+}

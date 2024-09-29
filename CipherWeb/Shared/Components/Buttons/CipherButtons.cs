@@ -10,7 +10,7 @@ namespace CipherWeb.Shared.Components.Buttons
     {
         public CipherAddBtn() : base()
         {
-            Icon = Icons.Symbols.Plus.add_circle_outline;
+            Icon = Icons.Symbols.Plus.add;
             Padding = "5px";
         }
     }

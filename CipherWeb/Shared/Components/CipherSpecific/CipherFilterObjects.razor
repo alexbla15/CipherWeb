@@ -1,0 +1,109 @@
+﻿<CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
+    <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new() ; await ParamsChanged();})">
+        <Items>
+            @foreach (string objType in objectTypes)
+            {
+                <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
+            }
+        </Items>
+    </RadzenSelectBar>
+</CipherComponentCard>
+<CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
+@RenderCipherDataGrid()
+
+@code {
+    private Type _ChosenType = typeof(Package);
+    private int _ChosenId = 0;
+
+    [Parameter]
+    public Type ChosenType { get => _ChosenType; set { _ChosenType= value; SetType(); } }
+
+    [Parameter]
+    public List<string> objectTypes { get; set; } = new() { 
+        Translator.GetTranslation("Packages"), 
+        Translator.GetTranslation("Vessels"), 
+        Translator.GetTranslation("Systems"), 
+        Translator.GetTranslation("Events"), 
+        Translator.GetTranslation("Processes"), 
+        Translator.GetTranslation("Categories"), 
+        Translator.GetTranslation("Units"), 
+        };
+
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    [Parameter]
+    public GroupedBooleanCondition ChosenCondition { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Tuple<GroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
+
+    private CipherBooleanConditions DataFilter = new();
+
+    public void SetType()
+    {
+        if (ChosenType == typeof(Package)) _ChosenId = 0;
+        if (ChosenType == typeof(Vessel)) _ChosenId = 1;
+        if (ChosenType == typeof(StorageSystem)) _ChosenId = 2;
+        if (ChosenType == typeof(Event)) _ChosenId = 3;
+        if (ChosenType == typeof(Process)) _ChosenId = 4;
+        if (ChosenType == typeof(Category)) _ChosenId = 5;
+        if (ChosenType == typeof(Unit)) _ChosenId = 6;
+    }
+
+    public Type GetReportType() => _ChosenId switch
+    {
+        0 => typeof(Package),
+        1 => typeof(Vessel),
+        2 => typeof(StorageSystem),
+        3 => typeof(Event),
+        4 => typeof(Process),
+        5 => typeof(Category),
+        6 => typeof(Unit),
+        _ => typeof(CipherClass)
+    };
+
+    private RenderFragment? RenderCipherDataGrid() => _ChosenId switch
+    {
+        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" />,
+        1 => @<CipherVesselsTable ChosenVessels="@(GetFilteredObjects<Vessel>())" />,
+        2 => @<CipherSystemsTable ChosenSystems="@(GetFilteredObjects<StorageSystem>())" />,
+        3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" />,
+        4 => @<CipherProcessesTable ChosenProcesses="@(GetFilteredObjects<Process>())" />,
+        5 => @<CipherCategoriesTable ChosenCategories="@(GetFilteredObjects<Category>())" />,
+        6 => @<CipherUnitsTable ChosenUnits="@(GetFilteredObjects<Unit>())" />,
+        _ => null
+    };
+
+
+    public List<T> GetFilteredObjects<T>() where T : Resource
+    {
+        List<T> objects = new();
+        ObjectFactory obj = new() { Filter = ChosenCondition };
+        (objects, Error) = Config.QueryRequests.QueryObjects<T>(obj);
+        return objects;
+    }
+
+    /// <summary>
+    /// Method to set the chosen condition accourding to DataFilter data
+    /// </summary>
+    public void SetCondition() => ChosenCondition = DataFilter.ChosenCondition;
+
+
+    /// <summary>
+    /// Events that occurs once something in the component changes.
+    /// </summary>
+    /// <returns></returns>
+    async Task ParamsChanged()
+    {
+        Type oldChosenType = ChosenType;
+        ChosenType = GetReportType();
+
+        if (oldChosenType != ChosenType) 
+        {
+            ChosenCondition = new();
+            await DataFilter.Clear();
+        }
+        await ChosenConditionChanged.InvokeAsync(Tuple.Create(ChosenCondition, ChosenType)); // Trigger change event
+    }
+}

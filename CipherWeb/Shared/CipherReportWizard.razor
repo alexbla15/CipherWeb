@@ -10,18 +10,21 @@
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="אובייקטים לתצוגה">
-        <SearchAdvanced ChosenCondition="@ChosenReport.ObjectFactory.Filter" ChosenConditionChanged="@OnFilterChanged" />
+        <CipherFilterObjects @ref=ReportFilter ChosenType="@ChosenReport.ObjectType" ChosenCondition="@ChosenReport.ObjectFactory.Filter" ChosenConditionChanged="@OnFilterChanged" />
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="בניית תצוגה">
-        <CipherDataGrouper Cipher_TItem="Package" Title="בחירת קבוצות" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
+        <CipherDataGrouper ComponentType="@ChosenReport.ObjectType"
+                           Title="בחירת קבוצות" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
 
-        <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות"/>
+        <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
+        AggregationFields="@ChosenReport.ObjectFactory.GroupBy" ChosenAggregates="@(ChosenReport.ObjectFactory.Aggregate ?? new())" 
+        ChosenAggregatesChanged="@OnAggregatesChanged" />
 
         <CipherComponentCard Title="תצוגה מקדימה">
             <Buttons>
-                <CipherButton Icon="@Icons.Arrows.Rounded.refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"></CipherButton>
-                <CipherButton Icon="@Icons.Documents.Edit.save" HelpText="שמירת דוח" Variant="Variant.Outlined"></CipherButton>
+                <CipherButton Icon="@Icons.Arrows.Rounded.refresh" HelpText="עדכון תצוגה" Click="@OnRefresh" Variant="Variant.Outlined"/>
+                <CipherButton Icon="@Icons.Documents.Edit.save" HelpText="שמירת דוח" Variant="Variant.Outlined"/>
                 <CipherExcelButton Data="@events"></CipherExcelButton>
                 <CipherPDFButton></CipherPDFButton>
             </Buttons>
@@ -65,8 +68,9 @@
     private List<Event> events = new();
 
     private CipherAutoComplete ReportName = new();
-    private CipherDataGrouper<Package> dataGrouper = new();
+    private CipherDataGrouper dataGrouper = new();
     private CipherDataAggregater dataAggregater = new();
+    private CipherFilterObjects ReportFilter = new();
 
     private List<Package> rows = new();
     private Dictionary<string, int> rowsColumnsOrder = new ();
@@ -86,9 +90,10 @@
         (vessels, error) = CachedData.AllVessels;
     }
 
-    private void OnFilterChanged(GroupedBooleanCondition newFilter)
+    private void OnFilterChanged(Tuple<GroupedBooleanCondition,Type> newFilter)
     {
-        ChosenReport.ObjectFactory.Filter = newFilter;
+        ChosenReport.ObjectFactory.Filter = newFilter.Item1;
+        ChosenReport.ObjectType = newFilter.Item2;
     }
 
     private void OnParametersChanged(List<ReportParameter> newParameters)
@@ -99,6 +104,11 @@
     private void OnGroupsChanged(List<string> newGroups)
     {
         ChosenReport.ObjectFactory.GroupBy = newGroups;
+    }
+
+    private void OnAggregatesChanged(List<AggregateItem> newAggregates)
+    {
+        ChosenReport.ObjectFactory.Aggregate = newAggregates;
     }
 
     // OLD - NEED TO REVISE

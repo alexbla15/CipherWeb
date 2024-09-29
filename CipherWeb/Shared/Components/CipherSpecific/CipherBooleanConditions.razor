@@ -48,16 +48,7 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
-    private CipherDataFilter<CipherField> dataFilter = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        Title ??= "תנאים נבחרים";
-
-        if (ChosenCondition != null) await FillDataFilter();
-
-        await ParamsChanged();
-    }
+    private RadzenDataFilter<CipherField> dataFilter = new();
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
     {
@@ -186,11 +177,11 @@
 
         ChosenCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
-        foreach (var filter in dataFilter.GetFilters())
+        foreach (var filter in dataFilter.Filters)
         {
             if (fields!=null)
             {
-                filter.Property ??= fields.ToList()[dataFilter.GetFilters().IndexOf(filter)].Path;
+                filter.Property ??= fields.ToList()[dataFilter.Filters.ToList().IndexOf(filter)].Path;
             }
 
             // decide if it is a GroupedCondition or BooleanCondition
@@ -211,29 +202,45 @@
         OnSave.InvokeAsync();
     }
 
-    public async Task FillDataFilter()
-    {
-        await dataFilter.ClearFilters();
-
-        dataFilter.LogicalFilterOperator = (ChosenCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
-
-        foreach (var cond in ChosenCondition.Conditions)
-        {
-            if (cond is BooleanCondition)
-            {
-                await dataFilter.AddFilter(AddBooleanConditionFilter(cond as BooleanCondition));
-            }
-            else if (cond is GroupedBooleanCondition)
-            {
-                await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as GroupedBooleanCondition));
-            }
-        }
-    }
-
     async Task ParamsChanged(IQueryable<CipherField>? fields = null)
     {
+        //StateHasChanged();
         Save(fields);
         await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
+    }
+
+    public async Task Clear()
+    {
+        await dataFilter.ClearFilters();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        Title ??= "תנאים נבחרים";
+        if (firstRender)
+        {
+            if (dataFilter.Filters.Any()) await Clear();
+
+            dataFilter.LogicalFilterOperator = (ChosenCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
+
+            List<CompositeFilterDescriptor> newFilters = new();
+
+            foreach (var cond in ChosenCondition.Conditions)
+            {
+                if (cond is BooleanCondition)
+                {
+                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as BooleanCondition));
+                }
+                else if (cond is GroupedBooleanCondition)
+                {
+                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as GroupedBooleanCondition));
+                }
+            }
+
+            StateHasChanged();
+        }
     }
 }
 
@@ -247,8 +254,16 @@
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
-            <CipherDataFilter @ref=dataFilter Cipher_TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})">
-                <FilterProperties>
+            <RadzenDataFilter @ref=dataFilter TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})"
+                              RemoveFilterText="הסרת מסנן"
+                              AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
+                              AndOperatorText="וגם" OrOperatorText="או"
+                              ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
+                              StartsWithText="מתחיל ב" EndsWithText="מסתיים ב" IsEmptyText="ריק" IsNotEmptyText="לא ריק"
+                              FilterText="סינון" ApplyFilterText="סינון"
+                              ContainsText="מכיל" DoesNotContainText="לא מכיל" EqualsText="זהה ל" NotEqualsText="שונה מ"
+                              LessThanOrEqualsText="קטן מ / שווה ל" LessThanText="קטן מ" GreaterThanOrEqualsText="גדול / שווה ל" GreaterThanText="גדול מ">
+                <Properties>
                     @foreach (CipherField field in AvailableAttributes)
                     {
                         <RadzenDataFilterProperty TItem="CipherField" Property="@field.Path" Title="@field.Translation">
@@ -259,9 +274,13 @@
                                     {
                                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
                                                      AlignItems="AlignItems.Center" Style="width:100%">
-                                            <RadzenTextBox Style="width: 100%" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
+                                            <RadzenTextBox Style="width: 100%"
+                                                           Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? context.FilterValue.ToString().Split("##")[0] : context.FilterValue.ToString()) : string.Empty)"
+                                                           ValueChanged="@(async args => { context.FilterValue = (context.FilterValue != null) ? (context.FilterValue.ToString().Contains("##") ? (object)($"{args}##{context.FilterValue?.ToString().Split("##")[1]}") :  (object)($"{args}##{Operator.All.ToString()}")) : (object)($"{args}##{Operator.All.ToString()}"); await ParamsChanged(); })"/>
                                             <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" Value="Operator.All" ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
+                                            <RadzenDropDown Style="width: 100%" TValue="Operator" 
+                                            Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? ((context.FilterValue.ToString().Split("##")[1] == "All") ? Operator.All : Operator.Any) : Operator.All) : Operator.All)" 
+                                            ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
                                                 Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
                                                 <ValueTemplate Context="operator_value_context">
                                                     @if (operator_value_context == Operator.All)
@@ -298,8 +317,8 @@
                             </FilterTemplate>
                         </RadzenDataFilterProperty>
                     }
-                </FilterProperties>
-            </CipherDataFilter>
+                </Properties>
+            </RadzenDataFilter>
             <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
         </RadzenStack>
     </ChildContent>

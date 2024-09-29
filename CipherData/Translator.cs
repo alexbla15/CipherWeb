@@ -13,7 +13,11 @@ namespace CipherData
         {
             string Translations = File.ReadAllText("F:\\Projects\\CipherWeb\\CipherWeb\\Data\\TranslationDictionary.json");
             return JsonSerializer.Deserialize<Dictionary<string, string>>(Translations);
+        }
 
+        public static string GetTranslation(string key)
+        {
+            return TranslationsDictionary[key];
         }
     }
 }

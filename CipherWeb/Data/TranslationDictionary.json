@@ -11,6 +11,7 @@
   "BooleanCondition_Value": "ערך",
 
   "Category": "קטגוריה",
+  "Categories": "קטגוריות",
   "Category_Children": "קטגוריות מוכלות",
   "Category_ConsumingProcesses": "תהליכים יוצרים",
   "Category_CreatingProcesses": "תהליכים צורכים",
@@ -45,6 +46,7 @@
   "DisplayedEvent_Id": "מספר תנועה",
 
   "Event": "תנועה",
+  "Events": "תנועות",
   "Event_Actions": "תעודות מעורבות",
   "Event_Comments": "הערות",
   "Event_InitialStatePackages": "תעודות מעורבות - מצב התחלתי",
@@ -74,6 +76,7 @@
   "OrderedItem_Order": "אופן סידור",
 
   "Package": "תעודה",
+  "Packages": "תעודות",
   "Package_BrutMass": "מסה ברוטו [גר']",
   "Package_Category": "קטגוריה",
   "Package_Children": "תעודות מוכלות",
@@ -92,6 +95,7 @@
   "PackageProperty_Value": "ערך",
 
   "Process": "תהליך",
+  "Processes": "תהליכים",
   "Process_Definition": "הגדרה",
   "Process_End": "סיום",
   "Process_Events": "תנועות",
@@ -119,6 +123,7 @@
   "RequestResult_404": "בעיה בכתובת המבוקשת",
 
   "System": "מערכת",
+  "Systems": "מערכות",
   "System_Children": "מערכות מוכלות",
   "System_Name": "שם מערכת",
   "System_Description": "תיאור",
@@ -127,6 +132,7 @@
   "System_Unit": "יחידה",
 
   "Unit": "יחידה",
+  "Units": "יחידות",
   "Unit_Children": "יחידות מוכלות",
   "Unit_Conditions": "מגבלות",
   "Unit_Description": "תיאור",
@@ -146,6 +152,7 @@
   "UserAction_Status": "סטטוס",
 
   "Vessel": "כלי",
+  "Vessels": "כלים",
   "Vessel_Name": "שם כלי",
   "Vessel_ContainingPackages": "תעודות",
   "Vessel_System": "מערכת",

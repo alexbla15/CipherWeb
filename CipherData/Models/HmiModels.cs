@@ -81,6 +81,9 @@ namespace CipherData.Models
 
         public ObjectFactory ObjectFactory { get; set; } = new();
 
+        [JsonIgnore]
+        public Type ObjectType { get; set; } = typeof(Package);
+
         // STATIC METHODS
 
         private static int IdCounter = 0;

@@ -1,19 +1,17 @@
 ﻿@inherits CipherComponentCard
 
-@typeparam Cipher_TItem
-
 @code {
-    /// <summary>
-    /// Available fields for grouping.
-    /// </summary>
+    private Type _ComponentType = typeof(CipherClass);
+    private List<CipherField> _GroupFields = new();
+
     [Parameter]
-    public List<CipherField> GroupFields { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(Cipher_TItem));
+    public Type ComponentType { get => _ComponentType;  set { _ComponentType = value; _GroupFields = CommonFuncs.GetCipherTypeFields(value); } }
 
     /// <summary>
     /// Max amount of grouping levels.
     /// </summary>
     [Parameter]
-    public int maxGroupLevels { get; set; } = 4;
+    public int maxGroupLevels { get; set; } = 9;
 
     /// <summary>
     /// Alert text for an empty group.
@@ -52,10 +50,9 @@
     private bool duplicityAlertVisible = false;
     private string? limitedGroupsAlertText;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         limitedGroupsAlertText = GetLimitedGroupsAlertText();
-        await AddGroup();
     }
 
     /// <summary>
@@ -95,30 +92,19 @@
     /// <param name="index"></param>
     private async Task CheckDuplicity(int index)
     {
-        HashSet<string> hashed_groups = new();
+        bool cond = ChosenGroups.Distinct().Count() != ChosenGroups.Count;
 
-        foreach (string group in ChosenGroups)
+        if (cond)
         {
-            if (!string.IsNullOrEmpty(group))
-            {
-                if (!hashed_groups.Add(group))
-                {
-                    await DeleteGroup();
-                    duplicityAlertVisible = true;
-                }
-                else
-                {
-                    hashed_groups.Add(group);
-                }
-            }
+            await DeleteGroup();
+            duplicityAlertVisible = true;
         }
     }
 
     private async Task ChangedValue(int index, string? val)
     {
         ChosenGroups[index] = val ?? string.Empty;
-        CheckDuplicity(index);
-
+        await CheckDuplicity(index);
         await GroupsChanged();
     }
 
@@ -127,9 +113,10 @@
     /// </summary>
     private async Task DeleteGroup()
     {
-        bool cond = ChosenGroups.Count > 0;
+        int groups = ChosenGroups.Count;
+        bool cond = groups > 0;
 
-        if (cond) ChosenGroups.RemoveAt(ChosenGroups.Count - 1);
+        if (cond) ChosenGroups.RemoveAt(groups - 1);
         StateHasChanged();
         await GroupsChanged();
     }
@@ -151,20 +138,19 @@
 }
 
 <CipherComponentCard Title="@Title">
-    <Buttons>
-        <CipherAddBtn Variant="Variant.Outlined" HelpText="@AddGroupText" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"></CipherAddBtn>
-        <CipherDeleteButton Variant="Variant.Outlined" HelpText="@DeleteGroupText" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default"></CipherDeleteButton>
-    </Buttons>
-
     <ChildContent>
-        <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" Style="padding-bottom:20px;" Gap="20px">
-            @foreach(string gr in ChosenGroups)
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap" Style="padding-bottom:20px;" Gap="20px">
+            @foreach (string gr in ChosenGroups)
             {
                 <CipherFormRow Icon="@($"filter_{ChosenGroups.IndexOf(gr)+1}")" Width="240px">
-                    <CipherAttributeDropDown AggregationFields="@GroupFields" Change="@(args => ChangedValue(ChosenGroups.IndexOf(gr), args?.ToString()))"
+                    <CipherAttributeDropDown AggregationFields="@_GroupFields" Change="@(args => ChangedValue(ChosenGroups.IndexOf(gr), args?.ToString()))"
                                              Placeholder="@($"רמה {ChosenGroups.IndexOf(gr)+1}")" ChosenAttribute="@gr" />
                 </CipherFormRow>
             }
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="5px">
+                <CipherAddBtn Height="10px" Variant="Variant.Outlined" HelpText="@AddGroupText" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" />
+                <CipherDeleteButton Height="10px" Variant="Variant.Outlined" HelpText="@DeleteGroupText" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" />
+            </RadzenStack>
         </RadzenStack>
 
         <RadzenAlert Visible="@emptyGroupsAlertVisible" Text="@EmptyGroupAlertText" AlertStyle="AlertStyle.Danger"

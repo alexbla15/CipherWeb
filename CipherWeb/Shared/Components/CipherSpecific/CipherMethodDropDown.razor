@@ -23,6 +23,9 @@
     [Parameter]
     public bool Visible { get; set; } = true;
 
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
     /// <summary>
     /// All available options in this component.
     /// </summary>
@@ -49,6 +52,7 @@
     {
         Options = IsNumeric ? NumericOptions : (IsDate ? DateOptions : GeneralOptions);
     }
+
     private string GetMethodTranslation(Method? method)
     {
         if (method != null) return MethodTranslations[(Method)method];
@@ -56,8 +60,8 @@
     }
 }
 
-<RadzenDropDown Style="width: 100%" TValue="Method?" Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
-Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))">
+<RadzenDropDown Style="width: 100%" TValue="Method?" @bind-Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
+Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" Change="@Change">
     <ValueTemplate Context="met">
         @if (met != null)
         {

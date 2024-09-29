@@ -1,6 +1,15 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    private Type _ChosenType = typeof(CipherClass);
+    private List<CipherField> _AllFields = new();
+
+    /// <summary>
+    /// Chosen type dictates which fields can be visible
+    /// </summary>
+    [Parameter]
+    public Type ChosenType { get => _ChosenType; set { _ChosenType = value; _AllFields = CommonFuncs.GetCipherTypeFields(value); } }
+
     /// <summary>
     /// Text shown in case no rows were added.
     /// </summary>
@@ -26,16 +35,20 @@
     public string DeleteAllAggregatesText { get; set; } = "מחיקת כל הפונקציות";
 
     /// <summary>
-    /// All available aggregation fields
+    /// All available aggregation fields - methods are applicable only upon them
     /// </summary>
     [Parameter]
-    public List<CipherField> AggregationFields { get; set; } = CommonFuncs.GetAllCipherFields();
+    public List<string> AggregationFields { get; set; } = new();
 
     [Parameter]
     public List<AggregateItem> ChosenAggregates { get; set; } = new();
 
+    [Parameter]
+    public EventCallback<List<AggregateItem>> ChosenAggregatesChanged { get; set; }
+
     private RadzenDataGrid<AggregateItem> CustomDataGrid = new();
     private CipherAttributeDropDown AttDropDown = new();
+    private CipherMethodDropDown AggMethod = new();
 
     private bool typeIncompatibleAlertVisible = false;
 
@@ -47,6 +60,7 @@
         ChosenAggregates.Add(new AggregateItem());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
+        await ParamsChanged(); // Trigger change event
     }
 
     /// <summary>
@@ -57,6 +71,7 @@
         ChosenAggregates.Remove(agg);
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
+        await ParamsChanged(); // Trigger change event
     }
 
     /// <summary>
@@ -73,9 +88,10 @@
     /// <summary>
     /// Delete the selected aggregation.
     /// </summary>
-    private void DeleteAggregation()
+    private async Task DeleteAggregation()
     {
         ChosenAggregates = new();
+        await ParamsChanged(); // Trigger change event
     }
 
     /// <summary>
@@ -98,7 +114,7 @@
     public bool IsDate(AggregateItem agg)
     {
         if (string.IsNullOrEmpty(agg.Attribute)) return false;
-        Type t = AggregationFields.Where(x => x.Path == agg.Attribute).First().FieldType;
+        Type t = _AllFields.Where(x => x.Path == agg.Attribute).First().FieldType;
         return (t == typeof(DateTime));
 
     }
@@ -107,17 +123,23 @@
     {
         if (!string.IsNullOrEmpty(agg.Attribute))
         {
-            Type t = AggregationFields.Where(x => x.Path == agg.Attribute).First().FieldType;
+            Type t = _AllFields.Where(x => x.Path == agg.Attribute).First().FieldType;
             return (t == typeof(decimal) || t == typeof(int));
         }
         return false;
+    }
+
+
+    async Task ParamsChanged()
+    {
+        await ChosenAggregatesChanged.InvokeAsync(ChosenAggregates); // Trigger change event
     }
 }
 
 <CipherComponentCard Title="@Title">
     <Buttons>
         <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"></CipherAddBtn>
-        <CipherDeleteButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteButton>
+        <CipherDeleteAllButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteAllButton>
     </Buttons>
 
     <ChildContent>
@@ -127,25 +149,27 @@
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenAggregates" TItem="AggregateItem" AllowColumnResize="true" Visible="@(ChosenAggregates.Count>0)">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="AggregateItem" Title="פעולות" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn Width="5%" TItem="AggregateItem" Title="" Filterable="false" Sortable="false" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Attribute)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherAttributeDropDown @ref=AttDropDown ChosenAttribute="@agg.Attribute" Change="@(args => agg.Attribute=AttDropDown.ChosenAttribute)"/>
+                        <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.As)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.As)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <RadzenTextBox @bind-Value="@agg.As" Style="width:100%"/>
+                        <RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Method)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherMethodDropDown ChosenMethod="@agg.Method" Visible="@(!string.IsNullOrEmpty(agg.Attribute))"
-                        IsDate="@IsDate(agg)" IsNumeric="@IsNumeric(agg)"/>
+                        <CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
+                        Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))" 
+                                              IsDate="@IsDate(agg)" IsNumeric="@IsNumeric(agg)" 
+                                              Change="@(async args => {agg.Method=AggMethod.ChosenMethod; await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

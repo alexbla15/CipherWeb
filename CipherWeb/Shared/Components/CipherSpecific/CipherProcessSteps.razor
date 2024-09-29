@@ -92,7 +92,7 @@
         StepCondition.Save();
         var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
         SelectedCondition = ChosenStep?.Condition ?? new();
-        await StepCondition.FillDataFilter();
+        //await StepCondition.FillDataFilter();
     }
 }
 

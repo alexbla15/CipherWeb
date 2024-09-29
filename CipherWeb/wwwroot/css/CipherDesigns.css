@@ -894,7 +894,7 @@ rz-multiselect-trigger,
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 0 0 0 1.25rem;
+    padding: 0 0 0 3rem;
     margin: 0;
     text-align: right;
 }
