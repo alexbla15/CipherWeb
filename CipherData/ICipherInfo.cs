@@ -7,6 +7,7 @@ namespace CipherData
     {
         Task<int> GetLastReportId();
         Task InsertReport(Report new_report);
+        Task<bool> ExistsInDb(Report new_report);
     }
     
     public class ExcelService

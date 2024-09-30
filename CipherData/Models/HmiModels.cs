@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace CipherData.Models
@@ -44,81 +45,51 @@ namespace CipherData.Models
         public string? Icon { get; set; }
     }
 
-    public class CipherField
+    [HebrewTranslation(nameof(CipherField))]
+    public class CipherField : CipherClass
     {
+        [HebrewTranslation(typeof(CipherField), nameof(Path))]
         public string Path { get; set; } = string.Empty;
+
+        [HebrewTranslation(typeof(CipherField), nameof(Translation))]
         public string Translation { get; set; } = string.Empty;
+
+        [HebrewTranslation(typeof(CipherField), nameof(IsList))]
         public bool IsList { get; set; } = false;
 
         [JsonIgnore]
-        public Type FieldType { get; set; } = typeof(CipherClass);
-    }
-
-    public class ReportParameter
-    {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Value { get; set; } = string.Empty;
-        public CipherField? ParamType { get; set; }
-    }
-
-    public class Report : CipherClass
-    {
-        /// <summary>
-        /// Report unique identifier.
-        /// </summary>
-        [HebrewTranslation(typeof(Report), nameof(Id))]
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Report title, as will be shown to user.
-        /// </summary>
-        [HebrewTranslation(typeof(Report), nameof(Title))]
-        public string? Title { get; set; }
-
-        /// <summary>
-        /// Report creator name.
-        /// </summary>
-        [HebrewTranslation(typeof(Report), nameof(Creator))]
-        public string Creator { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Report submission date.
-        /// </summary>
-        [HebrewTranslation(typeof(Report), nameof(CreationDate))]
-        public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        /// All user-set parameters (changable by user)
-        /// </summary>
-        public List<ReportParameter> Parameters { get; set; } = new();
-
-        public ObjectFactory ObjectFactory { get; set; } = new();
-
-        [JsonIgnore]
-        public Type ObjectType { get; set; } = typeof(Package);
-
-        public string Path()
+        [HebrewTranslation(typeof(CipherField), nameof(FieldType))]
+        public Type FieldType { get; set; } = typeof(object);
+        
+        public CheckField CheckPath()
         {
-            return $"Reports/{Id}";
+            CheckField result = CheckField.Required(Path, Translate(nameof(Path)), AllowedRegex: @"^[a-zA-Z0-9.\[\] \n?]+$");
+            if (result.Succeeded)
+            {
+                /// regex pattern: [--component1--].[--component2--].[--component3--].[--component4--]
+                string pattern = @"^\[([a-zA-Z0-9\-,. ]+)\](\.\[([a-zA-Z0-9\-,. ]+)\])*$";
+                result.Succeeded = Regex.IsMatch(Path, pattern);
+                if (!result.Succeeded)
+                {
+                    result.Message = $"שגיאת מערכת. השדה {Translate(nameof(Path))} לא תואם לתבנית הדרושה.";
+                }
+            }
+            return result;
         }
-
-        public CheckField CheckTitle() => CheckField.Required(Title, Translate(nameof(Title)));
-
-        public CheckField CheckCreator() => CheckField.Required(Creator, Translate(nameof(Creator)));
-
-        public CheckField CheckCreationDate() => CheckField.Between(CreationDate, DateTime.MinValue, DateTime.Now, Translate(nameof(Creator)));
-
-        public CheckField CheckObjectFactory() {
-
-            Tuple<bool, string> result = ObjectFactory.Check();
-            return new() { Succeeded = result.Item1, Message = result.Item2};
-        }
-
-        public CheckField CheckParameters()
+        public CheckField CheckTranslation()
         {
-            if (Parameters.Any()) return CheckField.ListItems(Parameters, Translate(nameof(Parameters)));
-            return new();
+            CheckField result = CheckField.Required(Translation, Translate(nameof(Translation)), AllowedRegex: @"^[a-zA-Z0-9א-ת.\[\] \n?]+$");
+            if (result.Succeeded)
+            {
+                /// regex pattern: [--component1--].[--component2--].[--component3--].[--component4--]
+                string pattern = @"^\[([a-zA-Z0-9א-ת\-,. ]+)\](\.\[([a-zA-Z0-9א-ת\-,. ]+)\])*$";
+                result.Succeeded = Regex.IsMatch(Translation, pattern);
+                if (!result.Succeeded)
+                {
+                    result.Message = $"שגיאת מערכת. השדה {Translate(nameof(Translation))} לא תואם לתבנית הדרושה.";
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -128,11 +99,8 @@ namespace CipherData.Models
         public Tuple<bool, string> Check()
         {
             CheckClass result = new();
-            result.Fields.Add(CheckTitle());
-            result.Fields.Add(CheckCreator());
-            result.Fields.Add(CheckCreator());
-            result.Fields.Add(CheckCreationDate());
-            result.Fields.Add(CheckParameters());
+            result.Fields.Add(CheckPath());
+            result.Fields.Add(CheckTranslation());
 
             return result.Check();
         }

@@ -1,6 +1,7 @@
 ﻿using CipherData.Models;
 using System.Data.SqlClient;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace CipherData
 {
@@ -41,6 +42,15 @@ namespace CipherData
             };
 
             return _db.SaveData(sql, parameters);
+        }
+
+
+        public Task<bool> ExistsInDb(Report new_report)
+        {
+            string sql = "SELECT COUNT(1) FROM Reports WHERE Title = @Title";
+
+            return _db.LoadData<int, dynamic>(sql, new { new_report.Title })
+                      .ContinueWith(task => task.Result.FirstOrDefault() > 0);
         }
     }
 }

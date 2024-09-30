@@ -23,13 +23,13 @@
     /// Summerizes the action that user tries to do with this form.
     /// </summary>
     [Parameter]
-    public string ActionText { get; set; }
+    public string? ActionText { get; set; }
 
     /// <summary>
     /// Path to go to when user cancels the form.
     /// </summary>
     [Parameter]
-    public string CancelPath { get; set; } = CipherNavLinks.Forms.Href;
+    public string? CancelPath { get; set; } = CipherNavLinks.Forms.Href;
 
     /// <summary>
     /// Message that will be showen when submitting the succesfuly.
@@ -64,9 +64,9 @@
     /// <summary>
     /// Control alert upon saving.
     /// </summary>
-    public void Save()
+    public async Task Save()
     {
-        Click.InvokeAsync();
+        await Click.InvokeAsync();
 
         alertVisible = true;
         alertStyle = (Valid) ? AlertStyle.Success : AlertStyle.Danger;

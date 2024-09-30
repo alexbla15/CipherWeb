@@ -52,12 +52,7 @@
         /// </summary>
         public CheckField CheckPackages()
         {
-            CheckField result = CheckField.Required(Packages, Translate(nameof(Packages)));
-            if (result.Succeeded && Packages != null)
-            {
-                result = (result.Succeeded) ? CheckField.FullList(Packages, Translate(nameof(Packages))) : result;
-                result = (result.Succeeded) ? CheckField.Distinct(Packages, Translate(nameof(Packages))) : result;            }
-            return result;
+            return CheckField.CheckList(Packages, Translate(nameof(Packages)), isRequired: true, isDistinct: true, isFull: true);
         }
 
         /// <summary>

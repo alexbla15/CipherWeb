@@ -75,12 +75,12 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckCreatingProcesses() => CheckField.FullList(CreatingProcesses, Translate(nameof(CreatingProcesses)));
+        public CheckField CheckCreatingProcesses() => CheckField.CheckList(CreatingProcesses, Translate(nameof(CreatingProcesses)), isFull: true, isDistinct:true);
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckConsumingProcesses() => CheckField.FullList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)));
+        public CheckField CheckConsumingProcesses() => CheckField.CheckList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)), isFull: true, isDistinct: true);
 
         /// <summary>
         /// Method to check if properties is applicable for this request
@@ -122,7 +122,7 @@
         /// <returns></returns>
         public Category Create(string id)
         {
-            return new Category(id)
+            return new (id)
             {
                 Name = Name,
                 Description = Description,

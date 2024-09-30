@@ -28,6 +28,12 @@
   "CategoryProperty_PropertyType": "טיפוס",
   "CategoryProperty_DefaultValue": "ערך ברירת מחדל",
 
+  "CipherField": "סוג משתנה",
+  "CipherField_FieldType": "טיפוס",
+  "CipherField_IsList": "האם מהווה רשימה",
+  "CipherField_Path": "מסלול לתכונה",
+  "CipherField_Translation": "מסלול מתורגם לתכונה",
+
   "CreateTranserAmountEvent": "תנועה 23",
   "CreateTranserAmountEvent_DonatingPackage": "תעודה מוסרת",
   "CreateTranserAmountEvent_AcceptingPackage": "תעודה מקבלת",
@@ -116,7 +122,15 @@
   "Report_Creator": "שם יוצר",
   "Report_CreationDate": "תאריך יצירה",
   "Report_Id": "מספר סידורי",
+  "Report_ObjectFactory": "תבנית",
+  "Report_Parameters": "פרמטרי משתמש",
   "Report_Title": "כותרת",
+
+  "ReportParameter": "פרמטר עבור דוח",
+  "ReportParameter_Id": "מספר פרמטר",
+  "ReportParameter_Name": "שם פרמטר",
+  "ReportParameter_ParamType": "טיפוס פרמטר",
+  "ReportParameter_Value": "ערך פרמטר",
 
   "Resource": "משאב",
   "Resource_ClearenceLevel": "מידור",

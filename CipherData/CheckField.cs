@@ -42,10 +42,22 @@ namespace CipherData
             return result;
         }
 
-        public static CheckField CheckString(string value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
+        public static CheckField CheckString(string? value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
         {
+            if (value is null) return new();
+
             CheckField result = ProperChars(value, field_name, AllowedRegex);
             return (result.Succeeded)? ProperWords(value, field_name) : result;
+        }
+
+        public static CheckField CheckList<T>(List<T>? value, string field_name, bool isFull=false, bool isRequired=true, bool isDistinct=false, bool isCheckItems = false)
+        {
+            CheckField result = new();
+            if (isRequired) result = Required(value, field_name);
+            if (result.Succeeded && isFull) result = FullList(value, field_name);
+            if (result.Succeeded && isDistinct) result = Distinct(value, field_name);
+            if (result.Succeeded && isCheckItems) result = ListItems(value, field_name);
+            return result;
         }
 
         public static CheckField Greater(decimal value, decimal min_value, string field_name, string? min_field_name = null)
@@ -112,7 +124,7 @@ namespace CipherData
             return new (condition, condition ? string.Empty : ErrorMessage);
         }
 
-        public static CheckField Required<T>(T value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
+        public static CheckField Required<T>(T? value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
         {
             CheckField result = new(); 
             
@@ -123,15 +135,15 @@ namespace CipherData
             result.Succeeded = condition;
             result.Message = condition ? string.Empty : ErrorMessage;
 
-            if (result.Succeeded)
+            if (result.Succeeded && value != null)
             {
-                result = (typeof(T) == typeof(string)) ? CheckString(value?.ToString().Trim(), field_name, AllowedRegex) : result;
+                result = (typeof(T) == typeof(string)) ? CheckString(value.ToString().Trim(), field_name, AllowedRegex) : result;
             }
 
             return result;
         }
 
-        public static CheckField FullList<T>(List<T> value, string field_name)
+        public static CheckField FullList<T>(List<T>? value, string field_name)
         {
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה. יש להוסיף לפחות איבר אחד לרשימה.";
             bool condition = value != null && value.Count > 0;
@@ -139,8 +151,10 @@ namespace CipherData
             return new(condition, condition ? string.Empty : ErrorMessage);
         }
 
-        public static CheckField ListItems<T>(List<T> value, string field_name)
+        public static CheckField ListItems<T>(List<T>? value, string field_name)
         {
+            if (value is null) return Required(value, field_name);
+
             string ErrorMessage = $"שגיאה בשדה \"{field_name}\".";
 
             // Get the type of the items in the list
@@ -183,8 +197,10 @@ namespace CipherData
             return result;
         }
 
-        public static CheckField Distinct<T>(List<T> value, string field_name)
+        public static CheckField Distinct<T>(List<T>? value, string field_name)
         {
+            if (value is null) return Required(value, field_name);
+            
             string ErrorMessage = $"ישנה כפילות בשדה \"{field_name}\".";
 
             bool condition = value.Distinct().Count() == value.Count;

@@ -46,8 +46,7 @@
         public CheckField CheckPackageDescription() => CheckField.Required(PackageDescription, Translate(nameof(PackageDescription)));
         public CheckField CheckDestinationProcessesIds()
         {
-            CheckField result = CheckField.Required(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds)));
-            return (result.Succeeded) ? CheckField.FullList(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds))) : result;
+            return CheckField.CheckList(DestinationProcessesIds, Translate(nameof(DestinationProcessesIds)), isFull: true, isDistinct: true);
         }
 
         /// <summary>

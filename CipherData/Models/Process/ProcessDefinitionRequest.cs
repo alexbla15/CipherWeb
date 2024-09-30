@@ -48,11 +48,7 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckSteps()
-        {
-            CheckField result = CheckField.FullList(Steps, Translate(nameof(Steps)));
-            return (result.Succeeded) ? CheckField.ListItems(Steps, Translate(nameof(Steps))) : result;
-        }
+        public CheckField CheckSteps() => CheckField.CheckList(Steps, Translate(nameof(Steps)), isFull: true, isCheckItems: true);
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

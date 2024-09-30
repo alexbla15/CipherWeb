@@ -106,10 +106,7 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckValue()
-        {
-            return (string.IsNullOrEmpty(Value)) ? new CheckField() : CheckField.Required(Value, Translate(nameof(Value)));
-        }
+        public CheckField CheckValue() => CheckField.CheckString(Value, Translate(nameof(Value)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

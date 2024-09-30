@@ -35,6 +35,12 @@
     [Parameter]
     public bool WithFilter { get; set; } = true;
 
+    /// <summary>
+    /// Controls visibility of buttons within the datagridtable component
+    /// </summary>
+    [Parameter]
+    public bool WithButtons { get; set; } = true;
+
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
@@ -77,7 +83,7 @@
 
     public RenderFragment? RenderCipherDataGrid(int id) => id switch
     {
-        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" WithHeaderContent="false"/>,
+        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" WithHeaderContent="false" WithButtons="@WithButtons"/>,
         1 => @<CipherVesselsTable ChosenVessels="@(GetFilteredObjects<Vessel>())" />,
         2 => @<CipherSystemsTable ChosenSystems="@(GetFilteredObjects<StorageSystem>())" />,
         3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" WithHeaderContent="false" />,

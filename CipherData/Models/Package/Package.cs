@@ -130,10 +130,7 @@ namespace CipherData.Models
         /// Get the id of a new package
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId()
-        {
-            return $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{++IdCounter:D3}";
-        }
+        public static string GetNextId() => $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{++IdCounter:D3}";
 
         /// <summary>
         /// Get a random new object.

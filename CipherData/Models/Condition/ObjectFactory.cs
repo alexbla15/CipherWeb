@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 
 namespace CipherData.Models
 {
@@ -81,7 +82,7 @@ namespace CipherData.Models
 
         public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
 
-        public CheckField CheckAs() => (As != null) ? CheckField.CheckString(As, Translate(nameof(As))) : new();
+        public CheckField CheckAs() => CheckField.CheckString(As, Translate(nameof(As)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -154,11 +155,8 @@ namespace CipherData.Models
 
         public CheckField CheckGroupBy()
         {
-            CheckField result = new();
             if (GroupBy is null) return new();
-            if (GroupBy.Any()) result = CheckField.Distinct(GroupBy, Translate(nameof(GroupBy)));
-            if (result.Succeeded) result = CheckField.ListItems(GroupBy, Translate(nameof(GroupBy)));
-            return result;
+            return CheckField.CheckList(GroupBy, Translate(nameof(GroupBy)), isDistinct: true, isCheckItems: true);
         }
 
         public CheckField CheckAggregate()

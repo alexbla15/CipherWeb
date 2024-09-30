@@ -85,11 +85,8 @@
         /// </summary>
         public CheckField CheckActions()
         {
-            CheckField result = CheckField.FullList(Actions, Translate(nameof(Actions)));
-            result = (result.Succeeded) ? CheckField.ListItems(Actions, Translate(nameof(Actions))) : result;
-            result = (result.Succeeded) ? CheckField.Distinct(Actions.Select(x => x.Id).ToList(), Translate(nameof(Actions))) : result;
-
-            return result;
+            CheckField result = CheckField.CheckList(Actions, Translate(nameof(Actions)), isFull: true, isCheckItems: true);
+            return (result.Succeeded) ? CheckField.Distinct(Actions.Select(x => x.Id).ToList(), Translate(nameof(Actions))) : result;
         }
 
         /// <summary>
