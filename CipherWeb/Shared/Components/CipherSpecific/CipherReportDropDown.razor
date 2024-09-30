@@ -1,0 +1,60 @@
+﻿@inherits CipherFormRow
+
+@inject ICipherInfo _db
+
+<CipherFormRow Icon="@Icon">
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Report" Disabled="@Disabled" AllowClear="true"
+                            Data=@AllReports TextProperty="@(nameof(Report.Title))" @bind-Value="ChosenReport"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
+                            Change="@Change" AllowSorting=false>
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Id))" Title="@(new Report().Translate(nameof(Report.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Title))" Title="@(new Report().Translate(nameof(Report.Title)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Creator))" Title="@(new Report().Translate(nameof(Report.Creator)))" />
+        </Columns>
+        <ValueTemplate>
+            <b>@Label:</b> @((context as Report).Title)
+        </ValueTemplate>
+    </RadzenDropDownDataGrid>
+</CipherFormRow>
+
+@code {
+    /// <summary>
+    /// Is the drop down disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    /// <summary>
+    /// All reports optional in the drop down.
+    /// </summary>
+    [Parameter]
+    public List<Report> AllReports { get; set; } = new();
+
+    /// <summary>
+    /// Error response for data fetching
+    /// </summary>
+    [Parameter]
+    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen category
+    /// </summary>
+    [Parameter]
+    public Report? ChosenReport { get; set; }
+
+    /// <summary>
+    /// Changed-value event
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Label ??= "בחירת דוח";
+        Icon ??= Icons.Documents.assignment;
+        Width ??= "300px";
+
+        AllReports = await Report.All(_db);
+    }
+}

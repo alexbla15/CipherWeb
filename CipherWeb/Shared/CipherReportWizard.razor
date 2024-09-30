@@ -1,12 +1,19 @@
 ﻿@inject DialogService DialogService
 
 @inject ICipherInfo _db
+@inject NavigationManager NavigationManager
 
+@using CipherWeb.Pages.Forms
+@using System.Reflection;
+
+@if (Visible)
+{
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
             <CipherAutoComplete Value="@(ChosenReport.Id.ToString())" Label="@ChosenReport.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
-            <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@ChosenReport.Translate(nameof(Report.Title))" Icon="@Icons.Documents.Edit.edit" @ref="ReportName" />
+            <CipherAmount @ref="CurrVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" Label="@ChosenReport.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
+            <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@ChosenReport.Translate(nameof(Report.Title))" Icon="@Icons.Documents.assignment" @ref="ReportName" />
         </CipherComponentCard>
         <CipherParametrization ChosenParameters="@ChosenReport.Parameters" ChosenParametersChanged="@OnParametersChanged" />
     </RadzenStepsItem>
@@ -72,8 +79,21 @@
     </RadzenStepsItem>
 </CipherSteps>
 <CipherJsonCheck JsonValue="@ChosenReport.ToJson()" />
+}
 
 @code {
+    /// <summary>
+    /// Is component visible
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// Is wizard used on update mode
+    /// </summary>
+    [Parameter]
+    public bool UpdateMode { get; set; } = false;
+
     /// <summary>
     /// Is report submitted to db.
     /// </summary>
@@ -99,7 +119,16 @@
     public string? ErrorMessage { get; set; }
 
     [Parameter]
-    public Report ChosenReport { get; set; } = new();
+    public Report? ChosenReport { get; set; } = new();
+
+    [Parameter]
+    public Report OriginalReport { get; set; } = new();
+
+    /// <summary>
+    /// API response.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper dataGrouper = new();
@@ -112,12 +141,17 @@
     private CipherLocation cipherSys = new();
     private CipherNumeric cipherNumber = new();
     private CipherAutoComplete cipherText = new();
-
+    private CipherAmount CurrVersion = new();
     private CipherSubmit submission = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() 
     {
-        ChosenReport.Id = await _db.GetLastReportId() + 1;
+        ChosenReport ??= new();
+
+        if (!UpdateMode)
+        {
+            ChosenReport.Id = await _db.GetLastReportId() + 1;
+        }
     }
 
     private void OnFilterChanged(Tuple<GroupedBooleanCondition, Type> newFilter)
@@ -132,48 +166,59 @@
 
     private void OnAggregatesChanged(List<AggregateItem> newAggregates) => ChosenReport.ObjectFactory.Aggregate = newAggregates;
 
-    public bool CheckForm()
+    public void Reset()
     {
         Valid = true;
         ErrorMessage = string.Empty;
+        Submitted = false;
+    }
 
+    public bool CheckForm()
+    {
         ChosenReport.Title = ReportName.Value;
         ChosenReport.CreationDate = DateTime.Now;
         ChosenReport.Creator = Constants.SetUser.Name;
+        ChosenReport.Version = (int)CurrVersion.GetAmount();
 
         if (Valid) (Valid, ErrorMessage) = ChosenReport.Check();
 
         return Valid;
     }
 
-    public async Task<Tuple<bool, string>> ExistsInDb(ICipherInfo db, bool ShouldExist = false)
-    {
-        bool exists = await db.ExistsInDb(ChosenReport);
-
-        if (exists && !ShouldExist) return Tuple.Create(false, $"דוח בשם {ChosenReport.Title} כבר קיים. נא להחליף שם או לעדכן גרסה של הדוח בעמוד הייעודי לכך.");
-
-        if (!exists && ShouldExist) return Tuple.Create(false, $"דוח בשם {ChosenReport.Title} לא קיים.");
-
-        return Tuple.Create(true, string.Empty);
-    }
-
     public async Task OnSave()
     {
-        Submitted = false;
-        (Valid, ErrorMessage) = await ExistsInDb(_db);
+        Reset();
 
-        if (Valid)
+        if (!UpdateMode)
         {
-            if (CheckForm())
-            {
-                JsonRequest = ChosenReport.ToJson();
-
-                await _db.InsertReport(ChosenReport);
-                Submitted = true;
-            }
+            (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db);
+        }
+        else
+        {
+            (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db, true);
+            if (Valid) CheckForDifference();
         }
 
+        if (Valid && CheckForm()) await SubmitReport();
+
         UpdateSubmissionSummary();
+    }
+
+    public void CheckForDifference()
+    {
+        bool equal = !ChosenReport.Different(OriginalReport);
+        if (equal)
+        {
+            Valid = false;
+            ErrorMessage = "לא נעשה שינוי בין גרסה זו של הדוח לגרסה הקיימת";
+        }
+    }
+
+    public async Task SubmitReport()
+    {
+        JsonRequest = ChosenReport.ToJson();
+        await _db.InsertReport(ChosenReport);
+        Submitted = true;
     }
 
     private void UpdateSubmissionSummary()

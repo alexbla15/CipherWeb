@@ -1,5 +1,4 @@
 ﻿using CipherData.Models;
-using System.Collections.Generic;
 
 namespace CipherWeb.Data
 {
@@ -42,7 +41,8 @@ namespace CipherWeb.Data
 
         public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.done, Name = "אישור תנועות" };
 
-        public static readonly MySubNavLink CustomReport = new() { Href = $"{nameof(Reports)}/{nameof(CustomReport)}", Name = "יצירת דוח", Icon = Icons.Documents.Edit.edit};
+        public static readonly MySubNavLink AddReport = new() { Href = $"{nameof(Reports)}/{nameof(AddReport)}", Name = "יצירת דוח", Icon = Icons.Documents.assignment_add};
+        public static readonly MySubNavLink UpdateReport = new() { Href = $"{nameof(Reports)}/{nameof(UpdateReport)}", Name = "עריכת דוח", Icon = Icons.Documents.Edit.edit_document};
         public static readonly MySubNavLink PackagesReport = new() { Href = $"{nameof(Reports)}/Packages", Name = "תעודות", Icon = Icons.Cipher.Package };
         public static readonly MySubNavLink CategoriesReport = new() { Href = $"{nameof(Reports)}/Categories", Name = "סוגים", Icon = Icons.Symbols.category };
         public static readonly MySubNavLink EventsReport = new() { Href = $"{nameof(Reports)}/Events", Name = "תנועות", Icon = Icons.Data.device_hub };
@@ -57,7 +57,7 @@ namespace CipherWeb.Data
             Icon = Icons.Cipher.Summary,
             Name = "דוחות",
             SubLinks = new()
-                { CustomReport, PackagesReport, CategoriesReport, EventsReport, DepartmentsReport, UnitsReport, LocationsReport, LinesReport, ProcessesReport }
+                { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, DepartmentsReport, UnitsReport, LocationsReport, LinesReport, ProcessesReport }
         };
 
         public static readonly MySubNavLink FreeSearch = new() { Href = $"{nameof(Searches)}/{nameof(FreeSearch)}", Name = "טקסט חופשי", Icon = Icons.Cipher.Id };

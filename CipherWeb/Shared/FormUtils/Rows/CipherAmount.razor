@@ -1,6 +1,6 @@
 ﻿@inherits CipherNumeric
 
-<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="Amount" />
+<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="Amount" Disabled="true"/>
 
 @code {
     protected override void OnInitialized()
@@ -8,4 +8,6 @@
         Label ??= "מסה [גר']";
         Icon ??= Icons.Professions.Construction.scale;
     }
+
+    public decimal GetAmount() => Amount;
 }

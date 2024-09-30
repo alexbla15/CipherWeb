@@ -65,6 +65,12 @@ namespace CipherData.Models
     public class Report : CipherClass
     {
         /// <summary>
+        /// Report version.
+        /// </summary>
+        [HebrewTranslation(typeof(Report), nameof(Version))]
+        public int Version { get; set; } = 1;
+
+        /// <summary>
         /// Report unique identifier.
         /// </summary>
         [HebrewTranslation(typeof(Report), nameof(Id))]
@@ -138,8 +144,45 @@ namespace CipherData.Models
             result.Fields.Add(CheckCreator());
             result.Fields.Add(CheckCreationDate());
             result.Fields.Add(CheckParameters());
+            result.Fields.Add(CheckObjectFactory());
 
             return result.Check();
+        }
+
+        public async Task<Tuple<bool, string>> ExistsInDb(ICipherInfo db, bool ShouldExist = false)
+        {
+            bool exists_by_title = await db.ExistsInDb(this);
+            bool exists_by_id = await db.ExistsInDb(this, CheckTitle:false);
+
+            if (exists_by_title && !ShouldExist) return Tuple.Create(false, $"דוח בשם {Title} כבר קיים. נא להחליף שם או לעדכן גרסה של הדוח בעמוד הייעודי לכך.");
+
+            if (!exists_by_id && ShouldExist) return Tuple.Create(false, $"דוח מספר {Id} לא קיים.");
+
+            return Tuple.Create(true, string.Empty);
+        }
+
+        public bool Different(Report? otherReport)
+        {
+            if (otherReport == null) return true;
+            if (Id != otherReport.Id) return true;
+            if (Title != otherReport.Title) return true;
+            if (Creator != otherReport.Creator) return true;
+
+            if (!Parameters.SequenceEqual(otherReport.Parameters)) return true;
+            if (!ObjectFactory.Equals(otherReport.ObjectFactory)) return true;
+            return false;
+        }
+
+        // STATIC METHODS
+
+        public static async Task<Report> Get(ICipherInfo db, int Id)
+        {
+            return await db.GetReport(Id);
+        }
+
+        public static async Task<List<Report>> All(ICipherInfo db)
+        {
+            return await db.GetAllUpdatedReports();
         }
     }
 }

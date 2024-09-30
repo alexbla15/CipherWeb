@@ -1,0 +1,57 @@
+﻿@page "/Reports/UpdateReport"
+
+@inject NavigationManager NavigationManager
+
+@inject ICipherInfo _db
+
+@using CipherWeb.Pages.Forms
+@using Microsoft.AspNetCore.WebUtilities;
+
+<ResourceForm @ref=ResForm Title="@NavLink.Name">
+    <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
+    <br/>
+    <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" OriginalReport="@(ChosenReport is null ? new () : CipherClass.Copy(ChosenReport))" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
+</ResourceForm>
+
+@code {
+    [Parameter]
+    public MySubNavLink NavLink { get; set; } = CipherNavLinks.UpdateReport;
+
+    [Parameter]
+    public Report? ChosenReport { get; set; }
+
+    private CipherReportDropDown ReportId = new();
+    private ResourceForm ResForm = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ChosenReport = await GetObjectFromUrl();
+    }
+
+    /// <summary>
+    /// Method to change url once the form is related to a certain id
+    /// </summary>
+    /// <param name="Navigation"></param>
+    /// <param name="CurrNavLink"></param>
+    /// <param name="Id"></param>
+    public void ChangeUrl()
+    {
+        ChosenReport = ReportId.ChosenReport;
+        ResForm.ChangeUrl(NavigationManager, NavLink, ChosenReport?.Id.ToString());
+    }
+
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public async Task<Report?> GetObjectFromUrl()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out Microsoft.Extensions.Primitives.StringValues idValue))
+        {
+            var result = await Report.Get(_db, int.Parse(idValue.ToString()));
+            return (result.Different(new Report())) ? result : null;
+        }
+        return null;
+    }
+}

@@ -156,7 +156,15 @@ namespace CipherData.Models
         public CheckField CheckGroupBy()
         {
             if (GroupBy is null) return new();
-            return CheckField.CheckList(GroupBy, Translate(nameof(GroupBy)), isDistinct: true, isCheckItems: true);
+            CheckField result = CheckField.Distinct(GroupBy, Translate(nameof(GroupBy)));
+            if (result.Succeeded && GroupBy.Any())
+            {
+                foreach (string g in GroupBy)
+                {
+                    if (result.Succeeded) CheckField.Required(g, nameof(GroupBy));
+                }
+            }
+            return result;
         }
 
         public CheckField CheckAggregate()

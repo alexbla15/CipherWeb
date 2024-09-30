@@ -125,6 +125,7 @@
   "Report_ObjectFactory": "תבנית",
   "Report_Parameters": "פרמטרי משתמש",
   "Report_Title": "כותרת",
+  "Report_Version": "גרסה",
 
   "ReportParameter": "פרמטר עבור דוח",
   "ReportParameter_Id": "מספר פרמטר",
