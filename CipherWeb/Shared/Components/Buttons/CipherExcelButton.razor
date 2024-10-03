@@ -5,14 +5,14 @@
 
 @using OfficeOpenXml
 @using System.IO
-@using OfficeOpenXml.Core.ExcelPackage;
-@inject NavigationManager Navigation
 
+@inject NavigationManager Navigation
 @inject ExcelService excelService
 @inject IJSRuntime JSRuntime
+@inject IJSRuntime JS
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
-              Click="@(args => ExportToCSV())" Variant="Variant.Outlined" />
+              Click="@ExportToCSV" Variant="Variant.Outlined" />
 
 @code
 {

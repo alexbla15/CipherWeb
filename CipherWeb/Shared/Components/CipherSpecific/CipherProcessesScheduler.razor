@@ -12,19 +12,19 @@
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
         <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddProcessDefinition.Href" HelpText="הוספת תהליך" Variant="Variant.Outlined" />
-        <CipherExcelButton FileName="@FileName" Data="@procs" />
+        <CipherAddProcessDefinitionBtn/>
+        <CipherExcelButton FileName="@FileName" Data="@ChosenProcessesDTOs" />
         <CipherPDFButton />
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
         {
             <CipherProcessesTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
-                               WithHeaderContent="false" ChosenProcesses="@procs" />
+                               WithHeaderContent="false" ChosenProcesses="@ChosenProcesses" />
         }
         else
         {
-            <CipherScheduler Height="@ProcessHeight" SelectedSystem="@SelectedSystem" Processes="@procs" />
+            <CipherScheduler Height="@ProcessHeight" SelectedSystem="@SelectedSystem" Processes="@ChosenProcesses" />
         }
     </ChildContent>
 </CipherComponentCard>
@@ -79,7 +79,8 @@
     public string SelectedSystem { get; set; } = "S1";
 
     private CipherLocation cipherLocation = new();
-    private List<Process>? procs = new();
+    private List<Process>? ChosenProcesses = new();
+    private List<ProcessDTO> ChosenProcessesDTOs = new();
 
     public enum View
     {
@@ -99,8 +100,10 @@
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
-        (procs, error) = StorageSystem.Processes(SelectedSystem);
+        (ChosenProcesses, error) = StorageSystem.Processes(SelectedSystem);
         FileName = $"processes_{SelectedSystem}";
+
+        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
     }
 
     private void TableView() => SetView = View.Table;
@@ -112,7 +115,7 @@
     /// </summary>
     private void SearchFunc()
     {
-        (procs, error) = StorageSystem.Processes(SelectedSystem);
+        (ChosenProcesses, error) = StorageSystem.Processes(SelectedSystem);
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
         FileName = $"processes_{SelectedSystem}";
     }

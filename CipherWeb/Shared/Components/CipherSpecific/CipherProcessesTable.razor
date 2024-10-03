@@ -2,41 +2,21 @@
 
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" DataSource="@values()" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" DataSource="@ChosenProcessesDTOs" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddProcessDefinition.Href" HelpText="הוספת תהליך" Variant="Variant.Outlined" />
+        <CipherAddProcessDefinitionBtn />
     </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation Label="בחירת מיקום / תחום / מבנה" />
+                <CipherLocation />
             </RadzenStack>
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Process" DataSource="@ChosenProcesses" WithCustomColumns="true" @ref=datagrid
-                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Id))" Title="@(new Process().Translate(nameof(Process.Id)))">
-                    <FooterTemplate>
-                        <b>סה"כ תהליכים:</b> @ChosenProcesses.Count()
-                    </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Definition.Name))" Title="@(new ProcessDefinition().Translate(nameof(Process.Definition.Name)))">
-                    <Template>
-                        @context.Definition.Name
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.UncompletedSteps))" Title="@(new Process().Translate(nameof(Process.UncompletedSteps)))">
-                    <Template>
-                        @(string.Join(", ", context.UncompletedSteps.Select(x => x.Name).ToList()))
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.Start))" Title="@(new Process().Translate(nameof(Process.Start)))" />
-                <RadzenDataGridColumn TItem="Process" Property="@(nameof(Process.End))" Title="@(new Process().Translate(nameof(Process.End)))" />
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid Cipher_TItem="ProcessDTO" DataSource="@ChosenProcessesDTOs" @ref=datagrid ColumnNames="@(new Process().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"/>
     </ComponentContent>
 </CipherTableCard>
 
@@ -75,16 +55,16 @@
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private CipherDataGrid<Process> datagrid = new();
+    private List<ProcessDTO> ChosenProcessesDTOs = new();
+    private CipherDataGrid<ProcessDTO> datagrid = new();
 
     protected override void OnInitialized()
     {
         Title ??= "דוח תהליכים";
 
-        if (ChosenProcesses is null) (ChosenProcesses, error) = CachedData.AllProcesses;
+        if (ChosenProcesses is null) (ChosenProcesses, Error) = CachedData.AllProcesses;
+        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
     }
-
-    public IEnumerable<object> values() => datagrid.View;
 }

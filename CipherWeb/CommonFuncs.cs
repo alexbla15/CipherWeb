@@ -1,5 +1,6 @@
-﻿using System.Reflection;
-using CipherData.Models;
+﻿using CipherData.Models;
+using Radzen;
+using System.Reflection;
 
 namespace CipherWeb
 {
@@ -16,10 +17,10 @@ namespace CipherWeb
             List<string> fields_names = new();
             foreach (FieldInfo field in fields)
             {
-                fields_names.Add(field.Name.Replace("k__BackingField", "").Replace("<","").Replace(">",""));
+                fields_names.Add(field.Name.Replace("k__BackingField", "").Replace("<", "").Replace(">", ""));
             }
             return fields_names.ToArray();
-        }   
+        }
 
         /// <summary>
         /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
@@ -66,7 +67,7 @@ namespace CipherWeb
         /// <returns></returns>
         public static List<Type> GetCipherClasses()
         {
-            return typeof(CipherClass).Assembly.GetTypes().Where(x=>x.BaseType?.Name == nameof(CipherClass)).ToList();
+            return typeof(CipherClass).Assembly.GetTypes().Where(x => x.BaseType?.Name == nameof(CipherClass)).ToList();
         }
 
         /// <summary>
@@ -111,12 +112,12 @@ namespace CipherWeb
                     if (CachedData.CipherTypes.Contains(field.FieldType))
                     {
                         new_fields.AddRange(GetCipherTypeFields(setType, mainPath: $"{field.Path}",
-                        mainTranslation: $"{field.Translation}", curr_depth+1));
+                        mainTranslation: $"{field.Translation}", curr_depth + 1));
                     }
                     else if (field.IsList)
                     {
                         List<CipherField> addition_fields = GetCipherTypeFields(field.FieldType.GetGenericArguments()[0], mainPath: $"{field.Path}",
-                        mainTranslation: $"{field.Translation}", curr_depth+1);
+                        mainTranslation: $"{field.Translation}", curr_depth + 1);
                         foreach (CipherField addition in addition_fields)
                         {
                             addition.IsList = true;
@@ -143,7 +144,7 @@ namespace CipherWeb
                 fields.AddRange(GetCipherTypeFields(type));
             }
 
-            return fields.DistinctBy(x=>x.Translation).OrderBy(x => x.Translation).ToList();
+            return fields.DistinctBy(x => x.Translation).OrderBy(x => x.Translation).ToList();
         }
 
 

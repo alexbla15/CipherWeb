@@ -15,6 +15,17 @@ namespace CipherWeb.Shared.Components.Buttons
         }
     }
 
+    public partial class CipherAddProcessDefinitionBtn : CipherNavButton
+    {
+        public CipherAddProcessDefinitionBtn() : base()
+        {
+            Icon = Icons.Symbols.Plus.add_circle_outline;
+            Path = CipherNavLinks.AddProcessDefinition.Href;
+            HelpText = "הוספת תהליך";
+            Variant = Variant.Outlined;
+        }
+    }
+
     public partial class CipherCancelButton : CipherButton
     {
         public CipherCancelButton() : base()
