@@ -14,8 +14,7 @@
             <Buttons>
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateCategory.Href}?Id={ChosenObject?.Id}")" />
+                    <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
                 }
             </Buttons>
             <ChildContent>
@@ -108,7 +107,7 @@
 
         if (parent != null)
         {
-            if (parent.Properties != null) ParentProps = parent?.Properties;
+            if (parent.Properties != null) ParentProps = parent.Properties;
         }
     }
 }

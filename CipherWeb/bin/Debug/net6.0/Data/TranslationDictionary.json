@@ -57,6 +57,7 @@
   "Event_Comments": "הערות",
   "Event_InitialStatePackages": "תעודות מעורבות - מצב התחלתי",
   "Event_FinalStatePackages": "תעודות מעורבות - מצב סופי",
+  "Event_Packages": "תעודות מעורבות",
   "Event_ProcessId": "מספר תהליך",
   "Event_Status": "סטטוס",
   "Event_Timestamp": "תאריך תנועה",

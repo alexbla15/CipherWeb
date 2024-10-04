@@ -1,11 +1,8 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenEvents" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenEventsDTOs" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
-    <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined" />
-    </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
         {
@@ -15,30 +12,8 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Event" DataSource="@ChosenEvents" WithCustomColumns="true"
-                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Id))" Title="@(new Event().Translate(nameof(Event.Id)))">
-                    <FooterTemplate>
-                        <b>@($"כמות: {ChosenEvents.Count()}")</b>
-                    </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.EventType))" Title="@(new Event().Translate(nameof(Event.EventType)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.ProcessId))" Title="@(new Event().Translate(nameof(Event.ProcessId)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Timestamp))" Title="@(new Event().Translate(nameof(Event.Timestamp)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.FinalStatePackages))" Title="@(new Event().Translate(nameof(Event.FinalStatePackages)))">
-                    <Template>
-                        @(string.Join(", ", context.FinalStatePackages.Select(x => x.Id)))
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Comments))" Title="@(new Event().Translate(nameof(Event.Comments)))" />
-                <RadzenDataGridColumn TItem="Event" Property="@(nameof(Event.Status))" Title="@(new Event().Translate(nameof(Event.Status)))">
-                    <Template>
-                        @((context.Status == 0) ? "מאומתת" : "לא מאומתת")
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid Cipher_TItem="EventDTO" DataSource="@ChosenEventsDTOs" ColumnNames="@(new Event().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"/>
     </ComponentContent>
 </CipherTableCard>
 
@@ -77,15 +52,19 @@
     /// Error response of fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherLocation ChosenSystem = new();
+
+    private List<EventDTO> ChosenEventsDTOs = new();
 
     protected override void OnInitialized()
     {
         Title ??= "דוח תנועות";
 
         if (ChosenEvents is null) SearchFunc();
+
+        ChosenEventsDTOs = ChosenEvents.Select(x => x.ToDTO()).ToList();
     }
 
     /// <summary>
@@ -99,7 +78,9 @@
         }
         else
         {
-            (ChosenEvents, error) = ChosenSystem.ChosenSystem.Events();
+            (ChosenEvents, Error) = ChosenSystem.ChosenSystem.Events();
         }
+
+        ChosenEventsDTOs = ChosenEvents.Select(x => x.ToDTO()).ToList();
     }
 }

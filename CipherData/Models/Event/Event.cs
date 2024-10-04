@@ -279,6 +279,21 @@ namespace CipherData.Models
             return new();
         }
 
+        public EventDTO ToDTO()
+        {
+            return new EventDTO()
+            {
+                Comments = Comments,
+                EventType = EventType,
+                Id = Id,
+                ProcessId = ProcessId,
+                Packages = string.Join("; ", FinalStatePackages.Select(x => x.Id)),
+                Status = Status,
+                Timestamp = Timestamp,
+                Worker = Worker
+            };
+        }
+
         // STATIC METHODS
 
         /// <summary>
@@ -421,5 +436,40 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
+    }
+
+
+    /// <summary>
+    /// Event data transfer object
+    /// </summary>
+    [HebrewTranslation(nameof(Event))]
+    public class EventDTO : CipherClass
+    {
+        [HebrewTranslation(typeof(Resource), nameof(Resource.Id))]
+        public string? Id { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(EventType))]
+        public int EventType { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(Status))]
+        public int Status { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        public string? Worker { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
+        public string? ProcessId { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(Comments))]
+        public string? Comments { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
+        public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Path: [Event].[FinalStatePackages].[Id]
+        /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Packages))]
+        public string? Packages { get; set; }
     }
 }

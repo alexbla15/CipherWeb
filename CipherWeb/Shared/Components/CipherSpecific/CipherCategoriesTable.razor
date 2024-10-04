@@ -4,7 +4,7 @@
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
+        <CipherAddCategoryBtn />
     </AdditionalButtons>
     <ComponentContent>
         <CipherDataGrid Cipher_TItem="CategoryDTO" DataSource="@ChosenCategoriesDTOs" ColumnNames="@(new Category().Headers())"
@@ -48,7 +48,7 @@
 
     protected override void OnInitialized()
     {
-        Title ??= "סוגים";
+        Title ??= Translator.GetTranslation("Categories");
         (ChosenCategories, Error) = CachedData.AllCategories;
 
         ChosenCategoriesDTOs = ChosenCategories.Select(x => x.ToDTO()).ToList();

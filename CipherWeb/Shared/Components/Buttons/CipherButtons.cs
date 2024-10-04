@@ -1,4 +1,5 @@
-﻿using CipherWeb.Data;
+﻿using CipherData.Models;
+using CipherWeb.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,17 +13,64 @@ namespace CipherWeb.Shared.Components.Buttons
         {
             Icon = Icons.Symbols.Plus.add;
             Padding = "5px";
+            Variant = Variant.Outlined;
         }
     }
 
-    public partial class CipherAddProcessDefinitionBtn : CipherNavButton
+    public partial class CipherAddResourceBtn : CipherNavButton
+    {
+        public CipherAddResourceBtn() : base()
+        {
+            Icon = Icons.Symbols.Plus.add_circle_outline;
+            Variant = Variant.Outlined;
+        }
+    }
+
+    public partial class CipherAddProcessDefinitionBtn : CipherAddResourceBtn
     {
         public CipherAddProcessDefinitionBtn() : base()
         {
-            Icon = Icons.Symbols.Plus.add_circle_outline;
             Path = CipherNavLinks.AddProcessDefinition.Href;
             HelpText = "הוספת תהליך";
-            Variant = Variant.Outlined;
+        }
+    }
+
+    public partial class CipherAddCategoryBtn : CipherAddResourceBtn
+    {
+        public CipherAddCategoryBtn() : base()
+        {
+            Path = CipherNavLinks.AddCategory.Href;
+            HelpText = "הוספת קטגוריה";
+        }
+    }
+
+    public partial class CipherUpdateResourceBtn : CipherNavButton
+    {
+        [Parameter]
+        public string? ObjectId { get; set; }
+
+        [Parameter]
+        public MySubNavLink? NavLink { get; set; }
+
+        protected override void BuildRenderTree(RenderTreeBuilder builder)
+        {
+            builder.OpenComponent<CipherNavButton>(0);
+            builder.AddAttribute(1, "ObjectId", ObjectId);
+            builder.AddAttribute(2, "NavLink", NavLink);
+            builder.AddAttribute(3, "Path", $"{NavLink?.Href}?Id={ObjectId}");
+            builder.AddAttribute(4, "Disabled", ObjectId is null);
+            builder.AddAttribute(5, "Variant", Variant.Outlined);
+            builder.AddAttribute(6, "HelpText", "עריכת נתונים");
+            builder.AddAttribute(7, "Icon", Icons.Documents.Edit.edit);
+            builder.CloseComponent();
+        }
+    }
+
+    public partial class CipherUpdateCategoryBtn : CipherUpdateResourceBtn
+    {
+        public CipherUpdateCategoryBtn() : base()
+        {
+            NavLink = CipherNavLinks.UpdateCategory;
         }
     }
 

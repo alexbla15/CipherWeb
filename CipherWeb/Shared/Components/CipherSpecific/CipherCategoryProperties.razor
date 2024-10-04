@@ -73,8 +73,8 @@
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
-        <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
-        <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
+        <CipherAddBtn Click="@(args => AddComponent())" HelpText="@AddText" />
+        <CipherDeleteAllButton Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
         @if (ChosenProperties.Count() == 0)
