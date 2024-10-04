@@ -108,6 +108,22 @@ namespace CipherData.Models
             };
         }
 
+        public CategoryDTO ToDTO()
+        {
+            return new CategoryDTO()
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                IdMask = string.Join(";", IdMask),
+                Children = Children != null ? string.Join(";", Children.Select(x => x.Name)) : null,
+                Parent = Parent?.Name,
+                MaterialType = MaterialType?.Name,
+                ConsumingProcesses = string.Join(";", ConsumingProcesses.Select(x => x.Name)),
+                CreatingProcesses = string.Join(";", CreatingProcesses.Select(x => x.Name))
+            };
+        }
+
         // STATIC METHODS
 
         /// <summary>
@@ -190,5 +206,63 @@ namespace CipherData.Models
                 new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", Value= SearchText, Operator = Operator.Any }
             }, Operator = Operator.Any });
         }
+    }
+
+    [HebrewTranslation(nameof(Category))]
+    public class CategoryDTO : CipherClass
+    {
+        /// <summary>
+        /// Path : [Category].[Id]
+        /// </summary>
+        [HebrewTranslation(typeof(Resource), nameof(Id))]
+        public string? Id { get; set; }
+
+        /// <summary>
+        /// Path : [Category].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(Name))]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[Description]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(Description))]
+        public string? Description { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[IdMask]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(IdMask))]
+        public string? IdMask { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[CreatingProcesses].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
+        public string? CreatingProcesses { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[ConsumingProcesses].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
+        public string? ConsumingProcesses { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[MaterialType].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(MaterialType))]
+        public string? MaterialType { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[Parent].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(Parent))]
+        public string? Parent { get; set; }
+
+        /// <summary>
+        /// Path: [Category].[Children].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Category), nameof(Children))]
+        public string? Children { get; set; }
     }
 }

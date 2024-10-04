@@ -34,7 +34,7 @@
     /// Error result of processes fetching.
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Display role of Cipher. Must be a Role-enum.
@@ -100,7 +100,7 @@
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
-        (ChosenProcesses, error) = StorageSystem.Processes(SelectedSystem);
+        (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
         FileName = $"processes_{SelectedSystem}";
 
         ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
@@ -115,7 +115,7 @@
     /// </summary>
     private void SearchFunc()
     {
-        (ChosenProcesses, error) = StorageSystem.Processes(SelectedSystem);
+        (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
         FileName = $"processes_{SelectedSystem}";
     }
@@ -125,7 +125,7 @@
         await DialogService.OpenAsync("שגיאת מערכת",
 
     ds =>
-    @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SelectedSystem" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+    @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SelectedSystem" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
   
 ,
         new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });

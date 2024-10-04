@@ -1,57 +1,14 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenCategories" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenCategoriesDTOs" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddCategory.Href" HelpText="הוספת קטגוריה" Variant="Variant.Outlined" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Category" DataSource="@ChosenCategories" WithCustomColumns="true"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Id))" Title="@(new Category().Translate(nameof(Category.Id)))">
-                    <FooterTemplate>
-                        <b>@($"כמות: {ChosenCategories.Count()}")</b>
-                    </FooterTemplate>
-                    </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Name))" Title="@(new Category().Translate(nameof(Category.Name)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Description))" Title="@(new Category().Translate(nameof(Category.Description)))" />
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.MaterialType))" Title="@(new Category().Translate(nameof(Category.MaterialType)))">
-                    <Template>
-                        @context.MaterialType?.Name
-                    </Template>    
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.IdMask))" Title="@(new Category().Translate(nameof(Category.IdMask)))">
-                    <Template>
-                        @(string.Join(", ", context.IdMask))
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.CreatingProcesses))" Title="@(new Category().Translate(nameof(Category.CreatingProcesses)))">
-                    <Template>
-                        @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.ConsumingProcesses))" Title="@(new Category().Translate(nameof(Category.ConsumingProcesses)))">
-                    <Template>
-                        @(string.Join(", ", context.CreatingProcesses.Select(x => x.Name)))
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Parent))" Title="@(new Category().Translate(nameof(Category.Parent)))">
-                    <Template>
-                        @context.Parent?.Name
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Category" Property="@(nameof(Category.Children))" Title="@(new Category().Translate(nameof(Category.Children)))">
-                    <Template>
-                        @if (context.Children != null)
-                        {
-                            @(string.Join(", ", context.Children.Select(x => x.Name)))
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid Cipher_TItem="CategoryDTO" DataSource="@ChosenCategoriesDTOs" ColumnNames="@(new Category().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group" />
     </ComponentContent>
 </CipherTableCard>
 
@@ -85,11 +42,15 @@
     /// State of rsponse for data fetching in this component
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private List<CategoryDTO> ChosenCategoriesDTOs = new();
 
     protected override void OnInitialized()
     {
         Title ??= "סוגים";
-        (ChosenCategories, error) = CachedData.AllCategories;
+        (ChosenCategories, Error) = CachedData.AllCategories;
+
+        ChosenCategoriesDTOs = ChosenCategories.Select(x => x.ToDTO()).ToList();
     }
 }
