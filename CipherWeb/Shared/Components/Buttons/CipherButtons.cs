@@ -44,6 +44,33 @@ namespace CipherWeb.Shared.Components.Buttons
         }
     }
 
+    public partial class CipherAddPackageBtn : CipherAddResourceBtn
+    {
+        public CipherAddPackageBtn() : base()
+        {
+            Path = CipherNavLinks.AddPackage.Href;
+            HelpText = "הוספת תעודה";
+        }
+    }
+
+    public partial class CipherAddSystemBtn : CipherAddResourceBtn
+    {
+        public CipherAddSystemBtn() : base()
+        {
+            Path = CipherNavLinks.AddStorageSystem.Href;
+            HelpText = "הוספת מערכת";
+        }
+    }
+
+    public partial class CipherAddUnitBtn : CipherAddResourceBtn
+    {
+        public CipherAddUnitBtn() : base()
+        {
+            Path = CipherNavLinks.AddUnit.Href;
+            HelpText = "הוספת יחידה";
+        }
+    }
+
     public partial class CipherUpdateResourceBtn : CipherNavButton
     {
         [Parameter]

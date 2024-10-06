@@ -1,48 +1,12 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" DataSource="ChosenSystemsDTOs">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddStorageSystem.Href" HelpText="הוספת מערכת" Variant="Variant.Outlined" />
+        <CipherAddSystemBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="StorageSystem" DataSource="@ChosenSystems" WithCustomColumns="true"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Id))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Id)))">
-                    <FooterTemplate>
-                        <b>@($"כמות: {ChosenSystems.Count()}")</b>
-                    </FooterTemplate>
-                    </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Name))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Name)))" />
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Description))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Description)))" />
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Parent))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Parent)))">
-                    <Template>
-                        @context.Parent?.Name
-                    </Template>    
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Children))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Children)))">
-                    <Template>
-                        @if (context.Children != null)
-                        {
-                            @(string.Join(", ", context.Children.Select(x => x.Name)))
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Unit))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Unit)))">
-                    <Template>
-                        @context.Unit?.Name
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="StorageSystem" Property="@(nameof(StorageSystem.Properties))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Properties)))">
-                    <Template>
-                        @if (context.Properties != null)
-                        {
-                            @(string.Join(", ", context.Properties.Select(x => $"{x.Key} : {x.Value}")))
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid Cipher_TItem="StorageSystemDTO" DataSource="@ChosenSystemsDTOs" ColumnNames="@(new StorageSystem().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
 
@@ -76,11 +40,14 @@
     /// State of rsponse for data fetching in this component
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private List<StorageSystemDTO> ChosenSystemsDTOs = new();
 
     protected override void OnInitialized()
     {
         Title ??= "מערכות";
-        (ChosenSystems, error) = CachedData.AllSystems;
+        (ChosenSystems, Error) = CachedData.AllSystems;
+        ChosenSystemsDTOs = ChosenSystems.Select(x => x.ToDTO()).ToList();
     }
 }

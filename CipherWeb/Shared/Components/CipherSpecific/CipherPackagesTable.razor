@@ -2,11 +2,11 @@
 
 @inject DialogService DialogService
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenPackages" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenPackagesDTOs" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddPackage.Href" HelpText="הוספת תעודה" Variant="Variant.Outlined" />
+        <CipherAddPackageBtn />
     </AdditionalButtons>
     <HeaderContent>
         @if (WithHeaderContent)
@@ -17,72 +17,9 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Package" DataSource="@ChosenPackages" RowsPerPage="@RowsPerPage"
+        <CipherDataGrid Cipher_TItem="PackageDTO" DataSource="@ChosenPackagesDTOs" RowsPerPage="@RowsPerPage" ColumnNames="@(new Package().Headers())"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
-                        WithTotalFooter="@AllowTotalFooter" WithCustomColumns="true">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Id))" Title="@(new Package().Translate(nameof(Package.Id)))">
-                    <FooterTemplate>
-                        סה"כ תעודות: <b>@ChosenPackages.Count() </b>
-                    </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
-                    <Template>
-                        @context.Category.Name
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Vessel)" Title="@(new Package().Translate(nameof(Package.Vessel)))">
-                    <Template>
-                        @context.Vessel?.Id
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.System)" Title="@(new Package().Translate(nameof(Package.System)))">
-                    <Template>
-                        @context.System.Id
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.BrutMass)" Title="@(new Package().Translate(nameof(Package.BrutMass)))">
-                    <FooterTemplate>
-                        @if (ChosenPackages != null)
-                        {
-                            <b>@string.Format("{0:0.00;0.00-}", ChosenPackages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(Package.BrutMass))?.GetValue(s)))</b>
-                        }
-                    </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.NetMass)" Title="@(new Package().Translate(nameof(Package.NetMass)))">
-
-                    <FooterTemplate>
-                        @if (ChosenPackages != null)
-                        {
-                            <b>@string.Format("{0:0.00;0.00-}", ChosenPackages.Sum(s => (decimal?)s.GetType().GetProperty(nameof(Package.NetMass))?.GetValue(s)))</b>
-                        }
-                    </FooterTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Parent)" Title="@(new Package().Translate(nameof(Package.Parent)))">
-                    <Template>
-                        @context.Parent?.Id
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Children)" Title="@(new Package().Translate(nameof(Package.Children)))">
-                    <Template>
-                        @if (context.Children != null)
-                        {
-                            @string.Join(", ", context.Children.Select(x => x.Id));
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.CreatedAt))" Title="@(new Package().Translate(nameof(Package.CreatedAt)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@(nameof(Package.Description))" Title="@(new Package().Translate(nameof(Package.Description)))" />
-                <RadzenDataGridColumn TItem="Package" Property="@nameof(Package.Properties)" Title="@(new Package().Translate(nameof(Package.Properties)))">
-                    <Template>
-                        @if (context.Properties != null)
-                        {
-                            @string.Join(", ", context.Properties.Select(x => $"{x.Name}:{x.Value}"));
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+                        WithTotalFooter="@AllowTotalFooter" />
     </ComponentContent>
 </CipherTableCard>
 
@@ -137,6 +74,8 @@
 
     private CipherLocation SelectedSystem = new();
 
+    private List<PackageDTO> ChosenPackagesDTOs = new();
+
     protected override void OnInitialized()
     {
         Title ??= "דוח תעודות";
@@ -156,6 +95,7 @@
         else
         {
             (ChosenPackages, Error) = SelectedSystem.ChosenSystem.Packages();
+            ChosenPackagesDTOs = ChosenPackages.Select(x => x.ToDTO()).ToList();
         }
     }
 

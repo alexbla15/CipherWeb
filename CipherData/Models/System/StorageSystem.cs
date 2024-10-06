@@ -87,6 +87,20 @@ namespace CipherData.Models
             };
         }
 
+        public StorageSystemDTO ToDTO()
+        {
+            return new StorageSystemDTO()
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                Parent = Parent?.Name,
+                Children = Children != null ? string.Join("; ", Children.Select(x => x.Name)) : null,
+                Unit = Unit?.Name,
+                Properties = Properties != null ? string.Join(", ", Properties.Select(x => $"{x.Key} : {x.Value}")) : null
+            };
+        }
+
         // API related functions
 
         /// <summary>
@@ -198,5 +212,43 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
+    }
+
+    [HebrewTranslation("System")]
+    public class StorageSystemDTO : CipherClass
+    {
+        [HebrewTranslation(typeof(Resource), nameof(Id))]
+        public string? Id { get; set; }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
+        public string? Name { get; set; }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
+        public string? Description { get; set; }
+
+        /// <summary>
+        /// Path: [System].[Properties].{key:value}
+        /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
+        public string? Properties { get; set; }
+
+        /// <summary>
+        /// Path: [System].[Parent].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
+        public string? Parent { get; set; }
+
+        /// <summary>
+        /// Path: [System].[Children].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
+        public string? Children { get; set; }
+
+        /// <summary>
+        /// Path: [System].[Unit].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
+        public string? Unit { get; set; }
+        
     }
 }

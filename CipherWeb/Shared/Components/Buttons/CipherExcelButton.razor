@@ -30,16 +30,18 @@
 
     protected override void OnInitialized()
     {
-        HelpText ??= "ייצוא ל-EXCEL";
+        if (string.IsNullOrEmpty(HelpText)) HelpText = "ייצוא ל-EXCEL";
         Icon ??= Icons.Cipher.Excel;
     }
+
+    private string GetFilePath() => $"{FileName}.csv";
 
     private async Task ExportToCSV()
     {
         if (Data == null || !Data.Any()) return; // Exit if there's no data
 
         var csvData = GenerateCSV(Data);
-        var fileName = $"{FileName}.csv"; // Change the file extension to .csv
+        var fileName = GetFilePath();
         var mimeType = "text/csv"; // Specify UTF-8 charset
 
         var csvBytes = Encoding.UTF8.GetBytes(csvData);

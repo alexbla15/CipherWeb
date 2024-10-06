@@ -15,7 +15,7 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="ProcessDTO" DataSource="@ChosenProcessesDTOs" @ref=datagrid ColumnNames="@(new Process().Headers())"
+        <CipherDataGrid Cipher_TItem="ProcessDTO" DataSource="@ChosenProcessesDTOs" ColumnNames="@(new Process().Headers())"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"/>
     </ComponentContent>
 </CipherTableCard>
@@ -58,7 +58,6 @@
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private List<ProcessDTO> ChosenProcessesDTOs = new();
-    private CipherDataGrid<ProcessDTO> datagrid = new();
 
     protected override void OnInitialized()
     {

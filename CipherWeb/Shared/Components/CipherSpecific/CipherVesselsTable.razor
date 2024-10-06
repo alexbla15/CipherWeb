@@ -2,31 +2,11 @@
 
 <CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddVessel.Href" HelpText="הוספת כלי" Variant="Variant.Outlined" />
+        <CipherAddUnitBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Vessel" DataSource="@ChosenVessels" WithCustomColumns="true"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Id))" Title="@(new Vessel().Translate(nameof(Vessel.Id)))">
-                    <FooterTemplate>
-                        <b>@($"כמות: {ChosenVessels.Count()}")</b>
-                    </FooterTemplate>
-                    </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Name))" Title="@(new Vessel().Translate(nameof(Vessel.Name)))" />
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.Type))" Title="@(new Vessel().Translate(nameof(Vessel.Type)))" />
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.System))" Title="@(new Vessel().Translate(nameof(Vessel.System)))">
-                    <Template>
-                        @context.System?.Name
-                    </Template>    
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Vessel" Property="@(nameof(Vessel.ContainingPackages))" Title="@(new Vessel().Translate(nameof(Vessel.ContainingPackages)))">
-                    <Template>
-                        @(string.Join(", ", context.Id))
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid Cipher_TItem="VesselDTO" DataSource="@ChosenVesselsDTOs" ColumnNames="@(new Vessel().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
 
@@ -60,11 +40,14 @@
     /// State of rsponse for data fetching in this component
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private List<VesselDTO> ChosenVesselsDTOs = new();
 
     protected override void OnInitialized()
     {
         Title ??= "כלים";
-        (ChosenVessels, error) = CachedData.AllVessels;
+        (ChosenVessels, Error) = CachedData.AllVessels;
+        ChosenVesselsDTOs = ChosenVessels.Select(x => x.ToDTO()).ToList();
     }
 }

@@ -49,6 +49,18 @@ namespace CipherData.Models
         /// <returns></returns>
         public VesselRequest Request() => new() { Name = Name, Type = Type, SystemId = System.Id };
 
+        public VesselDTO ToDTO()
+        {
+            return new VesselDTO()
+            {
+                Name = Name,
+                Type = Type,
+                Id = Id,
+                System = System.Name,
+                ContainingPackages = ContainingPackages is null ? null : string.Join(", ", ContainingPackages.Select(x=>x.Id))
+            };
+        }
+
         // STATIC METHODS
 
         /// <summary>
@@ -109,5 +121,30 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
+    }
+
+    [HebrewTranslation(nameof(Vessel))]
+    public class VesselDTO : CipherClass
+    {
+        [HebrewTranslation(typeof(Resource), nameof(Id))]
+        public string? Id { get; set; }
+
+        [HebrewTranslation(typeof(Vessel), nameof(Name))]
+        public string? Name { get; set; }
+
+        [HebrewTranslation(typeof(Vessel), nameof(Type))]
+        public string? Type { get; set; }
+
+        /// <summary>
+        /// Path: [Vessel].[ContainingPackages].[Id]
+        /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
+        public string? ContainingPackages { get; set; }
+
+        /// <summary>
+        /// Path: [Vessel].[System].[Name]
+        /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(System))]
+        public string? System { get; set; }
     }
 }

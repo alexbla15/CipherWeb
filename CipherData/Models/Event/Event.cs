@@ -288,7 +288,7 @@ namespace CipherData.Models
                 Id = Id,
                 ProcessId = ProcessId,
                 Packages = string.Join("; ", FinalStatePackages.Select(x => x.Id)),
-                Status = Status,
+                Status = Status == 0 ? "מחכה לאישור" : (Status > 0 ? "תנועה מאושרת" : "תנועה נדחתה") ,
                 Timestamp = Timestamp,
                 Worker = Worker
             };
@@ -452,7 +452,7 @@ namespace CipherData.Models
         public int EventType { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(Status))]
-        public int Status { get; set; }
+        public string? Status { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(Worker))]
         public string? Worker { get; set; }

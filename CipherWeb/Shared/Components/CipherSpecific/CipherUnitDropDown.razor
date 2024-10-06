@@ -2,7 +2,7 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Unit" Disabled="@Disabled" AllowClear="true"
-                            Data=@units TextProperty="@(nameof(Unit.Name))" @bind-Value="ChosenUnit"
+                            Data=@OptionalUnits TextProperty="@(nameof(Unit.Name))" @bind-Value="ChosenUnit"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
@@ -31,13 +31,13 @@
     /// All units optional in the drop down.
     /// </summary>
     [Parameter]
-    public List<Unit> units { get; set; } = new();
+    public List<Unit> OptionalUnits { get; set; } = new();
 
     /// <summary>
     /// Error response for data fetching
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     /// <summary>
     /// Chosen unit
@@ -57,6 +57,6 @@
         Icon ??= Icons.Cipher.Unit;
         Width ??= "300px";
 
-        (units, error) = CachedData.AllUnits;
+        (OptionalUnits, Error) = CachedData.AllUnits;
     }
 } 
