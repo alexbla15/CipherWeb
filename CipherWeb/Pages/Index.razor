@@ -2,22 +2,22 @@
 
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
+@using System.Dynamic;
+@using System.Text;
 
 @inject TooltipService tooltipService
 @inject ExcelService excelService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>מסך פתיחה</PageTitle>
 
+
 <CipherTopNavBar />
 
+<CipherProcessesScheduler />
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
-    <CipherProcessesScheduler />
     <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage />
-}
-else
-{
-    <CipherProcessesScheduler />
 }
 
 @code {

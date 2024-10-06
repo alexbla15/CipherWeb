@@ -8,49 +8,21 @@
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" HeaderContentPaddingRight="10px" MaxHeigth="100%">
     <HeaderContent>
-        <CipherAutoComplete @ref=autoComplete Data="@Options" TextProperty="@(nameof(Package.Id))" @bind-value="SearchText" OnKeyDown="EnteredSearchFunc" />
+        <RadzenTextBox @bind-Value="SearchText" @onkeydown="@EnteredSearchFunc" />
     </HeaderContent>
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
             <Items>
                 @foreach (var data in AllData)
                 {
-                    <RadzenAccordionItem Text="@($"{data.Item1} ({data.Item2.Count()})")">
-                        <CipherComponentCard>
-                            @if (data.Item2 is List<Package>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Package>())" WithTotalFooter=false ColumnNames="@(new Package().Headers())" />
-                            }
-                            else if (data.Item2 is List<Event>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Event>())" WithTotalFooter=false ColumnNames="@(new Event().Headers())" />
-                            }
-                            else if (data.Item2 is List<StorageSystem>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<StorageSystem>())" WithTotalFooter=false ColumnNames="@(new StorageSystem().Headers())" />
-                            }
-                            else if (data.Item2 is List<Process>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Process>())" WithTotalFooter=false ColumnNames="@(new Process().Headers())" />
-                            }
-                            else if (data.Item2 is List<ProcessDefinition>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<ProcessDefinition>())" WithTotalFooter=false ColumnNames="@(new ProcessDefinition().Headers())" />
-                            }
-                            else if (data.Item2 is List<Vessel>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Vessel>())" WithTotalFooter=false ColumnNames="@(new Vessel().Headers())" />
-                            }
-                            else if (data.Item2 is List<Unit>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Unit>())" WithTotalFooter=false ColumnNames="@(new Unit().Headers())" />
-                            }
-                            else if (data.Item2 is List<Category>)
-                            {
-                                <CipherDataGrid DataSource="@(data.Item2.Cast<Category>())" WithTotalFooter=false ColumnNames="@(new Category().Headers())" />
-                            }
-                        </CipherComponentCard>
-                    </RadzenAccordionItem>
+                    if (data.Item2?.Any() == true)
+                    {
+                        <RadzenAccordionItem Text="@($"{data.Item1} ({data.Item2.Count()})")">
+                            <CipherComponentCard>
+                                @RenderTable(data.Item2)
+                            </CipherComponentCard>
+                        </RadzenAccordionItem>
+                    }
                 }
             </Items>
         </RadzenAccordion>
@@ -77,16 +49,10 @@
     public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
     /// <summary>
-    /// All packages available
-    /// </summary>
-    [Parameter]
-    public List<Package> Options { get; set; } = new();
-
-    /// <summary>
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private static List<Package>? packs = new();
     private static List<Vessel>? vessels = new();
@@ -96,22 +62,53 @@
     private static List<Event>? events = new();
     private static List<Package>? packages = new();
     private static List<Process>? processes = new();
-    private static List<ProcessDefinition>? processes_definitions = new();
 
-    private List<Tuple<string, IEnumerable<Resource>?>> AllData = new(){
+    private List<Tuple<string, IEnumerable<Resource>?>> AllData = new();
+
+    private static readonly Dictionary<Type, Func<IEnumerable<Resource>, RenderFragment>> tableRenderers = new()
+    {
+        { typeof(Package), items => @<CipherPackagesTable ChosenObjects="@packs" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(Event), items => @<CipherEventsTable ChosenObjects="@events" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(StorageSystem), items => @<CipherSystemsTable ChosenObjects="@systems" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(Process), items => @<CipherProcessesTable ChosenObjects="@processes" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(Vessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(Unit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(Category), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
+            };
+
+    private RenderFragment RenderTable(IEnumerable<Resource> items)
+    {
+        var type = items.FirstOrDefault()?.GetType();
+        return type != null && tableRenderers.ContainsKey(type) ? tableRenderers[type](items) : @<div>No matching table found</div>;
+    }
+
+    private async Task<List<Tuple<string, IEnumerable<Resource>?>>> GetAllData()
+    {
+        await Task.Delay(1);
+
+        if (!string.IsNullOrEmpty(SearchText))
+        {
+            (packs, Error) = Package.Containing(SearchText);
+            (vessels, Error) = Vessel.Containing(SearchText);
+            (systems, Error) = StorageSystem.Containing(SearchText);
+            (units, Error) = Unit.Containing(SearchText);
+            (categories, Error) = Category.Containing(SearchText);
+            (events, Error) = Event.Containing(SearchText);
+            (processes, Error) = Process.Containing(SearchText);
+        }
+
+        return new(){
         new("תעודות", packs),
         new("מערכות", systems),
         new("יחידות", units),
         new("תנועות", events),
         new("תהליכים", processes),
-        new("סוגי תהליכים", processes_definitions),
         new("כלים", vessels),
         new("קטגוריות", categories),
-                                };
+           };
+    }
 
-    private CipherAutoComplete autoComplete = new CipherAutoComplete();
-
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         // get current URI
         var uri = new Uri(navigationManager.Uri);
@@ -121,26 +118,16 @@
         // only navigate there if parameter was successfuly recieved
         if (queryParameters.TryGetValue("search", out var searchValue))
         {
-            SearchText = searchValue;
+            SearchText = searchValue.ToString();
         }
+
+        AllData = await GetAllData();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        // Collect needed results
-        (Options, error) = CachedData.AllPackages;
-
-        (packs, error) = Package.Containing(SearchText);
-        (vessels, error) = Vessel.Containing(SearchText);
-        (systems, error) = StorageSystem.Containing(SearchText);
-        (units, error) = Unit.Containing(SearchText);
-        (categories, error) = Category.Containing(SearchText);
-        (events, error) = Event.Containing(SearchText);
-        (processes, error) = Process.Containing(SearchText);
-        (processes_definitions, error) = ProcessDefinition.Containing(SearchText);
-
         // Show error dialog if something went wrong fetching data
-        if (error != ErrorResponse.Success) await ShowError();
+        if (Error != ErrorResponse.Success) await ShowError();
 
         // Set default OnKeyDown if not provided
         if (!OnKeyDown.HasDelegate) OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, EnteredSearchFunc);
@@ -161,24 +148,21 @@
     {
         // Wait for a short duration to ensure SearchText is updated
         await Task.Delay(1);
-        if (!string.IsNullOrWhiteSpace(SearchText))
-        {
-            // if value is acceptable, do the search
-            if (autoComplete.Check())
-            {
-                // url to be shown upon searching
-                string url = $"{SearchPath}?search={SearchText}";
 
-                // if something went wrong, show error dialog
-                if (error != ErrorResponse.Success)
-                {
-                    await ShowError();
-                }
-                // else go to the desired path
-                else
-                {
-                    navigationManager.NavigateTo(url, forceLoad: true);
-                }
+        if (!string.IsNullOrWhiteSpace(SearchText) && CheckField.CheckString(SearchText, "").Succeeded)
+        {
+            // url to be shown upon searching
+            string url = $"{SearchPath}?search={SearchText}";
+
+            // if something went wrong, show error dialog
+            if (Error != ErrorResponse.Success)
+            {
+                await ShowError();
+            }
+            // else go to the desired path
+            else
+            {
+                navigationManager.NavigateTo(url, forceLoad: true);
             }
         }
     }
@@ -191,7 +175,7 @@
     {
         await DialogService.OpenAsync("שגיאת מערכת",
     ds =>
-        @<CipherErrorCard ErrorType="@error.Message" ErroredAction="@SearchText" Visible=@(error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+        @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SearchText" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
         ,
         new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }

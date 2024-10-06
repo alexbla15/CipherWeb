@@ -8,7 +8,7 @@
         @AdditionalButtons
         @if (ExcelExport)
         {
-            <CipherExcelButton FileName="@FileTitle" Data="@DataSource"/>
+            <CipherExcelButton FileName="@FileTitle" OnClickFunc="CsvDataFetch" CipherType="@CipherType"/>
         }
         @if (PDFExport)
         {
@@ -100,6 +100,12 @@
     /// </summary>
     [Parameter]
     public RadzenDataGrid<Process> grid { get; set; } = new();
+
+    [Parameter]
+    public Func<IEnumerable<IDictionary<string, object>>> CsvDataFetch { get; set; }
+
+    [Parameter]
+    public Type CipherType { get; set; } = typeof(Resource);
 
     public void Toggle() => IsFavourite = !IsFavourite;
 }

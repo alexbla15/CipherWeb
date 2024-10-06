@@ -2,8 +2,8 @@
 
 @inject DialogService DialogService
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenPackagesDTOs" WithCard="@WithCard" WithButtons="@WithButtons"
-                 Sharable="@Sharable" IsReport="@IsReport"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" IsReport="@IsReport" CsvDataFetch="SetData" CipherType="typeof(Package)"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
         <CipherAddPackageBtn />
@@ -17,13 +17,16 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="PackageDTO" DataSource="@ChosenPackagesDTOs" RowsPerPage="@RowsPerPage" ColumnNames="@(new Package().Headers())"
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="PackageDTO" DataSource="@_ChosenObjectsDTOs" RowsPerPage="@RowsPerPage" ColumnNames="@(new Package().Headers())"
                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"
                         WithTotalFooter="@AllowTotalFooter" />
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<Package> _ChosenObjects = new List<Package>();
+    private List<PackageDTO> _ChosenObjectsDTOs = new();
+
     /// <summary>
     /// Error result of events fetching.
     /// </summary>
@@ -70,16 +73,20 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public IEnumerable<Package> ChosenPackages { get; set; } = new List<Package>();
+    public IEnumerable<Package> ChosenObjects
+    {
+        get => _ChosenObjects;
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
+    }
 
     private CipherLocation SelectedSystem = new();
 
-    private List<PackageDTO> ChosenPackagesDTOs = new();
+    private CipherDataGrid<PackageDTO> DataGrid = new();
 
     protected override void OnInitialized()
     {
         Title ??= "דוח תעודות";
-        FileTitle ??= "packages";
+        SetFileTitle();
         SearchFunc();
     }
 
@@ -90,14 +97,19 @@
     {
         if (SelectedSystem.ChosenSystem is null)
         {
-            ChosenPackages = new List<Package>();
+            ChosenObjects = new List<Package>();
         }
         else
         {
-            (ChosenPackages, Error) = SelectedSystem.ChosenSystem.Packages();
-            ChosenPackagesDTOs = ChosenPackages.Select(x => x.ToDTO()).ToList();
+            (ChosenObjects, Error) = SelectedSystem.ChosenSystem.Packages();
         }
+        SetFileTitle();
+        StateHasChanged();
     }
+
+    public void SetFileTitle() => FileTitle = $"packages_{SelectedSystem.ChosenSystem?.Id}";
+
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 
     async Task ShowError()
     {

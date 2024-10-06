@@ -83,13 +83,13 @@
 
     public RenderFragment? RenderCipherDataGrid(int id) => id switch
     {
-        0 => @<CipherPackagesTable ChosenPackages="@(GetFilteredObjects<Package>())" WithHeaderContent="false" WithButtons="@WithButtons"/>,
-        1 => @<CipherVesselsTable ChosenVessels="@(GetFilteredObjects<Vessel>())" />,
-        2 => @<CipherSystemsTable ChosenSystems="@(GetFilteredObjects<StorageSystem>())" />,
-        3 => @<CipherEventsTable ChosenEvents="@(GetFilteredObjects<Event>())" WithHeaderContent="false" />,
-        4 => @<CipherProcessesTable ChosenProcesses="@(GetFilteredObjects<Process>())" WithHeaderContent="false" />,
-        5 => @<CipherCategoriesTable ChosenCategories="@(GetFilteredObjects<Category>())" />,
-        6 => @<CipherUnitsTable ChosenUnits="@(GetFilteredObjects<Unit>())" />,
+        0 => @<CipherPackagesTable ChosenObjects="@(GetFilteredObjects<Package>())" WithHeaderContent="false" WithButtons="@WithButtons"/>,
+        1 => @<CipherVesselsTable ChosenObjects="@(GetFilteredObjects<Vessel>())" />,
+        2 => @<CipherSystemsTable ChosenObjects="@(GetFilteredObjects<StorageSystem>())" />,
+        3 => @<CipherEventsTable ChosenObjects="@(GetFilteredObjects<Event>())" WithHeaderContent="false" />,
+        4 => @<CipherProcessesTable ChosenObjects="@(GetFilteredObjects<Process>())" WithHeaderContent="false" />,
+        5 => @<CipherCategoriesTable ChosenObjects="@(GetFilteredObjects<Category>())" />,
+        6 => @<CipherUnitsTable ChosenObjects="@(GetFilteredObjects<Unit>())" />,
         _ => null
     };
 

@@ -2,7 +2,8 @@
 
 @inherits CipherTableCard
 
-<CipherTableCard Title="@Title" DataSource="@ChosenProcessesDTOs" Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" CsvDataFetch="SetData" CipherType="typeof(Process)" FileTitle="@FileTitle"
+    Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
     <AdditionalButtons>
         <CipherAddProcessDefinitionBtn />
     </AdditionalButtons>
@@ -10,17 +11,22 @@
         @if (WithHeaderContent)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation />
+                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem />
             </RadzenStack>
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="ProcessDTO" DataSource="@ChosenProcessesDTOs" ColumnNames="@(new Process().Headers())"
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="ProcessDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Process().Headers())"
                         GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"/>
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<Process> _ChosenObjects = new List<Process>();
+    private List<ProcessDTO> _ChosenObjectsDTOs = new();
+
+    private CipherLocation ChosenSystem = new();
+
     /// <summary>
     /// Filter mode of the datagrid. Must be a FilterMode-enum.
     /// </summary>
@@ -49,7 +55,10 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public IEnumerable<Process> ChosenProcesses { get; set; } = new List<Process>();
+    public IEnumerable<Process> ChosenObjects { 
+        get => _ChosenObjects; 
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); } 
+    }
 
     /// <summary>
     /// Error response for fetching data
@@ -57,13 +66,34 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private List<ProcessDTO> ChosenProcessesDTOs = new();
+    [Parameter]
+    public CipherDataGrid<ProcessDTO> DataGrid { get; set; } = new();
+
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 
     protected override void OnInitialized()
     {
         Title ??= "דוח תהליכים";
 
-        if (ChosenProcesses is null) (ChosenProcesses, Error) = CachedData.AllProcesses;
-        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
+        if (ChosenObjects is null) (ChosenObjects, Error) = CachedData.AllProcesses;
+        SetFileName();
     }
+
+    /// <summary>
+    /// Function taking place upon clicking Enter.
+    /// </summary>
+    private void SearchFunc()
+    {
+        if (ChosenSystem.ChosenSystem is null)
+        {
+            ChosenObjects = new List<Process>();
+        }
+        else
+        {
+            (ChosenObjects, Error) = ChosenSystem.ChosenSystem.Processes();
+        }
+        SetFileName();
+    }
+
+    public void SetFileName() => FileTitle = ChosenSystem.ChosenSystem is null ? "processes" : $"processes_{ChosenSystem.ChosenSystem?.Id}";
 }

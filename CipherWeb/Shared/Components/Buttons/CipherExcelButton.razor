@@ -12,7 +12,7 @@
 @inject IJSRuntime JS
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
-              Click="@ExportToCSV" Variant="Variant.Outlined" />
+              Click="@ClickFunc" Variant="Variant.Outlined" />
 
 @code
 {
@@ -28,6 +28,21 @@
     [Parameter]
     public IEnumerable<object>? Data { get; set; }
 
+    /// <summary>
+    /// Data that will be exported to Excel.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<IDictionary<string, object>>? DataSource { get; set; }
+
+    /// <summary>
+    /// Type that will be used to translate headers
+    /// </summary>
+    [Parameter]
+    public Type CipherType { get; set; } = typeof(Resource);
+
+    [Parameter]
+    public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
+
     protected override void OnInitialized()
     {
         if (string.IsNullOrEmpty(HelpText)) HelpText = "ייצוא ל-EXCEL";
@@ -36,116 +51,64 @@
 
     private string GetFilePath() => $"{FileName}.csv";
 
-    private async Task ExportToCSV()
+
+    public async Task ClickFunc()
     {
-        if (Data == null || !Data.Any()) return; // Exit if there's no data
-
-        var csvData = GenerateCSV(Data);
-        var fileName = GetFilePath();
-        var mimeType = "text/csv"; // Specify UTF-8 charset
-
-        var csvBytes = Encoding.UTF8.GetBytes(csvData);
-
-        // Convert CSV data to Base64
-        var base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes(csvData));
-
-        // Create data URL for download
-        var url = $"data:{mimeType};base64,{base64String}";
-
-        // Trigger download
-        await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", url, fileName);
+        if (OnClickFunc != null)
+        {
+            DataSource = OnClickFunc.Invoke();
+            await ExportToCsv();
+        }
     }
 
-    private string GenerateCSV(IEnumerable<object> data)
+    public async Task ExportToCsv()
     {
-        using (var stream = new MemoryStream())
+        // Exit if there's no data
+        if (DataSource == null || !DataSource.Any()) return;
+
+        // Generate CSV data from the provided data
+        var csvData = GenerateCSV(DataSource);
+
+        // Trigger download using JavaScript interop
+        await JSRuntime.InvokeVoidAsync("DownloadFile", $"{FileName}.csv", csvData);
+    }
+
+
+    private string GenerateCSV(IEnumerable<IDictionary<string, object>> data)
+    {
+        var csvContent = new List<string>();
+
+        // Prepare CSV headers and translate them to Hebrew
+        var headers = data.First().Keys.ToList();
+
+        if (headers != null && headers.Any())
         {
-            using (var writer = new StreamWriter(stream, Encoding.UTF8))
+            List<string> translatedHeaders = headers
+            .Select(header =>
             {
-                if (data == null || !data.Any())
-                    return string.Empty;
+                string engHeader = (typeof(StorageSystem) == CipherType) ? $"System_{header}" : $"{CipherType.Name}_{header}";
+                string translatedHeader = Translator.GetTranslation(engHeader);
+                return (translatedHeader != engHeader) ? translatedHeader : Translator.GetTranslation($"Resource_{header}");
+            })
+            .ToList();
 
-                var firstItem = data.First();
+            csvContent.Add(string.Join(",", translatedHeaders)); // Add headers
 
-                // Get all property names from the first item
-                Type type = firstItem.GetType();
-                var properties = type.GetProperties();
+            // Add each row of data
+            foreach (var row in data)
+            {
+                var rowValues = headers.Select(header =>
+                    row.ContainsKey(header)
+                        ? $"\"{row[header]?.ToString()}\"" // Handle nulls safely
+                        : string.Empty
+                );
 
-                // Write headers with translation if available
-                var headers = properties.Select(p =>
-                {
-                    var translateMethod = type.GetMethod("Translate");
-                    if (translateMethod != null)
-                    {
-                        // Assuming the Translate method takes the property name as an argument
-                        return translateMethod.Invoke(firstItem, new object[] { p.Name })?.ToString();
-                    }
-                    return p.Name;
-                }).ToArray();
-                writer.WriteLine(string.Join(",", headers));
-
-                // Write data rows
-                foreach (var item in data)
-                {
-                    var values = properties.Select(p =>
-                    {
-                        var value = p.GetValue(item, null);
-                        if (value != null)
-                        {
-                            var valueType = value.GetType();
-
-                            // Check if the value is a collection (like List, IEnumerable, etc.)
-                            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(valueType) && valueType != typeof(string))
-                            {
-                                var idList = new List<string>();
-                                foreach (var subItem in (System.Collections.IEnumerable)value)
-                                {
-                                    // try to save a list of all contained names, otherwise all contained ids
-                                    var idProperty = subItem?.GetType().GetProperty("Name");
-                                    if (idProperty != null)
-                                    {
-                                        var idValue = idProperty.GetValue(subItem)?.ToString();
-                                        if (idValue != null) idList.Add(idValue);
-                                    }
-                                    // all contained ids within item
-                                    else
-                                    {
-                                        idProperty = subItem?.GetType().GetProperty("Id");
-                                        if (idProperty != null)
-                                        {
-                                            var idValue = idProperty.GetValue(subItem)?.ToString();
-                                            if (idValue != null) idList.Add(idValue);
-                                        }
-                                    }
-                                }
-                                return string.Join(";", idList); // Join IDs
-                            }
-                            else
-                            {
-                                // Check if the value is an object with a Name property
-                                var idProperty = valueType.GetProperty("Name");
-                                if (idProperty != null)
-                                {
-                                    return idProperty.GetValue(value)?.ToString();
-                                }
-                                // if it doesn't, save it's id
-                                else
-                                {
-                                    idProperty = valueType.GetProperty("Id");
-                                    if (idProperty != null) return idProperty.GetValue(value)?.ToString();
-                                }
-                                return value.ToString()?.Replace(",", ";");
-                            }
-                        }
-
-                        return string.Empty;
-                    }).ToArray();
-
-                    writer.WriteLine(string.Join(",", values));
-                }
+                csvContent.Add(string.Join(",", rowValues));
             }
-
-            return Encoding.UTF8.GetString(stream.ToArray());
         }
+
+        // Add UTF-8 BOM to the beginning of the CSV content
+        var utf8Bom = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+        return utf8Bom + string.Join(Environment.NewLine, csvContent);
     }
 }

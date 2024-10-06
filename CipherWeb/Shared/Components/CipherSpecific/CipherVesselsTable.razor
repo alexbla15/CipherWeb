@@ -1,16 +1,20 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport">
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" CsvDataFetch="SetData" CipherType="typeof(Vessel)" FileTitle="vessels" 
+    WithButtons="@WithButtons" WithCard="@WithCard">
     <AdditionalButtons>
         <CipherAddUnitBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="VesselDTO" DataSource="@ChosenVesselsDTOs" ColumnNames="@(new Vessel().Headers())"
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="VesselDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Vessel().Headers())"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<Vessel> _ChosenObjects = new List<Vessel>();
+    private List<VesselDTO> _ChosenObjectsDTOs = new();
+
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
     /// Defaults to SimpleWithMenu.
@@ -34,7 +38,11 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<Vessel> ChosenVessels { get; set; } = new List<Vessel>();
+    public IEnumerable<Vessel> ChosenObjects
+    {
+        get => _ChosenObjects;
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
+    }
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -42,12 +50,13 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private List<VesselDTO> ChosenVesselsDTOs = new();
+    private CipherDataGrid<VesselDTO> DataGrid = new();
+        
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 
     protected override void OnInitialized()
     {
         Title ??= "כלים";
-        (ChosenVessels, Error) = CachedData.AllVessels;
-        ChosenVesselsDTOs = ChosenVessels.Select(x => x.ToDTO()).ToList();
+        (ChosenObjects, Error) = CachedData.AllVessels;
     }
 }

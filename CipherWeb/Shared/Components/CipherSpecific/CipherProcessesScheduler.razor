@@ -1,6 +1,5 @@
 ﻿@inherits CipherComponentCard
 
-@inject ICipherInfo _db
 @inject DialogService DialogService
 
 <CipherComponentCard Title="גאנט תהליכים" MaxWidth="@MaxWidth" Width="@Width" MarginBottom="@MarginBottom">
@@ -13,14 +12,17 @@
         <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
         <CipherAddProcessDefinitionBtn/>
-        <CipherExcelButton FileName="@FileName" Data="@ChosenProcessesDTOs" />
+        @if (SetView == View.Table)
+        {
+            <CipherExcelButton FileName="@FileName" Data="@ChosenProcessesDTOs" OnClickFunc="SetData" CipherType="typeof(Process)" />
+        }
         <CipherPDFButton />
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
         {
-            <CipherProcessesTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
-                               WithHeaderContent="false" ChosenProcesses="@ChosenProcesses" />
+            <CipherProcessesTable @ref=ProcTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
+                               WithHeaderContent="false" ChosenObjects="@ChosenProcesses" />
         }
         else
         {
@@ -81,6 +83,7 @@
     private CipherLocation cipherLocation = new();
     private List<Process>? ChosenProcesses = new();
     private List<ProcessDTO> ChosenProcessesDTOs = new();
+    private CipherProcessesTable ProcTable = new();
 
     public enum View
     {
@@ -101,10 +104,12 @@
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
         (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
-        FileName = $"processes_{SelectedSystem}";
+        SetFileName();
 
         ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
     }
+
+    public void SetFileName() => FileName = $"processes_{SelectedSystem}";
 
     private void TableView() => SetView = View.Table;
 
@@ -116,9 +121,12 @@
     private void SearchFunc()
     {
         (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
+        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
-        FileName = $"processes_{SelectedSystem}";
+        SetFileName();
     }
+
+    public IEnumerable<IDictionary<string, object>> SetData() => ProcTable.SetData();
 
     async Task ShowError()
     {

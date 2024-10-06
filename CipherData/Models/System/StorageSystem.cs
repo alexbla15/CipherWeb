@@ -109,6 +109,11 @@ namespace CipherData.Models
         public Tuple<List<Event>, ErrorResponse> Events() => Events(Id);
 
         /// <summary>
+        /// All events that took place in this system
+        /// </summary>
+        public Tuple<List<Process>, ErrorResponse> Processes() => Processes(Id);
+
+        /// <summary>
         /// All packages that took place in this system
         /// </summary>
         public Tuple<List<Package>, ErrorResponse> Packages() => Packages(Id);

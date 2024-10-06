@@ -10,28 +10,18 @@
 <component type="typeof(App)" render-mode="ServerPrerendered" />
 
 <script>
-    window.BlazorDownloadFile = function (url, fileName) {
-        // Create a temporary anchor element
-        var element = document.createElement('a');
-        element.style.display = 'none';
-        element.href = url;
-        element.setAttribute('download', fileName);
+    window.DownloadFile = function (fileName, content) {
+        // Create a blob from the content
+        const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
 
-        // Append the anchor element to the document body
-        document.body.appendChild(element);
-
-        // Trigger the download
-        element.click();
-
-        // Remove the anchor element from the document body
-        document.body.removeChild(element);
-    };
-
-    function downloadFileFromBase64(base64Data, fileName) {
-        const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64Data}`;
-        const downloadLink = document.createElement("a");
-        downloadLink.href = linkSource;
-        downloadLink.download = fileName;
-        downloadLink.click();
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // Release the object URL to free up memory
+        URL.revokeObjectURL(url);
     }
 </script>

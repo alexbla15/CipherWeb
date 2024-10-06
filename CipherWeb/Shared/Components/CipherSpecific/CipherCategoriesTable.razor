@@ -1,18 +1,21 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenCategoriesDTOs" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" CsvDataFetch="SetData" CipherType="typeof(Category)" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
         <CipherAddCategoryBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="CategoryDTO" DataSource="@ChosenCategoriesDTOs" ColumnNames="@(new Category().Headers())"
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="CategoryDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Category().Headers())"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group" />
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<Category> _ChosenObjects = new List<Category>();
+    private List<CategoryDTO> _ChosenObjectsDTOs = new();
+
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
     /// Defaults to SimpleWithMenu.
@@ -36,7 +39,11 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<Category> ChosenCategories { get; set; } = new List<Category>();
+    public IEnumerable<Category> ChosenObjects
+    {
+        get => _ChosenObjects;
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
+    }
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -44,13 +51,15 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private List<CategoryDTO> ChosenCategoriesDTOs = new();
+    [Parameter]
+    public CipherDataGrid<CategoryDTO> DataGrid { get; set; } = new();
+
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 
     protected override void OnInitialized()
     {
         Title ??= Translator.GetTranslation("Categories");
-        (ChosenCategories, Error) = CachedData.AllCategories;
-
-        ChosenCategoriesDTOs = ChosenCategories.Select(x => x.ToDTO()).ToList();
+        (ChosenObjects, Error) = CachedData.AllCategories;
+        FileTitle ??= "categories";
     }
 }

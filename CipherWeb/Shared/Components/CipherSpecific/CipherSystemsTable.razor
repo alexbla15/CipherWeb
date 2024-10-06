@@ -1,16 +1,19 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" DataSource="ChosenSystemsDTOs">
+<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" CsvDataFetch="SetData" CipherType="typeof(StorageSystem)" FileTitle="systems"
+                 WithButtons="@WithButtons" WithCard="@WithCard">
     <AdditionalButtons>
         <CipherAddSystemBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="StorageSystemDTO" DataSource="@ChosenSystemsDTOs" ColumnNames="@(new StorageSystem().Headers())"
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="StorageSystemDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new StorageSystem().Headers())"
                         GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<StorageSystem> _ChosenObjects = new List<StorageSystem>();
+    private List<StorageSystemDTO> _ChosenObjectsDTOs = new();
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
     /// Defaults to SimpleWithMenu.
@@ -34,7 +37,11 @@
     /// All available category options
     /// </summary>
     [Parameter]
-    public IEnumerable<StorageSystem> ChosenSystems { get; set; } = new List<StorageSystem>();
+    public IEnumerable<StorageSystem> ChosenObjects
+    {
+        get => _ChosenObjects;
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
+    }
 
     /// <summary>
     /// State of rsponse for data fetching in this component
@@ -42,12 +49,13 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private List<StorageSystemDTO> ChosenSystemsDTOs = new();
+    private CipherDataGrid<StorageSystemDTO> DataGrid = new();
+
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 
     protected override void OnInitialized()
     {
-        Title ??= "מערכות";
-        (ChosenSystems, Error) = CachedData.AllSystems;
-        ChosenSystemsDTOs = ChosenSystems.Select(x => x.ToDTO()).ToList();
+        Title ??= Translator.GetTranslation("Systems");
+        (ChosenObjects, Error) = CachedData.AllSystems;
     }
 }

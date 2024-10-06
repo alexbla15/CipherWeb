@@ -1,50 +1,21 @@
 ﻿@inherits CipherTableCard
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataSource="@ChosenUnits" WithCard="@WithCard" WithButtons="@WithButtons"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" CsvDataFetch="SetData" CipherType="typeof(Unit)" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" IsReport="@IsReport"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Path="@CipherNavLinks.AddUnit.Href" HelpText="הוספת יחידה" Variant="Variant.Outlined" />
+        <CipherAddUnitBtn />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Unit" DataSource="@ChosenUnits" WithCustomColumns="true"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Id))" Title="@(new Unit().Translate(nameof(Unit.Id)))">
-                    <FooterTemplate>
-                        <b>@($"כמות: {ChosenUnits.Count()}")</b>
-                    </FooterTemplate>
-                    </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Name))" Title="@(new Unit().Translate(nameof(Unit.Name)))" />
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Description))" Title="@(new Unit().Translate(nameof(Unit.Description)))" />
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Properties))" Title="@(new Unit().Translate(nameof(Unit.Properties)))"/>
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Parent))" Title="@(new Unit().Translate(nameof(Unit.Parent)))">
-                    <Template>
-                        @context.Parent?.Name
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Children))" Title="@(new Unit().Translate(nameof(Unit.Children)))">
-                    <Template>
-                        @if (context.Children != null)
-                        {
-                            @(string.Join(", ", context.Children.Select(x => x.Name)))
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Unit" Property="@(nameof(Unit.Systems))" Title="@(new Unit().Translate(nameof(Unit.Systems)))">
-                    <Template>
-                        @if (context.Systems != null)
-                        {
-                            @(string.Join(", ", context.Systems.Select(x => x.Name)))
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-            </CustomColumns>
-        </CipherDataGrid>
+        <CipherDataGrid @ref=DataGrid Cipher_TItem="UnitDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Unit().Headers())"
+                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private IEnumerable<Unit> _ChosenObjects = new List<Unit>();
+    private List<UnitDTO> _ChosenObjectsDTOs = new();
+
     /// <summary>
     /// Filter mode of data grid. Must be a FilterMode-enum.
     /// Defaults to SimpleWithMenu.
@@ -68,17 +39,27 @@
     /// All available object options
     /// </summary>
     [Parameter]
-    public IEnumerable<Unit> ChosenUnits { get; set; } = new List<Unit>();
+    public IEnumerable<Unit> ChosenObjects
+    {
+        get => _ChosenObjects;
+        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
+    }
+
+    [Parameter]
+    public CipherDataGrid<UnitDTO> DataGrid { get; set; } = new();
 
     /// <summary>
     /// State of rsponse for data fetching in this component
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     protected override void OnInitialized()
     {
         Title ??= Translator.GetTranslation("Units");
-        (ChosenUnits, error) = CachedData.AllUnits;
+        (ChosenObjects, Error) = CachedData.AllUnits;
+        FileTitle ??= "units";
     }
+
+    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 }

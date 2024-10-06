@@ -1,5 +1,6 @@
 ﻿@using System.Text
 @using System.Reflection
+@using System.Dynamic;
 
 @typeparam Cipher_TItem
 
@@ -105,6 +106,11 @@
     [Parameter]
     public Action<DataGridRenderEventArgs<Cipher_TItem>>? RenderFunc { get; set; }
 
+    [Parameter]
+    public IEnumerable<IDictionary<string, object>> PagedData { get; set; }
+
+    private LoadDataArgs DataGridArgs = new();
+
     private RadzenDataGrid<Cipher_TItem> CustomDataGrid = new();
 
     private Dictionary<string, object> dynamicRow = new();
@@ -116,6 +122,10 @@
     {
         if (FetchDataFunc != null) DataSource = (await FetchDataFunc()).ToList();
         ColumnNames = ColumnNames ?? HebrewDictionary.Headers;
+
+        // Trigger LoadData here if necessary
+        DataGridArgs = new LoadDataArgs(); // initialize args as needed
+        LoadData(DataGridArgs);
     }
 
     /// <summary>
@@ -130,6 +140,15 @@
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
     }
 
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        LoadData(new LoadDataArgs());
+    //        StateHasChanged(); // Ensure the UI is updated after loading data
+    //    }
+    //}
+
     public void OnCellDoubleClick(DataGridCellMouseEventArgs<Cipher_TItem> args)
     {
         string? href = args.Column.Title switch
@@ -143,6 +162,61 @@
 
         if (href != null) Navigate(href);
     }
+
+    private new void LoadData(LoadDataArgs args)
+    {
+        DataGridArgs = args;
+
+        // Get visible columns dynamically
+        var visibleColumns = CustomDataGrid.ColumnsCollection
+            .Where(c => !string.IsNullOrEmpty(c.Property))
+            .Select(c => c.Property);
+
+        // Project only the columns that are visible using reflection
+        if (DataSource != null)
+        {
+            PagedData = DataSource
+            .Skip(args.Skip ?? 0)
+            .Take(args.Top ?? DataSource.Count())
+            .Select(p => ProjectToVisibleColumns(p, visibleColumns))
+            .ToList();
+        }
+    }
+
+    // Projecting only the visible columns to an ExpandoObject
+    private IDictionary<string, object> ProjectToVisibleColumns(Cipher_TItem item, IEnumerable<string> visibleColumns)
+    {
+        var result = new ExpandoObject() as IDictionary<string, object>;
+
+        foreach (var column in visibleColumns)
+        {
+            var value = GetNestedPropertyValue(item, column);
+
+            result.Add(column, value);
+        }
+
+        return result;
+    }
+
+
+    private object GetNestedPropertyValue(object obj, string propertyName)
+    {
+        foreach (var part in propertyName.Split('.'))
+        {
+            if (obj == null) return null;
+            var type = obj.GetType();
+            var info = type.GetProperty(part);
+            if (info == null) return null;
+            obj = info.GetValue(obj, null);
+        }
+        return obj;
+    }
+
+    public IEnumerable<IDictionary<string, object>> GetPagedData()
+    {
+        LoadData(new LoadDataArgs());
+        return PagedData;
+    }
 }
 
 @if (DataSource is null && OnlyFull)
@@ -154,6 +228,7 @@
                 Visible="@Visible"
                 TItem="Cipher_TItem"
                 Data="@DataSource"
+                LoadData="LoadData"
                 Render="@RenderFunc"
                 FilterMode="@GridFilterMode"
                 AllowFiltering="@AllowFilter"
