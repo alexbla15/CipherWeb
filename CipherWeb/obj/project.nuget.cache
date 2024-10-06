@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mxv3UUzjjPY2YqLbpqrh7YyzG026rvyq26ZKaWNxxG99CaSHN5jrt9DvTiNGCOlY8l5iTsROKghc+4YfmiMjWw==",
+  "dgSpecHash": "N8em1nQS/4fJLZe3MFPNQ9qg5ZeCau1SeW36YVJNaad0dYoqrvPUFGpLH9kdoQ+0OLMcprB1AYStWy99ZjMy5w==",
   "success": true,
   "projectFilePath": "F:\\Projects\\CipherWeb\\CipherWeb\\CipherWeb.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,7 @@
     "C:\\Users\\TEST\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\netstandard.library\\1.6.0\\netstandard.library.1.6.0.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\officeopenxml.core.excelpackage\\1.0.0\\officeopenxml.core.excelpackage.1.0.0.nupkg.sha512",
+    "C:\\Users\\TEST\\.nuget\\packages\\questpdf\\2024.10.0\\questpdf.2024.10.0.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\radzen.blazor\\4.25.7\\radzen.blazor.4.25.7.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\runtime.native.system\\4.0.0\\runtime.native.system.4.0.0.nupkg.sha512",
     "C:\\Users\\TEST\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",

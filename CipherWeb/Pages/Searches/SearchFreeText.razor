@@ -74,7 +74,7 @@
         { typeof(Vessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(Unit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(Category), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
-            };
+    };
 
     private RenderFragment RenderTable(IEnumerable<Resource> items)
     {

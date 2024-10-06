@@ -184,18 +184,6 @@ namespace CipherWeb.Shared.Components.Buttons
         }
     }
 
-    public partial class CipherPDFButton : CipherButton
-    {
-        public CipherPDFButton() : base()
-        {
-            HelpText = "ייצוא ל-PDF";
-            Icon = Icons.Documents.picture_as_pdf;
-            ColorStyle = ButtonStyle.Danger;
-            ColorShade = Shade.Dark;
-            Variant = Variant.Outlined;
-        }
-    }
-
     public partial class CipherNavButton : CipherButton
     {
         [Parameter]

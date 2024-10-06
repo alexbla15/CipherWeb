@@ -1,0 +1,222 @@
+﻿@inherits CipherButton
+
+@using System.Text
+@using System.Collections
+
+@using OfficeOpenXml
+@using System.IO
+@using System.Reflection
+
+@using QuestPDF.Fluent;
+@using QuestPDF.Helpers;
+@using QuestPDF.Infrastructure;
+
+@inject NavigationManager Navigation
+@inject ExcelService excelService
+@inject IJSRuntime JSRuntime
+@inject IJSRuntime JS
+
+<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ColorStyle" ColorShade="@ColorShade"
+              Click="@ClickFunc" Variant="@Variant" />
+
+@code
+{
+    /// <summary>
+    /// Name of output file.
+    /// </summary>
+    [Parameter]
+    public string FileName { get; set; } = "export_data";
+
+    /// <summary>
+    /// Data that will be exported.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<object>? Data { get; set; }
+
+    /// <summary>
+    /// Data that will be exported.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<IDictionary<string, object>>? DataSource { get; set; }
+
+    /// <summary>
+    /// Type that will be used to translate headers
+    /// </summary>
+    [Parameter]
+    public Type CipherType { get; set; } = typeof(Resource);
+
+    [Parameter]
+    public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HelpText ??= "ייצוא ל-PDF";
+        Icon ??= Icons.Documents.picture_as_pdf;
+        ColorStyle = ButtonStyle.Danger;
+        ColorShade = Shade.Dark;
+        Variant = Variant.Outlined;
+    }
+
+    private string GetFilePath() => $"{FileName}.csv";
+
+
+    public void ClickFunc()
+    {
+        if (OnClickFunc != null)
+        {
+            DataSource = OnClickFunc.Invoke();
+            TableToPDF.GeneratePdf(DataSource.ToList(), CipherType, FileName);
+        }
+    }
+
+    public class TableToPDF : IDocument
+    {
+        public string? Classification { get; set; } = "מוגבל";
+
+        private IEnumerable<IDictionary<string, object>>? _data { get; set; }
+
+        public string FileName { get; set; } = "test.pdf";
+        public string Worker { get; set; } = Constants.SetUser.Name;
+
+        public Type CipherType { get; set; } = typeof(Resource);
+
+        public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
+
+        public void Compose(IDocumentContainer container)
+        {
+            container
+                .Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(1, QuestPDF.Infrastructure.Unit.Centimetre);
+                    page.PageColor(QuestPDF.Helpers.Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header().Element(ComposeHeader);
+                    page.Content().Element(ComposeContent);
+                    page.Footer().Element(ComposeFooter);
+                });
+        }
+
+        public void ComposeHeader(IContainer container)
+        {
+            container.Padding(10).Row(row =>
+            {
+                row.RelativeColumn().AlignCenter().Text($"הודפס על ידי: {Worker}", QuestPDF.Infrastructure.TextStyle.Default.Size(12).DirectionFromRightToLeft());
+
+                row.RelativeColumn().AlignRight().Text(Classification?.ToString(),
+            QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Size(12).DirectionFromRightToLeft());
+
+                row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:MMMM dd, yyyy}", QuestPDF.Infrastructure.TextStyle.Default.Size(12).DirectionFromRightToLeft());
+
+            });
+        }
+
+        void ComposeContent(IContainer container)
+        {
+            container.PaddingVertical(10).Table(table =>
+        {
+            // Define columns dynamically based on the properties of the generic type
+            var properties = CipherType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            table.ColumnsDefinition(columns =>
+            {
+                foreach (var _ in properties)
+                {
+                    columns.RelativeColumn(); // Create a column for each property
+                }
+            });
+
+            // Add a header row with the property names
+            table.Header(header =>
+            {
+                foreach (var property in properties)
+                {
+                    header.Cell().Element(CellStyle).Text(property.Name);
+
+                    static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Padding(5).Background(QuestPDF.Helpers.Colors.Grey.Lighten2);
+                }
+            });
+
+            var headers = _data?.FirstOrDefault()?.Keys;
+
+            // Add rows for the data
+            foreach (var item in _data)
+            {
+                foreach (var column in headers)
+                {
+                    // Get the value from the dictionary by the key
+                    var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
+                    table.Cell().Element(CellStyle).Text(value);
+                }
+
+                static IContainer CellStyle(IContainer container) => container.Padding(5);
+            }
+        });
+        }
+
+        void ComposeFooter(IContainer container)
+        {
+            container.Padding(10).Row(row =>
+    {
+        // Load image as byte array
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "CIPHER_Logo_4.png");
+        if (File.Exists(imagePath))
+        {
+            var imageBytes = File.ReadAllBytes(imagePath);
+
+            // Create a container for the image
+            row.RelativeColumn().AlignCenter().Element(imageContainer =>
+            {
+                imageContainer.Image(imageBytes); // Adjust size as needed
+            });
+        }
+    });
+        }
+
+        public static void GeneratePdf(List<IDictionary<string, object>>? Data, Type type, string FileName)
+        {
+            var document = new TableToPDF() { _data = Data, CipherType = type, FileName = $"{FileName}.pdf" };
+            document.GeneratePdf(document.FileName);
+
+            // Optionally, add logic to allow downloading the PDF in the browser
+        }
+    }
+
+    //public void CreatePDF()
+    //{
+    //    Document.Create(container =>
+    //{
+    //    container.Page(page =>
+    //{
+    //    page.Size(PageSizes.A4);
+    //    page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
+    //    page.PageColor(QuestPDF.Helpers.Colors.White);
+    //    page.DefaultTextStyle(x => x.FontSize(20));
+
+    //    page.Header()
+    //        .Text("Hello PDF!")
+    //        .SemiBold().FontSize(36).FontColor(QuestPDF.Helpers.Colors.Blue.Medium);
+
+    //    page.Content()
+    //        .PaddingVertical(1, QuestPDF.Infrastructure.Unit.Centimetre)
+    //        .Column(x =>
+    //        {
+    //            x.Spacing(20);
+
+    //            x.Item().Text(Placeholders.LoremIpsum());
+    //            x.Item().Image(Placeholders.Image(200, 100));
+    //        });
+
+    //    page.Footer()
+    //        .AlignCenter()
+    //        .Text(x =>
+    //        {
+    //            x.Span("Page ");
+    //            x.CurrentPageNumber();
+    //        });
+    //});
+    //})
+    //.GeneratePdf(FileName);
+    //}
+}

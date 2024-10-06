@@ -1,8 +1,11 @@
 using CipherData;
+using QuestPDF.Infrastructure;
 using Radzen;
 using System.Globalization;
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("he-IL");
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args); 
 

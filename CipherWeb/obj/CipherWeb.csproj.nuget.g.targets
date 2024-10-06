@@ -3,5 +3,6 @@
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.logging.abstractions\6.0.4\buildTransitive\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.logging.abstractions\6.0.4\buildTransitive\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.aspnetcore.components.analyzers\6.0.25\buildTransitive\netstandard2.0\Microsoft.AspNetCore.Components.Analyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.aspnetcore.components.analyzers\6.0.25\buildTransitive\netstandard2.0\Microsoft.AspNetCore.Components.Analyzers.targets')" />
+    <Import Project="$(NuGetPackageRoot)questpdf\2024.10.0\buildTransitive\QuestPDF.targets" Condition="Exists('$(NuGetPackageRoot)questpdf\2024.10.0\buildTransitive\QuestPDF.targets')" />
   </ImportGroup>
 </Project>

@@ -11,10 +11,9 @@
 
 <PageTitle>מסך פתיחה</PageTitle>
 
-
 <CipherTopNavBar />
-
 <CipherProcessesScheduler />
+
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
     <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage />

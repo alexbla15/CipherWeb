@@ -192,6 +192,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQnV0dG9uc1xDaXBoZXJFeGNlbEJ1dHRvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/Buttons/CipherPDFButton.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQnV0dG9uc1xDaXBoZXJQREZCdXR0b24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherAutoComplete.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyQXV0b0NvbXBsZXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
