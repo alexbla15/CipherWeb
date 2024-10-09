@@ -1,5 +1,6 @@
 ﻿using CipherData.Randomizer;
 using System;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -279,18 +280,18 @@ namespace CipherData.Models
             return new();
         }
 
-        public EventDTO ToDTO()
+        public Dictionary<string, object?> ToDictionary()
         {
-            return new EventDTO()
+            return new()
             {
-                Comments = Comments,
-                EventType = EventType,
-                Id = Id,
-                ProcessId = ProcessId,
-                Packages = string.Join("; ", FinalStatePackages.Select(x => x.Id)),
-                Status = Status == 0 ? "מחכה לאישור" : (Status > 0 ? "תנועה מאושרת" : "תנועה נדחתה") ,
-                Timestamp = Timestamp,
-                Worker = Worker
+                [nameof(Id)] = Id,
+                [nameof(EventType)] = EventType,
+                [nameof(ProcessId)] = ProcessId,
+                ["Packages"] = string.Join("; ", FinalStatePackages.Select(x => x.Id)),
+                [nameof(Status)] = Status == 0 ? "מחכה לאישור" : (Status > 0 ? "תנועה מאושרת" : "תנועה נדחתה"),
+                [nameof(Timestamp)] = Timestamp,
+                [nameof(Worker)] = Worker,
+                [nameof(Comments)] = Comments,
             };
         }
 
@@ -436,40 +437,5 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
-    }
-
-
-    /// <summary>
-    /// Event data transfer object
-    /// </summary>
-    [HebrewTranslation(nameof(Event))]
-    public class EventDTO : CipherClass
-    {
-        [HebrewTranslation(typeof(Resource), nameof(Resource.Id))]
-        public string? Id { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(EventType))]
-        public int EventType { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(Status))]
-        public string? Status { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
-        public string? Worker { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
-        public string? ProcessId { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(Comments))]
-        public string? Comments { get; set; }
-
-        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
-        public DateTime Timestamp { get; set; }
-
-        /// <summary>
-        /// Path: [Event].[FinalStatePackages].[Id]
-        /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Packages))]
-        public string? Packages { get; set; }
     }
 }

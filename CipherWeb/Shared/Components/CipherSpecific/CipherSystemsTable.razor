@@ -1,61 +1,11 @@
-﻿@inherits CipherTableCard
+﻿@inherits CipherResourceTable<StorageSystem>
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" DataFetch="SetData" CipherType="typeof(StorageSystem)" FileTitle="systems"
-                 WithButtons="@WithButtons" WithCard="@WithCard">
-    <AdditionalButtons>
-        <CipherAddSystemBtn />
-    </AdditionalButtons>
-    <ComponentContent>
-        <CipherDataGrid @ref=DataGrid Cipher_TItem="StorageSystemDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new StorageSystem().Headers())"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
-    </ComponentContent>
-</CipherTableCard>
+<CipherResourceTable Cipher_TItem="StorageSystem" ChosenObjects="@ChosenObjects" PrefixFileTitle="systems" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    private IEnumerable<StorageSystem> _ChosenObjects = new List<StorageSystem>();
-    private List<StorageSystemDTO> _ChosenObjectsDTOs = new();
-    /// <summary>
-    /// Filter mode of data grid. Must be a FilterMode-enum.
-    /// Defaults to SimpleWithMenu.
-    /// </summary>
-    [Parameter]
-    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
-
-    /// <summary>
-    /// Allows/disabled filtering.
-    /// </summary>
-    [Parameter]
-    public bool Filter { get; set; } = false;
-
-    /// <summary>
-    /// Allows/disables grouping.
-    /// </summary>
-    [Parameter]
-    public bool Group { get; set; } = false;
-
-    /// <summary>
-    /// All available category options
-    /// </summary>
-    [Parameter]
-    public IEnumerable<StorageSystem> ChosenObjects
-    {
-        get => _ChosenObjects;
-        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
-    }
-
-    /// <summary>
-    /// State of rsponse for data fetching in this component
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    private CipherDataGrid<StorageSystemDTO> DataGrid = new();
-
-    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
-
     protected override void OnInitialized()
     {
         Title ??= Translator.GetTranslation("Systems");
-        (ChosenObjects, Error) = CachedData.AllSystems;
+        ChosenObjects ??= CachedData.AllSystems.Item1;
     }
 }

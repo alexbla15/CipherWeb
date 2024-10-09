@@ -1,0 +1,128 @@
+﻿@using System.Text
+@using System.Reflection
+@using System.Dynamic;
+
+@inherits RadzenDataGrid<DisplayedObject>
+
+@code {
+    /// <summary>
+    /// Data of datagrid.
+    /// </summary>
+    [Parameter]
+    public List<DisplayedObject>? DataSource { get; set; }
+
+    /// <summary>
+    /// Selected filteration mode. Must be a FilterMode-enum.
+    /// </summary>
+    [Parameter]
+    public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Is filteration allowed.
+    /// </summary>
+    [Parameter]
+    public bool AllowFilter { get; set; } = false;
+
+    /// <summary>
+    /// Is grouping allowed.
+    /// </summary>
+    [Parameter]
+    public bool AllowGroup { get; set; } = false;
+
+    /// <summary>
+    /// Is sorting allowed.
+    /// </summary>
+    [Parameter]
+    public bool AllowSort { get; set; } = false;
+
+    /// <summary>
+    /// Is column picking allowed.
+    /// </summary>
+    [Parameter]
+    public bool AllowColumnPick { get; set; } = false;
+
+    /// <summary>
+    /// Maximal amount of rows per page of datagrid.
+    /// </summary>
+    [Parameter]
+    public int RowsPerPage { get; set; } = Constants.RowsPerPage;
+
+    private RadzenDataGrid<DisplayedObject> CustomDataGrid = new();
+
+    private IList<DisplayedObject>? selectedRow;
+
+    public string? GetFooter(int index) => (index == 0)? $"כמות שורות: {CustomDataGrid.View.Count()}" : null;
+
+    public async void Navigate(string path)
+    {
+        await JSRuntime.InvokeAsync<object>("open", path, "_blank");
+    }
+}
+
+
+@if (DataSource != null && DataSource.Any())
+{
+    <RadzenDataGrid @ref="CustomDataGrid" @bind-Value=@selectedRow
+                    Visible="@Visible"
+                    TItem="DisplayedObject"
+                    Data="@DataSource"
+                    LoadData="LoadData"
+                    FilterMode="@GridFilterMode"
+                    AllowFiltering="@AllowFilter"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowColumnResize="true"
+                    FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                    AllowPaging="true"
+                    PageSize="@RowsPerPage"
+                    AllowSorting="@AllowSort"
+                    SelectionMode="DataGridSelectionMode.Single"
+                    AllowColumnPicking="@AllowColumnPick"
+                    AllGroupsExpanded="@AllGroupsExpanded"
+                    AllowGrouping="@AllowGroup"
+                    HideGroupedColumn="@HideGroupedColumn"
+                    Density="@Density.Compact"
+                    Style="text-align: right; background-color: transparent"
+                    AndOperatorText="וגם"
+                    OrOperatorText="או"
+                    ClearFilterText="ביטול"
+                    IsNullText="חסר"
+                    IsNotNullText="לא חסר"
+                    StartsWithText="מתחיל ב"
+                    EndsWithText="מסתיים ב"
+                    IsEmptyText="ריק"
+                    IsNotEmptyText="לא ריק"
+                    ContainsText="מכיל"
+                    DoesNotContainText="לא מכיל"
+                    EqualsText="זהה ל"
+                    NotEqualsText="שונה מ"
+                    LessThanOrEqualsText="קטן / שווה ל"
+                    LessThanText="קטן מ"
+                    GreaterThanOrEqualsText="גדול / שווה ל"
+                    GreaterThanText="גדול מ"
+                    AllColumnsText="הכל"
+                    FilterText="סינון"
+                    ApplyFilterText="סינון"
+                    ColumnsShowingText="עמודות מוצגות"
+                    GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם">
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px;
+            text-align: center; margin: 2rem;">לא נמצאו נתונים</p>
+        </EmptyTemplate>
+        <Columns>
+            @if (DataSource.First().Properties != null)
+            {
+                @foreach (var prop in DataSource.First().Properties)
+                {
+                    <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
+                        <Template>
+                            @context.Properties?.Where(x => x.Name == prop.Name).First().Value
+                        </Template>
+                        <FooterTemplate>
+                            @GetFooter(DataSource.First().Properties.IndexOf(prop))
+                        </FooterTemplate>
+                    </RadzenDataGridColumn>
+                }
+            }
+        </Columns>
+    </RadzenDataGrid>
+}

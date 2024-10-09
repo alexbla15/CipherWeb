@@ -1,65 +1,11 @@
-﻿@inherits CipherTableCard
+﻿@inherits CipherResourceTable<Unit>
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" DataFetch="SetData" CipherType="typeof(Unit)" WithCard="@WithCard" WithButtons="@WithButtons"
-                 Sharable="@Sharable" IsReport="@IsReport"
-                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
-    <AdditionalButtons>
-        <CipherAddUnitBtn />
-    </AdditionalButtons>
-    <ComponentContent>
-        <CipherDataGrid @ref=DataGrid Cipher_TItem="UnitDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Unit().Headers())"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
-    </ComponentContent>
-</CipherTableCard>
+<CipherResourceTable Cipher_TItem="Unit" ChosenObjects="@ChosenObjects" PrefixFileTitle="units" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    private IEnumerable<Unit> _ChosenObjects = new List<Unit>();
-    private List<UnitDTO> _ChosenObjectsDTOs = new();
-
-    /// <summary>
-    /// Filter mode of data grid. Must be a FilterMode-enum.
-    /// Defaults to SimpleWithMenu.
-    /// </summary>
-    [Parameter]
-    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
-
-    /// <summary>
-    /// Allows/disabled filtering.
-    /// </summary>
-    [Parameter]
-    public bool Filter { get; set; } = false;
-
-    /// <summary>
-    /// Allows/disables grouping.
-    /// </summary>
-    [Parameter]
-    public bool Group { get; set; } = false;
-
-    /// <summary>
-    /// All available object options
-    /// </summary>
-    [Parameter]
-    public IEnumerable<Unit> ChosenObjects
-    {
-        get => _ChosenObjects;
-        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
-    }
-
-    [Parameter]
-    public CipherDataGrid<UnitDTO> DataGrid { get; set; } = new();
-
-    /// <summary>
-    /// State of rsponse for data fetching in this component
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
     protected override void OnInitialized()
     {
         Title ??= Translator.GetTranslation("Units");
-        (ChosenObjects, Error) = CachedData.AllUnits;
-        FileTitle ??= "units";
+        ChosenObjects ??= CachedData.AllUnits.Item1;
     }
-
-    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
 }

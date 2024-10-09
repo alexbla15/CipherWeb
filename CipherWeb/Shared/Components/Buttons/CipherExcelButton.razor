@@ -7,9 +7,7 @@
 @using System.IO
 
 @inject NavigationManager Navigation
-@inject ExcelService excelService
 @inject IJSRuntime JSRuntime
-@inject IJSRuntime JS
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
               Click="@ClickFunc" Variant="Variant.Outlined" />
@@ -34,12 +32,6 @@
     [Parameter]
     public IEnumerable<IDictionary<string, object>>? DataSource { get; set; }
 
-    /// <summary>
-    /// Type that will be used to translate headers
-    /// </summary>
-    [Parameter]
-    public Type CipherType { get; set; } = typeof(Resource);
-
     [Parameter]
     public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
 
@@ -58,7 +50,9 @@
         {
             DataSource = OnClickFunc.Invoke();
             await ExportToCsv();
+            return;
         }
+        if (DataSource != null && DataSource.Any()) await ExportToCsv();
     }
 
     public async Task ExportToCsv()
@@ -83,16 +77,7 @@
 
         if (headers != null && headers.Any())
         {
-            List<string> translatedHeaders = headers
-            .Select(header =>
-            {
-                string engHeader = (typeof(StorageSystem) == CipherType) ? $"System_{header}" : $"{CipherType.Name}_{header}";
-                string translatedHeader = Translator.GetTranslation(engHeader);
-                return (translatedHeader != engHeader) ? translatedHeader : Translator.GetTranslation($"Resource_{header}");
-            })
-            .ToList();
-
-            csvContent.Add(string.Join(",", translatedHeaders)); // Add headers
+            csvContent.Add(string.Join(",", headers)); // Add headers
 
             // Add each row of data
             foreach (var row in data)

@@ -71,23 +71,24 @@
 
     public class TableToPDF : IDocument
     {
-        public string? Classification { get; set; } = "מוגבל";
-
         private IEnumerable<IDictionary<string, object>>? _data { get; set; }
 
         public string FileName { get; set; } = "test.pdf";
         public string Worker { get; set; } = Constants.SetUser.Name;
+        public string? Classification { get; set; } = "מוגבל";
 
         public Type CipherType { get; set; } = typeof(Resource);
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
+
+        public QuestPDF.Infrastructure.TextStyle HeaderTextStyle = QuestPDF.Infrastructure.TextStyle.Default.Size(12).DirectionFromRightToLeft();
 
         public void Compose(IDocumentContainer container)
         {
             container
                 .Page(page =>
                 {
-                    page.Size(PageSizes.A4);
+                    page.Size(PageSizes.A4.Landscape());
                     page.Margin(1, QuestPDF.Infrastructure.Unit.Centimetre);
                     page.PageColor(QuestPDF.Helpers.Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(12));
@@ -102,12 +103,12 @@
         {
             container.Padding(10).Row(row =>
             {
-                row.RelativeColumn().AlignCenter().Text($"הודפס על ידי: {Worker}", QuestPDF.Infrastructure.TextStyle.Default.Size(12).DirectionFromRightToLeft());
+                row.RelativeColumn().AlignCenter().Text($"הודפס על ידי: {Worker}", HeaderTextStyle);
 
-                row.RelativeColumn().AlignRight().Text(Classification?.ToString(),
-            QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Size(12).DirectionFromRightToLeft());
+                row.RelativeColumn().AlignCenter().Text(Classification?.ToString(),
+            QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Bold().Size(12).DirectionFromRightToLeft());
 
-                row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:MMMM dd, yyyy}", QuestPDF.Infrastructure.TextStyle.Default.Size(12).DirectionFromRightToLeft());
+                row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:MMMM dd, yyyy}", HeaderTextStyle);
 
             });
         }
@@ -132,9 +133,17 @@
             {
                 foreach (var property in properties)
                 {
-                    header.Cell().Element(CellStyle).Text(property.Name);
+                    string eng_translation = $"{CipherType.Name}_{property.Name}";
+                    string heb_translation = Translator.GetTranslation(eng_translation);
+                    if (heb_translation == eng_translation)
+                    {
+                        eng_translation = property.Name;
+                        heb_translation = Translator.GetTranslation(eng_translation);
+                    }
 
-                    static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Padding(5).Background(QuestPDF.Helpers.Colors.Grey.Lighten2);
+                    header.Cell().Element(HeaderCellStyle).Text(heb_translation);
+
+                    static IContainer HeaderCellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Border(1).Padding(5);
                 }
             });
 
@@ -150,7 +159,7 @@
                     table.Cell().Element(CellStyle).Text(value);
                 }
 
-                static IContainer CellStyle(IContainer container) => container.Padding(5);
+                static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
             }
         });
         }
@@ -166,9 +175,9 @@
             var imageBytes = File.ReadAllBytes(imagePath);
 
             // Create a container for the image
-            row.RelativeColumn().AlignCenter().Element(imageContainer =>
+            row.RelativeColumn().AlignCenter().Width(100).Height(100).Element(imageContainer =>
             {
-                imageContainer.Image(imageBytes); // Adjust size as needed
+                imageContainer.Image(imageBytes).FitWidth();
             });
         }
     });

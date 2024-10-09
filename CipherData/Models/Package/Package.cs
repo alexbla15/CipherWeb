@@ -119,22 +119,22 @@ namespace CipherData.Models
             };
         }
 
-        public PackageDTO ToDTO()
+        public Dictionary<string, object?> ToDictionary()
         {
-            return new PackageDTO()
+            return new()
             {
-                Id=Id,
-                BrutMass = BrutMass,
-                Category = Category.Name,
-                CreatedAt = CreatedAt,
-                Description = Description,
-                Children=Children != null ? string.Join("; ",Children.Select(x=>x.Id)) : null,
-                NetMass=NetMass,
-                Parent=Parent?.Id,
-                System=System.Id,
-                Vessel=Vessel?.Id,
-                DestinationProcesses=string.Join("; ", DestinationProcesses.Select(x=>x.Name)),
-                Properties= Properties != null ? string.Join("; ", Properties.Select(x => $"{x.Name}:{x.Value}")) : null
+                [nameof(Id)] = Id,
+                [nameof(BrutMass)] = BrutMass,
+                [nameof(NetMass)] = NetMass,
+                [nameof(Category)] = Category.Name,
+                [nameof(Description)] = Description,
+                [nameof(System)] = System.Id,
+                [nameof(Vessel)] = Vessel?.Id,
+                [nameof(Parent)] = Parent?.Id,
+                [nameof(Children)] = Children != null ? string.Join("; ", Children.Select(x => x.Id)) : null,
+                [nameof(DestinationProcesses)] = string.Join("; ", DestinationProcesses.Select(x => x.Name)),
+                [nameof(Properties)] = Properties != null ? string.Join("; ", Properties.Select(x => $"{x.Name}:{x.Value}")) : null,
+                [nameof(CreatedAt)] = CreatedAt,
             };
         }
 
@@ -245,67 +245,5 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
-    }
-
-
-    [HebrewTranslation(nameof(Package))]
-    public class PackageDTO : CipherClass
-    {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public string? Id { get; set; }
-
-        [HebrewTranslation(typeof(Package), nameof(Description))]
-        public string? Description { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[Properties].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public string? Properties { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[Vessel].[Id]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Vessel))]
-        public string? Vessel { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[System].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(System))]
-        public string? System { get; set; }
-
-        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
-        public decimal BrutMass { get; set; }
-
-        [HebrewTranslation(typeof(Package), nameof(NetMass))]
-        public decimal NetMass { get; set; }
-
-        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[Parent].[Id]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Parent))]
-        public string? Parent { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[Children].[Id]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Children))]
-        public string? Children { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[Category].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Category))]
-        public string? Category { get; set; }
-
-        /// <summary>
-        /// Path: [Package].[DestinationProcesses].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
-        public string? DestinationProcesses { get; set; }
     }
 }

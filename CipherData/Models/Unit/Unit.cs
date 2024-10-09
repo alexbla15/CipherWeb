@@ -1,4 +1,6 @@
 ﻿using CipherData.Randomizer;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -74,17 +76,17 @@ namespace CipherData.Models
             };
         }
 
-        public UnitDTO ToDTO()
+        public Dictionary<string, object?> ToDictionary()
         {
-            return new UnitDTO()
+            return new()
             {
-                Id = Id,
-                Name = Name,
-                Description = Description,
-                Properties = Properties,
-                Parent=Parent?.Name,
-                Children = Children is null ? null : string.Join("; ", Children.Select(x=>x.Name).ToList()),
-                Systems = Systems is null ? null : string.Join("; ", Systems.Select(x => x.Name).ToList()),
+                [nameof(Id)] = Id,
+                [nameof(Name)] = Name,
+                [nameof(Description)] = Description,
+                [nameof(Properties)] = Properties,
+                [nameof(Parent)] = Parent?.Name,
+                [nameof(Children)] = Children is null ? null : string.Join("; ", Children.Select(x => x.Name).ToList()),
+                [nameof(Systems)] = Systems is null ? null : string.Join("; ", Systems.Select(x => x.Name).ToList()),
             };
         }
 
@@ -146,46 +148,6 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
-    }
-
-    [HebrewTranslation(nameof(Unit))]
-    public class UnitDTO : CipherClass
-    {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public string? Id { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string? Name { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
-        public string? Description { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Properties))]
-        public string? Properties { get; set; }
-
-        /// <summary>
-        /// Path: [Unit].[Parent].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Parent))]
-        public string? Parent { get; set; }
-
-        /// <summary>
-        /// Path: [Unit].[Children].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Children))]
-        public string? Children { get; set; }
-
-        /// <summary>
-        /// Path: [Unit].[Systems].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Systems))]
-        public string? Systems { get; set; }
-
-        /// <summary>
-        /// Path: [Unit].[Conditions]
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
-        public string? Conditions { get; set; }
     }
 }
 

@@ -11,7 +11,7 @@ namespace CipherWeb.Data
             public static readonly Shade Shade = Shade.Darker;
         }
 
-        public static readonly bool CheckJsons = true;
+        public static readonly bool CheckJsons = false;
 
         public static readonly Worker SetUser = new() { Name = "אלכס בלחמן" };
 

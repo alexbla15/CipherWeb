@@ -1,4 +1,5 @@
 ﻿using CipherData.Randomizer;
+using System.Diagnostics;
 
 namespace CipherData.Models
 {
@@ -80,6 +81,19 @@ namespace CipherData.Models
                 At = RandomFuncs.RandomDateTime(),
                 ActionType = RandomFuncs.RandomItem(new List<ActionType>() { ActionType.Modified, ActionType.Created, ActionType.Approved }),
                 Comments = comments?.Trim() ?? "בדיקה"
+            };
+        }
+
+        public Dictionary<string, object?> ToDictionary()
+        {
+            return new()
+            {
+                [nameof(At)] = At,
+                [nameof(ActionParameters)] = ActionParameters,
+                [nameof(ActionType)] = ActionType == ActionType.Created ? "פעולה נוצרה" : (ActionType == ActionType.Modified ? "פעולה עודכנה" : "תנועה אושרה"),
+                [nameof(By)] = By,
+                [nameof(Status)] = Status,
+                [nameof(Comments)] = Comments,
             };
         }
     }

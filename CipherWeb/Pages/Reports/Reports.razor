@@ -4,38 +4,35 @@
 
 <CipherPointers Title="דוחות שמורים" LabelInitialText="דוח" NavLinkType="דוחות"></CipherPointers>
 
-<CipherTableCard Title="חיפוש דוח">
+<CipherTableCard Title="חיפוש דוח" GetDataSource="@GetDataSource" FileTitle="reports">
     <AdditionalButtons>
         <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@CipherNavLinks.AddReport.Href"/>
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataGrid Cipher_TItem="Report" DataSource="@AllReports" WithAddedColumns="true"
-                        GridFilterMode="FilterMode.Advanced" AllowFilter="true"/>
+        <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
+                         GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
     </ComponentContent>
 </CipherTableCard>
 
 @code {
-    public class Report
-    {
-        public int Uid { get; set; }
-        public string? Name { get; set; }
-        public string? Creator { get; set; }
-        public string? Path { get; set; }
-        public DateTime CreationDate { get; set; }
-    }
-
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
     [Parameter]
     public List<Report> AllReports { get; set; } = new()
     {
-        new() {Uid=1, Name="דוח תעודות", Creator="אבי", CreationDate=DateTime.Today, Path=CipherNavLinks.PackagesReport.Href},
-        new() {Uid=2, Name="דוח תנועות", Creator="אבי", CreationDate=DateTime.Today.AddDays(1), Path=CipherNavLinks.EventsReport.Href},
-        new() {Uid=3, Name="דוח סוגים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddMonths(1), Path=CipherNavLinks.CategoriesReport.Href},
-        new() {Uid=4, Name="דוח מיקומים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href},
-        new() {Uid=5, Name="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32), Path=CipherNavLinks.LocationsReport.Href}
+        new() {Id=1, Title="דוח תעודות", Creator="אבי", CreationDate=DateTime.Today},
+        new() {Id=2, Title="דוח תנועות", Creator="אבי", CreationDate=DateTime.Today.AddDays(1)},
+        new() {Id=3, Title="דוח סוגים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddMonths(1)},
+        new() {Id=4, Title="דוח מיקומים", Creator="אלכס בלחמן", CreationDate=DateTime.Today.AddDays(32)},
+        new() {Id=5, Title="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32)}
     };
 
-    private RadzenDataGrid<Report> CustomDataGrid = new();
+    /// <summary>
+    /// Function to retrieve the DataSource for the DataTable
+    /// </summary>
+    [Parameter]
+    public Func<List<Dictionary<string, object?>>>? GetDataSource { get; set; }
+
+    protected override void OnInitialized() => GetDataSource = (() => DisplayedObject.ToListDicts(AllReports));
 }

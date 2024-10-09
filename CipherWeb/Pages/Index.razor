@@ -6,8 +6,6 @@
 @using System.Text;
 
 @inject TooltipService tooltipService
-@inject ExcelService excelService
-@inject IJSRuntime JSRuntime
 
 <PageTitle>מסך פתיחה</PageTitle>
 
@@ -16,9 +14,5 @@
 
 @if (Roles.CurrnetRole == Roles.SysManager)
 {
-    <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage=@rowsPerPage />
-}
-
-@code {
-    private int rowsPerPage = 3;
+    <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" RowsPerPage="@Constants.RowsPerPage" />
 }

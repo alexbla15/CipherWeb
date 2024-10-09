@@ -173,6 +173,18 @@ namespace CipherData.Models
             return false;
         }
 
+        public Dictionary<string, object?> ToDictionary()
+        {
+            return new()
+            {
+                [nameof(Id)] = Id,
+                [nameof(Version)] = Version,
+                [nameof(Title)] = Title,
+                [nameof(Creator)] = Creator,
+                [nameof(CreationDate)] = CreationDate,
+            };
+        }
+
         // STATIC METHODS
 
         public static async Task<Report> Get(ICipherInfo db, int Id)

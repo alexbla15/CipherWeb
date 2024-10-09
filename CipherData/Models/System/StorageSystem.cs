@@ -1,4 +1,6 @@
 ﻿using CipherData.Randomizer;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace CipherData.Models
 {
@@ -87,17 +89,17 @@ namespace CipherData.Models
             };
         }
 
-        public StorageSystemDTO ToDTO()
+        public Dictionary<string, object?> ToDictionary()
         {
-            return new StorageSystemDTO()
+            return new()
             {
-                Id = Id,
-                Name = Name,
-                Description = Description,
-                Parent = Parent?.Name,
-                Children = Children != null ? string.Join("; ", Children.Select(x => x.Name)) : null,
-                Unit = Unit?.Name,
-                Properties = Properties != null ? string.Join(", ", Properties.Select(x => $"{x.Key} : {x.Value}")) : null
+                [nameof(Id)] = Id,
+                [nameof(Name)] = Name,
+                [nameof(Description)] = Description,
+                [nameof(Parent)] = Parent?.Name,
+                [nameof(Children)] = Children != null ? string.Join("; ", Children.Select(x => x.Name)) : null,
+                [nameof(Unit)] = Unit?.Name,
+                [nameof(Properties)] = Properties != null ? string.Join(", ", Properties.Select(x => $"{x.Key} : {x.Value}")) : null,
             };
         }
 
@@ -117,6 +119,11 @@ namespace CipherData.Models
         /// All packages that took place in this system
         /// </summary>
         public Tuple<List<Package>, ErrorResponse> Packages() => Packages(Id);
+
+        /// <summary>
+        /// All vessels that took place in this system
+        /// </summary>
+        public Tuple<List<Vessel>, ErrorResponse> Vessels() => Vessels(Id);
 
         /// <summary>
         /// Get details about a system vessel given system ID
@@ -217,43 +224,5 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
-    }
-
-    [HebrewTranslation("System")]
-    public class StorageSystemDTO : CipherClass
-    {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public string? Id { get; set; }
-
-        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string? Name { get; set; }
-
-        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string? Description { get; set; }
-
-        /// <summary>
-        /// Path: [System].[Properties].{key:value}
-        /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
-        public string? Properties { get; set; }
-
-        /// <summary>
-        /// Path: [System].[Parent].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
-        public string? Parent { get; set; }
-
-        /// <summary>
-        /// Path: [System].[Children].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
-        public string? Children { get; set; }
-
-        /// <summary>
-        /// Path: [System].[Unit].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
-        public string? Unit { get; set; }
-        
     }
 }

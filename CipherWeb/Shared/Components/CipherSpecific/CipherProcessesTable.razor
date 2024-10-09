@@ -1,99 +1,10 @@
-﻿@using System.IO
+﻿@inherits CipherResourceTable<Process>
 
-@inherits CipherTableCard
-
-<CipherTableCard Title="@Title" DataFetch="SetData" CipherType="typeof(Process)" FileTitle="@FileTitle"
-    Variant="@Variant" WithCard="@WithCard" WithButtons="@WithButtons" Sharable="@Sharable" IsReport="@IsReport">
-    <AdditionalButtons>
-        <CipherAddProcessDefinitionBtn />
-    </AdditionalButtons>
-    <HeaderContent>
-        @if (WithHeaderContent)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem />
-            </RadzenStack>
-        }
-    </HeaderContent>
-    <ComponentContent>
-        <CipherDataGrid @ref=DataGrid Cipher_TItem="ProcessDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Process().Headers())"
-                        GridFilterMode="@FilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup"/>
-    </ComponentContent>
-</CipherTableCard>
+<CipherResourceTable Cipher_TItem="Process" WithHeaderContent="true" PrefixFileTitle="processes" Title="@Title" />
 
 @code {
-    private IEnumerable<Process> _ChosenObjects = new List<Process>();
-    private List<ProcessDTO> _ChosenObjectsDTOs = new();
-
-    private CipherLocation ChosenSystem = new();
-
-    /// <summary>
-    /// Filter mode of the datagrid. Must be a FilterMode-enum.
-    /// </summary>
-    [Parameter]
-    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
-
-    /// <summary>
-    /// Is the datagrid filterable.
-    /// </summary>
-    [Parameter]
-    public bool AllowFilter { get; set; } = false;
-
-    /// <summary>
-    /// Is the datagrid groupable.
-    /// </summary>
-    [Parameter]
-    public bool AllowGroup { get; set; } = false;
-
-    /// <summary>
-    /// Is a CipherAutoComplete header is needed.
-    /// </summary>
-    [Parameter]
-    public bool WithHeaderContent { get; set; } = true;
-
-    /// <summary>
-    /// All events for scheduler
-    /// </summary>
-    [Parameter]
-    public IEnumerable<Process> ChosenObjects { 
-        get => _ChosenObjects; 
-        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); } 
-    }
-
-    /// <summary>
-    /// Error response for fetching data
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    [Parameter]
-    public CipherDataGrid<ProcessDTO> DataGrid { get; set; } = new();
-
-    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
-
     protected override void OnInitialized()
     {
-        Title ??= "דוח תהליכים";
-
-        if (ChosenObjects is null) (ChosenObjects, Error) = CachedData.AllProcesses;
-        SetFileName();
+        Title ??= Translator.GetTranslation("Processes");
     }
-
-    /// <summary>
-    /// Function taking place upon clicking Enter.
-    /// </summary>
-    private void SearchFunc()
-    {
-        if (ChosenSystem.ChosenSystem is null)
-        {
-            ChosenObjects = new List<Process>();
-        }
-        else
-        {
-            (ChosenObjects, Error) = ChosenSystem.ChosenSystem.Processes();
-        }
-        SetFileName();
-    }
-
-    public void SetFileName() => FileTitle = ChosenSystem.ChosenSystem is null ? "processes" : $"processes_{ChosenSystem.ChosenSystem?.Id}";
 }

@@ -12,7 +12,7 @@ namespace CipherData
         public static Dictionary<string, string> SetTranslationDictionary()
         {
             string Translations = File.ReadAllText("F:\\Projects\\CipherWeb\\CipherWeb\\Data\\TranslationDictionary.json");
-            return JsonSerializer.Deserialize<Dictionary<string, string>>(Translations);
+            return JsonSerializer.Deserialize<Dictionary<string, string>>(Translations) ?? new();
         }
 
         public static string GetTranslation(string key)

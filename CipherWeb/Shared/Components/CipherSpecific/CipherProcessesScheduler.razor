@@ -14,9 +14,9 @@
         <CipherAddProcessDefinitionBtn/>
         @if (SetView == View.Table)
         {
-            <CipherExcelButton FileName="@FileName" Data="@ChosenProcessesDTOs" OnClickFunc="SetData" CipherType="typeof(Process)" />
+            <CipherExcelButton FileName="@FileName" CipherType="typeof(Process)" OnClickFunc="@ProcTable.GetDataSource" />
         }
-        <CipherPDFButton />
+        <CipherPDFButton FileName="@FileName" CipherType="typeof(Process)" />
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
@@ -82,7 +82,6 @@
 
     private CipherLocation cipherLocation = new();
     private List<Process>? ChosenProcesses = new();
-    private List<ProcessDTO> ChosenProcessesDTOs = new();
     private CipherProcessesTable ProcTable = new();
 
     public enum View
@@ -105,8 +104,6 @@
 
         (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
         SetFileName();
-
-        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
     }
 
     public void SetFileName() => FileName = $"processes_{SelectedSystem}";
@@ -121,12 +118,9 @@
     private void SearchFunc()
     {
         (ChosenProcesses, Error) = StorageSystem.Processes(SelectedSystem);
-        ChosenProcessesDTOs = ChosenProcesses.Select(x => x.ToDTO()).ToList();
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
         SetFileName();
     }
-
-    public IEnumerable<IDictionary<string, object>> SetData() => ProcTable.SetData();
 
     async Task ShowError()
     {

@@ -1,62 +1,10 @@
-﻿@inherits CipherTableCard
+﻿@inherits CipherResourceTable<Vessel>
 
-<CipherTableCard Title="@Title" Sharable="@Sharable" IsReport="@IsReport" DataFetch="SetData" CipherType="typeof(Vessel)" FileTitle="vessels" 
-    WithButtons="@WithButtons" WithCard="@WithCard">
-    <AdditionalButtons>
-        <CipherAddUnitBtn />
-    </AdditionalButtons>
-    <ComponentContent>
-        <CipherDataGrid @ref=DataGrid Cipher_TItem="VesselDTO" DataSource="@_ChosenObjectsDTOs" ColumnNames="@(new Vessel().Headers())"
-                        GridFilterMode="@FilterMode" AllowFilter="@Filter" AllowGroup="@Group"/>
-    </ComponentContent>
-</CipherTableCard>
+<CipherResourceTable Cipher_TItem="Vessel" ChosenObjects="@ChosenObjects" PrefixFileTitle="vessels" Title="@Title" />
 
 @code {
-    private IEnumerable<Vessel> _ChosenObjects = new List<Vessel>();
-    private List<VesselDTO> _ChosenObjectsDTOs = new();
-
-    /// <summary>
-    /// Filter mode of data grid. Must be a FilterMode-enum.
-    /// Defaults to SimpleWithMenu.
-    /// </summary>
-    [Parameter]
-    public FilterMode FilterMode { get; set; } = FilterMode.SimpleWithMenu;
-
-    /// <summary>
-    /// Allows/disabled filtering.
-    /// </summary>
-    [Parameter]
-    public bool Filter { get; set; } = false;
-
-    /// <summary>
-    /// Allows/disables grouping.
-    /// </summary>
-    [Parameter]
-    public bool Group { get; set; } = false;
-
-    /// <summary>
-    /// All available category options
-    /// </summary>
-    [Parameter]
-    public IEnumerable<Vessel> ChosenObjects
-    {
-        get => _ChosenObjects;
-        set { _ChosenObjects = value; _ChosenObjectsDTOs = value.Select(x => x.ToDTO()).ToList(); }
-    }
-
-    /// <summary>
-    /// State of rsponse for data fetching in this component
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    private CipherDataGrid<VesselDTO> DataGrid = new();
-        
-    public IEnumerable<IDictionary<string, object>> SetData() => DataGrid.GetPagedData();
-
     protected override void OnInitialized()
     {
-        Title ??= "כלים";
-        (ChosenObjects, Error) = CachedData.AllVessels;
+        Title ??= Translator.GetTranslation("Vessels");
     }
 }

@@ -120,10 +120,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xQYWNrYWdlcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Pages/Reports/ProcessSummary.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xQcm9jZXNzU3VtbWFyeS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Pages/Reports/Reports.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xSZXBvcnRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -212,12 +208,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YUZpbHRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherDataGrid.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YUdyaWQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherDataGrouper.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YUdyb3VwZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherDataTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyRGF0YVRhYmxlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherErrorCard.razor]
@@ -326,6 +322,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherReportDropDown.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVwb3J0RHJvcERvd24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherResourceTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzb3VyY2VUYWJsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherRestriction.razor]

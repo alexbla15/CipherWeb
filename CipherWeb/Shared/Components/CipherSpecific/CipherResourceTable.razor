@@ -1,0 +1,103 @@
+﻿@inherits CipherTableCard
+
+@typeparam Cipher_TItem
+
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" GetDataSource="@GetDataSource" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" Variant="@Variant" IsReport="@IsReport"
+                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
+    <HeaderContent>
+        @if (WithHeaderContent)
+        {
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem/>
+            </RadzenStack>
+        }
+    </HeaderContent>
+    <ComponentContent>
+        <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)"
+                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+    </ComponentContent>
+</CipherTableCard>
+
+@code {
+    private CipherLocation ChosenSystem = new();
+
+    /// <summary>
+    /// Filter mode of data grid. Must be a FilterMode-enum.
+    /// </summary>
+    [Parameter]
+    public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
+
+    /// <summary>
+    /// Is the datagrid filterable.
+    /// </summary>
+    [Parameter]
+    public bool AllowFilter { get; set; } = false;
+
+    /// <summary>
+    /// Is the datagrid groupable.
+    /// </summary>
+    [Parameter]
+    public bool AllowGroup { get; set; } = false;
+
+    /// <summary>
+    /// Is a CipherAutoComplete header is needed.
+    /// </summary>
+    [Parameter]
+    public bool WithHeaderContent { get; set; } = true;
+
+    /// <summary>
+    /// File name - title prefix (e.g. events_[id].csv).
+    /// </summary>
+    [Parameter]
+    public string PrefixFileTitle { get; set; } = "exported_data";
+
+    /// <summary>
+    /// All events for scheduler
+    /// </summary>
+    [Parameter]
+    public IEnumerable<Cipher_TItem> ChosenObjects { get; set; } = new List<Cipher_TItem>();
+
+    /// <summary>
+    /// Error response of fetching data
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    [Parameter]
+    public CipherDataTable DataGrid { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        SearchFunc();
+        SetFileName();
+        GetDataSource = (() => DisplayedObject.ToListDicts(ChosenObjects));
+    }
+
+    /// <summary>
+    /// Function taking place upon clicking Enter.
+    /// </summary>
+    private void SearchFunc()
+    {
+        if (ChosenSystem.ChosenSystem is null)
+        {
+            ChosenObjects = new List<Cipher_TItem>();
+        }
+        else
+        {
+            (ChosenObjects, Error) = GetSearchedValues();
+        }
+        SetFileName();
+    }
+
+    private Tuple<List<Cipher_TItem>, ErrorResponse> GetSearchedValues()
+    {
+        if (typeof(Cipher_TItem) == typeof(Event)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)ChosenSystem.ChosenSystem.Events();
+        if (typeof(Cipher_TItem) == typeof(Process)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)ChosenSystem.ChosenSystem.Processes();
+        if (typeof(Cipher_TItem) == typeof(Package)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)ChosenSystem.ChosenSystem.Packages();
+        if (typeof(Cipher_TItem) == typeof(Vessel)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)ChosenSystem.ChosenSystem.Vessels();
+        return Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.Success);
+    }
+
+    public void SetFileName() => FileTitle = ChosenSystem.ChosenSystem is null ? PrefixFileTitle : $"{PrefixFileTitle}_{ChosenSystem.ChosenSystem?.Id}";
+}

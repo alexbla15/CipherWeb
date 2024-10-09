@@ -1,41 +1,10 @@
-﻿@inherits CipherTableCard
+﻿@inherits CipherResourceTable<UserAction>
 
-<CipherTableCard Title="@Title" DataSource="@ObjectChanges?.UserActions">
-    <ComponentContent>
-        <CipherDataGrid Cipher_TItem="UserAction" DataSource="@ObjectChanges?.UserActions" RowsPerPage="@Constants.RowsPerPage"
-                        WithCustomColumns="true">
-            <CustomColumns>
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.At))" Title="@(new UserAction().Translate(nameof(UserAction.At)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.ActionParameters))" Title="@(new UserAction().Translate(nameof(UserAction.ActionParameters)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.ActionType))" Title="@(new UserAction().Translate(nameof(UserAction.ActionType)))">
-                    <Template>
-                        @if (context.ActionType == ActionType.Created)
-                        {
-                            @("פעולה נוצרה")
-                        }
-                        else if (context.ActionType == ActionType.Modified)
-                        {
-                            @("פעולה עודכנה")
-                        }
-                        else if (context.ActionType == ActionType.Created)
-                        {
-                            @("פעולה אושרה")
-                        }
-                    </Template>
-                </RadzenDataGridColumn><RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.Comments))" Title="@(new UserAction().Translate(nameof(UserAction.Comments)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.By))" Title="@(new UserAction().Translate(nameof(UserAction.By)))" />
-                <RadzenDataGridColumn TItem="UserAction" Property="@(nameof(UserAction.Status))" Title="@(new UserAction().Translate(nameof(UserAction.Status)))" />
-            </CustomColumns>
-        </CipherDataGrid>
-    </ComponentContent>
-</CipherTableCard>
+<CipherResourceTable Cipher_TItem="UserAction" WithHeaderContent="true" PrefixFileTitle="historic_changes" Title="@Title" ChosenObjects="@ChosenObjects" />
 
 @code {
-    /// <summary>
-    /// All changes that occured to the package.
-    /// </summary>
-    [Parameter]
-    public UserActionResponse? ObjectChanges { get; set; }
-
-    protected override void OnInitialized() => Title ??= "היסטוריית שינויים";
+    protected override void OnInitialized()
+    {
+        Title ??= "היסטוריית שינויים";
+    }
 }

@@ -8,11 +8,11 @@
         @AdditionalButtons
         @if (ExcelExport)
         {
-            <CipherExcelButton FileName="@FileTitle" OnClickFunc="DataFetch" CipherType="@CipherType"/>
+            <CipherExcelButton FileName="@FileTitle" OnClickFunc="DataFetch" DataSource="@GetDataSource?.Invoke()" />
         }
         @if (PDFExport)
         {
-            <CipherPDFButton FileName="@FileTitle" OnClickFunc="DataFetch" CipherType="@CipherType" />
+            <CipherPDFButton FileName="@FileTitle" OnClickFunc="DataFetch" />
         }
         @if (!string.IsNullOrEmpty(ExpandPath))
         {
@@ -42,10 +42,10 @@
     public RenderFragment? ComponentContent { get; set; }
 
     /// <summary>
-    /// Data needed for Excel-export.
+    /// Function to retrieve the DataSource for the DataTable
     /// </summary>
     [Parameter]
-    public IEnumerable<object>? DataSource { get; set; }
+    public Func<List<Dictionary<string, object?>>>? GetDataSource { get; set; }
 
     /// <summary>
     /// File name for excel export.
@@ -103,9 +103,6 @@
 
     [Parameter]
     public Func<IEnumerable<IDictionary<string, object>>> DataFetch { get; set; }
-
-    [Parameter]
-    public Type CipherType { get; set; } = typeof(Resource);
 
     public void Toggle() => IsFavourite = !IsFavourite;
 }

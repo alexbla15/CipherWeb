@@ -12,7 +12,7 @@
     </CipherComponentCard>
     <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
 }
-@RenderCipherDataGrid()
+@RenderCipherDataTable()
 
 @code {
     private Type _ChosenType = typeof(Package);
@@ -81,7 +81,7 @@
         _ => typeof(CipherClass)
     };
 
-    public RenderFragment? RenderCipherDataGrid(int id) => id switch
+    public RenderFragment? RenderCipherDataTable(int id) => id switch
     {
         0 => @<CipherPackagesTable ChosenObjects="@(GetFilteredObjects<Package>())" WithHeaderContent="false" WithButtons="@WithButtons"/>,
         1 => @<CipherVesselsTable ChosenObjects="@(GetFilteredObjects<Vessel>())" />,
@@ -93,13 +93,13 @@
         _ => null
     };
 
-    public RenderFragment? RenderCipherDataGrid(Type type)
+    public RenderFragment? RenderCipherDataTable(Type type)
     {
         int id = GetTypeId(type);
-        return RenderCipherDataGrid(id);
+        return RenderCipherDataTable(id);
     }
 
-    public RenderFragment? RenderCipherDataGrid() => RenderCipherDataGrid(_ChosenId);
+    public RenderFragment? RenderCipherDataTable() => RenderCipherDataTable(_ChosenId);
 
     public List<T> GetFilteredObjects<T>() where T : Resource
     {

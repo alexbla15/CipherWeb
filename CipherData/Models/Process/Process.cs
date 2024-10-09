@@ -1,4 +1,7 @@
-﻿namespace CipherData.Models
+﻿using System.Diagnostics;
+using System.Xml.Linq;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// An instance of a specific processes
@@ -54,14 +57,15 @@
             return $"{days} ימים, {hours} שעות";
         }
 
-        public ProcessDTO ToDTO()
+        public Dictionary<string, object?> ToDictionary()
         {
-            return new() { 
-                Id=Id, 
-                Definition = Definition.Name, 
-                End = End, 
-                Start = Start, 
-                UncompletedSteps = string.Join(";", UncompletedSteps.Select(x => x.Name).ToList()) 
+            return new()
+            {
+                [nameof(Id)] = Id,
+                [nameof(Definition)] = Definition.Name,
+                [nameof(Start)] = Start,
+                [nameof(End)] = End,
+                [nameof(UncompletedSteps)] = string.Join(";", UncompletedSteps.Select(x => x.Name).ToList()),
             };
         }
 
@@ -120,39 +124,5 @@
                 Operator = Operator.Any
             });
         }
-    }
-
-    /// <summary>
-    /// An instance of a specific processes
-    /// </summary>
-    [HebrewTranslation(nameof(Process))]
-
-    /// Data transfer object (DTO) of Process class
-    /// Only vital info, without object references
-    public class ProcessDTO : CipherClass
-    {
-        /// <summary>
-        /// Path: [Process].[Id]
-        /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(Resource.Id))]
-        public string? Id { get; set; }
-
-        /// <summary>
-        /// Path: [Process].[Definition].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Name))]
-        public string? Definition { get; set; }
-
-        /// <summary>
-        /// Path: [Process].[UncompletedSteps].[Name]
-        /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
-        public string? UncompletedSteps { get; set; }
-
-        [HebrewTranslation(typeof(Process), nameof(Start))]
-        public DateTime Start { get; set; }
-
-        [HebrewTranslation(typeof(Process), nameof(End))]
-        public DateTime End { get; set; }
     }
 }
