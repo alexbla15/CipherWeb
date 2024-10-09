@@ -3,21 +3,21 @@
 @inject ICipherInfo _db
 
 <CipherFormRow Icon="@Icons.Cipher.Vessel">
-    <RadzenDropDownDataGrid TValue=Vessel Data=@AllVessels TextProperty="@(nameof(Vessel.Id))" AllowClear="true"
+    <RadzenDropDownDataGrid Data=@AllVessels TextProperty="@(nameof(IVessel.Id))" AllowClear="true"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@ChosenVessel" Change="@Change" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Id))" Title="@(new Vessel().Translate(nameof(Vessel.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Name))" Title="@(new Vessel().Translate(nameof(Vessel.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.Type))" Title="@(new Vessel().Translate(nameof(Vessel.Type)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Vessel.System))" Title="@(new Vessel().Translate(nameof(Vessel.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Id))" Title="@(new Vessel().Translate(nameof(IVessel.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Name))" Title="@(new Vessel().Translate(nameof(IVessel.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Type))" Title="@(new Vessel().Translate(nameof(IVessel.Type)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.System))" Title="@(new Vessel().Translate(nameof(IVessel.System)))">
                 <Template>
-                    @((context as Vessel)?.System.Name)
+                    @((context as IVessel)?.System.Name)
                 </Template>
                 </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>שם הכלי:</b> @((context as Vessel)?.Name)
+            <b>שם הכלי:</b> @((context as IVessel)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -33,13 +33,13 @@
     /// All vessels available
     /// </summary>
     [Parameter]
-    public Vessel? ChosenVessel { get; set; }
+    public IVessel? ChosenVessel { get; set; }
 
     /// <summary>
     /// All vessels available
     /// </summary>
     [Parameter]
-    public List<Vessel> AllVessels { get; set; } = new();
+    public List<IVessel> AllVessels { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data

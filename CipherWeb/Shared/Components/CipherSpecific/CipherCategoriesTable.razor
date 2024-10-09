@@ -1,11 +1,10 @@
-﻿@inherits CipherResourceTable<Category>
+﻿@inherits CipherResourceTable<ICategory>
 
-<CipherResourceTable Cipher_TItem="Category" ChosenObjects="@ChosenObjects" PrefixFileTitle="categories" Title="@Title" WithHeaderContent="false"/>
+<CipherResourceTable Cipher_TItem="ICategory" ChosenObjects="@CachedData.AllCategories.Item1" PrefixFileTitle="categories" Title="@Title" WithHeaderContent="false" />
 
 @code {
     protected override void OnInitialized()
     {
         Title ??= Translator.GetTranslation("Categories");
-        ChosenObjects ??= CachedData.AllCategories.Item1;
     }
 }

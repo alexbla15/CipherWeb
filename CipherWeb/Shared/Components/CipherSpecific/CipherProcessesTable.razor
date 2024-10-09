@@ -1,6 +1,7 @@
-﻿@inherits CipherResourceTable<Process>
+﻿@inherits CipherResourceTable<IProcess>
 
-<CipherResourceTable Cipher_TItem="Process" WithHeaderContent="true" PrefixFileTitle="processes" Title="@Title" />
+<CipherResourceTable Cipher_TItem="IProcess" WithHeaderContent="@WithHeaderContent" WithCard="@WithCard"
+    WithButtons="@WithButtons" PrefixFileTitle="processes" Title="@Title" ChosenObjects="@ChosenObjects"/>
 
 @code {
     protected override void OnInitialized()

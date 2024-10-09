@@ -47,13 +47,13 @@ namespace CipherData.Models
         /// Package that loses mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
-        public Package? DonatingPackage { get; set; }
+        public IPackage? DonatingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
-        public Package? AcceptingPackage { get; set; }
+        public IPackage? AcceptingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.

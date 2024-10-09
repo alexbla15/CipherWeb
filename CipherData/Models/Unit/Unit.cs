@@ -1,80 +1,41 @@
-﻿using CipherData.Randomizer;
-using System.Diagnostics;
-using System.Xml.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
-    [HebrewTranslation(nameof(Unit))]
-    public class Unit : Resource
+    public interface IUnit : IResource
     {
-        private string _Name = string.Empty;
-        private string? _Description = string.Empty;
-
-        /// <summary>
-        /// Name of the Unit
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string Name
-        {
-            get => _Name; 
-            set => _Name = value.Trim(); 
-        }
-
-        /// <summary>
-        /// Description of Unit
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
-        public string? Description
-        {
-            get => _Description; 
-            set => _Description = value?.Trim(); 
-        }
-
-        /// <summary>
-        /// JSON-like additional properties of the unit
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Properties))]
-        public string? Properties { get; set; }
-
-        /// <summary>
-        /// Parent system containing this one
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Parent))]
-        public Unit? Parent { get; set; }
-
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Children))]
-        public List<Unit>? Children { get; set; }
-
-        /// <summary>
-        /// Systems under this unit
-        /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Systems))]
-        public List<StorageSystem>? Systems { get; set; }
+        List<IUnit>? Children { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
-        public GroupedBooleanCondition? Conditions { get; set; }
+        IGroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
-        /// Instanciation of new unit.
+        /// Description of Unit
         /// </summary>
-        public Unit(string? id = null) => Id = id ?? GetNextId();
+        string? Description { get; set; }
 
-        public UnitRequest Request()
-        {
-            return new()
-            {
-                Name = Name,
-                Description = Description,
-                Properties = Properties,
-                ParentId = Parent?.Id
-            };
-        }
+        /// <summary>
+        /// Name of the Unit
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
+        /// Parent system containing this one
+        /// </summary>
+        IUnit? Parent { get; set; }
+
+        /// <summary>
+        /// JSON-like additional properties of the unit
+        /// </summary>
+        string? Properties { get; set; }
+
+        /// <summary>
+        /// Systems under this unit
+        /// </summary>
+        List<IStorageSystem>? Systems { get; set; }
 
         public Dictionary<string, object?> ToDictionary()
         {
@@ -89,30 +50,51 @@ namespace CipherData.Models
                 [nameof(Systems)] = Systems is null ? null : string.Join("; ", Systems.Select(x => x.Name).ToList()),
             };
         }
+    }
 
-        /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
+    [HebrewTranslation(nameof(Unit))]
+    public class Unit : Resource, IUnit
+    {
+        private string _Name = string.Empty;
+        private string? _Description = string.Empty;
 
-        /// <summary>
-        /// Get the id of a new object
-        /// </summary>
-        /// <returns></returns>
-        public static string GetNextId() => $"U{++IdCounter:D3}";
-
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
-        public static Unit Random(string? id = null)
+        [HebrewTranslation(typeof(Unit), nameof(Name))]
+        public string Name
         {
-            List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
+            get => _Name;
+            set => _Name = value.Trim();
+        }
 
-            return new Unit(id)
+        [HebrewTranslation(typeof(Unit), nameof(Description))]
+        public string? Description
+        {
+            get => _Description;
+            set => _Description = value?.Trim();
+        }
+
+        [HebrewTranslation(typeof(Unit), nameof(Properties))]
+        public string? Properties { get; set; }
+
+        [HebrewTranslation(typeof(Unit), nameof(Parent))]
+        public IUnit? Parent { get; set; }
+
+        [HebrewTranslation(typeof(Unit), nameof(Children))]
+        public List<IUnit>? Children { get; set; }
+
+        [HebrewTranslation(typeof(Unit), nameof(Systems))]
+        public List<IStorageSystem>? Systems { get; set; }
+
+        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
+        public IGroupedBooleanCondition? Conditions { get; set; }
+
+        public UnitRequest Request()
+        {
+            return new()
             {
-                Name = GetNextId(),
-                Description = RandomFuncs.RandomItem(UnitDescriptions)
+                Name = Name,
+                Description = Description,
+                Properties = Properties,
+                ParentId = Parent?.Id
             };
         }
 
@@ -122,12 +104,12 @@ namespace CipherData.Models
         /// Get details about a single unit given unit ID
         /// </summary>
         /// <param name="id">unit ID</param>
-        public static Tuple<Unit, ErrorResponse> Get(string id) => Config.UnitsRequests.GetUnit(id);
+        public static Tuple<IUnit, ErrorResponse> Get(string id) => Config.UnitsRequests.GetUnit(id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Unit>, ErrorResponse> All() => Config.UnitsRequests.GetUnits();
+        public static Tuple<List<IUnit>, ErrorResponse> All() => Config.UnitsRequests.GetUnits();
 
         /// <summary>
         /// Fetch all units which contain the searched text

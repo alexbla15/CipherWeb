@@ -1,14 +1,14 @@
 ﻿ @inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Unit" Disabled="@Disabled" AllowClear="true"
-                            Data=@OptionalUnits TextProperty="@(nameof(Unit.Name))" @bind-Value="ChosenUnit"
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IUnit" Disabled="@Disabled" AllowClear="true"
+                            Data=@OptionalUnits TextProperty="@(nameof(IUnit.Name))" @bind-Value="ChosenUnit"
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Name))" Title="@(new Unit().Translate(nameof(Unit.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Description))" Title="@(new Unit().Translate(nameof(Unit.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Unit.Parent))" Title="@(new Unit().Translate(nameof(Unit.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Name))" Title="@(new Unit().Translate(nameof(IUnit.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Description))" Title="@(new Unit().Translate(nameof(IUnit.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Parent))" Title="@(new Unit().Translate(nameof(IUnit.Parent)))">
                 <Template>
                     @((context as Unit).Parent?.Name)
                 </Template>
@@ -31,7 +31,7 @@
     /// All units optional in the drop down.
     /// </summary>
     [Parameter]
-    public List<Unit> OptionalUnits { get; set; } = new();
+    public List<IUnit> OptionalUnits { get; set; } = new();
 
     /// <summary>
     /// Error response for data fetching
@@ -43,7 +43,7 @@
     /// Chosen unit
     /// </summary>
     [Parameter]
-    public Unit? ChosenUnit { get; set; }
+    public IUnit? ChosenUnit { get; set; }
 
     /// <summary>
     /// Changed-value event

@@ -18,19 +18,19 @@
     /// All events in queue for approval
     /// </summary>
     [Parameter]
-    public List<Event> PendingEvents { get; set; } = new();
+    public List<IEvent> PendingEvents { get; set; } = new();
 
     /// <summary>
     /// All approved events
     /// </summary>
     [Parameter]
-    public List<Event> ApprovedEvents { get; set; } = new();
+    public List<IEvent> ApprovedEvents { get; set; } = new();
 
     /// <summary>
     /// All declined events
     /// </summary>
     [Parameter]
-    public List<Event> DeclinedEvents { get; set; } = new();
+    public List<IEvent> DeclinedEvents { get; set; } = new();
 
     /// <summary>
     /// Page Title.
@@ -61,10 +61,10 @@
         (ApprovedEvents, Error) = Event.ApprovedEvents();
         (DeclinedEvents, Error) = Event.DeclinedEvents();
     }
-    
+
     public async Task RefreshEvents()
     {
-        GroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
+        IGroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
         ObjectFactory objectFactory = new();
 
         // add to filter - only pending events
@@ -86,7 +86,9 @@
                 Order = Order.desc
             });
 
-        (PendingEvents, Error) = Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        var result = Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
+
         JsonRequest = objectFactory.ToJson();
         await FilterableEvents.ChangeEvents(PendingEvents);
     }

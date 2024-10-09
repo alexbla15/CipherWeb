@@ -1,6 +1,6 @@
-﻿@inherits CipherResourceTable<Package>
+﻿@inherits CipherResourceTable<IPackage>
 
-<CipherResourceTable Cipher_TItem="Package" WithHeaderContent="true" PrefixFileTitle="packages" Title="@Title"/>
+<CipherResourceTable Cipher_TItem="IPackage" WithHeaderContent="@WithHeaderContent" ChosenObjects="@ChosenObjects" PrefixFileTitle="packages" Title="@Title"/>
 
 @code{
     protected override void OnInitialized()

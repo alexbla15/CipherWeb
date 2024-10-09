@@ -1,6 +1,6 @@
 ﻿using CipherData.Models;
+using CipherData.Models.Randomizers;
 using CipherData.RequestsInterface;
-using System.Reflection;
 
 namespace CipherData.Randomizer
 {
@@ -11,23 +11,29 @@ namespace CipherData.Randomizer
             // Get the type of T
             Type type = typeof(T);
 
-            // Attempt to find the Random method on the type. Each Resource type needs to have this method
-            MethodInfo? randomMethod = type.GetMethod("Random", BindingFlags.Public | BindingFlags.Static);
+            string RandomTypeName = $"CipherData.Models.Randomizers.{type.Name}";
 
-            if (randomMethod != null)
+            Type? InterfaceType = type.GetInterfaces().Where(x=>x.Name != "IResource").First();
+            Type? randomType = Type.GetType(RandomTypeName);
+
+            if (randomType != null && InterfaceType != null)
             {
-                // Define the lambda to match the expected signature (string? -> T)
-                Func<string?, T> randomFunc = id =>
+                // Create an instance of List<randomType> using reflection
+                var method = typeof(RandomData)
+                    .GetMethod("GetRandomObjects")?
+                    .MakeGenericMethod(InterfaceType, randomType);
+
+                if (method != null)
                 {
-                    // Call the Random method with a default argument
-                    return (T)randomMethod.Invoke(null, new object[] { id });
-                };
+                    // Call the method using reflection and get the result as an IEnumerable<object>
+                    var randomList = method.Invoke(null, new object[] { new Random().Next(1, 20) }) as IEnumerable<object>;
 
-                // Use the lambda in the FillRandomObjects method. Gets you a list of X random objected of the desired type.
-                List<T> list = RandomFuncs.FillRandomObjects(new Random().Next(1, 20), randomFunc);
+                    // Convert the result to a List of InterfaceType
+                    var castedList = randomList?.Cast<T>().ToList();
 
-                // return a successful result / error, according to logic set in Request()
-                return new RandomGenericRequests().Request(list, canBeNotFound: true, canFail: canFail);
+                    // Return the casted list wrapped in a Tuple
+                    return new RandomGenericRequests().Request(castedList ?? new List<T>(), canBeNotFound: true, canFail: canFail);
+                }
             }
 
             // If the type doesn't have a Random method, return an empty list.

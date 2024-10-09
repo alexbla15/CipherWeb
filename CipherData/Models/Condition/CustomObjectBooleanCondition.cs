@@ -1,12 +1,31 @@
 ﻿namespace CipherData.Models
 {
-    public class CustomCondition
+    public interface ICustomCondition
+    {
+        ObjectFactory? Factory { get; set; }
+        GroupedBooleanCondition? ObjectCondition { get; set; }
+    }
+
+    public class CustomCondition : ICustomCondition
     {
         [HebrewTranslation(typeof(CustomCondition), nameof(Factory))]
-        public ObjectFactory Factory { get; set; }
+        public ObjectFactory? Factory { get; set; }
 
         [HebrewTranslation(typeof(CustomCondition), nameof(ObjectCondition))]
-        public GroupedBooleanCondition ObjectCondition { get; set; }
+        public GroupedBooleanCondition? ObjectCondition { get; set; }
+    }
+
+    public interface ICustomObjectBooleanCondition
+    {
+        /// <summary>
+        /// List of object factory specifications and conditions on them
+        /// </summary>
+        List<ICustomCondition> Conditions { get; set; }
+
+        /// <summary>
+        /// Operator used to resolve the multiple condition results to a single boolean
+        /// </summary>
+        Operator Operator { get; set; }
     }
 
     /// <summary>
@@ -14,23 +33,12 @@
     /// objects created from an object factory
     /// </summary>
     [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
-    public class CustomObjectBooleanCondition
+    public class CustomObjectBooleanCondition : ICustomObjectBooleanCondition
     {
-        /// <summary>
-        /// List of object factory specifications and conditions on them
-        /// </summary>
         [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
-        public List<CustomCondition> Conditions { get; set; } = new();
+        public List<ICustomCondition> Conditions { get; set; } = new();
 
-        /// <summary>
-        /// Operator used to resolve the multiple condition results to a single boolean
-        /// </summary>
         [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.All;
-
-        /// <summary>
-        /// Create a random object.
-        /// </summary>
-        public static CustomObjectBooleanCondition Random() => new();
     }
 }

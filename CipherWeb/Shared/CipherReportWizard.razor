@@ -154,10 +154,13 @@
         }
     }
 
-    private void OnFilterChanged(Tuple<GroupedBooleanCondition, Type> newFilter)
+    private void OnFilterChanged(Tuple<IGroupedBooleanCondition, Type> newFilter)
     {
-        ChosenReport.ObjectFactory.Filter = newFilter.Item1;
-        ChosenReport.ObjectType = newFilter.Item2;
+        if (ChosenReport != null)
+        {
+            ChosenReport.ObjectFactory.Filter = newFilter.Item1;
+            ChosenReport.ObjectType = newFilter.Item2;
+        }
     }
 
     private void OnParametersChanged(List<ReportParameter> newParameters) => ChosenReport.Parameters = newParameters;

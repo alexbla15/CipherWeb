@@ -20,11 +20,11 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new Unit().Translate(nameof(Unit.Name)))" Icon="@Icons.Cipher.Unit"
+                <CipherAutoComplete Label="@(new Unit().Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@(new Unit().Translate(nameof(Unit.Description)))" Icon="@Icons.Documents.Page.description"
+                <CipherAutoComplete Label="@(new Unit().Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@(new Unit().Translate(nameof(Unit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                <CipherUnitDropDown Label="@(new Unit().Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />
             </ChildContent>
         </CipherComponentCard>
@@ -42,7 +42,7 @@
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public Unit? ChosenObject { get; set; }
+    public IUnit? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the object.

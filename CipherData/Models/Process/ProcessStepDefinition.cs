@@ -1,52 +1,51 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
+    public interface IProcessStepDefinition
+    {
+        /// <summary>
+        /// Condition on event to be associated with the process step 
+        /// </summary>
+        IGroupedBooleanCondition Condition { get; set; }
+
+        /// <summary>
+        /// Description of process
+        /// </summary>
+        string Description { get; set; }
+
+        /// <summary>
+        /// Name of the process
+        /// </summary>
+        string Name { get; set; }
+    }
+
     /// <summary>
     /// Definition of a process - 
     /// a collection of steps that make a single definition
     /// </summary>
     [HebrewTranslation(nameof(ProcessStepDefinition))]
-    public class ProcessStepDefinition: Resource
+    public class ProcessStepDefinition : Resource, IProcessStepDefinition
     {
         private string _Name = string.Empty;
         private string _Description = string.Empty;
 
-        /// <summary>
-        /// Name of the process
-        /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
         public string Name
         {
-            get => _Name; 
+            get => _Name;
             set => _Name = value.Trim();
         }
 
-        /// <summary>
-        /// Description of process
-        /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
         public string Description
         {
-            get => _Description; 
-            set => _Description = value.Trim(); 
+            get => _Description;
+            set => _Description = value.Trim();
         }
-        /// <summary>
-        /// Condition on event to be associated with the process step 
-        /// </summary>
+
         [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
-        public GroupedBooleanCondition Condition { get; set; } = new();
+        public IGroupedBooleanCondition Condition { get; set; } = new GroupedBooleanCondition();
 
         // STATIC METHODS
-
-        private static int IdCounter { get; set; } = 0;
-
-        public static string GetId() => $"C{++IdCounter}";
-
-        /// <summary>
-        /// A collection of steps that make a single definition
-        /// </summary>
-        public ProcessStepDefinition(string? id = null) => Id = id ?? GetId();
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -80,19 +79,6 @@ namespace CipherData.Models
             result.Fields.Add(CheckCondition());
 
             return result.Check();
-        }
-
-        public static ProcessStepDefinition Random(string? id = null)
-        {
-            List<string> ProcessesStepNames = new() { "רישום", "עדכון במערכת", "השהייה" };
-            string name = RandomFuncs.RandomItem(ProcessesStepNames);
-
-            return new ProcessStepDefinition(id)
-            {
-                Name = name,
-                Description = name,
-                Condition = GroupedBooleanCondition.Random()
-            };
         }
     }
 }

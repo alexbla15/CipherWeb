@@ -1,54 +1,26 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
-    /// <summary>
-    /// An instance of a specific processes
-    /// </summary>
-    [HebrewTranslation(nameof(Process))]
-    public class Process : Resource
+    public interface IProcess : IResource
     {
-        private List<Event> _Events = new();
-
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(Definition))]
-        public ProcessDefinition Definition { get; set; } = new();
+        IProcessDefinition Definition { get; set; }
+        DateTime Start { get; set; }
+
+        DateTime End { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(Events))]
-        public List<Event> Events {
-            get => _Events;
-            set { 
-                _Events = value;
-                Start = Events.Select(x => x.Timestamp).Min();
-                End = Events.Select(x => x.Timestamp).Max();
-            } 
-        }
+        List<IEvent> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
-        public List<ProcessStepDefinition> UncompletedSteps { get; set; } = new();
+        List<IProcessStepDefinition> UncompletedSteps { get; set; }
 
-        [HebrewTranslation(typeof(Process), nameof(Start))]
-        public DateTime Start { get; set; }
-
-        [HebrewTranslation(typeof(Process), nameof(End))]
-        public DateTime End { get; set; }
-
-        /// <summary>
-        /// An instance of a specific processes
-        /// </summary>
-        /// <param name="id">Only if you want process to have specific id</param>
-        public Process(string? id = null) => Id = id ?? GetNextId();
-
-        public string Duration()
+        string Duration()
         {
             TimeSpan difference = End - Start;
             int days = difference.Days;
@@ -69,44 +41,57 @@ namespace CipherData.Models
             };
         }
 
-        // STATIC METHODS
+    }
 
-        /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
+    /// <summary>
+    /// An instance of a specific processes
+    /// </summary>
+    [HebrewTranslation(nameof(Process))]
+    public class Process : Resource, IProcess
+    {
+        private List<IEvent> _Events = new();
 
-        /// <summary>
-        /// Get the id of a new object
-        /// </summary>
-        /// <returns></returns>
-        private static string GetNextId() => $"PR{++IdCounter:D3}";
+        [HebrewTranslation(typeof(Process), nameof(Definition))]
+        public IProcessDefinition Definition { get; set; } = new ProcessDefinition();
 
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
-        public static Process Random(string? id = null)
+        [HebrewTranslation(typeof(Process), nameof(Events))]
+        public List<IEvent> Events
         {
-            return new Process(id)
+            get => _Events;
+            set
             {
-                Definition = ProcessDefinition.Random(),
-                Events = Enumerable.Range(0, 3).Select(_ => Event.Random()).ToList(),
-                UncompletedSteps = Enumerable.Range(0, 3).Select(_ => ProcessStepDefinition.Random()).ToList()
-            };
+                _Events = value;
+                Start = Events.Select(x => x.Timestamp).Min();
+                End = Events.Select(x => x.Timestamp).Max();
+            }
+        }
+
+        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
+        public List<IProcessStepDefinition> UncompletedSteps { get; set; } = new();
+
+        [HebrewTranslation(typeof(Process), nameof(Start))]
+        public DateTime Start { get; set; }
+
+        [HebrewTranslation(typeof(Process), nameof(End))]
+        public DateTime End { get; set; }
+
+        public string Duration()
+        {
+            TimeSpan difference = End - Start;
+            int days = difference.Days;
+            int hours = difference.Hours;
+
+            return $"{days} ימים, {hours} שעות";
         }
 
         // API-RELATED FUNCTIONS
 
-        public static Tuple<Process,ErrorResponse> Get(string? id = null)
-        {
-            return (id is null)? Tuple.Create(new Process(""), ErrorResponse.BadRequest) : Config.ProcessesRequests.GetProcess(id);
-        }
+        public static Tuple<IProcess, ErrorResponse> Get(string? id = null) => Config.GetProcess(id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Process>, ErrorResponse> All() => Config.ProcessesRequests.GetProcesses();
+        public static Tuple<List<IProcess>, ErrorResponse> All() => Config.ProcessesRequests.GetProcesses();
 
         /// <summary>
         /// Fetch all processes which contain the searched text

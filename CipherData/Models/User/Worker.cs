@@ -1,9 +1,12 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
+    public interface IWorker
+    {
+        string Name { get; set; }
+    }
+
     [HebrewTranslation(nameof(Worker))]
-    public class Worker
+    public class Worker : IWorker
     {
         private string _Name = string.Empty;
 
@@ -15,9 +18,5 @@ namespace CipherData.Models
             new() { Name = "אבי רון" },
             new() { Name = "עמית נקש" }
         };
-
-        // STATIC METHODS
-
-        public static Worker Random() => RandomFuncs.RandomItem(AllWorkers);
     }
 }

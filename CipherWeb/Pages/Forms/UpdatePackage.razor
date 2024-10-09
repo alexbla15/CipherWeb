@@ -15,18 +15,18 @@
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)"/>
-        <CipherComments @ref=PackDescription Label="@NewPack.Translate(nameof(Package.Description))" Disabled="@(ChosenPackage == null)"
+        <CipherComments @ref=PackDescription Label="@(new Package().Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
                         Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
-        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@(NewPack.Translate(nameof(Package.BrutMass)))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
-        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@(NewPack.Translate(nameof(Package.NetMass)))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((new Package().Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((new Package().Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
 
         <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" Disabled="@(ChosenPackage == null)"/>
         <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" Disabled="@(ChosenPackage == null)"/>
         <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" Disabled="@(ChosenPackage == null)" />
 
-        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@NewPack.Translate(nameof(Package.DestinationProcesses))" Disabled="@(ChosenPackage == null)"/>
-        <CipherPackageId @ref=ParentPack ChosenPackage="@ChosenPackage?.Parent" Label="@(NewPack.Translate(nameof(Package.Parent)))" Disabled="@(ChosenPackage == null)" />
-        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@(NewPack.Translate(nameof(Package.Children)))" Disabled="@(ChosenPackage == null)"/>
+        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@(new Package().Translate(nameof(IPackage.DestinationProcesses)))" Disabled="@(ChosenPackage == null)"/>
+        <CipherPackageId @ref=ParentPack ChosenPackage="@(ChosenPackage?.Parent)" Label="@((new Package().Translate(nameof(IPackage.Parent))))" Disabled="@(ChosenPackage == null)" />
+        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@((new Package().Translate(nameof(IPackage.Children))))" Disabled="@(ChosenPackage == null)"/>
 
         @if (NewProps != null)
         {
@@ -80,7 +80,7 @@
     /// </summary>
     [Parameter]
     public string? CreateEventJsonRequest { get; set; }
-    
+
     /// <summary>
     /// Error message upon improper submission.
     /// </summary>
@@ -91,13 +91,13 @@
     /// API package result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Package? UpdatePackResult { get; set; }
+    public IPackage? UpdatePackResult { get; set; }
 
     /// <summary>
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event? CreateEventResult { get; set; }
+    public IEvent? CreateEventResult { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -120,9 +120,9 @@
     private CipherLocation SetSystem = new();
     private CipherPackagesPicking SetChildren = new();
 
-    private Package? ChosenPackage;
-    private Package OriginalPack = new("");
-    private Package NewPack = new("");
+    private IPackage? ChosenPackage;
+    private IPackage OriginalPack = new Package() { Id = "" };
+    private IPackage NewPack = new Package() { Id = "" };
 
     private CipherData.Models.UpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
     private CreateEvent UpdatePackEvent = new();
@@ -156,7 +156,7 @@
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
         {
-            (OriginalPackage.ChosenPackage, Error) = Package.Get(idValue);
+            (OriginalPackage.ChosenPackage, Error) = Package.Get(idValue.ToString());
             Change();
         }
         FirstInitialization = false;
@@ -201,7 +201,7 @@
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
         UpdatePackEvent = new();
-        NewPack = new("");
+        NewPack = new Package() { Id = "" };
     }
 
     /// <summary>
@@ -253,9 +253,9 @@
         {
             NewPack.BrutMass = SetBrutMass.Amount;
             NewPack.NetMass = SetNetMass.Amount;
-            NewPack.Category = SetCategory.ChosenCategory ?? new("");
+            NewPack.Category = SetCategory.ChosenCategory ?? new Category() { Id = "" };
             NewPack.Vessel = SetVessel.ChosenVessel;
-            NewPack.System = SetSystem.ChosenSystem ?? new("");
+            NewPack.System = SetSystem.ChosenSystem ?? new StorageSystem() { Id = "" };
             NewPack.Parent = ParentPack.GetValue();
             NewPack.Children = SetChildren.SelectedPackages;
             NewPack.Properties = NewProps;
@@ -277,7 +277,7 @@
 
         if (OriginalPackChosen())
         {
-            string? originalPackId = OriginalPackage.ChosenPackage.Id;
+            string? originalPackId = OriginalPackage.ChosenPackage?.Id;
 
             if (newId.Check())
             {
@@ -375,6 +375,7 @@
             CreateEventJsonRequest = UpdatePackEvent.ToJson();
 
             (CreateEventResult, Error) = Config.EventsRequests.CreateEvent(UpdatePackEvent);
+
             if (Error != ErrorResponse.Success)
             {
                 submission.Valid = false;

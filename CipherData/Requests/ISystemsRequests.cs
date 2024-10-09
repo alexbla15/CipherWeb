@@ -10,38 +10,38 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="sys"></param>
         /// <returns></returns>
-        Tuple<StorageSystem, ErrorResponse> CreateSystem(SystemRequest sys);
+        Tuple<IStorageSystem, ErrorResponse> CreateSystem(SystemRequest sys);
 
         /// <summary>
         /// Get all available objects
         /// Path: Get /systems/
         /// </summary>
-        Tuple<List<StorageSystem>, ErrorResponse> GetSystems();
+        Tuple<List<IStorageSystem>, ErrorResponse> GetSystems();
 
         /// <summary>
         /// Get details about a single system
         /// Path: Get /systems/{id}
         /// </summary>
-        Tuple<StorageSystem, ErrorResponse> GetSystem(string sys_id);
+        Tuple<IStorageSystem, ErrorResponse> GetSystem(string sys_id);
 
         /// <summary>
         /// Update system's details
         /// Path: PUT /systems/{id}
         /// </summary>
-        Tuple<StorageSystem, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys);
+        Tuple<IStorageSystem, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys);
 
         /// <summary>
         /// Get conditions of a system. 
         /// Path: GET /systems/{id}/conditions
         /// </summary>
         /// <returns></returns>
-        Tuple<GroupedBooleanCondition, ErrorResponse> GetSystemConditions();
+        Tuple<IGroupedBooleanCondition, ErrorResponse> GetSystemConditions();
 
         /// <summary>
         /// Update system's conditions.
         /// Path: PUT /systems/{id}/conditions
         /// </summary>
         /// <returns></returns>
-        Tuple<CustomObjectBooleanCondition, ErrorResponse> UpdateSystemConditions(CustomObjectBooleanCondition condition);
+        Tuple<ICustomObjectBooleanCondition, ErrorResponse> UpdateSystemConditions(ICustomObjectBooleanCondition condition);
     }
 }

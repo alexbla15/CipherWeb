@@ -1,7 +1,7 @@
 ﻿@if (WithFilter)
 {
     <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
-        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new() ; await ParamsChanged();})">
+        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new GroupedBooleanCondition() ; await ParamsChanged();})">
             <Items>
                 @foreach (string objType in objectTypes)
                 {
@@ -45,10 +45,10 @@
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     [Parameter]
-    public GroupedBooleanCondition ChosenCondition { get; set; } = new();
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
 
     [Parameter]
-    public EventCallback<Tuple<GroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
+    public EventCallback<Tuple<IGroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
 
     private CipherBooleanConditions DataFilter = new();
 
@@ -83,11 +83,11 @@
 
     public RenderFragment? RenderCipherDataTable(int id) => id switch
     {
-        0 => @<CipherPackagesTable ChosenObjects="@(GetFilteredObjects<Package>())" WithHeaderContent="false" WithButtons="@WithButtons"/>,
+        0 => @<CipherPackagesTable ChosenObjects="@(GetFilteredObjects<Package>())" WithButtons="@WithButtons"/>,
         1 => @<CipherVesselsTable ChosenObjects="@(GetFilteredObjects<Vessel>())" />,
         2 => @<CipherSystemsTable ChosenObjects="@(GetFilteredObjects<StorageSystem>())" />,
-        3 => @<CipherEventsTable ChosenObjects="@(GetFilteredObjects<Event>())" WithHeaderContent="false" />,
-        4 => @<CipherProcessesTable ChosenObjects="@(GetFilteredObjects<Process>())" WithHeaderContent="false" />,
+        3 => @<CipherEventsTable ChosenObjects="@(GetFilteredObjects<Event>())" />,
+        4 => @<CipherProcessesTable ChosenObjects="@(GetFilteredObjects<Process>())" />,
         5 => @<CipherCategoriesTable ChosenObjects="@(GetFilteredObjects<Category>())" />,
         6 => @<CipherUnitsTable ChosenObjects="@(GetFilteredObjects<Unit>())" />,
         _ => null
@@ -126,7 +126,7 @@
 
         if (oldChosenType != ChosenType)
         {
-            ChosenCondition = new();
+            ChosenCondition = new GroupedBooleanCondition();
             await DataFilter.Clear();
         }
         await ChosenConditionChanged.InvokeAsync(Tuple.Create(ChosenCondition, ChosenType)); // Trigger change event

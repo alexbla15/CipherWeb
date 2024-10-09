@@ -19,15 +19,15 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(Vessel.Name)))" Icon="@Icons.Cipher.Vessel"
+                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
-                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(Vessel.Type)))" Icon="@Icons.Symbols.category"
+                <CipherAutoComplete Label="@(new Vessel().Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
                 <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenSystem="@ChosenObject?.System" @ref=VesSys />
 
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages" />
+                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" />
                 }
             </ChildContent>
         </CipherComponentCard>
@@ -45,7 +45,7 @@
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public Vessel? ChosenObject { get; set; }
+    public IVessel? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the vessel.

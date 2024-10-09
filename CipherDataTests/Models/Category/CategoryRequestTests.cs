@@ -211,12 +211,12 @@ namespace CipherData.Models.Tests
                 Name = nameof(cat),
                 Description = nameof(cat),
                 IdMask = new() { "1", "2" },
-                Parent = Category.Random("C001")
+                Parent = new Category() { Id = "C001" }
             };
 
             CategoryRequest req = cat.Request();
 
-            Category cat2 = req.Create("2");
+            Category cat2 = RandomFuncs.Request(req, "2");
 
             Assert.IsTrue(cat2.Id == "2");
             Assert.IsTrue(req.Name == cat2.Name);

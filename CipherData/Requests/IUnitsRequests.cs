@@ -8,7 +8,7 @@ namespace CipherData.RequestsInterface
         /// Get all vessels available.
         /// Path: Get /units/
         /// </summary>
-        Tuple<List<Unit>, ErrorResponse> GetUnits();
+        Tuple<List<IUnit>, ErrorResponse> GetUnits();
 
         /// <summary>
         /// Create a new unit.
@@ -16,7 +16,7 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="unit"></param>
         /// <returns></returns>
-        Tuple<Unit, ErrorResponse> CreateUnit(UnitRequest unit);
+        Tuple<IUnit, ErrorResponse> CreateUnit(UnitRequest unit);
 
         /// <summary>
         /// Get details about a single Unit.
@@ -24,7 +24,7 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="unit_id"></param>
         /// <returns></returns>
-        Tuple<Unit, ErrorResponse> GetUnit(string unit_id);
+        Tuple<IUnit, ErrorResponse> GetUnit(string unit_id);
 
         /// <summary>
         /// Update Unit's details
@@ -32,6 +32,6 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="unit_id"></param>
         /// <returns></returns>
-        Tuple<Unit, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit);
+        Tuple<IUnit, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit);
     }
 }

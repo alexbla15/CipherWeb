@@ -33,7 +33,7 @@
         /// Steps of the process
         /// </summary>
         [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
-        public List<ProcessStepDefinition> Steps { get; set; } = new();
+        public List<IProcessStepDefinition> Steps { get; set; } = new();
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -65,6 +65,6 @@
             return result.Check();
         }
 
-        public ProcessDefinition Create(string id) => new(id) { Name = Name, Description = Description, Steps=Steps };
+        public IProcessDefinition Create(string id) => new ProcessDefinition() { Id=id, Name = Name, Description = Description, Steps=Steps };
     }
 }

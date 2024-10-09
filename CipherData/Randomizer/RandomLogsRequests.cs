@@ -5,14 +5,10 @@ namespace CipherData.RequestsInterface
 {
     public class RandomLogsRequests : ILogsRequests
     {
-        public Tuple<UserActionResponse,ErrorResponse> GetObjectLogs(int uuid)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomUserActionResponse);
-        }
+        public Tuple<IUserActionResponse,ErrorResponse> GetObjectLogs(int uuid) =>
+            new RandomGenericRequests().Request(RandomData.UserActionResponse);
 
-        public Tuple<UserActionResponse, ErrorResponse> GetUserLogs(int userid)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomUserActionResponse);
-        }
+        public Tuple<IUserActionResponse, ErrorResponse> GetUserLogs(int userid) =>
+            new RandomGenericRequests().Request(RandomData.UserActionResponse);
     }
 }

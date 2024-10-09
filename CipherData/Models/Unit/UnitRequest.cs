@@ -70,13 +70,14 @@
             return result.Check();
         }
 
-        public Unit Create(string id)
+        public IUnit Create(string id)
         {
-            return new(id)
+            return new Unit()
             {
+                Id = id,
                 Name = Name,
                 Description = Description,
-                Parent = Unit.Random(ParentId),
+                Parent = new Unit() { Id = ParentId },
                 Properties = Properties
             };
         }

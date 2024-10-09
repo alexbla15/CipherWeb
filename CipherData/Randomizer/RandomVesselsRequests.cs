@@ -1,4 +1,5 @@
 ﻿using CipherData.Models;
+using CipherData.Models.Randomizers;
 using CipherData.RequestsInterface;
 
 namespace CipherData.Randomizer
@@ -6,24 +7,16 @@ namespace CipherData.Randomizer
 
     public class RandomVesselsRequests : IVesselsRequests
     {
-        public Tuple<List<Vessel>, ErrorResponse> GetVessels()
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomVessels);
-        }
+        public Tuple<List<IVessel>, ErrorResponse> GetVessels()
+            => new RandomGenericRequests().Request(RandomData.Vessels);
 
-        public Tuple<Vessel, ErrorResponse> CreateVessel(VesselRequest vessel)
-        {
-            return new RandomGenericRequests().Request(vessel.Create(Vessel.GetNextId()));
-        }
+        public Tuple<IVessel, ErrorResponse> CreateVessel(VesselRequest vessel)
+            => new RandomGenericRequests().Request(vessel.Create(RandomVessel.GetNextId()));
 
-        public Tuple<Vessel, ErrorResponse> GetVessel(string vessel_id)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomVessel, canBeNotFound: true, canBadRequest: false);
-        }
+        public Tuple<IVessel, ErrorResponse> GetVessel(string vessel_id)
+            => new RandomGenericRequests().Request(RandomData.Vessel, canBeNotFound: true, canBadRequest: false);
 
-        public Tuple<Vessel, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
-        {
-            return new RandomGenericRequests().Request(vessel.Create(vessel_id), canBeNotFound: true);
-        }
+        public Tuple<IVessel, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel)
+            => new RandomGenericRequests().Request(vessel.Create(vessel_id), canBeNotFound: true);
     }
 }

@@ -2,7 +2,7 @@
 
 @code {
     private ErrorResponse error = ErrorResponse.Success;
-    private List<Category> subCategories = new();
+    private List<ICategory> subCategories = new();
 
     protected override void OnInitialized()
     {
@@ -16,10 +16,10 @@
 
 <CipherFormRow Icon="@Icon" Width="@Width">
     <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false"
-                    TextProperty="@(nameof(Category.Name))" ValueProperty="@(nameof(Category.Name))"
+                    TextProperty="@(nameof(ICategory.Name))" ValueProperty="@(nameof(ICategory.Name))"
                     AllowClear="true" TValue="string" Style="@($"width: {Width}")">
         <ValueTemplate>
-            <b>@Label:</b> @((context as Category).Name)
+            <b>@Label:</b> @((context as ICategory).Name)
         </ValueTemplate>
     </RadzenDropDown>
 </CipherFormRow>

@@ -8,12 +8,12 @@ namespace CipherData.RequestsInterface
         /// Get change logs on a given object using its UUID
         /// Path: GET /logs/object/{uuid}
         /// </summary>
-        public Tuple<UserActionResponse, ErrorResponse> GetObjectLogs(int uuid);
+        public Tuple<IUserActionResponse, ErrorResponse> GetObjectLogs(int uuid);
 
         /// <summary>
         /// Get change logs made by a specific user.
         /// Path: GET /logs/users/{userid}
         /// </summary>
-        public Tuple<UserActionResponse, ErrorResponse> GetUserLogs(int userid);
+        public Tuple<IUserActionResponse, ErrorResponse> GetUserLogs(int userid);
     }
 }

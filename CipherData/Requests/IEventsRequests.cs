@@ -8,36 +8,36 @@ namespace CipherData.RequestsInterface
         /// Get all events
         /// Path: GET /events
         /// </summary>
-        Tuple<List<Event>, ErrorResponse> GetEvents();
+        Tuple<List<IEvent>, ErrorResponse> GetEvents();
 
         /// <summary>
         /// Create a new event.
         /// Path: POST /events
         /// </summary>
-        Tuple<Event, ErrorResponse> CreateEvent(CreateEvent ev);
+        Tuple<IEvent, ErrorResponse> CreateEvent(CreateEvent ev);
 
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/conditions
         /// </summary>
-        Tuple<GroupedBooleanCondition, ErrorResponse> UpdateEventConditions(GroupedBooleanCondition condition);
+        Tuple<IGroupedBooleanCondition, ErrorResponse> UpdateEventConditions(IGroupedBooleanCondition condition);
 
         /// <summary>
         /// Get conditions for validating an event. 
         /// Path: GET /events/conditions
         /// </summary>
-        Tuple<GroupedBooleanCondition, ErrorResponse> GetEventConditions();
+        Tuple<IGroupedBooleanCondition, ErrorResponse> GetEventConditions();
 
         /// <summary>
         /// Get details about a single event.
         /// Path: GET /events/{id}
         /// </summary>
-        Tuple<Event, ErrorResponse> GetEvent(UpdateEvent ev);
+        Tuple<IEvent, ErrorResponse> GetEvent(UpdateEvent ev);
 
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/{id}
         /// </summary>
-        Tuple<Event, ErrorResponse> UpdateEvent(string event_id, UpdateEvent ev);
+        Tuple<IEvent, ErrorResponse> UpdateEvent(string event_id, UpdateEvent ev);
     }
 }

@@ -28,13 +28,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> allPacks { get; set; } = new();
+    public List<IPackage> allPacks { get; set; } = new();
 
     /// <summary>
     /// All chosen packeges
     /// </summary>
     [Parameter]
-    public List<Package> chosenPacks { get; set; } = new();
+    public List<IPackage> chosenPacks { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -42,7 +42,7 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private RadzenDataGrid<Package> CustomDataGrid = new();
+    private RadzenDataGrid<IPackage> CustomDataGrid = new();
 
     protected override void OnInitialized()
     {
@@ -57,7 +57,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(new Package(""));
+        chosenPacks.Add(new Package() { Id = "" });
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -71,7 +71,7 @@
     /// Deletes a package-component from memory & view.
     /// </summary>
     /// <param name="pack">Package to delete</param>
-    async Task DeleteRow(Package pack)
+    async Task DeleteRow(IPackage pack)
     {
         chosenPacks.Remove(pack);
         await CustomDataGrid.RefreshDataAsync();
@@ -99,31 +99,31 @@
         {
             <CipherText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="Package" AllowColumnResize="true" Visible="chosenPacks.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="IPackage" AllowColumnResize="true" Visible="chosenPacks.Count() != 0">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="Package" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn Width="10%" TItem="IPackage" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="@(new Package().Translate(nameof(Package.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(new Package().Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         @if (string.IsNullOrEmpty(pack.Id))
                         {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null" Change="@(args=>pack.Id = ((Package)args).Id)" />
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null" Change="@(args=>pack.Id = ((IPackage)args).Id)" />
                         }
                         else
                         {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = (args is null) ? string.Empty : ((Package)args).Id)" />
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = (args is null) ? string.Empty : ((IPackage)args).Id)" />
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="@(new Package().Translate(nameof(Package.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="Package" Title="@(new Package().Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherNumeric Width="100%" Amount="Package.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>

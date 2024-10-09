@@ -109,7 +109,7 @@ namespace CipherData.Models
         /// All conditions must have the same target object.
         /// </summary>
         [HebrewTranslation(typeof(ObjectFactory), nameof(Attribute))]
-        public GroupedBooleanCondition Filter { get; set; } = new();
+        public IGroupedBooleanCondition Filter { get; set; } = new GroupedBooleanCondition();
 
         /// <summary>
         /// Define order to the filtered objects

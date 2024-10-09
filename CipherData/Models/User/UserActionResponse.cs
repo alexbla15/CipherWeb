@@ -1,20 +1,21 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
-    /// <summary>
-    /// Get user actions contract
-    /// </summary>
-    [HebrewTranslation(nameof(UserActionResponse))]
-    public class UserActionResponse
+    public interface IUserActionResponse
     {
         /// <summary>
         /// List of all user actions found
         /// </summary>
-        [HebrewTranslation(nameof(UserActions))]
-        public List<UserAction> UserActions { get; set; } = new();
+        List<IUserAction> UserActions { get; set; }
+    }
 
-        public static UserActionResponse Random() => new() { UserActions = RandomFuncs.FillRandomObjects(2, UserAction.Random)};
+    /// <summary>
+    /// Get user actions contract
+    /// </summary>
+    [HebrewTranslation(nameof(UserActionResponse))]
+    public class UserActionResponse : IUserActionResponse
+    {
+        [HebrewTranslation(nameof(UserActions))]
+        public List<IUserAction> UserActions { get; set; } = new();
     }
 }
 

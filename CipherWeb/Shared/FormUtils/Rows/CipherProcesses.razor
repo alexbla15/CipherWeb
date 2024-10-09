@@ -1,12 +1,12 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid TValue="List<ProcessDefinition>" Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
-                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(ProcessDefinition.Name))"
+    <RadzenDropDownDataGrid Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
+                            AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(IProcessDefinition.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(ProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(ProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @context
@@ -39,13 +39,13 @@
     /// All available processes
     /// </summary>
     [Parameter]
-    public List<ProcessDefinition> Processes { get; set; } = new();
+    public List<IProcessDefinition> Processes { get; set; } = new();
 
     /// <summary>
     /// All chosen processes
     /// </summary>
     [Parameter]
-    public List<ProcessDefinition>? ChosenProcesses { get; set; } = new();
+    public List<IProcessDefinition>? ChosenProcesses { get; set; } = new();
 
     /// <summary>
     /// Data fetching error

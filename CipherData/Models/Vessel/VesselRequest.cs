@@ -57,6 +57,7 @@
             return result.Check();
         }
 
-        public Vessel Create(string id) => new (id) { Name = Name, Type = Type, System = StorageSystem.Random(SystemId) };
+        public IVessel Create(string id) => 
+            new Vessel() { Id = id, Name = Name, Type = Type, System = new StorageSystem() { Id = SystemId } };
     }
 }

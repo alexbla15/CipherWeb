@@ -1,11 +1,12 @@
 ﻿@using System;
+@using CipherData.Models.Randomizers;
 
 @inject DialogService DialogService
 @inject TooltipService TooltipService
 @inject ICipherInfo _db
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
-                 style="@SchedulerStyle()" TItem="Process" AppointmentSelect="@SelectProcess"
+                 style="@SchedulerStyle()" TItem="IProcess" AppointmentSelect="@SelectProcess"
                  Data=@Processes StartProperty="Start" EndProperty="End" AppointmentMouseEnter=@OnProcessMouseEnter AppointmentMouseLeave=@OnProcessMouseLeave
                  TextProperty="Id" SelectedIndex="2" AppointmentRender=@OnProcessRender TodayText="היום">
     <CipherDayView StartTime="@startTime" EndTime="@endTime" TimeFormat="h tt" />
@@ -98,15 +99,15 @@
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<Process> Processes { get; set; } = new();
+    public List<IProcess> Processes { get; set; } = new();
 
-    private RadzenScheduler<Process> scheduler = new();
+    private RadzenScheduler<IProcess> scheduler = new();
 
     private Dictionary<string, string> ProcessColoring = new()
             {
-                [ProcessDefinition.ProcessesNames[0]] = Colors.Primary,
-                [ProcessDefinition.ProcessesNames[1]] = Colors.Danger,
-                [ProcessDefinition.ProcessesNames[2]] = Colors.Success
+                [RandomProcessDefinition.ProcessesNames[0]] = Colors.Primary,
+                [RandomProcessDefinition.ProcessesNames[1]] = Colors.Danger,
+                [RandomProcessDefinition.ProcessesNames[2]] = Colors.Success
             };
 
     private string SchedulerStyle()
@@ -146,7 +147,7 @@
     /// Controls the appearance of each event within a certain view.
     /// </summary>
     /// <param name="args"></param>
-    void OnProcessRender(SchedulerAppointmentRenderEventArgs<Process> args)
+    void OnProcessRender(SchedulerAppointmentRenderEventArgs<IProcess> args)
     {
         // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
 
@@ -169,7 +170,7 @@
     /// </summary>
     /// <param name="args"></param>
     /// <returns></returns>
-    async Task SelectProcess(SchedulerAppointmentSelectEventArgs<Process> args)
+    async Task SelectProcess(SchedulerAppointmentSelectEventArgs<IProcess> args)
     {
         await DialogService.OpenAsync(EventDialogTitle,
 
@@ -182,7 +183,7 @@
     /// Shows a tooltip upon hovering on an event.
     /// </summary>
     /// <param name="args"></param>
-    void OnProcessMouseEnter(SchedulerAppointmentMouseEventArgs<Process> args)
+    void OnProcessMouseEnter(SchedulerAppointmentMouseEventArgs<IProcess> args)
     {
         TooltipService.Open(args.Element, ts =>
     @<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Start"
@@ -210,6 +211,6 @@
     /// <summary>
     /// Closes tooltip at the end of the hovering on an event.
     /// </summary>
-    void OnProcessMouseLeave(SchedulerAppointmentMouseEventArgs<Process> args) => TooltipService.Close();
+    void OnProcessMouseLeave(SchedulerAppointmentMouseEventArgs<IProcess> args) => TooltipService.Close();
 
 }

@@ -1,26 +1,42 @@
 ﻿namespace CipherData.Models
 {
-    /// <summary>
-    /// Groups of boolean conditions on a single object
-    /// </summary>
-    [HebrewTranslation(nameof(GroupedBooleanCondition))]
-    public class GroupedBooleanCondition : Condition
+    public interface IGroupedBooleanCondition
     {
         /// <summary>
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
-        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
-        public IEnumerable<Condition> Conditions { get; set; } = new List<Condition>();
+        IEnumerable<Condition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
-        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
-        public Operator Operator { get; set; } = Operator.All;
+        Operator Operator { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
+        public CheckField CheckConditions();
+
+        /// <summary>
+        /// Check if all required values are within the request, before sending it to the api.
+        /// Item1 is the validity answer, Item2 is the problematic attribute.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<bool, string> Check();
+    }
+
+    /// <summary>
+    /// Groups of boolean conditions on a single object
+    /// </summary>
+    [HebrewTranslation(nameof(GroupedBooleanCondition))]
+    public class GroupedBooleanCondition : Condition, IGroupedBooleanCondition
+    {
+        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
+        public IEnumerable<Condition> Conditions { get; set; } = new List<Condition>();
+
+        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
+        public Operator Operator { get; set; } = Operator.All;
+
         public CheckField CheckConditions()
         {
             if (Conditions.Any())
@@ -43,21 +59,11 @@
 
         }
 
-        /// <summary>
-        /// Check if all required values are within the request, before sending it to the api.
-        /// Item1 is the validity answer, Item2 is the problematic attribute.
-        /// </summary>
-        /// <returns></returns>
         public Tuple<bool, string> Check()
         {
             CheckClass result = new();
             result.Fields.Add(CheckConditions());
             return result.Check();
         }
-
-        /// <summary>
-        /// Create a random object.
-        /// </summary>
-        public static GroupedBooleanCondition Random() => new();
     }
 }

@@ -30,23 +30,29 @@ namespace CipherData.Models
 
             Properties = new();
 
-            MethodInfo? getDict = obj.GetType().GetMethod("ToDictionary");
-            Dictionary<string, object?>? values = getDict != null ? (Dictionary<string, object?>)getDict.Invoke(obj, null) : null;
+            string interfaceName = obj.GetType().Name.Replace("Random", "I");
+            Type? interfaceType = Type.GetType($"CipherData.Models.{interfaceName}");
 
-            // Iterate through all the properties of the object
-            if (values != null)
+            if (interfaceType != null)
             {
-                foreach (string propertyName in values.Keys)
-                {
-                    string propertyPath = GetPropertyPath(obj, propertyName);
-                    string hebrewTranslation = GetHebrewTranslation(obj, propertyName);
+                MethodInfo? getDict = interfaceType.GetMethod("ToDictionary");
+                Dictionary<string, object?>? values = getDict != null ? (Dictionary<string, object?>)getDict.Invoke(obj, null) : null;
 
-                    if (!UnwantedPropertiesNames.Contains(propertyName))
+                // Iterate through all the properties of the object
+                if (values != null)
+                {
+                    foreach (string propertyName in values.Keys)
                     {
-                        if (values != null)
+                        string propertyPath = GetPropertyPath(obj, propertyName);
+                        string hebrewTranslation = GetHebrewTranslation(obj, propertyName);
+
+                        if (!UnwantedPropertiesNames.Contains(propertyName))
                         {
-                            object? value = values.ContainsKey(propertyName) ? values[propertyName] : null;
-                            Properties.Add(new() { Name = propertyName, Path = propertyPath, Translation = hebrewTranslation, Value = value });
+                            if (values != null)
+                            {
+                                object? value = values.ContainsKey(propertyName) ? values[propertyName] : null;
+                                Properties.Add(new() { Name = propertyName, Path = propertyPath, Translation = hebrewTranslation, Value = value });
+                            }
                         }
                     }
                 }
@@ -73,7 +79,7 @@ namespace CipherData.Models
             string originalKey = $"{obj.GetType().Name}_{propertyName}";
 
             // deal specifically with StorageSystem
-            originalKey = originalKey.Replace("StorageSystem", "System");
+            originalKey = originalKey.Replace("StorageSystem", "System").Replace("Random","");
 
             string translation = Translator.GetTranslation(originalKey);
             if (translation != originalKey) return translation;

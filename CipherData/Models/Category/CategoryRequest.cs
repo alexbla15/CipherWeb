@@ -1,10 +1,21 @@
 ﻿namespace CipherData.Models
 {
+    public interface ICategoryRequest
+    {
+        string? Name { get; set; }
+        string? ParentId { get; set; }
+        string? Description { get; set; }
+        List<string> IdMask { get; set; }
+        List<string> ConsumingProcesses { get; set; }
+        List<string> CreatingProcesses { get; set; }
+        List<ICategoryProperty>? Properties { get; set; }
+    }
+
     /// <summary>
     /// Create a new category or update it
     /// </summary>
     [HebrewTranslation(nameof(CategoryRequest))]
-    public class CategoryRequest: CipherClass
+    public class CategoryRequest : CipherClass, ICategoryRequest
     {
         private string? _Name = string.Empty;
         private string? _Description = string.Empty;
@@ -57,7 +68,7 @@
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.Properties))]
-        public List<CategoryProperty>? Properties { get; set; }
+        public List<ICategoryProperty>? Properties { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
         public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
@@ -75,7 +86,7 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckCreatingProcesses() => CheckField.CheckList(CreatingProcesses, Translate(nameof(CreatingProcesses)), isFull: true, isDistinct:true);
+        public CheckField CheckCreatingProcesses() => CheckField.CheckList(CreatingProcesses, Translate(nameof(CreatingProcesses)), isFull: true, isDistinct: true);
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -91,7 +102,7 @@
 
             if (Properties != null)
             {
-                result = CheckField.Distinct(Properties.Select(x=>x.Name).ToList(), Translate(nameof(Properties)));
+                result = CheckField.Distinct(Properties.Select(x => x.Name).ToList(), Translate(nameof(Properties)));
                 result = (result.Succeeded) ? CheckField.ListItems(Properties, Translate(nameof(Properties))) : result;
             }
             return result;
@@ -113,25 +124,6 @@
             result.Fields.Add(CheckProperties());
             result.Fields.Add(CheckParentId());
             return result.Check();
-        }
-
-        /// <summary>
-        /// Create (partially) a category from a request, specifying its id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Category Create(string id)
-        {
-            return new (id)
-            {
-                Name = Name,
-                Description = Description,
-                IdMask = IdMask,
-                CreatingProcesses = CreatingProcesses.Select(x => ProcessDefinition.Random(x)).ToList(),
-                ConsumingProcesses = ConsumingProcesses.Select(x => ProcessDefinition.Random(x)).ToList(),
-                Parent = Category.Random(ParentId),
-                Properties = Properties
-            };
         }
     }
 }

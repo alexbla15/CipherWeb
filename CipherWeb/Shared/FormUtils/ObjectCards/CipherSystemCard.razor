@@ -20,11 +20,11 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new StorageSystem().Translate(nameof(StorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                <CipherAutoComplete Label="@(new StorageSystem().Translate(nameof(IStorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" />
-                <CipherComments @ref="SysDescription" Label="@(new StorageSystem().Translate(nameof(StorageSystem.Description)))"
+                <CipherComments @ref="SysDescription" Label="@(new StorageSystem().Translate(nameof(IStorageSystem.Description)))"
                                 Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(new StorageSystem().Translate(nameof(StorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" />
+                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(new StorageSystem().Translate(nameof(IStorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" />
                 <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
             </ChildContent>
         </CipherComponentCard>
@@ -42,7 +42,7 @@
     /// Chosen vessel within the card
     /// </summary>
     [Parameter]
-    public StorageSystem? ChosenObject { get; set; }
+    public IStorageSystem? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the system.

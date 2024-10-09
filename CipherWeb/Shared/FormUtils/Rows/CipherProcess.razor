@@ -1,14 +1,14 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid TValue="ProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
-                            Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(ProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
+    <RadzenDropDownDataGrid TValue="IProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
+                            Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(ProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(ProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as ProcessDefinition).Name)
+            <b>@Label:</b> @((context as IProcessDefinition).Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -25,13 +25,13 @@
     /// All available processes
     /// </summary>
     [Parameter]
-    public List<ProcessDefinition> Processes { get; set; } = new();
+    public List<IProcessDefinition> Processes { get; set; } = new();
 
     /// <summary>
     /// Chosen process among AllProcesses
     /// </summary>
     [Parameter]
-    public ProcessDefinition? ChosenProcess { get; set; }
+    public IProcessDefinition? ChosenProcess { get; set; }
 
     /// <summary>
     /// Data fetching error

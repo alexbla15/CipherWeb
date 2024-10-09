@@ -39,13 +39,13 @@
         /// Package that relocate in this event.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(Packages))]
-        public List<Package>? Packages { get; set; }
+        public List<IPackage>? Packages { get; set; }
 
         /// <summary>
         /// System to which the packages are relocated.
         /// </summary>
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
-        public StorageSystem? TargetSystem { get; set; }
+        public IStorageSystem? TargetSystem { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -69,7 +69,7 @@
 
             CheckField result = new();
 
-            foreach (Package p in Packages)
+            foreach (IPackage p in Packages)
             {
                 result = (result.Succeeded) ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id, Translate(nameof(p.System))) : result;
             }
@@ -120,7 +120,7 @@
         {
             if (Packages != null && TargetSystem != null)
             {
-                foreach (Package p in Packages)
+                foreach (IPackage p in Packages)
                 {
                     p.System = TargetSystem;
                 }

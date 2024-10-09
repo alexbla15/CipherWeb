@@ -5,24 +5,12 @@ namespace CipherData.Randomizer
 {
     public class RandomCategoriesRequests : ICategoriesRequests
     {
-        public Tuple<List<Category>, ErrorResponse> GetCategories()
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomCategories, canBadRequest: false);
-        }
+        public Tuple<List<ICategory>, ErrorResponse> GetCategories() => new RandomGenericRequests().Request(RandomData.Categories, canBadRequest: false);
 
-        public Tuple<Category, ErrorResponse> GetCategory(string id)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomCategory, canBadRequest: false, canBeNotFound: true);
-        }
+        public Tuple<ICategory, ErrorResponse> GetCategory(string id) => new RandomGenericRequests().Request(RandomData.Category, canBadRequest: false, canBeNotFound: true);
 
-        public Tuple<Category, ErrorResponse> CreateCategory(CategoryRequest cat)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomCategory);
-        }
+        public Tuple<ICategory, ErrorResponse> CreateCategory(ICategoryRequest cat) => new RandomGenericRequests().Request(RandomData.Category);
 
-        public Tuple<Category, ErrorResponse> UpdateCategory(string id, CategoryRequest cat)
-        {
-            return new RandomGenericRequests().Request(cat.Create(id), canBeNotFound: true);
-        }
+        public Tuple<ICategory, ErrorResponse> UpdateCategory(string id, ICategoryRequest cat) => new RandomGenericRequests().Request((ICategory)RandomFuncs.Request(cat,id), canBeNotFound: true);
     }
 }

@@ -32,7 +32,7 @@
             </ChildContent>
         </CipherComponentCard>
         <CipherCategoryProperties @ref=CatProperties
-                                  ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<CategoryProperty>())))" />
+                                  ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
     </ChildContent>
 </CipherComponentCard>
 
@@ -47,7 +47,7 @@
     /// Chosen category within the card
     /// </summary>
     [Parameter]
-    public Category? ChosenObject { get; set; }
+    public ICategory? ChosenObject { get; set; }
 
     /// <summary>
     /// Event that takes place upon changing the category.
@@ -64,8 +64,8 @@
     private CipherProcesses OutProcs = new();
     private CipherCategoryProperties CatProperties = new();
 
-    private Category? Parent;
-    private List<CategoryProperty>? ParentProps;
+    private ICategory? Parent;
+    private List<ICategoryProperty>? ParentProps;
 
     protected override void OnInitialized()
     {
@@ -100,7 +100,7 @@
     /// <summary>
     /// Method to set properties according to category's parent's properties.
     /// </summary>
-    public void ChangedParent(Category? parent)
+    public void ChangedParent(ICategory? parent)
     {
         Parent = parent;
         ParentProps = null;

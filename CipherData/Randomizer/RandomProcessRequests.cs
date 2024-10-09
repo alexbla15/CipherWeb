@@ -5,14 +5,10 @@ namespace CipherData.Randomizer
 {
     public class RandomProcessesRequests : IProcessesRequests
     {
-        public Tuple<List<Process>, ErrorResponse> GetProcesses()
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomProcesses);
-        }
+        public Tuple<List<IProcess>, ErrorResponse> GetProcesses()
+            =>new RandomGenericRequests().Request(RandomData.Processes);
 
-        public Tuple<Process, ErrorResponse> GetProcess(string proc_id)
-        {
-            return new RandomGenericRequests().Request(RandomData.RandomProcess, canBeNotFound: true, canBadRequest: false);
-        }
+        public Tuple<IProcess, ErrorResponse> GetProcess(string proc_id)
+            => new RandomGenericRequests().Request(RandomData.Process, canBeNotFound: true, canBadRequest: false);
     }
 }

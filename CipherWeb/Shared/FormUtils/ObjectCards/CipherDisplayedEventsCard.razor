@@ -4,19 +4,19 @@
 
     private List<DisplayedEvent> DisplayedEvents = new();
 
-    private List<Event> _Events = new();
+    private List<IEvent> _Events = new();
 
     /// <summary>
     /// All events
     /// </summary>
     [Parameter]
-    public List<Event> Events
+    public List<IEvent> Events
     {
         get => _Events;
         set
         {
             _Events = value;
-            foreach (Event ev in _Events)
+            foreach (IEvent ev in _Events)
             {
                 DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
             }
@@ -27,7 +27,7 @@
     /// Update result, send from the api
     /// </summary>
     [Parameter]
-    public Event? Result { get; set; }
+    public IEvent? Result { get; set; }
 
     /// <summary>
     /// API response to submission.
@@ -60,16 +60,16 @@
         }
     }
 
-    public void ForSingleEvent(Func<UpdateEvent> singleFunc, Event ev)
+    public void ForSingleEvent(Func<UpdateEvent> singleFunc, IEvent ev)
     {
         UpdateEvent setUpdate = singleFunc();
         (Result, Error) = ev.Update(setUpdate);
         JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
     }
 
-    public void ApproveEvent(Event ev) => ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
+    public void ApproveEvent(IEvent ev) => ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
 
-    public void DeclineEvent(Event ev) => ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
+    public void DeclineEvent(IEvent ev) => ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
 
     public void ForAllEvents(Action<Event> singleFunc)
     {
@@ -86,11 +86,11 @@
 
     public void DeclineAllEvents() => ForAllEvents(DeclineEvent);
 
-    public async Task ChangeEvents(List<Event> newEvents)
+    public async Task ChangeEvents(List<IEvent> newEvents)
     {
         _Events = newEvents;
         DisplayedEvents = new();
-        foreach (Event ev in _Events)
+        foreach (IEvent ev in _Events)
         {
             DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
         }

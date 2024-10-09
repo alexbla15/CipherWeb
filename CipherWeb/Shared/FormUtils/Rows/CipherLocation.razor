@@ -5,20 +5,20 @@
     {
         <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
     }
-    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(StorageSystem.Name))"
+    <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(IStorageSystem.Name))"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled" Change="@Change">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Name))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Description))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Parent))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Name))" Title="@(new StorageSystem().Translate(nameof(IStorageSystem.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Description))" Title="@(new StorageSystem().Translate(nameof(IStorageSystem.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Parent))" Title="@(new StorageSystem().Translate(nameof(IStorageSystem.Parent)))">
                 <Template>
-                    @((context as StorageSystem).Parent?.Name)
+                    @((context as IStorageSystem).Parent?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(StorageSystem.Unit))" Title="@(new StorageSystem().Translate(nameof(StorageSystem.Unit)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Unit))" Title="@(new StorageSystem().Translate(nameof(IStorageSystem.Unit)))">
                 <Template>
-                    @((context as StorageSystem).Unit?.Description)
+                    @((context as IStorageSystem).Unit?.Description)
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>
@@ -33,13 +33,13 @@
     /// Value of the component.
     /// </summary>
     [Parameter]
-    public StorageSystem? ChosenSystem { get; set; }
+    public IStorageSystem? ChosenSystem { get; set; }
 
     /// <summary>
     /// All available systems to choose from.
     /// </summary>
     [Parameter]
-    public List<StorageSystem> AvailableSystems { get; set; } = new();
+    public List<IStorageSystem> AvailableSystems { get; set; } = new();
 
     /// <summary>
     /// Label and placeholder of component.

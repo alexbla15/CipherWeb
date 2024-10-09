@@ -84,13 +84,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new();
+    public List<IPackage> packs { get; set; } = new();
 
     /// <summary>
     /// Chosen package to view within card.
     /// </summary>
     [Parameter]
-    public Package? ChosenObject { get; set; }
+    public IPackage? ChosenObject { get; set; }
 
     /// <summary>
     /// Error response for fetching data

@@ -77,15 +77,16 @@
             return result.Check();
         }
 
-        public StorageSystem Create(string id)
+        public IStorageSystem Create(string id)
         {
-            return new(id)
+            return new StorageSystem()
             {
+                Id = id,
                 Description = Description,
-                Unit = Unit.Random(UnitId),
+                Unit = new Unit() { Id = UnitId },
                 Name = Name,
                 Properties = Properties,
-                Parent = StorageSystem.Random(ParentId),
+                Parent = new StorageSystem() { Id = ParentId },
             };
         }
     }

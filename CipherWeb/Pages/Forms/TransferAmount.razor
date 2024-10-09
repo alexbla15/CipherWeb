@@ -50,7 +50,7 @@
     /// API event result to submission. Empty if the submission was unsuccessful.
     /// </summary>
     [Parameter]
-    public Event? ResultEvent { get; set; }
+    public IEvent? ResultEvent { get; set; }
 
     private CipherFormInfo FormInfo = new();
     private CipherPackageId DonatingPack = new();

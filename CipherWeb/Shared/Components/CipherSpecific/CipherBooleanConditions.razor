@@ -19,7 +19,7 @@
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public GroupedBooleanCondition ChosenCondition { get; set; } = new();
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
 
     /// <summary>
     /// Error response for fetching data
@@ -34,7 +34,7 @@
     public EventCallback<object> OnSave { get; set; }
 
     [Parameter]
-    public EventCallback<GroupedBooleanCondition> ChosenConditionChanged { get; set; }
+    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
 
     /// <summary>
     /// Help text for save-button.
@@ -76,7 +76,7 @@
         return new_filter;
     }
 
-    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(GroupedBooleanCondition cond)
+    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition cond)
     {
         CompositeFilterDescriptor new_filter = new();
         new_filter.LogicalFilterOperator = (cond.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
@@ -91,9 +91,9 @@
                 {
                     sub_conds.Add(AddBooleanConditionFilter(sub_cond as BooleanCondition));
                 }
-                else if (sub_cond is GroupedBooleanCondition)
+                else if (sub_cond is IGroupedBooleanCondition)
                 {
-                    sub_conds.Add(AddGroupedBooleanConditionFilter(sub_cond as GroupedBooleanCondition));
+                    sub_conds.Add(AddGroupedBooleanConditionFilter(sub_cond as IGroupedBooleanCondition));
                 }
             }
 
@@ -198,7 +198,7 @@
         }
 
         ChosenCondition.Conditions = conditions;
-        JsonRequest = ChosenCondition.ToJson();
+        JsonRequest = (ChosenCondition as GroupedBooleanCondition).ToJson();
         OnSave.InvokeAsync();
     }
 

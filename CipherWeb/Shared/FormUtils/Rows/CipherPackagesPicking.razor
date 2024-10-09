@@ -17,7 +17,7 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<Package> packs { get; set; } = new();
+    public List<IPackage> packs { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -29,7 +29,7 @@
     /// All packages chosen
     /// </summary>
     [Parameter]
-    public List<Package> SelectedPackages { get; set; } = new();
+    public List<IPackage> SelectedPackages { get; set; } = new();
 
     /// <summary>
     /// Change event
@@ -49,20 +49,20 @@
 }
 
 <CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<Package>" @bind-Value="SelectedPackages"
+    <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<IPackage>" @bind-Value="SelectedPackages"
                             Data=@packs TextProperty="@(nameof(Package.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
                             Chips=true Style="@($"min-width: {MinWidth};")" AllowClear="true" Disabled="@Disabled" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Id))" Title="@(new Package().Translate(nameof(Package.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(new Package().Translate(nameof(Package.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Category))" Title="@(new Package().Translate(nameof(Package.Category)))">
                 <Template>
-                   @((context as Package).Category.Name)
+                   @((context as IPackage).Category.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Package.System))" Title="@(new Package().Translate(nameof(Package.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.System))" Title="@(new Package().Translate(nameof(Package.System)))">
                 <Template>
-                    @((context as Package).System.Name)
+                    @((context as IPackage).System.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>

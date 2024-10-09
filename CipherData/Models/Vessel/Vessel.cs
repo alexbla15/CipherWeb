@@ -1,53 +1,26 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
-    [HebrewTranslation(nameof(Vessel))]
-    public class Vessel : Resource
+    public interface IVessel: IResource
     {
-        private string? _Name;
-        private string? _Type = string.Empty;
+        /// <summary>
+        /// Packages within the vessel
+        /// </summary>
+        List<IPackage>? ContainingPackages { get; set; }
 
         /// <summary>
         /// Name of vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public string? Name { get => _Name; set => _Name = value?.Trim(); }
-
-        /// <summary>
-        /// Vessel type (bottle / pot / ...)
-        /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string? Type { get => _Type; set => _Type = value?.Trim(); }       
-            
-        /// <summary>
-        /// Packages within the vessel
-        /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
-        public List<Package>? ContainingPackages { get; set; }
+        string? Name { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(System))]
-        public StorageSystem System { get; set; } = new();
+        IStorageSystem System { get; set; }
 
         /// <summary>
-        /// Vessel containing some packages, inside some system
+        /// Vessel type (bottle / pot / ...)
         /// </summary>
-        public Vessel(string? id = null)
-        {
-            string nextId = GetNextId();
-
-            Id = id ?? nextId;
-            Name ??= nextId;
-        }
-
-        /// <summary>
-        /// Transfrom package object to a VesselRequest object
-        /// </summary>
-        /// <returns></returns>
-        public VesselRequest Request() => new() { Name = Name, Type = Type, SystemId = System.Id };
+        string? Type { get; set; }
 
         public Dictionary<string, object?> ToDictionary()
         {
@@ -60,35 +33,31 @@ namespace CipherData.Models
                 [nameof(ContainingPackages)] = ContainingPackages is null ? null : string.Join(", ", ContainingPackages.Select(x => x.Id)),
             };
         }
+    }
 
-        // STATIC METHODS
+    [HebrewTranslation(nameof(Vessel))]
+    public class Vessel : Resource, IVessel
+    {
+        private string? _Name;
+        private string? _Type = string.Empty;
+
+        [HebrewTranslation(typeof(Vessel), nameof(Name))]
+        public string? Name { get => _Name; set => _Name = value?.Trim(); }
+
+        [HebrewTranslation(typeof(Vessel), nameof(Type))]
+        public string? Type { get => _Type; set => _Type = value?.Trim(); }
+
+        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
+        public List<IPackage>? ContainingPackages { get; set; }
+
+        [HebrewTranslation(typeof(Vessel), nameof(System))]
+        public IStorageSystem System { get; set; } = new StorageSystem();
 
         /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
-
-        /// <summary>
-        /// Get the id of a new object
+        /// Transfrom package object to a VesselRequest object
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId() => $"V{++IdCounter:D3}";
-
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
-        public static Vessel Random(string? id = null)
-        {
-            List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
-
-            return new Vessel(id)
-            {
-                Type = RandomFuncs.RandomItem(VesselTypes),
-                System = StorageSystem.Random(),
-                ContainingPackages = new List<Package>() { new("VP") }
-            };
-        }
+        public VesselRequest Request() => new() { Name = Name, Type = Type, SystemId = System.Id };
 
         // API-RELATED FUNCTIONS
 
@@ -97,12 +66,12 @@ namespace CipherData.Models
         /// </summary>
         /// <param name="id">vessel ID</param>
         /// <returns></returns>
-        public static Tuple<Vessel, ErrorResponse> Get(string id) => Config.VesselsRequests.GetVessel(id);
+        public static Tuple<IVessel, ErrorResponse> Get(string id) => Config.VesselsRequests.GetVessel(id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static Tuple<List<Vessel>, ErrorResponse> All() => Config.VesselsRequests.GetVessels();
+        public static Tuple<List<IVessel>, ErrorResponse> All() => Config.VesselsRequests.GetVessels();
 
         /// <summary>
         /// Fetch all vessels which contain the searched text

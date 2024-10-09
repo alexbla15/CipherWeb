@@ -1,93 +1,40 @@
-﻿using CipherData.Randomizer;
-using System.Diagnostics;
-using System.Xml.Linq;
+﻿using CipherData.Models.Randomizers;
 
 namespace CipherData.Models
 {
-    [HebrewTranslation("System")]
-    public class StorageSystem : Resource
+    public interface IStorageSystem : IResource
     {
-        private string _Name = string.Empty;
-        private string _Description = string.Empty;
-
         /// <summary>
-        /// Name of the system
+        /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string Name
-        {
-            get => _Name;
-            set => _Name = value.Trim(); 
-        }
+        List<StorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string Description
-        {
-            get => _Description;
-            set => _Description = value.Trim();
-        }
+        string Description { get; set; }
 
         /// <summary>
-        /// JSON-like additional properties of the system
+        /// Name of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
-        public Dictionary<string, string>? Properties { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
-        public StorageSystem? Parent { get; set; }
+        IStorageSystem? Parent { get; set; }
 
         /// <summary>
-        /// Child systems contained in this one
+        /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
-        public List<StorageSystem>? Children { get; set; }
+        Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
-        /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
-        public Unit Unit { get; set; } = new();
-
-        /// <summary>
-        /// Instanciation of StorageSystem
-        /// </summary>
-        public StorageSystem(string? id = null) => Id = id ?? GetNextId();
+        /// </summary>s
+        IUnit Unit { get; set; }
 
         // STATIC METHODS
-
-        /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
-
-        /// <summary>
-        /// Get the id of a new object
-        /// </summary>
-        /// <returns></returns>
-        public static string GetNextId() => $"S{++IdCounter:D3}";
-
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
-        public static StorageSystem Random(string? id = null)
-        {
-            List<string> SystemsDescriptions = new() { "תחום", "מעבדה", "מבנה" };
-
-            return new(id)
-            {
-                Name = id ?? GetNextId(),
-                Description = RandomFuncs.RandomItem(SystemsDescriptions),
-                Unit = Unit.Random(),
-                Parent = (new Random().Next(0, 5) == 0) ? new StorageSystem() { Name= GetNextId() } : null
-            };
-        }
 
         public Dictionary<string, object?> ToDictionary()
         {
@@ -103,38 +50,146 @@ namespace CipherData.Models
             };
         }
 
-        // API related functions
+        /// <summary>
+        /// All events that took place in this system
+        /// </summary>
+        public Tuple<List<IEvent>, ErrorResponse> Events() => Events(Id);
 
         /// <summary>
         /// All events that took place in this system
         /// </summary>
-        public Tuple<List<Event>, ErrorResponse> Events() => Events(Id);
-
-        /// <summary>
-        /// All events that took place in this system
-        /// </summary>
-        public Tuple<List<Process>, ErrorResponse> Processes() => Processes(Id);
+        public Tuple<List<IProcess>, ErrorResponse> Processes() => Processes(Id);
 
         /// <summary>
         /// All packages that took place in this system
         /// </summary>
-        public Tuple<List<Package>, ErrorResponse> Packages() => Packages(Id);
+        public Tuple<List<IPackage>, ErrorResponse> Packages() => Packages(Id);
 
         /// <summary>
         /// All vessels that took place in this system
         /// </summary>
-        public Tuple<List<Vessel>, ErrorResponse> Vessels() => Vessels(Id);
+        public Tuple<List<IVessel>, ErrorResponse> Vessels() => Vessels(Id);
+
+        /// <summary>
+        /// All events that took place in a certain system
+        /// </summary>
+        /// <param name="SelectedSystem">selected system for query</param>
+        public static Tuple<List<IEvent>, ErrorResponse> Events(string SelectedSystem)
+        {
+            var result = Resource.GetObjects<RandomEvent>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{nameof(Event)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
+            return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
+        }
+
+        /// <summary>
+        /// All processes that took place in a certain system
+        /// </summary>
+        /// <param name="SelectedSystem">selected system for query</param>
+        /// <returns></returns>
+        public static Tuple<List<IProcess>, ErrorResponse> Processes(string SelectedSystem)
+        {
+            var result = Resource.GetObjects<RandomProcess>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{nameof(Process)}.{nameof(Process.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
+            return Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
+        }
+
+        /// <summary>
+        /// All packages that took place in a certain system
+        /// </summary>
+        public static Tuple<List<IPackage>, ErrorResponse> Packages(string SelectedSystem)
+        {
+            var result = Resource.GetObjects<RandomPackage>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{typeof(Package).Name}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
+            return Tuple.Create(result.Item1.Select(x => x as IPackage).ToList(), result.Item2);
+        }
+
+        /// <summary>
+        /// All vessels that are under this system
+        /// </summary>
+        public static Tuple<List<IVessel>, ErrorResponse> Vessels(string SelectedSystem)
+        {
+            var result = Resource.GetObjects<RandomVessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Package.System)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
+            return Tuple.Create(result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
+        }
+    }
+
+    [HebrewTranslation("System")]
+    public class StorageSystem : Resource, IStorageSystem
+    {
+        private string _Name = string.Empty;
+        private string _Description = string.Empty;
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
+        public string Name
+        {
+            get => _Name;
+            set => _Name = value.Trim();
+        }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
+        public string Description
+        {
+            get => _Description;
+            set => _Description = value.Trim();
+        }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
+        public Dictionary<string, string>? Properties { get; set; }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
+        public IStorageSystem? Parent { get; set; }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
+        public List<StorageSystem>? Children { get; set; }
+
+        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
+        public IUnit Unit { get; set; } = new Unit();
+
+
+        // API related functions
 
         /// <summary>
         /// Get details about a system vessel given system ID
         /// </summary>
         /// <param name="id">system ID</param>
-        public static Tuple<StorageSystem, ErrorResponse> Get(string id) => Config.SystemsRequests.GetSystem(id);
+        public static Tuple<IStorageSystem, ErrorResponse> Get(string id) => Config.SystemsRequests.GetSystem(id);
 
         /// <summary>
         /// All systems that took place in a certain system
         /// </summary>
-        public static Tuple<List<StorageSystem>, ErrorResponse> All() => Config.SystemsRequests.GetSystems();
+        public static Tuple<List<IStorageSystem>, ErrorResponse> All() => Config.SystemsRequests.GetSystems();
 
         /// <summary>
         /// Fetch all systems which contain the searched text
@@ -156,73 +211,5 @@ namespace CipherData.Models
             });
         }
 
-        /// <summary>
-        /// All events that took place in a certain system
-        /// </summary>
-        /// <param name="SelectedSystem">selected system for query</param>
-        public static Tuple<List<Event>, ErrorResponse> Events(string SelectedSystem)
-        {
-            return GetObjects<Event>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>()
-            {
-                new() {Attribute = $"{nameof(Event)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq,
-                    Value = SelectedSystem}
-            },
-                Operator = Operator.Any
-            });
-        }
-
-        /// <summary>
-        /// All processes that took place in a certain system
-        /// </summary>
-        /// <param name="SelectedSystem">selected system for query</param>
-        /// <returns></returns>
-        public static Tuple<List<Process>, ErrorResponse> Processes(string SelectedSystem)
-        {
-            return GetObjects<Process>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>()
-            {
-                new() {Attribute = $"{nameof(Process)}.{nameof(Process.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Package.System)}.{nameof(Id)}",
-                    AttributeRelation = AttributeRelation.Eq,
-                    Value = SelectedSystem}
-            },
-                Operator = Operator.Any
-            });
-        }
-
-        /// <summary>
-        /// All packages that took place in a certain system
-        /// </summary>
-        public static Tuple<List<Package>, ErrorResponse> Packages(string SelectedSystem)
-        {
-            return GetObjects<Package>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>()
-            {
-                new() {Attribute = $"{typeof(Package).Name}.{nameof(Package.System)}.{nameof(Id)}",
-                    AttributeRelation = AttributeRelation.Eq,
-                    Value = SelectedSystem}
-            }, Operator = Operator.Any 
-            });
-        }
-
-        /// <summary>
-        /// All vessels that are under this system
-        /// </summary>
-        public static Tuple<List<Vessel>, ErrorResponse> Vessels(string SelectedSystem)
-        {
-            return GetObjects<Vessel>(SelectedSystem, SelectedSystem => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>()
-            {
-                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Package.System)}.{nameof(Id)}",
-                    AttributeRelation = AttributeRelation.Eq,
-                    Value = SelectedSystem}
-            },
-                Operator = Operator.Any
-            });
-        }
     }
 }

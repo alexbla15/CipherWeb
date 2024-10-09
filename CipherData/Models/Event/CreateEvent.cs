@@ -112,7 +112,7 @@
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Event Create(string id)
+        public IEvent Create(string id)
         {
             return new Event()
             {

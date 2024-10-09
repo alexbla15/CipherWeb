@@ -1,123 +1,66 @@
-﻿using CipherData.Randomizer;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
-    [HebrewTranslation(nameof(Package))]
-    public class Package : Resource
+    public interface IPackage : IResource
     {
-        private string? _Description;
-        private Category _Category = new();
-
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Description))]
-        public string? Description {
-            get => _Description; 
-            set => _Description = value?.Trim(); 
-        }
-
-        /// <summary>
-        /// Dictionary of additional properties of the package
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public List<PackageProperty>? Properties { get; set; }
-
-        /// <summary>
-        /// Vessel which contains the package
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Vessel))]
-        public Vessel? Vessel { get; set; }
-
-        /// <summary>
-        /// Location which contains the package
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(System))]
-        public StorageSystem System { get; set; } = new();
+        string? Description { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
-        public decimal BrutMass { get; set; }
+        decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(NetMass))]
-        public decimal NetMass { get; set; }
+        decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
-        public DateTime CreatedAt { get; set; }
+        DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// Parent package containing this one.
+        /// Dictionary of additional properties of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Parent))]
-        public Package? Parent { get; set; }
-
-        /// <summary>
-        /// Packages contained in this one
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Children))]
-        public List<Package>? Children { get; set; }
+        List<PackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Category))]
-        public Category Category { 
-            get => _Category;
-            set {
-                _Category = value;
-                DestinationProcesses = value.ConsumingProcesses;
-
-                Properties = value.Properties?
-                .DistinctBy(prop => prop.Name)
-                .Select(prop => new PackageProperty { Name = prop.Name ?? string.Empty, Value = prop.DefaultValue })
-                .ToList();
-            } 
-        }
-
-        /// <summary>
-        /// List of processes definitions that may accept this package as input
-        /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
-        public List<ProcessDefinition> DestinationProcesses { get; set; } = new();
+        ICategory Category { get; set; }
 
         /// <summary>
         /// Calculated from the ratio between net to brut mass
         /// </summary>
-        public decimal Concentration => (BrutMass > 0) ? NetMass / BrutMass : 0;
+        decimal Concentration { get; }
 
         /// <summary>
-        /// Instanciation of a new package
+        /// List of processes definitions that may accept this package as input
         /// </summary>
-        /// <param name="id">only use if you want the package to have a specific id</param>
-        public Package(string? id = null) => Id = id ?? GetNextId();
+        List<IProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>
-        /// Transfrom package object to a PackageRequest object
+        /// Parent package containing this one.
         /// </summary>
-        /// <returns></returns>
-        public PackageRequest Request()
-        {
-            return new()
-            {
-                Id = Id,
-                BrutMass = BrutMass,
-                NetMass = NetMass,
-                Properties = Properties,
-                ParentId = Parent?.Id,
-                ChildrenIds = Children?.Select(x => x.Id).ToList(),
-                SystemId = System.Id,
-                VesselId = Vessel?.Id,
-                CategoryId = Category.Id
-            };
-        }
+        IPackage? Parent { get; set; }
+
+        /// <summary>
+        /// Packages contained in this one
+        /// </summary>
+        List<IPackage>? Children { get; set; }
+
+        /// <summary>
+        /// Location which contains the package
+        /// </summary>
+        IStorageSystem System { get; set; }
+
+        /// <summary>
+        /// Vessel which contains the package
+        /// </summary>
+        IVessel? Vessel { get; set; }
 
         public Dictionary<string, object?> ToDictionary()
         {
@@ -138,92 +81,109 @@ namespace CipherData.Models
             };
         }
 
-        // STATIC METHODS
-
         /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
-
-        /// <summary>
-        /// Get the id of a new package
+        /// Transfrom package object to a PackageRequest object
         /// </summary>
         /// <returns></returns>
-        public static string GetNextId() => $"{DateTime.Now.Year}{new Random().Next(0, 3)}{new Random().Next(0, 999):D3}{++IdCounter:D3}";
-
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        /// <param name="id">only use if you want the object to have a specific id</param>
-        public static Package Random(string? id = null)
-        {
-            Random random = new();
-
-            decimal curr_brutmass = Convert.ToDecimal(random.Next(1, 10)) / 10M;
-            List<string> PackageDescriptions = new() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" };
-            Category cat = Category.Random();
-
-            List<Package> random_packs = new() { new("PP1"), new("PP2"), new("PP3")};
-            Package Parent = RandomFuncs.RandomItem(random_packs);
-
-            Package result = new(id: id)
-            {
-                Description = RandomFuncs.RandomItem(PackageDescriptions),
-                CreatedAt = RandomFuncs.RandomDateTime(),
-                BrutMass = curr_brutmass,
-                NetMass = curr_brutmass * (Convert.ToDecimal(random.Next(0, 10)) / 10M),
-                Parent = Parent,
-                Children = new() { new("PC1"), new("PC2"), new("PC3") },
-                System = StorageSystem.Random(),
-                Vessel = Vessel.Random(),
-                Category = cat
-            };
-            return result;
-        }
+        public PackageRequest Request();
 
         // API-RELATED FUNCTIONS
 
         /// <summary>
-        /// All events relevant for package.
+        /// All processes relevant for package.
         /// </summary>
-        public Tuple<List<Event>, ErrorResponse> Events()
-        {
-            return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(RandomData.RandomEvent.FinalStatePackages)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any }
-                },
-                Operator = Operator.Any
-            });
-        }
+        public Tuple<List<Process>, ErrorResponse> Processes();
 
         /// <summary>
         /// All events relevant for package.
         /// </summary>
-        public Tuple<List<Process>, ErrorResponse> Processes()
+        public Tuple<List<Event>, ErrorResponse> Events();
+    }
+
+    [HebrewTranslation(nameof(Package))]
+    public class Package : Resource, IPackage
+    {
+        private string? _Description;
+        private ICategory _Category = new Category();
+
+        [HebrewTranslation(typeof(Package), nameof(Description))]
+        public string? Description
         {
-            return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(Process).Name}.{nameof(RandomData.RandomProcess.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Id)}",
-                    AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any}
-                }
-            });
+            get => _Description;
+            set => _Description = value?.Trim();
         }
 
-        /// <summary>
-        /// Get details about a single package given package ID
-        /// </summary>
-        /// <param name="id">package ID</param>
-        public static Tuple<Package, ErrorResponse> Get(string id)
+        [HebrewTranslation(typeof(Package), nameof(Properties))]
+        public List<PackageProperty>? Properties { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(Vessel))]
+        public IVessel? Vessel { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(System))]
+        public IStorageSystem System { get; set; } = new StorageSystem();
+
+        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
+        public decimal BrutMass { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(NetMass))]
+        public decimal NetMass { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
+        public DateTime CreatedAt { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(Parent))]
+        public IPackage? Parent { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(Children))]
+        public List<IPackage>? Children { get; set; }
+
+        [HebrewTranslation(typeof(Package), nameof(Category))]
+        public ICategory Category
         {
-            return (string.IsNullOrEmpty(id)) ?  new(new Package(), ErrorResponse.BadRequest) : Config.PackagesRequests.GetPackage(id);
+            get => _Category;
+            set
+            {
+                _Category = value;
+                DestinationProcesses = value.ConsumingProcesses;
+
+                Properties = value.Properties?
+                .DistinctBy(prop => prop.Name)
+                .Select(prop => new PackageProperty { Name = prop.Name ?? string.Empty, Value = prop.DefaultValue })
+                .ToList();
+            }
         }
+
+        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
+        public List<IProcessDefinition> DestinationProcesses { get; set; } = new();
+
+        public decimal Concentration => (BrutMass > 0) ? NetMass / BrutMass : 0;
+
+        public PackageRequest Request()
+        {
+            return new()
+            {
+                Id = Id,
+                BrutMass = BrutMass,
+                NetMass = NetMass,
+                Properties = Properties,
+                ParentId = Parent?.Id,
+                ChildrenIds = Children?.Select(x => x.Id).ToList(),
+                SystemId = System.Id,
+                VesselId = Vessel?.Id,
+                CategoryId = Category.Id
+            };
+        }
+
+        // API-RELATED FUNCTIONS
+
+        public Tuple<List<Event>, ErrorResponse> Events() => Config.GetPackageEvents(this);
+
+        public Tuple<List<Process>, ErrorResponse> Processes() => Config.GetPackageProcesses(this);
 
         /// <summary>
         /// All packages
         /// </summary>
-        public static Tuple<List<Package>, ErrorResponse> All() => Config.PackagesRequests.GetPackages();
+        public static Tuple<List<IPackage>, ErrorResponse> All() => Config.PackagesRequests.GetPackages();
 
         /// <summary>
         /// Fetch all packages which contain the searched text
@@ -245,5 +205,11 @@ namespace CipherData.Models
                 Operator = Operator.Any
             });
         }
+
+        /// <summary>
+        /// Get details about a single package given package ID
+        /// </summary>
+        /// <param name="id">package ID</param>
+        public static Tuple<IPackage, ErrorResponse> Get(string id) => Config.GetPackage(id);
     }
 }

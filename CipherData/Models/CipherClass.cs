@@ -48,7 +48,8 @@ namespace CipherData.Models
                 WriteIndented = true, // Pretty print
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
                 Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(), 
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)},
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase), new JsonICategoryConverter(), new JsonICategoryPropertyConverter(),
+                new JsonIGroupedBooleanConditionConverter()},
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
 
@@ -65,7 +66,8 @@ namespace CipherData.Models
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
                 Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(),
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) , new JsonICategoryConverter(), new JsonICategoryPropertyConverter(),
+                new JsonIGroupedBooleanConditionConverter()},
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
 

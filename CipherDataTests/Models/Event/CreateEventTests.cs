@@ -1,4 +1,5 @@
-﻿using CipherData.Randomizer;
+﻿using CipherData.Models.Randomizers;
+using CipherData.Randomizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
@@ -10,7 +11,7 @@ namespace CipherData.Models.Tests
         {
             Worker = "א",
             Timestamp = DateTime.Now,
-            Actions = new() { PackageRequest.Random() },
+            Actions = new() { new RandomPackage().Request() },
             ProcessId = "b",
             Comments = "c",
             EventType = 1
@@ -24,7 +25,7 @@ namespace CipherData.Models.Tests
             {
                 Worker = "a",
                 Timestamp = DateTime.Now,
-                Actions = new() { PackageRequest.Random() },
+                Actions = new() { new RandomPackage().Request() },
                 ProcessId = "b",
                 Comments = "c",
                 EventType = 1
@@ -35,7 +36,7 @@ namespace CipherData.Models.Tests
             Assert.IsNotNull(ev.Comments);
 
             // 2 - more than one action
-            ev.Actions = RandomFuncs.FillRandomObjects(3, PackageRequest.Random);
+            ev.Actions = RandomData.GetRandomPackages(3).Select(x=>x.Request()).ToList();
 
             Assert.IsNotNull(ev.Worker);
             Assert.IsNotNull(ev.ProcessId);
@@ -144,7 +145,7 @@ namespace CipherData.Models.Tests
             ev.Actions = new() { new PackageRequest()}; // bad request
             Assert.IsFalse(ev.CheckActions().Succeeded);
 
-            PackageRequest p = PackageRequest.Random();
+            PackageRequest p = new RandomPackage().Request();
             ev.Actions = new() { p, p }; // bad request
             Assert.IsFalse(ev.CheckActions().Succeeded);
         }

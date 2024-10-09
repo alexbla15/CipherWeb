@@ -14,11 +14,11 @@ namespace CipherData
 
         public async Task<Report> GetReport(int id)
         {
-            string sql = "SELECT * FROM UpdatedReports WHERE Id=@Id";
+            string sql = "EXEC GetReport @Id=@SetId";
 
             // Assuming _db.LoadData returns the result as a List<int>, 
             // and you want to return the first (and only) element.
-            var results = await _db.LoadData<dynamic, dynamic>(sql, new {Id = id });
+            var results = await _db.LoadData<dynamic, dynamic>(sql, new { SetId = id });
 
             if (results != null && results.Any())
             {
@@ -46,7 +46,7 @@ namespace CipherData
         {
             List<Report> reports = new();
 
-            string sql = "SELECT * FROM UpdatedReports";
+            string sql = "EXEC GetAllUpdatedReports";
 
             // Assuming _db.LoadData returns the result as a List<int>, 
             // and you want to return the first (and only) element.
@@ -75,7 +75,7 @@ namespace CipherData
 
         public Task<int> GetLastReportId()
         {
-            string sql = "SELECT COALESCE(MAX(Id), 0) FROM Reports";
+            string sql = "EXEC GetLastReportId";
 
             // Assuming _db.LoadData returns the result as a List<int>, 
             // and you want to return the first (and only) element.

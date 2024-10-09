@@ -26,7 +26,7 @@
     /// All chosen category-properties
     /// </summary>
     [Parameter]
-    public List<ProcessStepDefinition> ChosenSteps { get; set; } = new();
+    public List<IProcessStepDefinition> ChosenSteps { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -34,10 +34,10 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
-    private RadzenDataGrid<ProcessStepDefinition> StepsDataGrid = new();
+    private RadzenDataGrid<IProcessStepDefinition> StepsDataGrid = new();
     private CipherBooleanConditions StepCondition = new();
 
-    private GroupedBooleanCondition SelectedCondition = new();
+    private IGroupedBooleanCondition SelectedCondition = new GroupedBooleanCondition();
 
     private string? SelectedStep;
 
@@ -52,7 +52,7 @@
     async Task AddStep()
     {
         // Add the new restriction to the existing list
-        ChosenSteps.Add(new());
+        ChosenSteps.Add(new ProcessStepDefinition());
         StateHasChanged();
         await StepsDataGrid.RefreshDataAsync();
     }
@@ -61,7 +61,7 @@
     /// Deletes a step from memory & view.
     /// </summary>
     /// <param name="step">Step to delete</param>
-    async Task DeleteStep(ProcessStepDefinition step)
+    async Task DeleteStep(IProcessStepDefinition step)
     {
         ChosenSteps.Remove(step);
         await StepsDataGrid.RefreshDataAsync();
@@ -91,7 +91,7 @@
     {
         StepCondition.Save();
         var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
-        SelectedCondition = ChosenStep?.Condition ?? new();
+        SelectedCondition = ChosenStep?.Condition ?? new GroupedBooleanCondition();
         //await StepCondition.FillDataFilter();
     }
 }
@@ -107,19 +107,19 @@
             {
                 <CipherText Text="@HelpText" />
             }
-            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" TItem="ProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
+            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
                 <Columns>
-                    <RadzenDataGridColumn Width="10%" TItem="ProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(ProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(ProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(new ProcessStepDefinition().Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" />
                         </Template>

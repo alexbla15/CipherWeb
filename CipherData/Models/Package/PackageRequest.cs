@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace CipherData.Models
+﻿namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -114,25 +112,21 @@ namespace CipherData.Models
             return result.Check();
         }
 
-        public Package Create(string? id = null)
+        public IPackage Create(string? id = null)
         {
-            return new Package(id ?? Id)
+            return new Package()
             {
-                System = StorageSystem.Random(SystemId),
+                Id = id ?? Id,
+                System = new StorageSystem() { Id = SystemId },
                 BrutMass = BrutMass,
                 NetMass = NetMass,
                 CreatedAt = DateTime.Now,
-                Category = Category.Random(CategoryId),
-                Vessel = VesselId == null ? null : Vessel.Random(VesselId),
-                Parent = Package.Random(ParentId),
-                Children = ChildrenIds?.Select(x => Package.Random(x)).ToList(),
+                Category = new Category() { Id = CategoryId },
+                Vessel = VesselId == null ? null : new Vessel() { Id = VesselId },
+                Parent = new Package() { Id = ParentId ?? string.Empty },
+                Children = ChildrenIds?.Select(x => new Package() { Id = x } as IPackage).ToList(),
                 Properties = Properties
             };
         }
-
-        /// <summary>
-        /// Get a random new object.
-        /// </summary>
-        public static PackageRequest Random(string? id = null) => Package.Random(id).Request();
     }
 }
