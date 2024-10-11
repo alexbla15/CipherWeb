@@ -21,7 +21,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink NavLink { get; set; } = new();
+    public CipherNavLink NavLink { get; set; } = new();
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -56,11 +56,11 @@
     private CipherSubmit submission = new();
     private ResourceForm ResourcePage = new();
 
-    private UnitRequest unitRequest = new();
+    private IUnitRequest unitRequest = new UnitRequest();
     private ICategoryRequest catRequest = new CategoryRequest();
-    private VesselRequest vesRequest = new();
-    private ProcessDefinitionRequest procDefRequest = new();
-    private SystemRequest sysRequest = new();
+    private IVesselRequest vesRequest = new VesselRequest();
+    private IProcessDefinitionRequest procDefRequest = new ProcessDefinitionRequest();
+    private ISystemRequest sysRequest = new SystemRequest();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();

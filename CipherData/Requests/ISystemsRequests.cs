@@ -10,7 +10,7 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="sys"></param>
         /// <returns></returns>
-        Tuple<IStorageSystem, ErrorResponse> CreateSystem(SystemRequest sys);
+        Tuple<IStorageSystem, ErrorResponse> CreateSystem(ISystemRequest sys);
 
         /// <summary>
         /// Get all available objects
@@ -28,7 +28,7 @@ namespace CipherData.RequestsInterface
         /// Update system's details
         /// Path: PUT /systems/{id}
         /// </summary>
-        Tuple<IStorageSystem, ErrorResponse> UpdateSystem(string sys_id, SystemRequest sys);
+        Tuple<IStorageSystem, ErrorResponse> UpdateSystem(string sys_id, ISystemRequest sys);
 
         /// <summary>
         /// Get conditions of a system. 

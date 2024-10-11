@@ -14,7 +14,7 @@ namespace CipherData.RequestsInterface
         /// Create a new process
         /// Path: POST /processDefinitions
         /// </summary>
-        Tuple<IProcessDefinition, ErrorResponse> CreateProcessDefinition(ProcessDefinitionRequest proc);
+        Tuple<IProcessDefinition, ErrorResponse> CreateProcessDefinition(IProcessDefinitionRequest proc);
 
         /// <summary>
         /// Get details about a process definition.
@@ -26,6 +26,6 @@ namespace CipherData.RequestsInterface
         /// Update Unit's details
         /// Path: PUT /processDefinitions/{id}
         /// </summary>
-        Tuple<IProcessDefinition, ErrorResponse> UpdateProcessDefinition(string id, ProcessDefinitionRequest proc);
+        Tuple<IProcessDefinition, ErrorResponse> UpdateProcessDefinition(string id, IProcessDefinitionRequest proc);
     }
 }

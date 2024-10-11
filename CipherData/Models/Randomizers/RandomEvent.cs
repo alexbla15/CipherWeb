@@ -7,8 +7,10 @@
     [HebrewTranslation(nameof(Event))]
     public class RandomEvent : Resource, IEvent
     {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public new string? Id { get; set; } = GetNextId();
+        private string? _Worker;
+        private string? _Comments = null;
+        private List<IPackage> _InitialStatePackages = new();
+        private List<IPackage> _FinalStatePackages = new();
 
         [HebrewTranslation(typeof(Event), nameof(EventType))]
         public int EventType { get; set; }
@@ -17,23 +19,38 @@
         public int Status { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(Worker))]
-        public string? Worker { get; set; }
+        public string? Worker
+        {
+            get => _Worker;
+            set => _Worker = value?.Trim();
+        }
 
         [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         public string? ProcessId { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(Comments))]
-        public string? Comments { get; set; }
+        public string? Comments
+        {
+            get => _Comments;
+            set => _Comments = value?.Trim();
+        }
 
         [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         public DateTime Timestamp { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(InitialStatePackages))]
-        public List<IPackage>? InitialStatePackages { get; set; }
+        public List<IPackage> InitialStatePackages
+        {
+            get => _InitialStatePackages;
+            set => _InitialStatePackages = value.OrderBy(x => x.Id).ToList();
+        }
 
         [HebrewTranslation(typeof(Event), nameof(FinalStatePackages))]
-        public List<IPackage>? FinalStatePackages { get; set; }
-
+        public List<IPackage> FinalStatePackages
+        {
+            get => _FinalStatePackages;
+            set => _FinalStatePackages = value.OrderBy(x => x.Id).ToList();
+        }
         // STATIC METHODS
 
         /// <summary>
@@ -46,7 +63,5 @@
         /// </summary>
         /// <returns></returns>
         public static string GetNextId() => $"E{++IdCounter:D3}";
-
-        public Tuple<IEvent, ErrorResponse> Update(UpdateEvent update_details) => new Tuple<IEvent, ErrorResponse>(new Event(), ErrorResponse.Success);
     }
 }

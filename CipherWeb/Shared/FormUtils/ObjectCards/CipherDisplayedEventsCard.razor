@@ -2,7 +2,7 @@
 
 @code {
 
-    private List<DisplayedEvent> DisplayedEvents = new();
+    private List<IDisplayedEvent> DisplayedEvents = new();
 
     private List<IEvent> _Events = new();
 
@@ -44,32 +44,32 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
-    private RadzenDataGrid<DisplayedEvent> CustomDataGrid = new();
+    private RadzenDataGrid<IDisplayedEvent> CustomDataGrid = new();
 
-    public void OnRender(DataGridRenderEventArgs<DisplayedEvent> args)
+    public void OnRender(DataGridRenderEventArgs<IDisplayedEvent> args)
     {
         if (args.FirstRender)
         {
             args.Grid.Groups.Add(new GroupDescriptor()
                 {
-                    Title = DisplayedEvent.Translate(nameof(DisplayedEvent.Id)),
-                    Property = nameof(DisplayedEvent.Id),
+                    Title = DisplayedEvent.Translate(nameof(IDisplayedEvent.Id)),
+                    Property = nameof(IDisplayedEvent.Id),
                     SortOrder = SortOrder.Descending
                 });
             StateHasChanged();
         }
     }
 
-    public void ForSingleEvent(Func<UpdateEvent> singleFunc, IEvent ev)
+    public void ForSingleEvent(Func<IUpdateEvent> singleFunc, IEvent ev)
     {
-        UpdateEvent setUpdate = singleFunc();
+        IUpdateEvent setUpdate = singleFunc();
         (Result, Error) = ev.Update(setUpdate);
         JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
     }
 
-    public void ApproveEvent(IEvent ev) => ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
+    public void ApproveEvent(IEvent ev) => ForSingleEvent(IUpdateEvent.ApprovedEvent, ev);
 
-    public void DeclineEvent(IEvent ev) => ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
+    public void DeclineEvent(IEvent ev) => ForSingleEvent(IUpdateEvent.DeclinedEvent, ev);
 
     public void ForAllEvents(Action<Event> singleFunc)
     {
@@ -112,7 +112,7 @@
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenDataGrid TItem="DisplayedEvent"  @ref=CustomDataGrid
+            <RadzenDataGrid TItem="IDisplayedEvent"  @ref=CustomDataGrid
                             FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
                             AllowSorting="true" HideGroupedColumn="true"
                             AllGroupsExpanded="true" Render="@OnRender"

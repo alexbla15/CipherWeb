@@ -6,7 +6,7 @@ namespace CipherData.Randomizer
 {
     public class RandomQueryRequests : IQueryRequests
     {
-        public Tuple<List<T>, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource
+        public Tuple<List<T>, ErrorResponse> QueryObjects<T>(IObjectFactory obj, bool canFail = false) where T : Resource
         {
             // Get the type of T
             Type type = typeof(T);

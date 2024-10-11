@@ -5,20 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace CipherData.Models
 {
-    public interface ICipherClass
-    {
-        /// <summary>
-        /// Transfrom this object to JSON, readable by API
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson();
-
-        /// <summary>
-        /// Check if this object and another object of the same type are exactly the same.
-        /// </summary>
-        public bool Equals<T>(T? otherObject) where T : CipherClass;
-    }
-
     public abstract class CipherClass : ICipherClass
     {
         public string ToJson()
@@ -70,8 +56,10 @@ namespace CipherData.Models
         /// <summary>
         /// Translate the name of the field according to its hebrew translation. Muse give a specific type.
         /// </summary>
-        public static string Translate(Type type, string searchedAttribute)
+        public static string Translate(Type? type, string searchedAttribute)
         {
+            if (type is null) return searchedAttribute;
+
             // Get the PropertyInfo for the property name
             PropertyInfo ? property = type?.GetProperty(searchedAttribute);
             if (property == null) return searchedAttribute;

@@ -44,7 +44,7 @@ namespace CipherData
 
         public static CheckField CheckString(string? value, string field_name, string AllowedRegex = "^[a-zA-Z0-9א-ת., \n?]+$")
         {
-            if (value is null) return new();
+            if (string.IsNullOrEmpty(value)) return new();
 
             CheckField result = ProperChars(value, field_name, AllowedRegex);
             return (result.Succeeded)? ProperWords(value, field_name) : result;

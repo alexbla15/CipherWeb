@@ -30,23 +30,16 @@ namespace CipherData.Models
         }
     }
 
-    public class MyNavLink
+    public class CipherNavLink
     {
         public string? Name { get; set; }
         public string? Href { get; set; }
         public string? Icon { get; set; }
-        public List<MySubNavLink> SubLinks { get; set; } = new();
-    }
-
-    public class MySubNavLink
-    {
-        public string? Name { get; set; }
-        public string? Href { get; set; }
-        public string? Icon { get; set; }
+        public List<CipherNavLink>? SubLinks { get; set; } = new();
     }
 
     [HebrewTranslation(nameof(CipherField))]
-    public class CipherField : CipherClass
+    public class CipherField : CipherClass, ICipherClass
     {
         [HebrewTranslation(typeof(CipherField), nameof(Path))]
         public string Path { get; set; } = string.Empty;
@@ -76,6 +69,7 @@ namespace CipherData.Models
             }
             return result;
         }
+
         public CheckField CheckTranslation()
         {
             CheckField result = CheckField.Required(Translation, Translate(nameof(Translation)), AllowedRegex: @"^[a-zA-Z0-9א-ת.\[\] \n?]+$");
@@ -107,6 +101,6 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

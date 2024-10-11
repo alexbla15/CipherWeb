@@ -16,7 +16,7 @@ namespace CipherData.Randomizer
             return new RandomGenericRequests().Request(res, canBadRequest: false, canBeNotFound: true);
         }
 
-        public Tuple<IPackage, ErrorResponse> UpdatePackage(string pack_id, UpdatePackage pack)
+        public Tuple<IPackage, ErrorResponse> UpdatePackage(string pack_id, IUpdatePackage pack)
             => new RandomGenericRequests().Request(RandomData.Package, canBadRequest: false, canBeNotFound: true);
     }
 }

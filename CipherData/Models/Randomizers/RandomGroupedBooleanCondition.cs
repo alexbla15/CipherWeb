@@ -7,7 +7,7 @@
     public class RandomGroupedBooleanCondition : Condition, IGroupedBooleanCondition
     {
         [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
-        public IEnumerable<Condition> Conditions { get; set; } = new List<Condition>();
+        public IEnumerable<ICondition> Conditions { get; set; } = new List<Condition>();
 
         [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.All;
@@ -21,11 +21,11 @@
                     Tuple<bool, string> result = Tuple.Create(true, string.Empty);
                     if (cond is BooleanCondition)
                     {
-                        result = (cond as BooleanCondition).Check();
+                        result = (cond as IBooleanCondition).Check();
                     }
                     else if (cond is GroupedBooleanCondition)
                     {
-                        result = (cond as GroupedBooleanCondition).Check();
+                        result = (cond as IGroupedBooleanCondition).Check();
                     }
                     return new CheckField(result.Item1, result.Item2);
                 }

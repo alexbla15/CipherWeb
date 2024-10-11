@@ -30,7 +30,7 @@
 
         @if (NewProps != null)
         {
-            @foreach (PackageProperty prop in NewProps)
+            @foreach (IPackageProperty prop in NewProps)
             {
                 <CipherAutoComplete Label="@prop.Name" @bind-Value="@prop.Value" Icon="@(Icons.Cipher.Properties)" Disabled="@(ChosenPackage == null)" />
             }
@@ -124,10 +124,10 @@
     private IPackage OriginalPack = new Package() { Id = "" };
     private IPackage NewPack = new Package() { Id = "" };
 
-    private CipherData.Models.UpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
-    private CreateEvent UpdatePackEvent = new();
+    private IUpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
+    private ICreateEvent UpdatePackEvent = new CreateEvent();
 
-    private List<PackageProperty>? NewProps = new();
+    private List<IPackageProperty>? NewProps = new();
 
     private bool FirstInitialization = true;
 
@@ -156,7 +156,7 @@
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
         {
-            (OriginalPackage.ChosenPackage, Error) = Package.Get(idValue.ToString());
+            (OriginalPackage.ChosenPackage, Error) = IPackage.Get(idValue.ToString());
             Change();
         }
         FirstInitialization = false;
@@ -200,7 +200,7 @@
         (Valid, ErrorMessage) = (true, string.Empty);
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
-        UpdatePackEvent = new();
+        UpdatePackEvent = new CreateEvent();
         NewPack = new Package() { Id = "" };
     }
 
@@ -388,8 +388,8 @@
         }
         else
         {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
+            submission.SetValid(Valid);
+            submission.SetErrorMessage(ErrorMessage);
         }
     }
 
@@ -415,8 +415,8 @@
         }
         else
         {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
+            submission.SetValid(Valid);
+            submission.SetErrorMessage(ErrorMessage);
         }
     }
 
@@ -428,8 +428,8 @@
         }
         else
         {
-            submission.Valid = Valid;
-            submission.ErrorMessage = ErrorMessage;
+            submission.SetValid(Valid);
+            submission.SetErrorMessage(ErrorMessage);
         }
     }
 }

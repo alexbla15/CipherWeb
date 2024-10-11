@@ -26,7 +26,7 @@
     /// All chosen category-properties
     /// </summary>
     [Parameter]
-    public List<PackageProperty> ChosenProperties { get; set; } = new();
+    public List<IPackageProperty> ChosenProperties { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -34,7 +34,7 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private RadzenDataGrid<PackageProperty> CustomDataGrid = new();
+    private RadzenDataGrid<IPackageProperty> CustomDataGrid = new();
 
     protected override void OnInitialized() => Title ??= "תכונות התעודה";
 
@@ -52,7 +52,7 @@
     /// Deletes a category-property from memory & view.
     /// </summary>
     /// <param name="prop">Property to delete</param>
-    async Task DeleteRow(PackageProperty prop)
+    async Task DeleteRow(IPackageProperty prop)
     {
         ChosenProperties.Remove(prop);
         await CustomDataGrid.RefreshDataAsync();
@@ -80,19 +80,19 @@
         {
             <CipherText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="PackageProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="IPackageProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="PackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn Width="10%" TItem="IPackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(PackageProperty.Name)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(PackageProperty.Translate(nameof(IPackageProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PackageProperty" Title="@(PackageProperty.Translate(nameof(PackageProperty.Value)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(PackageProperty.Translate(nameof(IPackageProperty.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" />
                     </Template>

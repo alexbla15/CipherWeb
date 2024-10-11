@@ -11,19 +11,20 @@ namespace CipherData.Models.Randomizers
         public new string? Id { get; set; } = GetNextId();
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string Name { get; set; } = RandomFuncs.RandomItem(SystemsDescriptions);
+        public string? Name { get; set; } = RandomFuncs.RandomItem(SystemsDescriptions);
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string Description { get; set; } = RandomFuncs.RandomItem(SystemsDescriptions);
+        public string? Description { get; set; } = RandomFuncs.RandomItem(SystemsDescriptions);
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
         public Dictionary<string, string>? Properties { get; set; }
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
-        public IStorageSystem? Parent { get; set; } = new Random().Next(0, 5) == 0 ? new StorageSystem() { Name = GetNextId() } : null;
+        public IStorageSystem? Parent { get; set; } = 
+            new Random().Next(0, 5) == 0 ? new StorageSystem() { Name = GetNextId() } : null;
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
-        public List<StorageSystem>? Children { get; set; }
+        public List<IStorageSystem>? Children { get; set; }
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
         public IUnit Unit { get; set; } = new RandomUnit();

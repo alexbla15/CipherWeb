@@ -14,7 +14,7 @@ namespace CipherData.RequestsInterface
         /// Create a new vessel.
         /// Path: POST /vessels
         /// </summary>
-        Tuple<IVessel, ErrorResponse> CreateVessel(VesselRequest vessel);
+        Tuple<IVessel, ErrorResponse> CreateVessel(IVesselRequest vessel);
 
         /// <summary>
         /// Get details about a single vessel.
@@ -26,6 +26,6 @@ namespace CipherData.RequestsInterface
         /// Update vessel's details
         /// Path: PUT /vessels/{id}
         /// </summary>
-        Tuple<IVessel, ErrorResponse> UpdateVessel(string vessel_id, VesselRequest vessel);
+        Tuple<IVessel, ErrorResponse> UpdateVessel(string vessel_id, IVesselRequest vessel);
     }
 }

@@ -19,6 +19,6 @@ namespace CipherData.RequestsInterface
         /// Update comments or caterogy of package
         /// Path: PUT /packages/{id}
         /// </summary>
-        Tuple<IPackage, ErrorResponse> UpdatePackage(string pack_id, UpdatePackage pack);
+        Tuple<IPackage, ErrorResponse> UpdatePackage(string pack_id, IUpdatePackage pack);
     }
 }

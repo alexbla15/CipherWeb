@@ -72,7 +72,7 @@
     private CipherInputComponents InputPacks = new();
 
     private IPackage NewPackage = new Package();
-    private List<PackageProperty> ChosenProperties = new();
+    private List<IPackageProperty> ChosenProperties = new();
 
     protected override void OnInitialized() => (AllVessels, Error) = CachedData.AllVessels;
 
@@ -83,7 +83,8 @@
         ChosenPackage.System = ChosenSystem ?? new StorageSystem() { Id = "" };
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
-        ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => new PackageProperty { Name = x.Name, Value = x.Value }).ToList();
+        ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => 
+            new PackageProperty { Name = x.Name, Value = x.Value } as IPackageProperty).ToList();
         ChosenPackage.Children = InnerPacks.SelectedPackages ?? new();
 
         return ChosenPackage;
@@ -93,7 +94,7 @@
     {
         ChosenCategory = packCategory.ChosenCategory;
         DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new();
-        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty { Name = x.Name, Value = x.DefaultValue }).ToList() ?? new List<PackageProperty>();
+        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty { Name = x.Name, Value = x.DefaultValue } as IPackageProperty).ToList() ?? new List<IPackageProperty>();
         StateHasChanged();
     }
 
@@ -117,7 +118,7 @@
 
         if (packLocation.ChosenSystem is null)
         {
-            (AllVessels, Error) = Vessel.All();
+            (AllVessels, Error) = IVessel.All();
         }
         else
         {
@@ -156,19 +157,19 @@
     /// <summary>
     /// Get all the package requests of packages that were changed in this event.
     /// </summary>
-    public List<PackageRequest> GetChangedPacks()
+    public List<IPackageRequest> GetChangedPacks()
     {
         SetNewPackage();
 
-        List<PackageRequest> ChangedPacks = new() { NewPackage.Request() };
+        List<IPackageRequest> ChangedPacks = new() { NewPackage.Request() };
 
         if (!AssemblyOfPackages)
         {
             foreach (IPackage inputPack in InputPacks.chosenPacks)
             {
-                IPackage PreviousStatus = Package.Get(inputPack.Id).Item1;
+                IPackage PreviousStatus = IPackage.Get(inputPack.Id).Item1;
 
-                PackageRequest packageRequest = PreviousStatus.Request();
+                IPackageRequest packageRequest = PreviousStatus.Request();
                 // removing the amount that was transfered from the original amount
                 packageRequest.BrutMass -= inputPack.BrutMass;
                 packageRequest.NetMass = packageRequest.BrutMass * PreviousStatus.Concentration;

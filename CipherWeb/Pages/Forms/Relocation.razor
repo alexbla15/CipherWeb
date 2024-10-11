@@ -4,8 +4,8 @@
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
@@ -19,7 +19,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink NavLink { get; set; } = CipherNavLinks.Relocation;
+    public CipherNavLink NavLink { get; set; } = CipherNavLinks.Relocation;
 
     /// <summary>
     /// Is form valid for submission.
@@ -57,7 +57,7 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private CreateRelocationEvent RequestedEvent = new();
+    private ICreateRelocationEvent RequestedEvent = new CreateRelocationEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -87,7 +87,7 @@
     {
         if (Valid)
         {
-            CreateEvent ev = RequestedEvent.Create();
+            ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
             (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
@@ -102,7 +102,7 @@
 
     private void UpdateSubmissionSummary()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 }

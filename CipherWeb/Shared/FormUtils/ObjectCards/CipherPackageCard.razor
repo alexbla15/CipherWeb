@@ -64,7 +64,7 @@
             </ChildContent>
         </CipherComponentCard>
 
-        <CipherPackageProperties @ref="PackProps" ChosenProperties="@((ChosenObject?.Category is null)? new List<PackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=>new PackageProperty() {Name= x.Name, Value = x.DefaultValue}).ToList())" />
+        <CipherPackageProperties @ref="PackProps" ChosenProperties="@((ChosenObject?.Category is null)? new List<IPackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=>new PackageProperty() {Name= x.Name, Value = x.DefaultValue} as IPackageProperty).ToList())" />
 
         <CipherProcessesTable WithCard="true" Title="תנועות" ChosenObjects="@PackProcesses" WithHeaderContent="false" />
     </ChildContent>
@@ -107,7 +107,7 @@
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
 
-    private List<Process> PackProcesses = new();
+    private List<IProcess> PackProcesses = new();
 
     private CipherPackageId SetPack = new();
     private CipherPackageId PackId = new();

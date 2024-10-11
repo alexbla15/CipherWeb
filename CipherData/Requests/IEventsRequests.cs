@@ -14,7 +14,7 @@ namespace CipherData.RequestsInterface
         /// Create a new event.
         /// Path: POST /events
         /// </summary>
-        Tuple<IEvent, ErrorResponse> CreateEvent(CreateEvent ev);
+        Tuple<IEvent, ErrorResponse> CreateEvent(ICreateEvent ev);
 
         /// <summary>
         /// Update event details.
@@ -32,12 +32,12 @@ namespace CipherData.RequestsInterface
         /// Get details about a single event.
         /// Path: GET /events/{id}
         /// </summary>
-        Tuple<IEvent, ErrorResponse> GetEvent(UpdateEvent ev);
+        Tuple<IEvent, ErrorResponse> GetEvent(IUpdateEvent ev);
 
         /// <summary>
         /// Update event details.
         /// Path: PUT /events/{id}
         /// </summary>
-        Tuple<IEvent, ErrorResponse> UpdateEvent(string event_id, UpdateEvent ev);
+        Tuple<IEvent, ErrorResponse> UpdateEvent(string? event_id, IUpdateEvent ev);
     }
 }

@@ -20,7 +20,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink NavLink { get; set; } = CipherNavLinks.TransferAmount;
+    public CipherNavLink NavLink { get; set; } = CipherNavLinks.TransferAmount;
 
     /// <summary>
     /// Is form valid for submission.
@@ -60,7 +60,7 @@
     private CipherComments EventComments = new();
     private CipherProcess EventProc = new();
 
-    private CreateTranserAmountEvent RequestedEvent = new();
+    private ICreateTranserAmountEvent RequestedEvent = new CreateTranserAmountEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -91,7 +91,7 @@
     {
         if (Valid)
         {
-            CreateEvent ev = RequestedEvent.Create();
+            ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
             (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)

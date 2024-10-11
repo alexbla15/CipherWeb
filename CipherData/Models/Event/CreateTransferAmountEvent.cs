@@ -3,18 +3,16 @@ using System.Text.Json;
 
 namespace CipherData.Models
 {
+
     /// <summary>
     /// An event of transfering mass between one package to another
     /// </summary>
     [HebrewTranslation(nameof(CreateTranserAmountEvent))]
-    public class CreateTranserAmountEvent : CipherClass
+    public class CreateTranserAmountEvent : CipherClass, ICreateTranserAmountEvent
     {
         private string? _Worker = null;
         private string? _Comments;
 
-        /// <summary>
-        /// Name of worker that fulfilled the form
-        /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         public string? Worker
         {
@@ -22,15 +20,9 @@ namespace CipherData.Models
             set => _Worker = value?.Trim();
         }
 
-        /// <summary>
-        /// Process ID of process containing to this even. If null, tries to estimate it from event details
-        /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
         public string? ProcessId { get; set; }
 
-        /// <summary>
-        /// Free-text comments on the event
-        /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         public string? Comments
         {
@@ -38,106 +30,20 @@ namespace CipherData.Models
             set => _Comments = value?.Trim();
         }
 
-        /// <summary>
-        /// Timestamp when the event happend. Required
-        /// </summary>
         [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
         public DateTime Timestamp { get; set; }
 
-        /// <summary>
-        /// Package that loses mass.
-        /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
         public IPackage? DonatingPackage { get; set; }
 
-        /// <summary>
-        /// Package that accepts mass.
-        /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
         public IPackage? AcceptingPackage { get; set; }
 
-        /// <summary>
-        /// Package that accepts mass.
-        /// </summary>
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
         public decimal Amount { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckDonatingPackage()
-        {
-            CheckField result = CheckField.Required(DonatingPackage, Translate(nameof(DonatingPackage)));
-            result = (result.Succeeded) ? CheckField.LowerEqual(Amount, DonatingPackage.BrutMass, Translate(nameof(Amount))) : result;
-            return result;
-        }
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckAcceptingPackage() => CheckField.Required(AcceptingPackage, Translate(nameof(AcceptingPackage)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckAmount() => CheckField.Greater(Amount, 0, Translate(nameof(Amount)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckDonatingDifferentFromAccepting()
-        {
-            return CheckField.NotEq(AcceptingPackage?.Id, DonatingPackage?.Id, Translate(nameof(AcceptingPackage)));
-        }
-
-        /// <summary>
-        /// Check if all required values are within the request, before sending it to the api.
-        /// Item1 is the validity answer, Item2 is the problematic attribute.
-        /// </summary>
-        /// <returns></returns>
-        public Tuple<bool, string> Check()
-        {
-            CheckClass result = new();
-            result.Fields.Add(CheckAmount());
-            result.Fields.Add(CheckDonatingPackage());
-            result.Fields.Add(CheckAcceptingPackage());
-            result.Fields.Add(CheckDonatingDifferentFromAccepting());
-            
-
-            Tuple<bool,string> SpecificEventCheck = result.Check();
-            return (SpecificEventCheck.Item1) ? Create().Check() : SpecificEventCheck;
-        }
-
-        /// <summary>
-        /// Create a general CreateEvent object, out of this object parameters.
-        /// </summary>
-        /// <returns></returns>
-        public CreateEvent Create()
-        {
-            if (AcceptingPackage != null && DonatingPackage != null)
-            {
-                DonatingPackage.BrutMass -= Amount;
-                DonatingPackage.NetMass = decimal.Round(DonatingPackage.BrutMass * DonatingPackage.Concentration, 2);
-
-                AcceptingPackage.BrutMass += Amount;
-                AcceptingPackage.NetMass = decimal.Round(AcceptingPackage.BrutMass * AcceptingPackage.Concentration, 2);
-
-                return new()
-                {
-                    Worker = Worker,
-                    Timestamp = Timestamp,
-                    EventType = 23,
-                    ProcessId = ProcessId,
-                    Comments = Comments,
-                    Actions = new() { AcceptingPackage.Request(), DonatingPackage.Request() }
-                };
-            }
-
-            return new();
-        }
-
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

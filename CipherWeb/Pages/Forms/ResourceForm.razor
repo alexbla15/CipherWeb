@@ -47,7 +47,7 @@
     /// <param name="Navigation"></param>
     /// <param name="CurrNavLink"></param>
     /// <param name="Id"></param>
-    public void ChangeUrl(NavigationManager Navigation, MySubNavLink CurrNavLink, string? Id = null)
+    public void ChangeUrl(NavigationManager Navigation, CipherNavLink CurrNavLink, string? Id = null)
     {
         string? newUrl = CurrNavLink.Href;
         if (Id != null) newUrl = $"{newUrl}?Id={Id}";

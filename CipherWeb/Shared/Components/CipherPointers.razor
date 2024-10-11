@@ -50,11 +50,11 @@
 }
 
 <CipherComponentCard Title=@Title Width="@CardWidth()">
-    @foreach (MyNavLink myNavLink in CipherNavLinks.links)
+    @foreach (CipherNavLink myNavLink in CipherNavLinks.links)
     {
         if (myNavLink.Name == NavLinkType)
         {
-            @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
+            @foreach (CipherNavLink mySubNavLink in myNavLink.SubLinks)
             {
                 @if (!mySubNavLink.Name.Contains(LabelInitialText))
                 {

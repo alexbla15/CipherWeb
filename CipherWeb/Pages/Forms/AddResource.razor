@@ -22,7 +22,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink? NavLink { get; set; }
+    public CipherNavLink? NavLink { get; set; }
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -55,13 +55,13 @@
     private CipherFormInfo FormInfo = new();
     private CipherProcess EventProc = new();
 
-    private Package NewPackage = new();
-    private UnitRequest unitRequest = new();
+    private IPackage NewPackage = new Package();
+    private IUnitRequest unitRequest = new UnitRequest();
     private ICategoryRequest catRequest = new CategoryRequest();
-    private VesselRequest vesRequest = new();
-    private ProcessDefinitionRequest procDefRequest = new();
-    private SystemRequest sysRequest = new();
-    private CreateEvent packRequest = new();
+    private IVesselRequest vesRequest = new VesselRequest();
+    private IProcessDefinitionRequest procDefRequest = new ProcessDefinitionRequest();
+    private ISystemRequest sysRequest = new SystemRequest();
+    private ICreateEvent packRequest = new CreateEvent();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -107,8 +107,8 @@
         }
         else if (typeof(Cipher_TItem) == typeof(IPackage))
         {
-            List<PackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
-            packRequest = new()
+            List<IPackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
+            packRequest = new CreateEvent()
             {
                 Worker = FormInfo.GetWorker(),
                 ProcessId = EventProc.ChosenProcess?.Id,

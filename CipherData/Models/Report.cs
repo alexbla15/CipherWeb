@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace CipherData.Models
 {
     [HebrewTranslation(nameof(ReportParameter))]
-    public class ReportParameter : CipherClass
+    public class ReportParameter : CipherClass, ICipherClass
     {
         [HebrewTranslation(typeof(ReportParameter), nameof(Id))]
         public int Id { get; set; }
@@ -63,11 +63,11 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     [HebrewTranslation(nameof(Report))]
-    public class Report : CipherClass
+    public class Report : CipherClass, ICipherClass
     {
         /// <summary>
         /// Report version.
@@ -106,7 +106,7 @@ namespace CipherData.Models
         public List<ReportParameter> Parameters { get; set; } = new();
 
         [HebrewTranslation(typeof(Report), nameof(ObjectFactory))]
-        public ObjectFactory ObjectFactory { get; set; } = new();
+        public IObjectFactory ObjectFactory { get; set; } = new ObjectFactory();
 
         [JsonIgnore]
         public Type ObjectType { get; set; } = typeof(Package);
@@ -174,7 +174,12 @@ namespace CipherData.Models
             if (Creator != otherReport.Creator) return true;
 
             if (!Parameters.SequenceEqual(otherReport.Parameters)) return true;
-            if (!ObjectFactory.Equals(otherReport.ObjectFactory)) return true;
+
+            if (otherReport.ObjectFactory is ObjectFactory obj)
+            {
+                if (!ObjectFactory.Equals(obj)) return true;
+            }
+
             return false;
         }
 
@@ -192,7 +197,7 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
 
         public static async Task<Report> Get(ICipherInfo db, int Id) => await db.GetReport(Id);
 

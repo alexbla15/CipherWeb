@@ -9,6 +9,6 @@ namespace CipherData.RequestsInterface
         /// Can Be Any array of resources. 
         /// Path: POST /query
         /// </summary>
-        Tuple<List<T>, ErrorResponse> QueryObjects<T>(ObjectFactory obj, bool canFail = false) where T : Resource;
+        Tuple<List<T>, ErrorResponse> QueryObjects<T>(IObjectFactory obj, bool canFail = false) where T : Resource;
     }
 }

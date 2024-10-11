@@ -9,7 +9,7 @@ namespace CipherData.Models.Randomizers
         public string? Description { get; set; } = RandomFuncs.RandomItem(new List<string>() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" });
 
         [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public List<PackageProperty>? Properties { get; set; }
+        public List<IPackageProperty>? Properties { get; set; }
 
         [HebrewTranslation(typeof(Package), nameof(Vessel))]
         public IVessel? Vessel { get; set; } = new RandomVessel();
@@ -40,12 +40,9 @@ namespace CipherData.Models.Randomizers
 
 
         [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public new string Id { get; set; } = GetNextId();
+        public new string? Id { get; set; } = GetNextId();
 
         public decimal Concentration => BrutMass > 0 ? NetMass / BrutMass : 0;
-
-        public PackageRequest Request() => new();
-
 
         // STATIC METHODS
 
@@ -68,39 +65,6 @@ namespace CipherData.Models.Randomizers
             decimal BrutMass = Convert.ToDecimal(random.Next(1, 10)) / 10M;
             decimal NetMass = BrutMass * (Convert.ToDecimal(random.Next(0, 10)) / 10M);
             return Tuple.Create(BrutMass, NetMass);
-        }
-
-        // API-RELATED FUNCTIONS
-        public Tuple<List<Event>, ErrorResponse> Events()
-        {
-            return GetObjects<Event>(Id, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(RandomData.Event.FinalStatePackages)}.{nameof(Id)}", AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any }
-                },
-                Operator = Operator.Any
-            });
-        }
-
-        public Tuple<List<Process>, ErrorResponse> Processes()
-        {
-            return GetObjects<Process>(Id, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(Process).Name}.{nameof(RandomData.Process.Events)}.{nameof(Event.FinalStatePackages)}.{nameof(Id)}",
-                    AttributeRelation = AttributeRelation.Eq, Value = searchText, Operator = Operator.Any}
-                }
-            });
-        }
-
-
-        /// <summary>
-        /// Get details about a single package given package ID
-        /// </summary>
-        /// <param name="id">package ID</param>
-        public static Tuple<IPackage, ErrorResponse> Get(string? id)
-        {
-            return (string.IsNullOrEmpty(id)) ? new(new Package(), ErrorResponse.BadRequest) : Config.PackagesRequests.GetPackage(id);
         }
     }
 }

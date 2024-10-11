@@ -2,7 +2,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center"
              Style="@($"padding-bottom:{PaddingBottom}; padding-top:{PaddingTop}; padding-right:{PaddingRight}; padding-left:{PaddingLeft}")">
-    @foreach (MySubNavLink item in items)
+    @foreach (CipherNavLink item in items)
     {
         <CipherNavButton Icon="@item.Icon" Text="@item.Name" Width="@ButtonWidth()" Path="@item.Href" ColorShade="@ColorShade" ColorStyle="@ColorStyle" />
     }
@@ -49,7 +49,7 @@
     /// Buttons' content.
     /// </summary>
     [Parameter]
-    public List<MySubNavLink> items { get; set; } = new()
+    public List<CipherNavLink> items { get; set; } = new()
     {
         new() { Name="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href },
         new() { Name="חיפוש", Icon=Icons.SearchAndFilter.search, Href=CipherNavLinks.AdvancedSearch.Href },

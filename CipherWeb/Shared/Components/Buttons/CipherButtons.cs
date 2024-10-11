@@ -77,7 +77,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public string? ObjectId { get; set; }
 
         [Parameter]
-        public MySubNavLink? NavLink { get; set; }
+        public CipherNavLink? NavLink { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {

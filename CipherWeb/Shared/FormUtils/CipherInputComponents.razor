@@ -120,12 +120,12 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="@(Package.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Width="100%" Amount="Package.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric Width="100%" Amount="IPackage.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="IPackage.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

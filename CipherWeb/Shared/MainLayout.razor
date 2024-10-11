@@ -21,12 +21,12 @@
     <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
         <RadzenPanelMenu dir="rtl">
 
-            @foreach (MyNavLink myLink in CipherNavLinks.links)
+            @foreach (CipherNavLink myLink in CipherNavLinks.links)
             {
                 <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
                     @if (myLink.SubLinks.Count > 0)
                     {
-                        @foreach (MySubNavLink mySubLink in myLink.SubLinks)
+                        @foreach (CipherNavLink mySubLink in myLink.SubLinks)
                         {
                             <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
                         }

@@ -54,47 +54,47 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    private static List<Package>? packs = new();
-    private static List<Vessel>? vessels = new();
-    private static List<StorageSystem>? systems = new();
-    private static List<Unit>? units = new();
-    private static List<Category>? categories = new();
-    private static List<Event>? events = new();
-    private static List<Package>? packages = new();
-    private static List<Process>? processes = new();
+    private static List<IPackage>? packs = new();
+    private static List<IVessel>? vessels = new();
+    private static List<IStorageSystem>? systems = new();
+    private static List<IUnit>? units = new();
+    private static List<ICategory>? categories = new();
+    private static List<IEvent>? events = new();
+    private static List<IPackage>? packages = new();
+    private static List<IProcess>? processes = new();
 
-    private List<Tuple<string, IEnumerable<Resource>?>> AllData = new();
+    private List<Tuple<string, IEnumerable<IResource>?>> AllData = new();
 
-    private static readonly Dictionary<Type, Func<IEnumerable<Resource>, RenderFragment>> tableRenderers = new()
+    private static readonly Dictionary<Type, Func<IEnumerable<IResource>, RenderFragment>> tableRenderers = new()
     {
-        { typeof(Package), items => @<CipherPackagesTable ChosenObjects="@packs" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(Event), items => @<CipherEventsTable ChosenObjects="@events" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(StorageSystem), items => @<CipherSystemsTable ChosenObjects="@systems" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(Process), items => @<CipherProcessesTable ChosenObjects="@processes" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(Vessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(Unit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(Category), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
+        { typeof(IPackage), items => @<CipherPackagesTable ChosenObjects="@packs" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IEvent), items => @<CipherEventsTable ChosenObjects="@events" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IStorageSystem), items => @<CipherSystemsTable ChosenObjects="@systems" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IProcess), items => @<CipherProcessesTable ChosenObjects="@processes" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IVessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IUnit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(ICategory), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
     };
 
-    private RenderFragment RenderTable(IEnumerable<Resource> items)
+    private RenderFragment RenderTable(IEnumerable<IResource> items)
     {
         var type = items.FirstOrDefault()?.GetType();
         return type != null && tableRenderers.ContainsKey(type) ? tableRenderers[type](items) : @<div>No matching table found</div>;
     }
 
-    private async Task<List<Tuple<string, IEnumerable<Resource>?>>> GetAllData()
+    private async Task<List<Tuple<string, IEnumerable<IResource>?>>> GetAllData()
     {
         await Task.Delay(1);
 
         if (!string.IsNullOrEmpty(SearchText))
         {
-            (packs, Error) = Package.Containing(SearchText);
-            (vessels, Error) = Vessel.Containing(SearchText);
-            (systems, Error) = StorageSystem.Containing(SearchText);
-            (units, Error) = Unit.Containing(SearchText);
-            (categories, Error) = Category.Containing(SearchText);
-            (events, Error) = Event.Containing(SearchText);
-            (processes, Error) = Process.Containing(SearchText);
+            (packs, Error) = IPackage.Containing(SearchText);
+            (vessels, Error) = IVessel.Containing(SearchText);
+            (systems, Error) = IStorageSystem.Containing(SearchText);
+            (units, Error) = IUnit.Containing(SearchText);
+            (categories, Error) = ICategory.Containing(SearchText);
+            (events, Error) = IEvent.Containing(SearchText);
+            (processes, Error) = IProcess.Containing(SearchText);
         }
 
         return new(){

@@ -19,10 +19,10 @@ namespace CipherData
         public static readonly IUnitsRequests UnitsRequests = new RandomUnitsRequests();
         public static readonly IVesselsRequests VesselsRequests = new RandomVesselsRequests();
 
-        public static readonly Func<IPackage, Tuple<List<Event>, ErrorResponse>> GetPackageEvents = (IPackage p) => new RandomPackage().Events();
-        public static readonly Func<IPackage, Tuple<List<Process>, ErrorResponse>> GetPackageProcesses = (IPackage p) => new RandomPackage().Processes();
+        public static readonly Func<IPackage, Tuple<List<IEvent>, ErrorResponse>> GetPackageEvents = (IPackage p) => RandomData.Package.Events();
+        public static readonly Func<IPackage, Tuple<List<IProcess>, ErrorResponse>> GetPackageProcesses = (IPackage p) => RandomData.Package.Processes();
 
-        public static readonly Func<string?, Tuple<IPackage, ErrorResponse>> GetPackage = RandomPackage.Get;
+        public static readonly Func<string?, Tuple<IPackage, ErrorResponse>> GetPackage = IPackage.Get;
         public static readonly Func<string?, Tuple<IProcess, ErrorResponse>> GetProcess = RandomProcess.Get;
     }
 }

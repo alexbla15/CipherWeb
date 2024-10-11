@@ -2,24 +2,6 @@
 
 namespace CipherData.Models
 {
-    public interface IProcessDefinition : IResource
-    {
-        /// <summary>
-        /// Description of process
-        /// </summary>
-        string? Description { get; set; }
-
-        /// <summary>
-        /// Name of the process
-        /// </summary>
-        string? Name { get; set; }
-
-        /// <summary>
-        /// All steps that are associated with this process
-        /// </summary>
-        List<IProcessStepDefinition> Steps { get; set; }
-    }
-
     /// <summary>
     /// Definition of a process - 
     /// a collection of steps that make a single definition
@@ -49,30 +31,6 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
-
-        // API-RELATED FUNCTIONS
-
-        /// <summary>
-        /// All objects
-        /// </summary>
-        public static Tuple<List<IProcessDefinition>, ErrorResponse> All() => Config.ProcessesDefinitionsRequests.GetProcessDefinitions();
-
-        /// <summary>
-        /// Fetch all processes definitions which contain the searched text
-        /// </summary>
-        public static Tuple<List<ProcessDefinition>, ErrorResponse> Containing(string SearchText)
-        {
-            return GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", Value = SearchText },
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", Value = SearchText },
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", Value = SearchText},
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.{nameof(ProcessStepDefinition.Name)}", Value = SearchText, Operator = Operator.Any }
-                },
-                Operator = Operator.Any
-            });
-        }
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

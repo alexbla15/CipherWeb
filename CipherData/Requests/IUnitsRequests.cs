@@ -16,7 +16,7 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="unit"></param>
         /// <returns></returns>
-        Tuple<IUnit, ErrorResponse> CreateUnit(UnitRequest unit);
+        Tuple<IUnit, ErrorResponse> CreateUnit(IUnitRequest unit);
 
         /// <summary>
         /// Get details about a single Unit.
@@ -32,6 +32,6 @@ namespace CipherData.RequestsInterface
         /// </summary>
         /// <param name="unit_id"></param>
         /// <returns></returns>
-        Tuple<IUnit, ErrorResponse> UpdateUnit(string unit_id, UnitRequest unit);
+        Tuple<IUnit, ErrorResponse> UpdateUnit(string unit_id, IUnitRequest unit);
     }
 }

@@ -1,31 +1,12 @@
 ﻿namespace CipherData.Models
 {
-    public interface ICustomCondition
-    {
-        ObjectFactory? Factory { get; set; }
-        GroupedBooleanCondition? ObjectCondition { get; set; }
-    }
-
     public class CustomCondition : ICustomCondition
     {
         [HebrewTranslation(typeof(CustomCondition), nameof(Factory))]
-        public ObjectFactory? Factory { get; set; }
+        public IObjectFactory? Factory { get; set; }
 
         [HebrewTranslation(typeof(CustomCondition), nameof(ObjectCondition))]
-        public GroupedBooleanCondition? ObjectCondition { get; set; }
-    }
-
-    public interface ICustomObjectBooleanCondition
-    {
-        /// <summary>
-        /// List of object factory specifications and conditions on them
-        /// </summary>
-        List<ICustomCondition> Conditions { get; set; }
-
-        /// <summary>
-        /// Operator used to resolve the multiple condition results to a single boolean
-        /// </summary>
-        Operator Operator { get; set; }
+        public IGroupedBooleanCondition? ObjectCondition { get; set; }
     }
 
     /// <summary>
