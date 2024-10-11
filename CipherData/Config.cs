@@ -22,7 +22,7 @@ namespace CipherData
         public static readonly Func<IPackage, Tuple<List<Event>, ErrorResponse>> GetPackageEvents = (IPackage p) => new RandomPackage().Events();
         public static readonly Func<IPackage, Tuple<List<Process>, ErrorResponse>> GetPackageProcesses = (IPackage p) => new RandomPackage().Processes();
 
-        public static readonly Func<string, Tuple<IPackage, ErrorResponse>> GetPackage = RandomPackage.Get;
-        public static readonly Func<string, Tuple<IProcess, ErrorResponse>> GetProcess = RandomProcess.Get;
+        public static readonly Func<string?, Tuple<IPackage, ErrorResponse>> GetPackage = RandomPackage.Get;
+        public static readonly Func<string?, Tuple<IProcess, ErrorResponse>> GetProcess = RandomProcess.Get;
     }
 }

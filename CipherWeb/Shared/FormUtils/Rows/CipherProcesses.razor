@@ -5,8 +5,8 @@
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(IProcessDefinition.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @context

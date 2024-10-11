@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     public interface IPackage : IResource
     {
@@ -174,6 +176,10 @@
             };
         }
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+
         // API-RELATED FUNCTIONS
 
         public Tuple<List<Event>, ErrorResponse> Events() => Config.GetPackageEvents(this);
@@ -210,6 +216,6 @@
         /// Get details about a single package given package ID
         /// </summary>
         /// <param name="id">package ID</param>
-        public static Tuple<IPackage, ErrorResponse> Get(string id) => Config.GetPackage(id);
+        public static Tuple<IPackage, ErrorResponse> Get(string? id) => Config.GetPackage(id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Reflection
+@using CipherWeb.Shared.FormUtils
 
 @inject NavigationManager Navigation
 
@@ -56,7 +57,7 @@
 
     private Package NewPackage = new();
     private UnitRequest unitRequest = new();
-    private CategoryRequest catRequest = new();
+    private ICategoryRequest catRequest = new CategoryRequest();
     private VesselRequest vesRequest = new();
     private ProcessDefinitionRequest procDefRequest = new();
     private SystemRequest sysRequest = new();
@@ -186,8 +187,8 @@
 
     private void UpdateSubmissionSummary()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 
     /// <summary>
@@ -233,7 +234,7 @@
     private Tuple<Cipher_TItem, ErrorResponse>? SendPackageRequest()
     {
         JsonRequest = packRequest.ToJson();
-        Tuple<Event, ErrorResponse> evResult = (Tuple<Event, ErrorResponse>)(object)Config.EventsRequests.CreateEvent(packRequest);
+        Tuple<IEvent, ErrorResponse> evResult = Config.EventsRequests.CreateEvent(packRequest);
         if (evResult.Item1.FinalStatePackages.Count > 0)
         {
             return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(evResult.Item1.FinalStatePackages[0], evResult.Item2);
@@ -274,7 +275,6 @@
         {
             <CipherFormInfo @ref="FormInfo" />
             <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" />
-
             <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
                 <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" />
                 <CipherComments @ref="EventComments" Width="300px" />

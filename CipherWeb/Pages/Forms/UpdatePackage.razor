@@ -15,18 +15,18 @@
 
     <CipherComponentCard Title="שינוי פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
         <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)"/>
-        <CipherComments @ref=PackDescription Label="@(new Package().Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
+        <CipherComments @ref=PackDescription Label="@(Package.Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
                         Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
-        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((new Package().Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
-        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((new Package().Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((Package.Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((Package.Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
 
         <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" Disabled="@(ChosenPackage == null)"/>
         <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" Disabled="@(ChosenPackage == null)"/>
         <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" Disabled="@(ChosenPackage == null)" />
 
-        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@(new Package().Translate(nameof(IPackage.DestinationProcesses)))" Disabled="@(ChosenPackage == null)"/>
-        <CipherPackageId @ref=ParentPack ChosenPackage="@(ChosenPackage?.Parent)" Label="@((new Package().Translate(nameof(IPackage.Parent))))" Disabled="@(ChosenPackage == null)" />
-        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@((new Package().Translate(nameof(IPackage.Children))))" Disabled="@(ChosenPackage == null)"/>
+        <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@(Package.Translate(nameof(IPackage.DestinationProcesses)))" Disabled="@(ChosenPackage == null)"/>
+        <CipherPackageId @ref=ParentPack ChosenPackage="@(ChosenPackage?.Parent)" Label="@((Package.Translate(nameof(IPackage.Parent))))" Disabled="@(ChosenPackage == null)" />
+        <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@((Package.Translate(nameof(IPackage.Children))))" Disabled="@(ChosenPackage == null)"/>
 
         @if (NewProps != null)
         {

@@ -1,6 +1,6 @@
 ﻿@inherits CipherNumeric
 
-<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="Amount" Disabled="true"/>
+<CipherNumeric Icon="@Icon" Label="@Label" @bind-Amount="Amount" Disabled="@Disabled"/>
 
 @code {
     protected override void OnInitialized()

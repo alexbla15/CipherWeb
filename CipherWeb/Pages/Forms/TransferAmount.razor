@@ -3,9 +3,9 @@
 <ResourceForm Title="@NavLink?.Name">
     <CipherFormInfo @ref="FormInfo" />
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-        <CipherPackageId Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-        <CipherAmount Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.Amount))" @ref=DeltaM />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+        <CipherAmount Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.Amount))" @ref=DeltaM />
         <CipherProcess @ref=EventProc />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
@@ -106,7 +106,7 @@
 
     private void UpdateSubmissionSummary()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 }

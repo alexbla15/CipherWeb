@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace CipherData.Models
 {
@@ -59,6 +60,10 @@ namespace CipherData.Models
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 
     [HebrewTranslation(nameof(Report))]
@@ -187,14 +192,10 @@ namespace CipherData.Models
 
         // STATIC METHODS
 
-        public static async Task<Report> Get(ICipherInfo db, int Id)
-        {
-            return await db.GetReport(Id);
-        }
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
 
-        public static async Task<List<Report>> All(ICipherInfo db)
-        {
-            return await db.GetAllUpdatedReports();
-        }
+        public static async Task<Report> Get(ICipherInfo db, int Id) => await db.GetReport(Id);
+
+        public static async Task<List<Report>> All(ICipherInfo db) => await db.GetAllUpdatedReports();
     }
 }

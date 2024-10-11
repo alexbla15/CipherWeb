@@ -1,4 +1,5 @@
 ﻿using CipherData.Models.Randomizers;
+using System.Reflection;
 
 namespace CipherData.Models
 {
@@ -88,6 +89,10 @@ namespace CipherData.Models
         /// </summary>
         [HebrewTranslation(typeof(DisplayedEvent), nameof(EventMass))]
         public decimal? EventMass { get; set; }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 
     public interface IEvent : IResource

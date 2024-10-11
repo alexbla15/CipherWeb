@@ -19,9 +19,9 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName
+                <CipherAutoComplete Label="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
-                <CipherAutoComplete Label="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
+                <CipherAutoComplete Label="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
             </ChildContent>
         </CipherComponentCard>

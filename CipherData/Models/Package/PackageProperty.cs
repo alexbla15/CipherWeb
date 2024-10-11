@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Property scheme of one of the package's properties.
@@ -44,5 +46,9 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

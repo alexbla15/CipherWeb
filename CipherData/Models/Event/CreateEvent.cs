@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create new event
@@ -126,5 +128,9 @@
                 FinalStatePackages = Actions.Select(x => x.Create()).ToList(),
             };
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

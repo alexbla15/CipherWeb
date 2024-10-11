@@ -4,9 +4,9 @@ namespace CipherWeb
 {
     public class HebrewDictionary
     {
-        public static HashSet<Tuple<string, string>> BuildDictionary()
+        public static HashSet<Tuple<string, string?>> BuildDictionary()
         {
-            List<Tuple<string, string>> BuildHeaders = new();
+            List<Tuple<string, string?>> BuildHeaders = new();
             foreach (Type t in CommonFuncs.GetCipherClasses())
             {
                 if (!t.IsAbstract)
@@ -17,6 +17,6 @@ namespace CipherWeb
             return BuildHeaders.ToHashSet();
         }
 
-        public static readonly HashSet<Tuple<string, string>> Headers = BuildDictionary().Distinct().ToHashSet();
+        public static readonly HashSet<Tuple<string, string?>> Headers = BuildDictionary().Distinct().ToHashSet();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace CipherData.Models
@@ -103,5 +104,9 @@ namespace CipherData.Models
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

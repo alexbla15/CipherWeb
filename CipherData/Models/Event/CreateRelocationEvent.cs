@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// An event of relocating several packages to a new location
@@ -103,7 +105,7 @@
             {
                 if (!Checking) ChangeLocations();
 
-                return new CreateEvent()
+                return new()
                 {
                     Worker = Worker,
                     Timestamp = Timestamp,
@@ -113,7 +115,7 @@
                 };
             }
 
-            return new CreateEvent();
+            return new();
         }
 
         public void ChangeLocations()
@@ -126,5 +128,9 @@
                 }
             }
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

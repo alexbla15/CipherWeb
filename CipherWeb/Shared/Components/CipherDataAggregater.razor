@@ -138,8 +138,8 @@
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"></CipherAddBtn>
-        <CipherDeleteAllButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"></CipherDeleteAllButton>
+        <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"/>
+        <CipherDeleteAllButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"/>
     </Buttons>
 
     <ChildContent>
@@ -154,17 +154,17 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Attribute)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Attribute)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Attribute)" Title="@(AggregateItem.Translate(nameof(AggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.As)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.As)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.As)" Title="@(AggregateItem.Translate(nameof(AggregateItem.As)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Method)" Title="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="AggregateItem" Property="@nameof(AggregateItem.Method)" Title="@(AggregateItem.Translate(nameof(AggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
                         Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))" 

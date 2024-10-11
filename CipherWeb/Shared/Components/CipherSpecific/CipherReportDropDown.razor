@@ -8,9 +8,9 @@
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Id))" Title="@(new Report().Translate(nameof(Report.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Title))" Title="@(new Report().Translate(nameof(Report.Title)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Creator))" Title="@(new Report().Translate(nameof(Report.Creator)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Id))" Title="@(Report.Translate(nameof(Report.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Title))" Title="@(Report.Translate(nameof(Report.Title)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(Report.Creator))" Title="@(Report.Translate(nameof(Report.Creator)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @((context as Report).Title)

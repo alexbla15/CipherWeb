@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create a new process definition or update it.
@@ -66,5 +68,9 @@
         }
 
         public IProcessDefinition Create(string id) => new ProcessDefinition() { Id=id, Name = Name, Description = Description, Steps=Steps };
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

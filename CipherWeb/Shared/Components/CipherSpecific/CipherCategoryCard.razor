@@ -10,29 +10,32 @@
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
-                }
-            </Buttons>
-            <ChildContent>
-                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Name)))" Icon="@Icons.Symbols.category" @ref=CatName
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name"/>
-                <CipherCategoryDropDown Label="@(new Category().Translate(nameof(Category.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((Category?)args))"
-                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
-                <CipherAutoComplete Label="@(new Category().Translate(nameof(Category.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true"
-                @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(new Category().Translate(nameof(Category.CreatingProcesses)))" @ref=InProcs
-                                 Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
-                <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(new Category().Translate(nameof(Category.ConsumingProcesses)))" @ref=OutProcs
-                                 Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
-                <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
-            </ChildContent>
-        </CipherComponentCard>
-        <CipherCategoryProperties @ref=CatProperties
-                                  ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
+        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        {
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
+                    }
+                </Buttons>
+                <ChildContent>
+                    <CipherAutoComplete Label="@(Category.Translate(nameof(ICategory.Name)))" Icon="@Icons.Symbols.category" @ref=CatName
+                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
+                    <CipherCategoryDropDown Label="@(Category.Translate(nameof(ICategory.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((ICategory?)args))"
+                                            Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
+                    <CipherAutoComplete Label="@(Category.Translate(nameof(ICategory.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true"
+                                        @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
+                    <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(Category.Translate(nameof(ICategory.CreatingProcesses)))" @ref=InProcs
+                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
+                    <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(Category.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs
+                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
+                    <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
+                </ChildContent>
+            </CipherComponentCard>
+            <CipherCategoryProperties @ref=CatProperties
+                                      ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -84,17 +87,16 @@
 
     public CategoryRequest Value()
     {
-        CategoryRequest cat = new()
-        {
-            ParentId = ParentCat.ChosenCategory?.Id,
-            Name = CatName.Value,
-            Description = CatDescription.Value,
-            CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList(),
-            ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList(),
-            Properties = CatProperties.ChosenProperties,
-            IdMask = CatMask.GetValue()
-        };
-        return cat;
+        return new()
+            {
+                ParentId = ParentCat.ChosenCategory?.Id,
+                Name = CatName.Value,
+                Description = CatDescription.Value,
+                CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList(),
+                ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList(),
+                Properties = CatProperties.ChosenProperties,
+                IdMask = CatMask.GetValue()
+            };
     }
 
     /// <summary>

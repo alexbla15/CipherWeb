@@ -98,7 +98,7 @@ namespace CipherData.Models.Randomizers
         /// Get details about a single package given package ID
         /// </summary>
         /// <param name="id">package ID</param>
-        public static Tuple<IPackage, ErrorResponse> Get(string id)
+        public static Tuple<IPackage, ErrorResponse> Get(string? id)
         {
             return (string.IsNullOrEmpty(id)) ? new(new Package(), ErrorResponse.BadRequest) : Config.PackagesRequests.GetPackage(id);
         }

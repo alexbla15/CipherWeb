@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create a new unit or update it
@@ -6,17 +8,17 @@
     [HebrewTranslation(nameof(UnitRequest))]
     public class UnitRequest : CipherClass
     {
-        private string _Name = string.Empty;
+        private string? _Name = string.Empty;
         private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the Unit
         /// </summary>
         [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string Name
+        public string? Name
         {
             get => _Name;
-            set => _Name = value.Trim();
+            set => _Name = value?.Trim();
         }
 
         /// <summary>
@@ -81,5 +83,9 @@
                 Properties = Properties
             };
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

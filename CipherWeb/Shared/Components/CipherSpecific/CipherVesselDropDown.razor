@@ -7,10 +7,10 @@
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." @bind-Value="@ChosenVessel" Change="@Change" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")" Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Id))" Title="@(new Vessel().Translate(nameof(IVessel.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Name))" Title="@(new Vessel().Translate(nameof(IVessel.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Type))" Title="@(new Vessel().Translate(nameof(IVessel.Type)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.System))" Title="@(new Vessel().Translate(nameof(IVessel.System)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Id))" Title="@(Vessel.Translate(nameof(IVessel.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Name))" Title="@(Vessel.Translate(nameof(IVessel.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Type))" Title="@(Vessel.Translate(nameof(IVessel.Type)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.System))" Title="@(Vessel.Translate(nameof(IVessel.System)))">
                 <Template>
                     @((context as IVessel)?.System.Name)
                 </Template>
@@ -55,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= new Vessel().Translate(nameof(Vessel.Name));
+        Label ??= Vessel.Translate(nameof(Vessel.Name));
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 

@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 
 namespace CipherData.Models
@@ -46,6 +47,10 @@ namespace CipherData.Models
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(typeof(OrderedItem), text);
     }
 
     [HebrewTranslation(nameof(AggregateItem))]
@@ -96,13 +101,17 @@ namespace CipherData.Models
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 
     /// <summary>
     /// Method to get desired objects by filtering and aggregating the database
     /// </summary>
     [HebrewTranslation(nameof(ObjectFactory))]
-    public class ObjectFactory : CipherClass
+    public class ObjectFactory : CipherClass, ICipherClass
     {
         /// <summary>
         /// Conditions to apply to get the desired objects. 
@@ -190,5 +199,9 @@ namespace CipherData.Models
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(typeof(ObjectFactory), text);
     }
 }

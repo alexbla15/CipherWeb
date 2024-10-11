@@ -146,8 +146,6 @@
 
     public void SetNewPackage()
     {
-        NewPackage = new Package();
-
         NewPackage = Value();
 
         // choosing relevant packages for calculation of mass
@@ -189,17 +187,17 @@
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete Label="@(new Package().Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+    <CipherAutoComplete Label="@(Package.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
-    <CipherPackageId Label="@(new Package().Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
+    <CipherPackageId Label="@(Package.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" Label="@(new Package().Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(new Package().Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(new Package().Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherProcesses Label="@(new Package().Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
+        <CipherComments @ref="PackDescription" Label="@(Package.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@(Package.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@(Package.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherProcesses Label="@(Package.Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
     }
 </CipherComponentCard>
 

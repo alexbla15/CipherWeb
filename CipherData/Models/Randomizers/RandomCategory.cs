@@ -19,11 +19,11 @@ namespace CipherData.Models.Randomizers
 
         public List<IProcessDefinition> ConsumingProcesses { get; set; } = RandomData.GetRandomProcessDefinitions(3);
 
-        public Category? MaterialType { get; set; } = RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes));
+        public ICategory? MaterialType { get; set; } = RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes));
 
-        public Category? Parent { get; set; } = new Random().Next(0, 4) == 0 ? RandomMaterialType($"P{new Random().Next(0, 999)}") : null;
+        public ICategory? Parent { get; set; } = new Random().Next(0, 4) == 0 ? RandomMaterialType($"P{new Random().Next(0, 999)}") : null;
 
-        public List<Category>? Children { get; set; } = new Random().Next(0, 4) == 0 ? new List<Category>() { RandomMaterialType($"C1{new Random().Next(0, 999)}"), RandomMaterialType($"C2{new Random().Next(0, 999)}") } : null;
+        public List<ICategory>? Children { get; set; } = new Random().Next(0, 4) == 0 ? new() { RandomMaterialType($"C1{new Random().Next(0, 999)}"), RandomMaterialType($"C2{new Random().Next(0, 999)}") } : null;
 
 
         // STATIC METHODS

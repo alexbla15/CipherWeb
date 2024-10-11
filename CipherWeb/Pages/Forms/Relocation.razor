@@ -4,8 +4,8 @@
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@RequestedEvent.Translate(nameof(CreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@RequestedEvent.Translate(nameof(CreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(CreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     

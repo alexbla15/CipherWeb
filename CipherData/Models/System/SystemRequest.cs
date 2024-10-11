@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create a new system or update it
@@ -6,27 +8,27 @@
     [HebrewTranslation(nameof(SystemRequest))]
     public class SystemRequest : CipherClass
     {
-        private string _Name = string.Empty;
-        private string _Description = string.Empty;
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         /// <summary>
         /// Name of the system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string Name
+        public string? Name
         {
             get => _Name;
-            set => _Name = value.Trim();
+            set => _Name = value?.Trim();
         }
 
         /// <summary>
         /// Description of system
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string Description
+        public string? Description
         {
             get => _Description;
-            set => _Description = value.Trim();
+            set => _Description = value?.Trim();
         }
 
         /// <summary>
@@ -89,5 +91,9 @@
                 Parent = new StorageSystem() { Id = ParentId },
             };
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

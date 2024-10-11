@@ -1,47 +1,60 @@
-﻿using CipherData.Models.Randomizers;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace CipherData.Models
 {
-    public interface IResource
+
+    public interface IResource : ICipherClass
     {
         /// <summary>
         /// Required level of clearence to access this object
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(ClearenceLevel))]
         string ClearenceLevel { get; set; }
 
         /// <summary>
         /// Searchable ID for the object
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         int Uuid { get; set; }
+
+        public Dictionary<string, object?> ToDictionary()
+        {
+            return new()
+            {
+                [nameof(Uuid)] = Uuid,
+                [nameof(Id)] = Id,
+                [nameof(ClearenceLevel)] = ClearenceLevel,
+            };
+        }
     }
 
-    [HebrewTranslation(nameof(Resource))]
     /// <summary>
     /// Basic resource template for objects.
     /// </summary>
+    [HebrewTranslation(nameof(Resource))]
     public abstract class Resource : CipherClass, IResource
     {
+        [HebrewTranslation(typeof(Resource), nameof(Id))]
         public string? Id { get; set; } = string.Empty;
 
+        [HebrewTranslation(typeof(Resource), nameof(ClearenceLevel))]
         public string ClearenceLevel { get; set; } = string.Empty;
 
+        [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         public int Uuid { get; set; }
 
         /// <summary>
         /// Method to get all (english, hebrew) translations of the above attributes.
         /// </summary>
-        public HashSet<Tuple<string, string>> Headers()
+        public HashSet<Tuple<string, string?>> Headers()
         {
-            var translations = new HashSet<Tuple<string, string>>();
+            var translations = new HashSet<Tuple<string, string?>>();
 
             foreach (var prop in GetType().GetProperties())
             {

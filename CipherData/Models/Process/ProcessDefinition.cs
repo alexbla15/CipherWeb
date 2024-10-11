@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     public interface IProcessDefinition : IResource
     {
@@ -44,6 +46,10 @@
 
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Steps))]
         public List<IProcessStepDefinition> Steps { get; set; } = new();
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
 
         // API-RELATED FUNCTIONS
 

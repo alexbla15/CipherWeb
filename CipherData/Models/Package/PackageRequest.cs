@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// When creating an event, this objects describes an affected package status, after an event.
@@ -13,7 +15,7 @@
         /// ID of the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Id))]
-        public string Id { get; set; } = string.Empty;
+        public string? Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Vessel (Id) which contains the package
@@ -25,13 +27,13 @@
         /// Location (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.System))]
-        public string SystemId { get; set; } = string.Empty;
+        public string? SystemId { get; set; } = string.Empty;
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Category))]
-        public string CategoryId { get; set; } = string.Empty;
+        public string? CategoryId { get; set; } = string.Empty;
 
         /// <summary>
         /// JSON-like additional properties of the package
@@ -61,7 +63,7 @@
         /// Packages (Ids) contained in this one
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(Package.Children))]
-        public List<string>? ChildrenIds { get; set; }
+        public List<string?>? ChildrenIds { get; set; }
 
         public CheckField CheckId() => CheckField.Required(Id, Translate(nameof(Id)));
         public CheckField CheckCategoryId() => CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
@@ -128,5 +130,9 @@
                 Properties = Properties
             };
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

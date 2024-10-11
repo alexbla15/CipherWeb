@@ -4,8 +4,8 @@
     <RadzenDropDownDataGrid TValue="IProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
                             Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(ProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @((context as IProcessDefinition).Name)
@@ -46,7 +46,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= new ProcessDefinition().Translate(nameof(ProcessDefinition.Name));
+        Label ??= ProcessDefinition.Translate(nameof(ProcessDefinition.Name));
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
         MinWidth ??= "300px";

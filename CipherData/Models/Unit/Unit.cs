@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     public interface IUnit : IResource
     {
@@ -55,14 +57,14 @@
     [HebrewTranslation(nameof(Unit))]
     public class Unit : Resource, IUnit
     {
-        private string _Name = string.Empty;
+        private string? _Name = string.Empty;
         private string? _Description = string.Empty;
 
         [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string Name
+        public string? Name
         {
             get => _Name;
-            set => _Name = value.Trim();
+            set => _Name = value?.Trim();
         }
 
         [HebrewTranslation(typeof(Unit), nameof(Description))]
@@ -97,6 +99,10 @@
                 ParentId = Parent?.Id
             };
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
 
         // API-RELATED FUNCTIONS
 

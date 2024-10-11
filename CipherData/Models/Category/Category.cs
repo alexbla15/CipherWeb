@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     public interface ICategory : IResource
     {
@@ -10,52 +12,44 @@
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(IdMask))]
         List<string> IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Properties))]
         List<ICategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
         List<IProcessDefinition> ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
         List<IProcessDefinition> CreatingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(MaterialType))]
-        Category? MaterialType { get; set; }
+        ICategory? MaterialType { get; set; }
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Parent))]
-        Category? Parent { get; set; }
+        ICategory? Parent { get; set; }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Children))]
-        List<Category>? Children { get; set; }
+        List<ICategory>? Children { get; set; }
 
-        public Dictionary<string, object?> ToDictionary()
+        public new Dictionary<string, object?> ToDictionary()
         {
             return new()
             {
@@ -70,6 +64,18 @@
                 [nameof(CreatingProcesses)] = string.Join("; ", CreatingProcesses.Select(x => x.Name)),
             };
         }
+
+        // API-RELATED FUNCTIONS
+
+        /// <summary>
+        /// Get details about a single object given object ID
+        /// </summary>
+        /// <param name="id">object ID</param>
+        public static Tuple<ICategory, ErrorResponse> Get(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return new(new Category(), ErrorResponse.BadRequest);
+            return Config.CategoriesRequests.GetCategory(id);
+        }
     }
 
     [HebrewTranslation(nameof(Category))]
@@ -77,8 +83,8 @@
     {
         private string? _Name = string.Empty;
         private string? _Description = string.Empty;
-        private Category? _MaterialType = null;
-        private Category? _Parent = null;
+        private ICategory? _MaterialType = null;
+        private ICategory? _Parent = null;
 
         [HebrewTranslation(typeof(Category), nameof(Name))]
         public string? Name
@@ -87,27 +93,34 @@
             set => _Name = value?.Trim();
         }
 
+        [HebrewTranslation(typeof(Category), nameof(Description))]
         public string? Description
         {
             get => _Description;
             set => _Description = value?.Trim();
         }
 
+        [HebrewTranslation(typeof(Category), nameof(IdMask))]
         public List<string> IdMask { get; set; } = new();
 
+        [HebrewTranslation(typeof(Category), nameof(Properties))]
         public List<ICategoryProperty>? Properties { get; set; }
 
+        [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
         public List<IProcessDefinition> CreatingProcesses { get; set; } = new List<IProcessDefinition>();
 
+        [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
         public List<IProcessDefinition> ConsumingProcesses { get; set; } = new List<IProcessDefinition>();
 
-        public Category? MaterialType
+        [HebrewTranslation(typeof(Category), nameof(MaterialType))]
+        public ICategory? MaterialType
         {
             get => _MaterialType;
             set => _MaterialType = value ?? _MaterialType;
         }
 
-        public Category? Parent
+        [HebrewTranslation(typeof(Category), nameof(Parent))]
+        public ICategory? Parent
         {
             get => _Parent;
             set
@@ -117,7 +130,8 @@
             }
         }
 
-        public List<Category>? Children { get; set; }
+        [HebrewTranslation(typeof(Category), nameof(Children))]
+        public List<ICategory>? Children { get; set; }
 
         /// <summary>
         /// API request for a new category / updated category.
@@ -126,7 +140,7 @@
         /// <returns></returns>
         public CategoryRequest Request()
         {
-            return new CategoryRequest()
+            return new()
             {
                 Name = Name,
                 Description = Description,
@@ -140,28 +154,9 @@
 
         // STATIC METHODS
 
-        /// <summary>
-        /// Counts how many packages were created.
-        /// </summary>
-        private static int IdCounter { get; set; } = 0;
-
-        /// <summary>
-        /// Get the id of a new object
-        /// </summary>
-        /// <returns></returns>
-        private static string GetNextId() => $"C{++IdCounter:D3}";
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
 
         // API-RELATED FUNCTIONS
-
-        /// <summary>
-        /// Get details about a single object given object ID
-        /// </summary>
-        /// <param name="id">object ID</param>
-        public static Tuple<ICategory, ErrorResponse> Get(string id)
-        {
-            if (string.IsNullOrEmpty(id)) return new(new Category(), ErrorResponse.BadRequest);
-            return Config.CategoriesRequests.GetCategory(id);
-        }
 
         /// <summary>
         /// All categories

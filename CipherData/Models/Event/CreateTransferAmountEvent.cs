@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 
 namespace CipherData.Models
 {
@@ -121,7 +122,7 @@ namespace CipherData.Models
                 AcceptingPackage.BrutMass += Amount;
                 AcceptingPackage.NetMass = decimal.Round(AcceptingPackage.BrutMass * AcceptingPackage.Concentration, 2);
 
-                return new CreateEvent()
+                return new()
                 {
                     Worker = Worker,
                     Timestamp = Timestamp,
@@ -132,7 +133,11 @@ namespace CipherData.Models
                 };
             }
 
-            return new CreateEvent();
+            return new();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

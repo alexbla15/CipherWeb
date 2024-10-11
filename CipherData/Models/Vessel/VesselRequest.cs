@@ -1,4 +1,6 @@
-﻿namespace CipherData.Models
+﻿using System.Reflection;
+
+namespace CipherData.Models
 {
     /// <summary>
     /// Create a new unit or update it
@@ -59,5 +61,9 @@
 
         public IVessel Create(string id) => 
             new Vessel() { Id = id, Name = Name, Type = Type, System = new StorageSystem() { Id = SystemId } };
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

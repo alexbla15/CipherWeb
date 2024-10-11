@@ -1,4 +1,5 @@
 ﻿using CipherData.Models.Randomizers;
+using System.Reflection;
 
 namespace CipherData.Models
 {
@@ -148,21 +149,21 @@ namespace CipherData.Models
     [HebrewTranslation("System")]
     public class StorageSystem : Resource, IStorageSystem
     {
-        private string _Name = string.Empty;
-        private string _Description = string.Empty;
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
-        public string Name
+        public string? Name
         {
             get => _Name;
-            set => _Name = value.Trim();
+            set => _Name = value?.Trim();
         }
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        public string Description
+        public string? Description
         {
             get => _Description;
-            set => _Description = value.Trim();
+            set => _Description = value?.Trim();
         }
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
@@ -177,6 +178,9 @@ namespace CipherData.Models
         [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
         public IUnit Unit { get; set; } = new Unit();
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
 
         // API related functions
 

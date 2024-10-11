@@ -28,7 +28,7 @@
 
     protected override void OnInitialized()
     {
-        Placeholder ??= (new AggregateItem()).Translate(nameof(AggregateItem.Attribute));
+        Placeholder ??= AggregateItem.Translate(nameof(AggregateItem.Attribute));
     }
 }
 

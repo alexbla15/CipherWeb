@@ -24,7 +24,7 @@ namespace CipherData.Models.Tests
         [TestMethod()]
         public void CheckNameTest()
         {
-            CategoryProperty cat = new() { Name = "תכונה" }; // Good name
+            ICategoryProperty cat = new CategoryProperty() { Name = "תכונה" }; // Good name
             Assert.IsTrue(cat.CheckName().Succeeded);
 
             cat.Name = "@תכונה"; // Improper chars

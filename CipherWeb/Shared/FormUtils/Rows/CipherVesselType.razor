@@ -14,7 +14,7 @@
 
     protected override void OnInitialized()
     {
-        Label ??= new Vessel().Translate(nameof(Vessel.Type));
+        Label ??= Vessel.Translate(nameof(IVessel.Type));
         Icon ??= Icons.Cipher.Type;
 
         (vessels, error) = CachedData.AllVessels;
