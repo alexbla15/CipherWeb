@@ -1,6 +1,7 @@
-﻿@inherits CipherResourceTable<UserAction>
+﻿@inherits CipherResourceTable<IUserAction>
 
-<CipherResourceTable Cipher_TItem="UserAction" WithHeaderContent="true" PrefixFileTitle="historic_changes" Title="@Title" ChosenObjects="@ChosenObjects" />
+<CipherResourceTable Cipher_TItem="IUserAction" WithHeaderContent="true" PrefixFileTitle="historic_changes" Title="@Title" 
+    ChosenObjects="@ChosenObjects" />
 
 @code {
     protected override void OnInitialized()

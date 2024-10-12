@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CipherData.ApiMode.Models.Category;
+using CipherData.Interfaces.Models.Category;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
 {

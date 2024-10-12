@@ -1,6 +1,5 @@
 ﻿@page "/Searches/FreeSearch/"
 
-@inject ICipherInfo _db
 @inject DialogService DialogService
 @inject NavigationManager navigationManager
 
@@ -84,17 +83,15 @@
 
     private async Task<List<Tuple<string, IEnumerable<IResource>?>>> GetAllData()
     {
-        await Task.Delay(1);
-
         if (!string.IsNullOrEmpty(SearchText))
         {
-            (packs, Error) = IPackage.Containing(SearchText);
-            (vessels, Error) = IVessel.Containing(SearchText);
-            (systems, Error) = IStorageSystem.Containing(SearchText);
-            (units, Error) = IUnit.Containing(SearchText);
-            (categories, Error) = ICategory.Containing(SearchText);
-            (events, Error) = IEvent.Containing(SearchText);
-            (processes, Error) = IProcess.Containing(SearchText);
+            (packs, Error) = await IPackage.Containing(SearchText);
+            (vessels, Error) = await IVessel.Containing(SearchText);
+            (systems, Error) = await IStorageSystem.Containing(SearchText);
+            (units, Error) = await IUnit.Containing(SearchText);
+            (categories, Error) = await ICategory.Containing(SearchText);
+            (events, Error) = await IEvent.Containing(SearchText);
+            (processes, Error) = await IProcess.Containing(SearchText);
         }
 
         return new(){

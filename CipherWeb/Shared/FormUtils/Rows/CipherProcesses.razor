@@ -52,13 +52,13 @@
     /// </summary>
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
         Width = "";
         MinWidth ??= "300px";
 
-        if (Processes.Count() == 0) (Processes, Error) = CachedData.AllProcessDefinitions;
+        if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }
 }

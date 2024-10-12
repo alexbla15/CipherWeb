@@ -185,29 +185,29 @@
 
         // find the appropriate type, and then check if some details were changed relatively to the original object.
 
-        bool FoundUnitChanges() => FoundChanges(!unitRequest.Equals(ChosenObject as Unit));
-        bool FoundCategoryChanges() => FoundChanges(!catRequest.Equals(ChosenObject as Category));
-        bool FoundVesselChanges() => FoundChanges(!vesRequest.Equals(ChosenObject as Vessel));
-        bool FoundProcDefinitionChanges() => FoundChanges(!procDefRequest.Equals(ChosenObject as ProcessDefinition));
-        bool FoundSystemChanges() => FoundChanges(!sysRequest.Equals(ChosenObject as StorageSystem));
+        bool FoundUnitChanges() => FoundChanges(!unitRequest.Equals(ChosenObject as IUnit));
+        bool FoundCategoryChanges() => FoundChanges(!catRequest.Equals(ChosenObject as ICategory));
+        bool FoundVesselChanges() => FoundChanges(!vesRequest.Equals(ChosenObject as IVessel));
+        bool FoundProcDefinitionChanges() => FoundChanges(!procDefRequest.Equals(ChosenObject as IProcessDefinition));
+        bool FoundSystemChanges() => FoundChanges(!sysRequest.Equals(ChosenObject as IStorageSystem));
 
-        if (typeof(Cipher_TItem) == typeof(Unit))
+        if (typeof(Cipher_TItem) == typeof(IUnit))
         {
             HandleRequest(() => FoundUnitChanges(), () => SendUnitRequest());
         }
-        else if (typeof(Cipher_TItem) == typeof(Category))
+        else if (typeof(Cipher_TItem) == typeof(ICategory))
         {
             HandleRequest(() => FoundCategoryChanges(), () => SendCategoryRequest());
         }
-        else if (typeof(Cipher_TItem) == typeof(Vessel))
+        else if (typeof(Cipher_TItem) == typeof(IVessel))
         {
             HandleRequest(() => FoundVesselChanges(), () => SendVesselRequest());
         }
-        else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+        else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
         {
             HandleRequest(() => FoundProcDefinitionChanges(), () => SendProcessDefinitionRequest());
         }
-        else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+        else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
         {
             HandleRequest(() => FoundSystemChanges(), () => SendSystemRequest());
         }

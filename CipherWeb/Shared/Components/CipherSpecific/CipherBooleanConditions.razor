@@ -21,6 +21,9 @@
     [Parameter]
     public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
 
+    [Parameter]
+    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
+
     /// <summary>
     /// Error response for fetching data
     /// </summary>
@@ -32,9 +35,6 @@
     /// </summary>
     [Parameter]
     public EventCallback<object> OnSave { get; set; }
-
-    [Parameter]
-    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
 
     /// <summary>
     /// Help text for save-button.
@@ -50,7 +50,7 @@
 
     private RadzenDataFilter<CipherField> dataFilter = new();
 
-    public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
+    public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition cond)
     {
         CompositeFilterDescriptor new_filter = new();
         new_filter.Property = cond.Attribute;
@@ -87,9 +87,9 @@
 
             foreach (var sub_cond in cond.Conditions)
             {
-                if (sub_cond is BooleanCondition)
+                if (sub_cond is IBooleanCondition)
                 {
-                    sub_conds.Add(AddBooleanConditionFilter(sub_cond as BooleanCondition));
+                    sub_conds.Add(AddBooleanConditionFilter(sub_cond as IBooleanCondition));
                 }
                 else if (sub_cond is IGroupedBooleanCondition)
                 {
@@ -229,13 +229,13 @@
 
             foreach (var cond in ChosenCondition.Conditions)
             {
-                if (cond is BooleanCondition)
+                if (cond is IBooleanCondition)
                 {
-                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as BooleanCondition));
+                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as IBooleanCondition));
                 }
-                else if (cond is GroupedBooleanCondition)
+                else if (cond is IGroupedBooleanCondition)
                 {
-                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as GroupedBooleanCondition));
+                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as IGroupedBooleanCondition));
                 }
             }
 

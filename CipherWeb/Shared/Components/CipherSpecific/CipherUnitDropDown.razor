@@ -51,12 +51,12 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "יחידה";
         Icon ??= Icons.Cipher.Unit;
         Width ??= "300px";
 
-        (OptionalUnits, Error) = CachedData.AllUnits;
+        (OptionalUnits, Error) = await CachedData.AllUnits;
     }
 } 

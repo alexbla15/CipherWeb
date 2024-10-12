@@ -73,13 +73,11 @@
         StateHasChanged();
     }
 
-    public VesselRequest Value()
-    {
-        return new()
+    public IVesselRequest Value()
+    => new VesselRequest()
         {
             Type = VesType.Value,
             Name = VesName.Value,
             SystemId = VesSys.ChosenSystem?.Id
         };
-    }
 }

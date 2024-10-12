@@ -113,12 +113,12 @@
     private CipherPackageId PackId = new();
     private CipherPackageProperties PackProps = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         // DON'T DELETE - it made the form refresh with details from url
         if (ChosenObject != null) StateHasChanged();
 
-        (packs, error) = CachedData.AllPackages;
+        (packs, error) = await CachedData.AllPackages;
     }
 
     public void Change()

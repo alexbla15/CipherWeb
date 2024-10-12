@@ -12,11 +12,11 @@
     private ErrorResponse error = ErrorResponse.Success;
     private List<IVessel> vessels = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= Vessel.Translate(nameof(IVessel.Type));
         Icon ??= Icons.Cipher.Type;
 
-        (vessels, error) = CachedData.AllVessels;
+        (vessels, error) = await CachedData.AllVessels;
     }
 }

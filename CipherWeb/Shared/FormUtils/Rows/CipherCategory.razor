@@ -4,13 +4,13 @@
     private ErrorResponse error = ErrorResponse.Success;
     private List<ICategory> subCategories = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Width ??= "300px";
         Label ??= "שם קטגוריה";
         Icon ??= Icons.Symbols.category;
 
-        (subCategories, error) = CachedData.AllCategories;
+        (subCategories, error) = await CachedData.AllCategories;
     }
 }
 

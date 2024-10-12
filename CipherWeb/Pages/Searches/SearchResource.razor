@@ -5,35 +5,35 @@
 @typeparam Cipher_TItem
 
 <ResourceForm @ref="ResourcePage" Title="@NavLink.Name">
-    @if (typeof(Cipher_TItem) == typeof(Unit))
+    @if (typeof(Cipher_TItem) == typeof(IUnit))
     {
-        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Unit)"
-                        SetMode="FormMode.ReadOnly" />
+        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as IUnit)" SetMode="FormMode.ReadOnly" />
     }
-    else if (typeof(Cipher_TItem) == typeof(Vessel))
+    else if (typeof(Cipher_TItem) == typeof(IVessel))
     {
-        <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Vessel)"
-                          SetMode="FormMode.ReadOnly" />
+        <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as IVessel)" SetMode="FormMode.ReadOnly" />
     }
-    else if (typeof(Cipher_TItem) == typeof(StorageSystem))
+    else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
     {
-        <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as StorageSystem)"
-                          SetMode="FormMode.ReadOnly" />
+        <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as IStorageSystem)" SetMode="FormMode.ReadOnly" />
     }
-    else if (typeof(Cipher_TItem) == typeof(Package))
+    else if (typeof(Cipher_TItem) == typeof(IPackage))
     {
-        <CipherPackageCard Title="" WithCard="false" @ref="@packCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Package)"
-                          SetMode="FormMode.ReadOnly" />
+        <CipherPackageCard Title="" WithCard="false" @ref="@packCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as IPackage)" SetMode="FormMode.ReadOnly" />
     }
-    else if (typeof(Cipher_TItem) == typeof(ProcessDefinition))
+    else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
     {
-        <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as ProcessDefinition)"
-                           SetMode="FormMode.ReadOnly" />
+        <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as IProcessDefinition)" SetMode="FormMode.ReadOnly" />
     }
-    else if (typeof(Cipher_TItem) == typeof(Category))
+    else if (typeof(Cipher_TItem) == typeof(ICategory))
     {
-        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" ChosenObject="@(ChosenObject as Category)"
-                           SetMode="FormMode.ReadOnly" />
+        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" 
+            ChosenObject="@(ChosenObject as ICategory)" SetMode="FormMode.ReadOnly" />
     }
     @if (ObjectHistory != null)
     {
@@ -58,7 +58,7 @@
     /// All of object historic changes
     /// </summary>
     [Parameter]
-    public UserActionResponse? ObjectHistory { get; set; }
+    public IUserActionResponse? ObjectHistory { get; set; }
 
     /// <summary>
     /// API response to search.
@@ -126,7 +126,7 @@
     /// <summary>
     /// Retrieve the object's ID for URL changes.
     /// </summary>
-    private string? GetObjectId(object? obj) => (obj as Resource)?.Id;
+    private string? GetObjectId(object? obj) => (obj as IResource)?.Id;
 
     /// <summary>
     /// Method to get object history from UserActions function within the Resource-object

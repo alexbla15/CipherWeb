@@ -44,15 +44,15 @@
                             {
                                 <CipherDatePicker @ref=cipherDate Label="@param.Name" ValueChanged="@(args=> param.Value = cipherDate.Value.ToString())" />
                             }
-                            else if (param.ParamType?.FieldType == typeof(Unit))
+                            else if (param.ParamType?.FieldType == typeof(IUnit))
                             {
                                 <CipherUnitDropDown @ref=cipherUnit Label="@param.Name" Change="@(args=>param.Value =cipherUnit.ChosenUnit?.Id)" />
                             }
-                            else if (param.ParamType?.FieldType == typeof(Vessel))
+                            else if (param.ParamType?.FieldType == typeof(IVessel))
                             {
                                 <CipherVesselDropDown @ref=cipherVes Label="@param.Name" Change="@(args=>param.Value =cipherVes.ChosenVessel?.Id)" />
                             }
-                            else if (param.ParamType?.FieldType == typeof(StorageSystem))
+                            else if (param.ParamType?.FieldType == typeof(IStorageSystem))
                             {
                                 <CipherLocation @ref=cipherSys Label="@param.Name" Change="@(args=>param.Value = cipherSys.ChosenSystem?.Id)" />
                             }

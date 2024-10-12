@@ -85,9 +85,9 @@
         StateHasChanged();
     }
 
-    public CategoryRequest Value()
+    public ICategoryRequest Value()
     {
-        return new()
+        return new CategoryRequest()
             {
                 ParentId = ParentCat.ChosenCategory?.Id,
                 Name = CatName.Value,

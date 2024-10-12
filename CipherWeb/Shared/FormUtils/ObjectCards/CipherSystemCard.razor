@@ -72,14 +72,12 @@
         StateHasChanged();
     }
 
-    public SystemRequest Value()
-    {
-        return new()
+    public ISystemRequest Value()
+    => new SystemRequest()
         {
             Name = SysName.Value,
             Description = SysDescription.Comments,
             ParentId = SysParent.ChosenSystem?.Id,
             UnitId = SysUnit.ChosenUnit?.Id
         };
-    }
 }

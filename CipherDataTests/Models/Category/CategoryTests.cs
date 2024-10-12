@@ -1,4 +1,6 @@
-﻿using CipherData.Randomizer;
+﻿using CipherData.ApiMode.Models.Category;
+using CipherData.ApiMode.Models.Process;
+using CipherData.RandomMode.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests

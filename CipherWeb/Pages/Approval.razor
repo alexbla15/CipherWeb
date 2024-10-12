@@ -53,13 +53,13 @@
     private CipherBooleanConditions EventsFilter = new();
     private CipherDisplayedEventsCard FilterableEvents = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= CipherNavLinks.Approval.Name;
 
-        (PendingEvents, Error) = IEvent.PendingEvents();
-        (ApprovedEvents, Error) = IEvent.ApprovedEvents();
-        (DeclinedEvents, Error) = IEvent.DeclinedEvents();
+        (PendingEvents, Error) = await IEvent.PendingEvents();
+        (ApprovedEvents, Error) = await IEvent.ApprovedEvents();
+        (DeclinedEvents, Error) = await IEvent.DeclinedEvents();
     }
 
     public async Task RefreshEvents()
@@ -77,16 +77,16 @@
         // order by time (1), and system-id (2)
         objectFactory.AddOrderBy(new OrderedItem()
             {
-                Attribute = $"[{nameof(Event)}].[{nameof(Event.Timestamp)}]",
+                Attribute = $"[{nameof(Event)}].[{nameof(IEvent.Timestamp)}]",
                 Order = Order.desc
             });
         objectFactory.AddOrderBy(new OrderedItem()
             {
-                Attribute = $"[{nameof(Event)}].[{nameof(Event.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(StorageSystem.Id)}]",
+                Attribute = $"[{nameof(Event)}].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]",
                 Order = Order.desc
             });
 
-        var result = Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        var result = await Config.QueryRequests.QueryObjects<Event>(objectFactory);
         (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
 
         JsonRequest = objectFactory.ToJson();

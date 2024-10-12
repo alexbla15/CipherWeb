@@ -1,4 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CipherData.ApiMode.Models.Category;
+using CipherData.ApiMode.Models.Package;
+using CipherData.ApiMode.Models.Process;
+using CipherData.ApiMode.Models.StorageSystem;
+using CipherData.ApiMode.Models.Vessel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
 {

@@ -124,7 +124,7 @@
     private IPackage OriginalPack = new Package() { Id = "" };
     private IPackage NewPack = new Package() { Id = "" };
 
-    private IUpdatePackage RequestedPackUpdate = new CipherData.Models.UpdatePackage();
+    private IUpdatePackage RequestedPackUpdate = new CipherData.ApiMode.UpdatePackage();
     private ICreateEvent UpdatePackEvent = new CreateEvent();
 
     private List<IPackageProperty>? NewProps = new();
@@ -168,7 +168,7 @@
     public void ChangeUrl()
     {
         ChosenPackage = OriginalPackage.ChosenPackage;
-        string newUrl = CipherNavLinks.UpdatePackage.Href;
+        string newUrl = CipherNavLinks.UpdatePackage.Href ?? string.Empty;
         newUrl = (ChosenPackage is null) ? newUrl : $"{newUrl}?Id={ChosenPackage.Id}";
         Navigation.NavigateTo(newUrl);
     }
@@ -368,22 +368,22 @@
     /// <summary>
     /// Send create-event request to API
     /// </summary>
-    public void SendCreateEventRequest()
+    public async Task SendCreateEventRequest()
     {
         if (Valid && FoundCreateEventChanges())
         {
             CreateEventJsonRequest = UpdatePackEvent.ToJson();
 
-            (CreateEventResult, Error) = Config.EventsRequests.CreateEvent(UpdatePackEvent);
+            (CreateEventResult, Error) = await Config.EventsRequests.CreateEvent(UpdatePackEvent);
 
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
+                submission.SetValid(false);
+                submission.SetErrorMessage(ErrorMessage);
             }
             else
             {
-                submission.Valid = true;
+                submission.SetValid(true);
             }
         }
         else
@@ -396,21 +396,21 @@
     /// <summary>
     /// Send update-package request to API
     /// </summary>
-    public void SendUpdatePackageRequest(string originalPackId)
+    public async Task SendUpdatePackageRequest(string originalPackId)
     {
         if (Valid && FoundUpdatePackageChanges())
         {
             UpdatePackJsonRequest = RequestedPackUpdate.ToJson();
 
-            (UpdatePackResult, Error) = Config.PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
+            (UpdatePackResult, Error) = await Config.PackagesRequests.UpdatePackage(originalPackId, RequestedPackUpdate);
             if (Error != ErrorResponse.Success)
             {
-                submission.Valid = false;
-                submission.ErrorMessage = Error.Message;
+                submission.SetValid(false);
+                submission.SetErrorMessage(ErrorMessage);
             }
             else
             {
-                submission.Valid = true;
+                submission.SetValid(true);
             }
         }
         else

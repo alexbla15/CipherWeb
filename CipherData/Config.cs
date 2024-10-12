@@ -1,12 +1,9 @@
-﻿using CipherData.Models.Randomizers;
-using CipherData.Models;
-using CipherData.Randomizer;
-using CipherData.RequestsInterface;
-
-namespace CipherData
+﻿namespace CipherData
 {
     public static class Config
     {
+        public const bool RandomMode = true;
+
         public static readonly ICategoriesRequests CategoriesRequests = new RandomCategoriesRequests();
         public static readonly IEventsRequests EventsRequests = new RandomEventsRequests();
         public static readonly IGenericRequests GenericRequests = new RandomGenericRequests();
@@ -23,6 +20,6 @@ namespace CipherData
         public static readonly Func<IPackage, Tuple<List<IProcess>, ErrorResponse>> GetPackageProcesses = (IPackage p) => RandomData.Package.Processes();
 
         public static readonly Func<string?, Tuple<IPackage, ErrorResponse>> GetPackage = IPackage.Get;
-        public static readonly Func<string?, Tuple<IProcess, ErrorResponse>> GetProcess = RandomProcess.Get;
+        public static readonly Func<string?, Task<Tuple<IProcess, ErrorResponse>>> GetProcess = IProcess.Get;
     }
 }

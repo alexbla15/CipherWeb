@@ -44,11 +44,11 @@
 
     private RadzenDataGrid<IPackage> CustomDataGrid = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= "תעודות מוסרות";
 
-        (allPacks, error) = CachedData.AllPackages;
+        (allPacks, error) = await CachedData.AllPackages;
     }
 
     /// <summary>

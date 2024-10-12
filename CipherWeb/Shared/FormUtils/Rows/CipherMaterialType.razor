@@ -1,7 +1,7 @@
 ﻿@inherits CipherFormRow
 
 <CipherFormRow Icon="@Icon">
-    <RadzenDropDownDataGrid Placeholder="@Label" TValue="Category" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
+    <RadzenDropDownDataGrid Placeholder="@Label" TValue="ICategory" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
                             Style="width:300px" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(Category.Translate(nameof(ICategory.Id)))" />
@@ -24,17 +24,17 @@
     /// Chosen value
     /// </summary>
     [Parameter]
-    public Category? ChosenMaterialType { get; set; }
+    public ICategory? ChosenMaterialType { get; set; }
 
     private ErrorResponse error = ErrorResponse.Success;
     private List<ICategory> categories = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "סוג החומר";
         Icon ??= Icons.Cipher.Material;
 
-        (categories, error) = CachedData.AllCategories;
+        (categories, error) = await CachedData.AllCategories;
 
         // filter only material types
         categories = categories.Where(x => x.Parent == null).ToList();

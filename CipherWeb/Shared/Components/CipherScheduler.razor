@@ -1,9 +1,7 @@
 ﻿@using System;
-@using CipherData.Models.Randomizers;
 
 @inject DialogService DialogService
 @inject TooltipService TooltipService
-@inject ICipherInfo _db
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender dir="ltr"
                  style="@SchedulerStyle()" TItem="IProcess" AppointmentSelect="@SelectProcess"

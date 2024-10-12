@@ -51,7 +51,7 @@
 
     private CipherAutoComplete component = new CipherAutoComplete();
 
-    protected override void OnInitialized() => (AllPacks, Error) = CachedData.AllPackages;
+    protected override async Task OnInitializedAsync() => (AllPacks, Error) = await CachedData.AllPackages;
 
     public IPackage? GetValue() => ChosenPackage;
 }

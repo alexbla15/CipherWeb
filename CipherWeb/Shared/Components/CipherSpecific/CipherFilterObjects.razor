@@ -1,7 +1,8 @@
 ﻿@if (WithFilter)
 {
     <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
-        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" Change="@(async args => {ChosenCondition = new GroupedBooleanCondition() ; await ParamsChanged();})">
+        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" 
+        Change="@(async args => {ChosenCondition = new GroupedBooleanCondition() ; await ParamsChanged();})">
             <Items>
                 @foreach (string objType in objectTypes)
                 {
@@ -52,15 +53,23 @@
 
     private CipherBooleanConditions DataFilter = new();
 
+    private List<IPackage>? Packages;
+    private List<IVessel>? Vessels;
+    private List<IStorageSystem>? Systems;
+    private List<IEvent>? Events;
+    private List<IProcess>? Processes;
+    private List<ICategory>? Categories;
+    private List<IUnit>? Units;
+
     public int GetTypeId(Type t)
     {
-        if (t == typeof(Package)) return 0;
-        if (t == typeof(Vessel)) return 1;
-        if (t == typeof(StorageSystem)) return 2;
-        if (t == typeof(Event)) return 3;
-        if (t == typeof(Process)) return 4;
-        if (t == typeof(Category)) return 5;
-        if (t == typeof(Unit)) return 6;
+        if (t == typeof(IPackage)) return 0;
+        if (t == typeof(IVessel)) return 1;
+        if (t == typeof(IStorageSystem)) return 2;
+        if (t == typeof(IEvent)) return 3;
+        if (t == typeof(IProcess)) return 4;
+        if (t == typeof(ICategory)) return 5;
+        if (t == typeof(IUnit)) return 6;
         return 0;
     }
 
@@ -71,41 +80,97 @@
 
     public Type GetReportType() => _ChosenId switch
     {
-        0 => typeof(Package),
-        1 => typeof(Vessel),
-        2 => typeof(StorageSystem),
-        3 => typeof(Event),
-        4 => typeof(Process),
-        5 => typeof(Category),
-        6 => typeof(Unit),
-        _ => typeof(CipherClass)
+        0 => typeof(IPackage),
+        1 => typeof(IVessel),
+        2 => typeof(IStorageSystem),
+        3 => typeof(IEvent),
+        4 => typeof(IProcess),
+        5 => typeof(ICategory),
+        6 => typeof(IUnit),
+        _ => typeof(ICipherClass)
     };
 
-    public RenderFragment? RenderCipherDataTable(int id) => id switch
+    public async Task PreloadDataAsync()
     {
-        0 => @<CipherPackagesTable ChosenObjects="@(GetFilteredObjects<Package>())" WithButtons="@WithButtons"/>,
-        1 => @<CipherVesselsTable ChosenObjects="@(GetFilteredObjects<Vessel>())" />,
-        2 => @<CipherSystemsTable ChosenObjects="@(GetFilteredObjects<StorageSystem>())" />,
-        3 => @<CipherEventsTable ChosenObjects="@(GetFilteredObjects<Event>())" />,
-        4 => @<CipherProcessesTable ChosenObjects="@(GetFilteredObjects<Process>())" />,
-        5 => @<CipherCategoriesTable ChosenObjects="@(GetFilteredObjects<Category>())" />,
-        6 => @<CipherUnitsTable ChosenObjects="@(GetFilteredObjects<Unit>())" />,
-        _ => null
-    };
-
-    public RenderFragment? RenderCipherDataTable(Type type)
-    {
-        int id = GetTypeId(type);
-        return RenderCipherDataTable(id);
+        Packages = await GetFilteredObjects<IPackage>();
+        Vessels = await GetFilteredObjects<IVessel>();
+        Systems = await GetFilteredObjects<IStorageSystem>();
+        Events = await GetFilteredObjects<IEvent>();
+        Processes = await GetFilteredObjects<IProcess>();
+        Categories = await GetFilteredObjects<ICategory>();
+        Units = await GetFilteredObjects<IUnit>();
     }
 
-    public RenderFragment? RenderCipherDataTable() => RenderCipherDataTable(_ChosenId);
+    public async Task<RenderFragment?> RenderCipherDataTable(int id)
+    {
+        await PreloadDataAsync();
 
-    public List<T> GetFilteredObjects<T>() where T : Resource
+        // Define the RenderFragment based on the id
+        return id switch
+        {
+        0 => builder =>
+        {
+            builder.OpenComponent<CipherPackagesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Packages);
+            builder.AddAttribute(2, "WithButtons", WithButtons);
+            builder.CloseComponent();
+        },
+        1 => builder =>
+        {
+            builder.OpenComponent<CipherVesselsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Vessels);
+            builder.CloseComponent();
+        },
+        2 => builder =>
+        {
+            builder.OpenComponent<CipherSystemsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Systems);
+            builder.CloseComponent();
+        },
+        3 => builder =>
+        {
+            builder.OpenComponent<CipherEventsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Events);
+            builder.CloseComponent();
+        },
+        4 => builder =>
+        {
+            builder.OpenComponent<CipherProcessesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Processes);
+            builder.CloseComponent();
+        },
+        5 => builder =>
+        {
+            builder.OpenComponent<CipherCategoriesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Categories);
+            builder.CloseComponent();
+        },
+        6 => builder =>
+        {
+            builder.OpenComponent<CipherUnitsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Units);
+            builder.CloseComponent();
+        },
+        _ => builder =>
+        {
+            builder.AddContent(0, "No matching table found.");
+        }
+    };
+    }
+
+    public async Task<RenderFragment?> RenderCipherDataTable(Type type)
+    {
+        int id = GetTypeId(type);
+        return await RenderCipherDataTable(id);
+    }
+
+    public async Task<RenderFragment?> RenderCipherDataTable() => await RenderCipherDataTable(_ChosenId);
+
+    public async Task<List<T>> GetFilteredObjects<T>() where T : IResource
     {
         List<T> objects = new();
         ObjectFactory obj = new() { Filter = ChosenCondition };
-        (objects, Error) = Config.QueryRequests.QueryObjects<T>(obj);
+        (objects, Error) = await Config.QueryRequests.QueryObjects<T>(obj);
         return objects;
     }
 

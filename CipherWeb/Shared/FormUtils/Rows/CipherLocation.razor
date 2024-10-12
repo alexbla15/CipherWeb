@@ -83,11 +83,11 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Label ??= StorageSystem.Translate(nameof(StorageSystem.Name));
+        Label ??= StorageSystem.Translate(nameof(IStorageSystem.Name));
         Icon ??= Icons.Cipher.Location;
 
-        (AvailableSystems, Error) = CachedData.AllSystems;
+        (AvailableSystems, Error) = await CachedData.AllSystems;
     }
 }

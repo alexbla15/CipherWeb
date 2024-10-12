@@ -3,9 +3,9 @@
 <ResourceForm Title="@NavLink?.Name">
     <CipherFormInfo @ref="FormInfo" />
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-        <CipherAmount Label="@CreateTranserAmountEvent.Translate(nameof(CreateTranserAmountEvent.Amount))" @ref=DeltaM />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
+        <CipherPackageId Label="@CreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+        <CipherAmount Label="@CreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.Amount))" @ref=DeltaM />
         <CipherProcess @ref=EventProc />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
@@ -65,7 +65,7 @@
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
-    public void Submit()
+    public async Task Submit()
     {
         RequestedEvent = new CreateTranserAmountEvent()
         {
@@ -80,20 +80,20 @@
 
         (Valid, ErrorMessage) = RequestedEvent.Check();
 
-        SendRequest();
+        await SendRequest();
 
     }
 
     /// <summary>
     /// Send request to API
     /// </summary>
-    public void SendRequest()
+    public async Task SendRequest()
     {
         if (Valid)
         {
             ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
+            (ResultEvent, Error) = await Config.EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

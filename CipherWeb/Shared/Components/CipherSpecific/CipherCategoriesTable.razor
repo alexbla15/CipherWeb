@@ -1,10 +1,14 @@
 ﻿@inherits CipherResourceTable<ICategory>
 
-<CipherResourceTable Cipher_TItem="ICategory" ChosenObjects="@CachedData.AllCategories.Item1" PrefixFileTitle="categories" Title="@Title" WithHeaderContent="false" />
+<CipherResourceTable Cipher_TItem="ICategory" ChosenObjects="@ChosenObjects"
+                     PrefixFileTitle="categories" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= Translator.GetTranslation("Categories");
+
+        var result = await CachedData.AllCategories;
+        ChosenObjects = result.Item1;
     }
 }

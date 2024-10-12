@@ -72,11 +72,12 @@
     private Variant MonthVariant;
     private Variant YearVariant;
 
-    List<IEvent> events = new();
+    List<IEvent> ChosenEvents = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        events = CachedData.AllEvents.Item1;
+        var result = await CachedData.AllEvents;
+        ChosenEvents = result.Item1;
         MonthView();
     }
 
@@ -84,7 +85,7 @@
     {
         Dictionary<string, int> ProcessCounter = new Dictionary<string, int>();
 
-        foreach (Event ev in events)
+        foreach (Event ev in ChosenEvents)
         {
             if (AddProcess(ev))
             {
@@ -101,7 +102,7 @@
         return ProcessCounter;
     }
 
-    private bool AddProcess(Event ev)
+    private bool AddProcess(IEvent ev)
     {
         return View switch
         {

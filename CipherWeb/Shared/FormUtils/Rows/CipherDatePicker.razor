@@ -101,7 +101,7 @@
         public DateTime value { get; set; } = DateTime.Now;
     }
 
-    private Model model = new Model();
+    private Model model = new();
     private RadzenRequiredValidator RequiredValidator = new();
 
     protected override void OnInitialized()

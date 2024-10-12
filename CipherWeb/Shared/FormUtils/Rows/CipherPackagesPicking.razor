@@ -37,14 +37,14 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "תעודות";
         Icon ??= Icons.Cipher.Package;
         MinWidth ??= "300px";
         Width ??= "300px";
 
-        (packs, error) = CachedData.AllPackages;
+        (packs, error) = await CachedData.AllPackages;
     }
 }
 

@@ -74,7 +74,7 @@
     private IPackage NewPackage = new Package();
     private List<IPackageProperty> ChosenProperties = new();
 
-    protected override void OnInitialized() => (AllVessels, Error) = CachedData.AllVessels;
+    protected override async Task OnInitializedAsync() => (AllVessels, Error) = await CachedData.AllVessels;
 
     public IPackage Value()
     {
@@ -111,18 +111,18 @@
         }
     }
 
-    public void ChangedSystem()
+    public async Task ChangedSystem()
     {
         ChosenVessel = null;
         ChosenSystem = packLocation.ChosenSystem;
 
         if (packLocation.ChosenSystem is null)
         {
-            (AllVessels, Error) = IVessel.All();
+            (AllVessels, Error) = await IVessel.All();
         }
         else
         {
-            var result = IStorageSystem.Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
+            var result = await IStorageSystem.Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
             (AllVessels, Error) = (result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
     }

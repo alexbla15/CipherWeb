@@ -1,5 +1,6 @@
-﻿using CipherData.Models;
-using Radzen;
+﻿using Radzen;
+using CipherData.Interfaces;
+using CipherData.ApiMode;
 
 namespace CipherWeb.Data
 {
@@ -13,7 +14,7 @@ namespace CipherWeb.Data
 
         public static readonly bool CheckJsons = true;
 
-        public static readonly Worker SetUser = new() { Name = "אלכס בלחמן" };
+        public static readonly IWorker SetUser = new Worker() { Name = "אלכס בלחמן" };
 
         public static readonly string CompanyName = "היחידה להנדסת תהליך";
         public static readonly string DeveloperNames = "אלכס בלחמן ושחר פייט";

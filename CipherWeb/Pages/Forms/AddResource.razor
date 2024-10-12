@@ -126,7 +126,7 @@
     /// <summary>
     /// Method for submitting checked request, or showing errors within the checking process.
     /// </summary>
-    public void Submit()
+    public async Task Submit()
     {
         Valid = true;
         var requestCheck = HandleSubmissionRequest();
@@ -137,40 +137,40 @@
             ErrorMessage = requestCheck.Item2;
         }
 
-        SendRequest();
+        await SendRequest();
         UpdateSubmissionSummary();
     }
 
     /// <summary>
     /// Send request to API
     /// </summary>
-    public void SendRequest()
+    public async Task SendRequest()
     {
         if (!Valid) return;
 
         if (typeof(Cipher_TItem) == typeof(IUnit))
         {
-            HandleRequest(() => SendUnitRequest());
+            await HandleRequest(() => SendUnitRequest());
         }
         else if (typeof(Cipher_TItem) == typeof(ICategory))
         {
-            HandleRequest(() => SendCategoryRequest());
+            await HandleRequest(() => SendCategoryRequest());
         }
         else if (typeof(Cipher_TItem) == typeof(IVessel))
         {
-            HandleRequest(() => SendVesselRequest());
+            await HandleRequest(() => SendVesselRequest());
         }
         else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
         {
-            HandleRequest(() => SendProcessDefinitionRequest());
+            await HandleRequest(() => SendProcessDefinitionRequest());
         }
         else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
         {
-            HandleRequest(() => SendSystemRequest());
+            await HandleRequest(() => SendSystemRequest());
         }
         else if (typeof(Cipher_TItem) == typeof(IPackage))
         {
-            HandleRequest(() => SendPackageRequest());
+            await HandleRequest(() => SendPackageRequest());
         }
         else
         {
@@ -195,46 +195,51 @@
     /// Method to check if there were changed in the object, and then sending its request to API.
     /// </summary>
     /// <param name="sendRequest">method to send the request to the API</param>
-    private void HandleRequest(Func<Tuple<Cipher_TItem, ErrorResponse>?> sendRequest)
+    private async Task HandleRequest(Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>> sendRequest)
     {
-        var requestResult = sendRequest();
+        var requestResult = await sendRequest();
         if (requestResult != null) (Result, Error) = requestResult.ToValueTuple();
     }
 
-    public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
+    public async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.UnitsRequests.CreateUnit(unitRequest);
+        var result = await Config.UnitsRequests.CreateUnit(unitRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
-    private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.CategoriesRequests.CreateCategory(catRequest);
+        var result = await Config.CategoriesRequests.CreateCategory(catRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
-    private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.VesselsRequests.CreateVessel(vesRequest);
+        var result = await Config.VesselsRequests.CreateVessel(vesRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
-    private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendProcessDefinitionRequest()
     {
         JsonRequest = procDefRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.ProcessesDefinitionsRequests.CreateProcessDefinition(procDefRequest);
+        var result = await Config.ProcessesDefinitionsRequests.CreateProcessDefinition(procDefRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
-    private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendSystemRequest()
     {
         JsonRequest = sysRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.SystemsRequests.CreateSystem(sysRequest);
+        var result = await Config.SystemsRequests.CreateSystem(sysRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
-    private Tuple<Cipher_TItem, ErrorResponse>? SendPackageRequest()
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendPackageRequest()
     {
         JsonRequest = packRequest.ToJson();
-        Tuple<IEvent, ErrorResponse> evResult = Config.EventsRequests.CreateEvent(packRequest);
+        Tuple<IEvent, ErrorResponse> evResult = await Config.EventsRequests.CreateEvent(packRequest);
         if (evResult.Item1.FinalStatePackages.Count > 0)
         {
             return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(evResult.Item1.FinalStatePackages[0], evResult.Item2);

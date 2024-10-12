@@ -44,13 +44,13 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Label ??= ProcessDefinition.Translate(nameof(ProcessDefinition.Name));
+        Label ??= ProcessDefinition.Translate(nameof(IProcessDefinition.Name));
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
         MinWidth ??= "300px";
 
-        if (Processes.Count() == 0) (Processes, Error) = CachedData.AllProcessDefinitions;
+        if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }
 }

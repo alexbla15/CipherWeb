@@ -56,12 +56,12 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "בחירת קטגוריה";
         Icon ??= Icons.Symbols.category;
         Width ??= "300px";
 
-        (categories, error) = CachedData.AllCategories;
+        (categories, error) = await CachedData.AllCategories;
     }
 }

@@ -98,11 +98,11 @@
         Authorizer
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
-        var result = IStorageSystem.Processes(SelectedSystem);
+        var result = await IStorageSystem.Processes(SelectedSystem);
         (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
         SetFileName();
     }
@@ -116,9 +116,9 @@
     /// <summary>
     /// Function taking place upon clicking Enter.
     /// </summary>
-    private void SearchFunc()
+    private async Task SearchFunc()
     {
-        var result = IStorageSystem.Processes(SelectedSystem);
+        var result = await IStorageSystem.Processes(SelectedSystem);
         (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
         SetFileName();

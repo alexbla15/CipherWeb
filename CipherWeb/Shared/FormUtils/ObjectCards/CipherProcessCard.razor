@@ -72,9 +72,9 @@
         StateHasChanged();
     }
 
-    public ProcessDefinitionRequest Value()
+    public IProcessDefinitionRequest Value()
     {
-        ProcessDefinitionRequest proc = new();
+        IProcessDefinitionRequest proc = new ProcessDefinitionRequest();
 
         if (ProcName.Check()) proc.Name = ProcName.Value;
         if (ProcDescription.Check()) proc.Description = ProcDescription.Value;

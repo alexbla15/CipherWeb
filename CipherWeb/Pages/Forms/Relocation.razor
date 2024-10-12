@@ -62,7 +62,7 @@
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
-    public void Submit()
+    public async Task Submit()
     {
         Valid = true;
 
@@ -77,19 +77,19 @@
 
         (Valid, ErrorMessage) = RequestedEvent.Check();
 
-        SendRequest();
+        await SendRequest();
     }
 
     /// <summary>
     /// Send request to API
     /// </summary>
-    public void SendRequest()
+    public async Task SendRequest()
     {
         if (Valid)
         {
             ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
+            (ResultEvent, Error) = await Config.EventsRequests.CreateEvent(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

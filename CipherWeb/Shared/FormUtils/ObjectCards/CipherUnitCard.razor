@@ -76,13 +76,11 @@
         StateHasChanged();
     }
 
-    public UnitRequest Value()
-    {
-        return new()
+    public IUnitRequest Value()
+    => new UnitRequest()
         {
             Name = UnitName.Value,
             Description = UnitDescription.Value,
             ParentId = UnitParent.ChosenUnit?.Id
         };
-    }
 }

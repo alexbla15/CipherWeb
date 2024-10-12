@@ -53,12 +53,12 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Label ??= Vessel.Translate(nameof(Vessel.Name));
+        Label ??= Vessel.Translate(nameof(IVessel.Name));
         Icon ??= Icons.Cipher.Vessel;
         Width ??= "300px";
 
-        if (AllVessels.Count == 0) (AllVessels, Error) = CachedData.AllVessels;
+        if (AllVessels.Count == 0) (AllVessels, Error) = await CachedData.AllVessels;
     }
 }

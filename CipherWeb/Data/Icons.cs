@@ -1,15 +1,4 @@
-﻿using static CipherWeb.Data.Icons.Symbols;
-using static CipherWeb.Data.Icons;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
-using System.Threading;
-using CipherData.Models;
-using System;
-using static CipherWeb.Data.Icons.Travel.Vehicles;
-using static Dapper.SqlMapper;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-
-namespace CipherWeb.Data
+﻿namespace CipherWeb.Data
 {
     public class Icons
     {

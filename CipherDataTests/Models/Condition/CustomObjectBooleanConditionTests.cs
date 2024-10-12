@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CipherData.ApiMode.Models.Condition;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CipherData.Models.Tests
 {

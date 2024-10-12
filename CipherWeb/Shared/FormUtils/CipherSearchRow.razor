@@ -55,11 +55,11 @@
     private CipherAutoComplete autoComplete = new();
     private string SearchText = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         LabelText ??= "חיפוש תעודה";
 
-        (ChosenPackages, error) = CachedData.AllPackages;
+        (ChosenPackages, error) = await CachedData.AllPackages;
 
         // Set default OnKeyDown if not provided
         if (!OnKeyDown.HasDelegate) OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, SearchFunc);
