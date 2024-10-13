@@ -56,7 +56,7 @@
         public static IProcessStepDefinition ProcessStepDefinition(bool newObject = true)
             => GetObject<IProcessStepDefinition, RandomProcessStepDefinition, ProcessStepDefinition>(newObject);
 
-        public static IUnit Unit(bool newObject)
+        public static IUnit Unit(bool newObject = true)
             => GetObject<IUnit, RandomUnit, Unit>(newObject);
 
         public static IUnitRequest UnitRequest() => new UnitRequest();

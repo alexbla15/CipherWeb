@@ -1,14 +1,15 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits CipherMaskList
 
-<CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@Label"/>
+<CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@PlaceHolder" 
+SelectedTexts="@SelectedTexts" ValueChanged="@ValueChanged"/>
 
 @code {
     private CipherMaskList Masks = new();
 
     protected override void OnInitialized()
     {
-        Label ??= ICategory.Translate(nameof(ICategory.IdMask));
-        Icon ??= Icons.Security.password;
+        PlaceHolder = ICategory.Translate(nameof(ICategory.IdMask));
+        Icon = Icons.Security.password;
     }
 
     /// <summary>

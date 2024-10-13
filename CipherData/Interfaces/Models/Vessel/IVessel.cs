@@ -20,7 +20,7 @@ namespace CipherData.Interfaces
         /// System in which vessel is at
         /// </summary>
         [HebrewTranslation(typeof(Vessel), nameof(System))]
-        IStorageSystem System { get; set; }
+        IStorageSystem? System { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
@@ -34,7 +34,7 @@ namespace CipherData.Interfaces
                 [nameof(Id)] = Id,
                 [nameof(Name)] = Name,
                 [nameof(Type)] = Type,
-                [nameof(System)] = System.Name,
+                [nameof(System)] = System?.Name,
                 [nameof(ContainingPackages)] = ContainingPackages is null ? null : string.Join(", ", ContainingPackages.Select(x => x.Id)),
             };
 
@@ -42,7 +42,7 @@ namespace CipherData.Interfaces
         /// Transfrom package object to a VesselRequest object
         /// </summary>
         /// <returns></returns>
-        public IVesselRequest Request() => new VesselRequest() { Name = Name, Type = Type, SystemId = System.Id };
+        public IVesselRequest Request() => new VesselRequest() { Name = Name, Type = Type, SystemId = System?.Id };
 
 
         // STATIC METHODS
@@ -55,7 +55,7 @@ namespace CipherData.Interfaces
         /// Get details about a single vessel given vessel ID
         /// </summary>
         /// <param name="id">vessel ID</param>
-        Task<Tuple<IVessel, ErrorResponse>> Get(string id);
+        Task<Tuple<IVessel, ErrorResponse>> Get(string? id);
 
         /// <summary>
         /// All objects
@@ -65,7 +65,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Fetch all vessels which contain the searched text
         /// </summary>
-        Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string SearchText);
+        Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText);
 
         /// <summary>
         /// Method to create a new object from a request

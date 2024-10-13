@@ -20,12 +20,12 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
                 <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />
+                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent Change="@ChangeDetail" />
             </ChildContent>
         </CipherComponentCard>
     </ChildContent>
@@ -49,6 +49,12 @@
     /// </summary>
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
 
     /// <summary>
     /// Error response for fetching data
@@ -76,12 +82,12 @@
         StateHasChanged();
     }
 
-    public IUnitRequest Value()
+    public void ChangeDetail()
     {
-        var req = Config.UnitRequest();
-        req.Name = UnitName.Value;
-        req.Description = UnitDescription.Value;
-        req.ParentId = UnitParent.ChosenUnit?.Id;
-        return req;
+        if (ChosenObject is null) return;
+        ChosenObject.Name = UnitName.Value;
+        ChosenObject.Description = UnitDescription.Value;
+        ChosenObject.Parent = UnitParent.ChosenUnit;
+        ChangeDetails.InvokeAsync();
     }
 }

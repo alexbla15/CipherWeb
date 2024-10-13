@@ -29,19 +29,19 @@ namespace CipherData.Interfaces
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.IdMask))]
-        List<string> IdMask { get; set; }
+        List<string>? IdMask { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.ConsumingProcesses))]
-        List<string?> ConsumingProcesses { get; set; }
+        List<string?>? ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(Category.CreatingProcesses))]
-        List<string?> CreatingProcesses { get; set; }
+        List<string?>? CreatingProcesses { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.

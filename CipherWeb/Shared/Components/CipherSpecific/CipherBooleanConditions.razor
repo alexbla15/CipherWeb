@@ -48,6 +48,9 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private RadzenDataFilter<CipherField> dataFilter = new();
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
@@ -213,6 +216,7 @@
         //StateHasChanged();
         Save(fields);
         await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
+        await ValueChanged.InvokeAsync();
     }
 
     public async Task Clear()

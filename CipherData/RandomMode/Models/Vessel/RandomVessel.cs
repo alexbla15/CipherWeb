@@ -19,7 +19,7 @@
         public List<IPackage>? ContainingPackages { get; set; } = new() { new Package() { Id = "VP" } };
 
         [HebrewTranslation(typeof(Vessel), nameof(System))]
-        public IStorageSystem System { get; set; } = new RandomStorageSystem();
+        public IStorageSystem? System { get; set; } = new RandomStorageSystem();
 
         // STATIC METHODS
 

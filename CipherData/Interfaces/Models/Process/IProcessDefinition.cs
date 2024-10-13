@@ -44,6 +44,14 @@ namespace CipherData.Interfaces
         /// </summary>
         Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string? SearchText);
 
+        public IProcessDefinitionRequest Request() =>
+            new ProcessDefinitionRequest()
+            {
+                Description= Description,
+                Name= Name,
+                Steps= Steps
+            };
+
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);

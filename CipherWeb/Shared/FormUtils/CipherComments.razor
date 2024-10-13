@@ -39,4 +39,5 @@
 }
 
 <CipherAutoComplete @ref="component" Required="@Required" Width="@Width" ShowErrors="true" Icon="@Icon" Label="@Label" Disabled="@Disabled"
-                    Multiline="true" @bind-Value="Comments" Style="@TextAreaStyle()" Placeholder="@Placeholder"/>
+                    Multiline="true" Value="@Comments" Style="@TextAreaStyle()" Placeholder="@Placeholder" 
+                    ValueChanged="@(args => {Comments=args; ValueChanged.InvokeAsync();})"/>

@@ -20,20 +20,21 @@
                     }
                 </Buttons>
                 <ChildContent>
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" Icon="@Icons.Symbols.category" @ref=CatName
+                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" Icon="@Icons.Symbols.category" @ref=CatName ValueChanged="@ChangeDetail"
                                         Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
                     <CipherCategoryDropDown Label="@(ICategory.Translate(nameof(ICategory.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((ICategory?)args))"
                                             Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true"
+                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true" ValueChanged="@ChangeDetail"
                                         @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
-                    <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" @ref=InProcs
+                    <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" @ref=InProcs Change="@ChangeDetail"
                                      Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
-                    <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(ICategory.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs
+                    <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(ICategory.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs Change="@ChangeDetail"
                                      Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
-                    <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.IdMask[0]" />
+                    <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                SelectedTexts="@ChosenObject?.IdMask.ToHashSet()" ValueChanged="@ChangeDetail"/>
                 </ChildContent>
             </CipherComponentCard>
-            <CipherCategoryProperties @ref=CatProperties
+            <CipherCategoryProperties @ref=CatProperties ValueChanged="@ChangeDetail"
                                       ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
         }
     </ChildContent>
@@ -57,6 +58,12 @@
     /// </summary>
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
+
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
 
     private CipherCategoryDropDown CatId = new();
     private CipherCategoryDropDown ParentCat = new();
@@ -85,17 +92,17 @@
         StateHasChanged();
     }
 
-    public ICategoryRequest Value()
+    public void ChangeDetail()
     {
-        var req = Config.CategoryRequest();
-        req.ParentId = ParentCat.ChosenCategory?.Id;
-        req.Name = CatName.Value;
-        req.Description = CatDescription.Value;
-        req.CreatingProcesses = (InProcs.ChosenProcesses is null) ? new() : InProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        req.ConsumingProcesses = (OutProcs.ChosenProcesses is null) ? new() : OutProcs.ChosenProcesses.Select(x => x.Id).ToList();
-        req.Properties = CatProperties.ChosenProperties;
-        req.IdMask = CatMask.GetValue();
-        return req;
+        if (ChosenObject is null) return;
+        ChosenObject.Parent = ParentCat.ChosenCategory;
+        ChosenObject.Name = CatName.Value;
+        ChosenObject.Description = CatDescription.Value;
+        ChosenObject.CreatingProcesses = InProcs.ChosenProcesses;
+        ChosenObject.ConsumingProcesses = OutProcs.ChosenProcesses;
+        ChosenObject.Properties = CatProperties.ChosenProperties;
+        ChosenObject.IdMask = CatMask.GetValue();
+        ChangeDetails.InvokeAsync();
     }
 
     /// <summary>
@@ -103,6 +110,8 @@
     /// </summary>
     public void ChangedParent(ICategory? parent)
     {
+        ParentCat.ChosenCategory = parent;
+
         Parent = parent;
         ParentProps = null;
 
@@ -110,5 +119,7 @@
         {
             if (parent.Properties != null) ParentProps = parent.Properties;
         }
+
+        ChangeDetail();
     }
 }

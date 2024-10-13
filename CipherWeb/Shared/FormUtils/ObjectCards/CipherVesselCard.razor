@@ -19,15 +19,16 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
+                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
-                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category"
+                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
-                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenSystem="@ChosenObject?.System" @ref=VesSys />
+                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                ChosenSystem="@ChosenObject?.System" @ref=VesSys Change="@ChangeDetail" />
 
                 @if (SetMode == FormMode.ReadOnly)
                 {
-                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" />
+                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" Change="@ChangeDetail" />
                 }
             </ChildContent>
         </CipherComponentCard>
@@ -53,6 +54,12 @@
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
 
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
     private CipherVesselDropDown VesId = new();
     private CipherAutoComplete VesName = new();
     private CipherAutoComplete VesType = new();
@@ -66,19 +73,19 @@
         if (ChosenObject != null) StateHasChanged();
     }
 
+    public void ChangeDetail()
+    {
+        if (ChosenObject is null) return;
+        ChosenObject.Type = VesType.Value;
+        ChosenObject.Name = VesName.Value;
+        ChosenObject.System = VesSys.ChosenSystem;
+        ChangeDetails.InvokeAsync();
+    }
+
     public void Change()
     {
         ChosenObject = VesId.ChosenVessel;
         ChangeObject.InvokeAsync();
         StateHasChanged();
-    }
-
-    public IVesselRequest Value()
-    {
-        IVesselRequest req = Config.VesselRequest();
-        req.Type = VesType.Value;
-        req.Name = VesName.Value;
-        req.SystemId = VesSys.ChosenSystem?.Id;
-        return req;
     }
 }

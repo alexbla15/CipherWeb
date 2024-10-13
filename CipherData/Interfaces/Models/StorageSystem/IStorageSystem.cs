@@ -38,9 +38,7 @@ namespace CipherData.Interfaces
         /// Unit responsible for this system.
         /// </summary>
         [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
-        IUnit Unit { get; set; }
-
-        // STATIC METHODS
+        IUnit? Unit { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
         {
@@ -55,6 +53,16 @@ namespace CipherData.Interfaces
                 [nameof(Properties)] = Properties != null ? string.Join(", ", Properties.Select(x => $"{x.Key} : {x.Value}")) : null,
             };
         }
+
+        public ISystemRequest Request() =>
+            new SystemRequest()
+            {
+                ParentId = Parent?.Id,
+                Name = Name,
+                Description = Description,
+                Properties = Properties,
+                UnitId=Unit?.Id
+            };
 
         // STATIC METHODS
 

@@ -25,7 +25,7 @@
         public List<IStorageSystem>? Children { get; set; }
 
         [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
-        public IUnit Unit { get; set; } = new RandomUnit();
+        public IUnit? Unit { get; set; } = new RandomUnit();
 
         // STATIC METHODS
 

@@ -21,12 +21,13 @@
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" />
-                <CipherComments @ref="SysDescription" Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))"
+                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" ValueChanged="@ChangeDetail" />
+                <CipherComments @ref="SysDescription" Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
                                 Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" />
-                <CipherUnitDropDown @ref="SysUnit" ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" Change="@ChangeDetail" />
+                <CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"
+                                    ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
             </ChildContent>
         </CipherComponentCard>
     </ChildContent>
@@ -51,6 +52,12 @@
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
 
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
     private CipherLocation SysId = new();
     private CipherAutoComplete SysName = new();
     private CipherLocation SysParent = new();
@@ -72,13 +79,13 @@
         StateHasChanged();
     }
 
-    public ISystemRequest Value()
+    public void ChangeDetail()
     {
-        var req = Config.SystemRequest();
-        req.Name = SysName.Value;
-        req.Description = SysDescription.Comments;
-        req.ParentId = SysParent.ChosenSystem?.Id;
-        req.UnitId = SysUnit.ChosenUnit?.Id;
-        return req;
+        if (ChosenObject is null) return;
+        ChosenObject.Name = SysName.Value;
+        ChosenObject.Description = SysDescription.Comments;
+        ChosenObject.Parent = SysParent.ChosenSystem;
+        ChosenObject.Unit = SysUnit.ChosenUnit;
+        ChangeDetails.InvokeAsync();
     }
 }

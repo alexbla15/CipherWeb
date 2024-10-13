@@ -34,6 +34,9 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private RadzenDataGrid<IProcessStepDefinition> StepsDataGrid = new();
     private CipherBooleanConditions StepCondition = new();
 
@@ -107,7 +110,8 @@
             {
                 <CipherText Text="@HelpText" />
             }
-            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
+            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged" 
+                TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
                 <Columns>
                     <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                         <Template Context="step">
@@ -116,12 +120,12 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
-                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" />
+                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
-                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" />
+                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>
@@ -141,7 +145,7 @@
         <ChildContent>
             @if (SelectedStep != null)
             {
-                <CipherBooleanConditions Cipher_TItem="Event" @ref="StepCondition" OnSave="@OnSave" @bind-ChosenCondition="@SelectedCondition" />
+                <CipherBooleanConditions ValueChange="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" @bind-ChosenCondition="@SelectedCondition" />
             }
         </ChildContent>
     </CipherComponentCard>

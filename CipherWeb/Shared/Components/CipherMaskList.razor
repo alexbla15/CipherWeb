@@ -2,7 +2,7 @@
 @using Radzen
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="newText" 
+<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText" 
 AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
 @onkeydown="HandleKeyDown" Width="@Width" />
 
@@ -38,6 +38,9 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
     [Parameter]
     public bool Disabled { get; set; } = false;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private CipherAutoComplete TextAdd = new();
     private string newText = string.Empty;
 
@@ -49,16 +52,24 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
             {
                 SelectedTexts.Add(newText);
                 newText = string.Empty;
+                ValueChanged.InvokeAsync();
             }
         }
     }
 
     private void HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter") AddText();
+        if (e.Key == "Enter")
+        {
+            AddText();
+        }
     }
 
-    private void RemoveText(string text) => SelectedTexts.Remove(text);
+    private void RemoveText(string text)
+    {
+        SelectedTexts.Remove(text);
+        ValueChanged.InvokeAsync();
+    }
 }
 
 <style>

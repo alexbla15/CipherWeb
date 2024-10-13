@@ -12,7 +12,7 @@
 
         public List<IPackage>? ContainingPackages { get; set; }
 
-        public IStorageSystem System { get; set; } = new StorageSystem();
+        public IStorageSystem? System { get; set; }
 
         // API RELATED METHODS
 

@@ -19,15 +19,16 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName
+                <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
                 <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
+                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" 
+                                    ValueChanged="@ChangeDetail" />
             </ChildContent>
         </CipherComponentCard>
         @if (SetMode == FormMode.Create)
         {
-            <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" />
+            <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" />
         }
     </ChildContent>
 </CipherComponentCard>
@@ -51,6 +52,12 @@
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
 
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
     private CipherAutoComplete ProcName = new();
     private CipherAutoComplete ProcDescription = new();
     private CipherProcessSteps ProcSteps = new();
@@ -72,14 +79,14 @@
         StateHasChanged();
     }
 
-    public IProcessDefinitionRequest Value()
+    public void ChangeDetail()
     {
-        IProcessDefinitionRequest proc = Config.ProcessDefinitionRequest();
+        if (ChosenObject is null) return;
 
-        if (ProcName.Check()) proc.Name = ProcName.Value;
-        if (ProcDescription.Check()) proc.Description = ProcDescription.Value;
-        proc.Steps = ProcSteps.ChosenSteps;
+        ChosenObject.Name = ProcName.Value;
+        ChosenObject.Description = ProcDescription.Value;
+        ChosenObject.Steps = ProcSteps.ChosenSteps;
 
-        return proc;
+        ChangeDetails.InvokeAsync();
     }
 }

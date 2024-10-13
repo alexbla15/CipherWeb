@@ -124,27 +124,27 @@
     {
         if (typeof(Cipher_TItem) == typeof(IUnit))
         {
-            unitRequest = unitCard.Value();
+            unitRequest = unitCard.ChosenObject?.Request() ?? Config.UnitRequest();
             return unitRequest.Check();
         }
         else if (typeof(Cipher_TItem) == typeof(ICategory))
         {
-            catRequest = catCard.Value();
+            catRequest = catCard.ChosenObject?.Request() ?? Config.CategoryRequest();
             return catRequest.Check();
         }
         else if (typeof(Cipher_TItem) == typeof(IVessel))
         {
-            vesRequest = vesCard.Value();
+            vesRequest = vesCard.ChosenObject?.Request() ?? Config.VesselRequest();
             return vesRequest.Check();
         }
         else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
         {
-            procDefRequest = procCard.Value();
+            procDefRequest = procCard.ChosenObject?.Request() ?? Config.ProcessDefinitionRequest();
             return procDefRequest.Check();
         }
         else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
         {
-            sysRequest = sysCard.Value();
+            sysRequest = sysCard.ChosenObject?.Request() ?? Config.SystemRequest();
             return sysRequest.Check();
         }
 

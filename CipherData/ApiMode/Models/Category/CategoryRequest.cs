@@ -24,11 +24,11 @@
 
         public string? ParentId { get; set; }
 
-        public List<string?> CreatingProcesses { get; set; } = new();
+        public List<string?>? CreatingProcesses { get; set; } = new();
 
-        public List<string?> ConsumingProcesses { get; set; } = new();
+        public List<string?>? ConsumingProcesses { get; set; } = new();
 
-        public List<string> IdMask { get; set; } = new();
+        public List<string>? IdMask { get; set; } = new();
 
         public List<ICategoryProperty>? Properties { get; set; }
     }

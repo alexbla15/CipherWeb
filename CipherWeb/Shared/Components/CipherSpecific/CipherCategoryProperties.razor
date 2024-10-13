@@ -34,6 +34,9 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private RadzenDataGrid<ICategoryProperty> CustomDataGrid = new();
 
     protected override void OnInitialized() => Title ??= "תכונות הקטגוריה";
@@ -81,7 +84,8 @@
         {
             <CipherText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true"
+                        Visible="ChosenProperties.Count() != 0" ValueChanged="@ValueChanged">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="ICategoryProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="prop">
@@ -90,18 +94,18 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextBox @bind-Value="prop.Name" Style="width:100%"/>
+                        <RadzenTextBox @bind-Value="prop.Name" Style="width:100%" Change="@ValueChanged"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" />
+                        <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" Change="@ValueChanged" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
-                                        Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))"
+                                        Change="@(args=> {prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null); ValueChanged.InvokeAsync();})"
                                         Style="width: 100%">
                             <ValueTemplate>
                                 @if (prop.PropertyType == PropertyType.Text)
@@ -138,17 +142,18 @@
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {
-                            <RadzenTextBox @bind-Value="prop.DefaultValue" Style="width:100%" />
+                            <RadzenTextBox @bind-Value="prop.DefaultValue" Style="width:100%" Change="@ValueChanged" />
                         }
                         else if (prop.PropertyType == PropertyType.Number)
                         {
-                            <CipherNumeric Amount="@(decimal.TryParse(prop.DefaultValue, out _) ? Convert.ToDecimal(prop.DefaultValue) : 0)" AmountChanged="@(args=> prop.DefaultValue = args.ToString())" Width="100%" />
+                            <CipherNumeric Amount="@(decimal.TryParse(prop.DefaultValue, out _) ? Convert.ToDecimal(prop.DefaultValue) : 0)" 
+                            AmountChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})" Width="100%" />
                         }
                         else
                         {
                             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" AlignItems="AlignItems.Center" style="width:50%">
                                 <CipherText Text="כן" TextAlign="TextAlign.Center" Bold="true"/>
-                                <RadzenSwitch ValueChanged="@(args=> prop.DefaultValue = args.ToString())"/>
+                                <RadzenSwitch ValueChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})" />
                                 <CipherText Text="לא" TextAlign="TextAlign.Center" Bold="true" />
                             </RadzenStack>
                         }

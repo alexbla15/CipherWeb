@@ -32,13 +32,13 @@ namespace CipherData.Interfaces
         /// List of processes defintions consuming this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
-        List<IProcessDefinition> ConsumingProcesses { get; set; }
+        List<IProcessDefinition>? ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
-        List<IProcessDefinition> CreatingProcesses { get; set; }
+        List<IProcessDefinition>? CreatingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
@@ -85,8 +85,8 @@ namespace CipherData.Interfaces
                 Description = Description,
                 IdMask = IdMask,
                 ParentId = Parent?.Id,
-                CreatingProcesses = CreatingProcesses.Select(x => x.Id).ToList(),
-                ConsumingProcesses = ConsumingProcesses.Select(x => x.Id).ToList(),
+                CreatingProcesses = CreatingProcesses?.Select(x => x.Id).ToList(),
+                ConsumingProcesses = ConsumingProcesses?.Select(x => x.Id).ToList(),
                 Properties = Properties
             };
 

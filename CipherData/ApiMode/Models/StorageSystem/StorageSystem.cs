@@ -24,7 +24,7 @@
 
         public List<IStorageSystem>? Children { get; set; }
 
-        public IUnit Unit { get; set; } = new Unit();
+        public IUnit? Unit { get; set; }
 
         // API RELATED FUNCTIONS
 
