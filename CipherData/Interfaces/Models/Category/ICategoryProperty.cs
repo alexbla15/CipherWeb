@@ -1,10 +1,19 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
+    public enum PropertyType
+    {
+        Text,
+        Number,
+        Boolean
+    }
+
     /// <summary>
     /// Property interface of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
     /// </summary>
-    public interface ICategoryProperty
+    public interface ICategoryProperty : ICipherClass
     {
         /// <summary>
         /// Name of the property
@@ -26,19 +35,19 @@
         /// </summary>
         PropertyType PropertyType { get; set; }
 
-        public CheckField CheckName() => CheckField.Required(Name, Category.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
-        public CheckField CheckDescription() => CheckField.Required(Description, Category.Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         public CheckField CheckDefaultValue()
         {
             CheckField result = new();
             if (DefaultValue != null)
             {
-                result = CheckField.CheckString(DefaultValue, Category.Translate(nameof(DefaultValue)));
+                result = CheckField.CheckString(DefaultValue, Translate(nameof(DefaultValue)));
             }
 
-            return result.Succeeded ? CheckField.PropertyTypeValueCheck(PropertyType, DefaultValue, Category.Translate(nameof(Name))) : result;
+            return result.Succeeded ? CheckField.PropertyTypeValueCheck(PropertyType, DefaultValue, Translate(nameof(Name))) : result;
         }
 
         public Tuple<bool, string> Check()
@@ -50,5 +59,10 @@
 
             return result.Check();
         }
+
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

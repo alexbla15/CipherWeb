@@ -38,12 +38,18 @@
         /// <returns></returns>
         private static string GetNextId() => $"PR{++IdCounter:D3}";
 
-        /// <summary>
-        /// All objects
-        /// </summary>
-        public static async Task<Tuple<IProcess, ErrorResponse>> Get(string? id = null)
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IProcess, ErrorResponse>> Get(string? id = null)
         {
-            return id is null ? Tuple.Create(new Process() { Id = "" } as IProcess, ErrorResponse.BadRequest) : await Config.ProcessesRequests.GetProcess(id);
+            if (string.IsNullOrEmpty(id)) return Tuple.Create(new RandomProcess() as IProcess, ErrorResponse.BadRequest);
+            return await new RandomProcessesRequests().GetProcess(id);
         }
+
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> All()
+            => await new RandomProcessesRequests().GetProcesses();
+
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string SearchText)
+            => await All();
     }
 }

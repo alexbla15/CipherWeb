@@ -5,20 +5,10 @@
         private static readonly string path = "/events";
 
         public async Task<Tuple<List<IEvent>, ErrorResponse>> GetEvents()
-        {
-            var result = await GeneralAPIRequest.Get<List<Event>>(path);
-
-            List<IEvent> objs = result.Item1?.Select(x => x as IEvent).ToList() ?? new();
-            return Tuple.Create(objs, result.Item2);
-        }
+            => await GeneralAPIRequest.GetAll<IEvent, Event>(path);
 
         public async Task<Tuple<IEvent, ErrorResponse>> GetEvent(string id)
-        {
-            var result = await GeneralAPIRequest.Get<Event>($"{path}/{id}");
-
-            IEvent ev = result.Item1 ?? new Event();
-            return Tuple.Create(ev, result.Item2);
-        }
+            => await GeneralAPIRequest.GetId<IEvent, Event>(path, id);
 
         public async Task<Tuple<IEvent, ErrorResponse>> CreateEvent(ICreateEvent ev)
         {

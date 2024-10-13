@@ -101,6 +101,6 @@ namespace CipherData.General
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+        public static string Translate(string text) => ICipherClass.Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

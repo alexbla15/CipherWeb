@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     [HebrewTranslation(nameof(Unit))]
     public class Unit : Resource, IUnit
@@ -37,9 +35,38 @@ namespace CipherData.ApiMode
         [HebrewTranslation(typeof(Unit), nameof(Conditions))]
         public IGroupedBooleanCondition? Conditions { get; set; }
 
-        // STATIC METHODS
+        // API RELATED FUNCTIONS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+        public async Task<Tuple<IUnit, ErrorResponse>> Get(string id)
+            => await new UnitsRequests().GetUnit(id);
+
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> All()
+            => await new UnitsRequests().GetUnits();
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req)
+            => await new UnitsRequests().CreateUnit(req);
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Update(string id, IUnitRequest req)
+            => await new UnitsRequests().UpdateUnit(id, req);
+
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText)
+        {
+            var result = await GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{typeof(Unit).Name}.{nameof(Name)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Description)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Properties)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Parent)}.{nameof(Id)}", Value = SearchText },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Children)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any },
+                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Systems)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
+                                    },
+                Operator = Operator.Any
+            });
+
+            return Tuple.Create(result.Item1.Select(x => x as IUnit).ToList(), result.Item2);
+        }
     }
 }
 

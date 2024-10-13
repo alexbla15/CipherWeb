@@ -16,7 +16,7 @@
         {
             <CipherExcelButton FileName="@FileName" DataSource="@ProcTable.GetDataSource?.Invoke()" />
         }
-        <CipherPDFButton FileName="@FileName" CipherType="typeof(Process)" />
+        <CipherPDFButton FileName="@FileName" CipherType="typeof(IProcess)" />
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
@@ -102,7 +102,7 @@
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
-        var result = await IStorageSystem.Processes(SelectedSystem);
+        var result = await Config.StorageSystem.Processes(SelectedSystem);
         (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
         SetFileName();
     }
@@ -118,7 +118,7 @@
     /// </summary>
     private async Task SearchFunc()
     {
-        var result = await IStorageSystem.Processes(SelectedSystem);
+        var result = await Config.StorageSystem.Processes(SelectedSystem);
         (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
         SetFileName();

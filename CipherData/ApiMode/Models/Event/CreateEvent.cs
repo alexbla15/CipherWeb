@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
 
     /// <summary>
@@ -37,9 +35,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(Event), nameof(Actions))]
         public List<IPackageRequest> Actions { get; set; } = new();
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

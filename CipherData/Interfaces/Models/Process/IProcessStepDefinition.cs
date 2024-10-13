@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IProcessStepDefinition : IResource
     {
@@ -20,12 +22,12 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, ProcessStepDefinition.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription() => CheckField.Required(Description, ProcessStepDefinition.Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -51,5 +53,8 @@
             return result.Check();
         }
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Update package details contract.
@@ -31,9 +29,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(Package), nameof(Package.DestinationProcesses))]
         public List<string>? DestinationProcessesIds { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

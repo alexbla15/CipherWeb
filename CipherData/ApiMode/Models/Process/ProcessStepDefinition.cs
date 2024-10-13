@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Definition of a process - 
@@ -28,9 +26,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
         public IGroupedBooleanCondition Condition { get; set; } = new GroupedBooleanCondition();
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

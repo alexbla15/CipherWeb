@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     /// <summary>
     /// Create a new category or update it
@@ -40,28 +42,28 @@
         /// </summary>
         List<ICategoryProperty>? Properties { get; set; }
 
-        public CheckField CheckName() => CheckField.Required(Name, CategoryRequest.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
-        public CheckField CheckDescription() => CheckField.Required(Description, CategoryRequest.Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
-        public CheckField CheckParentId() => CheckField.CheckString(ParentId, CategoryRequest.Translate(nameof(ParentId)));
+        public CheckField CheckParentId() => CheckField.CheckString(ParentId, Translate(nameof(ParentId)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckIdMask() => CheckField.FullList(IdMask, CategoryRequest.Translate(nameof(IdMask)));
+        public CheckField CheckIdMask() => CheckField.FullList(IdMask, Translate(nameof(IdMask)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckCreatingProcesses() =>
-            CheckField.CheckList(CreatingProcesses, CategoryRequest.Translate(nameof(CreatingProcesses)), isFull: true, isDistinct: true);
+            CheckField.CheckList(CreatingProcesses, Translate(nameof(CreatingProcesses)), isFull: true, isDistinct: true);
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckConsumingProcesses() =>
-            CheckField.CheckList(ConsumingProcesses, CategoryRequest.Translate(nameof(ConsumingProcesses)), isFull: true, isDistinct: true);
+            CheckField.CheckList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)), isFull: true, isDistinct: true);
 
 
         /// <summary>
@@ -73,8 +75,8 @@
 
             if (Properties != null)
             {
-                result = CheckField.Distinct(Properties.Select(x => x.Name).ToList(), CategoryRequest.Translate(nameof(Properties)));
-                result = result.Succeeded ? CheckField.ListItems(Properties, CategoryRequest.Translate(nameof(Properties))) : result;
+                result = CheckField.Distinct(Properties.Select(x => x.Name).ToList(), Translate(nameof(Properties)));
+                result = result.Succeeded ? CheckField.ListItems(Properties, Translate(nameof(Properties))) : result;
             }
             return result;
         }
@@ -96,5 +98,9 @@
             result.Fields.Add(CheckParentId());
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

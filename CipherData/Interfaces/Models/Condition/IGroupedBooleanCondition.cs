@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IGroupedBooleanCondition : ICondition
     {
@@ -48,5 +50,9 @@
             result.Fields.Add(CheckConditions());
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

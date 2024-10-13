@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     [HebrewTranslation(nameof(Vessel))]
     public class Vessel : Resource, IVessel
@@ -20,8 +18,35 @@ namespace CipherData.ApiMode
         [HebrewTranslation(typeof(Vessel), nameof(System))]
         public IStorageSystem System { get; set; } = new StorageSystem();
 
-        // STATIC METHODS
+        // API RELATED METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+        public async Task<Tuple<IVessel, ErrorResponse>> Get(string id) =>
+            await new VesselsRequests().GetVessel(id);
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
+            await new VesselsRequests().GetVessels();
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string SearchText)
+        {
+            var result = await GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Id)}", Value= SearchText },
+                new() { Attribute = $"{typeof(Vessel).Name}.{nameof(Name)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(Type)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(System)}.{nameof(Id)}", Value= SearchText },
+                new() {Attribute = $"{typeof(Vessel).Name}.{nameof(ContainingPackages)}.{nameof(Id)}", Value= SearchText, Operator=Operator.Any }
+                    },
+                Operator = Operator.Any
+            });
+
+            return Tuple.Create(result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
+        }
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req) =>
+            await new VesselsRequests().CreateVessel(req);
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Update(string id, IVesselRequest req)
+            => await new VesselsRequests().UpdateVessel(id, req);
     }
 }

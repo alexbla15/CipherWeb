@@ -1,55 +1,5 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
-    public enum AttributeRelation
-    {
-        /// <summary>
-        /// Equal
-        /// </summary>
-        Eq,
-        /// <summary>
-        /// Not equal
-        /// </summary>
-        Ne,
-        /// <summary>
-        /// Greater Than
-        /// </summary>
-        Gt,
-        /// <summary>
-        /// Greater Than or equal
-        /// </summary>
-        Ge,
-        /// <summary>
-        /// Less than
-        /// </summary>
-        Lt,
-        /// <summary>
-        /// Less than or equal
-        /// </summary>
-        Le,
-        StartsWith,
-        EndsWith,
-        Contains,
-        NotContains,
-        IsNull,
-        IsNotNull,
-        IsEmpty,
-        IsNotEmpty,
-    }
-
-    public enum Operator
-    {
-        /// <summary>
-        /// All of the items in the array must follow the condition.
-        /// </summary>
-        All,
-        /// <summary>
-        /// At least one of the items in the array must follow the condition.
-        /// </summary>
-        Any
-    }
-
     /// <summary>
     /// Abstract class for union of BooleanCondition and GroupedBooleanCondition
     /// </summary>
@@ -79,9 +29,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

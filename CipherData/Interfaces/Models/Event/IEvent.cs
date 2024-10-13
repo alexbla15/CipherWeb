@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IDisplayedEvent : ICipherClass
     {
@@ -57,6 +59,10 @@
         /// Timestamp when the event happend
         /// </summary>
         DateTime Timestamp { get; set; }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     public interface IEvent : IResource
@@ -125,8 +131,7 @@
                 (iPack, fPack) => iPack.BrutMass != fPack.BrutMass).All(match => match);
 
         public List<IDisplayedEvent> GetRelocationEvents()
-        {
-            return InitialStatePackages.Zip(FinalStatePackages,
+            => InitialStatePackages.Zip(FinalStatePackages,
                 (iPack, fPack) =>
                 new DisplayedEvent()
                 {
@@ -140,7 +145,6 @@
                     DonatingSystem = iPack.System,
                     AcceptingSystem = fPack.System
                 }).Select(x => x as IDisplayedEvent).ToList();
-        }
 
         public List<IDisplayedEvent> GetTransferAmountEvent()
         {
@@ -221,70 +225,31 @@
 
         // API-RELATED FUNCTIONS
 
-        public async Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details) =>
-            await Config.EventsRequests.UpdateEvent(Id, update_details);
+        /// <summary>
+        /// Method to create a new object from a request
+        /// </summary>
+        Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req);
+
+        Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details);
 
         /// <summary>
         /// Fetch all events which contain the searched text
         /// </summary>
-        public static async Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)
-        {
-            if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
-
-            var result = await GetObjects<Event>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(Id)}", Value = searchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(Worker)}", Value = searchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(EventType)}", Value = searchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(ProcessId)}", Value = searchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(Comments)}",Value = searchText },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(InitialStatePackages)}.{nameof(Id)}", Value = searchText, Operator = Operator.Any },
-                new() { Attribute = $"{typeof(Event).Name}.{nameof(FinalStatePackages)}.{nameof(Id)}", Value = searchText, Operator = Operator.Any }
-            },
-                Operator = Operator.Any
-            });
-
-            return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
-        }
+        Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static async Task<Tuple<List<IEvent>, ErrorResponse>> All() => await Config.EventsRequests.GetEvents();
+        Task<Tuple<List<IEvent>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all events with specific status
         /// </summary>
-        private static async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status)
-        {
-            if (new Random().Next(2) == 0)
-            {
-                var result = await GetObjects<RandomRelocationEvent>(status.ToString(), searchText => new GroupedBooleanCondition()
-                {
-                    Conditions = new List<BooleanCondition>() {
-                    new() { Attribute = $"{typeof(Event).Name}.{nameof(Status)}", Value = searchText, AttributeRelation=AttributeRelation.Eq }
-                    },
-                    Operator = Operator.Any
-                });
-                return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
-            }
-            else
-            {
-                var result = await GetObjects<RandomTransferAmountEvent>(status.ToString(), searchText => new GroupedBooleanCondition()
-                {
-                    Conditions = new List<BooleanCondition>() {
-                    new() { Attribute = $"{typeof(Event).Name}.{nameof(Status)}", Value = searchText, AttributeRelation=AttributeRelation.Eq }
-                    },
-                    Operator = Operator.Any
-                });
-                return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
-            }
-        }
+        Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status);
 
-        public static async Task<Tuple<List<IEvent>, ErrorResponse>> PendingEvents() => await StatusEvents(0);
-        public static async Task<Tuple<List<IEvent>, ErrorResponse>> ApprovedEvents() => await StatusEvents(1);
-        public static async Task<Tuple<List<IEvent>, ErrorResponse>> DeclinedEvents() => await StatusEvents(-1);
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> PendingEvents() => await StatusEvents(0);
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> ApprovedEvents() => await StatusEvents(1);
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> DeclinedEvents() => await StatusEvents(-1);
 
     }
 }

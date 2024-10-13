@@ -1,6 +1,6 @@
 ﻿namespace CipherData.RandomMode
 {
-    public class RandomCategoryProperty : ICategoryProperty
+    public class RandomCategoryProperty : CipherClass, ICategoryProperty
     {
         public string? Description { get; set; } = RandomFuncs.RandomItem(new List<string>() { "נבדק", "טרם נבדק", "נכשל בבדיקה" });
 

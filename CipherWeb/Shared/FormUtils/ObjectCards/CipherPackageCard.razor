@@ -22,16 +22,16 @@
 
                 @if (SetMode == FormMode.Create)
                 {
-                    <CipherAutoComplete Label="@(Package.Translate(nameof(IPackage.Id)))" Value="@ChosenObject?.Id" Icon="@Icons.Cipher.Package" />
+                    <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Value="@ChosenObject?.Id" Icon="@Icons.Cipher.Package" />
                 }
-                <CipherComments Label="@(Package.Translate(nameof(IPackage.Description)))"
+                <CipherComments Label="@(IPackage.Translate(nameof(IPackage.Description)))"
                                 Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 
                 @if (SetMode != FormMode.Create)
                 {
-                    <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.BrutMass)" Label="@(Package.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale"
+                    <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.BrutMass)" Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale"
                                    Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                    <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.NetMass)" Label="@(Package.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale"
+                    <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.NetMass)" Label="@(IPackage.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale"
                                    Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 }
                 <CipherCategoryDropDown ChosenCategory="@ChosenObject?.Category" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
@@ -40,18 +40,18 @@
                 
                 @if (SetMode != FormMode.Create)
                 {
-                    <CipherDatePicker Value="@(ChosenObject?.CreatedAt ?? DateTime.Now)" Label="@(Package.Translate(nameof(Package.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@RowWidth" />
+                    <CipherDatePicker Value="@(ChosenObject?.CreatedAt ?? DateTime.Now)" Label="@(IPackage.Translate(nameof(IPackage.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@RowWidth" />
                     <CipherProcesses ChosenProcesses="@ChosenObject?.DestinationProcesses.ToList()" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                    Label="@(Package.Translate(nameof(IPackage.DestinationProcesses)))" />
+                    Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" />
                 }
 
-                <CipherPackageId ChosenPackage="@ChosenObject?.Parent" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(Package.Translate(nameof(IPackage.Parent)))" />
+                <CipherPackageId ChosenPackage="@ChosenObject?.Parent" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(IPackage.Translate(nameof(IPackage.Parent)))" />
                 
                 @if (ChosenObject != null && SetMode != FormMode.Create)
                 {
                     if (ChosenObject.Properties != null)
                     {
-                        @foreach (PackageProperty prop in ChosenObject.Properties)
+                        @foreach (IPackageProperty prop in ChosenObject.Properties)
                         {
                             <CipherAutoComplete Label="@prop.Name" Value="@prop.Value" Disabled="true"
                             Icon="@Icons.Cipher.Properties" />
@@ -60,11 +60,18 @@
                 }
                 <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()" 
                 Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                Label="@(Package.Translate(nameof(IPackage.Children)))" />
+                Label="@(IPackage.Translate(nameof(IPackage.Children)))" />
             </ChildContent>
         </CipherComponentCard>
 
-        <CipherPackageProperties @ref="PackProps" ChosenProperties="@((ChosenObject?.Category is null)? new List<IPackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=>new PackageProperty() {Name= x.Name, Value = x.DefaultValue} as IPackageProperty).ToList())" />
+        <CipherPackageProperties @ref="PackProps" 
+            ChosenProperties="@((ChosenObject?.Category is null)? 
+            new List<IPackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=> 
+            { IPackageProperty prop = Config.PackageProperty;
+              prop.Name= x.Name;
+              prop.Value = x.DefaultValue;
+              return prop;
+            }).ToList())" />
 
         <CipherProcessesTable WithCard="true" Title="תנועות" ChosenObjects="@PackProcesses" WithHeaderContent="false" />
     </ChildContent>
@@ -121,20 +128,20 @@
         (packs, error) = await CachedData.AllPackages;
     }
 
-    public void Change()
+    public async Task Change()
     {
         ChosenObject = SetPack.ChosenPackage;
 
         if (SetPack.ChosenPackage != null)
         {
-            (PackProcesses, error) = SetPack.ChosenPackage.Processes();
+            (PackProcesses, error) = await SetPack.ChosenPackage.Processes();
         }
         else
         {
             (PackProcesses, error) = (new(), ErrorResponse.Success);
         }
 
-        ChangeObject.InvokeAsync();
+        await ChangeObject.InvokeAsync();
         StateHasChanged();
     }
 }

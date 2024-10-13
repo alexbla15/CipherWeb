@@ -31,7 +31,23 @@
         /// <summary>
         /// Get the id of a new object
         /// </summary>
-        /// <returns></returns>
         public static string GetNextId() => $"V{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Get(string id) =>
+            await new RandomVesselsRequests().GetVessel(id);
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
+            await new RandomVesselsRequests().GetVessels();
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string SearchText) =>
+            await new RandomVesselsRequests().GetVessels();
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req) =>
+            await new RandomVesselsRequests().CreateVessel(req);
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Update(string id, IVesselRequest req)
+            => await new RandomVesselsRequests().UpdateVessel(id, req);
     }
 }

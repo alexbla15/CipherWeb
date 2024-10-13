@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -38,6 +37,24 @@ namespace CipherData.ApiMode
             string responseBody = await response.Content.ReadAsStringAsync();
 
             return TransfromResponse<T>(responseBody, response.StatusCode);
+        }
+
+        public static async Task<Tuple<List<TInterface>, ErrorResponse>> GetAll<TInterface, TClass>(string path)
+            where TClass : class, TInterface
+            where TInterface : ICipherClass
+        {
+            var result = await Get<List<TClass>>(path);
+            List<TInterface> objs = result.Item1?.OfType<TInterface>().ToList() ?? new();
+            return Tuple.Create(objs, result.Item2);
+        }
+
+        public static async Task<Tuple<TInterface, ErrorResponse>> GetId<TInterface, TClass>(string path, string id)
+            where TClass : class, TInterface, new()
+            where TInterface : ICipherClass
+        {
+            var result = await Get<TClass>($"{path}/{id}");
+            TInterface objs = result.Item1 ?? new TClass();
+            return Tuple.Create(objs, result.Item2);
         }
 
         /// <summary>

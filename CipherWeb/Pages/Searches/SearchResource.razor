@@ -92,12 +92,12 @@
     {
         chosenObjectMap = new Dictionary<Type, Func<object?>>
         {
-            { typeof(Unit), () => unitCard.ChosenObject },
-            { typeof(Vessel), () => vesCard.ChosenObject },
-            { typeof(StorageSystem), () => sysCard.ChosenObject },
-            { typeof(Package), () => packCard.ChosenObject },
-            { typeof(ProcessDefinition), () => procCard.ChosenObject },
-            { typeof(Category), () => catCard.ChosenObject },
+            { typeof(IUnit), () => unitCard.ChosenObject },
+            { typeof(IVessel), () => vesCard.ChosenObject },
+            { typeof(IStorageSystem), () => sysCard.ChosenObject },
+            { typeof(IPackage), () => packCard.ChosenObject },
+            { typeof(IProcessDefinition), () => procCard.ChosenObject },
+            { typeof(ICategory), () => catCard.ChosenObject },
         };
     }
 
@@ -144,7 +144,7 @@
         if (methodInfo != null)
         {
             var Result = methodInfo.Invoke(ChosenObject, null);
-            if (Result is Tuple<UserActionResponse?, ErrorResponse> tupleResult)
+            if (Result is Tuple<IUserActionResponse?, ErrorResponse> tupleResult)
             {
                 (ObjectHistory, Error) = tupleResult;
             }

@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IUnit : IResource
     {
@@ -60,6 +62,9 @@
                 ParentId = Parent?.Id
             };
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
 
         // API-RELATED FUNCTIONS
 
@@ -67,34 +72,27 @@
         /// Get details about a single unit given unit ID
         /// </summary>
         /// <param name="id">unit ID</param>
-        public static async Task<Tuple<IUnit, ErrorResponse>> Get(string id) => await Config.UnitsRequests.GetUnit(id);
+        Task<Tuple<IUnit, ErrorResponse>> Get(string id);
 
         /// <summary>
         /// All objects
         /// </summary>
-        public static async Task<Tuple<List<IUnit>, ErrorResponse>> All() => await Config.UnitsRequests.GetUnits();
+        Task<Tuple<List<IUnit>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all units which contain the searched text
         /// </summary>
-        public static async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText)
-        {
-            var result = await GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Id)}", Value = SearchText },
-                new() { Attribute = $"{typeof(Unit).Name}.{nameof(Name)}", Value = SearchText },
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Description)}", Value = SearchText },
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Properties)}", Value = SearchText },
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Parent)}.{nameof(Id)}", Value = SearchText },
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Children)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any },
-                new() {Attribute = $"{typeof(Unit).Name}.{nameof(Systems)}.{nameof(Id)}", Value = SearchText, Operator = Operator.Any }
-                                    },
-                Operator = Operator.Any
-            });
+        Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText);
 
-            return Tuple.Create(result.Item1.Select(x => x as IUnit).ToList(), result.Item2);
-        }
+        /// <summary>
+        /// Method to create a new object from a request
+        /// </summary>
+        Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req);
+
+        /// <summary>
+        /// Method to update object details 
+        /// </summary>
+        Task<Tuple<IUnit, ErrorResponse>> Update(string id, IUnitRequest req);
     }
 }
 

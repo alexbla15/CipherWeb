@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface ICreateEvent : ICipherClass
     {
@@ -32,27 +34,27 @@
         /// </summary>
         string? Worker { get; set; }
 
-        public CheckField CheckWorker() => CheckField.Required(Worker, CreateEvent.Translate(nameof(Worker)), "^[ א-ת]+$");
+        public CheckField CheckWorker() => CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
 
-        public CheckField CheckComments() => CheckField.Required(Comments, CreateEvent.Translate(nameof(Comments)));
+        public CheckField CheckComments() => CheckField.Required(Comments, Translate(nameof(Comments)));
 
         public CheckField CheckProcessId()
             => !string.IsNullOrEmpty(ProcessId) ?
-            CheckField.CheckString(ProcessId, CreateEvent.Translate(nameof(ProcessId))) : new();
+            CheckField.CheckString(ProcessId, Translate(nameof(ProcessId))) : new();
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckEventType() => CheckField.NotEq(EventType, 0, CreateEvent.Translate(nameof(EventType)));
+        public CheckField CheckEventType() => CheckField.NotEq(EventType, 0, Translate(nameof(EventType)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckTimeStamp()
         {
-            CheckField result = CheckField.Required(Timestamp, CreateEvent.Translate(nameof(Timestamp)));
+            CheckField result = CheckField.Required(Timestamp, Translate(nameof(Timestamp)));
             result = result.Succeeded ? CheckField.Between(Timestamp, DateTime.Parse("01/01/1900"), DateTime.Now,
-                CreateEvent.Translate(nameof(Timestamp))) : result;
+                Translate(nameof(Timestamp))) : result;
 
             return result;
         }
@@ -63,9 +65,9 @@
         public CheckField CheckActions()
         {
             CheckField result = CheckField.CheckList(Actions,
-                CreateEvent.Translate(nameof(Actions)), isFull: true, isCheckItems: true);
+                Translate(nameof(Actions)), isFull: true, isCheckItems: true);
             return result.Succeeded ? CheckField.Distinct(Actions.Select(x => x.Id).ToList(),
-                CreateEvent.Translate(nameof(Actions))) : result;
+                Translate(nameof(Actions))) : result;
         }
 
         /// <summary>
@@ -86,8 +88,7 @@
         }
 
         public IEvent Create(string id)
-        {
-            return new Event()
+            => new Event()
             {
                 Id = id,
                 Worker = Worker,
@@ -98,6 +99,10 @@
                 Status = 1,
                 FinalStatePackages = Actions.Select(x => x.Create()).ToList(),
             };
-        }
+
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

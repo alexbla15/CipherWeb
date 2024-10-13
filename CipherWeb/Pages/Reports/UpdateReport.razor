@@ -10,7 +10,8 @@
 <ResourceForm @ref=ResForm Title="@NavLink.Name">
     <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
     <br/>
-    <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" OriginalReport="@(ChosenReport is null ? new () : CipherClass.Copy(ChosenReport))" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
+    <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
+    OriginalReport="@(ChosenReport is null ? new () : ICipherClass.Copy(ChosenReport))" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
 </ResourceForm>
 
 @code {

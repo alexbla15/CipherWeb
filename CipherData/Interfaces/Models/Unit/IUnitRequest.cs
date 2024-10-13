@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IUnitRequest : ICipherClass
     {
@@ -30,12 +32,12 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, UnitRequest.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription() => CheckField.Required(Description, UnitRequest.Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -59,6 +61,10 @@
                 Parent = new Unit() { Id = ParentId },
                 Properties = Properties
             };
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
 
     }
 }

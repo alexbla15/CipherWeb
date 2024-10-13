@@ -39,5 +39,34 @@
         /// </summary>
         /// <returns></returns>
         public static string GetNextId() => $"S{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Get(string id) =>
+            await new RandomSystemsRequests().GetSystem(id);
+
+        public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> All() =>
+            await new RandomSystemsRequests().GetSystems();
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Create(ISystemRequest req)
+            => await new RandomSystemsRequests().CreateSystem(req);
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Update(string id, ISystemRequest req)
+            => await new RandomSystemsRequests().UpdateSystem(id, req);
+
+        public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> Containing(string searchedText) =>
+            await All();
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> Events(string? SelectedSystem)
+            => await new RandomEvent().All();
+
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> Processes(string? SelectedSystem)
+            => await new RandomProcess().All();
+
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedSystem)
+            => await new RandomPackage().All();
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> Vessels(string? SelectedSystem)
+            => await new RandomVessel().All();
     }
 }

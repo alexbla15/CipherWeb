@@ -1,18 +1,5 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
-    public enum Order
-    {
-        asc, desc
-    }
-
-    public enum Method
-    {
-        sum, avg, count, first, last, max, min
-    }
-
-
     [HebrewTranslation(nameof(OrderedItem))]
     public class OrderedItem : CipherClass, IOrderedItem
     {
@@ -23,10 +10,6 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
         public Order Order { get; set; } = Order.asc;
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     [HebrewTranslation(nameof(AggregateItem))]
@@ -47,10 +30,6 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
         public Method? Method { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     /// <summary>
@@ -70,9 +49,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
         public List<IAggregateItem>? Aggregate { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

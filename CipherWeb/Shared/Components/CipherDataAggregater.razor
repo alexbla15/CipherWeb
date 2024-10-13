@@ -1,7 +1,7 @@
 ﻿@inherits CipherComponentCard
 
 @code {
-    private Type _ChosenType = typeof(CipherClass);
+    private Type _ChosenType = typeof(ICipherClass);
     private List<CipherField> _AllFields = new();
 
     /// <summary>
@@ -57,7 +57,7 @@
     /// </summary>
     private async Task AddRow()
     {
-        ChosenAggregates.Add(new AggregateItem());
+        ChosenAggregates.Add(Config.AggregateItem);
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
         await ParamsChanged(); // Trigger change event
@@ -151,17 +151,20 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)" Title="@(AggregateItem.Translate(nameof(IAggregateItem.Attribute)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)" 
+                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.As)" Title="@(AggregateItem.Translate(nameof(IAggregateItem.As)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.As)" 
+                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.As)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Method)" Title="@(AggregateItem.Translate(nameof(IAggregateItem.Method)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Method)" 
+                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
                         Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))" 

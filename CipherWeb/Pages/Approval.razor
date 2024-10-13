@@ -57,36 +57,42 @@
     {
         Title ??= CipherNavLinks.Approval.Name;
 
-        (PendingEvents, Error) = await IEvent.PendingEvents();
-        (ApprovedEvents, Error) = await IEvent.ApprovedEvents();
-        (DeclinedEvents, Error) = await IEvent.DeclinedEvents();
+        (PendingEvents, Error) = await Config.Event.PendingEvents();
+        (ApprovedEvents, Error) = await Config.Event.ApprovedEvents();
+        (DeclinedEvents, Error) = await Config.Event.DeclinedEvents();
     }
 
     public async Task RefreshEvents()
     {
         IGroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
-        IObjectFactory objectFactory = new ObjectFactory();
+        IObjectFactory objectFactory = Config.ObjectFactory;
 
         // add to filter - only pending events
         List<ICondition> originalFilterValue = filterValue.Conditions.ToList();
-        originalFilterValue.Add(new BooleanCondition() { Attribute = $"[{nameof(Event)}].[{nameof(IEvent.Status)}]", AttributeRelation = AttributeRelation.Eq, Value = "0" });
+
+        var cond = Config.BooleanCondition;
+        cond.Attribute = $"[Event].[{nameof(IEvent.Status)}]";
+        cond.AttributeRelation = AttributeRelation.Eq;
+        cond.Value = "0";
+
+        originalFilterValue.Add(cond);
         filterValue.Conditions = originalFilterValue;
 
         objectFactory.Filter = filterValue;
 
         // order by time (1), and system-id (2)
-        objectFactory.AddOrderBy(new OrderedItem()
-            {
-                Attribute = $"[{nameof(Event)}].[{nameof(IEvent.Timestamp)}]",
-                Order = Order.desc
-            });
-        objectFactory.AddOrderBy(new OrderedItem()
-            {
-                Attribute = $"[{nameof(Event)}].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]",
-                Order = Order.desc
-            });
 
-        var result = await Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        IOrderedItem orderedItem = Config.OrderedItem;
+        orderedItem.Attribute = $"[Event].[{nameof(IEvent.Timestamp)}]";
+        orderedItem.Order = Order.desc;
+        objectFactory.AddOrderBy(orderedItem);
+
+        orderedItem = Config.OrderedItem;
+        orderedItem.Attribute = $"[Event].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]";
+        orderedItem.Order = Order.desc;
+        objectFactory.AddOrderBy(orderedItem);
+        
+        var result = await Config.QueryRequests.QueryObjects<IEvent>(objectFactory);
         (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
 
         JsonRequest = objectFactory.ToJson();

@@ -5,7 +5,7 @@
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherUnitDropDown Label="@(Unit.Translate(nameof(Unit.Name)))"
+                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Name)))"
                                       Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject"/>
             </RadzenStack>
         }
@@ -20,11 +20,11 @@
                 }
             </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(Unit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@(Unit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@(Unit.Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />
             </ChildContent>
         </CipherComponentCard>
@@ -77,10 +77,11 @@
     }
 
     public IUnitRequest Value()
-    => new UnitRequest()
-        {
-            Name = UnitName.Value,
-            Description = UnitDescription.Value,
-            ParentId = UnitParent.ChosenUnit?.Id
-        };
+    {
+        var req = Config.UnitRequest;
+        req.Name = UnitName.Value;
+        req.Description = UnitDescription.Value;
+        req.ParentId = UnitParent.ChosenUnit?.Id;
+        return req;
+    }
 }

@@ -31,5 +31,19 @@
         /// Get the id of a new object
         /// </summary>
         public static string GetNextId() => $"PD{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> All()
+            => await new RandomProcessDefinitionsRequests().GetProcessDefinitions();
+
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest req) =>
+            await new RandomProcessDefinitionsRequests().CreateProcessDefinition(req);
+
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string id, IProcessDefinitionRequest req)
+            => await new RandomProcessDefinitionsRequests().UpdateProcessDefinition(id, req);
+
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string SearchText)
+            => await All();
     }
 }

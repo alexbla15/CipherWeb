@@ -10,7 +10,7 @@
     {
         Label ??= "מבצע הפעולה";
         Icon ??= Icons.Social.SinglePerson.person;
-        Data ??= Worker.AllWorkers;
+        Data ??= Config.Worker.AllWorkers();
     }
 
     public string GetWorker() => SelectedWorker.Value;

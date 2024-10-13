@@ -99,7 +99,7 @@
     /// Needed datagrid.
     /// </summary>
     [Parameter]
-    public RadzenDataGrid<Process> grid { get; set; } = new();
+    public RadzenDataGrid<IProcess> grid { get; set; } = new();
 
     [Parameter]
     public Func<IEnumerable<IDictionary<string, object>>> DataFetch { get; set; }

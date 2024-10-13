@@ -14,7 +14,7 @@
     /// objects created from an object factory
     /// </summary>
     [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
-    public class CustomObjectBooleanCondition : ICustomObjectBooleanCondition
+    public class CustomObjectBooleanCondition : CipherClass, ICustomObjectBooleanCondition
     {
         [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
         public List<ICustomCondition> Conditions { get; set; } = new();

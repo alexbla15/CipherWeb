@@ -56,11 +56,11 @@
     private CipherSubmit submission = new();
     private ResourceForm ResourcePage = new();
 
-    private IUnitRequest unitRequest = new UnitRequest();
-    private ICategoryRequest catRequest = new CategoryRequest();
-    private IVesselRequest vesRequest = new VesselRequest();
-    private IProcessDefinitionRequest procDefRequest = new ProcessDefinitionRequest();
-    private ISystemRequest sysRequest = new SystemRequest();
+    private IUnitRequest unitRequest = Config.UnitRequest;
+    private ICategoryRequest catRequest = Config.CategoryRequest;
+    private IVesselRequest vesRequest = Config.VesselRequest;
+    private IProcessDefinitionRequest procDefRequest = Config.ProcessDefinitionRequest;
+    private ISystemRequest sysRequest = Config.SystemRequest;
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -269,31 +269,31 @@
     public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.UnitsRequests.UpdateUnit((ChosenObject as IUnit)?.Id, unitRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Unit.Update((ChosenObject as IUnit)?.Id, unitRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.CategoriesRequests.UpdateCategory((ChosenObject as ICategory)?.Id, catRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Category.Update((ChosenObject as ICategory)?.Id, catRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.VesselsRequests.UpdateVessel((ChosenObject as IVessel)?.Id, vesRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Vessel.Update((ChosenObject as IVessel)?.Id, vesRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.ProcessesDefinitionsRequests.UpdateProcessDefinition((ChosenObject as IProcessDefinition)?.Id, procDefRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.ProcessDefinition.Update((ChosenObject as IProcessDefinition)?.Id, procDefRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
     {
         JsonRequest = sysRequest.ToJson();
-        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.SystemsRequests.UpdateSystem((ChosenObject as IStorageSystem)?.Id, sysRequest);
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.StorageSystem.Update((ChosenObject as IStorageSystem)?.Id, sysRequest);
     }
 
     /// <summary>
@@ -325,7 +325,7 @@
     else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
     {
         <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl"
-                           ChosenObject="@(ChosenObject as StorageSystem)" SetMode="FormMode.Update" />
+                           ChosenObject="@(ChosenObject as IStorageSystem)" SetMode="FormMode.Update" />
     }
     </div>;
 }

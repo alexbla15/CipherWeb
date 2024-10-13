@@ -13,13 +13,13 @@
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
-    public List<CipherField> AvailableAttributes { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(Event));
+    public List<CipherField> AvailableAttributes { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(IEvent));
 
     /// <summary>
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition;
 
     [Parameter]
     public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
@@ -107,9 +107,9 @@
     /// <summary>
     /// Filter is a Boolean condition (no sub filters)
     /// </summary>
-    public BooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
+    public IBooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
     {
-        BooleanCondition cond = new();
+        IBooleanCondition cond = Config.BooleanCondition;
         cond.Attribute = filter.Property;
 
         if (filter.FilterValue != null)
@@ -148,12 +148,12 @@
     /// <summary>
     /// Filter is a Grouped Boolean condition (no sub filters)
     /// </summary>
-    public GroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
+    public IGroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
     {
-        GroupedBooleanCondition cond = new();
+        IGroupedBooleanCondition cond = Config.GroupedBooleanCondition;
         cond.Operator = (filter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
-        List<Condition> conditions = new();
+        List<ICondition> conditions = new();
 
         foreach (var sub_filter in filter.Filters)
         {
@@ -173,7 +173,7 @@
 
     public void Save(IQueryable<CipherField>? fields = null)
     {
-        List<Condition> conditions = new();
+        List<ICondition> conditions = new();
 
         ChosenCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
@@ -198,7 +198,7 @@
         }
 
         ChosenCondition.Conditions = conditions;
-        JsonRequest = (ChosenCondition as GroupedBooleanCondition).ToJson();
+        JsonRequest = ChosenCondition.ToJson();
         OnSave.InvokeAsync();
     }
 

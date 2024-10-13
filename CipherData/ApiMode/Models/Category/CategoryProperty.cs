@@ -1,14 +1,5 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
-    public enum PropertyType
-    {
-        Text,
-        Number,
-        Boolean
-    }
-
     /// <summary>
     /// Property scheme of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
@@ -40,9 +31,5 @@ namespace CipherData.ApiMode
         public string? DefaultValue { get; set; } = null;
 
         public override int GetHashCode() => HashCode.Combine(Name, Description, PropertyType, DefaultValue);
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

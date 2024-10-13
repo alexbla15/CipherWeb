@@ -1,6 +1,8 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
-    public interface IPackageRequest
+    public interface IPackageRequest : ICipherClass
     {
         /// <summary>
         /// ID of the package
@@ -48,15 +50,15 @@
         List<string?>? ChildrenIds { get; set; }
 
         public CheckField CheckId() =>
-            CheckField.Required(Id, PackageRequest.Translate(nameof(Id)));
+            CheckField.Required(Id, Translate(nameof(Id)));
         public CheckField CheckCategoryId() =>
-            CheckField.Required(CategoryId, PackageRequest.Translate(nameof(CategoryId)));
+            CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
         public CheckField CheckSystemId() =>
-            CheckField.Required(SystemId, PackageRequest.Translate(nameof(SystemId)));
+            CheckField.Required(SystemId, Translate(nameof(SystemId)));
         public CheckField CheckBrutMass() =>
-            CheckField.GreaterEqual(BrutMass, 0, PackageRequest.Translate(nameof(BrutMass)));
+            CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
         public CheckField CheckNetMass() =>
-            CheckField.GreaterEqual(NetMass, 0, PackageRequest.Translate(nameof(NetMass)));
+            CheckField.GreaterEqual(NetMass, 0, Translate(nameof(NetMass)));
 
         public CheckField CheckMass()
         {
@@ -66,7 +68,7 @@
             if (result.Succeeded)
             {
                 result = CheckField.GreaterEqual(BrutMass, NetMass,
-                    PackageRequest.Translate(nameof(BrutMass)), PackageRequest.Translate(nameof(NetMass)));
+                    Translate(nameof(BrutMass)), Translate(nameof(NetMass)));
             }
 
             return result;
@@ -79,9 +81,9 @@
             if (Properties != null)
             {
                 result = CheckField.Distinct(Properties.Select(x => x.Name).ToList(),
-                    PackageRequest.Translate(nameof(Properties)));
+                    Translate(nameof(Properties)));
                 result = result.Succeeded ? CheckField.ListItems(Properties,
-                    PackageRequest.Translate(nameof(Properties))) : result;
+                    Translate(nameof(Properties))) : result;
             }
 
             return result;
@@ -118,5 +120,9 @@
                 Children = ChildrenIds?.Select(x => new Package() { Id = x } as IPackage).ToList(),
                 Properties = Properties
             };
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

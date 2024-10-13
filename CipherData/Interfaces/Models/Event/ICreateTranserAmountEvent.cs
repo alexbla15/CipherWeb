@@ -1,6 +1,8 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
-    public interface ICreateTranserAmountEvent
+    public interface ICreateTranserAmountEvent : ICipherClass
     {
         /// <summary>
         /// Package that accepts mass.
@@ -42,9 +44,9 @@
         /// </summary>
         public CheckField CheckDonatingPackage()
         {
-            CheckField result = CheckField.Required(DonatingPackage, CreateTranserAmountEvent.Translate(nameof(DonatingPackage)));
+            CheckField result = CheckField.Required(DonatingPackage, Translate(nameof(DonatingPackage)));
             result = result.Succeeded ? CheckField.LowerEqual(Amount, DonatingPackage.BrutMass,
-            CreateTranserAmountEvent.Translate(nameof(Amount))) : result;
+            Translate(nameof(Amount))) : result;
             return result;
         }
 
@@ -52,20 +54,20 @@
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckAcceptingPackage() =>
-            CheckField.Required(AcceptingPackage, CreateTranserAmountEvent.Translate(nameof(AcceptingPackage)));
+            CheckField.Required(AcceptingPackage, Translate(nameof(AcceptingPackage)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckAmount() =>
-            CheckField.Greater(Amount, 0, CreateTranserAmountEvent.Translate(nameof(Amount)));
+            CheckField.Greater(Amount, 0, Translate(nameof(Amount)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckDonatingDifferentFromAccepting()
             => CheckField.NotEq(AcceptingPackage?.Id, DonatingPackage?.Id,
-                CreateTranserAmountEvent.Translate(nameof(AcceptingPackage)));
+                Translate(nameof(AcceptingPackage)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -110,5 +112,9 @@
 
             return new CreateEvent();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

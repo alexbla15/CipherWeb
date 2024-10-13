@@ -14,10 +14,10 @@
         public async Task<Tuple<IStorageSystem, ErrorResponse>> UpdateSystem(string sys_id, ISystemRequest sys)
             => await new RandomGenericRequests().Request(sys.Create(sys_id), canBeNotFound: true);
 
-        public async Task<Tuple<IGroupedBooleanCondition, ErrorResponse>> GetSystemConditions()
-            => await new RandomGenericRequests().Request(RandomData.GroupedBooleanCondition, canBadRequest: false);
+        public async Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> GetSystemConditions(string id)
+            => await new RandomGenericRequests().Request(RandomData.CustomObjectBooleanCondition, canBadRequest: false);
 
-        public async Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> UpdateSystemConditions(ICustomObjectBooleanCondition condition)
+        public async Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> UpdateSystemConditions(string id, ICustomObjectBooleanCondition condition)
             => await new RandomGenericRequests().Request(RandomData.CustomObjectBooleanCondition, canBeNotFound: true);
     }
 }

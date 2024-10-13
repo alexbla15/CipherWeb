@@ -64,5 +64,31 @@
             decimal NetMass = BrutMass * (Convert.ToDecimal(random.Next(0, 10)) / 10M);
             return Tuple.Create(BrutMass, NetMass);
         }
+
+        // API-RELATED FUNCTIONS
+
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> All() => 
+            await new RandomPackagesRequests().GetPackages();
+
+        public async Task<Tuple<IPackage, ErrorResponse>> Get(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return await Task.FromResult(Tuple.Create(new Package() as IPackage, ErrorResponse.BadRequest));
+            return await new RandomPackagesRequests().GetPackage(id);
+        }
+
+        public async Task<Tuple<IPackage, ErrorResponse>> Update(string id, IUpdatePackage req)
+            => await new RandomPackagesRequests().UpdatePackage(id, req);
+
+        /// <summary>
+        /// Fetch all packages which contain the searched text
+        /// </summary>
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string SearchText)
+            => await new RandomPackagesRequests().GetPackages();
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> Events() => 
+            await new RandomEventsRequests().GetEvents();
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> Processes() =>
+            await new RandomProcessesRequests().GetProcesses();
     }
 }

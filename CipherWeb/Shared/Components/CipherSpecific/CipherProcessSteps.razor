@@ -37,7 +37,7 @@
     private RadzenDataGrid<IProcessStepDefinition> StepsDataGrid = new();
     private CipherBooleanConditions StepCondition = new();
 
-    private IGroupedBooleanCondition SelectedCondition = new GroupedBooleanCondition();
+    private IGroupedBooleanCondition SelectedCondition = Config.GroupedBooleanCondition;
 
     private string? SelectedStep;
 
@@ -52,7 +52,7 @@
     async Task AddStep()
     {
         // Add the new restriction to the existing list
-        ChosenSteps.Add(new ProcessStepDefinition());
+        ChosenSteps.Add(Config.ProcessStepDefinition);
         StateHasChanged();
         await StepsDataGrid.RefreshDataAsync();
     }
@@ -91,7 +91,7 @@
     {
         StepCondition.Save();
         var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
-        SelectedCondition = ChosenStep?.Condition ?? new GroupedBooleanCondition();
+        SelectedCondition = ChosenStep?.Condition ?? Config.GroupedBooleanCondition;
         //await StepCondition.FillDataFilter();
     }
 }
@@ -114,12 +114,12 @@
                             <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(ProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" />
                         </Template>

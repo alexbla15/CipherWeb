@@ -4,8 +4,8 @@
     <CipherFormInfo @ref="FormInfo" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@CreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@CreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+        <CipherLocation Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
         <CipherComments @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
@@ -57,7 +57,7 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private ICreateRelocationEvent RequestedEvent = new CreateRelocationEvent();
+    private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent;
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -66,14 +66,12 @@
     {
         Valid = true;
 
-        RequestedEvent = new CreateRelocationEvent()
-        {
-            Worker = FormInfo.GetWorker(),
-            Timestamp = FormInfo.GetDateTime(),
-            TargetSystem = FinalLocation.ChosenSystem,
-            Packages = RelocatedPacks.SelectedPackages,
-            Comments = EventComments.Comments
-        };
+        RequestedEvent = Config.CreateRelocationEvent;
+        RequestedEvent.Worker = FormInfo.GetWorker();
+        RequestedEvent.Timestamp = FormInfo.GetDateTime();
+        RequestedEvent.TargetSystem = FinalLocation.ChosenSystem;
+        RequestedEvent.Packages = RelocatedPacks.SelectedPackages;
+        RequestedEvent.Comments = EventComments.Comments;
 
         (Valid, ErrorMessage) = RequestedEvent.Check();
 
@@ -89,7 +87,7 @@
         {
             ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = await Config.EventsRequests.CreateEvent(ev);
+            (ResultEvent, Error) = await Config.Event.Create(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

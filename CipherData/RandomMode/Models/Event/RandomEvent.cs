@@ -63,5 +63,45 @@
         /// </summary>
         /// <returns></returns>
         public static string GetNextId() => $"E{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details)
+            => await new RandomEventsRequests().UpdateEvent(Id, update_details);
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req) =>
+            await new RandomEventsRequests().CreateEvent(req);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> All()
+            => await new RandomEventsRequests().GetEvents();
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)
+            => await All();
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status)
+        {
+            if (new Random().Next(2) == 0)
+            {
+                var result = await GetObjects<RandomRelocationEvent>(status.ToString(), searchText => new GroupedBooleanCondition()
+                {
+                    Conditions = new List<BooleanCondition>() {
+                    new() { Attribute = $"{typeof(Event).Name}.{nameof(Status)}", Value = searchText, AttributeRelation=AttributeRelation.Eq }
+                    },
+                    Operator = Operator.Any
+                });
+                return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
+            }
+            else
+            {
+                var result = await GetObjects<RandomTransferAmountEvent>(status.ToString(), searchText => new GroupedBooleanCondition()
+                {
+                    Conditions = new List<BooleanCondition>() {
+                    new() { Attribute = $"{typeof(Event).Name}.{nameof(Status)}", Value = searchText, AttributeRelation=AttributeRelation.Eq }
+                    },
+                    Operator = Operator.Any
+                });
+                return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
+            }
+        }
     }
 }

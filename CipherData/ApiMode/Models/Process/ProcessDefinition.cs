@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Definition of a process - 
@@ -29,8 +27,31 @@ namespace CipherData.ApiMode
         [HebrewTranslation(typeof(ProcessDefinition), nameof(Steps))]
         public List<IProcessStepDefinition> Steps { get; set; } = new();
 
-        // STATIC METHODS
+        // API RELATED FUNCTIONS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> All()
+            => await new ProcessDefinitionsRequests().GetProcessDefinitions();
+
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest req) =>
+            await new ProcessDefinitionsRequests().CreateProcessDefinition(req);
+
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string id, IProcessDefinitionRequest req)
+            => await new ProcessDefinitionsRequests().UpdateProcessDefinition(id, req);
+
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string SearchText)
+        {
+            var result = await GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", Value = SearchText },
+                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", Value = SearchText },
+                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", Value = SearchText},
+                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.{nameof(ProcessStepDefinition.Name)}", Value = SearchText, Operator = Operator.Any }
+                },
+                Operator = Operator.Any
+            });
+
+            return Tuple.Create(result.Item1.Select(x => x as IProcessDefinition).ToList(), result.Item2);
+        }
     }
 }

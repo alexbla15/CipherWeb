@@ -1,6 +1,6 @@
 ﻿namespace CipherData.RandomMode
 {
-    public class RandomCustomObjectBooleanCondition : ICustomObjectBooleanCondition
+    public class RandomCustomObjectBooleanCondition : CipherClass, ICustomObjectBooleanCondition
     {
         /// <summary>
         /// List of object factory specifications and conditions on them

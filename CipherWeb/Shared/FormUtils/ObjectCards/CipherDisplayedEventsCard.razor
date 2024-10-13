@@ -52,7 +52,7 @@
         {
             args.Grid.Groups.Add(new GroupDescriptor()
                 {
-                    Title = DisplayedEvent.Translate(nameof(IDisplayedEvent.Id)),
+                    Title = IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id)),
                     Property = nameof(IDisplayedEvent.Id),
                     SortOrder = SortOrder.Descending
                 });
@@ -130,37 +130,43 @@
                                               Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
                             </RadzenStack>
                         }
-                        <CipherText Text="@($@"{DisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
-                                 {DisplayedEvent.Translate(nameof(IDisplayedEvent.EventType))} : {context.Data.Items.Cast<IDisplayedEvent>().First().EventType},
-                                 {DisplayedEvent.Translate(nameof(IDisplayedEvent.ProcessId))} : {context.Data.Items.Cast<IDisplayedEvent>().First().ProcessId},
-                                 {DisplayedEvent.Translate(nameof(IDisplayedEvent.Timestamp))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Timestamp},
-                                 {DisplayedEvent.Translate(nameof(IDisplayedEvent.Comments))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Comments}
+                        <CipherText Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventType))} : {context.Data.Items.Cast<IDisplayedEvent>().First().EventType},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.ProcessId))} : {context.Data.Items.Cast<IDisplayedEvent>().First().ProcessId},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Timestamp))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Timestamp},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Comments))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Comments}
                                 ")" Bold="true" MarginTop="3px" MarginBottom="3px" />
                     </RadzenStack>
                 </GroupHeaderTemplate>
                 <Columns>
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.Id))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.Id)))" MinWidth="20px" />
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingPackage))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingPackage)))">
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.Id))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id)))" MinWidth="20px" />
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingPackage))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingPackage)))">
                         <Template>
                             @context.DonatingPackage?.Item1.Id
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingSystem))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingSystem)))">
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingSystem))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingSystem)))">
                         <Template>
                             @context.DonatingSystem?.Name
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingPackage))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingPackage)))">
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingPackage))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingPackage)))">
                         <Template>
                             @context.AcceptingPackage?.Item1.Id
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingSystem))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingSystem)))">
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingSystem))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingSystem)))">
                         <Template>
                             @context.AcceptingSystem?.Name
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.EventMass))" Title="@(DisplayedEvent.Translate(nameof(IDisplayedEvent.EventMass)))" />
+                    <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.EventMass))" 
+                    Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventMass)))" />
                 </Columns>
             </RadzenDataGrid>
 

@@ -57,7 +57,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(new Package() { Id = "" });
+        chosenPacks.Add(Config.Package);
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -87,6 +87,19 @@
         chosenPacks.Clear();
         await CustomDataGrid.RefreshDataAsync();
     }
+
+    private async Task<decimal> FetchMaxBrutMassAsync(IPackage pack)
+    {
+        if (!string.IsNullOrEmpty(pack.Id))
+        {
+            var result = await Config.Package.Get(pack.Id);
+            if (result.Item1 != null)
+            {
+                return result.Item1.BrutMass;
+            }
+        }
+        return 0;
+    }
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
@@ -106,7 +119,7 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackage" Title="@(Package.Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         @if (string.IsNullOrEmpty(pack.Id))
                         {
@@ -118,14 +131,14 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackage" Title="@(Package.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Width="100%" Amount="IPackage.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric Width="100%" Amount="@FetchMaxBrutMassAsync(pack).Result" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="IPackage.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="@FetchMaxBrutMassAsync(pack).Result" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IPackage : IResource
     {
@@ -98,50 +100,42 @@
                 CategoryId = Category.Id
             };
 
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+
         // API-RELATED FUNCTIONS
-
-        /// <summary>
-        /// All events relevant for package.
-        /// </summary>
-        public Tuple<List<IEvent>, ErrorResponse> Events() => Config.GetPackageEvents(this);
-
-        /// <summary>
-        /// All processes relevant for package.
-        /// </summary>
-        public Tuple<List<IProcess>, ErrorResponse> Processes() => Config.GetPackageProcesses(this);
 
         /// <summary>
         /// All packages
         /// </summary>
-        public static async Task<Tuple<List<IPackage>, ErrorResponse>> All() => await Config.PackagesRequests.GetPackages();
+        Task<Tuple<List<IPackage>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all packages which contain the searched text
         /// </summary>
-        public static async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string SearchText)
-        {
-            if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
-
-            var result = await GetObjects<Package>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new () {Attribute = $"{typeof(Package).Name}.{nameof(Id)}", Value = searchText },
-                new () {Attribute = $"{typeof(Package).Name}.{nameof(Description)}", Value = searchText },
-                new() { Attribute = $"{typeof(Package).Name}.{nameof(Properties)}", Value = searchText },
-                new () {Attribute = $"{typeof(Package).Name}.{nameof(Vessel)}.{nameof(Id)}", Value = searchText },
-                new () {Attribute = $"{typeof(Package).Name}.{nameof(System)}.{nameof(Id)}", Value = searchText },
-                new () {Attribute = $"{typeof(Package).Name}.{nameof(Children)}.{nameof(Id)}", Value = searchText, Operator = Operator.Any }
-                },
-                Operator = Operator.Any
-            });
-
-            return Tuple.Create(result.Item1.Select(x => x as IPackage).ToList(), result.Item2);
-        }
+        Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string SearchText);
 
         /// <summary>
         /// Get details about a single package given package ID
         /// </summary>
         /// <param name="id">package ID</param>
-        public static Tuple<IPackage, ErrorResponse> Get(string? id) => Config.GetPackage(id);
+        Task<Tuple<IPackage, ErrorResponse>> Get(string? id);
+
+        /// <summary>
+        /// Method to update object details 
+        /// </summary>
+        Task<Tuple<IPackage, ErrorResponse>> Update(string id, IUpdatePackage req);
+
+        /// <summary>
+        /// All events relevant for package.
+        /// </summary>
+        Task<Tuple<List<IEvent>, ErrorResponse>> Events();
+
+        /// <summary>
+        /// All processes relevant for package.
+        /// </summary>
+        Task<Tuple<List<IProcess>, ErrorResponse>> Processes();
     }
 }

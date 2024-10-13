@@ -32,19 +32,6 @@
         /// <summary>
         /// Fetch all user actions that occured to this package.
         /// </summary>
-        public async Task<Tuple<IUserActionResponse, ErrorResponse>> UserActions() => await Config.logsRequests.GetObjectLogs(uuid: Uuid);
-
-        /// <summary>
-        /// Get resources which contain a certain text within one of their parameters
-        /// </summary>
-        /// <typeparam name="T">Type of resource</typeparam>
-        /// <param name="searchText">wanted text</param>
-        /// <param name="createCondition">how to create the GroupedBooleanCondition</param>
-        /// <returns></returns>
-        public static async Task<Tuple<List<T>, ErrorResponse>> GetObjects<T>(string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : Resource
-        {
-            ObjectFactory obj = new() { Filter = createCondition(searchText) };
-            return await Config.QueryRequests.QueryObjects<T>(obj);
-        }
+        Task<Tuple<IUserActionResponse, ErrorResponse>> UserActions();
     }
 }

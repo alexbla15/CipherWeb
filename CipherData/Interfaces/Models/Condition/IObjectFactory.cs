@@ -1,5 +1,17 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
+    public enum Order
+    {
+        asc, desc
+    }
+
+    public enum Method
+    {
+        sum, avg, count, first, last, max, min
+    }
+
     public interface IOrderedItem : ICipherClass
     {
         /// <summary>
@@ -12,7 +24,7 @@
         /// </summary>
         Order Order { get; set; }
 
-        public CheckField CheckAttribute() => CheckField.Required(Attribute, OrderedItem.Translate(nameof(Attribute)));
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -25,6 +37,10 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     public interface IAggregateItem : ICipherClass
@@ -45,9 +61,9 @@
         /// </summary>
         Method? Method { get; set; }
 
-        public CheckField CheckAttribute() => CheckField.Required(Attribute, AggregateItem.Translate(nameof(Attribute)));
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
 
-        public CheckField CheckAs() => CheckField.CheckString(As, AggregateItem.Translate(nameof(As)));
+        public CheckField CheckAs() => CheckField.CheckString(As, Translate(nameof(As)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -61,6 +77,10 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
     public interface IObjectFactory : ICipherClass
@@ -105,15 +125,15 @@
         {
             CheckField result = new();
             if (OrderBy is null) return new();
-            if (OrderBy.Any()) result = CheckField.Distinct(OrderBy.Select(x => x.Attribute).ToList(), ObjectFactory.Translate(nameof(OrderBy)));
-            if (result.Succeeded) result = CheckField.ListItems(OrderBy, ObjectFactory.Translate(nameof(OrderBy)));
+            if (OrderBy.Any()) result = CheckField.Distinct(OrderBy.Select(x => x.Attribute).ToList(), Translate(nameof(OrderBy)));
+            if (result.Succeeded) result = CheckField.ListItems(OrderBy, Translate(nameof(OrderBy)));
             return result;
         }
 
         public CheckField CheckGroupBy()
         {
             if (GroupBy is null) return new();
-            CheckField result = CheckField.Distinct(GroupBy, ObjectFactory.Translate(nameof(GroupBy)));
+            CheckField result = CheckField.Distinct(GroupBy, Translate(nameof(GroupBy)));
             if (result.Succeeded && GroupBy.Any())
             {
                 foreach (string g in GroupBy)
@@ -128,8 +148,8 @@
         {
             CheckField result = new();
             if (Aggregate is null) return new();
-            if (Aggregate.Any()) result = CheckField.Distinct(Aggregate.Select(x => x.Attribute).ToList(), ObjectFactory.Translate(nameof(Aggregate)));
-            if (result.Succeeded) result = CheckField.ListItems(Aggregate, ObjectFactory.Translate(nameof(Aggregate)));
+            if (Aggregate.Any()) result = CheckField.Distinct(Aggregate.Select(x => x.Attribute).ToList(), Translate(nameof(Aggregate)));
+            if (result.Succeeded) result = CheckField.ListItems(Aggregate, Translate(nameof(Aggregate)));
             return result;
         }
 
@@ -147,5 +167,9 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

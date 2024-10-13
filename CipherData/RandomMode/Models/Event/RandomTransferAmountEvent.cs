@@ -60,5 +60,22 @@
             }
             return Tuple.Create(iPacks, fPacks);
         }
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details)
+            => await new RandomEvent().Update(update_details);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> All()
+            => await new RandomEvent().All();
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req)
+            => await new RandomEvent().Create(req);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)
+            => await new RandomEvent().Containing(SearchText);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status) 
+            => await new RandomEvent().StatusEvents(status);
     }
 }

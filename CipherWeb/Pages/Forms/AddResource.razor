@@ -55,13 +55,13 @@
     private CipherFormInfo FormInfo = new();
     private CipherProcess EventProc = new();
 
-    private IPackage NewPackage = new Package();
-    private IUnitRequest unitRequest = new UnitRequest();
-    private ICategoryRequest catRequest = new CategoryRequest();
-    private IVesselRequest vesRequest = new VesselRequest();
-    private IProcessDefinitionRequest procDefRequest = new ProcessDefinitionRequest();
-    private ISystemRequest sysRequest = new SystemRequest();
-    private ICreateEvent packRequest = new CreateEvent();
+    private IPackage NewPackage = Config.Package;
+    private IUnitRequest unitRequest = Config.UnitRequest;
+    private ICategoryRequest catRequest = Config.CategoryRequest;
+    private IVesselRequest vesRequest = Config.VesselRequest;
+    private IProcessDefinitionRequest procDefRequest = Config.ProcessDefinitionRequest;
+    private ISystemRequest sysRequest = Config.SystemRequest;
+    private ICreateEvent packRequest = Config.CreateEvent;
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -72,13 +72,13 @@
     /// <summary>
     /// Retrieve the object's ID for URL changes.
     /// </summary>
-    private string? GetObjectId(object? obj) => (obj as Resource)?.Id;
+    private string? GetObjectId(object? obj) => (obj as IResource)?.Id;
 
     /// <summary>
     /// Method to fill in the request and check it before submission.
     /// </summary>
     /// <returns></returns>
-    private Tuple<bool, string> HandleSubmissionRequest()
+    private async Task<Tuple<bool, string>> HandleSubmissionRequest()
     {
         if (typeof(Cipher_TItem) == typeof(IUnit))
         {
@@ -107,16 +107,14 @@
         }
         else if (typeof(Cipher_TItem) == typeof(IPackage))
         {
-            List<IPackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
-            packRequest = new CreateEvent()
-            {
-                Worker = FormInfo.GetWorker(),
-                ProcessId = EventProc.ChosenProcess?.Id,
-                Timestamp = FormInfo.GetDateTime(),
-                EventType = 21,
-                Actions = ChangedPacks,
-                Comments = EventComments.GetValue()
-            };
+            List<IPackageRequest> ChangedPacks = await PackInfo.GetChangedPacks();
+            packRequest = Config.CreateEvent;
+            packRequest.Worker = FormInfo.GetWorker();
+            packRequest.ProcessId = EventProc.ChosenProcess?.Id;
+            packRequest.Timestamp = FormInfo.GetDateTime();
+            packRequest.EventType = 21;
+            packRequest.Actions = ChangedPacks;
+            packRequest.Comments = EventComments.GetValue();
             return packRequest.Check();
         }
 
@@ -129,7 +127,7 @@
     public async Task Submit()
     {
         Valid = true;
-        var requestCheck = HandleSubmissionRequest();
+        var requestCheck = await HandleSubmissionRequest();
 
         if (!requestCheck.Item1)
         {
@@ -204,49 +202,49 @@
     public async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        var result = await Config.UnitsRequests.CreateUnit(unitRequest);
+        var result = await Config.Unit.Create(unitRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        var result = await Config.CategoriesRequests.CreateCategory(catRequest);
+        var result = await Config.Category.Create(catRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        var result = await Config.VesselsRequests.CreateVessel(vesRequest);
+        var result = await Config.Vessel.Create(vesRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendProcessDefinitionRequest()
     {
         JsonRequest = procDefRequest.ToJson();
-        var result = await Config.ProcessesDefinitionsRequests.CreateProcessDefinition(procDefRequest);
+        var result = await Config.ProcessDefinition.Create(procDefRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendSystemRequest()
     {
         JsonRequest = sysRequest.ToJson();
-        var result = await Config.SystemsRequests.CreateSystem(sysRequest);
+        var result = await Config.StorageSystem.Create(sysRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendPackageRequest()
     {
         JsonRequest = packRequest.ToJson();
-        Tuple<IEvent, ErrorResponse> evResult = await Config.EventsRequests.CreateEvent(packRequest);
+        Tuple<IEvent, ErrorResponse> evResult = await Config.Event.Create(packRequest);
         if (evResult.Item1.FinalStatePackages.Count > 0)
         {
             return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(evResult.Item1.FinalStatePackages[0], evResult.Item2);
         }
         else
         {
-            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(new Package(), evResult.Item2);
+            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(Config.Package, evResult.Item2);
         }
     }
 

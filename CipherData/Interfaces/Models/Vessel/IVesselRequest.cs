@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IVesselRequest : ICipherClass
     {
@@ -20,17 +22,17 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, VesselRequest.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckType() => CheckField.Required(Type, VesselRequest.Translate(nameof(Type)));
+        public CheckField CheckType() => CheckField.Required(Type, Translate(nameof(Type)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckSystemId() => CheckField.Required(SystemId, VesselRequest.Translate(nameof(SystemId)));
+        public CheckField CheckSystemId() => CheckField.Required(SystemId, Translate(nameof(SystemId)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -48,6 +50,10 @@
 
         public IVessel Create(string id) =>
             new Vessel() { Id = id, Name = Name, Type = Type, System = new StorageSystem() { Id = SystemId } };
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
 
     }
 }

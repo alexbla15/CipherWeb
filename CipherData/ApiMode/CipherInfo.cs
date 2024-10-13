@@ -29,7 +29,7 @@ namespace CipherData.ApiMode
                     Title = result.Title,
                     Creator = result.Creator,
                     CreationDate = result.CreationDate,
-                    ObjectFactory = CipherClass.FromJson<ObjectFactory>(result.ObjectFactory),
+                    ObjectFactory = ICipherClass.FromJson<ObjectFactory>(result.ObjectFactory),
                     //ObjectType = new_report.ObjectType.Name,
                     Parameters = JsonSerializer.Deserialize<List<ReportParameter>>(result.Parameters),
                     Version = result.Version
@@ -61,7 +61,7 @@ namespace CipherData.ApiMode
                         Title = res.Title,
                         Creator = res.Creator,
                         CreationDate = res.CreationDate,
-                        ObjectFactory = CipherClass.FromJson<ObjectFactory>(res.ObjectFactory),
+                        ObjectFactory = ICipherClass.FromJson<ObjectFactory>(res.ObjectFactory),
                         //ObjectType = new_report.ObjectType.Name,
                         Parameters = JsonSerializer.Deserialize<List<ReportParameter>>(res.Parameters),
                         Version = res.Version

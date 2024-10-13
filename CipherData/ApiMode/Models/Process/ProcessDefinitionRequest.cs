@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Create a new process definition or update it.
@@ -27,9 +25,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
         public List<IProcessStepDefinition> Steps { get; set; } = new();
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

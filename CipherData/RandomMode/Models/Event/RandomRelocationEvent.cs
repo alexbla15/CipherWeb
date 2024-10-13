@@ -31,8 +31,6 @@
         [HebrewTranslation(typeof(Event), nameof(FinalStatePackages))]
         public List<IPackage> FinalStatePackages { get; set; } = Result.Item2;
 
-        public Tuple<IEvent, ErrorResponse> Update(UpdateEvent update_details) => Tuple.Create(new RandomRelocationEvent() as IEvent, ErrorResponse.Success);
-
         private static Tuple<List<IPackage>, List<IPackage>> Result = GetResult();
 
         private static Tuple<List<IPackage>, List<IPackage>> GetResult()
@@ -47,5 +45,22 @@
             }
             return Tuple.Create(iPacks, fPacks);
         }
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details)
+            => await new RandomEvent().Update(update_details);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> All()
+            => await new RandomEvent().All();
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req)
+            => await new RandomEvent().Create(req);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)
+            => await new RandomEvent().Containing(SearchText);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status)
+            => await new RandomEvent().StatusEvents(status);
     }
 }

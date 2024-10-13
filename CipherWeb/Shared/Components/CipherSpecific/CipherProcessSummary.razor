@@ -85,7 +85,7 @@
     {
         Dictionary<string, int> ProcessCounter = new Dictionary<string, int>();
 
-        foreach (Event ev in ChosenEvents)
+        foreach (IEvent ev in ChosenEvents)
         {
             if (AddProcess(ev))
             {

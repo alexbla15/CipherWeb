@@ -2,7 +2,7 @@
 {
     <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
         <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" 
-        Change="@(async args => {ChosenCondition = new GroupedBooleanCondition() ; await ParamsChanged();})">
+        Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition ; await ParamsChanged();})">
             <Items>
                 @foreach (string objType in objectTypes)
                 {
@@ -16,7 +16,7 @@
 @RenderCipherDataTable()
 
 @code {
-    private Type _ChosenType = typeof(Package);
+    private Type _ChosenType = typeof(IPackage);
     private int _ChosenId = 0;
 
     [Parameter]
@@ -46,7 +46,7 @@
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     [Parameter]
-    public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition;
 
     [Parameter]
     public EventCallback<Tuple<IGroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
@@ -108,54 +108,54 @@
         // Define the RenderFragment based on the id
         return id switch
         {
-        0 => builder =>
-        {
-            builder.OpenComponent<CipherPackagesTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Packages);
-            builder.AddAttribute(2, "WithButtons", WithButtons);
-            builder.CloseComponent();
-        },
-        1 => builder =>
-        {
-            builder.OpenComponent<CipherVesselsTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Vessels);
-            builder.CloseComponent();
-        },
-        2 => builder =>
-        {
-            builder.OpenComponent<CipherSystemsTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Systems);
-            builder.CloseComponent();
-        },
-        3 => builder =>
-        {
-            builder.OpenComponent<CipherEventsTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Events);
-            builder.CloseComponent();
-        },
-        4 => builder =>
-        {
-            builder.OpenComponent<CipherProcessesTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Processes);
-            builder.CloseComponent();
-        },
-        5 => builder =>
-        {
-            builder.OpenComponent<CipherCategoriesTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Categories);
-            builder.CloseComponent();
-        },
-        6 => builder =>
-        {
-            builder.OpenComponent<CipherUnitsTable>(0);
-            builder.AddAttribute(1, "ChosenObjects", Units);
-            builder.CloseComponent();
-        },
-        _ => builder =>
-        {
-            builder.AddContent(0, "No matching table found.");
-        }
-    };
+            0 => builder =>
+            {
+                builder.OpenComponent<CipherPackagesTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Packages);
+                builder.AddAttribute(2, "WithButtons", WithButtons);
+                builder.CloseComponent();
+            },
+            1 => builder =>
+            {
+                builder.OpenComponent<CipherVesselsTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Vessels);
+                builder.CloseComponent();
+            },
+            2 => builder =>
+            {
+                builder.OpenComponent<CipherSystemsTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Systems);
+                builder.CloseComponent();
+            },
+            3 => builder =>
+            {
+                builder.OpenComponent<CipherEventsTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Events);
+                builder.CloseComponent();
+            },
+            4 => builder =>
+            {
+                builder.OpenComponent<CipherProcessesTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Processes);
+                builder.CloseComponent();
+            },
+            5 => builder =>
+            {
+                builder.OpenComponent<CipherCategoriesTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Categories);
+                builder.CloseComponent();
+            },
+            6 => builder =>
+            {
+                builder.OpenComponent<CipherUnitsTable>(0);
+                builder.AddAttribute(1, "ChosenObjects", Units);
+                builder.CloseComponent();
+            },
+            _ => builder =>
+            {
+                builder.AddContent(0, "No matching table found.");
+            }
+        };
     }
 
     public async Task<RenderFragment?> RenderCipherDataTable(Type type)
@@ -169,7 +169,8 @@
     public async Task<List<T>> GetFilteredObjects<T>() where T : IResource
     {
         List<T> objects = new();
-        ObjectFactory obj = new() { Filter = ChosenCondition };
+        IObjectFactory obj = Config.ObjectFactory;
+        obj.Filter = ChosenCondition;
         (objects, Error) = await Config.QueryRequests.QueryObjects<T>(obj);
         return objects;
     }
@@ -191,7 +192,7 @@
 
         if (oldChosenType != ChosenType)
         {
-            ChosenCondition = new GroupedBooleanCondition();
+            ChosenCondition = Config.GroupedBooleanCondition;
             await DataFilter.Clear();
         }
         await ChosenConditionChanged.InvokeAsync(Tuple.Create(ChosenCondition, ChosenType)); // Trigger change event

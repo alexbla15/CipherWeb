@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
 
     /// <summary>
@@ -40,9 +38,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
         public decimal Amount { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

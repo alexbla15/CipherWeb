@@ -41,7 +41,7 @@
     /// Type that will be used to translate headers
     /// </summary>
     [Parameter]
-    public Type CipherType { get; set; } = typeof(Resource);
+    public Type CipherType { get; set; } = typeof(IResource);
 
     [Parameter]
     public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
@@ -75,7 +75,7 @@
         public string Worker { get; set; } = Constants.SetUser.Name;
         public string? Classification { get; set; } = "מוגבל";
 
-        public Type CipherType { get; set; } = typeof(Resource);
+        public Type CipherType { get; set; } = typeof(IResource);
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
 

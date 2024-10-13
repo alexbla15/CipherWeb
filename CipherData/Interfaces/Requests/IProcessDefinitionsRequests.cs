@@ -18,7 +18,7 @@
         /// Get details about a process definition.
         /// Path: Get /processDefinition/{id}
         /// </summary>
-        Task<Tuple<IProcessDefinition, ErrorResponse>> GetProcessDefintion(string proc_id);
+        Task<Tuple<IProcessDefinition, ErrorResponse>> GetProcessDefinition(string id);
 
         /// <summary>
         /// Update Unit's details

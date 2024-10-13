@@ -44,7 +44,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        ChosenProperties.Add(new CategoryProperty());
+        ChosenProperties.Add(Config.CategoryProperty);
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -88,17 +88,17 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(CategoryProperty.Translate(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextBox @bind-Value="prop.Name" Style="width:100%"/>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(CategoryProperty.Translate(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(CategoryProperty.Translate(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
                                         Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))"
@@ -134,7 +134,7 @@
                             </RadzenDropDown>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(CategoryProperty.Translate(nameof(ICategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {

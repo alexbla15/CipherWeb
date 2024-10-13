@@ -85,13 +85,13 @@
     {
         if (!string.IsNullOrEmpty(SearchText))
         {
-            (packs, Error) = await IPackage.Containing(SearchText);
-            (vessels, Error) = await IVessel.Containing(SearchText);
-            (systems, Error) = await IStorageSystem.Containing(SearchText);
-            (units, Error) = await IUnit.Containing(SearchText);
-            (categories, Error) = await ICategory.Containing(SearchText);
-            (events, Error) = await IEvent.Containing(SearchText);
-            (processes, Error) = await IProcess.Containing(SearchText);
+            (packs, Error) = await Config.Package.Containing(SearchText);
+            (vessels, Error) = await Config.Vessel.Containing(SearchText);
+            (systems, Error) = await Config.StorageSystem.Containing(SearchText);
+            (units, Error) = await Config.Unit.Containing(SearchText);
+            (categories, Error) = await Config.Category.Containing(SearchText);
+            (events, Error) = await Config.Event.Containing(SearchText);
+            (processes, Error) = await Config.Process.Containing(SearchText);
         }
 
         return new(){

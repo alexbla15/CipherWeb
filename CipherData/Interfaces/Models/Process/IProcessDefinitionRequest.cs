@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IProcessDefinitionRequest : ICipherClass
     {
@@ -20,17 +22,17 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, ProcessDefinitionRequest.Translate(nameof(Name)));
+        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckDescription() => CheckField.Required(Description, ProcessDefinitionRequest.Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckSteps() => CheckField.CheckList(Steps, ProcessDefinitionRequest.Translate(nameof(Steps)), isFull: true, isCheckItems: true);
+        public CheckField CheckSteps() => CheckField.CheckList(Steps, Translate(nameof(Steps)), isFull: true, isCheckItems: true);
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -50,5 +52,8 @@
         public IProcessDefinition Create(string id) =>
             new ProcessDefinition() { Id = id, Name = Name, Description = Description, Steps = Steps };
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

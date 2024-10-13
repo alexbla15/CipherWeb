@@ -1,6 +1,56 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
-    public interface ICondition { }
+    public enum AttributeRelation
+    {
+        /// <summary>
+        /// Equal
+        /// </summary>
+        Eq,
+        /// <summary>
+        /// Not equal
+        /// </summary>
+        Ne,
+        /// <summary>
+        /// Greater Than
+        /// </summary>
+        Gt,
+        /// <summary>
+        /// Greater Than or equal
+        /// </summary>
+        Ge,
+        /// <summary>
+        /// Less than
+        /// </summary>
+        Lt,
+        /// <summary>
+        /// Less than or equal
+        /// </summary>
+        Le,
+        StartsWith,
+        EndsWith,
+        Contains,
+        NotContains,
+        IsNull,
+        IsNotNull,
+        IsEmpty,
+        IsNotEmpty,
+    }
+
+    public enum Operator
+    {
+        /// <summary>
+        /// All of the items in the array must follow the condition.
+        /// </summary>
+        All,
+        /// <summary>
+        /// At least one of the items in the array must follow the condition.
+        /// </summary>
+        Any
+    }
+
+    public interface ICondition : ICipherClass { }
 
     public interface IBooleanCondition : ICondition
     {
@@ -31,12 +81,12 @@
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckAttribute() => CheckField.Required(Attribute, BooleanCondition.Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
+        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckValue() => CheckField.CheckString(Value, BooleanCondition.Translate(nameof(Value)));
+        public CheckField CheckValue() => CheckField.CheckString(Value, Translate(nameof(Value)));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -50,5 +100,9 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

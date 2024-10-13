@@ -8,7 +8,7 @@
         public async Task<Tuple<IProcessDefinition, ErrorResponse>> CreateProcessDefinition(IProcessDefinitionRequest proc)
             => await new RandomGenericRequests().Request(proc.Create(RandomProcessDefinition.GetNextId()));
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> GetProcessDefintion(string proc_id)
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> GetProcessDefinition(string proc_id)
             => await new RandomGenericRequests().Request(RandomData.ProcessDefinition, canBeNotFound: true, canBadRequest: false);
 
         public async Task<Tuple<IProcessDefinition, ErrorResponse>> UpdateProcessDefinition(string id, IProcessDefinitionRequest proc)

@@ -24,7 +24,7 @@
 
     <RadzenStepsItem Text="בניית תצוגה">
         <CipherDataGrouper ComponentType="@ChosenReport?.ObjectType"
-                           Title="@(ObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
+                           Title="@(IObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
 
         <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
                               AggregationFields="@ChosenReport.ObjectFactory.GroupBy" ChosenAggregates="@(ChosenReport.ObjectFactory.Aggregate ?? new())"

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Property scheme of one of the package's properties.
@@ -24,10 +22,5 @@ namespace CipherData.ApiMode
             get => _Value;
             set => _Value = value?.Trim();
         }
-
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

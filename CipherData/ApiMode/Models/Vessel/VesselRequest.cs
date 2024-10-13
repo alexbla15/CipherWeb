@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
     /// <summary>
     /// Create a new unit or update it
@@ -19,9 +17,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
         public string? SystemId { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

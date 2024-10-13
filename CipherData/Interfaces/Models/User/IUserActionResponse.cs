@@ -1,6 +1,6 @@
 ﻿namespace CipherData.Interfaces
 {
-    public interface IUserActionResponse
+    public interface IUserActionResponse : ICipherClass
     {
         /// <summary>
         /// List of all user actions found

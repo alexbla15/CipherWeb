@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CipherData.ApiMode
+﻿namespace CipherData.ApiMode
 {
 
     /// <summary>
@@ -34,9 +32,5 @@ namespace CipherData.ApiMode
 
         [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
         public IStorageSystem? TargetSystem { get; set; }
-
-        // STATIC METHODS
-
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

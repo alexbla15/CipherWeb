@@ -14,7 +14,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Label ??= Vessel.Translate(nameof(IVessel.Type));
+        Label ??= IVessel.Translate(nameof(IVessel.Type));
         Icon ??= Icons.Cipher.Type;
 
         (vessels, error) = await CachedData.AllVessels;

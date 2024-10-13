@@ -6,7 +6,7 @@
         /// Create a new system.
         /// Path: POST /systems
         /// </summary>
-        Task<Tuple<IStorageSystem, ErrorResponse>> CreateSystem(ISystemRequest sys);
+        Task<Tuple<IStorageSystem, ErrorResponse>> CreateSystem(ISystemRequest req);
 
         /// <summary>
         /// Get all available objects
@@ -30,14 +30,13 @@
         /// Get conditions of a system. 
         /// Path: GET /systems/{id}/conditions
         /// </summary>
-        /// <returns></returns>
-        Task<Tuple<IGroupedBooleanCondition, ErrorResponse>> GetSystemConditions();
+        Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> GetSystemConditions(string id);
 
         /// <summary>
         /// Update system's conditions.
         /// Path: PUT /systems/{id}/conditions
         /// </summary>
         /// <returns></returns>
-        Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> UpdateSystemConditions(ICustomObjectBooleanCondition condition);
+        Task<Tuple<ICustomObjectBooleanCondition, ErrorResponse>> UpdateSystemConditions(string id, ICustomObjectBooleanCondition condition);
     }
 }

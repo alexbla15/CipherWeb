@@ -42,5 +42,25 @@
         /// </summary>
         /// <returns></returns>
         public static string GetNextId() => $"C{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<List<ICategory>, ErrorResponse>> All() =>
+            await new RandomCategoriesRequests().GetCategories();
+
+        public async Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string SearchText) =>
+            await All();
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Get(string? id)
+        {
+            if (string.IsNullOrEmpty(id)) return new(new RandomCategory(), ErrorResponse.BadRequest);
+            return await new RandomCategoriesRequests().GetCategory(id);
+        }
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest req) =>
+            await new RandomCategoriesRequests().CreateCategory(req);
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Update(string id, ICategoryRequest req)
+            => await new RandomCategoriesRequests().UpdateCategory(id, req);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface ICreateRelocationEvent : ICipherClass
     {
@@ -31,14 +33,14 @@
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckPackages() =>
-            CheckField.CheckList(Packages, CreateRelocationEvent.Translate(nameof(Packages)),
+            CheckField.CheckList(Packages, Translate(nameof(Packages)),
                 isRequired: true, isDistinct: true, isFull: true);
 
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
         public CheckField CheckTargetSystem() => CheckField.Required(TargetSystem,
-            CreateRelocationEvent.Translate(nameof(TargetSystem)));
+            Translate(nameof(TargetSystem)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
@@ -52,7 +54,7 @@
             foreach (IPackage p in Packages)
             {
                 result = result.Succeeded ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id,
-                    CreateRelocationEvent.Translate(nameof(p.System))) : result;
+                    Translate(nameof(p.System))) : result;
             }
 
             return result;
@@ -107,5 +109,8 @@
             }
         }
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

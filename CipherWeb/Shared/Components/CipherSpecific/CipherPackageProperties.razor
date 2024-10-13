@@ -43,7 +43,7 @@
     /// </summary>
     async Task AddComponent()
     {
-        ChosenProperties.Add(new PackageProperty());
+        ChosenProperties.Add(Config.PackageProperty);
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -87,12 +87,12 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(PackageProperty.Translate(nameof(IPackageProperty.Name)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(PackageProperty.Translate(nameof(IPackageProperty.Value)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" />
                     </Template>

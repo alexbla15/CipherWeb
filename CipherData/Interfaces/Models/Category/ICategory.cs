@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface ICategory : IResource
     {
@@ -79,52 +81,37 @@
                 Properties = Properties
             };
 
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+
+
         // API-RELATED FUNCTIONS
 
         /// <summary>
         /// Method to get all available categories
         /// </summary>
-        public static async Task<Tuple<List<ICategory>, ErrorResponse>> All() => await Config.CategoriesRequests.GetCategories();
+        Task<Tuple<List<ICategory>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all categories which contain the searched text
         /// </summary>
-        public static async Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string SearchText)
-        {
-            if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
-
-            var result = await GetObjects<Category>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Id)}", Value = SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Name)}", Value = SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Description)}", Value = SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(IdMask)}", Value = SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(MaterialType)}", Value = SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(CreatingProcesses)}.{nameof(ProcessDefinition.Name)}", Value = SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(ConsumingProcesses)}.{nameof(Id)}", Value= SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Id)}", Value= SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Parent)}.{nameof(Name)}", Value= SearchText },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Id)}", Value= SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Children)}.{nameof(Name)}", Value= SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Name)}", Value= SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.Description)}", Value= SearchText, Operator = Operator.Any },
-                new () { Attribute = $"{typeof(Category).Name}.{nameof(Properties)}.{nameof(CategoryProperty.DefaultValue)}", Value= SearchText, Operator = Operator.Any }
-            },
-                Operator = Operator.Any
-            });
-
-            return Tuple.Create(result.Item1.Select(x => x as ICategory).ToList(), result.Item2);
-        }
+        Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string SearchText);
 
         /// <summary>
         /// Get details about a single object given object ID
         /// </summary>
         /// <param name="id">object ID</param>
-        public static async Task<Tuple<ICategory, ErrorResponse>> Get(string? id)
-        {
-            if (string.IsNullOrEmpty(id)) return new(new Category(), ErrorResponse.BadRequest);
-            return await Config.CategoriesRequests.GetCategory(id);
-        }
+        Task<Tuple<ICategory, ErrorResponse>> Get(string? id);
+
+        /// <summary>
+        /// Method to create a new object from a request
+        /// </summary>
+        Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest req);
+
+        /// <summary>
+        /// Method to update object details 
+        /// </summary>
+        Task<Tuple<ICategory, ErrorResponse>> Update(string id, ICategoryRequest req);
     }
 }

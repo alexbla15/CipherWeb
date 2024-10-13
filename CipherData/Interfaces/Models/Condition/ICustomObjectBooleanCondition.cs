@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface ICustomCondition
     {
@@ -6,7 +8,7 @@
         IGroupedBooleanCondition? ObjectCondition { get; set; }
     }
 
-    public interface ICustomObjectBooleanCondition
+    public interface ICustomObjectBooleanCondition : ICipherClass
     {
         /// <summary>
         /// List of object factory specifications and conditions on them
@@ -17,5 +19,9 @@
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
         Operator Operator { get; set; }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

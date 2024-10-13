@@ -23,7 +23,7 @@
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public IPackage ChosenPackage { get; set; } = new Package();
+    public IPackage ChosenPackage { get; set; } = Config.Package;
 
     /// <summary>
     /// Processes which can use the current package.
@@ -71,7 +71,7 @@
     private CipherPackagesPicking InnerPacks = new();
     private CipherInputComponents InputPacks = new();
 
-    private IPackage NewPackage = new Package();
+    private IPackage NewPackage = Config.Package;
     private List<IPackageProperty> ChosenProperties = new();
 
     protected override async Task OnInitializedAsync() => (AllVessels, Error) = await CachedData.AllVessels;
@@ -79,12 +79,17 @@
     public IPackage Value()
     {
         ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
-        ChosenPackage.Category = packCategory.ChosenCategory ?? new Category() { Id = "" };
-        ChosenPackage.System = ChosenSystem ?? new StorageSystem() { Id = "" };
+        ChosenPackage.Category = packCategory.ChosenCategory ?? Config.Category;
+        ChosenPackage.System = ChosenSystem ?? Config.StorageSystem;
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
         ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => 
-            new PackageProperty { Name = x.Name, Value = x.Value } as IPackageProperty).ToList();
+            { 
+                var prop = Config.PackageProperty;
+                prop.Name = x.Name;
+                prop.Value = x.Value;
+                return prop;
+            }).ToList();
         ChosenPackage.Children = InnerPacks.SelectedPackages ?? new();
 
         return ChosenPackage;
@@ -94,7 +99,13 @@
     {
         ChosenCategory = packCategory.ChosenCategory;
         DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new();
-        ChosenProperties = ChosenCategory?.Properties?.Select(x => new PackageProperty { Name = x.Name, Value = x.DefaultValue } as IPackageProperty).ToList() ?? new List<IPackageProperty>();
+        ChosenProperties = ChosenCategory?.Properties?.Select(x => 
+            { 
+                IPackageProperty prop = Config.PackageProperty;
+                prop.Name = x.Name;
+                prop.Value = x.DefaultValue;
+                return prop;
+            }).ToList() ?? new List<IPackageProperty>();
         StateHasChanged();
     }
 
@@ -118,11 +129,11 @@
 
         if (packLocation.ChosenSystem is null)
         {
-            (AllVessels, Error) = await IVessel.All();
+            (AllVessels, Error) = await CachedData.AllVessels;
         }
         else
         {
-            var result = await IStorageSystem.Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
+            var result = await Config.StorageSystem.Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
             (AllVessels, Error) = (result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
     }
@@ -157,7 +168,7 @@
     /// <summary>
     /// Get all the package requests of packages that were changed in this event.
     /// </summary>
-    public List<IPackageRequest> GetChangedPacks()
+    public async Task<List<IPackageRequest>> GetChangedPacks()
     {
         SetNewPackage();
 
@@ -167,7 +178,8 @@
         {
             foreach (IPackage inputPack in InputPacks.chosenPacks)
             {
-                IPackage PreviousStatus = IPackage.Get(inputPack.Id).Item1;
+                var PrevStatusResult = await Config.Package.Get(inputPack.Id);
+                IPackage PreviousStatus = PrevStatusResult.Item1;
 
                 IPackageRequest packageRequest = PreviousStatus.Request();
                 // removing the amount that was transfered from the original amount
@@ -188,17 +200,17 @@
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete Label="@(Package.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+    <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
-    <CipherPackageId Label="@(Package.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
+    <CipherPackageId Label="@(IPackage.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" Label="@(Package.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(Package.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(Package.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherProcesses Label="@(Package.Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
+        <CipherComments @ref="PackDescription" Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric Disabled="@ReadOnly" Label="@(IPackage.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherProcesses Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
     }
 </CipherComponentCard>
 

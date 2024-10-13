@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IUpdatePackage : ICipherClass
     {
@@ -24,14 +26,14 @@
 
 
         public CheckField CheckActionComments() =>
-            CheckField.Required(ActionComments, UpdatePackage.Translate(nameof(ActionComments)));
+            CheckField.Required(ActionComments, Translate(nameof(ActionComments)));
         public CheckField CheckPackageId() =>
-            CheckField.Required(PackageId, UpdatePackage.Translate(nameof(PackageId)));
+            CheckField.Required(PackageId, Translate(nameof(PackageId)));
         public CheckField CheckPackageDescription() => CheckField.Required(PackageDescription,
-            UpdatePackage.Translate(nameof(PackageDescription)));
+            Translate(nameof(PackageDescription)));
         public CheckField CheckDestinationProcessesIds()
             => CheckField.CheckList(DestinationProcessesIds,
-                UpdatePackage.Translate(nameof(DestinationProcessesIds)), isFull: true, isDistinct: true);
+                Translate(nameof(DestinationProcessesIds)), isFull: true, isDistinct: true);
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -57,5 +59,9 @@
 
             return result.Check();
         }
+
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
     }
 }

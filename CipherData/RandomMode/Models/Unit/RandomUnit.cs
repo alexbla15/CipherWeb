@@ -41,6 +41,23 @@
         /// </summary>
         /// <returns></returns>
         public static string GetNextId() => $"U{++IdCounter:D3}";
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Get(string id)
+            => await new RandomUnitsRequests().GetUnit(id);
+
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> All()
+            => await new RandomUnitsRequests().GetUnits();
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req)
+            => await new RandomUnitsRequests().CreateUnit(req);
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Update(string id, IUnitRequest req)
+            => await new RandomUnitsRequests().UpdateUnit(id, req);
+
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText)
+            => await All();
     }
 }
 

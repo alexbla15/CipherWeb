@@ -1,4 +1,6 @@
-﻿namespace CipherData.Interfaces
+﻿using System.Reflection;
+
+namespace CipherData.Interfaces
 {
     public interface IProcessDefinition : IResource
     {
@@ -22,25 +24,25 @@
         /// <summary>
         /// All objects
         /// </summary>
-        public static async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> All() => await Config.ProcessesDefinitionsRequests.GetProcessDefinitions();
+        Task<Tuple<List<IProcessDefinition>, ErrorResponse>> All();
+
+        /// <summary>
+        /// Method to create a new object from a request
+        /// </summary>
+        Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest req);
+
+        /// <summary>
+        /// Method to update object details 
+        /// </summary>
+        Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string id, IProcessDefinitionRequest req);
 
         /// <summary>
         /// Fetch all processes definitions which contain the searched text
         /// </summary>
-        public static async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string SearchText)
-        {
-            var result = await GetObjects<ProcessDefinition>(SearchText, searchText => new GroupedBooleanCondition()
-            {
-                Conditions = new List<BooleanCondition>() {
-                new() {Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Id)}", Value = SearchText },
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Name)}", Value = SearchText },
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Description)}", Value = SearchText},
-                new() { Attribute = $"{typeof(ProcessDefinition).Name}.{nameof(Steps)}.{nameof(ProcessStepDefinition.Name)}", Value = SearchText, Operator = Operator.Any }
-                },
-                Operator = Operator.Any
-            });
+        Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string SearchText);
 
-            return Tuple.Create(result.Item1.Select(x => x as IProcessDefinition).ToList(), result.Item2);
-        }
+        // STATIC METHODS
+
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }
