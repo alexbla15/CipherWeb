@@ -7,21 +7,25 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
+        [HebrewTranslation(nameof(ActionComments))]
         string? ActionComments { get; set; }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.DestinationProcesses))]
         List<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>
         /// Description of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Description))]
         string? PackageDescription { get; set; }
 
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
         string? PackageId { get; set; }
 
 

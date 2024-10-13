@@ -43,13 +43,13 @@
     [Parameter]
     public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n?]+$";
 
-    private string _value = string.Empty;
+    private string? _value = string.Empty;
 
     /// <summary>
     /// Component's value.
     /// </summary>
     [Parameter]
-    public string Value
+    public string? Value
     {
         get => _value;
         set

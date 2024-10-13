@@ -7,31 +7,37 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
         decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(NetMass))]
         decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
         DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Properties))]
         List<IPackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Category))]
         ICategory Category { get; set; }
 
         /// <summary>
@@ -42,26 +48,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// List of processes definitions that may accept this package as input
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
         List<IProcessDefinition> DestinationProcesses { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Parent))]
         IPackage? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Children))]
         List<IPackage>? Children { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(System))]
         IStorageSystem System { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Vessel))]
         IVessel? Vessel { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
@@ -126,7 +137,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to update object details 
         /// </summary>
-        Task<Tuple<IPackage, ErrorResponse>> Update(string id, IUpdatePackage req);
+        Task<Tuple<IPackage, ErrorResponse>> Update(string? id, IUpdatePackage req);
 
         /// <summary>
         /// All events relevant for package.

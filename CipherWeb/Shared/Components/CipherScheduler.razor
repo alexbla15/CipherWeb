@@ -197,7 +197,7 @@
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0px">
             <CipherText Text="@args.Data.Id" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@args.Data.Definition.Name.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
+            <CipherText Text="@args.Data.Definition.Name?.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
             <CipherText Text="@string.Join(", ",args.Data.UncompletedSteps.Select(x=>x.Name).ToHashSet())" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
             <CipherText Text="@args.Data.Start.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
             <CipherText Text="@args.Data.End.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />

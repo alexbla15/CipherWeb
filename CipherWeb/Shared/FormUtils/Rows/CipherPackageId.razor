@@ -69,17 +69,17 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(IPackage.Translate(nameof(IPackage.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(ICategory.Translate(nameof(ICategory.MaterialType)))">
                 <Template>
-                    @((context as IPackage).Category.MaterialType?.Name)
+                    @((context as IPackage)?.Category.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
             <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Category))" Title="@(IPackage.Translate(nameof(IPackage.Category)))">
                 <Template>
-                    @(string.Join(", ", (context as IPackage).Category.Name))
+                    @(string.Join(", ", (context as IPackage)?.Category.Name))
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as IPackage).Id)
+            <b>@Label:</b> @((context as IPackage)?.Id)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </RadzenStack>

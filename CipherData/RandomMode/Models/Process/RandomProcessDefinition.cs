@@ -40,10 +40,10 @@
         public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest req) =>
             await new RandomProcessDefinitionsRequests().CreateProcessDefinition(req);
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string id, IProcessDefinitionRequest req)
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string? id, IProcessDefinitionRequest req)
             => await new RandomProcessDefinitionsRequests().UpdateProcessDefinition(id, req);
 
-        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string SearchText)
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string? SearchText)
             => await All();
     }
 }

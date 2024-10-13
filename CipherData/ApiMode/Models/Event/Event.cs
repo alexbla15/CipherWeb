@@ -10,48 +10,36 @@
 
         private string? _Comments = null;
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(Id))]
         public string? Id { get; set; } = string.Empty;
 
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
         public string? Worker
         {
             get => _Worker;
             set => _Worker = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         public string? ProcessId { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Comments))]
         public string? Comments
         {
             get => _Comments;
             set => _Comments = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Event), nameof(EventType))]
         public int EventType { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Status))]
         public int Status { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         public DateTime Timestamp { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingPackage))]
         public Tuple<IPackage, IPackage>? DonatingPackage { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingPackage))]
         public Tuple<IPackage, IPackage>? AcceptingPackage { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingSystem))]
         public IStorageSystem? DonatingSystem { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingSystem))]
         public IStorageSystem? AcceptingSystem { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(EventMass))]
         public decimal? EventMass { get; set; }
     }
 
@@ -67,30 +55,24 @@
         private List<IPackage> _InitialStatePackages = new();
         private List<IPackage> _FinalStatePackages = new();
 
-        [HebrewTranslation(typeof(Event), nameof(EventType))]
         public int EventType { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Status))]
         public int Status { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
         public string? Worker
         {
             get => _Worker;
             set => _Worker = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         public string? ProcessId { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(Comments))]
         public string? Comments
         {
             get => _Comments;
             set => _Comments = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         public DateTime Timestamp { get; set; }
 
         [HebrewTranslation(typeof(Event), nameof(InitialStatePackages))]

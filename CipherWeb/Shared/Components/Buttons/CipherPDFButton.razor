@@ -104,7 +104,7 @@
                 row.RelativeColumn().AlignCenter().Text($"הודפס על ידי: {Worker}", HeaderTextStyle);
 
                 row.RelativeColumn().AlignCenter().Text(Classification?.ToString(),
-            QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Bold().Size(12).DirectionFromRightToLeft());
+                QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Bold().Size(12).DirectionFromRightToLeft());
 
                 row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:MMMM dd, yyyy}", HeaderTextStyle);
 
@@ -148,16 +148,21 @@
             var headers = _data?.FirstOrDefault()?.Keys;
 
             // Add rows for the data
-            foreach (var item in _data)
+            if (_data != null)
             {
-                foreach (var column in headers)
+                foreach (var item in _data)
                 {
-                    // Get the value from the dictionary by the key
-                    var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
-                    table.Cell().Element(CellStyle).Text(value);
+                    if (headers != null)
+                    {
+                        foreach (var column in headers)
+                        {
+                            // Get the value from the dictionary by the key
+                            var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
+                            table.Cell().Element(CellStyle).Text(value);
+                        }
+                    }
+                    static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
                 }
-
-                static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
             }
         });
         }
@@ -173,7 +178,7 @@
             var imageBytes = File.ReadAllBytes(imagePath);
 
             // Create a container for the image
-            row.RelativeColumn().AlignCenter().Width(100).Height(100).Element(imageContainer =>
+            row.RelativeItem().AlignCenter().Width(100).Height(100).Element(imageContainer =>
             {
                 imageContainer.Image(imageBytes).FitWidth();
             });

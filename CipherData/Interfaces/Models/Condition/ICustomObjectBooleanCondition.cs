@@ -13,11 +13,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// List of object factory specifications and conditions on them
         /// </summary>
+        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
         List<ICustomCondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean
         /// </summary>
+        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Operator))]
         Operator Operator { get; set; }
 
         // STATIC METHODS

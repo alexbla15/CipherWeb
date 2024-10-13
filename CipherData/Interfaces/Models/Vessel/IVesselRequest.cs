@@ -7,16 +7,19 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Name of vessel
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Type))]
         string? Type { get; set; }
 
         /// <summary>

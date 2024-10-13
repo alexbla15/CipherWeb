@@ -7,36 +7,43 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
+        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
         IPackage? AcceptingPackage { get; set; }
 
         /// <summary>
         /// Package that loses mass.
         /// </summary>
+        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
         IPackage? DonatingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
+        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
         decimal Amount { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
         DateTime Timestamp { get; set; }
 
         /// <summary>

@@ -8,7 +8,7 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as IProcessDefinition).Name)
+            <b>@Label:</b> @((context as IProcessDefinition)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>

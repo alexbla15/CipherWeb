@@ -75,7 +75,7 @@
 
     public IVesselRequest Value()
     {
-        IVesselRequest req = Config.VesselRequest;
+        IVesselRequest req = Config.VesselRequest();
         req.Type = VesType.Value;
         req.Name = VesName.Value;
         req.SystemId = VesSys.ChosenSystem?.Id;

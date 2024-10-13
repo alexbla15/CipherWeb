@@ -43,7 +43,7 @@
     /// </summary>
     async Task AddComponent()
     {
-        ChosenProperties.Add(Config.PackageProperty);
+        ChosenProperties.Add(Config.PackageProperty());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }

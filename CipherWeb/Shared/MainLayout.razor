@@ -24,11 +24,14 @@
             @foreach (CipherNavLink myLink in CipherNavLinks.links)
             {
                 <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
-                    @if (myLink.SubLinks.Count > 0)
+                    @if (myLink.SubLinks != null)
                     {
-                        @foreach (CipherNavLink mySubLink in myLink.SubLinks)
+                        @if (myLink.SubLinks.Any())
                         {
-                            <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
+                            @foreach (CipherNavLink mySubLink in myLink.SubLinks)
+                            {
+                                <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
+                            }
                         }
                     }
                 </RadzenPanelMenuItem>

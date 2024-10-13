@@ -160,11 +160,20 @@
         }
     }
 
-    private void OnParametersChanged(List<ReportParameter> newParameters) => ChosenReport.Parameters = newParameters;
+    private void OnParametersChanged(List<ReportParameter> newParameters)
+    {
+        if (ChosenReport != null) ChosenReport.Parameters = newParameters;
+    }
 
-    private void OnGroupsChanged(List<string> newGroups) => ChosenReport.ObjectFactory.GroupBy = newGroups;
+    private void OnGroupsChanged(List<string> newGroups)
+    {
+        if (ChosenReport != null) ChosenReport.ObjectFactory.GroupBy = newGroups;
+    }
 
-    private void OnAggregatesChanged(List<IAggregateItem> newAggregates) => ChosenReport.ObjectFactory.Aggregate = newAggregates;
+    private void OnAggregatesChanged(List<IAggregateItem> newAggregates) 
+    {
+        if (ChosenReport != null) ChosenReport.ObjectFactory.Aggregate = newAggregates;
+    }
 
     public void Reset()
     {
@@ -189,7 +198,11 @@
     {
         Reset();
 
-        if (!UpdateMode)
+        if (ChosenReport is null)
+        {
+            (Valid, ErrorMessage) = Tuple.Create(false, "שגיאת מערכת");
+        }
+        else if (!UpdateMode)
         {
             (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db);
         }
@@ -206,6 +219,13 @@
 
     public void CheckForDifference()
     {
+        if (ChosenReport is null)
+        {
+            Valid = false;
+            ErrorMessage = "שגיאת מערכת";
+            return;
+        }
+
         bool equal = !ChosenReport.Different(OriginalReport);
         if (equal)
         {

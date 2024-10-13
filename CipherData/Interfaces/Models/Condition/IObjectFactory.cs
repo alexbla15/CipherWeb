@@ -17,11 +17,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Attribute to order by
         /// </summary>
+        [HebrewTranslation(typeof(OrderedItem), nameof(Attribute))]
         string Attribute { get; set; }
 
         /// <summary>
         /// Desired order on the attribute
         /// </summary>
+        [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
         Order Order { get; set; }
 
         public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
@@ -49,16 +51,19 @@ namespace CipherData.Interfaces
         /// New name to give to the aggregated field. 
         /// if null, name is auto generated
         /// </summary>
+        [HebrewTranslation(typeof(AggregateItem), nameof(As))]
         string? As { get; set; }
 
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
+        [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
         string? Attribute { get; set; }
 
         /// <summary>
         /// Method to aggregate the field by
         /// </summary>
+        [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
         Method? Method { get; set; }
 
         public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
@@ -90,23 +95,27 @@ namespace CipherData.Interfaces
         ///  by default returns the grouped by fields if they 
         ///  exist. If null, returns the filtered objects
         /// </summary>
+        [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
         List<IAggregateItem>? Aggregate { get; set; }
 
         /// <summary>
         /// Conditions to apply to get the desired objects. 
         /// All conditions must have the same target object.
         /// </summary>
+        [HebrewTranslation(typeof(ObjectFactory), nameof(Attribute))]
         IGroupedBooleanCondition Filter { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
+        [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
         List<string>? GroupBy { get; set; }
 
         /// <summary>
         /// Define order to the filtered objects
         /// </summary>
+        [HebrewTranslation(typeof(ObjectFactory), nameof(OrderBy))]
         List<IOrderedItem>? OrderBy { get; set; }
 
         public void AddOrderBy(IOrderedItem nextOrder)

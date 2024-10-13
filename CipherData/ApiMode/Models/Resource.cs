@@ -9,13 +9,10 @@ namespace CipherData.ApiMode
     [HebrewTranslation(nameof(Resource))]
     public abstract class Resource : CipherClass, IResource
     {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
         public string? Id { get; set; } = string.Empty;
 
-        [HebrewTranslation(typeof(Resource), nameof(ClearenceLevel))]
         public string ClearenceLevel { get; set; } = string.Empty;
 
-        [HebrewTranslation(typeof(Resource), nameof(Uuid))]
         public int Uuid { get; set; }
 
         /// <summary>

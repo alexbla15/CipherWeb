@@ -8,7 +8,7 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(ICategory.Translate(nameof(ICategory.Name)))" />
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as ICategory).Name)
+            <b>@Label:</b> @((context as ICategory)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>

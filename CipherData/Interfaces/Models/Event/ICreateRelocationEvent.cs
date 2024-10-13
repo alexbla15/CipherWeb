@@ -7,26 +7,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Package that relocate in this event.
         /// </summary>
+        [HebrewTranslation(typeof(CreateRelocationEvent), nameof(Packages))]
         List<IPackage>? Packages { get; set; }
 
         /// <summary>
         /// System to which the packages are relocated.
         /// </summary>
+        [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
         IStorageSystem? TargetSystem { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
         DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
         string? Worker { get; set; }
 
         /// <summary>
@@ -54,7 +59,7 @@ namespace CipherData.Interfaces
             foreach (IPackage p in Packages)
             {
                 result = result.Succeeded ? CheckField.NotEq(p?.System.Id, TargetSystem?.Id,
-                    Translate(nameof(p.System))) : result;
+                    Translate(nameof(TargetSystem))) : result;
             }
 
             return result;

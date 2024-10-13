@@ -92,10 +92,12 @@
 
     private Tuple<List<Cipher_TItem>, ErrorResponse> GetSearchedValues()
     {
-        if (typeof(Cipher_TItem) == typeof(IEvent)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Events();
-        if (typeof(Cipher_TItem) == typeof(IProcess)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Processes();
-        if (typeof(Cipher_TItem) == typeof(IPackage)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Packages();
-        if (typeof(Cipher_TItem) == typeof(IVessel)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Vessels();
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+
+        if (typeof(Cipher_TItem) == typeof(IEvent)) return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)(ChosenSystem.ChosenSystem)?.Events() ?? badFetch;
+        if (typeof(Cipher_TItem) == typeof(IProcess)) return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)(ChosenSystem.ChosenSystem)?.Processes() ?? badFetch;
+        if (typeof(Cipher_TItem) == typeof(IPackage)) return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)(ChosenSystem.ChosenSystem)?.Packages() ?? badFetch;
+        if (typeof(Cipher_TItem) == typeof(IVessel)) return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)(ChosenSystem.ChosenSystem)?.Vessels() ?? badFetch;
         return Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.Success);
     }
 

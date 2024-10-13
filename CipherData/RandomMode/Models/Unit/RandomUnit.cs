@@ -10,7 +10,7 @@
         public new string? Id { get; set; } = _Id;
 
         [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string Name { get; set; } = _Id;
+        public string? Name { get; set; } = _Id;
 
         [HebrewTranslation(typeof(Unit), nameof(Description))]
         public string? Description { get; set; } = RandomFuncs.RandomItem(UnitDescriptions);

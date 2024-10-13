@@ -6,27 +6,23 @@
         private string? _Name;
         private string? _Type = string.Empty;
 
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
         public string? Name { get => _Name; set => _Name = value?.Trim(); }
 
-        [HebrewTranslation(typeof(Vessel), nameof(Type))]
         public string? Type { get => _Type; set => _Type = value?.Trim(); }
 
-        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
         public List<IPackage>? ContainingPackages { get; set; }
 
-        [HebrewTranslation(typeof(Vessel), nameof(System))]
         public IStorageSystem System { get; set; } = new StorageSystem();
 
         // API RELATED METHODS
 
-        public async Task<Tuple<IVessel, ErrorResponse>> Get(string id) =>
+        public async Task<Tuple<IVessel, ErrorResponse>> Get(string? id) =>
             await new VesselsRequests().GetVessel(id);
 
         public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
             await new VesselsRequests().GetVessels();
 
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string SearchText)
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText)
         {
             var result = await GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition()
             {

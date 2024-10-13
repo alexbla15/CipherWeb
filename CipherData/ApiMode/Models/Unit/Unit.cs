@@ -6,38 +6,31 @@
         private string? _Name = string.Empty;
         private string? _Description = string.Empty;
 
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
         public string? Name
         {
             get => _Name;
             set => _Name = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
         public string? Description
         {
             get => _Description;
             set => _Description = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(Unit), nameof(Properties))]
         public string? Properties { get; set; }
 
-        [HebrewTranslation(typeof(Unit), nameof(Parent))]
         public IUnit? Parent { get; set; }
 
-        [HebrewTranslation(typeof(Unit), nameof(Children))]
         public List<IUnit>? Children { get; set; }
 
-        [HebrewTranslation(typeof(Unit), nameof(Systems))]
         public List<IStorageSystem>? Systems { get; set; }
 
-        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
         public IGroupedBooleanCondition? Conditions { get; set; }
 
         // API RELATED FUNCTIONS
 
-        public async Task<Tuple<IUnit, ErrorResponse>> Get(string id)
+        public async Task<Tuple<IUnit, ErrorResponse>> Get(string? id)
             => await new UnitsRequests().GetUnit(id);
 
         public async Task<Tuple<List<IUnit>, ErrorResponse>> All()
@@ -46,10 +39,10 @@
         public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req)
             => await new UnitsRequests().CreateUnit(req);
 
-        public async Task<Tuple<IUnit, ErrorResponse>> Update(string id, IUnitRequest req)
+        public async Task<Tuple<IUnit, ErrorResponse>> Update(string? id, IUnitRequest req)
             => await new UnitsRequests().UpdateUnit(id, req);
 
-        public async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText)
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string? SearchText)
         {
             var result = await GetObjects<Unit>(SearchText, searchText => new GroupedBooleanCondition()
             {

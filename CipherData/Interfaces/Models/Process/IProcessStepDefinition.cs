@@ -7,16 +7,19 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
+        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
         IGroupedBooleanCondition Condition { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
         string Description { get; set; }
 
         /// <summary>
         /// Name of the process
         /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
         string Name { get; set; }
 
         /// <summary>

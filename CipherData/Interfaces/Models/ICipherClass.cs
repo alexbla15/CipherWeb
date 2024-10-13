@@ -21,12 +21,19 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Translate the name of the field according to its hebrew translation. Muse give a specific type.
         /// </summary>
-        public static string Translate(Type? type, string searchedAttribute)
+        public static string Translate(Type? interfaceType, string searchedAttribute)
         {
-            if (type is null) return searchedAttribute;
+            if (interfaceType == null) return searchedAttribute;
 
-            // Get the PropertyInfo for the property name
-            PropertyInfo? property = type?.GetProperty(searchedAttribute);
+            if (!interfaceType.IsInterface || interfaceType.GetInterface(nameof(ICipherClass)) is null)
+                return searchedAttribute;
+
+            List<PropertyInfo> props = interfaceType.GetInterfaces()
+                            .Concat(new[] { interfaceType }) // Include the main interface itself
+                            .SelectMany(i => i.GetProperties())
+                            .ToList();
+
+            PropertyInfo? property = props.Where(x => x.Name == searchedAttribute).First();
             if (property == null) return searchedAttribute;
 
             // Get the HebrewTranslationAttribute and return the translation

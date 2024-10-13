@@ -121,11 +121,11 @@
     private CipherPackagesPicking SetChildren = new();
 
     private IPackage? ChosenPackage;
-    private IPackage OriginalPack = Config.Package;
-    private IPackage NewPack = Config.Package;
+    private IPackage OriginalPack = Config.Package();
+    private IPackage NewPack = Config.Package();
 
     private IUpdatePackage RequestedPackUpdate = new CipherData.ApiMode.UpdatePackage();
-    private ICreateEvent UpdatePackEvent = Config.CreateEvent;
+    private ICreateEvent UpdatePackEvent = Config.CreateEvent();
 
     private List<IPackageProperty>? NewProps = new();
 
@@ -156,7 +156,7 @@
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idValue))
         {
-            (OriginalPackage.ChosenPackage, Error) = await Config.Package.Get(idValue.ToString());
+            (OriginalPackage.ChosenPackage, Error) = await Config.Package(false).Get(idValue.ToString());
             Change();
         }
         FirstInitialization = false;
@@ -200,8 +200,8 @@
         (Valid, ErrorMessage) = (true, string.Empty);
         UpdatePackJsonRequest = string.Empty;
         CreateEventJsonRequest = string.Empty;
-        UpdatePackEvent = Config.CreateEvent;
-        NewPack = Config.Package;
+        UpdatePackEvent = Config.CreateEvent();
+        NewPack = Config.Package();
     }
 
     /// <summary>
@@ -253,9 +253,9 @@
         {
             NewPack.BrutMass = SetBrutMass.Amount;
             NewPack.NetMass = SetNetMass.Amount;
-            NewPack.Category = SetCategory.ChosenCategory ?? Config.Category;
+            NewPack.Category = SetCategory.ChosenCategory ?? Config.Category();
             NewPack.Vessel = SetVessel.ChosenVessel;
-            NewPack.System = SetSystem.ChosenSystem ?? Config.StorageSystem;
+            NewPack.System = SetSystem.ChosenSystem ?? Config.StorageSystem();
             NewPack.Parent = ParentPack.GetValue();
             NewPack.Children = SetChildren.SelectedPackages;
             NewPack.Properties = NewProps;
@@ -271,7 +271,7 @@
         }
     }
 
-    private void Submit()
+    private async Task Submit()
     {
         Reset();
 
@@ -283,10 +283,10 @@
             {
                 // must be first, because it can change the package id!!!
                 SetUpdatePackageRequest();
-                SendUpdatePackageRequest(originalPackId);
+                await SendUpdatePackageRequest(originalPackId);
 
                 SetCreateEventRequest();
-                SendCreateEventRequest();
+                await SendCreateEventRequest();
 
                 if (!FoundCreateEventChanges() && !FoundUpdatePackageChanges())
                 {
@@ -374,7 +374,7 @@
         {
             CreateEventJsonRequest = UpdatePackEvent.ToJson();
 
-            (CreateEventResult, Error) = await Config.Event.Create(UpdatePackEvent);
+            (CreateEventResult, Error) = await Config.Event(false).Create(UpdatePackEvent);
 
             if (Error != ErrorResponse.Success)
             {
@@ -396,13 +396,13 @@
     /// <summary>
     /// Send update-package request to API
     /// </summary>
-    public async Task SendUpdatePackageRequest(string originalPackId)
+    public async Task SendUpdatePackageRequest(string? originalPackId)
     {
         if (Valid && FoundUpdatePackageChanges())
         {
             UpdatePackJsonRequest = RequestedPackUpdate.ToJson();
 
-            (UpdatePackResult, Error) = await Config.Package.Update(originalPackId, RequestedPackUpdate);
+            (UpdatePackResult, Error) = await Config.Package(false).Update(originalPackId, RequestedPackUpdate);
             if (Error != ErrorResponse.Success)
             {
                 submission.SetValid(false);

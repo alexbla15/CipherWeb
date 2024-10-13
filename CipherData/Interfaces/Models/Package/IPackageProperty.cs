@@ -7,11 +7,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Name of the property
         /// </summary>
+        [HebrewTranslation(typeof(PackageProperty), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Property value.
         /// </summary>
+        [HebrewTranslation(typeof(PackageProperty), nameof(Value))]
         string? Value { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));

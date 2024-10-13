@@ -7,21 +7,25 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Packages within the vessel
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
         List<IPackage>? ContainingPackages { get; set; }
 
         /// <summary>
         /// Name of vessel
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(System))]
         IStorageSystem System { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
+        [HebrewTranslation(typeof(Vessel), nameof(Type))]
         string? Type { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
@@ -71,6 +75,6 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to update object details 
         /// </summary>
-        Task<Tuple<IVessel, ErrorResponse>> Update(string id, IVesselRequest req);
+        Task<Tuple<IVessel, ErrorResponse>> Update(string? id, IVesselRequest req);
     }
 }

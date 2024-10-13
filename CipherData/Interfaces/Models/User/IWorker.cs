@@ -2,6 +2,7 @@
 {
     public interface IWorker
     {
+        [HebrewTranslation(nameof(Worker))]
         string Name { get; set; }
 
 

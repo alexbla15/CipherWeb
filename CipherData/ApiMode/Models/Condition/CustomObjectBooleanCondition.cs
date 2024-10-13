@@ -16,10 +16,8 @@
     [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
     public class CustomObjectBooleanCondition : CipherClass, ICustomObjectBooleanCondition
     {
-        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Conditions))]
         public List<ICustomCondition> Conditions { get; set; } = new();
 
-        [HebrewTranslation(typeof(CustomObjectBooleanCondition), nameof(Operator))]
         public Operator Operator { get; set; } = Operator.All;
     }
 }

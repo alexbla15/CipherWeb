@@ -87,7 +87,7 @@
 
     public ICategoryRequest Value()
     {
-        var req = Config.CategoryRequest;
+        var req = Config.CategoryRequest();
         req.ParentId = ParentCat.ChosenCategory?.Id;
         req.Name = CatName.Value;
         req.Description = CatDescription.Value;

@@ -74,7 +74,7 @@
 
     public IProcessDefinitionRequest Value()
     {
-        IProcessDefinitionRequest proc = Config.ProcessDefinitionRequest;
+        IProcessDefinitionRequest proc = Config.ProcessDefinitionRequest();
 
         if (ProcName.Check()) proc.Name = ProcName.Value;
         if (ProcDescription.Check()) proc.Description = ProcDescription.Value;

@@ -5,21 +5,25 @@
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
+        [HebrewTranslation(nameof(ActionComments))]
         string? ActionComments { get; set; }
 
         /// <summary>
         /// Updated comment for event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         string? EventComment { get; set; }
 
         /// <summary>
         /// New process ID for event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Event.Status))]
         int Status { get; set; }
 
         /// <summary>

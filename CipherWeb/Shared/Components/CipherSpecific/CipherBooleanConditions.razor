@@ -19,7 +19,7 @@
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition;
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition();
 
     [Parameter]
     public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
@@ -50,9 +50,12 @@
 
     private RadzenDataFilter<CipherField> dataFilter = new();
 
-    public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition cond)
+    public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
     {
         CompositeFilterDescriptor new_filter = new();
+
+        if (cond is null) return new_filter;
+
         new_filter.Property = cond.Attribute;
         new_filter.FilterValue = cond.Value;
 
@@ -76,9 +79,12 @@
         return new_filter;
     }
 
-    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition cond)
+    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition? cond)
     {
         CompositeFilterDescriptor new_filter = new();
+
+        if (cond is null) return new_filter;
+
         new_filter.LogicalFilterOperator = (cond.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
 
         if (cond.Conditions != null)
@@ -109,12 +115,12 @@
     /// </summary>
     public IBooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
     {
-        IBooleanCondition cond = Config.BooleanCondition;
+        IBooleanCondition cond = Config.BooleanCondition();
         cond.Attribute = filter.Property;
 
         if (filter.FilterValue != null)
         {
-            string filterVal = filter.FilterValue.ToString();
+            string filterVal = filter.FilterValue.ToString() ?? string.Empty;
 
             if (filterVal.Contains("##")) cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
             cond.Value = filterVal.Split("##")[0];
@@ -150,7 +156,7 @@
     /// </summary>
     public IGroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
     {
-        IGroupedBooleanCondition cond = Config.GroupedBooleanCondition;
+        IGroupedBooleanCondition cond = Config.GroupedBooleanCondition();
         cond.Operator = (filter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
         List<ICondition> conditions = new();

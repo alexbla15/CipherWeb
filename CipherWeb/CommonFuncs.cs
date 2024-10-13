@@ -28,11 +28,11 @@ namespace CipherWeb
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public static List<Tuple<string, string>> GetTranslatedFields(Type a)
+        public static List<Tuple<string, string?>> GetTranslatedFields(Type a)
         {
             string[] fields = GetFields(a);
-            List<Tuple<string, string>> hebFields = new();
-            foreach (Tuple<string, string> h in HebrewDictionary.Headers)
+            List<Tuple<string, string?>> hebFields = new();
+            foreach (Tuple<string, string?> h in HebrewDictionary.Headers)
             {
                 if (fields.Contains(h.Item1)) hebFields.Add(h);
             }
@@ -46,7 +46,7 @@ namespace CipherWeb
         /// <returns></returns>
         public static string? DeTranslateField(string heb_field)
         {
-            foreach (Tuple<string, string> h in HebrewDictionary.Headers)
+            foreach (Tuple<string, string?> h in HebrewDictionary.Headers)
             {
                 if (h.Item2 == heb_field) return h.Item1;
             }
@@ -90,7 +90,8 @@ namespace CipherWeb
                 FieldType = x.PropertyType,
 
 
-                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]" : $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>().Translation}]",
+                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]" : 
+                $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]",
                 Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]",
                 IsList = x.PropertyType.IsGenericType
             }).ToList();

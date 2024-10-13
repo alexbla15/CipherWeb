@@ -18,21 +18,25 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Name of the property
         /// </summary>
+        [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
+        [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
+        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
         string? DefaultValue { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
+        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
         PropertyType PropertyType { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));

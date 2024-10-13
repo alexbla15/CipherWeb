@@ -60,14 +60,14 @@
     private CipherComments EventComments = new();
     private CipherProcess EventProc = new();
 
-    private ICreateTranserAmountEvent RequestedEvent = Config.CreateTranserAmountEvent;
+    private ICreateTranserAmountEvent RequestedEvent = Config.CreateTranserAmountEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
     public async Task Submit()
     {
-        RequestedEvent = Config.CreateTranserAmountEvent;
+        RequestedEvent = Config.CreateTranserAmountEvent();
         RequestedEvent.Amount = DeltaM.Amount;
         RequestedEvent.DonatingPackage = DonatingPack.ChosenPackage;
         RequestedEvent.AcceptingPackage = AcceptingPack.ChosenPackage;
@@ -91,7 +91,7 @@
         {
             ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = await Config.Event.Create(ev);
+            (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

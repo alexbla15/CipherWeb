@@ -7,31 +7,37 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
         List<IStorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
         IStorageSystem? Parent { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
         Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
-        /// </summary>s
+        /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
         IUnit Unit { get; set; }
 
         // STATIC METHODS
@@ -60,7 +66,7 @@ namespace CipherData.Interfaces
         /// Get details about a system vessel given system ID
         /// </summary>
         /// <param name="id">system ID</param>
-        Task<Tuple<IStorageSystem, ErrorResponse>> Get(string id);
+        Task<Tuple<IStorageSystem, ErrorResponse>> Get(string? id);
 
         /// <summary>
         /// All systems that took place in a certain system
@@ -70,7 +76,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Fetch all systems which contain the searched text
         /// </summary>
-        Task<Tuple<List<IStorageSystem>, ErrorResponse>> Containing(string SearchText);
+        Task<Tuple<List<IStorageSystem>, ErrorResponse>> Containing(string? SearchText);
 
         /// <summary>
         /// Method to create a new object from a request
@@ -80,7 +86,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to update object details 
         /// </summary>
-        Task<Tuple<IStorageSystem, ErrorResponse>> Update(string id, ISystemRequest req);
+        Task<Tuple<IStorageSystem, ErrorResponse>> Update(string? id, ISystemRequest req);
 
         /// <summary>
         /// All events that took place in this system

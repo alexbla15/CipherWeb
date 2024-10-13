@@ -10,24 +10,20 @@
         private string? _Name = string.Empty;
         private string? _Description = string.Empty;
 
-        [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
         public string? Name
         {
             get => _Name;
             set => _Name = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
         public string? Description
         {
             get => _Description;
             set => _Description = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
         public PropertyType PropertyType { get; set; } = PropertyType.Text;
 
-        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
         public string? DefaultValue { get; set; } = null;
 
         public override int GetHashCode() => HashCode.Combine(Name, Description, PropertyType, DefaultValue);

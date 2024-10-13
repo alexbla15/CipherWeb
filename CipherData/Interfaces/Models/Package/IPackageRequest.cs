@@ -7,46 +7,55 @@ namespace CipherData.Interfaces
         /// <summary>
         /// ID of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Vessel))]
         string? VesselId { get; set; }
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.System))]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Category))]
         string? CategoryId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
         List<IPackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.BrutMass))]
         decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.NetMass))]
         decimal NetMass { get; set; }
 
         /// <summary>
         /// Parent (Id) containing this one
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
+        [HebrewTranslation(typeof(Package), nameof(Package.Children))]
         List<string?>? ChildrenIds { get; set; }
 
         public CheckField CheckId() =>

@@ -18,7 +18,7 @@ namespace CipherData.ApiMode
 
         public async Task<List<T>> LoadData<T, U>(string sql, U parameters)
         {
-            string connection_string = _config.GetConnectionString(ConnectionStringName);
+            string? connection_string = _config.GetConnectionString(ConnectionStringName);
 
             using (IDbConnection connection = new SqlConnection(connection_string))
             {

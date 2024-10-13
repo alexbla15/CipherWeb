@@ -19,7 +19,7 @@
                     TextProperty="@(nameof(ICategory.Name))" ValueProperty="@(nameof(ICategory.Name))"
                     AllowClear="true" TValue="string" Style="@($"width: {Width}")">
         <ValueTemplate>
-            <b>@Label:</b> @((context as ICategory).Name)
+            <b>@Label:</b> @((context as ICategory)?.Name)
         </ValueTemplate>
     </RadzenDropDown>
 </CipherFormRow>

@@ -2,7 +2,7 @@
 {
     <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" ContentJustify="center" ContentDisplay="flex">
         <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int" 
-        Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition ; await ParamsChanged();})">
+        Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ParamsChanged();})">
             <Items>
                 @foreach (string objType in objectTypes)
                 {
@@ -46,7 +46,7 @@
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     [Parameter]
-    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition;
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition();
 
     [Parameter]
     public EventCallback<Tuple<IGroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
@@ -169,9 +169,9 @@
     public async Task<List<T>> GetFilteredObjects<T>() where T : IResource
     {
         List<T> objects = new();
-        IObjectFactory obj = Config.ObjectFactory;
+        IObjectFactory obj = Config.ObjectFactory();
         obj.Filter = ChosenCondition;
-        (objects, Error) = await Config.QueryRequests.QueryObjects<T>(obj);
+        (objects, Error) = await Config.QueryRequests(false).QueryObjects<T>(obj);
         return objects;
     }
 
@@ -192,7 +192,7 @@
 
         if (oldChosenType != ChosenType)
         {
-            ChosenCondition = Config.GroupedBooleanCondition;
+            ChosenCondition = Config.GroupedBooleanCondition();
             await DataFilter.Clear();
         }
         await ChosenConditionChanged.InvokeAsync(Tuple.Create(ChosenCondition, ChosenType)); // Trigger change event

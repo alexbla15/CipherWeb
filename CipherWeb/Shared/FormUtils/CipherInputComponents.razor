@@ -57,7 +57,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(Config.Package);
+        chosenPacks.Add(Config.Package());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -92,7 +92,7 @@
     {
         if (!string.IsNullOrEmpty(pack.Id))
         {
-            var result = await Config.Package.Get(pack.Id);
+            var result = await Config.Package(false).Get(pack.Id);
             if (result.Item1 != null)
             {
                 return result.Item1.BrutMass;

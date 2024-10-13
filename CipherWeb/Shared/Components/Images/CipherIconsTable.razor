@@ -1,7 +1,7 @@
 ﻿@code {
     public class IconInfo
     {
-        public string IconName { get; set; } = string.Empty;
+        public string? IconName { get; set; } = string.Empty;
         public string MainClass { get; set; } = string.Empty;
         public string SubClass { get; set; } = string.Empty;
         public string ThirdClass { get; set; } = string.Empty;
@@ -20,7 +20,7 @@
                 {
                     icons.Add(new IconInfo
                         {
-                            IconName = (string)member.GetRawConstantValue(),
+                            IconName = member.GetRawConstantValue()?.ToString(),
                             SubClass = "",
                             MainClass = mainClass.Name,
                             ThirdClass = ""
@@ -36,7 +36,7 @@
                     {
                         icons.Add(new IconInfo
                             {
-                                IconName = (string)member.GetRawConstantValue(),
+                                IconName = member.GetRawConstantValue()?.ToString(),
                                 SubClass = subClass.Name,
                                 MainClass = mainClass.Name,
                                 ThirdClass = ""
@@ -52,7 +52,7 @@
                         {
                             icons.Add(new IconInfo
                                 {
-                                    IconName = (string)member.GetRawConstantValue(),
+                                    IconName = member.GetRawConstantValue()?.ToString(),
                                     SubClass = subClass.Name,
                                     MainClass = mainClass.Name,
                                     ThirdClass = thirdClass.Name  // Populate ThirdClass
@@ -75,7 +75,7 @@
     public void ChangeSearchText()
     {
         icons = GetIcons();
-        icons = icons.Where(x => x.IconName.Contains(searchText)).ToList();
+        icons = icons.Where(x => x.IconName != null && x.IconName.Contains(searchText)).ToList();
         StateHasChanged();
     }
 }
@@ -108,11 +108,11 @@
                                             @foreach (string third in thirdClasses)
                                             {
                                                 <RadzenAccordionItem Text="@third">
-                                                    @foreach (string ic in icons.Where(x => x.MainClass == main && x.SubClass == sub && x.ThirdClass == third).Select(x => x.IconName))
+                                                    @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub && x.ThirdClass == third).Select(x => x.IconName))
                                                     {
                                                         <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
                                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
-                                                            <CipherText Text="@ic.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                                            <CipherText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
                                                         </CipherComponentCard>
                                                     }
                                                 </RadzenAccordionItem>
@@ -122,11 +122,11 @@
                                 }
                                 else
                                 {
-                                    @foreach (string ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
+                                    @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
                                     {
                                         <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
-                                            <CipherText Text="@ic.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                            <CipherText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
                                         </CipherComponentCard>
                                     }
 

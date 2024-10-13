@@ -5,7 +5,6 @@
     {
         private string _Name = string.Empty;
 
-        [HebrewTranslation(nameof(Worker))]
         public string Name { get => _Name; set => _Name = value.Trim(); }
 
         public List<IWorker> AllWorkers() => new() {

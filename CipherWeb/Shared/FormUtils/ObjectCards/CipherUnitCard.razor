@@ -78,7 +78,7 @@
 
     public IUnitRequest Value()
     {
-        var req = Config.UnitRequest;
+        var req = Config.UnitRequest();
         req.Name = UnitName.Value;
         req.Description = UnitDescription.Value;
         req.ParentId = UnitParent.ChosenUnit?.Id;

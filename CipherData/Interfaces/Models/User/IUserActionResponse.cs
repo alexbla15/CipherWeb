@@ -5,6 +5,7 @@
         /// <summary>
         /// List of all user actions found
         /// </summary>
+        [HebrewTranslation(nameof(UserActions))]
         List<IUserAction> UserActions { get; set; }
     }
 }

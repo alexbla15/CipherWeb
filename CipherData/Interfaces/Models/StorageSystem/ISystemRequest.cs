@@ -7,26 +7,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Unit))]
         string? UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
+        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Properties))]
         Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>

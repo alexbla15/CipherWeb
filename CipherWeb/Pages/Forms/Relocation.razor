@@ -57,7 +57,7 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent;
+    private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
@@ -66,7 +66,7 @@
     {
         Valid = true;
 
-        RequestedEvent = Config.CreateRelocationEvent;
+        RequestedEvent = Config.CreateRelocationEvent();
         RequestedEvent.Worker = FormInfo.GetWorker();
         RequestedEvent.Timestamp = FormInfo.GetDateTime();
         RequestedEvent.TargetSystem = FinalLocation.ChosenSystem;
@@ -87,7 +87,7 @@
         {
             ICreateEvent ev = RequestedEvent.Create();
             JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = await Config.Event.Create(ev);
+            (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;

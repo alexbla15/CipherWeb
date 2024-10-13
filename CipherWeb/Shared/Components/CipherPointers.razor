@@ -56,10 +56,13 @@
         {
             @foreach (CipherNavLink mySubNavLink in myNavLink.SubLinks)
             {
-                @if (!mySubNavLink.Name.Contains(LabelInitialText))
+                @if (mySubNavLink.Name != null)
                 {
-                    <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
-                                     Text="@($"{LabelInitialText} {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px" />
+                    @if (!mySubNavLink.Name.Contains(LabelInitialText))
+                    {
+                        <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
+                        Text="@($"{LabelInitialText} {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px" />
+                    }
                 }
             }
         }

@@ -59,6 +59,7 @@ namespace CipherData.Interfaces
         /// Can be chained to include sub-objects.
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Attribute))]
         string? Attribute { get; set; }
 
         /// <summary>
@@ -66,16 +67,19 @@ namespace CipherData.Interfaces
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Value))]
         string? Value { get; set; }
 
         /// <summary>
         /// Expected relation between attribute and a value.
         /// </summary>
+        [HebrewTranslation(typeof(BooleanCondition), nameof(AttributeRelation))]
         AttributeRelation AttributeRelation { get; set; }
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
+        [HebrewTranslation(typeof(BooleanCondition), nameof(Operator))]
         Operator Operator { get; set; }
 
         /// <summary>

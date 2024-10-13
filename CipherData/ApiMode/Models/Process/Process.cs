@@ -8,10 +8,8 @@
     {
         private List<IEvent> _Events = new();
 
-        [HebrewTranslation(typeof(Process), nameof(Definition))]
         public IProcessDefinition Definition { get; set; } = new ProcessDefinition();
 
-        [HebrewTranslation(typeof(Process), nameof(Events))]
         public List<IEvent> Events
         {
             get => _Events;
@@ -23,13 +21,10 @@
             }
         }
 
-        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
         public List<IProcessStepDefinition> UncompletedSteps { get; set; } = new();
 
-        [HebrewTranslation(typeof(Process), nameof(Start))]
         public DateTime Start { get; set; }
 
-        [HebrewTranslation(typeof(Process), nameof(End))]
         public DateTime End { get; set; }
 
         // API RELATED FUNCTIONS

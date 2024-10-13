@@ -74,7 +74,7 @@
 
     public ISystemRequest Value()
     {
-        var req = Config.SystemRequest;
+        var req = Config.SystemRequest();
         req.Name = SysName.Value;
         req.Description = SysDescription.Comments;
         req.ParentId = SysParent.ChosenSystem?.Id;

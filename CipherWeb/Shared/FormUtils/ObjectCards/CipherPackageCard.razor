@@ -67,7 +67,7 @@
         <CipherPackageProperties @ref="PackProps" 
             ChosenProperties="@((ChosenObject?.Category is null)? 
             new List<IPackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=> 
-            { IPackageProperty prop = Config.PackageProperty;
+            { IPackageProperty prop = Config.PackageProperty();
               prop.Name= x.Name;
               prop.Value = x.DefaultValue;
               return prop;

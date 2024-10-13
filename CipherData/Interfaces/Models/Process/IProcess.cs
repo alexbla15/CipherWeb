@@ -5,19 +5,25 @@
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
+        [HebrewTranslation(typeof(Process), nameof(Definition))]
         IProcessDefinition Definition { get; set; }
+
+        [HebrewTranslation(typeof(Process), nameof(Start))]
         DateTime Start { get; set; }
 
+        [HebrewTranslation(typeof(Process), nameof(End))]
         DateTime End { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
+        [HebrewTranslation(typeof(Process), nameof(Events))]
         List<IEvent> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
+        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
         List<IProcessStepDefinition> UncompletedSteps { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

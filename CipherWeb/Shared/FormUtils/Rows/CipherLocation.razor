@@ -13,12 +13,12 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Description))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Parent))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))">
                 <Template>
-                    @((context as IStorageSystem).Parent?.Name)
+                    @((context as IStorageSystem)?.Parent?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
             <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Unit))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Unit)))">
                 <Template>
-                    @((context as IStorageSystem).Unit?.Description)
+                    @((context as IStorageSystem)?.Unit?.Description)
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>

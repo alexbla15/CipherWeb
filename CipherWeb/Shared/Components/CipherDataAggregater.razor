@@ -57,7 +57,7 @@
     /// </summary>
     private async Task AddRow()
     {
-        ChosenAggregates.Add(Config.AggregateItem);
+        ChosenAggregates.Add(Config.AggregateItem());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
         await ParamsChanged(); // Trigger change event

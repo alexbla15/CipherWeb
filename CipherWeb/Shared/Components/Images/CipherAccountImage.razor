@@ -23,13 +23,7 @@
     /// Border of image.
     /// </summary>
     [Parameter]
-    public string Border { get; set; } = "";
-
-    /// <summary>
-    /// Inject JSRuntime
-    /// </summary>
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; }
+    public string Border { get; set; } = string.Empty;
 
     protected override void OnInitialized() => Path = "Images/UserPic.jpg";
 
@@ -41,7 +35,7 @@
     /// <summary>
     /// Reset border style on mouse out
     /// </summary>
-    private void OnMouseOut() => Border = "";
+    private void OnMouseOut() => Border = string.Empty;
 }
 
 <RadzenImage Path="@Path"

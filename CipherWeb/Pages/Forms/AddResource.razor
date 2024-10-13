@@ -55,13 +55,13 @@
     private CipherFormInfo FormInfo = new();
     private CipherProcess EventProc = new();
 
-    private IPackage NewPackage = Config.Package;
-    private IUnitRequest unitRequest = Config.UnitRequest;
-    private ICategoryRequest catRequest = Config.CategoryRequest;
-    private IVesselRequest vesRequest = Config.VesselRequest;
-    private IProcessDefinitionRequest procDefRequest = Config.ProcessDefinitionRequest;
-    private ISystemRequest sysRequest = Config.SystemRequest;
-    private ICreateEvent packRequest = Config.CreateEvent;
+    private IPackage NewPackage = Config.Package();
+    private IUnitRequest unitRequest = Config.UnitRequest();
+    private ICategoryRequest catRequest = Config.CategoryRequest();
+    private IVesselRequest vesRequest = Config.VesselRequest();
+    private IProcessDefinitionRequest procDefRequest = Config.ProcessDefinitionRequest();
+    private ISystemRequest sysRequest = Config.SystemRequest();
+    private ICreateEvent packRequest = Config.CreateEvent();
 
     private CipherUnitCard unitCard = new();
     private CipherVesselCard vesCard = new();
@@ -108,7 +108,7 @@
         else if (typeof(Cipher_TItem) == typeof(IPackage))
         {
             List<IPackageRequest> ChangedPacks = await PackInfo.GetChangedPacks();
-            packRequest = Config.CreateEvent;
+            packRequest = Config.CreateEvent();
             packRequest.Worker = FormInfo.GetWorker();
             packRequest.ProcessId = EventProc.ChosenProcess?.Id;
             packRequest.Timestamp = FormInfo.GetDateTime();
@@ -202,49 +202,49 @@
     public async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendUnitRequest()
     {
         JsonRequest = unitRequest.ToJson();
-        var result = await Config.Unit.Create(unitRequest);
+        var result = await Config.Unit(false).Create(unitRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendCategoryRequest()
     {
         JsonRequest = catRequest.ToJson();
-        var result = await Config.Category.Create(catRequest);
+        var result = await Config.Category(false).Create(catRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendVesselRequest()
     {
         JsonRequest = vesRequest.ToJson();
-        var result = await Config.Vessel.Create(vesRequest);
+        var result = await Config.Vessel(false).Create(vesRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendProcessDefinitionRequest()
     {
         JsonRequest = procDefRequest.ToJson();
-        var result = await Config.ProcessDefinition.Create(procDefRequest);
+        var result = await Config.ProcessDefinition(false).Create(procDefRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendSystemRequest()
     {
         JsonRequest = sysRequest.ToJson();
-        var result = await Config.StorageSystem.Create(sysRequest);
+        var result = await Config.StorageSystem(false).Create(sysRequest);
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)result;
     }
 
     private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendPackageRequest()
     {
         JsonRequest = packRequest.ToJson();
-        Tuple<IEvent, ErrorResponse> evResult = await Config.Event.Create(packRequest);
+        Tuple<IEvent, ErrorResponse> evResult = await Config.Event(false).Create(packRequest);
         if (evResult.Item1.FinalStatePackages.Count > 0)
         {
             return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(evResult.Item1.FinalStatePackages[0], evResult.Item2);
         }
         else
         {
-            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(Config.Package, evResult.Item2);
+            return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(Config.Package(), evResult.Item2);
         }
     }
 

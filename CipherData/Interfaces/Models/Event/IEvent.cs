@@ -7,57 +7,70 @@ namespace CipherData.Interfaces
         /// <summary>
         /// accepting package, item 1 - previous status, item 2 - final status
         /// </summary>
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingPackage))]
         Tuple<IPackage, IPackage>? AcceptingPackage { get; set; }
 
         /// <summary>
         /// donating package, item 1 - previous status, item 2 - final status
         /// </summary>
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingPackage))]
         Tuple<IPackage, IPackage>? DonatingPackage { get; set; }
 
         /// <summary>
         /// package accepting system
         /// </summary>
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingSystem))]
         IStorageSystem? AcceptingSystem { get; set; }
 
         /// <summary>
         /// package donating system
         /// </summary>
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingSystem))]
         IStorageSystem? DonatingSystem { get; set; }
+
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// mass transfered in the event
         /// </summary>
+        [HebrewTranslation(typeof(DisplayedEvent), nameof(EventMass))]
         decimal? EventMass { get; set; }
 
         /// <summary>
         /// Type of event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(EventType))]
         int EventType { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Status))]
         int Status { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         DateTime Timestamp { get; set; }
 
         // STATIC METHODS
@@ -70,26 +83,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Type of event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(EventType))]
         int EventType { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Status))]
         int Status { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Comments))]
         string? Comments { get; set; }
 
         /// <summary>
@@ -105,6 +123,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
+        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
         DateTime Timestamp { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

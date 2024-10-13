@@ -37,7 +37,7 @@
     private RadzenDataGrid<IProcessStepDefinition> StepsDataGrid = new();
     private CipherBooleanConditions StepCondition = new();
 
-    private IGroupedBooleanCondition SelectedCondition = Config.GroupedBooleanCondition;
+    private IGroupedBooleanCondition SelectedCondition = Config.GroupedBooleanCondition();
 
     private string? SelectedStep;
 
@@ -52,7 +52,7 @@
     async Task AddStep()
     {
         // Add the new restriction to the existing list
-        ChosenSteps.Add(Config.ProcessStepDefinition);
+        ChosenSteps.Add(Config.ProcessStepDefinition());
         StateHasChanged();
         await StepsDataGrid.RefreshDataAsync();
     }
@@ -87,11 +87,11 @@
         }
     }
 
-    public async Task RefreshSelectedStep()
+    public void RefreshSelectedStep()
     {
         StepCondition.Save();
         var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
-        SelectedCondition = ChosenStep?.Condition ?? Config.GroupedBooleanCondition;
+        SelectedCondition = ChosenStep?.Condition ?? Config.GroupedBooleanCondition();
         //await StepCondition.FillDataFilter();
     }
 }

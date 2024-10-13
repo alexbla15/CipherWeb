@@ -44,7 +44,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        ChosenProperties.Add(Config.CategoryProperty);
+        ChosenProperties.Add(Config.CategoryProperty());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }

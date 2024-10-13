@@ -6,35 +6,29 @@
         private string? _Name = string.Empty;
         private string? _Description = string.Empty;
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
         public string? Name
         {
             get => _Name;
             set => _Name = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
         public string? Description
         {
             get => _Description;
             set => _Description = value?.Trim();
         }
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
         public Dictionary<string, string>? Properties { get; set; }
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
         public IStorageSystem? Parent { get; set; }
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
         public List<IStorageSystem>? Children { get; set; }
 
-        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
         public IUnit Unit { get; set; } = new Unit();
 
         // API RELATED FUNCTIONS
 
-        public async Task<Tuple<IStorageSystem, ErrorResponse>> Get(string id) =>
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Get(string? id) =>
             await new SystemsRequests().GetSystem(id);
 
         public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> All() =>

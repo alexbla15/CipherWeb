@@ -23,7 +23,7 @@
     /// Set Packge-object value.
     /// </summary>
     [Parameter]
-    public IPackage ChosenPackage { get; set; } = Config.Package;
+    public IPackage ChosenPackage { get; set; } = Config.Package();
 
     /// <summary>
     /// Processes which can use the current package.
@@ -71,7 +71,7 @@
     private CipherPackagesPicking InnerPacks = new();
     private CipherInputComponents InputPacks = new();
 
-    private IPackage NewPackage = Config.Package;
+    private IPackage NewPackage = Config.Package(true);
     private List<IPackageProperty> ChosenProperties = new();
 
     protected override async Task OnInitializedAsync() => (AllVessels, Error) = await CachedData.AllVessels;
@@ -79,13 +79,13 @@
     public IPackage Value()
     {
         ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
-        ChosenPackage.Category = packCategory.ChosenCategory ?? Config.Category;
-        ChosenPackage.System = ChosenSystem ?? Config.StorageSystem;
+        ChosenPackage.Category = packCategory.ChosenCategory ?? Config.Category();
+        ChosenPackage.System = ChosenSystem ?? Config.StorageSystem();
         ChosenPackage.Vessel = ChosenVessel;
         ChosenPackage.Parent = ParentPackage.ChosenPackage;
         ChosenPackage.Properties = PackProps.ChosenProperties?.Select(x => 
             { 
-                var prop = Config.PackageProperty;
+                var prop = Config.PackageProperty();
                 prop.Name = x.Name;
                 prop.Value = x.Value;
                 return prop;
@@ -101,7 +101,7 @@
         DestinationProcesses = packCategory.ChosenCategory?.ConsumingProcesses.ToList() ?? new();
         ChosenProperties = ChosenCategory?.Properties?.Select(x => 
             { 
-                IPackageProperty prop = Config.PackageProperty;
+                IPackageProperty prop = Config.PackageProperty();
                 prop.Name = x.Name;
                 prop.Value = x.DefaultValue;
                 return prop;
@@ -133,7 +133,7 @@
         }
         else
         {
-            var result = await Config.StorageSystem.Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
+            var result = await Config.StorageSystem(false).Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
             (AllVessels, Error) = (result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
     }
@@ -152,8 +152,8 @@
     /// <param name="pack">Relevant package</param>
     public decimal GetBrutMass(IPackage pack)
     {
-        List<IPackage> RelevantPackages = AssemblyOfPackages ? pack.Children.ToList() : InputPacks.chosenPacks;
-        return RelevantPackages.Select(x => x.BrutMass).Sum();
+        List<IPackage>? RelevantPackages = AssemblyOfPackages ? pack.Children?.ToList() : InputPacks.chosenPacks;
+        return RelevantPackages?.Select(x => x.BrutMass).Sum() ?? 0;
     }
 
     public void SetNewPackage()
@@ -178,7 +178,7 @@
         {
             foreach (IPackage inputPack in InputPacks.chosenPacks)
             {
-                var PrevStatusResult = await Config.Package.Get(inputPack.Id);
+                var PrevStatusResult = await Config.Package(false).Get(inputPack.Id);
                 IPackage PreviousStatus = PrevStatusResult.Item1;
 
                 IPackageRequest packageRequest = PreviousStatus.Request();

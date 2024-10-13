@@ -7,26 +7,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of Unit
         /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the Unit
         /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Properties))]
         string? Properties { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
+        [HebrewTranslation(typeof(Unit), nameof(Unit.Conditions))]
         IGroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>

@@ -57,20 +57,20 @@
     {
         Title ??= CipherNavLinks.Approval.Name;
 
-        (PendingEvents, Error) = await Config.Event.PendingEvents();
-        (ApprovedEvents, Error) = await Config.Event.ApprovedEvents();
-        (DeclinedEvents, Error) = await Config.Event.DeclinedEvents();
+        (PendingEvents, Error) = await Config.Event(false).PendingEvents();
+        (ApprovedEvents, Error) = await Config.Event(false).ApprovedEvents();
+        (DeclinedEvents, Error) = await Config.Event(false).DeclinedEvents();
     }
 
     public async Task RefreshEvents()
     {
         IGroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
-        IObjectFactory objectFactory = Config.ObjectFactory;
+        IObjectFactory objectFactory = Config.ObjectFactory();
 
         // add to filter - only pending events
         List<ICondition> originalFilterValue = filterValue.Conditions.ToList();
 
-        var cond = Config.BooleanCondition;
+        var cond = Config.BooleanCondition();
         cond.Attribute = $"[Event].[{nameof(IEvent.Status)}]";
         cond.AttributeRelation = AttributeRelation.Eq;
         cond.Value = "0";
@@ -82,17 +82,17 @@
 
         // order by time (1), and system-id (2)
 
-        IOrderedItem orderedItem = Config.OrderedItem;
+        IOrderedItem orderedItem = Config.OrderedItem();
         orderedItem.Attribute = $"[Event].[{nameof(IEvent.Timestamp)}]";
         orderedItem.Order = Order.desc;
         objectFactory.AddOrderBy(orderedItem);
 
-        orderedItem = Config.OrderedItem;
+        orderedItem = Config.OrderedItem();
         orderedItem.Attribute = $"[Event].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]";
         orderedItem.Order = Order.desc;
         objectFactory.AddOrderBy(orderedItem);
         
-        var result = await Config.QueryRequests.QueryObjects<IEvent>(objectFactory);
+        var result = await Config.QueryRequests(false).QueryObjects<IEvent>(objectFactory);
         (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
 
         JsonRequest = objectFactory.ToJson();

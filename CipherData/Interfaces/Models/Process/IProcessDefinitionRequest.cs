@@ -7,16 +7,19 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of process
         /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the process
         /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Steps of the process
         /// </summary>
+        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
         List<IProcessStepDefinition> Steps { get; set; }
 
         /// <summary>

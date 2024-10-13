@@ -7,11 +7,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
+        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
         IEnumerable<ICondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
+        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
         Operator Operator { get; set; }
 
         /// <summary>
@@ -26,11 +28,11 @@ namespace CipherData.Interfaces
                     Tuple<bool, string> result = Tuple.Create(true, string.Empty);
                     if (cond is BooleanCondition)
                     {
-                        result = (cond as IBooleanCondition).Check();
+                        result = (cond as IBooleanCondition)?.Check() ?? Tuple.Create(false, "שגיאת מערכת");
                     }
                     else if (cond is GroupedBooleanCondition)
                     {
-                        result = (cond as IGroupedBooleanCondition).Check();
+                        result = (cond as IGroupedBooleanCondition)?.Check() ?? Tuple.Create(false, "שגיאת מערכת"); ;
                     }
                     return new CheckField(result.Item1, result.Item2);
                 }

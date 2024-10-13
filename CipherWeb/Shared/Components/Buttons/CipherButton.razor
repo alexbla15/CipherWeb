@@ -106,7 +106,7 @@
 
     private string StyleClass = string.Empty;
     
-    void ShowTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
+    void ShowTooltipWithHtml(ElementReference elementReference, TooltipOptions? options = null)
     {
         if (!string.IsNullOrWhiteSpace(HelpText))
         {
@@ -115,7 +115,7 @@
         }
     }
 
-    void HideTooltipWithHtml(ElementReference elementReference, TooltipOptions options = null)
+    void HideTooltipWithHtml(ElementReference elementReference, TooltipOptions? options = null)
     {
         if (!string.IsNullOrWhiteSpace(HelpText))
         {
