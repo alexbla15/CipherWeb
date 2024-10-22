@@ -3,7 +3,6 @@
     /// <summary>
     /// Create new event
     /// </summary>
-    [HebrewTranslation(nameof(CreateEvent))]
     public class CreateEvent : CipherClass, ICreateEvent
     {
         private string? _Worker;

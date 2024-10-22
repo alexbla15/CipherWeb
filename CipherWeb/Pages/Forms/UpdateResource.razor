@@ -2,7 +2,7 @@
 
 @inject NavigationManager Navigation
 
-@typeparam Cipher_TItem
+@typeparam Cipher_TItem 
 
 <ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
     @RenderChosenCard()
@@ -74,15 +74,46 @@
     /// </summary>
     private Dictionary<Type, Func<object?>> chosenObjectMap = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         SetChosenObjMap();
-        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Cipher_TItem>(Navigation);
+        await GetObjectFromUrl();
     }
 
-    public void SetChosenObjMap()
+    private async Task GetObjectFromUrl()
     {
-        chosenObjectMap = new Dictionary<Type, Func<object?>>
+        string? id = ResourcePage.GetIdFromUrl(Navigation);
+        if (!string.IsNullOrEmpty(id))
+        {
+            if (typeof(Cipher_TItem) == typeof(IUnit))
+            {
+                var result = await Config.Unit(false).Get(id);
+                (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+            }
+            else if (typeof(Cipher_TItem) == typeof(ICategory))
+            {
+                var result = await Config.Category(false).Get(id);
+                (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+            }
+            else if (typeof(Cipher_TItem) == typeof(IVessel))
+            {
+                var result = await Config.Vessel(false).Get(id);
+                (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+            }
+            else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
+            {
+                //var result = await Config.ProcessDefinition().Get(id);
+                //(ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+            }
+            else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
+            {
+                var result = await Config.StorageSystem(false).Get(id);
+                (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+            }
+        }
+    }
+
+    public void SetChosenObjMap() => chosenObjectMap = new Dictionary<Type, Func<object?>>
         {
             { typeof(IUnit), () => unitCard.ChosenObject },
             { typeof(IVessel), () => vesCard.ChosenObject },
@@ -91,7 +122,6 @@
             { typeof(IProcessDefinition), () => procCard.ChosenObject },
             { typeof(ICategory), () => catCard.ChosenObject },
         };
-    }
 
     /// <summary>
     /// Get the chosen object based on its type.
@@ -268,32 +298,61 @@
 
     public Tuple<Cipher_TItem, ErrorResponse>? SendUnitRequest()
     {
-        JsonRequest = unitRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Unit(false).Update((ChosenObject as IUnit)?.Id, unitRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendCategoryRequest()
     {
-        JsonRequest = catRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Category(false).Update((ChosenObject as ICategory)?.Id, catRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendVesselRequest()
     {
-        JsonRequest = vesRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.Vessel(false).Update((ChosenObject as IVessel)?.Id, vesRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendProcessDefinitionRequest()
     {
-        JsonRequest = vesRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.ProcessDefinition(false).Update((ChosenObject as IProcessDefinition)?.Id, procDefRequest);
     }
 
     private Tuple<Cipher_TItem, ErrorResponse>? SendSystemRequest()
     {
-        JsonRequest = sysRequest.ToJson();
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Config.StorageSystem(false).Update((ChosenObject as IStorageSystem)?.Id, sysRequest);
+    }
+
+
+    private void SetJsonRequest()
+    {
+        if (typeof(Cipher_TItem) == typeof(IUnit))
+        {
+            unitRequest = (ChosenObject as IUnit)?.Request() ?? Config.UnitRequest();
+            JsonRequest = unitRequest.ToJson();
+        }
+        else if (typeof(Cipher_TItem) == typeof(ICategory))
+        {
+            catRequest = (ChosenObject as ICategory)?.Request() ?? Config.CategoryRequest();
+            JsonRequest = catRequest.ToJson();
+        }
+        else if (typeof(Cipher_TItem) == typeof(IVessel))
+        {
+            vesRequest = (ChosenObject as IVessel)?.Request() ?? Config.VesselRequest();
+            JsonRequest = vesRequest.ToJson();
+        }
+        else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
+        {
+            procDefRequest = (ChosenObject as IProcessDefinition)?.Request() ?? Config.ProcessDefinitionRequest();
+            JsonRequest = procDefRequest.ToJson();
+        }
+        else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
+        {
+            sysRequest = (ChosenObject as IStorageSystem)?.Request() ?? Config.SystemRequest();
+            JsonRequest = sysRequest.ToJson();
+        }
+        else
+        {
+            JsonRequest = string.Empty;
+        }
     }
 
     /// <summary>
@@ -304,28 +363,28 @@
     @<div style="width:100%">
         @if (typeof(Cipher_TItem) == typeof(IUnit))
     {
-        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl"
+        <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
                         ChosenObject="@(ChosenObject as IUnit)" SetMode="FormMode.Update" />
     }
     else if (typeof(Cipher_TItem) == typeof(ICategory))
     {
-        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl"
+        <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
                             ChosenObject="@(ChosenObject as ICategory)" SetMode="FormMode.Update" />
     }
     else if (typeof(Cipher_TItem) == typeof(IVessel))
     {
-        <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl"
+        <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
                           ChosenObject="@(ChosenObject as IVessel)" SetMode="FormMode.Update" />
     }
     else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
     {
-        <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl"
+        <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
                            ChosenObject="@(ChosenObject as IProcessDefinition)" SetMode="FormMode.Update" />
     }
     else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
     {
-        <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl"
-                           ChosenObject="@(ChosenObject as IStorageSystem)" SetMode="FormMode.Update" />
+        <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                          ChosenObject="@(ChosenObject as IStorageSystem)" SetMode="FormMode.Update" />
     }
     </div>;
 }

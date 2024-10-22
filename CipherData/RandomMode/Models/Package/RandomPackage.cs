@@ -1,50 +1,28 @@
 ﻿namespace CipherData.RandomMode
 {
     [HebrewTranslation(nameof(Package))]
-    public class RandomPackage : Resource, IPackage
+    public class RandomPackage : BasePackage, IPackage
     {
-        [HebrewTranslation(typeof(Package), nameof(Description))]
-        public string? Description { get; set; } = RandomFuncs.RandomItem(new List<string>() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" });
+        public RandomPackage() 
+        {
+            Id = GetNextId();
+            Description = RandomFuncs.RandomItem(new List<string>() { "נקייה", "מלוכלכת", "מלוכלכת מאוד", "חריג" }); ;
+            Vessel = new RandomVessel();
+            System = new RandomStorageSystem();
+            Category = new RandomCategory();
 
-        [HebrewTranslation(typeof(Package), nameof(Properties))]
-        public List<IPackageProperty>? Properties { get; set; }
+            Tuple<decimal, decimal> MassTuple = CalcMass();
 
-        [HebrewTranslation(typeof(Package), nameof(Vessel))]
-        public IVessel? Vessel { get; set; } = new RandomVessel();
+            BrutMass = MassTuple.Item1;
+            NetMass = MassTuple.Item2; 
 
-        [HebrewTranslation(typeof(Package), nameof(System))]
-        public IStorageSystem System { get; set; } = new RandomStorageSystem();
-
-        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
-        public decimal BrutMass { get; set; } = MassTuple.Item1;
-
-        [HebrewTranslation(typeof(Package), nameof(NetMass))]
-        public decimal NetMass { get; set; } = MassTuple.Item2;
-
-        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
-        public DateTime CreatedAt { get; set; } = RandomFuncs.RandomDateTime();
-
-        [HebrewTranslation(typeof(Package), nameof(Parent))]
-        public IPackage? Parent { get; set; } = RandomFuncs.RandomItem(new List<Package>() { new() { Id = "PP1" }, new() { Id = "PP2" }, new() { Id = "PP3" } });
-
-        [HebrewTranslation(typeof(Package), nameof(Children))]
-        public List<IPackage>? Children { get; set; } = new() { new Package() { Id = "PC1" }, new Package() { Id = "PC2" }, new Package() { Id = "PC3" } };
-
-        [HebrewTranslation(typeof(Package), nameof(Category))]
-        public ICategory Category { get; set; } = new RandomCategory();
-
-        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
-        public List<IProcessDefinition> DestinationProcesses { get; set; } = new List<IProcessDefinition>();
-
-
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public new string? Id { get; set; } = GetNextId();
-
-        public decimal Concentration => BrutMass > 0 ? NetMass / BrutMass : 0;
+            CreatedAt = RandomFuncs.RandomDateTime();
+            Parent = RandomFuncs.RandomItem(new List<Package>() { new() { Id = "PP1" }, new() { Id = "PP2" }, new() { Id = "PP3" } });
+            Children = new() { new Package() { Id = "PC1" }, new Package() { Id = "PC2" }, new Package() { Id = "PC3" } };
+            DestinationProcesses = new List<IProcessDefinition>();
+        }
 
         // STATIC METHODS
-
-        private static readonly Tuple<decimal, decimal> MassTuple = CalcMass();
 
         /// <summary>
         /// Counts how many packages were created.
@@ -67,28 +45,17 @@
 
         // API-RELATED FUNCTIONS
 
-        public async Task<Tuple<List<IPackage>, ErrorResponse>> All() => 
-            await new RandomPackagesRequests().GetPackages();
-
-        public async Task<Tuple<IPackage, ErrorResponse>> Get(string? id)
-        {
-            if (string.IsNullOrEmpty(id))
-                return await Task.FromResult(Tuple.Create(new Package() as IPackage, ErrorResponse.BadRequest));
-            return await new RandomPackagesRequests().GetPackage(id);
-        }
-
-        public async Task<Tuple<IPackage, ErrorResponse>> Update(string id, IUpdatePackage req)
-            => await new RandomPackagesRequests().UpdatePackage(id, req);
+        protected override IPackagesRequests GetRequests() => new RandomPackagesRequests();
 
         /// <summary>
         /// Fetch all packages which contain the searched text
         /// </summary>
-        public async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string SearchText)
-            => await new RandomPackagesRequests().GetPackages();
+        public override async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText)
+            => await GetRequests().GetAll();
 
-        public async Task<Tuple<List<IEvent>, ErrorResponse>> Events() => 
-            await new RandomEventsRequests().GetEvents();
-        public async Task<Tuple<List<IProcess>, ErrorResponse>> Processes() =>
-            await new RandomProcessesRequests().GetProcesses();
+        public override async Task<Tuple<List<IEvent>, ErrorResponse>> Events() => 
+            await new RandomEventsRequests().GetAll();
+        public override async Task<Tuple<List<IProcess>, ErrorResponse>> Processes() =>
+            await new RandomProcessesRequests().GetAll();
     }
 }

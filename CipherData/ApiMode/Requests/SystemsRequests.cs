@@ -4,10 +4,10 @@
     {
         private static readonly string path = "/systems";
 
-        public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> GetSystems()
+        public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IStorageSystem, StorageSystem>(path);
 
-        public async Task<Tuple<IStorageSystem, ErrorResponse>> GetSystem(string? id)
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> GetById(string? id)
         {
             if (id is null) return Tuple.Create(Config.StorageSystem(), ErrorResponse.BadRequest);
 
@@ -17,7 +17,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IStorageSystem, ErrorResponse>> CreateSystem(ISystemRequest req)
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Create(ISystemRequest req)
         {
             var result = await GeneralAPIRequest.Post<StorageSystem>(path, req);
 
@@ -25,7 +25,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IStorageSystem, ErrorResponse>> UpdateSystem(string? id, ISystemRequest req)
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Update(string? id, ISystemRequest req)
         {
             if (id is null) return Tuple.Create(Config.StorageSystem(false), ErrorResponse.BadRequest);
 

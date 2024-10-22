@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(ProcessDefinitionRequest))]
     public interface IProcessDefinitionRequest : ICipherClass
     {
         /// <summary>
@@ -52,7 +53,7 @@ namespace CipherData.Interfaces
             return result.Check();
         }
 
-        public IProcessDefinition Create(string id) =>
+        public IProcessDefinition Create(string? id) =>
             new ProcessDefinition() { Id = id, Name = Name, Description = Description, Steps = Steps };
 
         // STATIC METHODS

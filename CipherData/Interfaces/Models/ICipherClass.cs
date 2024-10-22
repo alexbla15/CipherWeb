@@ -7,6 +7,23 @@ namespace CipherData.Interfaces
 {
     public interface ICipherClass
     {
+        public static readonly IList<JsonConverter> Converters =
+            new List<JsonConverter>() {
+                    new JsonDateTimeConverter(),
+                    new JsonIConditionConverter(),
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) ,
+                    new JsonICategoryConverter(),
+                    new JsonICategoryPropertyConverter(),
+                    new JsonIGroupedBooleanConditionConverter(),
+                    new JsonIPackageConverter(),
+                    new JsonIPackagePropertyConverter(),
+                    new JsonIProcessDefinitionConverter(),
+                    new JsonIProcessStepDefinitionConverter(),
+                    new JsonIStorageSystemConverter(),
+                    new JsonIVesselConverter(),
+                    new JsonIUnitConverter(),
+            };
+
         /// <summary>
         /// Transfrom this object to JSON, readable by API
         /// </summary>
@@ -49,11 +66,13 @@ namespace CipherData.Interfaces
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(),
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) , new JsonICategoryConverter(), new JsonICategoryPropertyConverter(),
-                new JsonIGroupedBooleanConditionConverter()},
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
+
+            foreach (JsonConverter conv in Converters)
+            {
+                options.Converters.Add(conv);
+            }
 
             return JsonSerializer.Deserialize<T>(json, options);
         }

@@ -63,7 +63,7 @@
     public async Task ForSingleEvent(Func<IUpdateEvent> singleFunc, IEvent ev)
     {
         IUpdateEvent setUpdate = singleFunc();
-        (Result, Error) = await ev.Update(setUpdate);
+        (Result, Error) = await ev.Update(ev.Id, setUpdate);
         JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
     }
 

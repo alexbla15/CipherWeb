@@ -1,5 +1,6 @@
 ﻿namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(Process))]
     public interface IProcess : IResource
     {
         /// <summary>
@@ -60,5 +61,44 @@
         /// Fetch all processes which contain the searched text
         /// </summary>
         Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string SearchText);
+    }
+
+    public abstract class BaseProcess : Resource, IProcess
+    {
+        private List<IEvent> _Events = new();
+
+        public IProcessDefinition Definition { get; set; } = new ProcessDefinition();
+
+        public List<IEvent> Events
+        {
+            get => _Events;
+            set
+            {
+                _Events = value;
+                Start = Events.Select(x => x.Timestamp).Min();
+                End = Events.Select(x => x.Timestamp).Max();
+            }
+        }
+
+        public List<IProcessStepDefinition> UncompletedSteps { get; set; } = new();
+
+        public DateTime Start { get; set; }
+
+        public DateTime End { get; set; }
+
+        // ABSTRACT METHODS
+
+        protected abstract IProcessesRequests GetRequests();
+
+        public abstract Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string? SearchText);
+
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IProcess, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
     }
 }

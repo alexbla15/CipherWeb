@@ -39,7 +39,7 @@ namespace CipherData.ApiMode
             return TransfromResponse<T>(responseBody, response.StatusCode);
         }
 
-        public static async Task<Tuple<List<TInterface>, ErrorResponse>> GetAll<TInterface, TClass>(string path)
+        public static async Task<Tuple<List<TInterface>, ErrorResponse>> GetAll<TInterface, TClass>(string? path)
             where TClass : class, TInterface
             where TInterface : ICipherClass
         {
@@ -48,7 +48,7 @@ namespace CipherData.ApiMode
             return Tuple.Create(objs, result.Item2);
         }
 
-        public static async Task<Tuple<TInterface, ErrorResponse>> GetId<TInterface, TClass>(string path, string id)
+        public static async Task<Tuple<TInterface, ErrorResponse>> GetId<TInterface, TClass>(string? path, string? id)
             where TClass : class, TInterface, new()
             where TInterface : ICipherClass
         {

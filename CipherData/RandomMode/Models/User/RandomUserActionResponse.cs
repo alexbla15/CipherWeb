@@ -1,10 +1,11 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(UserActionResponse))]
-    public class RandomUserActionResponse : CipherClass, IUserActionResponse
+    public class RandomUserActionResponse : BaseUserActionResponse
     {
-        [HebrewTranslation(nameof(UserActions))]
-        public List<IUserAction> UserActions { get; set; } = RandomData.GetRandomUserActions(2);
+        public RandomUserActionResponse()
+        {
+            UserActions = RandomData.GetRandomUserActions(2);
+        }
     }
 }
 

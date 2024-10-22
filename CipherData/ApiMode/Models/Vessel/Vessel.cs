@@ -1,28 +1,12 @@
 ﻿namespace CipherData.ApiMode
 {
-    [HebrewTranslation(nameof(Vessel))]
-    public class Vessel : Resource, IVessel
+    public class Vessel : BaseVessel, IVessel
     {
-        private string? _Name;
-        private string? _Type = string.Empty;
-
-        public string? Name { get => _Name; set => _Name = value?.Trim(); }
-
-        public string? Type { get => _Type; set => _Type = value?.Trim(); }
-
-        public List<IPackage>? ContainingPackages { get; set; }
-
-        public IStorageSystem? System { get; set; }
-
         // API RELATED METHODS
 
-        public async Task<Tuple<IVessel, ErrorResponse>> Get(string? id) =>
-            await new VesselsRequests().GetVessel(id);
+        protected override IVesselsRequests GetRequests() => new VesselsRequests();
 
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
-            await new VesselsRequests().GetVessels();
-
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText)
+        public override async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText)
         {
             var result = await GetObjects<Vessel>(SearchText, searchText => new GroupedBooleanCondition()
             {
@@ -38,11 +22,5 @@
 
             return Tuple.Create(result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
-
-        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req) =>
-            await new VesselsRequests().CreateVessel(req);
-
-        public async Task<Tuple<IVessel, ErrorResponse>> Update(string id, IVesselRequest req)
-            => await new VesselsRequests().UpdateVessel(id, req);
     }
 }

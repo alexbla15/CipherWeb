@@ -8,7 +8,6 @@
     /// <summary>
     /// Condition function on a single object
     /// </summary>
-    [HebrewTranslation(nameof(BooleanCondition))]
     public class BooleanCondition : Condition, IBooleanCondition
     {
         private string? _Attribute = string.Empty;

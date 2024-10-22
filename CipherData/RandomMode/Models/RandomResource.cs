@@ -1,16 +1,10 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(Resource))]
-    /// <summary>
-    /// Basic resource template for objects.
-    /// </summary>
-    public abstract class RandomResource : CipherClass, IResource
+    public abstract class RandomResource : BaseResource, IResource
     {
-        public string? Id { get; set; } = string.Empty;
+        public new string ClearenceLevel { get; set; } = RandomFuncs.RandomItem(clearences);
 
-        public string ClearenceLevel { get; set; } = RandomFuncs.RandomItem(clearences);
-
-        public int Uuid { get; set; } = GetUuid();
+        public new int Uuid { get; set; } = GetUuid();
 
         // STATIC METHODS
 
@@ -22,21 +16,7 @@
 
         // API RELATED FUNCTIONS
 
-        public async Task<Tuple<IUserActionResponse, ErrorResponse>> UserActions()
-            => await new RandomLogsRequests().GetObjectLogs(Uuid);
-
-        /// <summary>
-        /// Get resources which contain a certain text within one of their parameters
-        /// </summary>
-        /// <typeparam name="T">Type of resource</typeparam>
-        /// <param name="searchText">wanted text</param>
-        /// <param name="createCondition">how to create the GroupedBooleanCondition</param>
-        /// <returns></returns>
-        public async Task<Tuple<List<T>, ErrorResponse>> GetObjects<T>(
-            string searchText, Func<string, GroupedBooleanCondition> createCondition) where T : RandomResource
-        {
-            ObjectFactory obj = new() { Filter = createCondition(searchText) };
-            return await new RandomQueryRequests().QueryObjects<T>(obj);
-        }
+        protected override ILogsRequests GetLogsRequests() => new RandomLogsRequests();
+        protected override IQueryRequests GetQueryRequests() => new RandomQueryRequests();
     }
 }

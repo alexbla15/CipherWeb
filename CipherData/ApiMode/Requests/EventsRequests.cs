@@ -4,13 +4,13 @@
     {
         private static readonly string path = "/events";
 
-        public async Task<Tuple<List<IEvent>, ErrorResponse>> GetEvents()
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IEvent, Event>(path);
 
-        public async Task<Tuple<IEvent, ErrorResponse>> GetEvent(string id)
+        public async Task<Tuple<IEvent, ErrorResponse>> GetById(string? id)
             => await GeneralAPIRequest.GetId<IEvent, Event>(path, id);
 
-        public async Task<Tuple<IEvent, ErrorResponse>> CreateEvent(ICreateEvent ev)
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent ev)
         {
             var result = await GeneralAPIRequest.Post<Event>(path, ev);
 
@@ -18,7 +18,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IEvent, ErrorResponse>> UpdateEvent(string? id, IUpdateEvent cat)
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(string? id, IUpdateEvent cat)
         {
             var result = await GeneralAPIRequest.Put<Event>($"{path}/{id}", cat);
 

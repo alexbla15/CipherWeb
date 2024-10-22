@@ -1,35 +1,17 @@
 ﻿namespace CipherData.RandomMode
 {
     [HebrewTranslation(nameof(Unit))]
-    public class RandomUnit : Resource, IUnit
+    public class RandomUnit : BaseUnit, IUnit
     {
         private static readonly List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
-        private static readonly string _Id = GetNextId();
-
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public new string? Id { get; set; } = _Id;
-
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
-        public string? Name { get; set; } = _Id;
-
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
-        public string? Description { get; set; } = RandomFuncs.RandomItem(UnitDescriptions);
-
-        [HebrewTranslation(typeof(Unit), nameof(Properties))]
-        public string? Properties { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Parent))]
-        public IUnit? Parent { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Children))]
-        public List<IUnit>? Children { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Systems))]
-        public List<IStorageSystem>? Systems { get; set; }
-
-        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
-        public IGroupedBooleanCondition? Conditions { get; set; }
-
+ 
+        public RandomUnit()
+        {
+            string _Id = GetNextId();
+            Id = _Id;
+            Name = _Id;
+            Description = RandomFuncs.RandomItem(UnitDescriptions);
+        }
 
         /// <summary>
         /// Counts how many packages were created.
@@ -42,21 +24,11 @@
         /// <returns></returns>
         public static string GetNextId() => $"U{++IdCounter:D3}";
 
-        // API RELATED FUNCTIONS
+        // METHODS
 
-        public async Task<Tuple<IUnit, ErrorResponse>> Get(string id)
-            => await new RandomUnitsRequests().GetUnit(id);
+        protected override IUnitsRequests GetRequests() => new RandomUnitsRequests();
 
-        public async Task<Tuple<List<IUnit>, ErrorResponse>> All()
-            => await new RandomUnitsRequests().GetUnits();
-
-        public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req)
-            => await new RandomUnitsRequests().CreateUnit(req);
-
-        public async Task<Tuple<IUnit, ErrorResponse>> Update(string id, IUnitRequest req)
-            => await new RandomUnitsRequests().UpdateUnit(id, req);
-
-        public async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string SearchText)
+        public override async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string? SearchText)
             => await All();
     }
 }

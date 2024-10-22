@@ -4,10 +4,10 @@
     {
         private static readonly string path = "/vessels";
 
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> GetVessels()
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IVessel, Vessel>(path);
 
-        public async Task<Tuple<IVessel, ErrorResponse>> GetVessel(string? id)
+        public async Task<Tuple<IVessel, ErrorResponse>> GetById(string? id)
         {
             if (string.IsNullOrEmpty(id)) return Tuple.Create(new Vessel() as IVessel, ErrorResponse.BadRequest);
 
@@ -17,7 +17,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IVessel, ErrorResponse>> CreateVessel(IVesselRequest req)
+        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req)
         {
             var result = await GeneralAPIRequest.Post<Vessel>(path, req);
 
@@ -25,7 +25,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IVessel, ErrorResponse>> UpdateVessel(string? id, IVesselRequest req)
+        public async Task<Tuple<IVessel, ErrorResponse>> Update(string? id, IVesselRequest req)
         {
             if (string.IsNullOrEmpty(id)) return Tuple.Create(new Vessel() as IVessel, ErrorResponse.BadRequest);
 

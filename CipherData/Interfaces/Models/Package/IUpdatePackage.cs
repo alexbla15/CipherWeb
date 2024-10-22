@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(UpdatePackage))]
     public interface IUpdatePackage : ICipherClass
     {
         /// <summary>

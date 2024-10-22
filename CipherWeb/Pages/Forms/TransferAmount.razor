@@ -1,13 +1,13 @@
 ﻿@page "/Forms/TransferAmount"
 
 <ResourceForm Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" />
+    <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-        <CipherPackageId Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-        <CipherAmount Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.Amount))" @ref=DeltaM />
-        <CipherProcess @ref=EventProc />
-        <CipherComments @ref="EventComments" Width="300px" />
+        <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
+        <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+        <CipherAmount AmountChanged="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.Amount))" @ref=DeltaM />
+        <CipherProcess Change="@SetJsonRequest" @ref=EventProc />
+        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -67,19 +67,24 @@
     /// </summary>
     public async Task Submit()
     {
+        (Valid, ErrorMessage) = RequestedEvent.Check();
+
+        await SendRequest();
+    }
+
+    public void SetJsonRequest()
+    {
         RequestedEvent = Config.CreateTranserAmountEvent();
         RequestedEvent.Amount = DeltaM.Amount;
         RequestedEvent.DonatingPackage = DonatingPack.ChosenPackage;
         RequestedEvent.AcceptingPackage = AcceptingPack.ChosenPackage;
-        RequestedEvent.Worker = FormInfo.GetWorker();
-        RequestedEvent.Timestamp = FormInfo.GetDateTime();
+        RequestedEvent.Worker = FormInfo.ChosenWorker;
+        RequestedEvent.Timestamp = FormInfo.ChosenDate;
         RequestedEvent.ProcessId = EventProc.ChosenProcess?.Id;
         RequestedEvent.Comments = EventComments.Comments;
 
-        (Valid, ErrorMessage) = RequestedEvent.Check();
-
-        await SendRequest();
-
+        ICreateEvent ev = RequestedEvent.Create();
+        JsonRequest = ev.ToJson();
     }
 
     /// <summary>
@@ -89,8 +94,8 @@
     {
         if (Valid)
         {
+            SetJsonRequest();
             ICreateEvent ev = RequestedEvent.Create();
-            JsonRequest = ev.ToJson();
             (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {

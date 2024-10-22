@@ -137,7 +137,8 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
             <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="@DateFormat" ShowTime="@ShowTime"
+                <RadzenDatePicker TValue="DateTime" Name="value" Value="@model.value" DateFormat="@DateFormat" ShowTime="@ShowTime" 
+                ValueChanged="@(args => {model.value=(DateTime)args; ValueChanged.InvokeAsync();})"
                                   Disabled="@Disabled" Min="@Min" Max="@Max" ShowTimeOkButton="@ShowTimeOkButton" TimeOnly="@TimeOnly"/>
             </RadzenFormField>
         </RadzenStack>

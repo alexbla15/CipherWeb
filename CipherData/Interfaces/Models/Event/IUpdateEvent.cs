@@ -1,5 +1,6 @@
 ﻿namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(UpdateEvent))]
     public interface IUpdateEvent : ICipherClass
     {
         /// <summary>

@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(CreateEvent))]
     public interface ICreateEvent : ICipherClass
     {
         /// <summary>

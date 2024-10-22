@@ -52,6 +52,7 @@ namespace CipherData.Interfaces
 
     public interface ICondition : ICipherClass { }
 
+    [HebrewTranslation(nameof(BooleanCondition))]
     public interface IBooleanCondition : ICondition
     {
         /// <summary>

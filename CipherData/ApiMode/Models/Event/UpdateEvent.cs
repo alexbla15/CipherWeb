@@ -3,7 +3,6 @@
     /// <summary>
     /// Update event's process or comments
     /// </summary>
-    [HebrewTranslation(nameof(UpdateEvent))]
     public class UpdateEvent : CipherClass, IUpdateEvent
     {
         private string? _EventComment;

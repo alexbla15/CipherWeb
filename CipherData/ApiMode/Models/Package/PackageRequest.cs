@@ -6,7 +6,6 @@
     /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
     /// In order to change other Package properties - use UpdatePackage.
     /// </summary>
-    [HebrewTranslation(nameof(PackageRequest))]
     public class PackageRequest : CipherClass, IPackageRequest
     {
         public string? Id { get; set; } = string.Empty;

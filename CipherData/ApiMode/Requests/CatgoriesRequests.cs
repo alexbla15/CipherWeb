@@ -4,13 +4,16 @@
     {
         private static readonly string path = "/categories";
 
-        public async Task<Tuple<List<ICategory>, ErrorResponse>> GetCategories()
+        public async Task<Tuple<List<ICategory>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<ICategory, Category>(path);
 
-        public async Task<Tuple<ICategory, ErrorResponse>> GetCategory(string id)
-            => await GeneralAPIRequest.GetId<ICategory, Category>(path, id);
+        public async Task<Tuple<ICategory, ErrorResponse>> GetById(string? id)
+        {
+            if (string.IsNullOrEmpty(id)) return new(new Category(), ErrorResponse.BadRequest);
+            return await GeneralAPIRequest.GetId<ICategory, Category>(path, id);
+        }
 
-        public async Task<Tuple<ICategory, ErrorResponse>> CreateCategory(ICategoryRequest cat)
+        public async Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest cat)
         {
             var result = await GeneralAPIRequest.Post<Category>(path, cat);
 
@@ -18,7 +21,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<ICategory, ErrorResponse>> UpdateCategory(string id, ICategoryRequest cat)
+        public async Task<Tuple<ICategory, ErrorResponse>> Update(string? id, ICategoryRequest cat)
         {
             var result = await GeneralAPIRequest.Put<Category>($"{path}/{id}", cat);
 

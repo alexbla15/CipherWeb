@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation("System")]
     public interface IStorageSystem : IResource
     {
         /// <summary>
@@ -138,5 +139,59 @@ namespace CipherData.Interfaces
         /// All vessels that are under this system
         /// </summary>
         Task<Tuple<List<IVessel>, ErrorResponse>> Vessels(string? SelectedSystem);
+    }
+
+    public abstract class BaseStorageSystem: Resource, IStorageSystem
+    {
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
+
+        public string? Name
+        {
+            get => _Name;
+            set => _Name = value?.Trim();
+        }
+
+        public string? Description
+        {
+            get => _Description;
+            set => _Description = value?.Trim();
+        }
+
+        public Dictionary<string, string>? Properties { get; set; }
+
+        public IStorageSystem? Parent { get; set; }
+
+        public List<IStorageSystem>? Children { get; set; }
+
+        public IUnit? Unit { get; set; }
+
+        // ABSTRACT METHODS
+
+        protected abstract ISystemsRequests GetRequests();
+
+        public abstract Task<Tuple<List<IStorageSystem>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract Task<Tuple<List<IEvent>, ErrorResponse>> Events(string? SelectedSystem);
+
+        public abstract Task<Tuple<List<IProcess>, ErrorResponse>> Processes(string? SelectedSystem);
+
+        public abstract Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedSystem);
+
+        public abstract Task<Tuple<List<IVessel>, ErrorResponse>> Vessels(string? SelectedSystem);
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IStorageSystem>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Create(ISystemRequest req) =>
+            await GetRequests().Create(req);
+
+        public async Task<Tuple<IStorageSystem, ErrorResponse>> Update(string? id, ISystemRequest req)
+            => await GetRequests().Update(id, req);
     }
 }

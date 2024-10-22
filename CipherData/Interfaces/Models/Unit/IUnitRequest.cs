@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(UnitRequest))]
     public interface IUnitRequest : ICipherClass
     {
         /// <summary>
@@ -57,19 +58,18 @@ namespace CipherData.Interfaces
             return result.Check();
         }
 
-        public IUnit Create(string id)
-            => new Unit()
+        public IUnit Create<T>(string? id) where T: IUnit, new()
+            => new T()
             {
                 Id = id,
                 Name = Name,
                 Description = Description,
-                Parent = new Unit() { Id = ParentId },
+                Parent = new T() { Id = ParentId },
                 Properties = Properties
             };
 
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
-
     }
 }

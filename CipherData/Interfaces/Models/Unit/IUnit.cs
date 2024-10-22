@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(Unit))]
     public interface IUnit : IResource
     {
         /// <summary>
@@ -76,20 +77,20 @@ namespace CipherData.Interfaces
         // API-RELATED FUNCTIONS
 
         /// <summary>
-        /// Get details about a single unit given unit ID
-        /// </summary>
-        /// <param name="id">unit ID</param>
-        Task<Tuple<IUnit, ErrorResponse>> Get(string? id);
-
-        /// <summary>
-        /// All objects
+        /// Method to get all available objects
         /// </summary>
         Task<Tuple<List<IUnit>, ErrorResponse>> All();
 
         /// <summary>
-        /// Fetch all units which contain the searched text
+        /// Fetch all categories which contain the searched text
         /// </summary>
         Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string? SearchText);
+
+        /// <summary>
+        /// Get details about a single object given object ID
+        /// </summary>
+        /// <param name="id">object ID</param>
+        Task<Tuple<IUnit, ErrorResponse>> Get(string? id);
 
         /// <summary>
         /// Method to create a new object from a request
@@ -100,6 +101,55 @@ namespace CipherData.Interfaces
         /// Method to update object details 
         /// </summary>
         Task<Tuple<IUnit, ErrorResponse>> Update(string? id, IUnitRequest req);
+    }
+
+    public abstract class BaseUnit : Resource, IUnit
+    {
+
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
+
+        public string? Name
+        {
+            get => _Name;
+            set => _Name = value?.Trim();
+        }
+
+        public string? Description
+        {
+            get => _Description;
+            set => _Description = value?.Trim();
+        }
+
+        public string? Properties { get; set; }
+
+        public IUnit? Parent { get; set; }
+
+        public List<IUnit>? Children { get; set; }
+
+        public List<IStorageSystem>? Systems { get; set; }
+
+        public IGroupedBooleanCondition? Conditions { get; set; }
+
+        // ABSTRACT METHODS
+
+        protected abstract IUnitsRequests GetRequests();
+
+        public abstract Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string? SearchText);
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req) =>
+            await GetRequests().Create(req);
+
+        public async Task<Tuple<IUnit, ErrorResponse>> Update(string? id, IUnitRequest req)
+            => await GetRequests().Update(id, req);
     }
 }
 

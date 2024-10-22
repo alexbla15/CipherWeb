@@ -1,5 +1,9 @@
 ﻿namespace CipherData.Interfaces
 {
+    /// <summary>
+    /// Get user actions contract
+    /// </summary>
+    [HebrewTranslation(nameof(UserActionResponse))]
     public interface IUserActionResponse : ICipherClass
     {
         /// <summary>
@@ -7,6 +11,11 @@
         /// </summary>
         [HebrewTranslation(nameof(UserActions))]
         List<IUserAction> UserActions { get; set; }
+    }
+
+    public abstract class BaseUserActionResponse : CipherClass, IUserActionResponse
+    {
+        public List<IUserAction> UserActions { get; set; } = new();
     }
 }
 

@@ -1,14 +1,13 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(Worker))]
-    public class RandomWorker : IWorker
+    public class RandomWorker : BaseWorker
     {
-        [HebrewTranslation(nameof(Worker))]
-        public string Name { get; set; } = string.Empty;
+        public RandomWorker()
+        {
+            Name = RandomFuncs.RandomItem(AllWorkers()).Name;
+        }
 
-        public RandomWorker() => Name = RandomFuncs.RandomItem(AllWorkers()).Name;
-
-        public List<IWorker> AllWorkers() => new() {
+        public override List<IWorker> AllWorkers() => new() {
             new Worker() {Name = "אלי קופטר" },
             new Worker() { Name = "אבי רון" },
             new Worker() { Name = "עמית נקש" }

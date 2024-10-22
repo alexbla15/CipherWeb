@@ -2,10 +2,10 @@
 {
     public class RandomEventsRequests : IEventsRequests
     {
-        public async Task<Tuple<List<IEvent>, ErrorResponse>> GetEvents() =>
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> GetAll() =>
             await new RandomGenericRequests().Request(RandomData.Events, canBadRequest: false);
 
-        public async Task<Tuple<IEvent, ErrorResponse>> CreateEvent(ICreateEvent ev) =>
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent ev) =>
             await new RandomGenericRequests().Request(ev.Create(RandomEvent.GetNextId()));
 
         public async Task<Tuple<IGroupedBooleanCondition, ErrorResponse>> UpdateEventConditions(IGroupedBooleanCondition condition) =>
@@ -14,10 +14,10 @@
         public async Task<Tuple<IGroupedBooleanCondition, ErrorResponse>> GetEventConditions() =>
             await new RandomGenericRequests().Request(RandomData.GroupedBooleanCondition, canBadRequest: false, canBeNotFound: true);
 
-        public async Task<Tuple<IEvent, ErrorResponse>> GetEvent(string id) =>
+        public async Task<Tuple<IEvent, ErrorResponse>> GetById(string? id) =>
             await new RandomGenericRequests().Request(RandomData.Event, canBeNotFound: true);
 
-        public async Task<Tuple<IEvent, ErrorResponse>> UpdateEvent(string? event_id, IUpdateEvent ev) =>
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(string? event_id, IUpdateEvent ev) =>
             await new RandomGenericRequests().Request(RandomData.Event, canBadRequest: false, canBeNotFound: true);
     }
 }

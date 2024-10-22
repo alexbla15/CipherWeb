@@ -1,12 +1,12 @@
 ﻿@page "/Forms/Relocation"
 
 <ResourceForm Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" />
+    <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
 
     <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
-        <CipherComments @ref="EventComments" Width="300px" />
+        <CipherLocation Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" Width="300px" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -59,23 +59,29 @@
 
     private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent();
 
+    private bool Relocate = false;
+
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
     public async Task Submit()
     {
-        Valid = true;
+        Relocate = false;
+        (Valid, ErrorMessage) = RequestedEvent.Check();
+        await SendRequest();
+    }
 
+    public void SetJsonRequest()
+    {
         RequestedEvent = Config.CreateRelocationEvent();
-        RequestedEvent.Worker = FormInfo.GetWorker();
-        RequestedEvent.Timestamp = FormInfo.GetDateTime();
+        RequestedEvent.Worker = FormInfo.ChosenWorker;
+        RequestedEvent.Timestamp = FormInfo.ChosenDate;
         RequestedEvent.TargetSystem = FinalLocation.ChosenSystem;
         RequestedEvent.Packages = RelocatedPacks.SelectedPackages;
         RequestedEvent.Comments = EventComments.Comments;
 
-        (Valid, ErrorMessage) = RequestedEvent.Check();
-
-        await SendRequest();
+        ICreateEvent ev = RequestedEvent.Create(!Relocate);
+        JsonRequest = ev.ToJson();
     }
 
     /// <summary>
@@ -85,8 +91,9 @@
     {
         if (Valid)
         {
+            Relocate = true;
+            SetJsonRequest();
             ICreateEvent ev = RequestedEvent.Create();
-            JsonRequest = ev.ToJson();
             (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {

@@ -2,6 +2,10 @@
 
 namespace CipherData.Interfaces
 {
+    /// <summary>
+    /// Groups of boolean conditions on a single object
+    /// </summary>
+    [HebrewTranslation(nameof(GroupedBooleanCondition))]
     public interface IGroupedBooleanCondition : ICondition
     {
         /// <summary>
@@ -56,5 +60,12 @@ namespace CipherData.Interfaces
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+    }
+
+    public abstract class BaseGroupedBooleanCondition : CipherClass, IGroupedBooleanCondition
+    {
+        public IEnumerable<ICondition> Conditions { get; set; } = new List<Condition>();
+
+        public Operator Operator { get; set; } = Operator.All;
     }
 }

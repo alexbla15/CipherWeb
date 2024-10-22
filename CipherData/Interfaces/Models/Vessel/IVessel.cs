@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(Vessel))]
     public interface IVessel : IResource
     {
         /// <summary>
@@ -76,5 +77,39 @@ namespace CipherData.Interfaces
         /// Method to update object details 
         /// </summary>
         Task<Tuple<IVessel, ErrorResponse>> Update(string? id, IVesselRequest req);
+    }
+
+    public abstract class BaseVessel: Resource, IVessel
+    {
+        private string? _Name;
+        private string? _Type = string.Empty;
+
+        public string? Name { get => _Name; set => _Name = value?.Trim(); }
+
+        public string? Type { get => _Type; set => _Type = value?.Trim(); }
+
+        public List<IPackage>? ContainingPackages { get; set; }
+
+        public IStorageSystem? System { get; set; }
+
+        // ABSTRACT METHODS
+
+        protected abstract IVesselsRequests GetRequests();
+
+        public abstract Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText);
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req) =>
+            await GetRequests().Create(req);
+
+        public async Task<Tuple<IVessel, ErrorResponse>> Update(string? id, IVesselRequest req)
+            => await GetRequests().Update(id, req);
     }
 }

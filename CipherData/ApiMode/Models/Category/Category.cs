@@ -1,49 +1,8 @@
 ﻿namespace CipherData.ApiMode
 {
-    [HebrewTranslation(nameof(Category))]
-    public class Category : Resource, ICategory
+    public class Category : BaseCategory, ICategory
     {
-        private string? _Name = string.Empty;
-        private string? _Description = string.Empty;
-        private ICategory? _MaterialType = null;
-        private ICategory? _Parent = null;
-
-        public string? Name { get => _Name; set => _Name = value?.Trim(); }
-
-        public string? Description { get => _Description; set => _Description = value?.Trim(); }
-
-        public List<string> IdMask { get; set; } = new();
-
-        public List<ICategoryProperty>? Properties { get; set; }
-
-        public List<IProcessDefinition> CreatingProcesses { get; set; } = new List<IProcessDefinition>();
-
-        public List<IProcessDefinition> ConsumingProcesses { get; set; } = new List<IProcessDefinition>();
-
-        public ICategory? MaterialType
-        {
-            get => _MaterialType;
-            set => _MaterialType = value ?? _MaterialType;
-        }
-
-        public ICategory? Parent
-        {
-            get => _Parent;
-            set
-            {
-                _Parent = value;
-                MaterialType = value?.MaterialType;
-            }
-        }
-
-        public List<ICategory>? Children { get; set; }
-
-        // API RELATED FUNCTIONS
-
-        public async Task<Tuple<List<ICategory>, ErrorResponse>> All() =>
-            await new CategoriesRequests().GetCategories();
-
-        public async Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string SearchText)
+        public override async Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string? SearchText)
         {
             if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);
 
@@ -71,16 +30,6 @@
             return Tuple.Create(result.Item1.Select(x => x as ICategory).ToList(), result.Item2);
         }
 
-        public async Task<Tuple<ICategory, ErrorResponse>> Get(string? id)
-        {
-            if (string.IsNullOrEmpty(id)) return new(new Category(), ErrorResponse.BadRequest);
-            return await new CategoriesRequests().GetCategory(id);
-        }
-
-        public async Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest req) =>
-            await new CategoriesRequests().CreateCategory(req);
-
-        public async Task<Tuple<ICategory, ErrorResponse>> Update(string id, ICategoryRequest req)
-            => await new CategoriesRequests().UpdateCategory(id, req);
+        protected override ICategoriesRequests GetRequests() => new CategoriesRequests();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(CreateTranserAmountEvent))]
     public interface ICreateTranserAmountEvent : ICipherClass
     {
         /// <summary>
@@ -98,26 +99,30 @@ namespace CipherData.Interfaces
         /// </summary>
         public ICreateEvent Create()
         {
+            var ev = new CreateEvent
+            {
+                Worker = Worker,
+                Timestamp = Timestamp,
+                EventType = 23,
+                ProcessId = ProcessId,
+                Comments = Comments,
+            };
+
             if (AcceptingPackage != null && DonatingPackage != null)
             {
-                DonatingPackage.BrutMass -= Amount;
-                DonatingPackage.NetMass = decimal.Round(DonatingPackage.BrutMass * DonatingPackage.Concentration, 2);
+                var AccPack = Copy(AcceptingPackage);
+                var DonPack = Copy(DonatingPackage);
 
-                AcceptingPackage.BrutMass += Amount;
-                AcceptingPackage.NetMass = decimal.Round(AcceptingPackage.BrutMass * AcceptingPackage.Concentration, 2);
+                DonPack.BrutMass = DonPack.BrutMass - Amount;
+                DonPack.NetMass = decimal.Round(DonPack.BrutMass * DonPack.Concentration, 2);
 
-                return new CreateEvent()
-                {
-                    Worker = Worker,
-                    Timestamp = Timestamp,
-                    EventType = 23,
-                    ProcessId = ProcessId,
-                    Comments = Comments,
-                    Actions = new() { AcceptingPackage.Request(), DonatingPackage.Request() }
-                };
+                AccPack.BrutMass = AccPack.BrutMass + Amount;
+                AccPack.NetMass = decimal.Round(AccPack.BrutMass * AccPack.Concentration, 2);
+
+                ev.Actions = new() { AccPack.Request(), DonPack.Request() };
             }
 
-            return new CreateEvent();
+            return ev;
         }
 
         // STATIC METHODS

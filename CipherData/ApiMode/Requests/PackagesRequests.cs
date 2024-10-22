@@ -4,10 +4,13 @@
     {
         private static readonly string path = "/packages";
 
-        public async Task<Tuple<List<IPackage>, ErrorResponse>> GetPackages()
+        public Task<Tuple<IPackage, ErrorResponse>> Create(IUpdatePackage request)
+            => throw new NotImplementedException("Cannot create package using this end point, use events");
+
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IPackage, Package>(path);
 
-        public async Task<Tuple<IPackage, ErrorResponse>> GetPackage(string id)
+        public async Task<Tuple<IPackage, ErrorResponse>> GetById(string? id)
         {
             var result = await GeneralAPIRequest.Get<Package>($"{path}/{id}");
 
@@ -15,7 +18,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IPackage, ErrorResponse>> UpdatePackage(string pack_id, IUpdatePackage pack)
+        public async Task<Tuple<IPackage, ErrorResponse>> Update(string? pack_id, IUpdatePackage pack)
         {
             var result = await GeneralAPIRequest.Put<Package>($"{path}/{pack_id}", pack);
 

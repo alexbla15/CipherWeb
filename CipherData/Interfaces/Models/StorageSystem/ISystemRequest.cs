@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(SystemRequest))]
     public interface ISystemRequest : ICipherClass
     {
         /// <summary>

@@ -4,10 +4,10 @@
     {
         private static readonly string path = "/units";
 
-        public async Task<Tuple<List<IUnit>, ErrorResponse>> GetUnits()
+        public async Task<Tuple<List<IUnit>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IUnit, Unit>(path);
 
-        public async Task<Tuple<IUnit, ErrorResponse>> GetUnit(string id)
+        public async Task<Tuple<IUnit, ErrorResponse>> GetById(string? id)
         {
             var result = await GeneralAPIRequest.Get<Unit>($"{path}/{id}");
 
@@ -15,7 +15,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IUnit, ErrorResponse>> CreateUnit(IUnitRequest req)
+        public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest req)
         {
             var result = await GeneralAPIRequest.Post<Unit>(path, req);
 
@@ -23,7 +23,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IUnit, ErrorResponse>> UpdateUnit(string id, IUnitRequest req)
+        public async Task<Tuple<IUnit, ErrorResponse>> Update(string? id, IUnitRequest req)
         {
             var result = await GeneralAPIRequest.Put<Unit>($"{path}/{id}", req);
 

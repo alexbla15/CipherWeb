@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(ProcessStepDefinition))]
     public interface IProcessStepDefinition : IResource
     {
         /// <summary>
@@ -59,5 +60,25 @@ namespace CipherData.Interfaces
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+    }
+
+    public abstract class BaseProcessStepDefinition : Resource, IProcessStepDefinition
+    {
+        private string _Name = string.Empty;
+        private string _Description = string.Empty;
+
+        public string Name
+        {
+            get => _Name;
+            set => _Name = value.Trim();
+        }
+
+        public string Description
+        {
+            get => _Description;
+            set => _Description = value.Trim();
+        }
+
+        public IGroupedBooleanCondition Condition { get; set; } = new GroupedBooleanCondition();
     }
 }

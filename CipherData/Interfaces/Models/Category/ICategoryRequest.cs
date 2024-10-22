@@ -5,6 +5,7 @@ namespace CipherData.Interfaces
     /// <summary>
     /// Create a new category or update it
     /// </summary>
+    [HebrewTranslation(nameof(CategoryRequest))]
     public interface ICategoryRequest : ICipherClass
     {
         /// <summary>

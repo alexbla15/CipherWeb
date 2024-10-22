@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(Package))]
     public interface IPackage : IResource
     {
         /// <summary>
@@ -49,7 +50,7 @@ namespace CipherData.Interfaces
         /// List of processes definitions that may accept this package as input
         /// </summary>
         [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
-        List<IProcessDefinition> DestinationProcesses { get; set; }
+        List<IProcessDefinition>? DestinationProcesses { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
@@ -88,7 +89,7 @@ namespace CipherData.Interfaces
                 [nameof(Vessel)] = Vessel?.Id,
                 [nameof(Parent)] = Parent?.Id,
                 [nameof(Children)] = Children != null ? string.Join("; ", Children.Select(x => x.Id)) : null,
-                [nameof(DestinationProcesses)] = string.Join("; ", DestinationProcesses.Select(x => x.Name)),
+                [nameof(DestinationProcesses)] = DestinationProcesses!=null ? string.Join("; ", DestinationProcesses.Select(x => x.Name)) : null,
                 [nameof(Properties)] = Properties != null ? string.Join("; ", Properties.Select(x => $"{x.Name}:{x.Value}")) : null,
                 [nameof(CreatedAt)] = CreatedAt,
             };
@@ -119,19 +120,19 @@ namespace CipherData.Interfaces
         // API-RELATED FUNCTIONS
 
         /// <summary>
-        /// All packages
+        /// Method to get all available objects
         /// </summary>
         Task<Tuple<List<IPackage>, ErrorResponse>> All();
 
         /// <summary>
-        /// Fetch all packages which contain the searched text
+        /// Fetch all categories which contain the searched text
         /// </summary>
-        Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string SearchText);
+        Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText);
 
         /// <summary>
-        /// Get details about a single package given package ID
+        /// Get details about a single object given object ID
         /// </summary>
-        /// <param name="id">package ID</param>
+        /// <param name="id">object ID</param>
         Task<Tuple<IPackage, ErrorResponse>> Get(string? id);
 
         /// <summary>
@@ -148,5 +149,74 @@ namespace CipherData.Interfaces
         /// All processes relevant for package.
         /// </summary>
         Task<Tuple<List<IProcess>, ErrorResponse>> Processes();
+    }
+
+    public abstract class BasePackage: Resource, IPackage
+    {
+        private string? _Description;
+        private ICategory _Category = new Category();
+
+        public string? Description
+        {
+            get => _Description;
+            set => _Description = value?.Trim();
+        }
+
+        public List<IPackageProperty>? Properties { get; set; }
+
+        public IVessel? Vessel { get; set; }
+
+        public IStorageSystem System { get; set; } = new StorageSystem();
+
+        public decimal BrutMass { get; set; }
+
+        public decimal NetMass { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public IPackage? Parent { get; set; }
+
+        public List<IPackage>? Children { get; set; }
+
+        public ICategory Category
+        {
+            get => _Category;
+            set
+            {
+                _Category = value;
+                DestinationProcesses = value.ConsumingProcesses;
+
+                Properties = value.Properties?
+                .DistinctBy(prop => prop.Name)
+                .Select(prop => new PackageProperty { Name = prop.Name ?? string.Empty, Value = prop.DefaultValue }
+                as IPackageProperty)
+                .ToList();
+            }
+        }
+
+        public List<IProcessDefinition>? DestinationProcesses { get; set; } = new();
+
+        public decimal Concentration => BrutMass > 0 ? NetMass / BrutMass : 0;
+
+        // ABSTRACT METHODS
+
+        protected abstract IPackagesRequests GetRequests();
+
+        public abstract Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract Task<Tuple<List<IEvent>, ErrorResponse>> Events();
+
+        public abstract Task<Tuple<List<IProcess>, ErrorResponse>> Processes();
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IPackage, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<IPackage, ErrorResponse>> Update(string? id, IUpdatePackage req)
+            => await GetRequests().Update(id, req);
     }
 }

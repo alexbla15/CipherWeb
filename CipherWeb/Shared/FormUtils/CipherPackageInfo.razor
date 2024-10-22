@@ -61,6 +61,12 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
     private CipherAutoComplete packId = new();
     private CipherCategoryDropDown packCategory = new();
     private CipherLocation packLocation = new();
@@ -107,6 +113,7 @@
                 return prop;
             }).ToList() ?? new List<IPackageProperty>();
         StateHasChanged();
+        ChangeDetail();
     }
 
     public void ChangedVessel()
@@ -120,6 +127,7 @@
         {
             ChosenVessel = null;
         }
+        ChangeDetail();
     }
 
     public async Task ChangedSystem()
@@ -136,6 +144,7 @@
             var result = await Config.StorageSystem(false).Vessels(packLocation.ChosenSystem?.Id ?? string.Empty);
             (AllVessels, Error) = (result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
+        ChangeDetail();
     }
 
     /// <summary>
@@ -144,6 +153,8 @@
     private void ChangeView()
     {
         AssemblyOfPackages = (InnerPacks.SelectedPackages is null) ? false : (InnerPacks.SelectedPackages.Count() > 0);
+
+        ChangeDetail();
     }
 
     /// <summary>
@@ -191,6 +202,11 @@
         }
         return ChangedPacks;
     }
+
+    public void ChangeDetail()
+    {
+        ChangeDetails.InvokeAsync();
+    }
 }
 
 
@@ -200,17 +216,20 @@
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+    <CipherAutoComplete ValueChanged="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
-    <CipherPackageId Label="@(IPackage.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
+    <CipherPackageId Change="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherNumeric Disabled="@ReadOnly" Label="@(IPackage.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
-        <CipherProcesses Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
+        <CipherComments @ref="PackDescription" ValueChanged="@ChangeDetails" 
+            Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 
+            Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 
+            Label="@(IPackage.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale" />
+        <CipherProcesses Change="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" ChosenProcesses="@DestinationProcesses" />
     }
 </CipherComponentCard>
 
@@ -218,4 +237,4 @@
     <CipherPackagesPicking @ref="InnerPacks" Change="ChangeView" />
 </CipherComponentCard>
 
-<CipherPackageProperties @ref="PackProps" ChosenProperties="@ChosenProperties" />
+<CipherPackageProperties @ref="PackProps" ChosenProperties="@ChosenProperties" ChangeDetails="@ChangeDetails" />

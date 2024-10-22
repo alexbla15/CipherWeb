@@ -1,26 +1,21 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(ProcessDefinition))]
-    public class RandomProcessDefinition : Resource, IProcessDefinition
+    public class RandomProcessDefinition : BaseProcessDefinition, IProcessDefinition
     {
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
-        public new string? Id { get; set; } = GetNextId();
+        public RandomProcessDefinition()
+        {
+            Id = GetNextId();
+            Name = RandomFuncs.RandomItem(ProcessesNames);
+            Description = RandomFuncs.RandomItem(ProcessesNames);
+            Steps = new() { new RandomProcessStepDefinition() };
+        }
 
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
-        public string? Name { get; set; } = RandomFuncs.RandomItem(ProcessesNames);
-
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
-        public string? Description { get; set; } = RandomFuncs.RandomItem(ProcessesNames);
-
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Steps))]
-        public List<IProcessStepDefinition> Steps { get; set; } = new() { new RandomProcessStepDefinition() };
+        // STATIC
 
         /// <summary>
         /// For randomization only
         /// </summary>
         public static readonly List<string> ProcessesNames = new() { "יצירה", "דגימה", "שינוי", "עיצוב" };
-
-        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.
@@ -34,16 +29,10 @@
 
         // API RELATED FUNCTIONS
 
-        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> All()
-            => await new RandomProcessDefinitionsRequests().GetProcessDefinitions();
+        protected override IProcessDefinitionsRequests GetRequests()
+            => new RandomProcessDefinitionsRequests();
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest req) =>
-            await new RandomProcessDefinitionsRequests().CreateProcessDefinition(req);
-
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string? id, IProcessDefinitionRequest req)
-            => await new RandomProcessDefinitionsRequests().UpdateProcessDefinition(id, req);
-
-        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string? SearchText)
+        public override async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string? SearchText)
             => await All();
     }
 }

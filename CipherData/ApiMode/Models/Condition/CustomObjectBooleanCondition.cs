@@ -13,11 +13,7 @@
     /// Complex boolean condition that is applied to custom 
     /// objects created from an object factory
     /// </summary>
-    [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
-    public class CustomObjectBooleanCondition : CipherClass, ICustomObjectBooleanCondition
+    public class CustomObjectBooleanCondition : BaseCustomObjectBooleanCondition, ICustomObjectBooleanCondition
     {
-        public List<ICustomCondition> Conditions { get; set; } = new();
-
-        public Operator Operator { get; set; } = Operator.All;
     }
 }

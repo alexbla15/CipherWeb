@@ -79,5 +79,16 @@
             if (RandomMode && !newObject) return new TRandomClass();
             return new TApiClass();
         }
+
+        public static ICipherClass? GetNewObject<TInterface>()
+        {
+            if (typeof(TInterface) == typeof(ICategory))
+                return Category();
+            if (typeof(TInterface) == typeof(IPackage))
+                return Package();
+            if (typeof(TInterface) == typeof(IProcessDefinition))
+                return ProcessDefinition();
+            return null;
+        }
     }
 }

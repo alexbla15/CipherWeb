@@ -4,7 +4,6 @@
     /// Update package details contract.
     /// Ergo, only properties that are not changed using Event, are included.
     /// </summary>
-    [HebrewTranslation(nameof(UpdatePackage))]
     public class UpdatePackage : CipherClass, IUpdatePackage
     {
         private string? _PackageDescription;

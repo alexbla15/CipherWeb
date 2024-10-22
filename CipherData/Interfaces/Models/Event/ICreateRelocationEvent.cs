@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(CreateRelocationEvent))]
     public interface ICreateRelocationEvent : ICipherClass
     {
         /// <summary>
@@ -86,21 +87,21 @@ namespace CipherData.Interfaces
         /// </summary>
         public ICreateEvent Create(bool Checking = false)
         {
+            var ev = new CreateEvent()
+            {
+                Worker = Worker,
+                Timestamp = Timestamp,
+                EventType = 24,
+                Comments = Comments,
+            };
+
             if (Packages != null && TargetSystem != null)
             {
                 if (!Checking) ChangeLocations();
-
-                return new CreateEvent()
-                {
-                    Worker = Worker,
-                    Timestamp = Timestamp,
-                    EventType = 24,
-                    Comments = Comments,
-                    Actions = Packages.Select(x => x.Request()).ToList()
-                };
+                ev.Actions = Packages.Select(x => x.Request()).ToList();
             }
 
-            return new CreateEvent();
+            return ev;
         }
 
         public void ChangeLocations()

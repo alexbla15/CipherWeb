@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(DisplayedEvent))]
     public interface IDisplayedEvent : ICipherClass
     {
         /// <summary>
@@ -78,6 +79,7 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
+    [HebrewTranslation(nameof(Event))]
     public interface IEvent : IResource
     {
         /// <summary>
@@ -241,34 +243,107 @@ namespace CipherData.Interfaces
             return new();
         }
 
-
         // API-RELATED FUNCTIONS
-
-        /// <summary>
-        /// Method to create a new object from a request
-        /// </summary>
-        Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req);
-
-        Task<Tuple<IEvent, ErrorResponse>> Update(IUpdateEvent update_details);
-
-        /// <summary>
-        /// Fetch all events which contain the searched text
-        /// </summary>
-        Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText);
-
-        /// <summary>
-        /// All objects
-        /// </summary>
-        Task<Tuple<List<IEvent>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all events with specific status
         /// </summary>
         Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status);
 
+        /// <summary>
+        /// Method to get all available categories
+        /// </summary>
+        Task<Tuple<List<IEvent>, ErrorResponse>> All();
+
+        /// <summary>
+        /// Fetch all categories which contain the searched text
+        /// </summary>
+        Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string SearchText);
+
+        /// <summary>
+        /// Get details about a single object given object ID
+        /// </summary>
+        /// <param name="id">object ID</param>
+        Task<Tuple<IEvent, ErrorResponse>> Get(string? id);
+
+        /// <summary>
+        /// Method to create a new object from a request
+        /// </summary>
+        Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req);
+
+        /// <summary>
+        /// Method to update object details 
+        /// </summary>
+        Task<Tuple<IEvent, ErrorResponse>> Update(string? id, IUpdateEvent req);
+
         public async Task<Tuple<List<IEvent>, ErrorResponse>> PendingEvents() => await StatusEvents(0);
         public async Task<Tuple<List<IEvent>, ErrorResponse>> ApprovedEvents() => await StatusEvents(1);
         public async Task<Tuple<List<IEvent>, ErrorResponse>> DeclinedEvents() => await StatusEvents(-1);
 
+    }
+
+    public abstract class BaseEvent : Resource, IEvent
+    {
+        private string? _Worker;
+        private string? _Comments = null;
+        private List<IPackage> _InitialStatePackages = new();
+        private List<IPackage> _FinalStatePackages = new();
+
+        public int EventType { get; set; }
+
+        public int Status { get; set; }
+
+        public string? Worker
+        {
+            get => _Worker;
+            set => _Worker = value?.Trim();
+        }
+
+        public string? ProcessId { get; set; }
+
+        public string? Comments
+        {
+            get => _Comments;
+            set => _Comments = value?.Trim();
+        }
+
+        public DateTime Timestamp { get; set; }
+
+        [HebrewTranslation(typeof(Event), nameof(InitialStatePackages))]
+        public List<IPackage> InitialStatePackages
+        {
+            get => _InitialStatePackages;
+            set => _InitialStatePackages = value.OrderBy(x => x.Id).ToList();
+        }
+
+        [HebrewTranslation(typeof(Event), nameof(FinalStatePackages))]
+        public List<IPackage> FinalStatePackages
+        {
+            get => _FinalStatePackages;
+            set => _FinalStatePackages = value.OrderBy(x => x.Id).ToList();
+        }
+
+        // ABSTRACT METHODS
+
+        protected abstract IEventsRequests GetRequests();
+
+        public abstract Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status);
+
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<IEvent>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent req) =>
+            await GetRequests().Create(req);
+
+        public async Task<Tuple<IEvent, ErrorResponse>> Update(string? id, IUpdateEvent req)
+            => await GetRequests().Update(id, req);
     }
 }

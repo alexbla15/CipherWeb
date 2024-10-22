@@ -2,6 +2,7 @@
 
 namespace CipherData.Interfaces
 {
+    [HebrewTranslation(nameof(Category))]
     public interface ICategory : IResource
     {
         /// <summary>
@@ -98,14 +99,14 @@ namespace CipherData.Interfaces
         // API-RELATED FUNCTIONS
 
         /// <summary>
-        /// Method to get all available categories
+        /// Method to get all available objects
         /// </summary>
         Task<Tuple<List<ICategory>, ErrorResponse>> All();
 
         /// <summary>
         /// Fetch all categories which contain the searched text
         /// </summary>
-        Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string SearchText);
+        Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string? SearchText);
 
         /// <summary>
         /// Get details about a single object given object ID
@@ -122,5 +123,64 @@ namespace CipherData.Interfaces
         /// Method to update object details 
         /// </summary>
         Task<Tuple<ICategory, ErrorResponse>> Update(string? id, ICategoryRequest req);
+    }
+
+
+    public abstract class BaseCategory : Resource, ICategory
+    {
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
+        private ICategory? _MaterialType = null;
+        private ICategory? _Parent = null;
+
+        public string? Name { get => _Name; set => _Name = value?.Trim(); }
+
+        public string? Description { get => _Description; set => _Description = value?.Trim(); }
+
+        public List<string> IdMask { get; set; } = new();
+
+        public List<ICategoryProperty>? Properties { get; set; }
+
+        public List<IProcessDefinition>? CreatingProcesses { get; set; } = new List<IProcessDefinition>();
+
+        public List<IProcessDefinition>? ConsumingProcesses { get; set; } = new List<IProcessDefinition>();
+
+        public ICategory? MaterialType
+        {
+            get => _MaterialType;
+            set => _MaterialType = value ?? _MaterialType;
+        }
+
+        public ICategory? Parent
+        {
+            get => _Parent;
+            set
+            {
+                _Parent = value;
+                MaterialType = value?.MaterialType;
+            }
+        }
+
+        public List<ICategory>? Children { get; set; }
+
+        // ABSTRACT METHODS
+
+        protected abstract ICategoriesRequests GetRequests();
+
+        public abstract Task<Tuple<List<ICategory>, ErrorResponse>> Containing(string? SearchText);
+
+        // API RELATED FUNCTIONS
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Get(string? id) =>
+            await GetRequests().GetById(id);
+
+        public async Task<Tuple<List<ICategory>, ErrorResponse>> All() =>
+            await GetRequests().GetAll();
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest req) =>
+            await GetRequests().Create(req);
+
+        public async Task<Tuple<ICategory, ErrorResponse>> Update(string? id, ICategoryRequest req)
+            => await GetRequests().Update(id, req);
     }
 }

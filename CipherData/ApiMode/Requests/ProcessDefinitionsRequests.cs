@@ -4,10 +4,10 @@
     {
         private static readonly string path = "/processDefinitions";
 
-        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> GetProcessDefinitions()
+        public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IProcessDefinition, ProcessDefinition>(path);
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> GetProcessDefinition(string id)
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> GetById(string? id)
         {
             var result = await GeneralAPIRequest.Get<ProcessDefinition>($"{path}/{id}");
 
@@ -15,7 +15,7 @@
             return Tuple.Create(obj, result.Item2);
         }
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> CreateProcessDefinition(IProcessDefinitionRequest objRequest)
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest objRequest)
         {
             var result = await GeneralAPIRequest.Post<ProcessDefinition>(path, objRequest);
 
@@ -23,7 +23,7 @@
             return Tuple.Create(obj, (ErrorResponse)result.Item2);
         }
 
-        public async Task<Tuple<IProcessDefinition, ErrorResponse>> UpdateProcessDefinition(string id, IProcessDefinitionRequest objRequest)
+        public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string? id, IProcessDefinitionRequest objRequest)
         {
             var result = await GeneralAPIRequest.Put<ProcessDefinition>($"{path}/{id}", objRequest);
 

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CipherData.General
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Interface)]
     public class HebrewTranslationAttribute : Attribute
     {
         public string? Translation { get; set; } = string.Empty;

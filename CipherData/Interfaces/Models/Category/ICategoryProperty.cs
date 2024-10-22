@@ -13,6 +13,7 @@ namespace CipherData.Interfaces
     /// Property interface of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
     /// </summary>
+    [HebrewTranslation(nameof(CategoryProperty))]
     public interface ICategoryProperty : ICipherClass
     {
         /// <summary>
@@ -68,5 +69,27 @@ namespace CipherData.Interfaces
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+    }
+
+    public abstract class BaseCategoryProperty : CipherClass, ICategoryProperty
+    {
+        private string? _Name = string.Empty;
+        private string? _Description = string.Empty;
+
+        public string? Name
+        {
+            get => _Name;
+            set => _Name = value?.Trim();
+        }
+
+        public string? Description
+        {
+            get => _Description;
+            set => _Description = value?.Trim();
+        }
+
+        public PropertyType PropertyType { get; set; } = PropertyType.Text;
+
+        public string? DefaultValue { get; set; } = null;
     }
 }

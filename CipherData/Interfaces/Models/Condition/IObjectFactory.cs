@@ -12,6 +12,7 @@ namespace CipherData.Interfaces
         sum, avg, count, first, last, max, min
     }
 
+    [HebrewTranslation(nameof(OrderedItem))]
     public interface IOrderedItem : ICipherClass
     {
         /// <summary>
@@ -45,6 +46,7 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
+    [HebrewTranslation(nameof(AggregateItem))]
     public interface IAggregateItem : ICipherClass
     {
         /// <summary>
@@ -88,6 +90,7 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
+    [HebrewTranslation(nameof(ObjectFactory))]
     public interface IObjectFactory : ICipherClass
     {
         /// <summary>

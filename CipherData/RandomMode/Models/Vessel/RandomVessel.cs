@@ -1,25 +1,17 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(Vessel))]
-    public class RandomVessel : Resource, IVessel
+    public class RandomVessel : BaseVessel, IVessel
     {
-        private static readonly string? _Id = GetNextId();
         private static readonly List<string> VesselTypes = new() { "קופסה", "ארגז", "צנצנת" };
 
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public new string? Id { get; set; } = _Id;
-
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
-        public string? Name { get; set; } = _Id;
-
-        [HebrewTranslation(typeof(Vessel), nameof(Type))]
-        public string? Type { get; set; } = RandomFuncs.RandomItem(VesselTypes);
-
-        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
-        public List<IPackage>? ContainingPackages { get; set; } = new() { new Package() { Id = "VP" } };
-
-        [HebrewTranslation(typeof(Vessel), nameof(System))]
-        public IStorageSystem? System { get; set; } = new RandomStorageSystem();
+        public RandomVessel()
+        {
+            Id = GetNextId();
+            Name = Id;
+            Type = RandomFuncs.RandomItem(VesselTypes);
+            ContainingPackages = new() { new Package() { Id = "VP" } };
+            System = new RandomStorageSystem();
+        }
 
         // STATIC METHODS
 
@@ -35,19 +27,9 @@
 
         // API RELATED FUNCTIONS
 
-        public async Task<Tuple<IVessel, ErrorResponse>> Get(string id) =>
-            await new RandomVesselsRequests().GetVessel(id);
+        protected override IVesselsRequests GetRequests() => new RandomVesselsRequests();
 
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> All() =>
-            await new RandomVesselsRequests().GetVessels();
-
-        public async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string SearchText) =>
-            await new RandomVesselsRequests().GetVessels();
-
-        public async Task<Tuple<IVessel, ErrorResponse>> Create(IVesselRequest req) =>
-            await new RandomVesselsRequests().CreateVessel(req);
-
-        public async Task<Tuple<IVessel, ErrorResponse>> Update(string id, IVesselRequest req)
-            => await new RandomVesselsRequests().UpdateVessel(id, req);
+        public override async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText) =>
+            await GetRequests().GetAll();
     }
 }

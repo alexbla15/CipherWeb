@@ -8,6 +8,7 @@ namespace CipherData.Interfaces
         IGroupedBooleanCondition? ObjectCondition { get; set; }
     }
 
+    [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
     public interface ICustomObjectBooleanCondition : ICipherClass
     {
         /// <summary>
@@ -25,5 +26,12 @@ namespace CipherData.Interfaces
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+    }
+
+    public abstract class BaseCustomObjectBooleanCondition: CipherClass, ICustomObjectBooleanCondition
+    {
+        public List<ICustomCondition> Conditions { get; set; } = new();
+
+        public Operator Operator { get; set; } = Operator.All;
     }
 }

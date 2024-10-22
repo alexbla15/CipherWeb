@@ -18,26 +18,41 @@
     public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
-    /// Method to deduce the package id from the url.
+    /// Method to deduce id from the url.
     /// </summary>
-    public Tuple<T?, ErrorResponse> GetObjectFromUrl<T>(NavigationManager Navigation)
+    public string? GetIdFromUrl(NavigationManager Navigation)
     {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out Microsoft.Extensions.Primitives.StringValues idValue))
         {
+            return idValue;
+        }
 
+        return null;
+    }
+
+    /// <summary>
+    /// Method to deduce the package id from the url.
+    /// </summary>
+    public Tuple<T?, ErrorResponse> GetObjectFromUrl<T>(NavigationManager Navigation)
+    where T : class, ICipherClass, new()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out Microsoft.Extensions.Primitives.StringValues idValue))
+        {
             // Check if the method 'Get' exists, with a string parameter
-            MethodInfo? methodInfo = typeof(T).GetMethod("Get", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+            MethodInfo? methodInfo = typeof(T).GetMethod("Get", new[] { typeof(string) }, null);
 
-            if (methodInfo != null && methodInfo.IsStatic)
+            if (methodInfo != null)
             {
-                var Result = methodInfo.Invoke(null, idValue);
+                var Result = methodInfo.Invoke(new T(), idValue);
                 if (Result is Tuple<T?, ErrorResponse> tupleResult)
                 {
                     return tupleResult;
                 }
             }
         }
+
         return Tuple.Create<T?, ErrorResponse>(default(T), ErrorResponse.Success);
     }
 

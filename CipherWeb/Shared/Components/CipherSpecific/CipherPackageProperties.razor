@@ -29,6 +29,12 @@
     public List<IPackageProperty> ChosenProperties { get; set; } = new();
 
     /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
+    /// <summary>
     /// Error response for fetching data
     /// </summary>
     [Parameter]
@@ -46,6 +52,7 @@
         ChosenProperties.Add(Config.PackageProperty());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
+        await ChangeDetails.InvokeAsync();
     }
 
     /// <summary>
@@ -57,6 +64,7 @@
         ChosenProperties.Remove(prop);
         await CustomDataGrid.RefreshDataAsync();
         StateHasChanged();
+        await ChangeDetails.InvokeAsync();
     }
 
     /// <summary>
@@ -67,6 +75,7 @@
     {
         ChosenProperties.Clear();
         await CustomDataGrid.RefreshDataAsync();
+        await ChangeDetails.InvokeAsync();
     }
 }
 
@@ -80,7 +89,8 @@
         {
             <CipherText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="IPackageProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="IPackageProperty" 
+            AllowColumnResize="true" Visible="ChosenProperties.Count() != 0" ValueChanged="@ChangeDetails">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="IPackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="prop">
@@ -89,12 +99,12 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" />
+                        <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" Change="@ChangeDetails" />
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" />
+                        <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" Change="@ChangeDetails" />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

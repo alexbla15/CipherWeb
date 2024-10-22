@@ -261,8 +261,8 @@
             NewPack.Properties = NewProps;
 
             UpdatePackEvent.EventType = 26;
-            UpdatePackEvent.Worker = FormInfo.GetWorker();
-            UpdatePackEvent.Timestamp = FormInfo.GetDateTime();
+            UpdatePackEvent.Worker = FormInfo.ChosenWorker;
+            UpdatePackEvent.Timestamp = FormInfo.ChosenDate;
             UpdatePackEvent.Comments = EventComments.GetValue();
             UpdatePackEvent.Actions.Add(NewPack.Request());
 

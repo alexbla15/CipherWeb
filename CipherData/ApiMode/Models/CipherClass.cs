@@ -1,4 +1,5 @@
-﻿using System.Text.Encodings.Web;
+﻿using System;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,11 +13,13 @@ namespace CipherData.ApiMode
             {
                 WriteIndented = true, // Pretty print
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                Converters = { new JsonDateTimeConverter(), new JsonConditionConverter(),
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase), new JsonICategoryConverter(), new JsonICategoryPropertyConverter(),
-                new JsonIGroupedBooleanConditionConverter()},
                 IncludeFields = true // Include private/protected fields (if necessary)
             };
+
+            foreach (JsonConverter conv in ICipherClass.Converters)
+            {
+                options.Converters.Add(conv);
+            }
 
             return JsonSerializer.Serialize(this, GetType(), options);
         }

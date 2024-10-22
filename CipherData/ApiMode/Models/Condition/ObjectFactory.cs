@@ -1,6 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    [HebrewTranslation(nameof(OrderedItem))]
     public class OrderedItem : CipherClass, IOrderedItem
     {
         private string _Attribute = string.Empty;
@@ -10,7 +9,6 @@
         public Order Order { get; set; } = Order.asc;
     }
 
-    [HebrewTranslation(nameof(AggregateItem))]
     public class AggregateItem : CipherClass, IAggregateItem
     {
         private string? _Attribute = null;
@@ -30,7 +28,6 @@
     /// <summary>
     /// Method to get desired objects by filtering and aggregating the database
     /// </summary>
-    [HebrewTranslation(nameof(ObjectFactory))]
     public class ObjectFactory : CipherClass, IObjectFactory
     {
         public IGroupedBooleanCondition Filter { get; set; } = new GroupedBooleanCondition();

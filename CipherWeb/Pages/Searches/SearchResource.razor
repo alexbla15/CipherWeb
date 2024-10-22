@@ -80,12 +80,42 @@
     /// </summary>
     private Dictionary<Type, Func<object?>> chosenObjectMap = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         SetChosenObjMap();
-
-        (ChosenObject, Error) = ResourcePage.GetObjectFromUrl<Cipher_TItem>(Navigation);
+        await GetObjectFromUrl();
         GetObjectHistory();
+    }
+
+    private async Task GetObjectFromUrl()
+    {
+        string? id = ResourcePage.GetIdFromUrl(Navigation);
+
+        if (typeof(Cipher_TItem) == typeof(IUnit))
+        {
+            var result = await Config.Unit().Get(id);
+            (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+        }
+        else if (typeof(Cipher_TItem) == typeof(ICategory))
+        {
+            var result = await Config.Category().Get(id);
+            (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+        }
+        else if (typeof(Cipher_TItem) == typeof(IVessel))
+        {
+            var result = await Config.Vessel().Get(id);
+            (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+        }
+        else if (typeof(Cipher_TItem) == typeof(IProcessDefinition))
+        {
+            //var result = await Config.ProcessDefinition().Get(id);
+            //(ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+        }
+        else if (typeof(Cipher_TItem) == typeof(IStorageSystem))
+        {
+            var result = await Config.StorageSystem().Get(id);
+            (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+        }
     }
 
     public void SetChosenObjMap()

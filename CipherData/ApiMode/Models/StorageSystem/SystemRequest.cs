@@ -3,7 +3,6 @@
     /// <summary>
     /// Create a new system or update it
     /// </summary>
-    [HebrewTranslation(nameof(SystemRequest))]
     public class SystemRequest : CipherClass, ISystemRequest
     {
         private string? _Name = string.Empty;
