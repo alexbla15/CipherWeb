@@ -142,7 +142,7 @@
     <ChildContent>
         @if (ChosenAggregates.Count() == 0)
         {
-            <CipherText Text="@HelpText" />
+            <RadzenText Text="@HelpText" />
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenAggregates" TItem="IAggregateItem" AllowColumnResize="true" Visible="@(ChosenAggregates.Count>0)">
             <Columns>

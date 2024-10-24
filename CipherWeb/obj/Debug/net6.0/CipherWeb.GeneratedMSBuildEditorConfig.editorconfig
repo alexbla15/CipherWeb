@@ -328,10 +328,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzb3VyY2VUYWJsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherRestriction.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzdHJpY3Rpb24ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherSystemRestictions.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyU3lzdGVtUmVzdGljdGlvbnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -356,20 +352,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyVmVzc2Vsc1RhYmxlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherStepDescription.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcERlc2NyaXB0aW9uLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSteps.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherTableCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGFibGVDYXJkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherText.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGV4dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherTopNavBar.razor]

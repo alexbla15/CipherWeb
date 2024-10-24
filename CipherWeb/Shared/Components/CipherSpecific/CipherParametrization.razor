@@ -79,7 +79,7 @@
     <ChildContent>
         @if (ChosenParameters.Count() == 0)
         {
-            <CipherText Text="@HelpText"/>
+            <RadzenText Text="@HelpText"/>
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="ChosenParameters" TItem="ReportParameter" AllowColumnResize="true" Visible="ChosenParameters.Count() != 0">
             <Columns>

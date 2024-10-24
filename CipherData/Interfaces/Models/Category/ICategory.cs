@@ -60,8 +60,7 @@ namespace CipherData.Interfaces
         List<ICategory>? Children { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
-        {
-            return new()
+            => new()
             {
                 [nameof(Id)] = Id,
                 [nameof(Name)] = Name,
@@ -70,10 +69,11 @@ namespace CipherData.Interfaces
                 [nameof(Children)] = Children != null ? string.Join("; ", Children.Select(x => x.Name)) : null,
                 [nameof(Parent)] = Parent?.Name,
                 [nameof(MaterialType)] = MaterialType?.Name,
-                [nameof(ConsumingProcesses)] = string.Join("; ", ConsumingProcesses.Select(x => x.Name)),
-                [nameof(CreatingProcesses)] = string.Join("; ", CreatingProcesses.Select(x => x.Name)),
+                [nameof(ConsumingProcesses)] =
+                ConsumingProcesses is null ? null : string.Join("; ", ConsumingProcesses.Select(x => x.Name)),
+                [nameof(CreatingProcesses)] =
+                CreatingProcesses is null ? null : string.Join("; ", CreatingProcesses.Select(x => x.Name)),
             };
-        }
 
         /// <summary>
         /// API request for a new category / updated category.

@@ -31,13 +31,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
         string? DefaultValue { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
+        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
         PropertyType PropertyType { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
@@ -71,6 +71,10 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
+    /// <summary>
+    /// Property scheme of one of the category's properties.
+    /// Each package will use it by default, and than will be edited per package.
+    /// </summary>
     public abstract class BaseCategoryProperty : CipherClass, ICategoryProperty
     {
         private string? _Name = string.Empty;

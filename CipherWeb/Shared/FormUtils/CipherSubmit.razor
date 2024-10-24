@@ -94,7 +94,7 @@
     <ChildContent>
         @if (!string.IsNullOrEmpty(ActionText))
         {
-            <CipherText TextStyle="TextStyle.Subtitle1" Text="@ActionText"></CipherText>
+            <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ActionText"/>
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
                 <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
                 <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />

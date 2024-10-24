@@ -79,17 +79,17 @@
     {
         public Func<RenderFragment>? Card { get; set; }
         public Func<Tuple<bool, string>>? Check { get; set; }
-        public Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>>? SendRequest { get; set; }
-        public Func<Task>? SetJsonRequest { get; set; }
+        public Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>>? Request { get; set; }
+        public Func<Task>? SetJson { get; set; }
     }
 
+    // Dictionary for dynamically handling different resource types
     private Dictionary<Type, AddResourceHandler> ResourceHandlers = new();
-
     private AddResourceHandler SetResourceHandler = new();
 
     protected override void OnInitialized()
     {
-        SetHandlers();
+        RegisterResourceHandlers();
 
         if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
         {
@@ -97,69 +97,63 @@
         }
         else
         {
-            throw new Exception($"Can't find type {typeof(Cipher_TItem).Name}");
+            throw new InvalidOperationException($"Handler not found for type {typeof(Cipher_TItem).Name}");
         }
     }
 
-    private void SetHandlers()
+    private void RegisterResourceHandler<T>(
+    Func<RenderFragment> Card,
+    Func<Tuple<bool, string>> Check,
+    Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>> Request,
+    Action SetJson) where T : IResource
     {
-        ResourceHandlers.Add(typeof(IUnit), new AddResourceHandler()
+        ResourceHandlers.Add(typeof(T), new AddResourceHandler()
                 {
-                    Card = () => RenderUnitCard(),
-                    Check = () => unitRequest.Check(),
-                    SendRequest = () => SendUnitRequest(),
-                    SetJsonRequest = async () => { await InvokeAsync(SetUnitJsonRequest); }
-                });
-
-        ResourceHandlers.Add(typeof(ICategory), new AddResourceHandler()
-                {
-                    Card = () => RenderCategoryCard(),
-                    Check = () => catRequest.Check(),
-                    SendRequest = () => SendCategoryRequest(),
-                    SetJsonRequest = async () => { await InvokeAsync(SetCategoryJsonRequest); }
-                });
-
-        ResourceHandlers.Add(typeof(IVessel), new AddResourceHandler()
-                {
-                    Card = () => RenderVesselCard(),
-                    Check = () => vesRequest.Check(),
-                    SendRequest = () => SendVesselRequest(),
-                    SetJsonRequest = async () => { await InvokeAsync(SetVesselJsonRequest); }
-                });
-
-        ResourceHandlers.Add(typeof(IProcessDefinition), new AddResourceHandler()
-                {
-                    Card = () => RenderProcessDefinitionCard(),
-                    Check = () => procDefRequest.Check(),
-                    SendRequest = () => SendProcessDefinitionRequest(),
-                    SetJsonRequest = async () => { await InvokeAsync(SetProcessDefinitionJsonRequest); }
-                });
-
-        ResourceHandlers.Add(typeof(IStorageSystem), new AddResourceHandler()
-                {
-                    Card = () => RenderStorageSystemCard(),
-                    Check = () => sysRequest.Check(),
-                    SendRequest = () => SendSystemRequest(),
-                    SetJsonRequest = async () => { await InvokeAsync(SetStorageSystemJsonRequest); }
-                });
-
-        ResourceHandlers.Add(typeof(IPackage), new AddResourceHandler()
-                {
-                    Card = () => RenderPackageCard(),
-                    Check = () => packRequest.Check(),
-                    SendRequest = () => SendPackageRequest(),
-                    SetJsonRequest = SetPackageJsonRequest
+                    Card = () => Card(),
+                    Check = () => Check(),
+                    Request = () => Request(),
+                    SetJson = async () => { await InvokeAsync(SetJson); }
                 });
     }
 
-    // GENERAL METHODS
+    private void RegisterResourceHandler<T>(
+        Func<RenderFragment> Card,
+        Func<Tuple<bool, string>> Check,
+        Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>> Request,
+        Func<Task> SetJson) where T : IResource
+    {
+        ResourceHandlers.Add(typeof(T), new AddResourceHandler()
+                {
+                    Card = () => Card(),
+                    Check = Check,
+                    Request = () => Request(),
+                    SetJson = async () => { await InvokeAsync(SetJson); }
+                });
+    }
 
-    /// <summary>
-    /// Method to fill in the request and check it before submission.
-    /// </summary>
-    private Tuple<bool, string> HandleSubmissionRequest() => 
-        SetResourceHandler.Check != null ? 
-        SetResourceHandler.Check() : Tuple.Create(false, "שגיאת מערכת");
+    private void RegisterResourceHandlers()
+    {
+        RegisterResourceHandler<IUnit>(
+            RenderUnitCard, () => unitRequest.Check(), 
+            SendUnitRequest, SetUnitJsonRequest);
+        RegisterResourceHandler<ICategory>(
+            RenderCategoryCard, () => catRequest.Check(),
+            SendCategoryRequest, SetCategoryJsonRequest);
+        RegisterResourceHandler<IVessel>(
+            RenderVesselCard, () => vesRequest.Check(), 
+            SendVesselRequest, SetVesselJsonRequest);
+        RegisterResourceHandler<IProcessDefinition>(
+        RenderProcessDefinitionCard, () => procDefRequest.Check(), 
+        SendProcessDefinitionRequest, SetProcessDefinitionJsonRequest);
+        RegisterResourceHandler<IStorageSystem>(
+            RenderStorageSystemCard, () => sysRequest.Check(),
+            SendSystemRequest, SetStorageSystemJsonRequest);
+        RegisterResourceHandler<IPackage>(
+            RenderPackageCard, () => packRequest.Check(),
+            SendPackageRequest, SetPackageJsonRequest);
+    }
+
+    // GENERAL METHODS
 
     /// <summary>
     /// Method for submitting checked request, or showing errors within the checking process.
@@ -167,7 +161,7 @@
     public async Task Submit()
     {
         Valid = true;
-        var requestCheck = HandleSubmissionRequest();
+        var requestCheck = await HandleSubmissionRequest();
 
         if (!requestCheck.Item1)
         {
@@ -175,8 +169,18 @@
             ErrorMessage = requestCheck.Item2;
         }
 
-        await SendRequest();
+        if (Valid) await SendRequest();
         UpdateSubmissionSummary();
+    }
+
+    /// <summary>
+    /// Method to fill in the request and check it before submission.
+    /// </summary>
+    private async Task<Tuple<bool, string>> HandleSubmissionRequest()
+    {
+        await SetJsonRequest();
+        return SetResourceHandler.Check != null ?
+        SetResourceHandler.Check() : Tuple.Create(false, "שגיאת מערכת");
     }
 
     /// <summary>
@@ -184,10 +188,9 @@
     /// </summary>
     public async Task SendRequest()
     {
-        if (!Valid) return;
-        if (SetResourceHandler.SendRequest != null)
+        if (SetResourceHandler.Request != null)
         {
-            await HandleRequest(SetResourceHandler.SendRequest);
+            await HandleRequest(SetResourceHandler.Request);
         }
         else
         {
@@ -220,9 +223,9 @@
 
     private async Task SetJsonRequest()
     {
-        if (SetResourceHandler.SetJsonRequest != null)
+        if (SetResourceHandler.SetJson != null)
         {
-            await SetResourceHandler.SetJsonRequest();
+            await SetResourceHandler.SetJson();
         }
         else
         {
@@ -233,15 +236,7 @@
     /// <summary>
     /// Method to get the appropriate object-card to the selected type
     /// </summary>
-    private RenderFragment? RenderChosenCard()
-    {
-        if (SetResourceHandler.Card != null)
-        {
-            return SetResourceHandler.Card();
-        }
-
-        return null;
-    }
+    private RenderFragment? RenderChosenCard() => SetResourceHandler.Card?.Invoke();
 
     // TYPE SPECIFIC METHODS
 
@@ -336,35 +331,35 @@
         <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" SetMode="FormMode.Create"
                         ChangeDetails="@SetJsonRequest" @bind-ChosenObject="@SetUnit" />
     </div>
-        ;
+    ;
 
     public RenderFragment RenderCategoryCard() =>
     @<div style="width:100%">
         <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" SetMode="FormMode.Create"
                             ChangeDetails="@SetJsonRequest" @bind-ChosenObject="@SetCategory" />
     </div>
-        ;
+    ;
 
     public RenderFragment RenderVesselCard() =>
     @<div style="width:100%">
         <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" SetMode="FormMode.Create"
                           ChangeDetails="@SetJsonRequest" @bind-ChosenObject="@SetVessel" />
     </div>
-        ;
+    ;
 
     public RenderFragment RenderProcessDefinitionCard() =>
     @<div style="width:100%">
         <CipherProcessCard Title="" WithCard="false" @ref="@procCard" SetMode="FormMode.Create"
                            ChangeDetails="@SetJsonRequest" @bind-ChosenObject="@SetProc" />
     </div>
-        ;
+    ;
 
     public RenderFragment RenderStorageSystemCard() =>
     @<div style="width:100%">
         <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="FormMode.Create"
                           ChangeDetails="@SetJsonRequest" @bind-ChosenObject="@SetSystem" />
     </div>
-        ;
+    ;
 
     public RenderFragment RenderPackageCard() =>
     @<div style="width:100%">

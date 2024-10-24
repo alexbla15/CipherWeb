@@ -84,7 +84,7 @@
 
     public IPackage Value()
     {
-        ChosenPackage.Id = (packId.Check()) ? packId.Value : string.Empty;
+        ChosenPackage.Id = packId.Value;
         ChosenPackage.Category = packCategory.ChosenCategory ?? Config.Category();
         ChosenPackage.System = ChosenSystem ?? Config.StorageSystem();
         ChosenPackage.Vessel = ChosenVessel;
@@ -203,16 +203,13 @@
         return ChangedPacks;
     }
 
-    public void ChangeDetail()
-    {
-        ChangeDetails.InvokeAsync();
-    }
+    public void ChangeDetail() => ChangeDetails.InvokeAsync();
 }
 
 
 @if (!AssemblyOfPackages)
 {
-    <CipherInputComponents @ref="InputPacks" />
+    <CipherInputComponents @ref="InputPacks" ChangeDetails="@ChangeDetails" />
 }
 
 <CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">

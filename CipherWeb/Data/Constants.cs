@@ -6,6 +6,16 @@ namespace CipherWeb.Data
 {
     public class Constants
     {
+        public class Styles
+        {
+            public static readonly string ParagraphTitle = "cipher_paragraph_header";
+            public static readonly string CardTitle = "cipher_card_header";
+            public static readonly string Restriction = "cipher_restriction";
+            public static readonly string ComingSoon = "cipher-comingsoon";
+            public static readonly string ComingSoonImage = "cipher-comingsoon-image-container";
+            public static readonly string ComingSoonOverlay = "cipher-comingsoon-overlay";
+        }
+
         public class Button
         {
             public static readonly ButtonStyle Color = ButtonStyle.Primary;

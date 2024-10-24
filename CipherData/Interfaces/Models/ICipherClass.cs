@@ -7,11 +7,13 @@ namespace CipherData.Interfaces
 {
     public interface ICipherClass
     {
-        public static readonly IList<JsonConverter> Converters =
-            new List<JsonConverter>() {
+        public static readonly JsonSerializerOptions JsonOptions = new()
+            {
+                WriteIndented = true, // Pretty print
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
+                Converters = {
                     new JsonDateTimeConverter(),
                     new JsonIConditionConverter(),
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) ,
                     new JsonICategoryConverter(),
                     new JsonICategoryPropertyConverter(),
                     new JsonIGroupedBooleanConditionConverter(),
@@ -22,6 +24,9 @@ namespace CipherData.Interfaces
                     new JsonIStorageSystemConverter(),
                     new JsonIVesselConverter(),
                     new JsonIUnitConverter(),
+                    new JsonStringEnumConverter() ,
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) ,
+                },
             };
 
         /// <summary>
@@ -61,27 +66,14 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Transfrom Json to an object
         /// </summary>
-        public static T? FromJson<T>(string json)
-        {
-            var options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
-                IncludeFields = true // Include private/protected fields (if necessary)
-            };
-
-            foreach (JsonConverter conv in Converters)
-            {
-                options.Converters.Add(conv);
-            }
-
-            return JsonSerializer.Deserialize<T>(json, options);
-        }
+        public static T? FromJson<T>(string json) => JsonSerializer.Deserialize<T>(json, JsonOptions);
 
         // generic static copy of two objected
         public static T? Copy<T>(T obj) where T : ICipherClass
         {
             var json = obj.ToJson();
-            return FromJson<T>(json); // Deserialize to the actual type
+            var result = FromJson<T>(json); // Deserialize to the actual type
+            return result;
         }
     }
 }

@@ -1,32 +1,10 @@
-﻿using System.Globalization;
+﻿using CipherData.ApiMode;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CipherData.General
 {
-    public class JsonIGroupedBooleanConditionConverter : JsonConverter<IGroupedBooleanCondition>
-    {
-        public override IGroupedBooleanCondition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<GroupedBooleanCondition>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, IGroupedBooleanCondition value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (GroupedBooleanCondition)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as random object
-                JsonSerializer.Serialize(writer, (RandomGroupedBooleanCondition)value, options);
-            }
-        }
-    }
-
     public class JsonICategoryConverter : JsonConverter<ICategory>
     {
         public override ICategory? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -46,6 +24,52 @@ namespace CipherData.General
             {
                 // If serialization fails, try to serialize as Random object
                 JsonSerializer.Serialize(writer, (RandomCategory)value, options);
+            }
+        }
+    }
+
+    public class JsonICategoryPropertyConverter : JsonConverter<ICategoryProperty>
+    {
+        public override ICategoryProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            // Deserialize the JSON into the concrete object type
+            return JsonSerializer.Deserialize<CategoryProperty>(ref reader, options);
+        }
+
+        public override void Write(Utf8JsonWriter writer, ICategoryProperty value, JsonSerializerOptions options)
+        {
+            try
+            {
+                // Attempt to serialize as object
+                JsonSerializer.Serialize(writer, (CategoryProperty)value, options);
+            }
+            catch (Exception)
+            {
+                // If serialization fails, try to serialize as Random object
+                JsonSerializer.Serialize(writer, (RandomCategoryProperty)value, options);
+            }
+        }
+    }
+
+    public class JsonIGroupedBooleanConditionConverter : JsonConverter<IGroupedBooleanCondition>
+    {
+        public override IGroupedBooleanCondition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            // Deserialize the JSON into the concrete object type
+            return JsonSerializer.Deserialize<GroupedBooleanCondition>(ref reader, options);
+        }
+
+        public override void Write(Utf8JsonWriter writer, IGroupedBooleanCondition value, JsonSerializerOptions options)
+        {
+            try
+            {
+                // Attempt to serialize as object
+                JsonSerializer.Serialize(writer, (GroupedBooleanCondition)value, options);
+            }
+            catch (Exception)
+            {
+                // If serialization fails, try to serialize as random object
+                JsonSerializer.Serialize(writer, (RandomGroupedBooleanCondition)value, options);
             }
         }
     }
@@ -198,29 +222,6 @@ namespace CipherData.General
             {
                 // If serialization fails, try to serialize as Random object
                 JsonSerializer.Serialize(writer, (RandomProcessStepDefinition)value, options);
-            }
-        }
-    }
-
-    public class JsonICategoryPropertyConverter : JsonConverter<ICategoryProperty>
-    {
-        public override ICategoryProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<CategoryProperty>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, ICategoryProperty value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (CategoryProperty)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomCategoryProperty)value, options);
             }
         }
     }

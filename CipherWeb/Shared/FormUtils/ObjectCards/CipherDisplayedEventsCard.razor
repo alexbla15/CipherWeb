@@ -130,12 +130,12 @@
                                               Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
                             </RadzenStack>
                         }
-                        <CipherText Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
+                        <RadzenText Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventType))} : {context.Data.Items.Cast<IDisplayedEvent>().First().EventType},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.ProcessId))} : {context.Data.Items.Cast<IDisplayedEvent>().First().ProcessId},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Timestamp))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Timestamp},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Comments))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Comments}
-                                ")" Bold="true" MarginTop="3px" MarginBottom="3px" />
+                                ")" />
                     </RadzenStack>
                 </GroupHeaderTemplate>
                 <Columns>

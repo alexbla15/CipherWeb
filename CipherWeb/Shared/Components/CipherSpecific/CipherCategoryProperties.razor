@@ -82,7 +82,7 @@
     <ChildContent>
         @if (ChosenProperties.Count() == 0)
         {
-            <CipherText Text="@HelpText" />
+            <RadzenText Text="@HelpText" />
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true"
                         Visible="ChosenProperties.Count() != 0" ValueChanged="@ValueChanged">
@@ -151,11 +151,11 @@
                         }
                         else
                         {
-                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" AlignItems="AlignItems.Center" style="width:50%">
-                                <CipherText Text="כן" TextAlign="TextAlign.Center" Bold="true"/>
-                                <RadzenSwitch ValueChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})" />
-                                <CipherText Text="לא" TextAlign="TextAlign.Center" Bold="true" />
-                            </RadzenStack>
+                            <RadzenToggleButton Value="@(bool.TryParse(prop.DefaultValue, out _) ? Convert.ToBoolean(prop.DefaultValue) : false)" 
+                            ValueChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})"
+                                Text="@(prop.DefaultValue.ToString() == false.ToString() ? "לא" : "כן" )" 
+                                ButtonStyle="ButtonStyle.Danger"
+                                ToggleButtonStyle="ButtonStyle.Success"  />
                         }
                     </Template>
                 </RadzenDataGridColumn>

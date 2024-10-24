@@ -87,7 +87,7 @@
     <ChildContent>
         @if (ChosenProperties.Count() == 0)
         {
-            <CipherText Text="@HelpText"/>
+            <RadzenText Text="@HelpText"/>
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="IPackageProperty" 
             AllowColumnResize="true" Visible="ChosenProperties.Count() != 0" ValueChanged="@ChangeDetails">

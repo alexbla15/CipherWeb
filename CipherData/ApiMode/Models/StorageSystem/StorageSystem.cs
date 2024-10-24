@@ -4,8 +4,7 @@
     {
         // API RELATED FUNCTIONS
 
-        protected override ISystemsRequests GetRequests()
-            => new SystemsRequests();
+        protected override ISystemsRequests GetRequests() => new SystemsRequests();
 
         public override async Task<Tuple<List<IStorageSystem>, ErrorResponse>> Containing(string? SearchText)
         {

@@ -79,13 +79,13 @@ namespace CipherData.Interfaces
             result.Fields.Add(CheckTargetSystemDifferent());
 
             Tuple<bool, string> SpecificEventCheck = result.Check();
-            return SpecificEventCheck.Item1 ? Create(true).Check() : SpecificEventCheck;
+            return SpecificEventCheck.Item1 ? Create().Check() : SpecificEventCheck;
         }
 
         /// <summary>
         /// Create a general CreateEvent object, out of this object parameters.
         /// </summary>
-        public ICreateEvent Create(bool Checking = false)
+        public ICreateEvent Create()
         {
             var ev = new CreateEvent()
             {
@@ -97,22 +97,26 @@ namespace CipherData.Interfaces
 
             if (Packages != null && TargetSystem != null)
             {
-                if (!Checking) ChangeLocations();
-                ev.Actions = Packages.Select(x => x.Request()).ToList();
+                List<IPackage> changedPacks = ChangeLocations();
+                ev.Actions = changedPacks.Select(x => x.Request()).ToList();
             }
 
             return ev;
         }
 
-        public void ChangeLocations()
+        public List<IPackage> ChangeLocations()
         {
-            if (Packages != null && TargetSystem != null)
+            List<IPackage>? relocatedPacks = 
+                Packages?.Select(x => Copy(x)).Where(x=>x != null).ToList();
+
+            if (relocatedPacks != null && TargetSystem != null)
             {
-                foreach (IPackage p in Packages)
+                foreach (IPackage? p in relocatedPacks)
                 {
-                    p.System = TargetSystem;
+                    if (p != null) p.System = TargetSystem;
                 }
             }
+            return relocatedPacks ?? new();
         }
 
         // STATIC METHODS

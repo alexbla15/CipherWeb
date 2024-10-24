@@ -62,6 +62,10 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
+    /// <summary>
+    /// Definition of a process - 
+    /// a collection of steps that make a single definition
+    /// </summary>
     public abstract class BaseProcessStepDefinition : Resource, IProcessStepDefinition
     {
         private string _Name = string.Empty;

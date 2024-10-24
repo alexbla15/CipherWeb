@@ -12,11 +12,10 @@
 
 <CipherLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0" dir="rtl">
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Gap="0" dir="rtl">
             <RadzenSidebarToggle Style="font-size:large;" Click="@(() => sidebarExpanded = !sidebarExpanded)" />
             <CipherSiteHeader />
         </RadzenStack>
-
     </RadzenHeader>
     <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
         <RadzenPanelMenu dir="rtl">

@@ -59,14 +59,11 @@
 
     private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent();
 
-    private bool Relocate = false;
-
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
     public async Task Submit()
     {
-        Relocate = false;
         (Valid, ErrorMessage) = RequestedEvent.Check();
         await SendRequest();
     }
@@ -80,7 +77,7 @@
         RequestedEvent.Packages = RelocatedPacks.SelectedPackages;
         RequestedEvent.Comments = EventComments.Comments;
 
-        ICreateEvent ev = RequestedEvent.Create(!Relocate);
+        ICreateEvent ev = RequestedEvent.Create();
         JsonRequest = ev.ToJson();
     }
 
@@ -91,7 +88,6 @@
     {
         if (Valid)
         {
-            Relocate = true;
             SetJsonRequest();
             ICreateEvent ev = RequestedEvent.Create();
             (ResultEvent, Error) = await Config.Event(false).Create(ev);

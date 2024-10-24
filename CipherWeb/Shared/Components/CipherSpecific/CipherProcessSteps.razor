@@ -108,7 +108,7 @@
         <ChildContent>
             @if (ChosenSteps.Count() == 0)
             {
-                <CipherText Text="@HelpText" />
+                <RadzenText Text="@HelpText" />
             }
             <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged" 
                 TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">

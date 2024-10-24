@@ -20,14 +20,30 @@
                     }
                 </Buttons>
                 <ChildContent>
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" Icon="@Icons.Symbols.category" @ref=CatName ValueChanged="@ChangeDetail"
-                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
-                    <CipherCategoryDropDown Label="@(ICategory.Translate(nameof(ICategory.Parent)))" @ref=ParentCat Change="@(args => ChangedParent((ICategory?)args))"
-                                            Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenCategory="@(ChosenObject?.Parent ?? Parent)" />
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" Icon="@Icons.Documents.Page.description" Multiline="true" ValueChanged="@ChangeDetail"
-                                        @ref=CatDescription Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" />
-                    <CipherProcesses Icon="@Icons.Arrows.Squared.input" Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" @ref=InProcs Change="@ChangeDetail"
-                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
+                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" 
+                                        Icon="@Icons.Symbols.category" @ref=CatName 
+                                        ValueChanged="@ChangeDetail"
+                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                                        Value="@ChosenObject?.Name" />
+                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" 
+                                        Icon="@Icons.Documents.Page.description" 
+                                        Multiline="true" 
+                                        ValueChanged="@ChangeDetail"
+                                        @ref=CatDescription 
+                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                                        Value="@ChosenObject?.Description" />
+                    <CipherCategoryDropDown 
+                        Label="@(ICategory.Translate(nameof(ICategory.Parent)))" 
+                        @ref=ParentCat 
+                        Change="@(args => ChangedParent((ICategory?)args))"
+                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                        ChosenCategory="@ChosenObject?.Parent" />
+                    <CipherProcesses 
+                        Icon="@Icons.Arrows.Squared.input" 
+                        Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" 
+                        @ref=InProcs 
+                        Change="@ChangeDetail"
+                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
                     <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(ICategory.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs Change="@ChangeDetail"
                                      Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
                     <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
@@ -82,14 +98,13 @@
         Title ??= "פרטי הקטגוריה";
 
         // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null) StateHasChanged();
+        //if (ChosenObject != null) StateHasChanged();
     }
 
     public void Change()
     {
         ChosenObject = CatId.ChosenCategory;
         ChangeObject.InvokeAsync();
-        StateHasChanged();
     }
 
     public void ChangeDetail()

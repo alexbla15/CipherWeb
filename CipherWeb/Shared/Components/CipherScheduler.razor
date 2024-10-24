@@ -188,20 +188,20 @@
     @<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Start"
                       Style="min-width: 250px; max-width: 500px;" dir="rtl" Gap="0">
         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0px">
-            <CipherText Text="שם תהליך:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="סוג:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="שלבים שנותרו:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="תאריך התחלה:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="תאריך סיום:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
-            <CipherText Text="משך:" Bold="false" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="שם תהליך:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="סוג:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="שלבים שנותרו:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="תאריך התחלה:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="תאריך סיום:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
+            <RadzenText Text="משך:" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);width: 44px;" />
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0px">
-            <CipherText Text="@args.Data.Id" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@args.Data.Definition.Name?.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@string.Join(", ",args.Data.UncompletedSteps.Select(x=>x.Name).ToHashSet())" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@args.Data.Start.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@args.Data.End.ToString()" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
-            <CipherText Text="@(args.Data.Duration())" Bold="true" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
+            <RadzenText Text="@args.Data.Id" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);" />
+            <RadzenText Text="@args.Data.Definition.Name?.ToString()" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);" />
+            <RadzenText Text="@string.Join(", ",args.Data.UncompletedSteps.Select(x=>x.Name).ToHashSet())" TextStyle="TextStyle.Body1" Color="var(--rz-tooltip-color);" />
+            <RadzenText Text="@args.Data.Start.ToString()" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);" />
+            <RadzenText Text="@args.Data.End.ToString()" TextStyle="TextStyle.Body1" Style="color:  var(--rz-tooltip-color);" />
+            <RadzenText Text="@(args.Data.Duration())" TextStyle="TextStyle.Body1" Style="color: var(--rz-tooltip-color);" />
         </RadzenStack>
     </RadzenStack>
     , new TooltipOptions { Position = EventTooltipPosition, Duration = null, Style = $"background-color: {Colors.PrimaryDark};" });

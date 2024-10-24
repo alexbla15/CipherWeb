@@ -107,7 +107,6 @@ namespace CipherData.Interfaces
                 FinalStatePackages = Actions.Select(x => x.Create()).ToList(),
             };
 
-
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);

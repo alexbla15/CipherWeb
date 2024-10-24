@@ -3,7 +3,7 @@
 <PageTitle>@CipherNavLinks.Information.Name</PageTitle>
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
-    <CipherText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת" TextAlign="TextAlign.Center" Width="" />
+    <RadzenText TextStyle="TextStyle.H2" Text="ברוכים הבאים למערכת" TextAlign="TextAlign.Center" />
     <CipherLogo Height="25vh"></CipherLogo>
 </RadzenStack>
 
@@ -14,10 +14,10 @@
         <CipherComponentCard Variant="Variant.Outlined" Width="33%">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.05rem">
                 <RadzenRow Style="height: 70px">
-                    <CipherText TextStyle="@HeaderTextStyle" Text="@infoBox.Title" />
+                    <RadzenText TextStyle="@HeaderTextStyle" Text="@infoBox.Title" />
                 </RadzenRow>
                 <RadzenRow Style="height: 100px;">
-                    <CipherText Wrap="true" TextAlign="TextAlign.Center" TextStyle="TextStyle.H6" Text="@infoBox.Description" />
+                    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H6" Text="@infoBox.Description" />
                 </RadzenRow>
                 <RadzenRow>
                     <CipherNavButton Icon="@infoBox.ButtonIcon" Size="ButtonSize.Large" Text="@infoBox.ButtonText" />

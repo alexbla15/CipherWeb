@@ -5,7 +5,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
         @if (!string.IsNullOrEmpty(Title))
         {
-            <CipherText Text="@Title" TextAlign="@Align" TextStyle="TextStyle.H5" Width="" Underline="@Underline" PaddingLeft="@HeaderContentPaddingRight" />
+            <RadzenText class="@HeaderStyleClass" Text="@Title"/>
         }
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width:100%">
             <div style="@($"display: flex; justify-content: {ContentJustify};")">
@@ -42,12 +42,6 @@
     /// </summary>
     [Parameter]
     public string? ContentPadding { get; set; } = "5px 0";
-
-    /// <summary>
-    /// Space right to header-content.
-    /// </summary>
-    [Parameter]
-    public string? HeaderContentPaddingRight { get; set; } = "20px";
 
     /// <summary>
     /// Align the content within a card.
@@ -91,6 +85,12 @@
     public string? AlignCardItems { get; set; }
 
     /// <summary>
+    /// Css styling of header.
+    /// </summary>
+    [Parameter]
+    public string? HeaderStyleClass { get; set; } = Constants.Styles.CardTitle;
+
+    /// <summary>
     /// Card's side buttons.
     /// </summary>
     [Parameter]
@@ -103,20 +103,8 @@
     public RenderFragment? HeaderContent { get; set; }
 
     /// <summary>
-    /// Align title. Must be a TextAlign-enum.
-    /// </summary>
-    [Parameter]
-    public TextAlign Align { get; set; } = TextAlign.Right;
-
-    /// <summary>
     /// Control side-buttons visibility.
     /// </summary>
     [Parameter]
     public bool WithButtons { get; set; } = true;
-
-    /// <summary>
-    /// Decide if title is underlined.
-    /// </summary>
-    [Parameter]
-    public bool Underline { get; set; } = false;
 }

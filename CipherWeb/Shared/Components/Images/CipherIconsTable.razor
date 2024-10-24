@@ -111,8 +111,10 @@
                                                     @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub && x.ThirdClass == third).Select(x => x.IconName))
                                                     {
                                                         <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                                            <RadzenStack Orientation="Orientation.Vertical">
                                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
-                                                            <CipherText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                                            <RadzenText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" />
+                                                            </RadzenStack>
                                                         </CipherComponentCard>
                                                     }
                                                 </RadzenAccordionItem>
@@ -125,8 +127,10 @@
                                     @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
                                     {
                                         <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                            <RadzenStack Orientation="Orientation.Vertical">
                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
-                                            <CipherText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" Wrap="true" />
+                                            <RadzenText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" />
+                                            </RadzenStack>
                                         </CipherComponentCard>
                                     }
 

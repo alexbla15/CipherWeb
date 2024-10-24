@@ -3,7 +3,8 @@
 
 <PageTitle>@Title</PageTitle>
 
-<CipherComponentCard Underline="true" WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard HeaderStyleClass="@Constants.Styles.ParagraphTitle" WithCard="false" 
+Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
     @ChildContent
 </CipherComponentCard>
 
@@ -46,10 +47,7 @@
             if (methodInfo != null)
             {
                 var Result = methodInfo.Invoke(new T(), idValue);
-                if (Result is Tuple<T?, ErrorResponse> tupleResult)
-                {
-                    return tupleResult;
-                }
+                if (Result is Tuple<T?, ErrorResponse> tupleResult) return tupleResult;
             }
         }
 
