@@ -1571,91 +1571,791 @@
             }
         }
 
-        // continue from here
         public class Tech
         {
-            public class Battery { }
-            public class Bluetooth { }
-            public class Cloud { }
-            public class Coding { }
+            public const string add_to_drive = nameof(add_to_drive);
+            public const string devices = nameof(devices);
+            public const string devices_other = nameof(devices_other);
+            public const string dns = nameof(dns);
+            public const string keyboard = nameof(keyboard);
+            public const string keyboard_alt = nameof(keyboard_alt);
+            public const string keyboard_command_key = nameof(keyboard_command_key);
+            public const string keyboard_hide = nameof(keyboard_hide);
+            public const string keyboard_option_key = nameof(keyboard_option_key);
+            public const string memory = nameof(memory);
+            public const string mouse = nameof(mouse);
+            public const string nat = nameof(nat);
+            public const string network_ping = nameof(network_ping);
+            public const string nfc = nameof(nfc);
+            public const string phonelink_off = nameof(phonelink_off);
+            public const string power_settings_new = nameof(power_settings_new);
+            public const string qr_code = nameof(qr_code);
+            public const string qr_code_2 = nameof(qr_code_2);
+            public const string qr_code_scanner = nameof(qr_code_scanner);
+            public const string sd_storage = nameof(sd_storage);
+            public const string settings_input_hdmi = nameof(settings_input_hdmi);
+            public const string settings_power = nameof(settings_power);
+            public const string satellite_alt = nameof(satellite_alt);
+            public const string storage = nameof(storage);
+            public const string token = nameof(token);
+            public const string view_in_ar = nameof(view_in_ar);
+            public const string webhook = nameof(webhook);
+            public const string home_max = nameof(home_max);
+            public const string home_mini = nameof(home_mini);
+            public const string usb = nameof(usb);
+            public const string usb_off = nameof(usb_off);
+
+            public class Battery 
+            {
+                public const string battery_0_bar = nameof(battery_0_bar);
+                public const string battery_1_bar = nameof(battery_1_bar);
+                public const string battery_2_bar = nameof(battery_2_bar);
+                public const string battery_3_bar = nameof(battery_3_bar);
+                public const string battery_4_bar = nameof(battery_4_bar);
+                public const string battery_5_bar = nameof(battery_5_bar);
+                public const string battery_6_bar = nameof(battery_6_bar);
+                public const string battery_alert = nameof(battery_alert);
+                public const string battery_charging_full = nameof(battery_charging_full);
+                public const string battery_full = nameof(battery_full);
+                public const string battery_saver = nameof(battery_saver);
+                public const string battery_unknown = nameof(battery_unknown);
+            }
+
+            public class Bluetooth 
+            {
+                public const string bluetooth = nameof(bluetooth);
+                public const string bluetooth_audio = nameof(bluetooth_audio);
+                public const string bluetooth_connected = nameof(bluetooth_connected);
+                public const string bluetooth_disabled = nameof(bluetooth_disabled);
+                public const string settings_bluetooth = nameof(settings_bluetooth);
+            }
+
+            public class Cloud 
+            {
+                public const string cloud_circle = nameof(cloud_circle);
+                public const string cloud_done = nameof(cloud_done);
+                public const string cloud_download = nameof(cloud_download);
+                public const string cloud_off = nameof(cloud_off);
+                public const string cloud_queue = nameof(cloud_queue);
+                public const string cloud_sync = nameof(cloud_sync);
+                public const string cloud_upload = nameof(cloud_upload);
+                public const string settings_system_daydream = nameof(settings_system_daydream);            }
+
+
+            public class Coding 
+            {
+                public const string bug_report = nameof(bug_report);
+                public const string code = nameof(code);
+                public const string code_off = nameof(code_off);
+                public const string css = nameof(css);
+                public const string developer_board = nameof(developer_board);
+                public const string developer_board_off = nameof(developer_board_off);
+                public const string developer_mode = nameof(developer_mode);
+                public const string hls = nameof(hls);
+                public const string hls_off = nameof(hls_off);
+                public const string html = nameof(html);
+                public const string http = nameof(http);
+                public const string integration_instructions = nameof(integration_instructions);
+                public const string javascript = nameof(javascript);
+                public const string logo_dev = nameof(logo_dev);
+                public const string php = nameof(php);
+                public const string running_with_errors = nameof(running_with_errors);
+                public const string settings_ethernet = nameof(settings_ethernet);
+                public const string terminal = nameof(terminal);
+            }
+
             public class Network 
-            { 
-                public class Mobiledata { }
+            {
+                public const string broadcast_on_home = nameof(broadcast_on_home);
+                public const string broadcast_on_personal = nameof(broadcast_on_personal);
+                public const string cast = nameof(cast);
+                public const string cast_connected = nameof(cast_connected);
+                public const string cast_for_education = nameof(cast_for_education);
+                public const string cell_tower = nameof(cell_tower);
+                public const string cell_wifi = nameof(cell_wifi);
+                public const string graphic_eq = nameof(graphic_eq);
+                public const string leak_add = nameof(leak_add);
+                public const string leak_remove = nameof(leak_remove);
+                public const string lte_mobiledata = nameof(lte_mobiledata);
+                public const string network_cell = nameof(network_cell);
+                public const string network_locked = nameof(network_locked);
+                public const string podcasts = nameof(podcasts);
+                public const string radar = nameof(radar);
+                public const string router = nameof(router);
+                public const string rss_feed = nameof(rss_feed);
+                public const string sensors = nameof(sensors);
+                public const string sensors_off = nameof(sensors_off);
+                public const string settings_input_antenna = nameof(settings_input_antenna);
+                public const string settings_remote = nameof(settings_remote);
+                public const string signal_cellular_alt = nameof(signal_cellular_alt);
+                public const string signal_cellular_alt_1_bar = nameof(signal_cellular_alt_1_bar);
+                public const string signal_cellular_alt_2_bar = nameof(signal_cellular_alt_2_bar);
+                public const string signal_cellular_connected_no_internet_0_bar = nameof(signal_cellular_connected_no_internet_0_bar);
+                public const string signal_cellular_connected_no_internet_4_bar = nameof(signal_cellular_connected_no_internet_4_bar);
+                public const string signal_cellular_nodata = nameof(signal_cellular_nodata);
+                public const string signal_cellular_null = nameof(signal_cellular_null);
+                public const string signal_cellular_off = nameof(signal_cellular_off);
+                public const string surround_sound = nameof(surround_sound);
+                public const string tap_and_play = nameof(tap_and_play);
+
+                public class Mobiledata 
+                {
+                    public const string _1x_mobiledata = "1x_mobiledata";
+                    public const string _3g_mobiledata = "3g_mobiledata";
+                    public const string _4g_mobiledata = "4g_mobiledata";
+                    public const string _4g_plus_mobiledata = "4g_plus_mobiledata";
+                    public const string _5g = "5g";
+                    public const string e_mobiledata = nameof(e_mobiledata);
+                    public const string g_mobiledata = nameof(g_mobiledata);
+                    public const string h_mobiledata = nameof(h_mobiledata);
+                    public const string h_plus_mobiledata = nameof(h_plus_mobiledata);
+                    public const string lte_mobiledata = nameof(lte_mobiledata);
+                    public const string lte_plus_mobiledata = nameof(lte_plus_mobiledata);
+                    public const string r_mobiledata = nameof(r_mobiledata);
+                }
             }
 
-            public class Screen { }
-            public class Smartphone { 
-                public class Touch { }
+            public class Screen 
+            {
+                public const string add_to_queue = nameof(add_to_queue);
+                public const string airplay = nameof(airplay);
+                public const string browser_updated = nameof(browser_updated);
+                public const string computer = nameof(computer);
+                public const string connected_tv = nameof(connected_tv);
+                public const string desktop_access_disabled = nameof(desktop_access_disabled);
+                public const string desktop_mac = nameof(desktop_mac);
+                public const string desktop_windows = nameof(desktop_windows);
+                public const string display_settings = nameof(display_settings);
+                public const string dvr = nameof(dvr);
+                public const string important_devices = nameof(important_devices);
+                public const string install_desktop = nameof(install_desktop);
+                public const string laptop_chromebook = nameof(laptop_chromebook);
+                public const string laptop_mac = nameof(laptop_mac);
+                public const string monitor = nameof(monitor);
+                public const string phonelink = nameof(phonelink);
+                public const string queue_play_next = nameof(queue_play_next);
+                public const string remove_from_queue = nameof(remove_from_queue);
+                public const string reset_tv = nameof(reset_tv);
+                public const string screenshot_monitor = nameof(screenshot_monitor);
+                public const string screen_search_desktop = nameof(screen_search_desktop);
+                public const string tv = nameof(tv);
+                public const string tv_off = nameof(tv_off);
+
             }
 
-            public class Wifi { }
+            public class Smartphone 
+            {
+                public const string aod = nameof(aod);
+                public const string add_to_home_screen = nameof(add_to_home_screen);
+                public const string adb = nameof(adb);
+                public const string android = nameof(android);
+                public const string app_blocking = nameof(app_blocking);
+                public const string app_settings_alt = nameof(app_settings_alt);
+                public const string app_shortcut = nameof(app_shortcut);
+                public const string charging_station = nameof(charging_station);
+                public const string device_unknown = nameof(device_unknown);
+                public const string dock = nameof(dock);
+                public const string edgesensor_high = nameof(edgesensor_high);
+                public const string edgesensor_low = nameof(edgesensor_low);
+                public const string install_mobile = nameof(install_mobile);
+                public const string landscape = nameof(landscape);
+                public const string mobile_friendly = nameof(mobile_friendly);
+                public const string mobile_off = nameof(mobile_off);
+                public const string mobile_screen_share = nameof(mobile_screen_share);
+                public const string offline_share = nameof(offline_share);
+                public const string perm_device_information = nameof(perm_device_information);
+                public const string phone_android = nameof(phone_android);
+                public const string phone_iphone = nameof(phone_iphone);
+                public const string phonelink_erase = nameof(phonelink_erase);
+                public const string phonelink_lock = nameof(phonelink_lock);
+                public const string phonelink_ring = nameof(phonelink_ring);
+                public const string phonelink_setup = nameof(phonelink_setup);
+                public const string remember_me = nameof(remember_me);
+                public const string screenshot = nameof(screenshot);
+                public const string screen_lock_landscape = nameof(screen_lock_landscape);
+                public const string screen_lock_portrait = nameof(screen_lock_portrait);
+                public const string screen_lock_rotation = nameof(screen_lock_rotation);
+                public const string screen_rotation = nameof(screen_rotation);
+                public const string security_update_good = nameof(security_update_good);
+                public const string smart_screen = nameof(smart_screen);
+                public const string smartphone = nameof(smartphone);
+                public const string settings_cell = nameof(settings_cell);
+                public const string system_update = nameof(system_update);
+                public const string tablet = nameof(tablet);
+                public const string tablet_android = nameof(tablet_android);
+                public const string tablet_mac = nameof(tablet_mac);
+                public const string vibration = nameof(vibration);
+                public const string speaker_phone = nameof(speaker_phone);
+                public const string on_device_training = nameof(on_device_training);
+
+                public class Touch 
+                {
+                    public const string back_hand = nameof(back_hand);
+                    public const string do_not_touch = nameof(do_not_touch);
+                    public const string front_hand = nameof(front_hand);
+                    public const string pan_tool = nameof(pan_tool);
+                    public const string pan_tool_alt = nameof(pan_tool_alt);
+                    public const string pinch = nameof(pinch);
+                    public const string pattern = nameof(pattern);
+                    public const string pin_end = nameof(pin_end);
+                    public const string pin_invoke = nameof(pin_invoke);
+                    public const string swipe = nameof(swipe);
+                    public const string swipe_down = nameof(swipe_down);
+                    public const string swipe_down_alt = nameof(swipe_down_alt);
+                    public const string swipe_left = nameof(swipe_left);
+                    public const string swipe_left_alt = nameof(swipe_left_alt);
+                    public const string swipe_right = nameof(swipe_right);
+                    public const string swipe_right_alt = nameof(swipe_right_alt);
+                    public const string swipe_up = nameof(swipe_up);
+                    public const string swipe_up_alt = nameof(swipe_up_alt);
+                    public const string swipe_vertical = nameof(swipe_vertical);
+                    public const string touch_app = nameof(touch_app);
+                }
+            }
+
+            public class Wifi 
+            {
+                public const string network_check = nameof(network_check);
+                public const string network_wifi = nameof(network_wifi);
+                public const string network_wifi_1_bar = nameof(network_wifi_1_bar);
+                public const string network_wifi_2_bar = nameof(network_wifi_2_bar);
+                public const string network_wifi_3_bar = nameof(network_wifi_3_bar);
+                public const string perm_scan_wifi = nameof(perm_scan_wifi);
+                public const string portable_wifi_off = nameof(portable_wifi_off);
+                public const string signal_wifi_bad = nameof(signal_wifi_bad);
+                public const string signal_wifi_connected_no_internet_4 = nameof(signal_wifi_connected_no_internet_4);
+                public const string signal_wifi_off = nameof(signal_wifi_off);
+                public const string signal_wifi_statusbar_connected_no_internet_4 = nameof(signal_wifi_statusbar_connected_no_internet_4);
+                public const string signal_wifi_statusbar_null = nameof(signal_wifi_statusbar_null);
+                public const string wifi = nameof(wifi);
+                public const string wifi_1_bar = nameof(wifi_1_bar);
+                public const string wifi_2_bar = nameof(wifi_2_bar);
+                public const string wifi_channel = nameof(wifi_channel);
+                public const string wifi_find = nameof(wifi_find);
+                public const string wifi_lock = nameof(wifi_lock);
+                public const string wifi_off = nameof(wifi_off);
+                public const string wifi_password = nameof(wifi_password);
+                public const string wifi_tethering = nameof(wifi_tethering);
+                public const string wifi_tethering_error = nameof(wifi_tethering_error);
+            }
         }
+
 
         public class Time
         {
-            public const string CalanderMonth = "calendar_month";
-            public const string CalendarToday = "calendar_today";
-            public const string Event = "event";
+            public const string _event = "event";
+            public const string calendar_month = nameof(calendar_month);
+            public const string calendar_today = nameof(calendar_today);
+            public const string date_range = nameof(date_range);
+            public const string edit_calendar = nameof(edit_calendar);
+            public const string event_available = nameof(event_available);
+            public const string event_busy = nameof(event_busy);
+            public const string event_note = nameof(event_note);
+            public const string event_repeat = nameof(event_repeat);
+            public const string free_cancellation = nameof(free_cancellation);
+            public const string hourglass_bottom = nameof(hourglass_bottom);
+            public const string hourglass_disabled = nameof(hourglass_disabled);
+            public const string hourglass_empty = nameof(hourglass_empty);
+            public const string hourglass_full = nameof(hourglass_full);
+            public const string hourglass_top = nameof(hourglass_top);
+            public const string today = nameof(today);
+            public const string watch = nameof(watch);
+            public const string watch_off = nameof(watch_off);
 
             public class Clock
             {
-                public const string Schedule = "schedule";
+                public const string alarm = nameof(alarm);
+                public const string alarm_add = nameof(alarm_add);
+                public const string alarm_off = nameof(alarm_off);
+                public const string alarm_on = nameof(alarm_on);
+                public const string av_timer = nameof(av_timer);
+                public const string browse_gallery = nameof(browse_gallery);
+                public const string history = nameof(history);
+                public const string history_toggle_off = nameof(history_toggle_off);
+                public const string lock_clock = nameof(lock_clock);
+                public const string manage_history = nameof(manage_history);
+                public const string more_time = nameof(more_time);
+                public const string pending_actions = nameof(pending_actions);
+                public const string punch_clock = nameof(punch_clock);
+                public const string schedule = nameof(schedule);
+                public const string slow_motion_video = nameof(slow_motion_video);
+                public const string snooze = nameof(snooze);
+                public const string timelapse = nameof(timelapse);
+                public const string timer = nameof(timer);
+                public const string timer_off = nameof(timer_off);
+                public const string update = nameof(update);
+                public const string watch_later = nameof(watch_later);
             }
 
             public class Weather
             {
-                public class Night { }
+                public const string ac_unit = nameof(ac_unit);
+                public const string air = nameof(air);
+                public const string bolt = nameof(bolt);
+                public const string brightness_4 = nameof(brightness_4);
+                public const string brightness_high = nameof(brightness_high);
+                public const string brightness_low = nameof(brightness_low);
+                public const string brightness_medium = nameof(brightness_medium);
+                public const string cloud = nameof(cloud);
+                public const string cloudy_snowing = nameof(cloudy_snowing);
+                public const string cyclone = nameof(cyclone);
+                public const string dew_point = nameof(dew_point);
+                public const string filter_drama = nameof(filter_drama);
+                public const string flare = nameof(flare);
+                public const string foggy = nameof(foggy);
+                public const string looks = nameof(looks);
+                public const string offline_bolt = nameof(offline_bolt);
+                public const string settings_brightness = nameof(settings_brightness);
+                public const string severe_cold = nameof(severe_cold);
+                public const string snowing = nameof(snowing);
+                public const string storm = nameof(storm);
+                public const string sunny = nameof(sunny);
+                public const string sunny_snowing = nameof(sunny_snowing);
+                public const string thermostat = nameof(thermostat);
+                public const string thermostat_auto = nameof(thermostat_auto);
+                public const string thunderstorm = nameof(thunderstorm);
+                public const string tornado = nameof(tornado);
+                public const string tsunami = nameof(tsunami);
+                public const string umbrella = nameof(umbrella);
+                public const string water = nameof(water);
+                public const string water_drop = nameof(water_drop);
+                public const string wb_twilight = nameof(wb_twilight);
+
+                public class Night 
+                {
+                    public const string bedtime = nameof(bedtime);
+                    public const string bedtime_off = nameof(bedtime_off);
+                    public const string brightness_3 = nameof(brightness_3);
+                    public const string dark_mode = nameof(dark_mode);
+                    public const string mode_night = nameof(mode_night);
+                    public const string nightlight = nameof(nightlight);
+                    public const string nightlight_round = nameof(nightlight_round);
+                    public const string nights_stay = nameof(nights_stay);
+                    public const string shield_moon = nameof(shield_moon);
+                }
             }
         }
 
         public class Travel
         {
+            public const string _public = "public";
+            public const string add_road = nameof(add_road);
+            public const string attractions = nameof(attractions);
+            public const string compass_calibration = nameof(compass_calibration);
+            public const string deck = nameof(deck);
+            public const string do_not_step = nameof(do_not_step);
+            public const string edit_road = nameof(edit_road);
+            public const string language = nameof(language);
+            public const string public_off = nameof(public_off);
+            public const string remove_road = nameof(remove_road);
+            public const string south_america = nameof(south_america);
+            public const string streetview = nameof(streetview);
+            public const string travel_explore = nameof(travel_explore);
+            public const string vpn_lock = nameof(vpn_lock);
+
+
             public class Buildings
             {
-                public const string Apartment = "apartment";
-                public const string Domain = "domain";
+                public const string apartment = nameof(apartment);
+                public const string bungalow = nameof(bungalow);
+                public const string castle = nameof(castle);
+                public const string church = nameof(church);
+                public const string corporate_fare = nameof(corporate_fare);
+                public const string domain = nameof(domain);
+                public const string domain_add = nameof(domain_add);
+                public const string domain_disabled = nameof(domain_disabled);
+                public const string festival = nameof(festival);
+                public const string fort = nameof(fort);
+                public const string gite = nameof(gite);
+                public const string holiday_village = nameof(holiday_village);
+                public const string houseboat = nameof(houseboat);
+                public const string location_city = nameof(location_city);
+                public const string mosque = nameof(mosque);
+                public const string museum = nameof(museum);
+                public const string stadium = nameof(stadium);
+                public const string synagogue = nameof(synagogue);
+                public const string temple_buddhist = nameof(temple_buddhist);
+                public const string temple_hindu = nameof(temple_hindu);
+                public const string villa = nameof(villa);
+                public const string wb_shade = nameof(wb_shade);
             }
 
-            public class Flight { }
-            public class Hotel { }
-            public class Nature { }
+            public class Flight 
+            {
+                public const string airplane_ticket = nameof(airplane_ticket);
+                public const string airplanemode_inactive = nameof(airplanemode_inactive);
+                public const string airline_seat_flat = nameof(airline_seat_flat);
+                public const string airline_seat_flat_angled = nameof(airline_seat_flat_angled);
+                public const string airline_seat_individual_suite = nameof(airline_seat_individual_suite);
+                public const string airline_seat_legroom_extra = nameof(airline_seat_legroom_extra);
+                public const string airline_seat_legroom_normal = nameof(airline_seat_legroom_normal);
+                public const string airline_seat_legroom_reduced = nameof(airline_seat_legroom_reduced);
+                public const string airline_seat_recline_extra = nameof(airline_seat_recline_extra);
+                public const string airline_seat_recline_normal = nameof(airline_seat_recline_normal);
+                public const string airlines = nameof(airlines);
+                public const string connecting_airports = nameof(connecting_airports);
+                public const string conveyor_belt = nameof(conveyor_belt);
+                public const string flight = nameof(flight);
+                public const string flight_class = nameof(flight_class);
+                public const string flight_land = nameof(flight_land);
+                public const string flight_takeoff = nameof(flight_takeoff);
+                public const string luggage = nameof(luggage);
+                public const string no_luggage = nameof(no_luggage);
+                public const string trolley = nameof(trolley);
+            }
+
+            public class Hotel 
+            {
+                public const string all_inclusive = nameof(all_inclusive);
+                public const string beach_access = nameof(beach_access);
+                public const string casino = nameof(casino);
+                public const string fitness_center = nameof(fitness_center);
+                public const string pool = nameof(pool);
+                public const string room_service = nameof(room_service);
+                public const string rv_hookup = nameof(rv_hookup);
+                public const string smoke_free = nameof(smoke_free);
+                public const string smoking_rooms = nameof(smoking_rooms);
+                public const string vape_free = nameof(vape_free);
+                public const string vaping_rooms = nameof(vaping_rooms);
+            }
+
+            public class Nature 
+            {
+                public const string compost = nameof(compost);
+                public const string cruelty_free = nameof(cruelty_free);
+                public const string emoji_nature = nameof(emoji_nature);
+                public const string filter_vintage = nameof(filter_vintage);
+                public const string forest = nameof(forest);
+                public const string flutter_dash = nameof(flutter_dash);
+                public const string grass = nameof(grass);
+                public const string hive = nameof(hive);
+                public const string landscape = nameof(landscape);
+                public const string landslide = nameof(landslide);
+                public const string local_florist = nameof(local_florist);
+                public const string macro_off = nameof(macro_off);
+                public const string nature = nameof(nature);
+                public const string nature_people = nameof(nature_people);
+                public const string park = nameof(park);
+                public const string pests_control = nameof(pests_control);
+                public const string pest_control_rodent = nameof(pest_control_rodent);
+                public const string pets = nameof(pets);
+                public const string recycling = nameof(recycling);
+                public const string spa = nameof(spa);
+                public const string volcano = nameof(volcano);
+                public const string yard = nameof(yard);
+            }
 
             public class Navigation
             {
-                public const string MyLocation = "my_location";
+                public const string add_location_alt = nameof(add_location_alt);
+                public const string assistant_navigation = nameof(assistant_navigation);
+                public const string directions_off = nameof(directions_off);
+                public const string edit_location = nameof(edit_location);
+                public const string edit_location_alt = nameof(edit_location_alt);
+                public const string emergency_share = nameof(emergency_share);
+                public const string explore = nameof(explore);
+                public const string explore_off = nameof(explore_off);
+                public const string gps_not_fixed = nameof(gps_not_fixed);
+                public const string location_disabled = nameof(location_disabled);
+                public const string location_off = nameof(location_off);
+                public const string location_pin = nameof(location_pin);
+                public const string map = nameof(map);
+                public const string mode_of_travel = nameof(mode_of_travel);
+                public const string my_location = nameof(my_location);
+                public const string navigation = nameof(navigation);
+                public const string near_me = nameof(near_me);
+                public const string near_me_disabled = nameof(near_me_disabled);
+                public const string nearby_error = nameof(nearby_error);
+                public const string nearby_off = nameof(nearby_off);
+                public const string pin_drop = nameof(pin_drop);
+                public const string place = nameof(place);
+                public const string push_pin = nameof(push_pin);
+                public const string route = nameof(route);
+                public const string share_location = nameof(share_location);
+                public const string signpost = nameof(signpost);
+                public const string where_to_vote = nameof(where_to_vote);
+                public const string wrong_location = nameof(wrong_location);
             }
 
             public class Vehicles
             {
-                public class Car { }
+                public const string agriculture = nameof(agriculture);
+                public const string airport_shuttle = nameof(airport_shuttle);
+                public const string bike_scooter = nameof(bike_scooter);
+                public const string bus_alert = nameof(bus_alert);
+                public const string commute = nameof(commute);
+                public const string departure_board = nameof(departure_board);
+                public const string directions_boat = nameof(directions_boat);
+                public const string directions_bus = nameof(directions_bus);
+                public const string directions_railway = nameof(directions_railway);
+                public const string directions_subway = nameof(directions_subway);
+                public const string electric_bike = nameof(electric_bike);
+                public const string electric_moped = nameof(electric_moped);
+                public const string electric_rickshaw = nameof(electric_rickshaw);
+                public const string ev_station = nameof(ev_station);
+                public const string fire_truck = nameof(fire_truck);
+                public const string fork_lift = nameof(fork_lift);
+                public const string front_loader = nameof(front_loader);
+                public const string local_gas_station = nameof(local_gas_station);
+                public const string local_parking = nameof(local_parking);
+                public const string local_shipping = nameof(local_shipping);
+                public const string local_taxi = nameof(local_taxi);
+                public const string moped = nameof(moped);
+                public const string pedal_bike = nameof(pedal_bike);
+                public const string rocket = nameof(rocket);
+                public const string rocket_launch = nameof(rocket_launch);
+                public const string traffic = nameof(traffic);
+                public const string train_subway = nameof(train_subway);
+                public const string tram = nameof(tram);
+                public const string tire_repair = nameof(tire_repair);
+                public const string two_wheeler = nameof(two_wheeler);
+                public const string taxi_alert = nameof(taxi_alert);
+
+                public class Car 
+                {
+                    public const string bluetooth_drive = nameof(bluetooth_drive);
+                    public const string car_crash = nameof(car_crash);
+                    public const string car_repair = nameof(car_repair);
+                    public const string car_rental = nameof(car_rental);
+                    public const string directions_car = nameof(directions_car);
+                    public const string electric_car = nameof(electric_car);
+                    public const string garage = nameof(garage);
+                    public const string local_car_wash = nameof(local_car_wash);
+                    public const string minor_crash = nameof(minor_crash);
+                    public const string no_crash = nameof(no_crash);
+                    public const string emoji_transportation = nameof(emoji_transportation);
+                }
             }
         }
 
+        // continue from here
+
         public class UiComponents
         {
-            public const string Pending = "pending";
-            public const string Settings = "settings";
+            public const string all_out = nameof(all_out);
+            public const string animation = nameof(animation);
+            public const string cancel_schedule_send = nameof(cancel_schedule_send);
+            public const string dynamic_form = nameof(dynamic_form);
+            public const string drag_handle = nameof(drag_handle);
+            public const string drag_indicator = nameof(drag_indicator);
+            public const string format_overline = nameof(format_overline);
+            public const string format_shapes = nameof(format_shapes);
+            public const string manage_accounts = nameof(manage_accounts);
+            public const string miscellaneous_services = nameof(miscellaneous_services);
+            public const string more_horiz = nameof(more_horiz);
+            public const string more_vert = nameof(more_vert);
+            public const string pages = nameof(pages);
+            public const string pending = nameof(pending);
+            public const string perm_data_setting = nameof(perm_data_setting);
+            public const string schedule_send = nameof(schedule_send);
+            public const string send = nameof(send);
+            public const string send_and_archive = nameof(send_and_archive);
+            public const string settings = nameof(settings);
+            public const string settings_applications = nameof(settings_applications);
+            public const string settings_suggest = nameof(settings_suggest);
+            public const string splitscreen = nameof(splitscreen);
+            public const string space_bar = nameof(space_bar);
+            public const string stream = nameof(stream);
+            public const string view_carousel = nameof(view_carousel);
+            public const string line_style = nameof(line_style);
+            public const string horizontal_rule = nameof(horizontal_rule);
 
-            public class Align { }
-            public class Border { }
-            public class Button { }
-            public class List { }
+            public class Align 
+            {
+                public const string align_horizontal_center = nameof(align_horizontal_center);
+                public const string align_horizontal_left = nameof(align_horizontal_left);
+                public const string align_horizontal_right = nameof(align_horizontal_right);
+                public const string align_vertical_bottom = nameof(align_vertical_bottom);
+                public const string align_vertical_center = nameof(align_vertical_center);
+                public const string align_vertical_top = nameof(align_vertical_top);
+                public const string format_align_center = nameof(format_align_center);
+                public const string format_align_justify = nameof(format_align_justify);
+                public const string format_align_left = nameof(format_align_left);
+                public const string format_align_right = nameof(format_align_right);
+                public const string format_indent_decrease = nameof(format_indent_decrease);
+                public const string format_indent_increase = nameof(format_indent_increase);
+                public const string format_textdirection_l_to_r = nameof(format_textdirection_l_to_r);
+                public const string format_textdirection_r_to_l = nameof(format_textdirection_r_to_l);
+                public const string horizontal_distribute = nameof(horizontal_distribute);
+                public const string vertical_distribute = nameof(vertical_distribute);
+            }
+
+            public class Border 
+            {
+                public const string border_all = nameof(border_all);
+                public const string border_bottom = nameof(border_bottom);
+                public const string border_clear = nameof(border_clear);
+                public const string border_inner = nameof(border_inner);
+                public const string border_left = nameof(border_left);
+                public const string border_outer = nameof(border_outer);
+                public const string border_right = nameof(border_right);
+                public const string border_style = nameof(border_style);
+                public const string border_top = nameof(border_top);
+                public const string border_vertical = nameof(border_vertical);
+                public const string border_horizontal = nameof(border_horizontal); 
+                public const string margin = nameof(margin);
+                public const string padding = nameof(padding);
+                public const string rounded_corner = nameof(rounded_corner);
+            }
+
+            public class Button 
+            {
+                public const string control_point_duplicate = nameof(control_point_duplicate);
+                public const string edit_attributes = nameof(edit_attributes);
+                public const string fiber_smart_record = nameof(fiber_smart_record);
+                public const string smart_button = nameof(smart_button);
+                public const string toggle_off = nameof(toggle_off);
+                public const string toggle_on = nameof(toggle_on);
+            }
 
             public class Layout
             {
-                public const string CalendarViewDay = "calendar_view_day";
+                public const string app_registration = nameof(app_registration);
+                public const string apps = nameof(apps);
+                public const string apps_outage = nameof(apps_outage);
+                public const string auto_awesome_mosaic = nameof(auto_awesome_mosaic);
+                public const string calendar_view_day = nameof(calendar_view_day);
+                public const string call_to_action = nameof(call_to_action);
+                public const string dashboard = nameof(dashboard);
+                public const string dashboard_customize = nameof(dashboard_customize);
+                public const string featured_play_list = nameof(featured_play_list);
+                public const string space_dashboard = nameof(space_dashboard);
+                public const string video_label = nameof(video_label);
+                public const string view_array = nameof(view_array);
+                public const string view_column = nameof(view_column);
+                public const string view_compact = nameof(view_compact);
+                public const string view_comfy = nameof(view_comfy);
+                public const string view_day = nameof(view_day);
+                public const string view_agenda = nameof(view_agenda);
+                public const string view_module = nameof(view_module);
+                public const string view_sidebar = nameof(view_sidebar);
+                public const string view_stream = nameof(view_stream);
+                public const string view_week = nameof(view_week);
+                public const string vertical_split = nameof(vertical_split);
+                public const string web = nameof(web);
+                public const string web_asset = nameof(web_asset);
+                public const string web_asset_off = nameof(web_asset_off);
             }
 
-            public class Order { }
-            public class Paragraph { }
-            public class Selection { }
-            public class Size { }
+            public class List 
+            {
+                public const string checklist = nameof(checklist);
+                public const string checklist_rtl = nameof(checklist_rtl);
+                public const string edit_note = nameof(edit_note);
+                public const string format_list_bulleted = nameof(format_list_bulleted);
+                public const string format_list_bulleted_add = nameof(format_list_bulleted_add);
+                public const string format_list_numbered = nameof(format_list_numbered);
+                public const string format_list_numbered_rtl = nameof(format_list_numbered_rtl);
+                public const string list = nameof(list);
+                public const string list_alt = nameof(list_alt);
+                public const string playlist_add = nameof(playlist_add);
+                public const string playlist_add_check = nameof(playlist_add_check);
+                public const string playlist_add_circle = nameof(playlist_add_circle);
+                public const string playlist_add_check_circle = nameof(playlist_add_check_circle);
+                public const string playlist_play = nameof(playlist_play);
+                public const string playlist_remove = nameof(playlist_remove);
+                public const string rule = nameof(rule);
+                public const string toc = nameof(toc);
+                public const string view_list = nameof(view_list);
+            }
+
+            public class Order 
+            {
+                public const string auto_awesome_motion = nameof(auto_awesome_motion);
+                public const string clear_all = nameof(clear_all);
+                public const string chrome_reader_mode = nameof(chrome_reader_mode);
+                public const string dynamic_feed = nameof(dynamic_feed);
+                public const string layers = nameof(layers);
+                public const string layers_clear = nameof(layers_clear);
+                public const string line_weight = nameof(line_weight);
+                public const string move_down = nameof(move_down);
+                public const string move_up = nameof(move_up);
+                public const string read_more = nameof(read_more);
+                public const string view_timeline = nameof(view_timeline);
+            }
+
+            public class Paragraph 
+            {
+                public const string grading = nameof(grading);
+                public const string insert_page_break = nameof(insert_page_break);
+                public const string menu = nameof(menu);
+                public const string menu_open = nameof(menu_open);
+                public const string notes = nameof(notes);
+                public const string reorder = nameof(reorder);
+                public const string segment = nameof(segment);
+                public const string short_text = nameof(short_text);
+                public const string subject = nameof(subject);
+            }
+
+            public class Selection 
+            {
+                public const string ads_click = nameof(ads_click);
+                public const string branding_watermark = nameof(branding_watermark);
+                public const string deselect = nameof(deselect);
+                public const string featured_video = nameof(featured_video);
+                public const string flip = nameof(flip);
+                public const string flip_to_back = nameof(flip_to_back);
+                public const string flip_to_front = nameof(flip_to_front);
+                public const string highlight_alt = nameof(highlight_alt);
+                public const string photo_size_select_large = nameof(photo_size_select_large);
+                public const string photo_size_select_small = nameof(photo_size_select_small);
+                public const string picture_in_picture = nameof(picture_in_picture);
+                public const string picture_in_picture_alt = nameof(picture_in_picture_alt);
+                public const string select_all = nameof(select_all);
+                public const string tab = nameof(tab);
+                public const string tab_unselected = nameof(tab_unselected);
+            }
+
+            public class Size 
+            {
+                public const string aspect_ratio = nameof(aspect_ratio);
+                public const string close_fullscreen = nameof(close_fullscreen);
+                public const string compress = nameof(compress);
+                public const string control_camera = nameof(control_camera);
+                public const string crop = nameof(crop);
+                public const string crop_rotate = nameof(crop_rotate);
+                public const string expand = nameof(expand);
+                public const string fit_screen = nameof(fit_screen);
+                public const string fullscreen = nameof(fullscreen);
+                public const string fullscreen_exit = nameof(fullscreen_exit);
+                public const string hdr_strong = nameof(hdr_strong);
+                public const string hdr_weak = nameof(hdr_weak);
+                public const string height = nameof(height);
+                public const string image_aspect_ratio = nameof(image_aspect_ratio);
+                public const string maximize = nameof(maximize);
+                public const string minimize = nameof(minimize);
+                public const string open_in_full = nameof(open_in_full);
+                public const string open_with = nameof(open_with);
+                public const string settings_overscan = nameof(settings_overscan);
+                public const string transform = nameof(transform);
+                public const string unfold_less = nameof(unfold_less);
+                public const string unfold_less_double = nameof(unfold_less_double);
+                public const string unfold_more = nameof(unfold_more);
+                public const string unfold_more_double = nameof(unfold_more_double);
+                public const string width_full = nameof(width_full);
+                public const string width_normal = nameof(width_normal);
+                public const string width_wide = nameof(width_wide);
+                public const string zoom_in_map = nameof(zoom_in_map);
+                public const string zoom_out_map = nameof(zoom_out_map);
+                public const string center_focus_strong = nameof(center_focus_strong);
+                public const string center_focus_weak = nameof(center_focus_weak);
+            }
 
             public class Table
             {
-                public const string CalendarViewMonth = "calendar_view_month";
-                public const string GridOn = "grid_on";
-                public const string TableView = "table_view";
+                public const string backup_table = nameof(backup_table);
+                public const string calendar_view_month = nameof(calendar_view_month);
+                public const string calendar_view_week = nameof(calendar_view_week);
+                public const string grid_3x3 = nameof(grid_3x3);
+                public const string grid_4x4 = nameof(grid_4x4);
+                public const string grid_goldenratio = nameof(grid_goldenratio);
+                public const string grid_off = nameof(grid_off);
+                public const string grid_on = nameof(grid_on);
+                public const string grid_view = nameof(grid_view);
+                public const string pivot_table_chart = nameof(pivot_table_chart);
+                public const string table_chart = nameof(table_chart);
+                public const string table_rows = nameof(table_rows);
+                public const string table_view = nameof(table_view);
             }
         }
 
@@ -1666,23 +2366,23 @@
             public const string Advanced = Documents.wysiwyg;
             public const string Analysis = Professions.Construction.architecture;
             public const string Department = Home.other_houses;
-            public const string Excel = UiComponents.Table.GridOn;
+            public const string Excel = UiComponents.Table.grid_on;
             public const string Id = Symbols.Notifications.info;
             public const string Line = Data.linear_scale;
-            public const string Location = Travel.Buildings.Domain;
+            public const string Location = Travel.Buildings.domain;
             public const string Material = Professions.Medical.science;
             public const string Package = Documents.sticky_note_2;
             public const string PackageCombine = Symbols.group_work;
             public const string Process = Data.LineChart.timeline;
             public const string Properties = Home.Facilities.window;
             public const string Rule = "rule";
-            public const string Status = UiComponents.Pending;
+            public const string Status = UiComponents.pending;
             public const string Summary = Data.BarChart.leaderboard;
             public const string Transfer = Arrows.Swap.multiple_stop;
             public const string Type = Symbols.interests;
             public const string Unit = Social.Groups.groups;
             public const string Vessel = Food.Drinks.local_cafe;
-            public const string Year = Time.CalanderMonth;
+            public const string Year = Time.calendar_month;
         }
     }
 }

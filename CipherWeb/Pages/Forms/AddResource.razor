@@ -368,7 +368,7 @@
         <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" ChangeDetails="@SetJsonRequest" />
         <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
             <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" Change="@SetJsonRequest" />
-            <CipherComments @ref="EventComments" Width="300px" ValueChanged="@SetJsonRequest" />
+            <CipherComments @ref="EventComments" Width="@Constants.StandartWidth" ValueChanged="@SetJsonRequest" />
         </CipherComponentCard>
     </div>
     ;

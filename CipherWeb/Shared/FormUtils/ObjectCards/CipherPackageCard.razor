@@ -25,27 +25,27 @@
                     <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Value="@ChosenObject?.Id" Icon="@Icons.Cipher.Package" />
                 }
                 <CipherComments Label="@(IPackage.Translate(nameof(IPackage.Description)))"
-                                Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                                Icon="@Icons.Documents.Page.description" Width="@Constants.StandartWidth" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 
                 @if (SetMode != FormMode.Create)
                 {
                     <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.BrutMass)" Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale"
-                                   Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                                   Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                     <CipherNumeric Amount="@((ChosenObject == null) ? 0 : ChosenObject.NetMass)" Label="@(IPackage.Translate(nameof(IPackage.NetMass)))" Icon="@Icons.Professions.Construction.scale"
-                                   Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                                   Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 }
-                <CipherCategoryDropDown ChosenCategory="@ChosenObject?.Category" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherVesselDropDown ChosenVessel="@ChosenObject?.Vessel" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherLocation ChosenSystem="@ChosenObject?.System" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                <CipherCategoryDropDown ChosenCategory="@ChosenObject?.Category" Width="@Constants.StandartWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                <CipherVesselDropDown ChosenVessel="@ChosenObject?.Vessel" Width="@Constants.StandartWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                <CipherLocation ChosenSystem="@ChosenObject?.System" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 
                 @if (SetMode != FormMode.Create)
                 {
-                    <CipherDatePicker Value="@(ChosenObject?.CreatedAt ?? DateTime.Now)" Label="@(IPackage.Translate(nameof(IPackage.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@RowWidth" />
+                    <CipherDatePicker Value="@(ChosenObject?.CreatedAt ?? DateTime.Now)" Label="@(IPackage.Translate(nameof(IPackage.CreatedAt)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Width="@Constants.StandartWidth" />
                     <CipherProcesses ChosenProcesses="@ChosenObject?.DestinationProcesses.ToList()" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
                     Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" />
                 }
 
-                <CipherPackageId ChosenPackage="@ChosenObject?.Parent" Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(IPackage.Translate(nameof(IPackage.Parent)))" />
+                <CipherPackageId ChosenPackage="@ChosenObject?.Parent" Width="@Constants.StandartWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Label="@(IPackage.Translate(nameof(IPackage.Parent)))" />
                 
                 @if (ChosenObject != null && SetMode != FormMode.Create)
                 {
@@ -58,9 +58,9 @@
                         }
                     }
                 }
-                <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()" 
-                Width="@RowWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                Label="@(IPackage.Translate(nameof(IPackage.Children)))" />
+                <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()"
+                                       Width="@Constants.StandartWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                       Label="@(IPackage.Translate(nameof(IPackage.Children)))" />
             </ChildContent>
         </CipherComponentCard>
 
@@ -83,12 +83,6 @@
     /// </summary>
     [Parameter]
     public FormMode SetMode { get; set; } = FormMode.Create;
-
-    /// <summary>
-    /// Width of each row within the component
-    /// </summary>
-    [Parameter]
-    public string RowWidth { get; set; } = "300px";
 
     /// <summary>
     /// All packages available

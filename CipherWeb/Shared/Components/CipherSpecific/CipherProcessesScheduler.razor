@@ -7,9 +7,9 @@
         <CipherLocation @ref="cipherLocation" WithIcon="false" Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc"/>
     </HeaderContent>
     <Buttons>
-        <CipherButton Icon="@Icons.UiComponents.Table.TableView" HelpText="@TableViewText"
+        <CipherButton Icon="@Icons.UiComponents.Table.table_view" HelpText="@TableViewText"
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
-        <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
+        <CipherButton Icon="@Icons.Time.calendar_today" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
         <CipherAddProcessDefinitionBtn/>
         @if (SetView == View.Table)

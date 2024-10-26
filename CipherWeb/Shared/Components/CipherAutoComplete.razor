@@ -5,7 +5,7 @@
     /// Component width.
     /// </summary>
     [Parameter]
-    public string Width { get; set; } = "300px";
+    public string Width { get; set; } = Constants.StandartWidth;
 
     /// <summary>
     /// Component's label.
@@ -244,13 +244,6 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {
-                <style>
-                    .rz-messages-error {
-                        display: flex;
-                        font-size: small;
-                        padding-right: 2.5rem;
-                    }
-                </style>
                 <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
             }
             @if (string.IsNullOrEmpty(Label))

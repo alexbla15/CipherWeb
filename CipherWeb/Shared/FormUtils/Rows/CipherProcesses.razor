@@ -63,7 +63,7 @@
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
         Width = "";
-        MinWidth ??= "300px";
+        MinWidth ??= Constants.StandartWidth;
 
         if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }

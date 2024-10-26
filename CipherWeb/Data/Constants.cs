@@ -14,6 +14,7 @@ namespace CipherWeb.Data
             public static readonly string ComingSoon = "cipher-comingsoon";
             public static readonly string ComingSoonImage = "cipher-comingsoon-image-container";
             public static readonly string ComingSoonOverlay = "cipher-comingsoon-overlay";
+            public static readonly string JsonCheck = "cipher-jsoncheck";
         }
 
         public class Button
@@ -39,5 +40,7 @@ namespace CipherWeb.Data
         public static readonly List<string> Products = new() { "תוצר א", "תוצר ב", "תוצר ג" };
 
         public static readonly string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
+
+        public static readonly string StandartWidth = "300px";
     }
 }

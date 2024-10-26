@@ -63,7 +63,7 @@
     {
         Label ??= "בחירת קטגוריה";
         Icon ??= Icons.Symbols.category;
-        Width ??= "300px";
+        Width ??= Constants.StandartWidth;
 
         (categories, error) = await CachedData.AllCategories;
     }

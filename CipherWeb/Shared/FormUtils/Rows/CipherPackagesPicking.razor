@@ -41,8 +41,8 @@
     {
         Label ??= "תעודות";
         Icon ??= Icons.Cipher.Package;
-        MinWidth ??= "300px";
-        Width ??= "300px";
+        MinWidth ??= Constants.StandartWidth;
+        Width ??= Constants.StandartWidth;
 
         (AvailablePackages, Error) = await CachedData.AllPackages;
     }

@@ -49,7 +49,7 @@
         Label ??= IProcessDefinition.Translate(nameof(IProcessDefinition.Name));
         Icon ??= Icons.Cipher.Process;
         Width ??= "100%";
-        MinWidth ??= "300px";
+        MinWidth ??= Constants.StandartWidth;
 
         if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }

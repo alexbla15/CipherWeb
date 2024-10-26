@@ -2,12 +2,6 @@
 
 @code {
     /// <summary>
-    /// Width of each row within card.
-    /// </summary>
-    [Parameter]
-    public string RowWidth { get; set; } = "300px";
-
-    /// <summary>
     /// Width of component card.
     /// </summary>
     [Parameter]
@@ -30,17 +24,17 @@
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="פרטים">
-                <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="מספר סידורי" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherAutoComplete Icon="@Icons.Cipher.Type" Label="סוג תנועה" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherAutoComplete Icon="@Icons.Cipher.Process" Label="תהליך" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherDatePicker Label="תאריך תנועה" Disabled="@ReadOnly" Width="@RowWidth" />
-                <CipherAutoComplete Icon="@Icons.Cipher.Account_Old" Label="עובד מעדכן" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherDatePicker Label="תאריך עדכון" Disabled="@ReadOnly" Width="@RowWidth" />
-                <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="עובד מאשר" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherDatePicker Label="תאריך אישור" Disabled="@ReadOnly" Width="@RowWidth" />
-                <CipherAutoComplete Icon="@Icons.UiComponents.Settings" Label="פרמטרים" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherAutoComplete Icon="@Icons.Cipher.Status" Label="סטטוס" Width="@RowWidth" Disabled="@ReadOnly" />
-                <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.comment" Width="@RowWidth" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Id" Label="מספר סידורי" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Type" Label="סוג תנועה" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Process" Label="תהליך" Disabled="@ReadOnly" />
+                <CipherDatePicker Label="תאריך תנועה" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Account_Old" Label="עובד מעדכן" Disabled="@ReadOnly" />
+                <CipherDatePicker Label="תאריך עדכון" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="עובד מאשר" Disabled="@ReadOnly" />
+                <CipherDatePicker Label="תאריך אישור" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.UiComponents.settings" Label="פרמטרים" Disabled="@ReadOnly" />
+                <CipherAutoComplete Icon="@Icons.Cipher.Status" Label="סטטוס" Disabled="@ReadOnly" />
+                <CipherAutoComplete Multiline="true" Label="הערות" Icon="@Icons.Communication.Chat.comment" Disabled="@ReadOnly" />
 
                 <br/>
                 <br/>

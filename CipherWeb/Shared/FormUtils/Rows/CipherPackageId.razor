@@ -32,12 +32,6 @@
     public string? Icon { get; set; } = Icons.Cipher.Package;
 
     /// <summary>
-    /// Component's width.
-    /// </summary>
-    [Parameter]
-    public string? Width { get; set; } = "300px";
-
-    /// <summary>
     /// Component's chosen value.
     /// </summary>
     [Parameter]
@@ -63,7 +57,7 @@
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IPackage" AllowClear="true"
                             Data=@AllPacks TextProperty="@(nameof(IPackage.Id))" AllowFilteringByAllStringColumns="true"
-                            Style="@($"width: {Width}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
+                            Style="@($"width: {Constants.StandartWidth}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
                             Change="@Change" AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(IPackage.Translate(nameof(IPackage.Id)))" />

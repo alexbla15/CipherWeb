@@ -220,8 +220,8 @@
     <CipherPackageId Change="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.Parent)))" @ref=ParentPackage />
     @if (!IsNew)
     {
-        <CipherComments @ref="PackDescription" ValueChanged="@ChangeDetails" 
-            Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="300px" />
+        <CipherComments @ref="PackDescription" ValueChanged="@ChangeDetails"
+                        Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="@Constants.StandartWidth" />
         <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 
             Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
         <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 

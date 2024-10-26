@@ -60,6 +60,41 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
+.cipher-jsoncheck {
+    width: 100%;
+    direction: ltr;
+    height: 300px;
+}
+
+.cipher-chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.cipher-chip {
+    background-color: var(--rz-chip-background-color);
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.cipher-chip-close {
+    background-color: var(--rz-chip-background-color);
+    color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
 .cipher_paragraph_header {
     padding-left: 10px;
     padding-right: 10px;
@@ -127,6 +162,124 @@
 .cipher-comingsoon-image-container:hover .cipher-comingsoon-overlay {
     display: block;
 }
+
+.CipherButton {
+    border: unset;
+    z-index: 1;
+    position: relative;
+    transition: all 250ms;
+    overflow: hidden;
+}
+
+    .CipherButton.Disabled {
+    }
+
+    .CipherButton::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 0; /*start the new-background width at 0, and enlarge it*/
+        z-index: -1;
+        transition: all 250ms
+    }
+
+    .CipherButton:hover::before {
+        width: 100%;
+    }
+
+    .CipherButton.PrimaryDarker::before {
+        background-color: var(--rz-primary-dark);
+    }
+
+    .CipherButton.PrimaryDark::before {
+        background-color: var(--rz-primary);
+    }
+
+    .CipherButton.PrimaryDefault::before {
+        background-color: var(--rz-primary-dark);
+    }
+
+    .CipherButton.PrimaryLight::before {
+        background-color: var(--rz-primary-lighter);
+    }
+
+    .CipherButton.PrimaryLighter::before {
+        background-color: var(--rz-primary-light);
+    }
+
+    .CipherButton.SuccessDarker::before {
+        background-color: var(--rz-success-dark);
+    }
+
+    .CipherButton.SuccessDark::before {
+        background-color: var(--rz-success);
+    }
+
+    .CipherButton.SuccessDefault::before {
+        background-color: var(--rz-success-light);
+    }
+
+    .CipherButton.SuccessLight::before {
+        background-color: var(--rz-success-lighter);
+    }
+
+    .CipherButton.SuccessLighter::before {
+        background-color: var(--rz-success-light);
+    }
+
+    .CipherButton.DangerDarker::before {
+        background-color: var(--rz-danger-dark);
+    }
+
+    .CipherButton.DangerDark::before {
+        background-color: var(--rz-danger);
+    }
+
+    .CipherButton.DangerDefault::before {
+        background-color: var(--rz-danger-light);
+    }
+
+    .CipherButton.DangerLight::before {
+        background-color: var(--rz-danger-lighter);
+    }
+
+    .CipherButton.DangerLighter::before {
+        background-color: var(--rz-danger-light);
+    }
+
+    .CipherButton.SecondaryDarker::before {
+        background-color: var(--rz-secondary-dark);
+    }
+
+    .CipherButton.SecondaryDark::before {
+        background-color: var(--rz-secondary);
+    }
+
+    .CipherButton.SecondaryDefault::before {
+        background-color: var(--rz-secondary-light);
+    }
+
+    .CipherButton.SecondaryLight::before {
+        background-color: var(--rz-secondary-lighter);
+    }
+
+    .CipherButton.WarningDarker::before {
+        background-color: var(--rz-warning-dark);
+    }
+
+    .CipherButton.WarningDark::before {
+        background-color: var(--rz-warning);
+    }
+
+    .CipherButton.WarningDefault::before {
+        background-color: var(--rz-warning-light);
+    }
+
+    .CipherButton.WarningLight::before {
+        background-color: var(--rz-warning);
+    }
 
 /* ------------------ DATA FILTER ------------------ */
 
