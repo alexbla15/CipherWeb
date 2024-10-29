@@ -107,6 +107,19 @@
     margin: 0;
 }
 
+.cipher_datagrid_group_header {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-secondary-lighter);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: larger;
+    line-height: unset;
+    margin: 0;
+}
+
 .cipher_paragraph_header {
     padding-left: 10px;
     padding-right: 10px;

@@ -120,7 +120,7 @@
                             AllGroupsExpanded="true" Render="@OnRender"
                             Data="@DisplayedEvents">
                 <GroupHeaderTemplate>
-                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="10px">
                         @if (WithRowButtons)
                         {
                             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
@@ -132,7 +132,7 @@
                                               Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
                             </RadzenStack>
                         }
-                        <RadzenText Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
+                            <RadzenText class="@Constants.Styles.GroupHeader" Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventType))} : {context.Data.Items.Cast<IDisplayedEvent>().First().EventType},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.ProcessId))} : {context.Data.Items.Cast<IDisplayedEvent>().First().ProcessId},
                                  {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Timestamp))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Timestamp},

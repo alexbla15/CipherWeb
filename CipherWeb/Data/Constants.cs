@@ -9,6 +9,7 @@ namespace CipherWeb.Data
         public class Styles
         {
             public static readonly string ParagraphTitle = "cipher_paragraph_header";
+            public static readonly string GroupHeader = "cipher_datagrid_group_header";
             public static readonly string CardTitle = "cipher_card_header";
             public static readonly string Restriction = "cipher_restriction";
             public static readonly string ComingSoon = "cipher-comingsoon";

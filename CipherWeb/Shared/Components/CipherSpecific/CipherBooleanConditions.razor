@@ -168,14 +168,7 @@
 
         foreach (var sub_filter in filter.Filters)
         {
-            if (sub_filter.Filters is null)
-            {
-                conditions.Add(SetBooleanCondition(sub_filter));
-            }
-            else
-            {
-                conditions.Add(SetGroupedBooleanCondition(sub_filter));
-            }
+            conditions.Add(sub_filter.Filters is null ? SetBooleanCondition(sub_filter) : SetGroupedBooleanCondition(sub_filter));
         }
 
         cond.Conditions = conditions;
@@ -197,14 +190,7 @@
 
             // decide if it is a GroupedCondition or BooleanCondition
 
-            if (filter.Filters is null)
-            {
-                conditions.Add(SetBooleanCondition(filter));
-            }
-            else
-            {
-                conditions.Add(SetGroupedBooleanCondition(filter));
-            }
+            conditions.Add((filter.Filters is null) ? SetBooleanCondition(filter) : SetGroupedBooleanCondition(filter));
 
         }
 
@@ -222,10 +208,7 @@
         JsonRequest = ChosenCondition.ToJson();
     }
 
-    public async Task Clear()
-    {
-        await dataFilter.ClearFilters();
-    }
+    public async Task Clear() => await dataFilter.ClearFilters();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
