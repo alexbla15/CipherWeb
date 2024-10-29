@@ -51,7 +51,7 @@
                 </ChildContent>
             </CipherComponentCard>
             <CipherCategoryProperties @ref=CatProperties ValueChanged="@ChangeDetail" Disabled="@ReadonlyFields()"
-                                      ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
+                                      ChosenProperties="@SetProperties()" />
         }
     </ChildContent>
 </CipherComponentCard>
@@ -81,12 +81,6 @@
     [Parameter]
     public EventCallback ChangeDetails { get; set; }
 
-    /// <summary>
-    /// Control visibility of the send request according to changes found in the form
-    /// </summary>
-    [Parameter]
-    public bool FoundChanges { get; set; } = false;
-
     private CipherCategoryDropDown CatId = new();
     private CipherCategoryDropDown ParentCat = new();
     private CipherAutoComplete CatName = new();
@@ -102,7 +96,20 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי הקטגוריה";
-        FoundChanges = false;
+        SetDetails();
+    }
+
+    public List<ICategoryProperty> SetProperties()
+    {
+        List<ICategoryProperty> result = new();
+        result = ChosenObject?.Properties ?? result;
+
+        if (CatProperties != null && CatProperties.ChosenProperties != null)
+        {
+            if (CatProperties.ChosenProperties.Any()) result = CatProperties.ChosenProperties;
+        }
+
+        return ParentProps ?? result;
     }
 
     public bool ReadonlyFields()
@@ -111,8 +118,21 @@
     public void Change()
     {
         ChosenObject = CatId.ChosenCategory;
+        //SetDetails();
         ChangeObject.InvokeAsync();
-        FoundChanges = false;
+    }
+
+    public void SetDetails()
+    {
+        if (ChosenObject is null) return;
+
+        ParentCat.ChosenCategory = ChosenObject.Parent;
+        CatName.Value = ChosenObject.Name;
+        CatDescription.Value = ChosenObject.Description;
+        InProcs.ChosenProcesses = ChosenObject.CreatingProcesses;
+        OutProcs.ChosenProcesses = ChosenObject.ConsumingProcesses;
+        CatProperties.ChosenProperties = ChosenObject.Properties;
+        CatMask.SelectedTexts = ChosenObject.IdMask.ToHashSet();
     }
 
     public void ChangeDetail()
@@ -126,7 +146,6 @@
         ChosenObject.Properties = CatProperties.ChosenProperties;
         ChosenObject.IdMask = CatMask.GetValue();
         ChangeDetails.InvokeAsync();
-        FoundChanges = true;
     }
 
     /// <summary>

@@ -1,3 +1,5 @@
 ﻿@page "/Searches/System"
 
-<SearchResource NavLink="@CipherNavLinks.SystemSearch" Cipher_TItem="IStorageSystem" />
+@using CipherWeb.Pages.Forms
+
+<ResourceFormHandler NavLink="@CipherNavLinks.SystemSearch" Cipher_TItem="IStorageSystem" Mode="@FormMode.ReadOnly" />

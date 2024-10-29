@@ -113,29 +113,26 @@
             {
                 <RadzenText Text="@HelpText"/>
             }
-            else
-            {
-                <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged" 
-                    TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
-                    <Columns>
-                        <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                            <Template Context="step">
-                                <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
-                            <Template Context="step">
-                                <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
-                            <Template Context="step">
-                                <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
-                            </Template>
-                        </RadzenDataGridColumn>
-                    </Columns>
-                </RadzenDataGrid>
-            }
+            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged"
+                            TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="@(ChosenSteps != null && ChosenSteps.Any())">
+                <Columns>
+                    <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                        <Template Context="step">
+                            <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                        <Template Context="step">
+                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                        <Template Context="step">
+                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
         </ChildContent>
     </CipherComponentCard>
 

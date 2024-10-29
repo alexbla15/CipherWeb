@@ -160,9 +160,9 @@
                         }
                         else
                         {
-                            <RadzenToggleButton Value="@(bool.TryParse(prop.DefaultValue, out _) ? Convert.ToBoolean(prop.DefaultValue) : false)" 
+                            <RadzenToggleButton Value="@(prop.DefaultValue is null ? false : (bool.TryParse(prop.DefaultValue, out _) ? Convert.ToBoolean(prop.DefaultValue) : false))" 
                             ValueChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})"
-                                Text="@(prop.DefaultValue.ToString() == false.ToString() ? "לא" : "כן" )"
+                                Text="@(prop.DefaultValue?.ToString() == false.ToString() ? "לא" : "כן" )"
                                                 ButtonStyle="ButtonStyle.Danger" Disabled="@Disabled"
                                 ToggleButtonStyle="ButtonStyle.Success"  />
                         }

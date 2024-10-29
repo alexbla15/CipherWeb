@@ -20,14 +20,12 @@
             FinalStatePackages = PacksStatuses.Item2;
         }
 
-        public Tuple<IEvent, ErrorResponse> Update(UpdateEvent update_details) => Tuple.Create(new RandomRelocationEvent() as IEvent, ErrorResponse.Success);
-
         private static Tuple<List<IPackage>, List<IPackage>> GetPacks()
         {
             List<IPackage> _Packages = RandomData.GetRandomPackages(new Random().Next(2, 3));
 
             List<IPackage> iPacks = _Packages;
-            List<IPackage> fPacks = _Packages.Select(x=>IResource.Copy(x)).ToList();
+            List<IPackage> fPacks = _Packages.Select(x => IResource.Copy(x)).ToList();
 
             for (int i = 0; i < iPacks.Count; i++)
             {
@@ -38,15 +36,16 @@
 
             if (fPacks.Count == 2)
             {
-                fPacks[0].BrutMass -= 0.1M;
-                fPacks[1].BrutMass += 0.1M;
+                fPacks[0].AddBrutMass(-0.1M);
+                fPacks[1].AddBrutMass(0.1M);
             }
             else
             {
-                fPacks[0].BrutMass -= 0.3M;
-                fPacks[1].BrutMass += 0.1M;
-                fPacks[2].BrutMass += 0.2M;
+                fPacks[0].AddBrutMass(-0.3M);
+                fPacks[1].AddBrutMass(0.1M);
+                fPacks[2].AddBrutMass(0.2M);
             }
+
             return Tuple.Create(iPacks, fPacks);
         }
 

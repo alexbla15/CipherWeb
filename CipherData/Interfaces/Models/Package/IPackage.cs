@@ -76,6 +76,8 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IPackage), nameof(Vessel))]
         IVessel? Vessel { get; set; }
 
+        void AddBrutMass(decimal brutMass);
+
         public new Dictionary<string, object?> ToDictionary()
         {
             return new()
@@ -197,6 +199,14 @@ namespace CipherData.Interfaces
         public List<IProcessDefinition>? DestinationProcesses { get; set; } = new();
 
         public decimal Concentration => BrutMass > 0 ? NetMass / BrutMass : 0;
+
+        public void AddBrutMass(decimal brutMass)
+        {
+            decimal Conc = Concentration;
+
+            BrutMass += brutMass;
+            NetMass = decimal.Round(BrutMass * Conc, 2);
+        }
 
         // ABSTRACT METHODS
 

@@ -118,11 +118,8 @@ namespace CipherData.Interfaces
 
                 if (AccPack != null && DonPack != null)
                 {
-                    DonPack.BrutMass -= Amount;
-                    DonPack.NetMass = decimal.Round(DonPack.BrutMass * DonPack.Concentration, 2);
-
-                    AccPack.BrutMass += Amount;
-                    AccPack.NetMass = decimal.Round(AccPack.BrutMass * AccPack.Concentration, 2);
+                    DonPack.AddBrutMass(-Amount);
+                    AccPack.AddBrutMass(Amount);
 
                     ev.Actions = new() { AccPack.Request(), DonPack.Request() };
                 }

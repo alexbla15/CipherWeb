@@ -11,31 +11,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(typeof(IStorageSystem), nameof(Description))]
+        [HebrewTranslation($"ISystem_{nameof(Description)}")]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
-        [HebrewTranslation(typeof(IStorageSystem), nameof(Name))]
+        [HebrewTranslation($"ISystem_{nameof(Name)}")]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
-        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Unit))]
+        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Unit)}")]
         string? UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
-        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Parent))]
+        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Parent)}")]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Properties))]
+        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Properties)}")]
         Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
