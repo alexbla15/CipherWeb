@@ -129,7 +129,7 @@ namespace CipherData.General
 
             string ErrorMessage = $"השדה \"{field_name}\" הוא חובה.";
 
-            bool condition = !string.IsNullOrEmpty(value?.ToString().Trim()); // trim white spaces for more creative users
+            bool condition = value is not null && !string.IsNullOrEmpty(value.ToString().Trim()); // trim white spaces for more creative users
 
             result.Succeeded = condition;
             result.Message = condition ? string.Empty : ErrorMessage;

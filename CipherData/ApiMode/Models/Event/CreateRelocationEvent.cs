@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// An event of relocating several packages to a new location
-    /// </summary>
     public class CreateRelocationEvent : CipherClass, ICreateRelocationEvent
     {
         private string? _Worker = string.Empty;

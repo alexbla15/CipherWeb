@@ -2,37 +2,40 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(CreateRelocationEvent))]
+    /// <summary>
+    /// An event of relocating several packages to a new location
+    /// </summary>
+    [HebrewTranslation(nameof(ICreateRelocationEvent))]
     public interface ICreateRelocationEvent : ICipherClass
     {
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Package that relocate in this event.
         /// </summary>
-        [HebrewTranslation(typeof(CreateRelocationEvent), nameof(Packages))]
+        [HebrewTranslation(typeof(ICreateRelocationEvent), nameof(Packages))]
         List<IPackage>? Packages { get; set; }
 
         /// <summary>
         /// System to which the packages are relocated.
         /// </summary>
-        [HebrewTranslation(typeof(CreateRelocationEvent), nameof(TargetSystem))]
+        [HebrewTranslation(typeof(ICreateRelocationEvent), nameof(TargetSystem))]
         IStorageSystem? TargetSystem { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Timestamp))]
         DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Worker))]
         string? Worker { get; set; }
 
         /// <summary>

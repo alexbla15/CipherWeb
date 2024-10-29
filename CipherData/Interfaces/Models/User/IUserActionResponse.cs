@@ -3,7 +3,7 @@
     /// <summary>
     /// Get user actions contract
     /// </summary>
-    [HebrewTranslation(nameof(UserActionResponse))]
+    [HebrewTranslation(nameof(IUserActionResponse))]
     public interface IUserActionResponse : ICipherClass
     {
         /// <summary>

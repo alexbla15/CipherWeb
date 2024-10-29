@@ -1,9 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    /// <summary>
-    /// Definition of a process - 
-    /// a collection of steps that make a single definition
-    /// </summary>
     public class RandomProcessStepDefinition : BaseProcessStepDefinition, IProcessStepDefinition
     {
         private static readonly List<string> ProcessesStepNames = 

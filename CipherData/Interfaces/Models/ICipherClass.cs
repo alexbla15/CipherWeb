@@ -47,7 +47,7 @@ namespace CipherData.Interfaces
         {
             if (interfaceType == null) return searchedAttribute;
 
-            if (!interfaceType.IsInterface || interfaceType.GetInterface(nameof(ICipherClass)) is null)
+            if (interfaceType.GetInterface(nameof(ICipherClass)) is null)
                 return searchedAttribute;
 
             List<PropertyInfo> props = interfaceType.GetInterfaces()

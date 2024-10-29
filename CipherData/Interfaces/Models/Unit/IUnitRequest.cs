@@ -2,37 +2,40 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(UnitRequest))]
+    /// <summary>
+    /// Create a new unit or update it
+    /// </summary>
+    [HebrewTranslation(nameof(IUnitRequest))]
     public interface IUnitRequest : ICipherClass
     {
         /// <summary>
         /// Description of Unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
+        [HebrewTranslation(typeof(IUnit), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the Unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
+        [HebrewTranslation(typeof(IUnit), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of parent unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Unit.Parent))]
+        [HebrewTranslation(typeof(IUnit), nameof(IUnit.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Unit.Properties))]
+        [HebrewTranslation(typeof(IUnit), nameof(IUnit.Properties))]
         string? Properties { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Unit.Conditions))]
+        [HebrewTranslation(typeof(IUnit), nameof(IUnit.Conditions))]
         IGroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>

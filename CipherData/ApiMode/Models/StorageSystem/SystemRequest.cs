@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Create a new system or update it
-    /// </summary>
     public class SystemRequest : CipherClass, ISystemRequest
     {
         private string? _Name = string.Empty;

@@ -2,49 +2,49 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Unit))]
+    [HebrewTranslation(nameof(IUnit))]
     public interface IUnit : IResource
     {
         /// <summary>
         /// Description of Unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Description))]
+        [HebrewTranslation(typeof(IUnit), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the Unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Name))]
+        [HebrewTranslation(typeof(IUnit), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Children))]
+        [HebrewTranslation(typeof(IUnit), nameof(Children))]
         List<IUnit>? Children { get; set; }
 
         /// <summary>
         /// Conditions on the unit to make sure it is valid.
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Conditions))]
+        [HebrewTranslation(typeof(IUnit), nameof(Conditions))]
         IGroupedBooleanCondition? Conditions { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Parent))]
+        [HebrewTranslation(typeof(IUnit), nameof(Parent))]
         IUnit? Parent { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Properties))]
+        [HebrewTranslation(typeof(IUnit), nameof(Properties))]
         string? Properties { get; set; }
 
         /// <summary>
         /// Systems under this unit
         /// </summary>
-        [HebrewTranslation(typeof(Unit), nameof(Systems))]
+        [HebrewTranslation(typeof(IUnit), nameof(Systems))]
         List<IStorageSystem>? Systems { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

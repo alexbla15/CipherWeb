@@ -8,17 +8,6 @@
 
         public static readonly ICustomObjectBooleanCondition CustomObjectBooleanCondition = new RandomCustomObjectBooleanCondition();
         public static readonly IGroupedBooleanCondition GroupedBooleanCondition = new RandomGroupedBooleanCondition();
-        public static readonly IUserActionResponse UserActionResponse = new RandomUserActionResponse();
-
-        public static readonly ICategory Category = new RandomCategory();
-        public static readonly ICategoryProperty RandomCategoryProperty = new RandomCategoryProperty();
-        public static readonly IEvent Event = new RandomEvent();
-        public static readonly IPackage Package = new RandomPackage();
-        public static readonly IProcess Process = new RandomProcess();
-        public static readonly IProcessDefinition ProcessDefinition = new RandomProcessDefinition();
-        public static readonly IStorageSystem System = new RandomStorageSystem();
-        public static readonly IUnit Unit = new RandomUnit();
-        public static readonly IVessel Vessel = new RandomVessel();
 
         public static readonly List<ICategory> Categories = GetRandomCategories();
         public static readonly List<ICategoryProperty> RandomCategoryProperties = GetRandomCategoryProperties();
@@ -31,9 +20,7 @@
         public static readonly List<IUnit> Units = GetRandomUnits();
 
         public static List<TInterface> GetRandomObjects<TInterface, TConcrete>(int amount = 20) where TConcrete : TInterface
-        {
-            return RandomFuncs.FillRandomObjects(amount, () => (TInterface)typeof(TConcrete).GetConstructor(Type.EmptyTypes)?.Invoke(null));
-        }
+            => RandomFuncs.FillRandomObjects(amount, () => (TInterface)typeof(TConcrete).GetConstructor(Type.EmptyTypes)?.Invoke(null));
 
         public static List<ICategory> GetRandomCategories(int amount = 20) => GetRandomObjects<ICategory, RandomCategory>(amount);
         public static List<ICategoryProperty> GetRandomCategoryProperties(int amount = 3) => GetRandomObjects<ICategoryProperty, RandomCategoryProperty>(amount);

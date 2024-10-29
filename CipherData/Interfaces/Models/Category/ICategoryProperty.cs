@@ -13,31 +13,31 @@ namespace CipherData.Interfaces
     /// Property interface of one of the category's properties.
     /// Each package will use it by default, and than will be edited per package.
     /// </summary>
-    [HebrewTranslation(nameof(CategoryProperty))]
+    [HebrewTranslation(nameof(ICategoryProperty))]
     public interface ICategoryProperty : ICipherClass
     {
         /// <summary>
         /// Name of the property
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(Name))]
+        [HebrewTranslation(typeof(ICategoryProperty), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(Description))]
+        [HebrewTranslation(typeof(ICategoryProperty), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Value that will be set for this category as default. User cannot change that.
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(DefaultValue))]
+        [HebrewTranslation(typeof(ICategoryProperty), nameof(DefaultValue))]
         string? DefaultValue { get; set; }
 
         /// <summary>
         /// Type of the property (string / decimal / bool)
         /// </summary>
-        [HebrewTranslation(typeof(CategoryProperty), nameof(PropertyType))]
+        [HebrewTranslation(typeof(ICategoryProperty), nameof(PropertyType))]
         PropertyType PropertyType { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));

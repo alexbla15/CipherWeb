@@ -2,31 +2,31 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Vessel))]
+    [HebrewTranslation(nameof(IVessel))]
     public interface IVessel : IResource
     {
         /// <summary>
         /// Packages within the vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(ContainingPackages))]
+        [HebrewTranslation(typeof(IVessel), nameof(ContainingPackages))]
         List<IPackage>? ContainingPackages { get; set; }
 
         /// <summary>
         /// Name of vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
+        [HebrewTranslation(typeof(IVessel), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// System in which vessel is at
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(System))]
+        [HebrewTranslation(typeof(IVessel), nameof(System))]
         IStorageSystem? System { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Type))]
+        [HebrewTranslation(typeof(IVessel), nameof(Type))]
         string? Type { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

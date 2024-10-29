@@ -2,61 +2,61 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Category))]
+    [HebrewTranslation(nameof(ICategory))]
     public interface ICategory : IResource
     {
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Name))]
+        [HebrewTranslation(typeof(ICategory), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Description))]
+        [HebrewTranslation(typeof(ICategory), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(IdMask))]
+        [HebrewTranslation(typeof(ICategory), nameof(IdMask))]
         List<string>? IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Properties))]
+        [HebrewTranslation(typeof(ICategory), nameof(Properties))]
         List<ICategoryProperty>? Properties { get; set; }
 
         /// <summary>
         /// List of processes defintions consuming this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(ConsumingProcesses))]
+        [HebrewTranslation(typeof(ICategory), nameof(ConsumingProcesses))]
         List<IProcessDefinition>? ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definitions creating this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(CreatingProcesses))]
+        [HebrewTranslation(typeof(ICategory), nameof(CreatingProcesses))]
         List<IProcessDefinition>? CreatingProcesses { get; set; }
 
         /// <summary>
         /// Type of material of this category (highest-level cateogry)
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(MaterialType))]
+        [HebrewTranslation(typeof(ICategory), nameof(MaterialType))]
         ICategory? MaterialType { get; set; }
 
         /// <summary>
         /// Parent Category containing this one
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Parent))]
+        [HebrewTranslation(typeof(ICategory), nameof(Parent))]
         ICategory? Parent { get; set; }
 
         /// <summary>
         /// Child categories contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Children))]
+        [HebrewTranslation(typeof(ICategory), nameof(Children))]
         List<ICategory>? Children { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
@@ -137,7 +137,7 @@ namespace CipherData.Interfaces
 
         public string? Description { get => _Description; set => _Description = value?.Trim(); }
 
-        public List<string> IdMask { get; set; } = new();
+        public List<string>? IdMask { get; set; } = new();
 
         public List<ICategoryProperty>? Properties { get; set; }
 

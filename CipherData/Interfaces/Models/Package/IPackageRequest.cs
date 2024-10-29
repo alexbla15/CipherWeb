@@ -2,61 +2,67 @@
 
 namespace CipherData.Interfaces
 {
+    /// <summary>
+    /// When creating an event, this objects describes an affected package status, after an event.
+    /// Ergo, only properties that are changed using Event, are included.
+    /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
+    /// In order to change other Package properties - use UpdatePackage.
+    /// </summary>
     [HebrewTranslation(nameof(PackageRequest))]
     public interface IPackageRequest : ICipherClass
     {
         /// <summary>
         /// ID of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Vessel (Id) which contains the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Vessel))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Vessel))]
         string? VesselId { get; set; }
 
         /// <summary>
         /// Location (Id) which contains the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.System))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.System))]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Category))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Category))]
         string? CategoryId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Properties))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Properties))]
         List<IPackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.BrutMass))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.BrutMass))]
         decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.NetMass))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.NetMass))]
         decimal NetMass { get; set; }
 
         /// <summary>
         /// Parent (Id) containing this one
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Parent))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// Packages (Ids) contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Children))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Children))]
         List<string?>? ChildrenIds { get; set; }
 
         public CheckField CheckId() =>

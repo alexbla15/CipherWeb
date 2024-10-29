@@ -1,9 +1,9 @@
 ﻿namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Worker))]
+    [HebrewTranslation(nameof(IWorker))]
     public interface IWorker
     {
-        [HebrewTranslation(nameof(Worker))]
+        [HebrewTranslation(nameof(IWorker))]
         string Name { get; set; }
 
 

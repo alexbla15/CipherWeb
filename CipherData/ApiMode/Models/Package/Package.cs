@@ -6,9 +6,6 @@
 
         // API RELATED FUNCTIONS
 
-        /// <summary>
-        /// Fetch all packages which contain the searched text
-        /// </summary>
         public override async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText)
         {
             if (string.IsNullOrEmpty(SearchText)) return new(new(), ErrorResponse.BadRequest);

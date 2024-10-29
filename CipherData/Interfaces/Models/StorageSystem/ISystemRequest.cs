@@ -2,37 +2,40 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(SystemRequest))]
+    /// <summary>
+    /// Create a new system or update it
+    /// </summary>
+    [HebrewTranslation(nameof(ISystemRequest))]
     public interface ISystemRequest : ICipherClass
     {
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Unit))]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Unit))]
         string? UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Parent))]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(StorageSystem.Properties))]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Properties))]
         Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>

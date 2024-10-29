@@ -2,10 +2,7 @@
 {
     public class RandomWorker : BaseWorker
     {
-        public RandomWorker()
-        {
-            Name = RandomFuncs.RandomItem(AllWorkers()).Name;
-        }
+        public RandomWorker() => Name = RandomFuncs.RandomItem(AllWorkers()).Name;
 
         public override List<IWorker> AllWorkers() => new() {
             new Worker() {Name = "אלי קופטר" },

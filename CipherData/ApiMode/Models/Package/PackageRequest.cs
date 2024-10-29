@@ -1,11 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// When creating an event, this objects describes an affected package status, after an event.
-    /// Ergo, only properties that are changed using Event, are included.
-    /// Therefore, no need for CreatedAt attribute (packages creation date is given in API, not by user).
-    /// In order to change other Package properties - use UpdatePackage.
-    /// </summary>
     public class PackageRequest : CipherClass, IPackageRequest
     {
         public string? Id { get; set; } = string.Empty;

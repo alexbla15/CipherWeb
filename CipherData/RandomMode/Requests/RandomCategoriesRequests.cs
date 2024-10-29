@@ -10,7 +10,7 @@
                 new RandomCategory() { Id=id} as ICategory, canBadRequest: false, canBeNotFound: true);
 
         public async Task<Tuple<ICategory, ErrorResponse>> Create(ICategoryRequest cat) => 
-            await new RandomGenericRequests().Request(RandomData.Category);
+            await new RandomGenericRequests().Request(new RandomCategory() as ICategory);
 
         public async Task<Tuple<ICategory, ErrorResponse>> Update(string? id, ICategoryRequest cat) => 
             await new RandomGenericRequests().Request((ICategory)RandomFuncs.Request(cat, id), canBeNotFound: true);

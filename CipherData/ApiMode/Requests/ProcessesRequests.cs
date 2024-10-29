@@ -4,11 +4,6 @@
     {
         private static readonly string path = "/processes";
 
-        public Task<Tuple<IProcess, ErrorResponse>> Create(IProcessDefinitionRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Tuple<List<IProcess>, ErrorResponse>> GetAll()
             => await GeneralAPIRequest.GetAll<IProcess, Process>(path);
 
@@ -20,9 +15,10 @@
             return Tuple.Create(obj, result.Item2);
         }
 
+        public Task<Tuple<IProcess, ErrorResponse>> Create(IProcessDefinitionRequest request)
+            => throw new NotImplementedException();
+
         public Task<Tuple<IProcess, ErrorResponse>> Update(string? id, IProcessDefinitionRequest request)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 }

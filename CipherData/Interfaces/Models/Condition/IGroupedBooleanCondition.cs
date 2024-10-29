@@ -5,7 +5,7 @@ namespace CipherData.Interfaces
     /// <summary>
     /// Groups of boolean conditions on a single object
     /// </summary>
-    [HebrewTranslation(nameof(GroupedBooleanCondition))]
+    [HebrewTranslation(nameof(IGroupedBooleanCondition))]
     public interface IGroupedBooleanCondition : ICondition
     {
         /// <summary>

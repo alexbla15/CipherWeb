@@ -15,9 +15,9 @@
             await new RandomGenericRequests().Request(RandomData.GroupedBooleanCondition, canBadRequest: false, canBeNotFound: true);
 
         public async Task<Tuple<IEvent, ErrorResponse>> GetById(string? id) =>
-            await new RandomGenericRequests().Request(RandomData.Event, canBeNotFound: true);
+            await new RandomGenericRequests().Request(new RandomEvent() { Id=id} as IEvent, canBeNotFound: true);
 
         public async Task<Tuple<IEvent, ErrorResponse>> Update(string? event_id, IUpdateEvent ev) =>
-            await new RandomGenericRequests().Request(RandomData.Event, canBadRequest: false, canBeNotFound: true);
+            await new RandomGenericRequests().Request(new RandomEvent() { Id = event_id } as IEvent, canBadRequest: false, canBeNotFound: true);
     }
 }

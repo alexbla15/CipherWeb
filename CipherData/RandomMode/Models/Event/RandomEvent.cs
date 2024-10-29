@@ -1,9 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    /// <summary>
-    /// Event consists of several classicaly defined events (called LegacyEvent)
-    /// Each event can include many sub events of mass-transfer, and relocation.
-    /// </summary>
     public class RandomEvent : BaseEvent, IEvent
     {
         public RandomEvent()
@@ -21,7 +17,6 @@
         /// <summary>
         /// Get the id of a new object
         /// </summary>
-        /// <returns></returns>
         public static string GetNextId() => $"E{++IdCounter:D3}";
 
         // API RELATED FUNCTIONS

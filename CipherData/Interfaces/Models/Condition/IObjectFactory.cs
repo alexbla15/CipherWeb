@@ -12,19 +12,19 @@ namespace CipherData.Interfaces
         sum, avg, count, first, last, max, min
     }
 
-    [HebrewTranslation(nameof(OrderedItem))]
+    [HebrewTranslation(nameof(IOrderedItem))]
     public interface IOrderedItem : ICipherClass
     {
         /// <summary>
         /// Attribute to order by
         /// </summary>
-        [HebrewTranslation(typeof(OrderedItem), nameof(Attribute))]
+        [HebrewTranslation(typeof(IOrderedItem), nameof(Attribute))]
         string Attribute { get; set; }
 
         /// <summary>
         /// Desired order on the attribute
         /// </summary>
-        [HebrewTranslation(typeof(OrderedItem), nameof(Order))]
+        [HebrewTranslation(typeof(IOrderedItem), nameof(Order))]
         Order Order { get; set; }
 
         public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
@@ -46,26 +46,26 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
-    [HebrewTranslation(nameof(AggregateItem))]
+    [HebrewTranslation(nameof(IAggregateItem))]
     public interface IAggregateItem : ICipherClass
     {
         /// <summary>
         /// New name to give to the aggregated field. 
         /// if null, name is auto generated
         /// </summary>
-        [HebrewTranslation(typeof(AggregateItem), nameof(As))]
+        [HebrewTranslation(typeof(IAggregateItem), nameof(As))]
         string? As { get; set; }
 
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
-        [HebrewTranslation(typeof(AggregateItem), nameof(Attribute))]
+        [HebrewTranslation(typeof(IAggregateItem), nameof(Attribute))]
         string? Attribute { get; set; }
 
         /// <summary>
         /// Method to aggregate the field by
         /// </summary>
-        [HebrewTranslation(typeof(AggregateItem), nameof(Method))]
+        [HebrewTranslation(typeof(IAggregateItem), nameof(Method))]
         Method? Method { get; set; }
 
         public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
@@ -90,7 +90,10 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
-    [HebrewTranslation(nameof(ObjectFactory))]
+    /// <summary>
+    /// Method to get desired objects by filtering and aggregating the database
+    /// </summary>
+    [HebrewTranslation(nameof(IObjectFactory))]
     public interface IObjectFactory : ICipherClass
     {
         /// <summary>
@@ -98,27 +101,27 @@ namespace CipherData.Interfaces
         ///  by default returns the grouped by fields if they 
         ///  exist. If null, returns the filtered objects
         /// </summary>
-        [HebrewTranslation(typeof(ObjectFactory), nameof(Aggregate))]
+        [HebrewTranslation(typeof(IObjectFactory), nameof(Aggregate))]
         List<IAggregateItem>? Aggregate { get; set; }
 
         /// <summary>
         /// Conditions to apply to get the desired objects. 
         /// All conditions must have the same target object.
         /// </summary>
-        [HebrewTranslation(typeof(ObjectFactory), nameof(Attribute))]
+        [HebrewTranslation(typeof(IObjectFactory), nameof(Attribute))]
         IGroupedBooleanCondition Filter { get; set; }
 
         /// <summary>
         ///  List of object attributes to group by. 
         ///  If null, aggregates all the objects to a single one.
         /// </summary>
-        [HebrewTranslation(typeof(ObjectFactory), nameof(GroupBy))]
+        [HebrewTranslation(typeof(IObjectFactory), nameof(GroupBy))]
         List<string>? GroupBy { get; set; }
 
         /// <summary>
         /// Define order to the filtered objects
         /// </summary>
-        [HebrewTranslation(typeof(ObjectFactory), nameof(OrderBy))]
+        [HebrewTranslation(typeof(IObjectFactory), nameof(OrderBy))]
         List<IOrderedItem>? OrderBy { get; set; }
 
         public void AddOrderBy(IOrderedItem nextOrder)

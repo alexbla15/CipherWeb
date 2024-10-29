@@ -2,19 +2,22 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(PackageProperty))]
+    /// <summary>
+    /// Property scheme of one of the package's properties.
+    /// </summary>
+    [HebrewTranslation(nameof(IPackageProperty))]
     public interface IPackageProperty : ICipherClass
     {
         /// <summary>
         /// Name of the property
         /// </summary>
-        [HebrewTranslation(typeof(PackageProperty), nameof(Name))]
+        [HebrewTranslation(typeof(IPackageProperty), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Property value.
         /// </summary>
-        [HebrewTranslation(typeof(PackageProperty), nameof(Value))]
+        [HebrewTranslation(typeof(IPackageProperty), nameof(Value))]
         string? Value { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));

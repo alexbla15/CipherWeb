@@ -1,6 +1,9 @@
 ﻿namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(UpdateEvent))]
+    /// <summary>
+    /// Update event's process or comments
+    /// </summary>
+    [HebrewTranslation(nameof(IUpdateEvent))]
     public interface IUpdateEvent : ICipherClass
     {
         /// <summary>
@@ -12,19 +15,19 @@
         /// <summary>
         /// Updated comment for event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
         string? EventComment { get; set; }
 
         /// <summary>
         /// New process ID for event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Status))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Status))]
         int Status { get; set; }
 
         /// <summary>

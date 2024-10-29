@@ -2,25 +2,29 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(ProcessStepDefinition))]
+    /// <summary>
+    /// Definition of a process - 
+    /// a collection of steps that make a single definition
+    /// </summary>
+    [HebrewTranslation(nameof(IProcessStepDefinition))]
     public interface IProcessStepDefinition : IResource
     {
         /// <summary>
         /// Condition on event to be associated with the process step 
         /// </summary>
-        [HebrewTranslation(typeof(ProcessStepDefinition), nameof(Condition))]
+        [HebrewTranslation(typeof(IProcessStepDefinition), nameof(Condition))]
         IGroupedBooleanCondition Condition { get; set; }
 
         /// <summary>
         /// Description of process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
+        [HebrewTranslation(typeof(IProcessDefinition), nameof(Description))]
         string Description { get; set; }
 
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
+        [HebrewTranslation(typeof(IProcessDefinition), nameof(Name))]
         string Name { get; set; }
 
         /// <summary>
@@ -62,10 +66,6 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
-    /// <summary>
-    /// Definition of a process - 
-    /// a collection of steps that make a single definition
-    /// </summary>
     public abstract class BaseProcessStepDefinition : Resource, IProcessStepDefinition
     {
         private string _Name = string.Empty;

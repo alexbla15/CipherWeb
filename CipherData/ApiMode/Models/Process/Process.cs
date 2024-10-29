@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// An instance of a specific processes
-    /// </summary>
     public class Process : BaseProcess, IProcess
     {
         // API RELATED FUNCTIONS

@@ -3,25 +3,25 @@
     /// <summary>
     /// Basic resource template for objects.
     /// </summary>
-    [HebrewTranslation(nameof(Resource))]
+    [HebrewTranslation(nameof(IResource))]
     public interface IResource : ICipherClass
     {
         /// <summary>
         /// Required level of clearence to access this object
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(ClearenceLevel))]
+        [HebrewTranslation(typeof(IResource), nameof(ClearenceLevel))]
         string ClearenceLevel { get; set; }
 
         /// <summary>
         /// Searchable ID for the object
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(Id))]
+        [HebrewTranslation(typeof(IResource), nameof(Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Universal unique ID (UUID) for the object, unique over all objects
         /// </summary>
-        [HebrewTranslation(typeof(Resource), nameof(Uuid))]
+        [HebrewTranslation(typeof(IResource), nameof(Uuid))]
         int Uuid { get; set; }
 
         public Dictionary<string, object?> ToDictionary()

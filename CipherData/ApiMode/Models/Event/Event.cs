@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Regular event object is too complicated for HMI display, ergo - we have this object.
-    /// </summary>
     public class DisplayedEvent : CipherClass, IDisplayedEvent
     {
         private string? _Worker = null;
@@ -42,10 +39,6 @@
         public decimal? EventMass { get; set; }
     }
 
-    /// <summary>
-    /// Event consists of several classicaly defined events (called LegacyEvent)
-    /// Each event can include many sub events of mass-transfer, and relocation.
-    /// </summary>
     public class Event : BaseEvent, IEvent
     {
         // API RELATED FUNCTIONS

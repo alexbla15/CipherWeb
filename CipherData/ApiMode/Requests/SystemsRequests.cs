@@ -54,7 +54,5 @@
             ICustomObjectBooleanCondition obj = result.Item1 ?? new CustomObjectBooleanCondition();
             return Tuple.Create(obj, result.Item2);
         }
-
-
     }
 }

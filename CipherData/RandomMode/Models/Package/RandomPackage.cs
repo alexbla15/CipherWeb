@@ -1,6 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(Package))]
     public class RandomPackage : BasePackage, IPackage
     {
         public RandomPackage() 
@@ -47,9 +46,6 @@
 
         protected override IPackagesRequests GetRequests() => new RandomPackagesRequests();
 
-        /// <summary>
-        /// Fetch all packages which contain the searched text
-        /// </summary>
         public override async Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText)
             => await GetRequests().GetAll();
 

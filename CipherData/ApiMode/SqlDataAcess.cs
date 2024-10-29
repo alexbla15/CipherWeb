@@ -29,7 +29,7 @@ namespace CipherData.ApiMode
 
         public async Task SaveData<T>(string sql, T parameters)
         {
-            string connection_string = _config.GetConnectionString(ConnectionStringName);
+            string? connection_string = _config.GetConnectionString(ConnectionStringName);
 
             using (IDbConnection connection = new SqlConnection(connection_string))
             {

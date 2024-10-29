@@ -1,9 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Update package details contract.
-    /// Ergo, only properties that are not changed using Event, are included.
-    /// </summary>
     public class UpdatePackage : CipherClass, IUpdatePackage
     {
         private string? _PackageDescription;

@@ -6,10 +6,7 @@ namespace CipherData.ApiMode
     {
         private readonly ISqlDataAcess _db;
 
-        public CipherInfo(ISqlDataAcess db)
-        {
-            _db = db;
-        }
+        public CipherInfo(ISqlDataAcess db) => _db = db;
 
         public async Task<Report> GetReport(int id)
         {

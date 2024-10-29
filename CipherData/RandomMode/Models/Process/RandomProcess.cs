@@ -1,8 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    /// <summary>
-    /// An instance of a specific processes
-    /// </summary>
     public class RandomProcess : BaseProcess, IProcess
     {
         public RandomProcess()

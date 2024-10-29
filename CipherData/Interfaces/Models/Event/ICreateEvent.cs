@@ -2,43 +2,46 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(CreateEvent))]
+    /// <summary>
+    /// Create new event
+    /// </summary>
+    [HebrewTranslation(nameof(ICreateEvent))]
     public interface ICreateEvent : ICipherClass
     {
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Actions))]
+        [HebrewTranslation(typeof(IEvent), nameof(Actions))]
         List<IPackageRequest> Actions { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.EventType))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.EventType))]
         int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Timestamp))]
         DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Worker))]
         string? Worker { get; set; }
 
         public CheckField CheckWorker() => CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");

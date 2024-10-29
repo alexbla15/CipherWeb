@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Create a new unit or update it
-    /// </summary>
     public class VesselRequest : CipherClass, IVesselRequest
     {
         private string? _Name;

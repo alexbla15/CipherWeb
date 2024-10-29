@@ -2,25 +2,28 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(ProcessDefinitionRequest))]
+    /// <summary>
+    /// Create a new process definition or update it.
+    /// </summary>
+    [HebrewTranslation(nameof(IProcessDefinitionRequest))]
     public interface IProcessDefinitionRequest : ICipherClass
     {
         /// <summary>
         /// Description of process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Description))]
+        [HebrewTranslation(typeof(IProcessDefinition), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(Name))]
+        [HebrewTranslation(typeof(IProcessDefinition), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Steps of the process
         /// </summary>
-        [HebrewTranslation(typeof(ProcessDefinition), nameof(ProcessDefinition.Steps))]
+        [HebrewTranslation(typeof(IProcessDefinition), nameof(IProcessDefinition.Steps))]
         List<IProcessStepDefinition> Steps { get; set; }
 
         /// <summary>

@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Property scheme of one of the package's properties.
-    /// </summary>
     public class PackageProperty : CipherClass, IPackageProperty
     {
         private string? _Name = string.Empty;

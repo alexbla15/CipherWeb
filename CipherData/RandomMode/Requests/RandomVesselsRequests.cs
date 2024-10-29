@@ -1,6 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-
     public class RandomVesselsRequests : IVesselsRequests
     {
         public async Task<Tuple<List<IVessel>, ErrorResponse>> GetAll()

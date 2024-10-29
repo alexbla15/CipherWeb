@@ -2,76 +2,79 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(DisplayedEvent))]
+    /// <summary>
+    /// Regular event object is too complicated for HMI display, ergo - we have this object.
+    /// </summary>
+    [HebrewTranslation(nameof(IDisplayedEvent))]
     public interface IDisplayedEvent : ICipherClass
     {
         /// <summary>
         /// accepting package, item 1 - previous status, item 2 - final status
         /// </summary>
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingPackage))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(AcceptingPackage))]
         Tuple<IPackage, IPackage>? AcceptingPackage { get; set; }
 
         /// <summary>
         /// donating package, item 1 - previous status, item 2 - final status
         /// </summary>
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingPackage))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(DonatingPackage))]
         Tuple<IPackage, IPackage>? DonatingPackage { get; set; }
 
         /// <summary>
         /// package accepting system
         /// </summary>
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(AcceptingSystem))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(AcceptingSystem))]
         IStorageSystem? AcceptingSystem { get; set; }
 
         /// <summary>
         /// package donating system
         /// </summary>
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(DonatingSystem))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(DonatingSystem))]
         IStorageSystem? DonatingSystem { get; set; }
 
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(Id))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(Id))]
         string? Id { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
+        [HebrewTranslation(typeof(IEvent), nameof(ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        [HebrewTranslation(typeof(IEvent), nameof(Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// mass transfered in the event
         /// </summary>
-        [HebrewTranslation(typeof(DisplayedEvent), nameof(EventMass))]
+        [HebrewTranslation(typeof(IDisplayedEvent), nameof(EventMass))]
         decimal? EventMass { get; set; }
 
         /// <summary>
         /// Type of event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(EventType))]
+        [HebrewTranslation(typeof(IEvent), nameof(EventType))]
         int EventType { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Status))]
+        [HebrewTranslation(typeof(IEvent), nameof(Status))]
         int Status { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
+        [HebrewTranslation(typeof(IEvent), nameof(Timestamp))]
         DateTime Timestamp { get; set; }
 
         // STATIC METHODS
@@ -79,37 +82,41 @@ namespace CipherData.Interfaces
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
-    [HebrewTranslation(nameof(Event))]
+    /// <summary>
+    /// Event consists of several classicaly defined events (called LegacyEvent)
+    /// Each event can include many sub events of mass-transfer, and relocation.
+    /// </summary>
+    [HebrewTranslation(nameof(IEvent))]
     public interface IEvent : IResource
     {
         /// <summary>
         /// Type of event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(EventType))]
+        [HebrewTranslation(typeof(IEvent), nameof(EventType))]
         int EventType { get; set; }
 
         /// <summary>
         /// Validation status of event.
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Status))]
+        [HebrewTranslation(typeof(IEvent), nameof(Status))]
         int Status { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Worker))]
+        [HebrewTranslation(typeof(IEvent), nameof(Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(ProcessId))]
+        [HebrewTranslation(typeof(IEvent), nameof(ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(Comments))]
         string? Comments { get; set; }
 
         /// <summary>
@@ -125,7 +132,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Timestamp when the event happend
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Timestamp))]
+        [HebrewTranslation(typeof(IEvent), nameof(Timestamp))]
         DateTime Timestamp { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
@@ -309,14 +316,14 @@ namespace CipherData.Interfaces
 
         public DateTime Timestamp { get; set; }
 
-        [HebrewTranslation(typeof(Event), nameof(InitialStatePackages))]
+        [HebrewTranslation(typeof(IEvent), nameof(InitialStatePackages))]
         public List<IPackage> InitialStatePackages
         {
             get => _InitialStatePackages;
             set => _InitialStatePackages = value.OrderBy(x => x.Id).ToList();
         }
 
-        [HebrewTranslation(typeof(Event), nameof(FinalStatePackages))]
+        [HebrewTranslation(typeof(IEvent), nameof(FinalStatePackages))]
         public List<IPackage> FinalStatePackages
         {
             get => _FinalStatePackages;

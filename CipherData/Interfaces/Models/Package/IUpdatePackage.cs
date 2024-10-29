@@ -2,31 +2,35 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(UpdatePackage))]
+    /// <summary>
+    /// Update package details contract.
+    /// Ergo, only properties that are not changed using Event, are included.
+    /// </summary>
+    [HebrewTranslation(nameof(IUpdatePackage))]
     public interface IUpdatePackage : ICipherClass
     {
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
         string? ActionComments { get; set; }
 
         /// <summary>
         /// List of processes definitions (IDs) that may accept this package as input
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.DestinationProcesses))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.DestinationProcesses))]
         List<string>? DestinationProcessesIds { get; set; }
 
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Description))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Description))]
         string? PackageDescription { get; set; }
 
         /// <summary>
         /// Unique identifier of a package (if null, no change in package id).
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Package.Id))]
+        [HebrewTranslation(typeof(IPackage), nameof(IPackage.Id))]
         string? PackageId { get; set; }
 
 
@@ -67,6 +71,6 @@ namespace CipherData.Interfaces
 
         // STATIC METHODS
 
-        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod().DeclaringType, text);
+        public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 }

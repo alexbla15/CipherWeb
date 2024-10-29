@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Create a new process definition or update it.
-    /// </summary>
     public class ProcessDefinitionRequest : CipherClass, IProcessDefinitionRequest
     {
         private string? _Name = string.Empty;

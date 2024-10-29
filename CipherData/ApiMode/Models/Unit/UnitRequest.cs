@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Create a new unit or update it
-    /// </summary>
     public class UnitRequest : CipherClass, IUnitRequest
     {
         private string? _Name = string.Empty;

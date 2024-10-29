@@ -3,7 +3,6 @@
     /// <summary>
     /// Make an event where 1 package donates mass to other packs.
     /// </summary>
-    [HebrewTranslation(nameof(Event))]
     public class RandomTransferAmountEvent : RandomEvent, IEvent
     {
         public RandomTransferAmountEvent()

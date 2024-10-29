@@ -1,9 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-
-    /// <summary>
-    /// Create a new category or update it
-    /// </summary>
     public class CategoryRequest : CipherClass, ICategoryRequest
     {
         private string? _Name = string.Empty;

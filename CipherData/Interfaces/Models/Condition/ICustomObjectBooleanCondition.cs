@@ -4,11 +4,18 @@ namespace CipherData.Interfaces
 {
     public interface ICustomCondition
     {
+        [HebrewTranslation(typeof(ICustomCondition), nameof(Factory))]
         IObjectFactory? Factory { get; set; }
+
+        [HebrewTranslation(typeof(ICustomCondition), nameof(ObjectCondition))]
         IGroupedBooleanCondition? ObjectCondition { get; set; }
     }
 
-    [HebrewTranslation(nameof(CustomObjectBooleanCondition))]
+    /// <summary>
+    /// Complex boolean condition that is applied to custom 
+    /// objects created from an object factory
+    /// </summary>
+    [HebrewTranslation(nameof(ICustomObjectBooleanCondition))]
     public interface ICustomObjectBooleanCondition : ICipherClass
     {
         /// <summary>

@@ -25,9 +25,6 @@
         public Method? Method { get; set; }
     }
 
-    /// <summary>
-    /// Method to get desired objects by filtering and aggregating the database
-    /// </summary>
     public class ObjectFactory : CipherClass, IObjectFactory
     {
         public IGroupedBooleanCondition Filter { get; set; } = new GroupedBooleanCondition();

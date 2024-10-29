@@ -1,10 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    /// <summary>
-    /// Event consists of several classicaly defined events (called LegacyEvent)
-    /// Each event can include many sub events of mass-transfer, and relocation.
-    /// </summary>
-    [HebrewTranslation(nameof(Event))]
     public class RandomRelocationEvent : RandomEvent, IEvent
     {
         public RandomRelocationEvent()

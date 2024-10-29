@@ -2,43 +2,43 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation("System")]
+    [HebrewTranslation("ISystem")]
     public interface IStorageSystem : IResource
     {
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Description))]
-        string? Description { get; set; }
+        [HebrewTranslation($"ISystem_{nameof(Description)}")]
+        string ? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Name))]
+        [HebrewTranslation($"ISystem_{nameof(Name)}")]
         string? Name { get; set; }
 
         /// <summary>
         /// Child systems contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Children))]
+        [HebrewTranslation($"ISystem_{nameof(Children)}")]
         List<IStorageSystem>? Children { get; set; }
 
         /// <summary>
         /// Parent system containing this one
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Parent))]
+        [HebrewTranslation($"ISystem_{nameof(Parent)}")]
         IStorageSystem? Parent { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Properties))]
+        [HebrewTranslation($"ISystem_{nameof(Properties)}")]
         Dictionary<string, string>? Properties { get; set; }
 
         /// <summary>
         /// Unit responsible for this system.
         /// </summary>
-        [HebrewTranslation(typeof(StorageSystem), nameof(Unit))]
+        [HebrewTranslation($"ISystem_{nameof(Unit)}")]
         IUnit? Unit { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

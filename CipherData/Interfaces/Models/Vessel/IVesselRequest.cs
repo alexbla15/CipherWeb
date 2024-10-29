@@ -2,25 +2,28 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(VesselRequest))]
+    /// <summary>
+    /// Create a new unit or update it
+    /// </summary>
+    [HebrewTranslation(nameof(IVesselRequest))]
     public interface IVesselRequest : ICipherClass
     {
         /// <summary>
         /// Name of vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Name))]
+        [HebrewTranslation(typeof(IVessel), nameof(Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Vessel.System))]
+        [HebrewTranslation(typeof(IVessel), nameof(IVessel.System))]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
-        [HebrewTranslation(typeof(Vessel), nameof(Type))]
+        [HebrewTranslation(typeof(IVessel), nameof(Type))]
         string? Type { get; set; }
 
         /// <summary>

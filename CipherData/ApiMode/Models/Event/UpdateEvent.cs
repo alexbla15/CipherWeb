@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// Update event's process or comments
-    /// </summary>
     public class UpdateEvent : CipherClass, IUpdateEvent
     {
         private string? _EventComment;

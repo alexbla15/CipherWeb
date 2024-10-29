@@ -1,6 +1,5 @@
 ﻿namespace CipherData.RandomMode
 {
-    [HebrewTranslation(nameof(Unit))]
     public class RandomUnit : BaseUnit, IUnit
     {
         private static readonly List<string> UnitDescriptions = new() { "תפעול", "אחסון", "תכנון" };
@@ -22,7 +21,6 @@
         /// <summary>
         /// Get the id of a new object
         /// </summary>
-        /// <returns></returns>
         public static string GetNextId() => $"U{++IdCounter:D3}";
 
         // METHODS

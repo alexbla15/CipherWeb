@@ -2,43 +2,43 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Package))]
+    [HebrewTranslation(nameof(IPackage))]
     public interface IPackage : IResource
     {
         /// <summary>
         /// Description of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Description))]
+        [HebrewTranslation(typeof(IPackage), nameof(Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Total mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(BrutMass))]
+        [HebrewTranslation(typeof(IPackage), nameof(BrutMass))]
         decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(NetMass))]
+        [HebrewTranslation(typeof(IPackage), nameof(NetMass))]
         decimal NetMass { get; set; }
 
         /// <summary>
         /// Timestamp when the package was created
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(CreatedAt))]
+        [HebrewTranslation(typeof(IPackage), nameof(CreatedAt))]
         DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Dictionary of additional properties of the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Properties))]
+        [HebrewTranslation(typeof(IPackage), nameof(Properties))]
         List<IPackageProperty>? Properties { get; set; }
 
         /// <summary>
         /// Category of package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Category))]
+        [HebrewTranslation(typeof(IPackage), nameof(Category))]
         ICategory Category { get; set; }
 
         /// <summary>
@@ -49,31 +49,31 @@ namespace CipherData.Interfaces
         /// <summary>
         /// List of processes definitions that may accept this package as input
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(DestinationProcesses))]
+        [HebrewTranslation(typeof(IPackage), nameof(DestinationProcesses))]
         List<IProcessDefinition>? DestinationProcesses { get; set; }
 
         /// <summary>
         /// Parent package containing this one.
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Parent))]
+        [HebrewTranslation(typeof(IPackage), nameof(Parent))]
         IPackage? Parent { get; set; }
 
         /// <summary>
         /// Packages contained in this one
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Children))]
+        [HebrewTranslation(typeof(IPackage), nameof(Children))]
         List<IPackage>? Children { get; set; }
 
         /// <summary>
         /// Location which contains the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(System))]
+        [HebrewTranslation(typeof(IPackage), nameof(System))]
         IStorageSystem System { get; set; }
 
         /// <summary>
         /// Vessel which contains the package
         /// </summary>
-        [HebrewTranslation(typeof(Package), nameof(Vessel))]
+        [HebrewTranslation(typeof(IPackage), nameof(Vessel))]
         IVessel? Vessel { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
@@ -125,7 +125,7 @@ namespace CipherData.Interfaces
         Task<Tuple<List<IPackage>, ErrorResponse>> All();
 
         /// <summary>
-        /// Fetch all categories which contain the searched text
+        /// Fetch all objects which contain the searched text
         /// </summary>
         Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText);
 
@@ -202,6 +202,9 @@ namespace CipherData.Interfaces
 
         protected abstract IPackagesRequests GetRequests();
 
+        /// <summary>
+        /// Fetch all packages which contain the searched text
+        /// </summary>
         public abstract Task<Tuple<List<IPackage>, ErrorResponse>> Containing(string? SearchText);
 
         public abstract Task<Tuple<List<IEvent>, ErrorResponse>> Events();

@@ -16,7 +16,6 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<ISqlDataAcess, SqlDataAcess>();
 builder.Services.AddTransient<ICipherInfo, CipherInfo>(); 
-builder.Services.AddScoped<ExcelService>();
 builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();

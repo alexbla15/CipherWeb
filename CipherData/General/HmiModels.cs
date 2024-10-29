@@ -11,14 +11,9 @@ namespace CipherData.General
 
         public void SetTranslation(string engWord)
         {
-            if (Translator.TranslationsDictionary.ContainsKey(engWord))
-            {
-                Translation = Translator.TranslationsDictionary[engWord].Trim();
-            }
-            else
-            {
-                Translation = engWord.Trim();
-            }
+            Translation = (Translator.TranslationsDictionary.ContainsKey(engWord)) ? 
+                Translator.TranslationsDictionary[engWord] : engWord;
+            Translation = Translation.Trim();
         }
 
         public HebrewTranslationAttribute(string engWord) => SetTranslation(engWord);

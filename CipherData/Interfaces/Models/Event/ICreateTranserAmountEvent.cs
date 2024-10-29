@@ -2,49 +2,52 @@
 
 namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(CreateTranserAmountEvent))]
+    /// <summary>
+    /// An event of transfering mass between one package to another
+    /// </summary>
+    [HebrewTranslation(nameof(ICreateTranserAmountEvent))]
     public interface ICreateTranserAmountEvent : ICipherClass
     {
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
-        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(AcceptingPackage))]
+        [HebrewTranslation(typeof(ICreateTranserAmountEvent), nameof(AcceptingPackage))]
         IPackage? AcceptingPackage { get; set; }
 
         /// <summary>
         /// Package that loses mass.
         /// </summary>
-        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(DonatingPackage))]
+        [HebrewTranslation(typeof(ICreateTranserAmountEvent), nameof(DonatingPackage))]
         IPackage? DonatingPackage { get; set; }
 
         /// <summary>
         /// Package that accepts mass.
         /// </summary>
-        [HebrewTranslation(typeof(CreateTranserAmountEvent), nameof(Amount))]
+        [HebrewTranslation(typeof(ICreateTranserAmountEvent), nameof(Amount))]
         decimal Amount { get; set; }
 
         /// <summary>
         /// Free-text comments on the event
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
         string? Comments { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.ProcessId))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.ProcessId))]
         string? ProcessId { get; set; }
 
         /// <summary>
         /// Name of worker that fulfilled the form
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Worker))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Worker))]
         string? Worker { get; set; }
 
         /// <summary>
         /// Timestamp when the event happend. Required
         /// </summary>
-        [HebrewTranslation(typeof(Event), nameof(Event.Timestamp))]
+        [HebrewTranslation(typeof(IEvent), nameof(IEvent.Timestamp))]
         DateTime Timestamp { get; set; }
 
         /// <summary>
@@ -53,7 +56,7 @@ namespace CipherData.Interfaces
         public CheckField CheckDonatingPackage()
         {
             CheckField result = CheckField.Required(DonatingPackage, Translate(nameof(DonatingPackage)));
-            result = result.Succeeded ? CheckField.LowerEqual(Amount, DonatingPackage.BrutMass,
+            result = result.Succeeded ? CheckField.LowerEqual(Amount, DonatingPackage?.BrutMass ?? 0,
             Translate(nameof(Amount))) : result;
             return result;
         }
@@ -113,13 +116,16 @@ namespace CipherData.Interfaces
                 var AccPack = Copy(AcceptingPackage);
                 var DonPack = Copy(DonatingPackage);
 
-                DonPack.BrutMass = DonPack.BrutMass - Amount;
-                DonPack.NetMass = decimal.Round(DonPack.BrutMass * DonPack.Concentration, 2);
+                if (AccPack != null && DonPack != null)
+                {
+                    DonPack.BrutMass -= Amount;
+                    DonPack.NetMass = decimal.Round(DonPack.BrutMass * DonPack.Concentration, 2);
 
-                AccPack.BrutMass = AccPack.BrutMass + Amount;
-                AccPack.NetMass = decimal.Round(AccPack.BrutMass * AccPack.Concentration, 2);
+                    AccPack.BrutMass += Amount;
+                    AccPack.NetMass = decimal.Round(AccPack.BrutMass * AccPack.Concentration, 2);
 
-                ev.Actions = new() { AccPack.Request(), DonPack.Request() };
+                    ev.Actions = new() { AccPack.Request(), DonPack.Request() };
+                }
             }
 
             return ev;

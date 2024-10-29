@@ -12,7 +12,6 @@ namespace CipherData.RandomMode
         /// <param name="canBadRequest">is bad request an optionional result</param>
         /// <param name="canBeNotFound">is not found an optional result</param>
         /// <param name="canFail">only for testing. in real api, of course it may fail</param>
-        /// <returns></returns>
         public Task<Tuple<T, ErrorResponse>> Request<T>(T successResult, bool canBadRequest = true, bool canBeNotFound = false, bool canFail = false)
         {
             int result = new Random().Next(1, 4);

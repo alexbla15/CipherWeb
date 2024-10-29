@@ -1,30 +1,33 @@
 ﻿namespace CipherData.Interfaces
 {
-    [HebrewTranslation(nameof(Process))]
+    /// <summary>
+    /// An instance of a specific processes
+    /// </summary>
+    [HebrewTranslation(nameof(IProcess))]
     public interface IProcess : IResource
     {
         /// <summary>
         /// a collection of steps that make a single definition
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(Definition))]
+        [HebrewTranslation(typeof(IProcess), nameof(Definition))]
         IProcessDefinition Definition { get; set; }
 
-        [HebrewTranslation(typeof(Process), nameof(Start))]
+        [HebrewTranslation(typeof(IProcess), nameof(Start))]
         DateTime Start { get; set; }
 
-        [HebrewTranslation(typeof(Process), nameof(End))]
+        [HebrewTranslation(typeof(IProcess), nameof(End))]
         DateTime End { get; set; }
 
         /// <summary>
         /// Events taking place during a process
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(Events))]
+        [HebrewTranslation(typeof(IProcess), nameof(Events))]
         List<IEvent> Events { get; set; }
 
         /// <summary>
         /// Uncompleted steps for completing the process
         /// </summary>
-        [HebrewTranslation(typeof(Process), nameof(UncompletedSteps))]
+        [HebrewTranslation(typeof(IProcess), nameof(UncompletedSteps))]
         List<IProcessStepDefinition> UncompletedSteps { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()

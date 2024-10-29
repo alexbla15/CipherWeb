@@ -5,49 +5,49 @@ namespace CipherData.Interfaces
     /// <summary>
     /// Create a new category or update it
     /// </summary>
-    [HebrewTranslation(nameof(CategoryRequest))]
+    [HebrewTranslation(nameof(ICategoryRequest))]
     public interface ICategoryRequest : ICipherClass
     {
         /// <summary>
         /// Name of the category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.Name))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.Name))]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.Description))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.Description))]
         string? Description { get; set; }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.Parent))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.IdMask))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.IdMask))]
         List<string>? IdMask { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.ConsumingProcesses))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.ConsumingProcesses))]
         List<string?>? ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.CreatingProcesses))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.CreatingProcesses))]
         List<string?>? CreatingProcesses { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
         /// </summary>
-        [HebrewTranslation(typeof(Category), nameof(Category.Properties))]
+        [HebrewTranslation(typeof(ICategory), nameof(ICategory.Properties))]
         List<ICategoryProperty>? Properties { get; set; }
 
         public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));

@@ -1,230 +1,55 @@
-﻿using CipherData.ApiMode;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CipherData.General
 {
-    public class JsonICategoryConverter : JsonConverter<ICategory>
+    public class JsonInterfaceConverter<TInterface, TApiClass, TRandomClass> : JsonConverter<TInterface>
+    where TApiClass : TInterface
+    where TRandomClass : TInterface
     {
-        public override ICategory? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<Category>(ref reader, options);
-        }
+        public override TInterface? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => JsonSerializer.Deserialize<TApiClass>(ref reader, options);
 
-        public override void Write(Utf8JsonWriter writer, ICategory value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options)
         {
             try
             {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (Category)value, options);
+                JsonSerializer.Serialize(writer, (TApiClass)value, options);
             }
             catch (Exception)
             {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomCategory)value, options);
+                // If serialization fails, try to serialize as fallback type
+                JsonSerializer.Serialize(writer, (TRandomClass)value, options);
             }
         }
     }
 
-    public class JsonICategoryPropertyConverter : JsonConverter<ICategoryProperty>
-    {
-        public override ICategoryProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<CategoryProperty>(ref reader, options);
-        }
+    public class JsonICategoryConverter : JsonInterfaceConverter<ICategory, Category, RandomCategory> { }
 
-        public override void Write(Utf8JsonWriter writer, ICategoryProperty value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (CategoryProperty)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomCategoryProperty)value, options);
-            }
-        }
-    }
+    public class JsonICategoryPropertyConverter : 
+        JsonInterfaceConverter<ICategoryProperty, CategoryProperty, RandomCategoryProperty> { }
 
-    public class JsonIGroupedBooleanConditionConverter : JsonConverter<IGroupedBooleanCondition>
-    {
-        public override IGroupedBooleanCondition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<GroupedBooleanCondition>(ref reader, options);
-        }
+    public class JsonIGroupedBooleanConditionConverter : 
+        JsonInterfaceConverter<IGroupedBooleanCondition, GroupedBooleanCondition, RandomGroupedBooleanCondition> { }
 
-        public override void Write(Utf8JsonWriter writer, IGroupedBooleanCondition value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (GroupedBooleanCondition)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as random object
-                JsonSerializer.Serialize(writer, (RandomGroupedBooleanCondition)value, options);
-            }
-        }
-    }
+    public class JsonIPackageConverter : JsonInterfaceConverter<IPackage, Package, RandomPackage> { }
 
-    public class JsonIPackageConverter : JsonConverter<IPackage>
-    {
-        public override IPackage? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<Package>(ref reader, options);
-        }
+    public class JsonIPackagePropertyConverter : 
+        JsonInterfaceConverter<IPackageProperty, PackageProperty, PackageProperty> { }
 
-        public override void Write(Utf8JsonWriter writer, IPackage value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (Package)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomPackage)value, options);
-            }
-        }
-    }
+    public class JsonIVesselConverter : JsonInterfaceConverter<IVessel, Vessel, RandomVessel> { }
 
-    public class JsonIPackagePropertyConverter : JsonConverter<IPackageProperty>
-    {
-        public override IPackageProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<PackageProperty>(ref reader, options);
-        }
+    public class JsonIStorageSystemConverter : 
+        JsonInterfaceConverter<IStorageSystem, StorageSystem, RandomStorageSystem> { }
 
-        public override void Write(Utf8JsonWriter writer, IPackageProperty value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, (PackageProperty)value, options);
-        }
-    }
+    public class JsonIUnitConverter : JsonInterfaceConverter<IUnit, Unit, RandomUnit> { }
 
-    public class JsonIVesselConverter : JsonConverter<IVessel>
-    {
-        public override IVessel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<Vessel>(ref reader, options);
-        }
+    public class JsonIProcessDefinitionConverter : 
+        JsonInterfaceConverter<IProcessDefinition, ProcessDefinition, RandomProcessDefinition> { }
 
-        public override void Write(Utf8JsonWriter writer, IVessel value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (Vessel)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomVessel)value, options);
-            }
-        }
-    }
-
-    public class JsonIStorageSystemConverter : JsonConverter<IStorageSystem>
-    {
-        public override IStorageSystem? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<StorageSystem>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, IStorageSystem value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (StorageSystem)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomStorageSystem)value, options);
-            }
-        }
-    }
-
-    public class JsonIUnitConverter : JsonConverter<IUnit>
-    {
-        public override IUnit? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<Unit>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, IUnit value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (Unit)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomUnit)value, options);
-            }
-        }
-    }
-
-    public class JsonIProcessDefinitionConverter : JsonConverter<IProcessDefinition>
-    {
-        public override IProcessDefinition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<ProcessDefinition>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, IProcessDefinition value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (ProcessDefinition)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomProcessDefinition)value, options);
-            }
-        }
-    }
-
-    public class JsonIProcessStepDefinitionConverter : JsonConverter<IProcessStepDefinition>
-    {
-        public override IProcessStepDefinition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            // Deserialize the JSON into the concrete object type
-            return JsonSerializer.Deserialize<ProcessStepDefinition>(ref reader, options);
-        }
-
-        public override void Write(Utf8JsonWriter writer, IProcessStepDefinition value, JsonSerializerOptions options)
-        {
-            try
-            {
-                // Attempt to serialize as object
-                JsonSerializer.Serialize(writer, (ProcessStepDefinition)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as Random object
-                JsonSerializer.Serialize(writer, (RandomProcessStepDefinition)value, options);
-            }
-        }
-    }
+    public class JsonIProcessStepDefinitionConverter :
+        JsonInterfaceConverter<IProcessStepDefinition, ProcessStepDefinition, RandomProcessStepDefinition> { }
 
     /// <summary>
     /// Custom DateTime converter
@@ -234,14 +59,10 @@ namespace CipherData.General
         private readonly string _dateTimeFormat = "yyyy-MM-dd HH:mm"; // Format excluding seconds
 
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            return DateTime.ParseExact(reader.GetString() ?? string.Empty, _dateTimeFormat, CultureInfo.InvariantCulture);
-        }
+            => DateTime.ParseExact(reader.GetString() ?? string.Empty, _dateTimeFormat, CultureInfo.InvariantCulture);
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-        {
-            writer.WriteStringValue(value.ToString(_dateTimeFormat));
-        }
+            => writer.WriteStringValue(value.ToString(_dateTimeFormat));
     }
 
     /// <summary>
@@ -275,9 +96,6 @@ namespace CipherData.General
         }
 
         public override void Write(Utf8JsonWriter writer, ICondition value, JsonSerializerOptions options)
-        {
-            // Serialize the resource, including the type
-            JsonSerializer.Serialize(writer, value, value.GetType(), options);
-        }
+            => JsonSerializer.Serialize(writer, value, value.GetType(), options);
     }
 }

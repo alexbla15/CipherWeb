@@ -2,10 +2,7 @@
 {
     public class RandomUserActionResponse : BaseUserActionResponse
     {
-        public RandomUserActionResponse()
-        {
-            UserActions = RandomData.GetRandomUserActions(2);
-        }
+        public RandomUserActionResponse() => UserActions = RandomData.GetRandomUserActions(2);
     }
 }
 

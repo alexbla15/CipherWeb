@@ -12,8 +12,7 @@
         {
             if (string.IsNullOrEmpty(pack_id)) 
                 return Tuple.Create(new Package() { Id=pack_id} as IPackage, ErrorResponse.BadRequest);
-            IPackage res = RandomData.Package;
-            res.Id = pack_id;
+            IPackage res = new RandomPackage() { Id=pack_id};
             return await new RandomGenericRequests().Request(res, canBadRequest: false, canBeNotFound: true);
         }
 

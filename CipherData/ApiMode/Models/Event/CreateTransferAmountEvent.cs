@@ -1,8 +1,5 @@
 ﻿namespace CipherData.ApiMode
 {
-    /// <summary>
-    /// An event of transfering mass between one package to another
-    /// </summary>
     public class CreateTranserAmountEvent : CipherClass, ICreateTranserAmountEvent
     {
         private string? _Worker = null;
