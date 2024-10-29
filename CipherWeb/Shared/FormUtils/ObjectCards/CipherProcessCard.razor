@@ -10,23 +10,26 @@
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="פרטי התהליך" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-            <Buttons>
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
-                }
-            </Buttons>
-            <ChildContent>
-                <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
-                                    Disabled="@DisabledFields()" Value="@ChosenObject?.Name" />
-                <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
-                                    Disabled="@DisabledFields()" Value="@ChosenObject?.Description"
-                                    ValueChanged="@ChangeDetail" />
-            </ChildContent>
-        </CipherComponentCard>
-        <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" Disabled="@DisabledFields()" />
+        @if (!(SetMode != FormMode.Create && ChosenObject is null))
+        {
+            <CipherComponentCard Title="פרטי התהליך" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
+                    }
+                </Buttons>
+                <ChildContent>
+                    <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
+                    Disabled="@DisabledFields()" Value="@ChosenObject?.Name" />
+                    <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
+                    Disabled="@DisabledFields()" Value="@ChosenObject?.Description"
+                    ValueChanged="@ChangeDetail" />
+                </ChildContent>
+            </CipherComponentCard>
+            <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" Disabled="@DisabledFields()" />
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -64,9 +67,6 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי התהליך";
-
-        // DON'T DELETE - it made the form refresh with details from url
-        // if (ChosenObject != null) StateHasChanged();
         SetDetails();
     }
 
