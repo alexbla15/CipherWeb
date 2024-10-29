@@ -10,7 +10,7 @@
         }
     </HeaderContent>
     <ChildContent>
-        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
             <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
                 <Buttons>

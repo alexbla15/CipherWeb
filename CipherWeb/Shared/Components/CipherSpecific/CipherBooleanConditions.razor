@@ -6,6 +6,9 @@
 
 @code {
     [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    [Parameter]
     public bool WithSaveButton { get; set; } = true;
 
     /// <summary>
@@ -254,7 +257,7 @@
     }
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible">
+<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled)">
     <Buttons>
         @if (WithSaveButton)
         {
@@ -265,7 +268,7 @@
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
             <RadzenDataFilter @ref=dataFilter TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})"
-                              RemoveFilterText="הסרת מסנן"
+                              RemoveFilterText="הסרת מסנן" 
                               AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
                               AndOperatorText="וגם" OrOperatorText="או"
                               ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
@@ -284,11 +287,11 @@
                                     {
                                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
                                                      AlignItems="AlignItems.Center" Style="width:100%">
-                                            <RadzenTextBox Style="width: 100%"
+                                            <RadzenTextBox Style="width: 100%" Disabled="@Disabled" 
                                                            Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? context.FilterValue.ToString().Split("##")[0] : context.FilterValue.ToString()) : string.Empty)"
                                                            ValueChanged="@(async args => { context.FilterValue = (context.FilterValue != null) ? (context.FilterValue.ToString().Contains("##") ? (object)($"{args}##{context.FilterValue?.ToString().Split("##")[1]}") :  (object)($"{args}##{Operator.All.ToString()}")) : (object)($"{args}##{Operator.All.ToString()}"); await ParamsChanged(); })"/>
                                             <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" 
+                                            <RadzenDropDown Style="width: 100%" TValue="Operator" Disabled="@Disabled"
                                             Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? ((context.FilterValue.ToString().Split("##")[1] == "All") ? Operator.All : Operator.Any) : Operator.All) : Operator.All)" 
                                             ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
                                                 Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
@@ -317,7 +320,7 @@
                                     }
                                     else
                                     {
-                                        <RadzenTextBox Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
+                                        <RadzenTextBox Disabled="@Disabled" Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
                                     }
                                 }
                                 else
@@ -329,7 +332,10 @@
                     }
                 </Properties>
             </RadzenDataFilter>
-            <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
+            @if (!Disabled)
+            {
+                <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
+            }
         </RadzenStack>
     </ChildContent>
 </CipherComponentCard>

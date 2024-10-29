@@ -20,13 +20,13 @@
             </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" />
+                                    Disabled="@DisabledFields()" Value="@ChosenObject?.Name" />
                 <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" 
+                                    Disabled="@DisabledFields()" Value="@ChosenObject?.Description"
                                     ValueChanged="@ChangeDetail" />
             </ChildContent>
         </CipherComponentCard>
-        <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" />
+        <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" Disabled="@DisabledFields()" />
     </ChildContent>
 </CipherComponentCard>
 
@@ -69,6 +69,9 @@
         // if (ChosenObject != null) StateHasChanged();
         SetDetails();
     }
+
+    public bool DisabledFields()
+     => SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
 
     public void Change()
     {

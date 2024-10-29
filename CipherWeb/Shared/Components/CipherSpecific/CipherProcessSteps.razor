@@ -2,6 +2,9 @@
 
 @code {
     [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
     /// <summary>
@@ -103,7 +106,7 @@
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible" WithCard="false">
-    <CipherComponentCard Title="הגדרת שלבים" Visible="@Visible">
+    <CipherComponentCard Title="הגדרת שלבים" Visible="@Visible" WithButtons="@(!Disabled)">
         <Buttons>
             <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddStep())" HelpText="@AddText" />
             <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAllSteps())" HelpText="@DeleteAllText" />
@@ -116,19 +119,22 @@
             <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged"
                             TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="@(ChosenSteps != null && ChosenSteps.Any())">
                 <Columns>
-                    <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                        <Template Context="step">
+                    @if (!Disabled)
+                    {
+                        <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                            <Template Context="step">
                             <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
                         </Template>
                     </RadzenDataGridColumn>
+                    }
                     <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
-                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
+                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged" Disabled="@Disabled"/>
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
-                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
+                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" Disabled="@Disabled" />
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>
@@ -150,7 +156,7 @@
             <ChildContent>
                 @if (SelectedStep != null)
                 {
-                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" ChosenCondition="@SelectedCondition" />
+                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" ChosenCondition="@SelectedCondition" Disabled="@Disabled"/>
                 }
             </ChildContent>
         </CipherComponentCard>

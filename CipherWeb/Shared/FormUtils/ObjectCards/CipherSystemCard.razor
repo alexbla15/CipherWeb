@@ -10,7 +10,7 @@
         }
     </HeaderContent>
     <ChildContent>
-        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
             <CipherComponentCard Title="תכונות" WithCard="true" 
             ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
@@ -18,7 +18,7 @@
                     @if (SetMode == FormMode.ReadOnly)
                     {
                         <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenObject?.Id}")" />
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateSystem.Href}?Id={ChosenObject?.Id}")" />
                     }
                 </Buttons>
             <ChildContent>
