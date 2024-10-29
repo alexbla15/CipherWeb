@@ -6,7 +6,7 @@
         {
             Id = GetNextId();
             Name = RandomFuncs.RandomItem(ProcessesNames);
-            Description = RandomFuncs.RandomItem(ProcessesNames);
+            Description = Name;
             Steps = new() { new RandomProcessStepDefinition() };
         }
 

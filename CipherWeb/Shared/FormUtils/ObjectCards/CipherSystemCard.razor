@@ -10,15 +10,17 @@
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenObject?.Id}")" />
-                }
-            </Buttons>
+        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        {
+            <CipherComponentCard Title="תכונות" WithCard="true" 
+            ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.AddStorageSystem.Href}?Id={ChosenObject?.Id}")" />
+                    }
+                </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" ValueChanged="@ChangeDetail" />
@@ -30,6 +32,7 @@
                                     ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
             </ChildContent>
         </CipherComponentCard>
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -67,9 +70,7 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי המערכת";
-
-        // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null) StateHasChanged();
+        SetDetails();
     }
 
     public void Change()
@@ -86,6 +87,17 @@
         ChosenObject.Description = SysDescription.Comments;
         ChosenObject.Parent = SysParent.ChosenSystem;
         ChosenObject.Unit = SysUnit.ChosenUnit;
+        ChangeDetails.InvokeAsync();
+    }
+
+    public void SetDetails()
+    {
+        if (ChosenObject is null) return;
+
+        SysName.Value = ChosenObject.Name;
+        SysDescription.Comments = ChosenObject.Description;
+        SysParent.ChosenSystem = ChosenObject.Parent;
+        SysUnit.ChosenUnit = ChosenObject.Unit;
         ChangeDetails.InvokeAsync();
     }
 }

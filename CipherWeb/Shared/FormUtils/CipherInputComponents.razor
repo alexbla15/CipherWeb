@@ -142,13 +142,13 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Width="100%" Amount="@FetchMaxBrutMassAsync(pack).Result" 
+                        <CipherNumeric Amount="@FetchMaxBrutMassAsync(pack).Result" 
                         Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" AmountChanged="@ChangeDetails"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Amount="pack.BrutMass" Width="100%" 
+                        <CipherNumeric Amount="pack.BrutMass" 
                         AmountChanged="@(args => {pack.BrutMass = args; ChangeDetails.InvokeAsync();})"
                         Max="@FetchMaxBrutMassAsync(pack).Result" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>

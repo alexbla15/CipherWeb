@@ -14,7 +14,7 @@
         </RadzenLink>
 
         @* -- SEARCH BLOCK -- *@
-        <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"></CipherSearchRow>
+        <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"/>
     </RadzenStack>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
                  AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
@@ -34,10 +34,6 @@
                         <CipherButton Icon="@Icons.Social.SinglePerson.account_circle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
                                       Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
                                       Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
-
-                        @* -- FAST ACTIONS -- *@
-                        <CipherNavButton Icon="@Icons.Symbols.QuestionMark.question_mark" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                         Path="@CipherNavLinks.Information.Href" HelpTextPosition="TooltipPosition.Bottom" />
                     </RadzenStack>
                 </RadzenStack>
             </RadzenStack>

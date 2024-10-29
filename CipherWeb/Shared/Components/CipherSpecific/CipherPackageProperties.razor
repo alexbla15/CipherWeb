@@ -1,6 +1,12 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    /// <summary>
+    /// Is component readonly?
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
@@ -79,7 +85,7 @@
     }
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible">
+<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled)">
     <Buttons>
         <CipherAddBtn Variant="Variant.Outlined" Click="@(args => AddComponent())" HelpText="@AddText" />
         <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
@@ -92,19 +98,22 @@
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="IPackageProperty" 
             AllowColumnResize="true" Visible="ChosenProperties.Count() != 0" ValueChanged="@ChangeDetails">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="IPackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                    <Template Context="prop">
+                @if (!Disabled)
+                {
+                    <RadzenDataGridColumn Width="10%" TItem="IPackageProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                        <Template Context="prop">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
-                </RadzenDataGridColumn>
+                    </RadzenDataGridColumn>
+                }
                 <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" Change="@ChangeDetails" />
+                        <RadzenTextBox @bind-Value="@prop.Name" Style="width:100%" Change="@ChangeDetails" Disabled="@Disabled"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackageProperty" Title="@(IPackageProperty.Translate(nameof(IPackageProperty.Value)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" Change="@ChangeDetails" />
+                        <RadzenTextArea @bind-Value="@prop.Value" Style="width:100%" Change="@ChangeDetails" Disabled="@Disabled" />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

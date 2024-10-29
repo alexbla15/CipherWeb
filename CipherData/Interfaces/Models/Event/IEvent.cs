@@ -282,7 +282,7 @@ namespace CipherData.Interfaces
 
     }
 
-    public abstract class BaseEvent : Resource, IEvent
+    public abstract class BaseEvent : BaseResource, IEvent
     {
         private string? _Worker;
         private string? _Comments = null;

@@ -25,6 +25,8 @@ namespace CipherData.Interfaces
 
         // API-RELATED FUNCTIONS
 
+        Task<Tuple<IProcessDefinition, ErrorResponse>> Get(string? id);
+
         /// <summary>
         /// All objects
         /// </summary>

@@ -8,8 +8,8 @@
 
 @inject IJSRuntime JSRuntime
 
-<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
-              Click="@ClickFunc" Variant="Variant.Outlined" />
+<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ButtonStyle.Success" ColorShade="@Shade.Dark"
+              Click="@ClickFunc" Variant="@Variant.Outlined" />
 
 @code
 {
@@ -18,12 +18,6 @@
     /// </summary>
     [Parameter]
     public string? FileName { get; set; }
-
-    /// <summary>
-    /// Data that will be exported to Excel.
-    /// </summary>
-    [Parameter]
-    public IEnumerable<object>? Data { get; set; }
 
     /// <summary>
     /// Data that will be exported to Excel.

@@ -8,7 +8,7 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Free text comments on update. Ideally contains reason for change
         /// </summary>
-        [HebrewTranslation(nameof(ActionComments))]
+        [HebrewTranslation(typeof(Event), nameof(Event.Comments))]
         string? ActionComments { get; set; }
 
         /// <summary>

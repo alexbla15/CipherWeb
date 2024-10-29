@@ -45,6 +45,7 @@ namespace CipherData.Interfaces
         /// <returns></returns>
         public IVesselRequest Request() => new VesselRequest() { Name = Name, Type = Type, SystemId = System?.Id };
 
+        public IVessel Copy();
 
         // STATIC METHODS
 
@@ -94,9 +95,12 @@ namespace CipherData.Interfaces
 
         // ABSTRACT METHODS
 
+
         protected abstract IVesselsRequests GetRequests();
 
         public abstract Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract IVessel Copy();
 
         // API RELATED FUNCTIONS
 

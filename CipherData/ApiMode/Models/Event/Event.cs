@@ -50,6 +50,10 @@
     {
         // API RELATED FUNCTIONS
 
+        protected override ILogsRequests GetLogsRequests() => new LogsRequests();
+
+        protected override IQueryRequests GetQueryRequests() => new QueryRequests();
+
         protected override IEventsRequests GetRequests() => new EventsRequests();
 
         public override async Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)

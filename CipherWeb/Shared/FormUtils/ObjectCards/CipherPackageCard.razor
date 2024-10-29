@@ -22,9 +22,10 @@
 
                 @if (SetMode == FormMode.Create)
                 {
-                    <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Value="@ChosenObject?.Id" Icon="@Icons.Cipher.Package" />
+                    <CipherAutoComplete Label="@(IPackage.Translate(nameof(IPackage.Id)))" Value="@ChosenObject?.Id"
+                    Icon="@Icons.Cipher.Package" Disabled="@(SetMode == FormMode.ReadOnly)"/>
                 }
-                <CipherComments Label="@(IPackage.Translate(nameof(IPackage.Description)))"
+                <CipherComments Label="@(IPackage.Translate(nameof(IPackage.Description)))" 
                                 Icon="@Icons.Documents.Page.description" Width="@Constants.StandartWidth" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 
                 @if (SetMode != FormMode.Create)
@@ -58,13 +59,13 @@
                         }
                     }
                 }
-                <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()"
+                <CipherPackagesPicking SelectedPackages="@ChosenObject?.Children?.ToList()" 
                                        Width="@Constants.StandartWidth" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                        Label="@(IPackage.Translate(nameof(IPackage.Children)))" />
             </ChildContent>
         </CipherComponentCard>
 
-        <CipherPackageProperties @ref="PackProps" 
+        <CipherPackageProperties @ref="PackProps" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
             ChosenProperties="@((ChosenObject?.Category is null)? 
             new List<IPackageProperty>() : ChosenObject?.Category?.Properties?.Select(x=> 
             { IPackageProperty prop = Config.PackageProperty();
@@ -73,7 +74,7 @@
               return prop;
             }).ToList())" />
 
-        <CipherProcessesTable WithCard="true" Title="תנועות" ChosenObjects="@PackProcesses" WithHeaderContent="false" />
+        <CipherDisplayedEventsCard @bind-Events="PackEvents"/>
     </ChildContent>
 </CipherComponentCard>
 
@@ -108,7 +109,7 @@
     [Parameter]
     public EventCallback<object> ChangeObject { get; set; }
 
-    private List<IProcess> PackProcesses = new();
+    private List<IEvent> PackEvents = new();
 
     private CipherPackageId SetPack = new();
     private CipherPackageId PackId = new();
@@ -128,11 +129,11 @@
 
         if (SetPack.ChosenPackage != null)
         {
-            (PackProcesses, error) = await SetPack.ChosenPackage.Processes();
+            (PackEvents, error) = await SetPack.ChosenPackage.Events();
         }
         else
         {
-            (PackProcesses, error) = (new(), ErrorResponse.Success);
+            (PackEvents, error) = (new(), ErrorResponse.Success);
         }
 
         await ChangeObject.InvokeAsync();

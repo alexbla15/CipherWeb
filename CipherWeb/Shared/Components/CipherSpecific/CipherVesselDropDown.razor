@@ -12,7 +12,7 @@
             <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.Type))" Title="@(IVessel.Translate(nameof(IVessel.Type)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(IVessel.System))" Title="@(IVessel.Translate(nameof(IVessel.System)))">
                 <Template>
-                    @((context as IVessel)?.System.Name)
+                    @((context as IVessel)?.System?.Name)
                 </Template>
                 </RadzenDropDownDataGridColumn>
         </Columns>

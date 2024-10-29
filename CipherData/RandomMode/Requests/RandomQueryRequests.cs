@@ -7,7 +7,7 @@
             // Get the type of T
             Type type = typeof(T);
 
-            string RandomTypeName = $"CipherData.Models.Randomizers.{type.Name}";
+            string RandomTypeName = $"CipherData.RandomMode.{type.Name}";
 
             Type? InterfaceType = type.GetInterfaces().Where(x => x.Name != "IResource").First();
             Type? randomType = Type.GetType(RandomTypeName);

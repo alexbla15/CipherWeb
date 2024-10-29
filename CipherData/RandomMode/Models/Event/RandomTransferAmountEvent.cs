@@ -4,10 +4,8 @@
     /// Make an event where 1 package donates mass to other packs.
     /// </summary>
     [HebrewTranslation(nameof(Event))]
-    public class RandomTransferAmountEvent : BaseEvent, IEvent
+    public class RandomTransferAmountEvent : RandomEvent, IEvent
     {
-        private static readonly List<IPackage> _Packages = RandomData.GetRandomPackages(new Random().Next(2, 3));
-
         public RandomTransferAmountEvent()
         {
             EventType = 23;
@@ -16,17 +14,21 @@
             ProcessId = new Random().Next(1, 20).ToString();
             Comments = "תנועה לדוגמה";
             Timestamp = RandomFuncs.RandomDateTime();
+
+            Tuple<List<IPackage>, List<IPackage>> PacksStatuses = GetPacks();
+
             InitialStatePackages = PacksStatuses.Item1;
             FinalStatePackages = PacksStatuses.Item2;
         }
 
         public Tuple<IEvent, ErrorResponse> Update(UpdateEvent update_details) => Tuple.Create(new RandomRelocationEvent() as IEvent, ErrorResponse.Success);
 
-        private static readonly Tuple<List<IPackage>, List<IPackage>> PacksStatuses = GetPacks();
         private static Tuple<List<IPackage>, List<IPackage>> GetPacks()
         {
+            List<IPackage> _Packages = RandomData.GetRandomPackages(new Random().Next(2, 3));
+
             List<IPackage> iPacks = _Packages;
-            List<IPackage> fPacks = _Packages;
+            List<IPackage> fPacks = _Packages.Select(x=>IResource.Copy(x)).ToList();
 
             for (int i = 0; i < iPacks.Count; i++)
             {

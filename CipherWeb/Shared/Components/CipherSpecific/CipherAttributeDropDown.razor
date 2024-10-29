@@ -1,10 +1,6 @@
-﻿@code {
-    /// <summary>
-    /// drop-down text when no value is chosen
-    /// </summary>
-    [Parameter]
-    public string? Placeholder { get; set; }
+﻿@inherits RadzenDropDown<string>
 
+@code {
     /// <summary>
     /// Chosen method
     /// </summary>
@@ -12,19 +8,10 @@
     public string? ChosenAttribute { get; set; }
 
     /// <summary>
-    /// Is the component visible.
-    /// </summary>
-    [Parameter]
-    public bool Visible { get; set; } = true;
-
-    /// <summary>
     /// All available aggregation fields
     /// </summary>
     [Parameter]
     public List<CipherField> AggregationFields { get; set; } = CommonFuncs.GetAllCipherFields();
-
-    [Parameter]
-    public EventCallback<object> Change { get; set; }
 
     protected override void OnInitialized()
     {
@@ -32,6 +19,5 @@
     }
 }
 
-<RadzenDropDown @bind-Value="@ChosenAttribute" Data=@AggregationFields TextProperty="Translation" ValueProperty="Path" Visible="@Visible"
-                Placeholder="@Placeholder" AllowClear="true" AllowFiltering="true" 
-                Style="width: 100%" Change="@Change"/>
+<RadzenDropDown @bind-Value="@ChosenAttribute" Data=@AggregationFields TextProperty="Translation" ValueProperty="Path" 
+Visible="@Visible" Placeholder="@Placeholder" AllowClear="true" AllowFiltering="true" Style="width: 100%" Change="@Change"/>

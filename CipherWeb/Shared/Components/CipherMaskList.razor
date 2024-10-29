@@ -2,21 +2,24 @@
 @using Radzen
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText" 
-AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
-    @onkeydown="HandleKeyDown" Width="@Constants.StandartWidth" />
+    <CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText"
+                        AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
+                        @onkeydown="HandleKeyDown" Width="@Constants.StandartWidth" />
 
     <div class="cipher-chip-container">
-    @foreach (var text in SelectedTexts)
-    {
-            <div class="cipher-chip">
-            @text
-                <span class="cipher-chip-close" @onclick="() => RemoveText(text)">
-                <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-            </span>
-        </div>
-    }
-</div>
+        @if (SelectedTexts != null)
+        {
+            @foreach (var text in SelectedTexts)
+            {
+                <div class="cipher-chip">
+                    @text
+                    <span class="cipher-chip-close" @onclick="() => RemoveText(text)">
+                        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+                    </span>
+                </div>
+            }
+        }
+    </div>
 </RadzenStack>
 
 @code {
@@ -61,7 +64,10 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
 
     private void RemoveText(string text)
     {
-        SelectedTexts.Remove(text);
-        ValueChanged.InvokeAsync();
+        if (!Disabled)
+        {
+            SelectedTexts.Remove(text);
+            ValueChanged.InvokeAsync();
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace CipherData.Interfaces
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(typeof(Category), nameof(IdMask))]
-        List<string> IdMask { get; set; }
+        List<string>? IdMask { get; set; }
 
         /// <summary>
         /// Properties that are accurate to most of the packages of this category.
@@ -65,7 +65,7 @@ namespace CipherData.Interfaces
                 [nameof(Id)] = Id,
                 [nameof(Name)] = Name,
                 [nameof(Description)] = Description,
-                [nameof(IdMask)] = string.Join(";", IdMask),
+                [nameof(IdMask)] = IdMask is null ? null : string.Join(";", IdMask),
                 [nameof(Children)] = Children != null ? string.Join("; ", Children.Select(x => x.Name)) : null,
                 [nameof(Parent)] = Parent?.Name,
                 [nameof(MaterialType)] = MaterialType?.Name,

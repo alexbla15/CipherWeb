@@ -5,7 +5,7 @@
     /// Each event can include many sub events of mass-transfer, and relocation.
     /// </summary>
     [HebrewTranslation(nameof(Event))]
-    public class RandomRelocationEvent : BaseEvent, IEvent
+    public class RandomRelocationEvent : RandomEvent, IEvent
     {
         public RandomRelocationEvent()
         {
@@ -15,17 +15,17 @@
             ProcessId = new Random().Next(1, 20).ToString();
             Comments = "תנועה לדוגמה";
             Timestamp = RandomFuncs.RandomDateTime();
+
+            Tuple<List<IPackage>, List<IPackage>> Result = GetResult();
+
             InitialStatePackages = Result.Item1;
             FinalStatePackages = Result.Item2;
         }
 
-
-        private static Tuple<List<IPackage>, List<IPackage>> Result = GetResult();
-
         private static Tuple<List<IPackage>, List<IPackage>> GetResult()
         {
             List<IPackage> iPacks = RandomData.GetRandomPackages(new Random().Next(3));
-            List<IPackage> fPacks = iPacks.ToList();
+            List<IPackage> fPacks = iPacks.Select(x=>ICipherClass.Copy(x)).ToList();
             foreach (IPackage p in fPacks)
             {
                 string target = $"S{new Random().Next(100)}";

@@ -15,6 +15,7 @@ namespace CipherWeb.Data
             public static readonly string ComingSoonImage = "cipher-comingsoon-image-container";
             public static readonly string ComingSoonOverlay = "cipher-comingsoon-overlay";
             public static readonly string JsonCheck = "cipher-jsoncheck";
+            public static readonly string DataGridEmpty = "cipher_datagrid_empty_text";
         }
 
         public class Button

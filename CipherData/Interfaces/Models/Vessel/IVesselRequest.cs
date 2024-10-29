@@ -52,7 +52,7 @@ namespace CipherData.Interfaces
             return result.Check();
         }
 
-        public IVessel Create(string id) =>
+        public IVessel Create(string? id) =>
             new Vessel() { Id = id, Name = Name, Type = Type, System = new StorageSystem() { Id = SystemId } };
 
         // STATIC METHODS

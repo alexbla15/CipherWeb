@@ -2,7 +2,7 @@
 {
     public class RandomFuncs
     {
-        public static T RandomItem<T>(List<T> values) => values[new Random().Next(0, values.Count - 1)];
+        public static T RandomItem<T>(List<T> values) => values[new Random().Next(0, values.Count-1)];
 
         public static DateTime RandomDateTime()
         {

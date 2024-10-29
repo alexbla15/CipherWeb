@@ -112,6 +112,8 @@
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">
+            @if (DisplayedEvents.Any())
+            {
             <RadzenDataGrid TItem="IDisplayedEvent"  @ref=CustomDataGrid
                             FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
                             AllowSorting="true" HideGroupedColumn="true"
@@ -168,8 +170,12 @@
                     <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.EventMass))" 
                     Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventMass)))" />
                 </Columns>
-            </RadzenDataGrid>
-
+                </RadzenDataGrid>
+            }
+            else
+            {
+                <RadzenText Text="לא נמצאו תנועות" class="@Constants.Styles.DataGridEmpty" />
+            }
 
             @if (WithRowButtons)
             {

@@ -7,8 +7,7 @@
 <RadzenStack Orientation="Orientation.Vertical">
     <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnSave="@RefreshEvents" />
     <CipherJsonCheck JsonValue="@JsonRequest" />
-    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents"
-        WithRowButtons="true"/>
+    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents" WithRowButtons="true"/>
     <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-Events="@ApprovedEvents" />
     <CipherDisplayedEventsCard Title="תנועות דחויות" @bind-Events="@DeclinedEvents" />
 </RadzenStack>

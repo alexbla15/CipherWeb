@@ -69,8 +69,10 @@ namespace CipherData.Interfaces
         public static T? FromJson<T>(string json) => JsonSerializer.Deserialize<T>(json, JsonOptions);
 
         // generic static copy of two objected
-        public static T? Copy<T>(T obj) where T : ICipherClass
+        public static T? Copy<T>(T? obj) where T : ICipherClass
         {
+            if (obj is null) return default;
+
             var json = obj.ToJson();
             var result = FromJson<T>(json); // Deserialize to the actual type
             return result;

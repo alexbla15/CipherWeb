@@ -56,5 +56,9 @@
                 return Tuple.Create(result.Item1.Select(x => x as IEvent).ToList(), result.Item2);
             }
         }
+
+        protected override ILogsRequests GetLogsRequests() => new RandomLogsRequests();
+
+        protected override IQueryRequests GetQueryRequests() => new RandomQueryRequests();
     }
 }

@@ -9,7 +9,7 @@
             => await new RandomGenericRequests().Request(RandomData.Systems, canBadRequest: false);
 
         public async Task<Tuple<IStorageSystem, ErrorResponse>> GetById(string? sys_id)
-            => await new RandomGenericRequests().Request(RandomData.System, canBadRequest: false, canBeNotFound: true);
+            => await new RandomGenericRequests().Request(new RandomStorageSystem() {Id=sys_id } as IStorageSystem, canBadRequest: false, canBeNotFound: true);
 
         public async Task<Tuple<IStorageSystem, ErrorResponse>> Update(string? sys_id, ISystemRequest sys)
             => await new RandomGenericRequests().Request(sys.Create(sys_id), canBeNotFound: true);

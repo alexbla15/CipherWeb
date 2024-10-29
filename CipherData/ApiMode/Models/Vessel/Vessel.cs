@@ -2,6 +2,18 @@
 {
     public class Vessel : BaseVessel, IVessel
     {
+        public override IVessel Copy()
+        {
+            var res = new Vessel();
+
+            foreach (var prop in typeof(IVessel).GetProperties())
+            {
+                prop.SetValue(res, prop.GetValue(this));
+            }
+
+            return res;
+        }
+
         // API RELATED METHODS
 
         protected override IVesselsRequests GetRequests() => new VesselsRequests();

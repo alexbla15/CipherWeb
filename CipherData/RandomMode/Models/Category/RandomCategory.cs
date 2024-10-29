@@ -12,8 +12,8 @@
             CreatingProcesses = RandomData.GetRandomProcessDefinitions(3);
             ConsumingProcesses = RandomData.GetRandomProcessDefinitions(3);
             MaterialType = RandomMaterialType(RandomFuncs.RandomItem(RandomData.MaterialTypes));
-            Parent = new Random().Next(0, 4) == 0 ? RandomMaterialType($"P{new Random().Next(0, 999)}") : null;
-            Children = new Random().Next(0, 4) == 0 ? new() { RandomMaterialType($"C1{new Random().Next(0, 999)}"), RandomMaterialType($"C2{new Random().Next(0, 999)}") } : null;
+            Parent = RandomMaterialType($"P{new Random().Next(0, 999)}");
+            Children = new() { RandomMaterialType($"C1{new Random().Next(0, 999)}"), RandomMaterialType($"C2{new Random().Next(0, 999)}") };
         }
 
         // STATIC METHODS

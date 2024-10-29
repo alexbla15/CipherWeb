@@ -23,34 +23,34 @@
                     <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" 
                                         Icon="@Icons.Symbols.category" @ref=CatName 
                                         ValueChanged="@ChangeDetail"
-                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                                        Disabled="@ReadonlyFields()"
                                         Value="@ChosenObject?.Name" />
                     <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" 
                                         Icon="@Icons.Documents.Page.description" 
                                         Multiline="true" 
                                         ValueChanged="@ChangeDetail"
-                                        @ref=CatDescription 
-                                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                                        @ref=CatDescription
+                                        Disabled="@ReadonlyFields()"
                                         Value="@ChosenObject?.Description" />
                     <CipherCategoryDropDown 
                         Label="@(ICategory.Translate(nameof(ICategory.Parent)))" 
                         @ref=ParentCat 
                         Change="@(args => ChangedParent((ICategory?)args))"
-                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                        ChosenCategory="@ChosenObject?.Parent" />
+                                            Disabled="@ReadonlyFields()"
+                                            ChosenCategory="@ChosenObject?.Parent" />
                     <CipherProcesses 
                         Icon="@Icons.Arrows.Squared.input" 
                         Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" 
                         @ref=InProcs 
                         Change="@ChangeDetail"
-                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
+                                     Disabled="@ReadonlyFields()" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
                     <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(ICategory.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs Change="@ChangeDetail"
-                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
-                    <CipherMask @ref=CatMask Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                SelectedTexts="@ChosenObject?.IdMask.ToHashSet()" ValueChanged="@ChangeDetail"/>
+                                     Disabled="@ReadonlyFields()" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
+                    <CipherMask @ref=CatMask Disabled="@ReadonlyFields()"
+                                SelectedTexts="@ChosenObject?.IdMask.ToHashSet()" ValueChanged="@ChangeDetail" />
                 </ChildContent>
             </CipherComponentCard>
-            <CipherCategoryProperties @ref=CatProperties ValueChanged="@ChangeDetail"
+            <CipherCategoryProperties @ref=CatProperties ValueChanged="@ChangeDetail" Disabled="@ReadonlyFields()"
                                       ChosenProperties="@(ParentProps ?? (CatProperties.ChosenProperties.Count > 0 ? CatProperties.ChosenProperties : (ChosenObject?.Properties ?? new List<ICategoryProperty>())))" />
         }
     </ChildContent>
@@ -81,6 +81,12 @@
     [Parameter]
     public EventCallback ChangeDetails { get; set; }
 
+    /// <summary>
+    /// Control visibility of the send request according to changes found in the form
+    /// </summary>
+    [Parameter]
+    public bool FoundChanges { get; set; } = false;
+
     private CipherCategoryDropDown CatId = new();
     private CipherCategoryDropDown ParentCat = new();
     private CipherAutoComplete CatName = new();
@@ -96,15 +102,17 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי הקטגוריה";
-
-        // DON'T DELETE - it made the form refresh with details from url
-        //if (ChosenObject != null) StateHasChanged();
+        FoundChanges = false;
     }
+
+    public bool ReadonlyFields()
+        => SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
 
     public void Change()
     {
         ChosenObject = CatId.ChosenCategory;
         ChangeObject.InvokeAsync();
+        FoundChanges = false;
     }
 
     public void ChangeDetail()
@@ -118,6 +126,7 @@
         ChosenObject.Properties = CatProperties.ChosenProperties;
         ChosenObject.IdMask = CatMask.GetValue();
         ChangeDetails.InvokeAsync();
+        FoundChanges = true;
     }
 
     /// <summary>
@@ -130,10 +139,7 @@
         Parent = parent;
         ParentProps = null;
 
-        if (parent != null)
-        {
-            if (parent.Properties != null) ParentProps = parent.Properties;
-        }
+        if (parent != null && parent.Properties != null) ParentProps = parent.Properties;
 
         ChangeDetail();
     }

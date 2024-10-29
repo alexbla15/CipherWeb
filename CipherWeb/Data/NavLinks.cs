@@ -33,17 +33,17 @@ namespace CipherWeb.Data
         };
 
         public static readonly CipherNavLink UpdateCategory = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Category", Name = "קטגוריה", Icon = Icons.Symbols.category };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Category", Name = "עריכת קטגוריה", Icon = Icons.Symbols.category };
         public static readonly CipherNavLink UpdatePackage = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Package", Name = "עריכת תעודה", Icon = Icons.Cipher.Package };
         public static readonly CipherNavLink UpdateUnit = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Unit", Name = "עריכת יחידה", Icon = Icons.Cipher.Unit };
         public static readonly CipherNavLink UpdateVessel = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Vessel", Name = "עריכת כלי", Icon = Icons.Cipher.Vessel };
         public static readonly CipherNavLink UpdateSystem = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/System", Name = "מערכת", Icon = Icons.Cipher.Location };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/System", Name = "עריכת מערכת", Icon = Icons.Cipher.Location };
         public static readonly CipherNavLink UpdateProcess = 
-            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Process", Name = "תהליך", Icon = Icons.Cipher.Process };
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Process", Name = "עריכת תהליך", Icon = Icons.Cipher.Process };
 
         public static readonly CipherNavLink Updates = new()
         {
@@ -109,10 +109,7 @@ namespace CipherWeb.Data
                 { FreeSearch, AdvancedSearch, CategorySearch, PackageSearch, VesselSearch, SystemSearch, UnitSearch, ProcessSearch }
         };
 
-        public static readonly CipherNavLink Information = 
-            new() { Href = nameof(Information), Icon = Icons.Communication.Chat.question_answer, Name = "הסברים ותמיכה" };
-
         public static readonly List<CipherNavLink> links = 
-            new() { Home, Forms, Updates, Approval, Reports, Searches, Information };
+            new() { Home, Forms, Updates, Approval, Reports, Searches };
     }
 }

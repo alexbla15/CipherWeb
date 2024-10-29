@@ -117,10 +117,7 @@
 
     void HideTooltipWithHtml(ElementReference elementReference, TooltipOptions? options = null)
     {
-        if (!string.IsNullOrWhiteSpace(HelpText))
-        {
-            tooltipService.Close();
-        }
+        if (!string.IsNullOrWhiteSpace(HelpText)) tooltipService.Close();
     }
 
     /// <summary>

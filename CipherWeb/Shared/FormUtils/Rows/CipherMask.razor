@@ -1,7 +1,7 @@
 ﻿@inherits CipherMaskList
 
 <CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@PlaceHolder" 
-SelectedTexts="@SelectedTexts" ValueChanged="@ValueChanged"/>
+SelectedTexts="@SelectedTexts" ValueChanged="@ValueChanged" Disabled="@Disabled"/>
 
 @code {
     private CipherMaskList Masks = new();
@@ -16,5 +16,5 @@ SelectedTexts="@SelectedTexts" ValueChanged="@ValueChanged"/>
     /// Get the value set within the mask. Resets the value if it doesn't fullfill the check function.
     /// </summary>
     /// <returns></returns>
-    public List<string> GetValue() => Masks.SelectedTexts.ToList();
+    public List<string>? GetValue() => Masks.SelectedTexts?.ToList();
 }

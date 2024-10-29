@@ -11,6 +11,7 @@
             Id = _Id;
             Name = _Id;
             Description = RandomFuncs.RandomItem(UnitDescriptions);
+            Parent = new Unit() { Id = GetNextId(), Name= GetNextId() };
         }
 
         /// <summary>
@@ -26,7 +27,8 @@
 
         // METHODS
 
-        protected override IUnitsRequests GetRequests() => new RandomUnitsRequests();
+        protected override IUnitsRequests GetRequests() 
+            => new RandomUnitsRequests();
 
         public override async Task<Tuple<List<IUnit>, ErrorResponse>> Containing(string? SearchText)
             => await All();

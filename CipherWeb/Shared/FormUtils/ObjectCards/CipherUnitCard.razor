@@ -11,14 +11,17 @@
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
-                }
-            </Buttons>
+        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        {
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" 
+            ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
+                    }
+                </Buttons>
             <ChildContent>
                 <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
@@ -28,6 +31,7 @@
                                     ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent Change="@ChangeDetail" />
             </ChildContent>
         </CipherComponentCard>
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -70,16 +74,13 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי היחידה";
-
-        // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null) StateHasChanged();
+        SetDetails();
     }
 
     public void Change()
     {
         ChosenObject = UnitId.ChosenUnit;
         ChangeObject.InvokeAsync();
-        StateHasChanged();
     }
 
     public void ChangeDetail()
@@ -88,6 +89,16 @@
         ChosenObject.Name = UnitName.Value;
         ChosenObject.Description = UnitDescription.Value;
         ChosenObject.Parent = UnitParent.ChosenUnit;
+        ChangeDetails.InvokeAsync();
+    }
+
+    public void SetDetails()
+    {
+        if (ChosenObject is null) return;
+
+        UnitName.Value = ChosenObject.Name;
+        UnitDescription.Value = ChosenObject.Description;
+        UnitParent.ChosenUnit = ChosenObject.Parent;
         ChangeDetails.InvokeAsync();
     }
 }

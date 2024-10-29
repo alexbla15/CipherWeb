@@ -12,7 +12,8 @@
     <RadzenStepsItem Text="קביעת פרמטרים">
         <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
                 <CipherAutoComplete Value="@(ChosenReport?.Id.ToString())" Label="@Report.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
-                <CipherAmount @ref="CurrVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" Label="@Report.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
+                <CipherAmount @ref="CurrVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" 
+                Label="@Report.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
                 <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@Report.Translate(nameof(Report.Title))" Icon="@Icons.Documents.assignment" @ref="ReportName" />
         </CipherComponentCard>
         <CipherParametrization ChosenParameters="@ChosenReport?.Parameters" ChosenParametersChanged="@OnParametersChanged" />

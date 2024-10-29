@@ -16,9 +16,6 @@ namespace CipherData
         }
 
         public static string GetTranslation(string key)
-        {
-            if (TranslationsDictionary.ContainsKey(key)) return TranslationsDictionary[key];
-            return key;
-        }
+            => (TranslationsDictionary.ContainsKey(key)) ? TranslationsDictionary[key] : key;
     }
 }

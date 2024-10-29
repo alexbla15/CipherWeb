@@ -58,6 +58,7 @@
         ChosenSteps.Add(Config.ProcessStepDefinition());
         StateHasChanged();
         await StepsDataGrid.RefreshDataAsync();
+        await ValueChanged.InvokeAsync();
     }
 
     /// <summary>
@@ -69,6 +70,7 @@
         ChosenSteps.Remove(step);
         await StepsDataGrid.RefreshDataAsync();
         StateHasChanged();
+        await ValueChanged.InvokeAsync();
     }
 
     /// <summary>
@@ -79,6 +81,7 @@
     {
         ChosenSteps.Clear();
         await StepsDataGrid.RefreshDataAsync();
+        await ValueChanged.InvokeAsync();
     }
 
     public void OnSave()
@@ -106,47 +109,53 @@
             <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAllSteps())" HelpText="@DeleteAllText" />
         </Buttons>
         <ChildContent>
-            @if (ChosenSteps.Count() == 0)
+            @if (ChosenSteps == null || !ChosenSteps.Any())
             {
-                <RadzenText Text="@HelpText" />
+                <RadzenText Text="@HelpText"/>
             }
-            <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged" 
-                TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
-                <Columns>
-                    <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                        <Template Context="step">
-                            <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
-                        <Template Context="step">
-                            <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
-                        <Template Context="step">
-                            <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
+            else
+            {
+                <RadzenDataGrid @ref="StepsDataGrid" Data="@ChosenSteps" ValueChanged="@ValueChanged" 
+                    TItem="IProcessStepDefinition" AllowColumnResize="true" Visible="ChosenSteps.Count() != 0">
+                    <Columns>
+                        <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                            <Template Context="step">
+                                <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteStep(step))" @onclick:stopPropagation="true" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                            <Template Context="step">
+                                <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged"/>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                            <Template Context="step">
+                                <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            }
         </ChildContent>
     </CipherComponentCard>
 
-    <CipherComponentCard Title="אפיון שלבים">
-        <HeaderContent>
-            <RadzenDropDown Placeholder="בחירת שלב" TextProperty="Name" ValueProperty="Name" Data="@ChosenSteps" TValue="string" 
-            @bind-Value="SelectedStep" Style="margin-bottom:10px" Change="@RefreshSelectedStep">
-                <ValueTemplate>
-                    <b>שלב נבחר:</b> @context.Name
-                </ValueTemplate>
-            </RadzenDropDown>
-        </HeaderContent>
-        <ChildContent>
-            @if (SelectedStep != null)
-            {
-                <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" ChosenCondition="@SelectedCondition" />
-            }
-        </ChildContent>
-    </CipherComponentCard>
+    @if (ChosenSteps != null && ChosenSteps.Any())
+    {
+        <CipherComponentCard Title="אפיון שלבים">
+            <HeaderContent>
+                <RadzenDropDown Placeholder="בחירת שלב" TextProperty="Name" ValueProperty="Name" Data="@ChosenSteps" TValue="string" 
+                @bind-Value="SelectedStep" Style="margin-bottom:10px" Change="@RefreshSelectedStep">
+                    <ValueTemplate>
+                        <b>שלב נבחר:</b> @context.Name
+                    </ValueTemplate>
+                </RadzenDropDown>
+            </HeaderContent>
+            <ChildContent>
+                @if (SelectedStep != null)
+                {
+                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" ChosenCondition="@SelectedCondition" />
+                }
+            </ChildContent>
+        </CipherComponentCard>
+    }
 </CipherComponentCard>

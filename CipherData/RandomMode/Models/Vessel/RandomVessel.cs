@@ -13,6 +13,18 @@
             System = new RandomStorageSystem();
         }
 
+        public override IVessel Copy()
+        {
+            var res = new RandomVessel();
+
+            foreach (var prop in typeof(IVessel).GetProperties())
+            {
+                prop.SetValue(res, prop.GetValue(this));
+            }
+
+            return res;
+        }
+
         // STATIC METHODS
 
         /// <summary>

@@ -5,33 +5,40 @@
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherVesselDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="VesId" ChosenVessel="@ChosenObject"/>
+                <CipherVesselDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="VesId" ChosenVessel="@ChosenObject" />
             </RadzenStack>
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenObject?.Id}")" />
-                }
-            </Buttons>
-            <ChildContent>
-                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel" ValueChanged="@ChangeDetail"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=VesName />
-                <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category" ValueChanged="@ChangeDetail"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
-                <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                ChosenSystem="@ChosenObject?.System" @ref=VesSys Change="@ChangeDetail" />
+        @if (!(SetMode == FormMode.Update && ChosenObject is null))
+        {
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenObject?.Id}")" />
+                    }
+                </Buttons>
+                <ChildContent>
+                    <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
+                                        ValueChanged="@(args => ChangeName(args))"
+                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
+                    Value="@ChosenObject?.Name" @ref=VesName />
+                    <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category"
+                                        ValueChanged="@(args => ChangeType(args))"
+                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
+                    <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                    ChosenSystem="@ChosenObject?.System" @ref=VesSys
+                                    Change="@(args => ChangeSystem((IStorageSystem?)args))" />
 
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" Change="@ChangeDetail" />
-                }
-            </ChildContent>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" Change="@ChangeDetail" />
+                    }
+                </ChildContent>
         </CipherComponentCard>
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -67,25 +74,47 @@
 
     protected override void OnInitialized()
     {
-        Title ??= "פרטי הכלי";
+        Title ??= "פרטי הכלי"; 
+        SetDetails();
+    }
 
-        // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null) StateHasChanged();
+    public void ChangeName(string? name)
+    {
+        if (ChosenObject != null) ChosenObject.Name = name;
+        ChangeDetail();
+    }
+
+    public void ChangeType(string? name)
+    {
+        if (ChosenObject != null) ChosenObject.Type = name;
+        ChangeDetail();
+    }
+
+    public void ChangeSystem(IStorageSystem? sys)
+    {
+        if (ChosenObject != null) ChosenObject.System = sys;
+        ChangeDetail();
     }
 
     public void ChangeDetail()
     {
         if (ChosenObject is null) return;
-        ChosenObject.Type = VesType.Value;
-        ChosenObject.Name = VesName.Value;
-        ChosenObject.System = VesSys.ChosenSystem;
         ChangeDetails.InvokeAsync();
     }
 
     public void Change()
     {
         ChosenObject = VesId.ChosenVessel;
+
         ChangeObject.InvokeAsync();
-        StateHasChanged();
+    }
+
+    public void SetDetails()
+    {
+        if (ChosenObject is null) return;
+
+        VesName.Value = ChosenObject.Name;
+        VesType.Value = ChosenObject.Type;
+        VesSys.ChosenSystem = ChosenObject.System;
     }
 }
