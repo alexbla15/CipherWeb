@@ -8,12 +8,13 @@
             <RadzenText class="@HeaderStyleClass" Text="@Title"/>
         }
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width:100%">
-            <div style="@($"display: flex; justify-content: {ContentJustify};")">
+            <div class="@Constants.Styles.ComponentCardHeader">
                 @HeaderContent
             </div>
             @if (WithButtons)
             {
-                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="@ButtonsGap">
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" 
+                Gap="@ButtonsGap">
                     @Buttons
                 </RadzenStack>
             }
@@ -21,10 +22,7 @@
     </RadzenStack>
     @if (ChildContent != null)
     {
-        <div style="@($@"
-            padding: {ContentPadding}; display:{ContentDisplay}; align-items: {AlignCardItems};
-            justify-content: {ContentJustify}; flex-wrap: {ContentFlexWrap};
-            column-gap: {ContentColumnGap}; row-Gap: {ContentRowGap}")">
+        <div class="@ContentStyleClass">
             @ChildContent
         </div>
     }
@@ -38,57 +36,22 @@
     public string? Title { get; set; }
 
     /// <summary>
-    /// Space outside of content within card.
-    /// </summary>
-    [Parameter]
-    public string? ContentPadding { get; set; } = "5px 0";
-
-    /// <summary>
-    /// Align the content within a card.
-    /// </summary>
-    [Parameter]
-    public string? ContentJustify { get; set; } = "right";
-    /// <summary>
-    /// Specify display type of the content within the card.
-    /// </summary>
-    [Parameter]
-    public string? ContentDisplay { get; set; }
-
-    /// <summary>
-    /// Controls wrapping of content. Must set ContentDisplay accordingly for it to work.
-    /// </summary>
-    [Parameter]
-    public string? ContentFlexWrap { get; set; }
-
-    /// <summary>
-    /// Controls gap between elements of content when there is a flexible display. Must set ContentDisplay accordingly for it to work.
-    /// </summary>
-    [Parameter]
-    public string? ContentColumnGap { get; set; } = "100px";
-
-    /// <summary>
-    /// Controls gap between rows of content when there is a flexible display. Must set ContentDisplay accordingly for it to work.
-    /// </summary>
-    [Parameter]
-    public string? ContentRowGap { get; set; } = "10px";
-
-    /// <summary>
     /// Controls gap between buttons of the top left side of the component.
     /// </summary>
     [Parameter]
     public string? ButtonsGap { get; set; }
 
     /// <summary>
-    /// Align items within the card.
-    /// </summary>
-    [Parameter]
-    public string? AlignCardItems { get; set; }
-
-    /// <summary>
     /// Css styling of header.
     /// </summary>
     [Parameter]
     public string? HeaderStyleClass { get; set; } = Constants.Styles.CardTitle;
+
+    /// <summary>
+    /// Css styling of content.
+    /// </summary>
+    [Parameter]
+    public string? ContentStyleClass { get; set; } = Constants.Styles.ComponentCardContent;
 
     /// <summary>
     /// Card's side buttons.

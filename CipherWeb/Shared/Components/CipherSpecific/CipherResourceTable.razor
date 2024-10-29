@@ -14,8 +14,15 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)"
+        @if (ChosenSystem != null && !ChosenObjects.Any())
+        {
+            <CipherLoadingCard/>
+        }
+        else
+        {
+            <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)"
                          GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+        }
     </ComponentContent>
 </CipherTableCard>
 
@@ -79,14 +86,8 @@
     /// </summary>
     private void SearchFunc()
     {
-        if (ChosenSystem.ChosenSystem is null)
-        {
-            ChosenObjects = new List<Cipher_TItem>();
-        }
-        else
-        {
-            (ChosenObjects, Error) = GetSearchedValues();
-        }
+        if (ChosenSystem.ChosenSystem is null) ChosenObjects = new List<Cipher_TItem>();
+        else (ChosenObjects, Error) = GetSearchedValues();
         SetFileName();
     }
 

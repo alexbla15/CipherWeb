@@ -40,7 +40,7 @@
     protected override void OnInitialized() => Title ??= "ציינו מיקום התחלתי וסופי";
 }
 
-<CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
     <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" @bind-ChosenSystem=InitialLocation/>
     <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" @bind-ChosenSystem=FinalLocation />
 </CipherComponentCard>

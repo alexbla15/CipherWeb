@@ -7,7 +7,7 @@
     </Buttons>
 
     <ChildContent>
-        @if (restrictions.Count() == 0)
+        @if (!restrictions.Any())
         {
             <RadzenText Text="@HelpText" />
         }

@@ -1,6 +1,6 @@
 ﻿@inherits CipherAutoComplete
 
-<CipherAutoComplete Icon="@Icon" Label="@Label" Data="@Data" Disabled="@Disabled" Width="@Width" 
+<CipherAutoComplete Icon="@Icon" Label="@Label" Data="@Data" Disabled="@Disabled" 
                     ValueChanged="@(args => {ChosenWorker=args; ValueChanged.InvokeAsync();})"
                     TextProperty="Name" @ref="SelectedWorker" Value="@ChosenWorker" AllowedRegex="^[א-ת. \n]+$" />
 

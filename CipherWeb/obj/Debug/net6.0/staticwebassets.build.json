@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uv62/TzjhSWqNQMmutJAiQ1NUqCecv14rY9jGvP2rKY=",
+  "Hash": "AChy9GxEB8k5D8SfymPPjWF4wsAtkV/P/R5YRFrF+uo=",
   "Source": "CipherWeb",
   "BasePath": "_content/CipherWeb",
   "Mode": "Default",
@@ -1120,6 +1120,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\Cipher_Loading.jpeg",
+      "SourceId": "CipherWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\",
+      "BasePath": "_content/CipherWeb",
+      "RelativePath": "Images/Cipher_Loading.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\Cipher_Loading.jpeg"
     },
     {
       "Identity": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\CIPHER_Logo_2.png",

@@ -4,7 +4,7 @@
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
     <CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText"
                         AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
-                        @onkeydown="HandleKeyDown" Width="@Constants.StandartWidth" />
+                        @onkeydown="HandleKeyDown" />
 
     <div class="cipher-chip-container">
         @if (SelectedTexts != null)

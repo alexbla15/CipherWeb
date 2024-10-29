@@ -10,7 +10,8 @@
 {
 <CipherSteps>
     <RadzenStepsItem Text="קביעת פרמטרים">
-        <CipherComponentCard Title="בחירת שם לדוח" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        
+            <CipherComponentCard Title="בחירת שם לדוח" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <CipherAutoComplete Value="@(ChosenReport?.Id.ToString())" Label="@Report.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
                 <CipherAmount @ref="CurrVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" 
                 Label="@Report.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
@@ -39,7 +40,7 @@
             <RadzenStack Orientation="Orientation.Vertical">
                 @if (Valid)
                 {
-                    <CipherComponentCard Title="פרמטרים" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+                        <CipherComponentCard Title="פרמטרים" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                         @foreach (ReportParameter param in ChosenReport.Parameters)
                         {
                             if (param.ParamType?.FieldType == typeof(DateTime))

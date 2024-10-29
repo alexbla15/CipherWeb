@@ -2,12 +2,6 @@
 
 @code {
     /// <summary>
-    /// Component width.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = Constants.StandartWidth;
-
-    /// <summary>
     /// Component's label.
     /// </summary>
     [Parameter]
@@ -67,12 +61,6 @@
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
-
-    /// <summary>
-    /// Is the error message a popup / regular underline text.
-    /// </summary>
-    [Parameter]
-    public bool Popup { get; set; }
 
     /// <summary>
     /// Is the value required for the form.
@@ -248,13 +236,13 @@
             }
             @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
+                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Constants.StandartWidth};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                     Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
                                     Multiline="@Multiline"/>
             }
             else
             {
-                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width}; min-width: {Width}")">
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
                     <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                         Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
                                         Multiline="@Multiline" />
@@ -264,7 +252,7 @@
         <RadzenStack Orientation="Orientation.Vertical">
             @if (Required && ShowErrors)
             {
-                <RadzenRequiredValidator @ref="RequiredValidator" Component="setvalue" Text="שדה חובה" Popup=@Popup />
+                <RadzenRequiredValidator @ref="RequiredValidator" Component="setvalue" Text="שדה חובה" />
             }
             <RadzenLengthValidator @ref=LengthValidator Component="setvalue" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
                                    Visible="@(RequiredValidator.IsValid && ShowErrors)" />

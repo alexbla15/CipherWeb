@@ -1,6 +1,6 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
     <HeaderContent>
         @if (SetMode != FormMode.Create)
         {
@@ -12,8 +12,7 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" 
-            ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
                     @if (SetMode == FormMode.ReadOnly)
                     {
@@ -25,7 +24,7 @@
                 <CipherAutoComplete Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                     Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" ValueChanged="@ChangeDetail" />
                 <CipherComments @ref="SysDescription" Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
-                                Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                                Icon="@Icons.Documents.Page.description" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
                 <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
                                 Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" Change="@ChangeDetail" />
                 <CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"

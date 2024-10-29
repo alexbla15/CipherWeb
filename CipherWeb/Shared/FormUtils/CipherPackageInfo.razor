@@ -212,8 +212,9 @@
     <CipherInputComponents @ref="InputPacks" ChangeDetails="@ChangeDetails" />
 }
 
-<CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" WithCard="@WithCard">
-    <CipherAutoComplete ValueChanged="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" Icon="@Icons.Cipher.Package" />
+<CipherComponentCard Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent" WithCard="@WithCard">
+    <CipherAutoComplete ValueChanged="@ChangeDetails" Label="@(IPackage.Translate(nameof(IPackage.Id)))" Disabled="@ReadOnly" @ref="packId" 
+    Icon="@Icons.Cipher.Package" />
     <CipherCategoryDropDown Disabled="@ReadOnly" @ref="packCategory" Change="@ChangedCategory" ChosenCategory="@ChosenCategory" />
     <CipherVesselDropDown Disabled="@ReadOnly" @ref="packVessel" AllVessels="@AllVessels" ChosenVessel="@ChosenVessel" Change="@ChangedVessel" />
     <CipherLocation Disabled="@ReadOnly" @ref="packLocation" ChosenSystem="@ChosenSystem" Change="@ChangedSystem" />
@@ -221,7 +222,7 @@
     @if (!IsNew)
     {
         <CipherComments @ref="PackDescription" ValueChanged="@ChangeDetails"
-                        Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" Width="@Constants.StandartWidth" />
+                        Label="@(IPackage.Translate(nameof(IPackage.Description)))" Icon="@Icons.Documents.Page.description" />
         <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 
             Label="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Icon="@Icons.Professions.Construction.scale" />
         <CipherNumeric AmountChanged="@ChangeDetails" Disabled="@ReadOnly" 

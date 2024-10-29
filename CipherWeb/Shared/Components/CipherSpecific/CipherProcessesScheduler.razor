@@ -78,7 +78,7 @@
     /// System name for data fetching events
     /// </summary>
     [Parameter]
-    public string SelectedSystem { get; set; } = "S1";
+    public string? SelectedSystem { get; set; }
 
     private CipherLocation cipherLocation = new();
     private List<IProcess>? ChosenProcesses = new();

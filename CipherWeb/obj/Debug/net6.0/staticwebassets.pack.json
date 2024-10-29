@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\Images\\CIPHER_Logo_4.png"
     },
     {
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\Cipher_Loading.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Cipher_Loading.jpeg"
+    },
+    {
       "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\ComingSoon.jfif",
       "PackagePath": "staticwebassets\\Images\\ComingSoon.jfif"
     },

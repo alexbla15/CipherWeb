@@ -640,9 +640,9 @@
         {
             <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetAddJsonRequest" />
             <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" ChangeDetails="@SetAddJsonRequest" />
-            <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+            <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" Change="@SetAddJsonRequest" />
-                <CipherComments @ref="EventComments" Width="@Constants.StandartWidth" ValueChanged="@SetAddJsonRequest" />
+                <CipherComments @ref="EventComments" ValueChanged="@SetAddJsonRequest" />
             </CipherComponentCard>
         }
         else

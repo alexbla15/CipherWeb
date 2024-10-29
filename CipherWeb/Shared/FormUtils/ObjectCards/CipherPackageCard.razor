@@ -12,7 +12,7 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <CipherComponentCard Title="תכונות" WithCard="true"  ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
                     @if (SetMode == FormMode.ReadOnly)
                     {
@@ -28,7 +28,7 @@
                         Icon="@Icons.Cipher.Package" Disabled="@(SetMode == FormMode.ReadOnly)"/>
                     }
                     <CipherComments Label="@(IPackage.Translate(nameof(IPackage.Description)))" 
-                    Icon="@Icons.Documents.Page.description" Width="@Constants.StandartWidth" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                    Icon="@Icons.Documents.Page.description" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
 
                     @if (SetMode != FormMode.Create)
                     {

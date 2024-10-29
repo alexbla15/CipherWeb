@@ -114,7 +114,7 @@
         <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (chosenPacks.Count() == 0)
+        @if (!chosenPacks.Any())
         {
             <RadzenText Text="@HelpText" />
         }

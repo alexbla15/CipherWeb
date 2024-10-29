@@ -77,7 +77,7 @@
     </Buttons>
 
     <ChildContent>
-        @if (ChosenParameters.Count() == 0)
+        @if (!ChosenParameters.Any())
         {
             <RadzenText Text="@HelpText"/>
         }

@@ -3,10 +3,10 @@
 <ResourceForm Title="@NavLink?.Name">
     <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
 
-    <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+    <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
         <CipherLocation Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
         <CipherPackagesPicking Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
-        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" Width="300px" />
+        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>

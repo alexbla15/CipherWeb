@@ -1,6 +1,6 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
     <HeaderContent>
         @if (SetMode != FormMode.Create)
         {
@@ -12,7 +12,7 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
                     @if (SetMode == FormMode.ReadOnly)
                     {

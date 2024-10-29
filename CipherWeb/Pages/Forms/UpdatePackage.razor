@@ -15,14 +15,10 @@
 
     @if (ChosenPackage != null)
     {
-        <CipherComponentCard Title
-        ="שינוי פרמטרים" ContentDisplay
-        ="flex" ContentJustify
-        ="flex-start" ContentFlexWrap
-        ="wrap">
+        <CipherComponentCard Title="שינוי פרמטרים" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
             <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)"/>
             <CipherComments @ref=PackDescription Label="@(IPackage.Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
-            Icon="@Icons.Documents.Page.description" Width="300px" Comments="@ChosenPackage?.Description" />
+            Icon="@Icons.Documents.Page.description" Comments="@ChosenPackage?.Description" />
             <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((IPackage.Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
             <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((IPackage.Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
 
@@ -38,7 +34,7 @@
 
         <CipherPackageProperties @ref="PackProps" ChosenProperties="@(NewProps ?? new())" ChangeDetails="@ChangeNewProps" />
 
-    <CipherComponentCard Title="הערות עבור עדכון" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+        <CipherComponentCard Title="הערות עבור עדכון" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
         <CipherComments @ref="EventComments" Disabled="@(ChosenPackage == null)" />
     </CipherComponentCard>
 

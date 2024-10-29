@@ -83,7 +83,7 @@
     public void SetErrorMessage(string? msg) => ErrorMessage = msg ?? string.Empty;
 }
 
-<CipherComponentCard Title="@Title" WithCard="@WithCard" ButtonsGap="10px" ContentPadding="" Visible="@Visible">
+<CipherComponentCard Title="@Title" WithCard="@WithCard" ButtonsGap="10px" ContentStyleClass="@Constants.Styles.ComponentFooterContent" Visible="@Visible">
     <Buttons>
         @if (string.IsNullOrEmpty(ActionText))
         {

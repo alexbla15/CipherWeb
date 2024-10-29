@@ -32,12 +32,6 @@
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Are the error-messages visible as popup or plain text.
-    /// </summary>
-    [Parameter]
-    public bool Popup { get; set; }
-
-    /// <summary>
     /// Force user to enter a value for this component in a form.
     /// </summary>
     [Parameter]
@@ -143,7 +137,7 @@
             </RadzenFormField>
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup Visible=@Required />
+            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Visible=@Required />
         </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

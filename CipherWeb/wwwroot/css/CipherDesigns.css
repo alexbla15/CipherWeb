@@ -60,6 +60,31 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
+.cipher_component_card_header {
+    display: flex;
+    justify-content: right;
+}
+
+.cipher_component_card_content {
+    padding: 5px 0;
+    justify-content: right;
+    column-gap: 100px;
+    row-gap: 10px;
+}
+    .cipher_component_card_content.footer {
+        padding: 0;
+    }
+
+    .cipher_component_card_content.resource_card {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+        .cipher_component_card_content.resource_card.centered {
+            align-items:center;
+        }
+
 .cipher-jsoncheck {
     width: 100%;
     direction: ltr;
@@ -127,10 +152,24 @@
     direction: rtl;
     border-radius: 10px;
     text-wrap: nowrap;
-    font-weight:600;
-    font-size:larger;
-    line-height:unset;
-    margin:0;
+    font-weight: 600;
+    font-size: larger;
+    line-height: unset;
+    margin: 0;
+}
+
+.cipher_loading_text {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-primary-light);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: xx-large;
+    line-height: unset;
+    margin: 0;
+    color: var(--rz-primary-darker);
 }
 
 .cipher_card_header {
@@ -152,7 +191,7 @@
     background-color: #AC6E35;
     border-radius: 5px;
     padding: 0px;
-    width:100%;
+    width: 100%;
 }
 
 .cipher-comingsoon-image-container {
@@ -306,6 +345,18 @@
         background-color: var(--rz-warning);
     }
 
+/* ------------------ PROGRESS BAR ------------------ */
+
+.rz-progressbar-circular-background {
+    stroke: var(--rz-primary-lightest);
+    stroke-width: 4px;
+}
+
+.rz-progressbar-indeterminate.rz-progressbar-primary .rz-progressbar-circular-value {
+    stroke: var(--rz-primary-darker);
+    stroke-width: 4px;
+}
+
 /* ------------------ DATA FILTER ------------------ */
 
 .rz-datafilter .rz-datafilter-group {
@@ -390,7 +441,7 @@
 
 .rz-button-text {
     padding-right: 5px;
-    text-wrap: nowrap;
+    text-wrap: wrap;
 }
 
 .rz-button.rz-light.rz-variant-flat {
@@ -547,7 +598,7 @@
     text-align: right;
 }
 
-.rz-datatable .rzi-chevron-circle-right, 
+.rz-datatable .rzi-chevron-circle-right,
 .rz-datatable .rzi-chevron-circle-down {
     vertical-align: middle;
     color: white;
@@ -574,7 +625,7 @@
         border-radius: 5px;
         background-color: var(--rz-primary-darker);
         padding: 3.5px;
-        margin: 1px;    
+        margin: 1px;
     }
 
     .rz-datatable .rzi-chevron-circle-down:before {
@@ -584,7 +635,7 @@
         border-radius: 5px;
         background-color: var(--rz-primary-lighter);
         padding: 3.5px;
-        margin:1px;
+        margin: 1px;
     }
 
 .rz-datatable .rz-col-icon {
@@ -1034,7 +1085,7 @@
 .rz-event-content {
     font-size: 1rem;
     overflow-wrap: anywhere;
-    margin:5px;
+    margin: 5px;
 }
 
 /* ------------------ LAYOUT ------------------ */
@@ -1208,19 +1259,18 @@ rz-multiselect-trigger,
     --cipher-shadow: none;
 }
 
-.rz-colorpicker, 
-.rz-spinner, 
-.rz-multiselect, 
-.mask, 
-.rz-textarea, 
+.rz-colorpicker,
+.rz-spinner,
+.rz-multiselect,
+.mask,
+.rz-textarea,
 .rz-textbox {
     padding: 0.5rem;
     min-height: 52px;
 }
 
-.rz-autocomplete-input
-{
-    min-height:52px
+.rz-autocomplete-input {
+    min-height: 52px
 }
 
 div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled,
@@ -1241,20 +1291,20 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     opacity: 1;
 }
 
-    div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext{
-        color:black;
+    div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext {
+        color: black;
         opacity: 1;
     }
 
-    .rz-form-field-content > *,
-    .rz-form-field-content > .rz-autocomplete,
-    .rz-form-field-content input,
-    .rz-form-field-content .rz-inputtext {
-        background-color: white;
-        border-radius: var(--rz-border-radius);
-        display: flex;
-        align-items: center;
-    }
+.rz-form-field-content > *,
+.rz-form-field-content > .rz-autocomplete,
+.rz-form-field-content input,
+.rz-form-field-content .rz-inputtext {
+    background-color: white;
+    border-radius: var(--rz-border-radius);
+    display: flex;
+    align-items: center;
+}
 
 .rz-form-field:not(.rz-floating-label) .rz-form-field-label,
 .rz-textbox:focus ~ .rz-form-field-label,
@@ -1320,7 +1370,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     padding: 0.5rem;
     padding-right: 0.7rem;
     padding-top: 1rem;
-    min-height:52px;
+    min-height: 52px;
 }
 
 .rz-datepicker-trigger {

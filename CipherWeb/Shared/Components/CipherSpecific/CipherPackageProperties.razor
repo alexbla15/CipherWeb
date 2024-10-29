@@ -91,7 +91,7 @@
         <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (ChosenProperties.Count() == 0)
+        @if (!ChosenProperties.Any())
         {
             <RadzenText Text="@HelpText"/>
         }

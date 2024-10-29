@@ -81,7 +81,7 @@
 }
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Style="padding-bottom:20px">
-    <CipherAutoComplete @bind-Value=searchText></CipherAutoComplete>
+    <CipherAutoComplete @bind-Value=searchText/>
     <CipherButton Icon="@Icons.Arrows.Swap.cached" Click="ChangeSearchText"></CipherButton>
 </RadzenStack>
 
@@ -110,7 +110,7 @@
                                                 <RadzenAccordionItem Text="@third">
                                                     @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub && x.ThirdClass == third).Select(x => x.IconName))
                                                     {
-                                                        <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                                        <CipherComponentCard ContentStyleClass="@Constants.Styles.ComponentResourceCardContent" Width="200px">
                                                             <RadzenStack Orientation="Orientation.Vertical">
                                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
                                                             <RadzenText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" />
@@ -126,7 +126,7 @@
                                 {
                                     @foreach (string? ic in icons.Where(x => x.MainClass == main && x.SubClass == sub).Select(x => x.IconName))
                                     {
-                                        <CipherComponentCard ContentDisplay="flex" ContentJustify="center" ContentFlexWrap="wrap" Width="200px">
+                                        <CipherComponentCard ContentStyleClass="@Constants.Styles.ComponentResourceCardContent" Width="200px">
                                             <RadzenStack Orientation="Orientation.Vertical">
                                             <CipherButton Icon="@ic" Variant="Variant.Text" Disabled="true" />
                                             <RadzenText Text="@ic?.Replace("_", " ")" TextAlign="TextAlign.Center" />

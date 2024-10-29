@@ -17,6 +17,12 @@ namespace CipherWeb.Data
             public static readonly string ComingSoonOverlay = "cipher-comingsoon-overlay";
             public static readonly string JsonCheck = "cipher-jsoncheck";
             public static readonly string DataGridEmpty = "cipher_datagrid_empty_text";
+            public static readonly string LoadingText = "cipher_loading_text";
+            public static readonly string ComponentCardContent = "cipher_component_card_content";
+            public static readonly string ComponentCardHeader = "cipher_component_card_header";
+            public static readonly string ComponentFooterContent = "cipher_component_card_content footer";
+            public static readonly string ComponentResourceCardContent = "cipher_component_card_content resource_card";
+            public static readonly string ComponentResourceCardContent_Centered = "cipher_component_card_content resource_card centered";
         }
 
         public class Button
