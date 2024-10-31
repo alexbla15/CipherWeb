@@ -86,12 +86,12 @@
         <CipherDeleteAllButton Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (ChosenProperties.Count() == 0)
+        @if (ChosenProperties.Any())
         {
             <RadzenText Text="@HelpText" />
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true"
-                        Visible="ChosenProperties.Count() != 0" ValueChanged="@ValueChanged">
+                        Visible="!ChosenProperties.Any()" ValueChanged="@ValueChanged">
             <Columns>
                 @if (!Disabled)
                 {

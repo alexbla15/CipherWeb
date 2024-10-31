@@ -126,7 +126,7 @@
 
     class Model
     {
-        public string value = string.Empty;
+        public string? value = string.Empty;
     }
 
     Model model = new() { value = string.Empty };
@@ -232,7 +232,7 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {
-                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
             }
             @if (string.IsNullOrEmpty(Label))
             {

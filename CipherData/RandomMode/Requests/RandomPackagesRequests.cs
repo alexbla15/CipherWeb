@@ -3,7 +3,7 @@
     public class RandomPackagesRequests : IPackagesRequests
     {
         public async Task<Tuple<List<IPackage>, ErrorResponse>> GetAll() =>
-            await new RandomGenericRequests().Request(RandomData.Packages, canBadRequest: false);
+            await new RandomGenericRequests().Request(RandomData.GetRandomPackages(new Random().Next(20)), canBadRequest: false);
 
         public Task<Tuple<IPackage, ErrorResponse>> Create(IUpdatePackage request)
             => throw new NotImplementedException("Cannot create package using this end point, use events");

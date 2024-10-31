@@ -3,7 +3,7 @@
     public class RandomEventsRequests : IEventsRequests
     {
         public async Task<Tuple<List<IEvent>, ErrorResponse>> GetAll() =>
-            await new RandomGenericRequests().Request(RandomData.Events, canBadRequest: false);
+            await new RandomGenericRequests().Request(RandomData.GetRandomEvents(new Random().Next(20)), canBadRequest: false);
 
         public async Task<Tuple<IEvent, ErrorResponse>> Create(ICreateEvent ev) =>
             await new RandomGenericRequests().Request(ev.Create(RandomEvent.GetNextId()));

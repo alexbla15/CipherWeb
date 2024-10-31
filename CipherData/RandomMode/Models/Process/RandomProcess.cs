@@ -6,7 +6,14 @@
         {
             Id = GetNextId();
             Definition = new RandomProcessDefinition();
-            Events = Enumerable.Range(0, 3).Select(_ => new RandomEvent() as IEvent).ToList();
+            if (new Random().Next() == 0)
+            {
+                Events = Enumerable.Range(0, 3).Select(_ => new RandomTransferAmountEvent() as IEvent).ToList();
+            }
+            else
+            {
+                Events = Enumerable.Range(0, 3).Select(_ => new RandomRelocationEvent() as IEvent).ToList();
+            }
             UncompletedSteps =
             Enumerable.Range(0, 3).Select(_ => new RandomProcessStepDefinition() as IProcessStepDefinition).ToList();
         }

@@ -13,15 +13,8 @@ namespace CipherData.General
 
         public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options)
         {
-            try
-            {
-                JsonSerializer.Serialize(writer, (TApiClass)value, options);
-            }
-            catch (Exception)
-            {
-                // If serialization fails, try to serialize as fallback type
-                JsonSerializer.Serialize(writer, (TRandomClass)value, options);
-            }
+            if (value is TApiClass api_value) JsonSerializer.Serialize(writer, api_value, options);
+            if (value is TRandomClass random_value) JsonSerializer.Serialize(writer, random_value, options);
         }
     }
 

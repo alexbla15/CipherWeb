@@ -6,7 +6,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Width ??= Constants.StandartWidth;
         Label ??= "שם קטגוריה";
         Icon ??= Icons.Symbols.category;
 
@@ -14,10 +13,10 @@
     }
 }
 
-<CipherFormRow Icon="@Icon" Width="@Width">
+<CipherFormRow Icon="@Icon" >
     <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false"
                     TextProperty="@(nameof(ICategory.Name))" ValueProperty="@(nameof(ICategory.Name))"
-                    AllowClear="true" TValue="string" Style="@($"width: {Width}")">
+                    AllowClear="true" TValue="string" Style="@($"width: {Constants.StandartWidth}")">
         <ValueTemplate>
             <b>@Label:</b> @((context as ICategory)?.Name)
         </ValueTemplate>

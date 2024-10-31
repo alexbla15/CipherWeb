@@ -8,12 +8,6 @@
     public string? DateFormat { get; set; }
 
     /// <summary>
-    /// Width of the component.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = Constants.StandartWidth;
-
-    /// <summary>
     /// Label of the component.
     /// </summary>
     [Parameter]
@@ -129,8 +123,8 @@
     <RadzenStack Orientation="Orientation.Vertical" Gap="0">
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
-            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
+            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth};")">
                 <RadzenDatePicker TValue="DateTime" Name="value" Value="@model.value" DateFormat="@DateFormat" ShowTime="@ShowTime" 
                 ValueChanged="@(args => {model.value=(DateTime)args; ValueChanged.InvokeAsync();})"
                                   Disabled="@Disabled" Min="@Min" Max="@Max" ShowTimeOkButton="@ShowTimeOkButton" TimeOnly="@TimeOnly"/>

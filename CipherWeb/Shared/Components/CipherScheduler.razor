@@ -88,16 +88,10 @@
     public TooltipPosition EventTooltipPosition { get; set; } = TooltipPosition.Bottom;
 
     /// <summary>
-    /// Schudler events are set by selected system.
-    /// </summary>
-    [Parameter]
-    public string SelectedSystem { get; set; } = string.Empty;
-
-    /// <summary>
     /// All events for scheduler
     /// </summary>
     [Parameter]
-    public List<IProcess> Processes { get; set; } = new();
+    public List<IProcess>? Processes { get; set; } = new();
 
     private RadzenScheduler<IProcess> scheduler = new();
 
@@ -211,5 +205,4 @@
     /// Closes tooltip at the end of the hovering on an event.
     /// </summary>
     void OnProcessMouseLeave(SchedulerAppointmentMouseEventArgs<IProcess> args) => TooltipService.Close();
-
 }

@@ -12,14 +12,12 @@
     <ChildContent>
         <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
             <Items>
-                @foreach (var data in AllData)
+                @foreach (var key in AllData.Keys)
                 {
-                    if (data.Item2?.Any() == true)
+                    if (AllData[key].Any())
                     {
-                        <RadzenAccordionItem Text="@($"{data.Item1} ({data.Item2.Count()})")">
-                            <CipherComponentCard>
-                                @RenderTable(data.Item2)
-                            </CipherComponentCard>
+                        <RadzenAccordionItem Text="@($"{key.Item2} ({AllData[key].Count()})")">
+                            @RenderTable(key, AllData[key])
                         </RadzenAccordionItem>
                     }
                 }
@@ -62,7 +60,7 @@
     private static List<IPackage>? packages = new();
     private static List<IProcess>? processes = new();
 
-    private List<Tuple<string, IEnumerable<IResource>?>> AllData = new();
+    private Dictionary<Tuple<Type, string>, IEnumerable<IResource>?> AllData = new();
 
     private static readonly Dictionary<Type, Func<IEnumerable<IResource>, RenderFragment>> tableRenderers = new()
     {
@@ -70,18 +68,18 @@
         { typeof(IEvent), items => @<CipherEventsTable ChosenObjects="@events" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(IStorageSystem), items => @<CipherSystemsTable ChosenObjects="@systems" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(IProcess), items => @<CipherProcessesTable ChosenObjects="@processes" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
-        { typeof(IVessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithButtons="false" WithCard="false" Title="" /> },
+        { typeof(IVessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(IUnit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(ICategory), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
-    };
+        };
 
-    private RenderFragment RenderTable(IEnumerable<IResource> items)
+    private RenderFragment RenderTable(Tuple<Type, string> itemType, IEnumerable<IResource>? items)
     {
-        var type = items.FirstOrDefault()?.GetType();
-        return type != null && tableRenderers.ContainsKey(type) ? tableRenderers[type](items) : @<div>No matching table found</div>;
+        Type type = itemType.Item1;
+        return type != null && tableRenderers.ContainsKey(type) ? tableRenderers[type](items) : @<div>לא נמצאו נתונים</div>;
     }
 
-    private async Task<List<Tuple<string, IEnumerable<IResource>?>>> GetAllData()
+    private async Task GetAllData()
     {
         if (!string.IsNullOrEmpty(SearchText))
         {
@@ -94,15 +92,14 @@
             (processes, Error) = await Config.Process(false).Containing(SearchText);
         }
 
-        return new(){
-        new("תעודות", packs),
-        new("מערכות", systems),
-        new("יחידות", units),
-        new("תנועות", events),
-        new("תהליכים", processes),
-        new("כלים", vessels),
-        new("קטגוריות", categories),
-           };
+        AllData.Clear();
+        AllData[Tuple.Create(typeof(IPackage), "תעודות")] = packs;
+        AllData[Tuple.Create(typeof(IStorageSystem), "מערכות")] = systems;
+        AllData[Tuple.Create(typeof(IUnit), "יחידות")] = units;
+        AllData[Tuple.Create(typeof(IEvent), "תנועות")] = events;
+        AllData[Tuple.Create(typeof(IProcess), "תהליכים")] = processes;
+        AllData[Tuple.Create(typeof(IVessel), "כלים")] = vessels;
+        AllData[Tuple.Create(typeof(ICategory), "קטגוריות")] = categories;
     }
 
     protected override async Task OnParametersSetAsync()
@@ -118,7 +115,7 @@
             SearchText = searchValue.ToString();
         }
 
-        AllData = await GetAllData();
+        await GetAllData();
     }
 
     protected override async Task OnInitializedAsync()
@@ -152,15 +149,9 @@
             string url = $"{SearchPath}?search={SearchText}";
 
             // if something went wrong, show error dialog
-            if (Error != ErrorResponse.Success)
-            {
-                await ShowError();
-            }
+            if (Error != ErrorResponse.Success) await ShowError();
             // else go to the desired path
-            else
-            {
-                navigationManager.NavigateTo(url, forceLoad: true);
-            }
+            else navigationManager.NavigateTo(url, forceLoad: true);
         }
     }
 
@@ -171,7 +162,7 @@
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
-    ds =>
+        ds =>
         @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SearchText" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
         ,
         new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });

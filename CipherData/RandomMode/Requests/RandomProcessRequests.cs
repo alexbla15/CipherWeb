@@ -3,7 +3,7 @@
     public class RandomProcessesRequests : IProcessesRequests
     {
         public async Task<Tuple<List<IProcess>, ErrorResponse>> GetAll()
-            => await new RandomGenericRequests().Request(RandomData.Processes);
+            => await new RandomGenericRequests().Request(RandomData.GetRandomProcesses(new Random().Next(20)));
 
         public async Task<Tuple<IProcess, ErrorResponse>> GetById(string? proc_id)
             => await new RandomGenericRequests().Request(new RandomProcess() { Id=proc_id} as IProcess, canBeNotFound: true, canBadRequest: false);

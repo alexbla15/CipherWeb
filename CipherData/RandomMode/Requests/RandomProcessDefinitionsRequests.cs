@@ -3,7 +3,7 @@
     public class RandomProcessDefinitionsRequests : IProcessDefinitionsRequests
     {
         public async Task<Tuple<List<IProcessDefinition>, ErrorResponse>> GetAll()
-            => await new RandomGenericRequests().Request(RandomData.ProcessDefinitions);
+            => await new RandomGenericRequests().Request(RandomData.GetRandomProcessDefinitions(new Random().Next(20)));
 
         public async Task<Tuple<IProcessDefinition, ErrorResponse>> Create(IProcessDefinitionRequest proc)
             => await new RandomGenericRequests().Request(proc.Create(RandomProcessDefinition.GetNextId()));

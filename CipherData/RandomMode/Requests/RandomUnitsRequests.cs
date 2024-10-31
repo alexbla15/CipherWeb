@@ -3,7 +3,7 @@
     public class RandomUnitsRequests : IUnitsRequests
     {
         public async Task<Tuple<List<IUnit>, ErrorResponse>> GetAll()
-            => await new RandomGenericRequests().Request(RandomData.Units);
+            => await new RandomGenericRequests().Request(RandomData.GetRandomUnits(new Random().Next(20)));
 
         public async Task<Tuple<IUnit, ErrorResponse>> Create(IUnitRequest unit)
             => await new RandomGenericRequests().Request(unit.Create<RandomUnit>(RandomUnit.GetNextId()));

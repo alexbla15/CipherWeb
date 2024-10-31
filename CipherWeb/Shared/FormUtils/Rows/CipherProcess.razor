@@ -2,7 +2,7 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid TValue="IProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
-                            Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
+                            Style="@($"width: 100%; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
@@ -48,7 +48,6 @@
     {
         Label ??= IProcessDefinition.Translate(nameof(IProcessDefinition.Name));
         Icon ??= Icons.Cipher.Process;
-        Width ??= "100%";
         MinWidth ??= Constants.StandartWidth;
 
         if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;

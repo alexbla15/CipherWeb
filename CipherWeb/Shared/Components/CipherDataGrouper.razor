@@ -142,7 +142,7 @@
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.Wrap" Style="padding-bottom:20px;" Gap="20px">
             @foreach (string gr in ChosenGroups)
             {
-                <CipherFormRow Icon="@($"filter_{ChosenGroups.IndexOf(gr)+1}")" Width="240px">
+                <CipherFormRow Icon="@($"filter_{ChosenGroups.IndexOf(gr)+1}")">
                     <CipherAttributeDropDown AggregationFields="@_GroupFields" Change="@(args => ChangedValue(ChosenGroups.IndexOf(gr), args?.ToString()))"
                                              Placeholder="@($"רמה {ChosenGroups.IndexOf(gr)+1}")" ChosenAttribute="@gr" />
                 </CipherFormRow>

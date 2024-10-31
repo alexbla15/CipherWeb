@@ -4,8 +4,5 @@
     PrefixFileTitle="events" Title="@Title" />
 
 @code {
-    protected override void OnInitialized()
-    {
-        Title ??= "דוח תנועות";
-    }
+    protected override void OnInitialized() => Title ??= "דוח תנועות";
 }

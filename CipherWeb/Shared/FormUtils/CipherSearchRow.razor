@@ -1,5 +1,4 @@
 ﻿@inject NavigationManager navigationManager
-@inject DialogService DialogService
 
 @inherits RadzenStack
 
@@ -11,28 +10,10 @@
     public string? LabelText { get; set; }
 
     /// <summary>
-    /// AutoComplete width
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = "100%";
-
-    /// <summary>
     /// Path to be searched in case on Enter pressed / search-button clicked.
     /// </summary>
     [Parameter]
     public string? SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
-
-    /// <summary>
-    /// Background color of search button.
-    /// </summary>
-    [Parameter]
-    public string ButtonColor { get; set; } = Colors.PrimaryDarker;
-
-    /// <summary>
-    /// Alignment of row.
-    /// </summary>
-    [Parameter]
-    public JustifyContent JustifyRow { get; set; } = JustifyContent.Center;
 
     /// <summary>
     /// Event in case a key was pressed within AutoComplete box.
@@ -50,7 +31,7 @@
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherAutoComplete autoComplete = new();
     private string SearchText = string.Empty;
@@ -59,7 +40,7 @@
     {
         LabelText ??= "חיפוש תעודה";
 
-        (ChosenPackages, error) = await CachedData.AllPackages;
+        (ChosenPackages, Error) = await CachedData.AllPackages;
 
         // Set default OnKeyDown if not provided
         if (!OnKeyDown.HasDelegate) OnKeyDown = EventCallback.Factory.Create<KeyboardEventArgs>(this, SearchFunc);
@@ -90,9 +71,9 @@
     }
 }
 
-<RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Start" JustifyContent="@JustifyRow" Gap="0px" Style="@Style">
-    <CipherAutoComplete @ref=autoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:{Width}")" @bind-value="SearchText"
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="@AlignItems.Start" JustifyContent="@JustifyContent.Center" Gap="0px" Style="@Style">
+    <CipherAutoComplete @ref=autoComplete Label="@LabelText" Style="@($"border-top-left-radius:0; border-bottom-left-radius:0; width:100%")" @bind-value="SearchText"
                         Data="@ChosenPackages" TextProperty="Id" OnKeyDown="EnteredSearchFunc" Change="SearchFunc"></CipherAutoComplete>
-    <CipherButton Icon="@Icons.SearchAndFilter.search" IconColor="white" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" ButtonTextAlign="right" Height="53px"
-                  Click="SearchFunc" Style="@($"border: 1px solid {ButtonColor}; padding-left:10px; border-top-right-radius:0; border-bottom-right-radius:0;")" />
+    <RadzenButton Icon="@Icons.SearchAndFilter.search" IconColor="white" ButtonStyle="ButtonStyle.Primary" Shade="Shade.Darker" 
+      Click="SearchFunc" class="@Constants.Styles.SearchButtonIcon" />
 </RadzenStack>

@@ -53,7 +53,7 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     @if (!string.IsNullOrEmpty(Icon))
     {
-        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IPackage" AllowClear="true"
                             Data=@AllPacks TextProperty="@(nameof(IPackage.Id))" AllowFilteringByAllStringColumns="true"

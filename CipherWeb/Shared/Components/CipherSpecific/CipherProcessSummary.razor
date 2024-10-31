@@ -93,10 +93,7 @@
                 {
                     ProcessCounter[ev.ProcessId.ToString()] += 1;
                 }
-                else
-                {
-                    ProcessCounter[ev.ProcessId.ToString()] = 1;
-                }
+                else ProcessCounter[ev.ProcessId.ToString()] = 1;
             }
         }
         return ProcessCounter;

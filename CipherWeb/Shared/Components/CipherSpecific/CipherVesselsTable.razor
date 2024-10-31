@@ -1,10 +1,8 @@
 ﻿@inherits CipherResourceTable<IVessel>
 
-<CipherResourceTable Cipher_TItem="IVessel" ChosenObjects="@ChosenObjects" PrefixFileTitle="vessels" Title="@Title" />
+<CipherResourceTable Cipher_TItem="IVessel" ChosenObjects="@ChosenObjects" PrefixFileTitle="vessels" Title="@Title" 
+    WithHeaderContent="@WithHeaderContent"/>
 
 @code {
-    protected override void OnInitialized()
-    {
-        Title ??= Translator.GetTranslation("Vessels");
-    }
+    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Vessels");
 }

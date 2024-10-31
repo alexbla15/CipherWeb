@@ -1,6 +1,6 @@
 ﻿@inherits CipherFormRow
 
-<CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
+<CipherFormRow Icon="@Icon" Label="@Label" MinWidth="@MinWidth">
     <RadzenDropDownDataGrid Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(IProcessDefinition.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
@@ -62,7 +62,6 @@
     {
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
-        Width = "";
         MinWidth ??= Constants.StandartWidth;
 
         if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;

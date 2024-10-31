@@ -4,10 +4,14 @@
     {
         public RandomEvent()
         {
+            EventType = new Random().Next(20, 30);
+            Status = new Random().Next(-1, 2);
+            Worker = new RandomWorker().Name;
+            ProcessId = new Random().Next(1, 20).ToString();
+            Comments = "תנועה לדוגמה";
+            Timestamp = RandomFuncs.RandomDateTime();
             Id = GetNextId();
         }
-
-        // STATIC METHODS
 
         /// <summary>
         /// Counts how many packages were created.

@@ -52,11 +52,11 @@
         // API RELATED FUNCTIONS
 
         public override async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status) 
-            => await new RandomEvent().StatusEvents(status);
+            => await new RandomTransferAmountEvent().StatusEvents(status);
 
         protected override IEventsRequests GetRequests() => new RandomEventsRequests();
 
         public override Task<Tuple<List<IEvent>, ErrorResponse>> Containing(string? SearchText)
-            => new RandomEvent().Containing(SearchText);
+            => new RandomTransferAmountEvent().Containing(SearchText);
     }
 }

@@ -24,14 +24,14 @@ namespace CipherData.General
         /// Method to get all properties of a class in a specified tuple
         /// </summary>
         /// <returns></returns>
-        public DisplayedObject(object obj, List<string>? UnwantedProperties = null, List<Tuple<string,int>>? OrderProperties = null)
+        public DisplayedObject(object obj, List<string>? UnwantedProperties = null)
         {
             UnwantedPropertiesNames = UnwantedProperties ?? new();
 
             Properties = new();
 
             string interfaceName = obj.GetType().Name.Replace("Random", "I");
-            Type? interfaceType = Type.GetType($"CipherData.Models.{interfaceName}");
+            Type? interfaceType = Type.GetType($"CipherData.Interfaces.{interfaceName}");
 
             if (interfaceType != null)
             {
@@ -79,7 +79,7 @@ namespace CipherData.General
             string originalKey = $"{obj.GetType().Name}_{propertyName}";
 
             // deal specifically with StorageSystem
-            originalKey = originalKey.Replace("StorageSystem", "System").Replace("Random","");
+            originalKey = originalKey.Replace("StorageSystem", "System").Replace("Random","I");
 
             string translation = Translator.GetTranslation(originalKey);
             if (translation != originalKey) return translation;
@@ -97,13 +97,16 @@ namespace CipherData.General
                 // If the translation was successful for the base class, return it
                 if (baseTranslation != baseClassKey) return baseTranslation;
             }
-            return translation;
+
+            // if not successful, try IResource
+            translation = Translator.GetTranslation($"IResource_{propertyName}");
+            return (translation != originalKey) ? translation : originalKey;
         }
 
-        public static List<DisplayedObject> ListObjects<T>(IEnumerable<T>? objects, List<string>? UnwantedCols = null, List<Tuple<string, int>>? OrderCols = null)
+        public static List<DisplayedObject> ListObjects<T>(IEnumerable<T>? objects, List<string>? UnwantedCols = null)
         {
             if (objects is null) return new();
-             return objects.Select(x => new DisplayedObject(x, UnwantedCols, OrderCols)).ToList();
+             return objects.Select(x => new DisplayedObject(x, UnwantedCols)).ToList();
         }
 
         public static List<Dictionary<string, object?>> ToListDicts<T>(IEnumerable<T>? objects) => ToListDicts(ListObjects(objects));

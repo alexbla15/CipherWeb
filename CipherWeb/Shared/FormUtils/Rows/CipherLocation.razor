@@ -3,7 +3,7 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     @if (WithIcon)
     {
-        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
     }
     <RadzenDropDownDataGrid @bind-Value=@ChosenSystem Data=@AvailableSystems TextProperty="@(nameof(IStorageSystem.Name))"
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true" AllowSorting=false

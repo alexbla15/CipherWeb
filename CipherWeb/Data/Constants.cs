@@ -8,6 +8,9 @@ namespace CipherWeb.Data
     {
         public class Styles
         {
+            public static readonly string Body = "cipher_body";
+            public static readonly string Icon = "cipher_icon";
+            public static readonly string SearchButtonIcon = "cipher_searchbtn_icon";
             public static readonly string ParagraphTitle = "cipher_paragraph_header";
             public static readonly string GroupHeader = "cipher_datagrid_group_header";
             public static readonly string CardTitle = "cipher_card_header";

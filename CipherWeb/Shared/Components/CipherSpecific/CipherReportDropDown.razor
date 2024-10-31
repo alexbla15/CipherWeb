@@ -5,7 +5,7 @@
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="Report" Disabled="@Disabled" AllowClear="true"
                             Data=@AllReports TextProperty="@(nameof(Report.Title))" @bind-Value="ChosenReport"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(Report.Id))" Title="@(Report.Translate(nameof(Report.Id)))" />
@@ -53,7 +53,6 @@
     {
         Label ??= "בחירת דוח";
         Icon ??= Icons.Documents.assignment;
-        Width ??= "300px";
 
         AllReports = await Report.All(_db);
     }

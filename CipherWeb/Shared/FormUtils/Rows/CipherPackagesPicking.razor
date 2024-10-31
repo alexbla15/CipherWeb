@@ -42,13 +42,12 @@
         Label ??= "תעודות";
         Icon ??= Icons.Cipher.Package;
         MinWidth ??= Constants.StandartWidth;
-        Width ??= Constants.StandartWidth;
 
         (AvailablePackages, Error) = await CachedData.AllPackages;
     }
 }
 
-<CipherFormRow Icon="@Icon" Width="@Width" MinWidth="@MinWidth">
+<CipherFormRow Icon="@Icon" MinWidth="@MinWidth">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="List<IPackage>" @bind-Value="SelectedPackages"
                             Data=@AvailablePackages TextProperty="@(nameof(IPackage.Id))" SelectedItemsText="אפשרויות נבחרו"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" Multiple="true" Change="@Change"
