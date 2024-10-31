@@ -31,6 +31,7 @@ namespace CipherData.General
             Properties = new();
 
             string interfaceName = obj.GetType().Name.Replace("Random", "I");
+            if (!interfaceName.StartsWith("I")) interfaceName = $"I{interfaceName}";
             Type? interfaceType = Type.GetType($"CipherData.Interfaces.{interfaceName}");
 
             if (interfaceType != null)
@@ -76,31 +77,45 @@ namespace CipherData.General
 
         private static string GetHebrewTranslation(object obj, string propertyName)
         {
-            string originalKey = $"{obj.GetType().Name}_{propertyName}";
+            // Retrieve the type of the provided object
+            Type objType = obj.GetType();
 
-            // deal specifically with StorageSystem
-            originalKey = originalKey.Replace("StorageSystem", "System").Replace("Random","I");
+            string OriginalKey = $"{objType.Name}_{propertyName}";
 
-            string translation = Translator.GetTranslation(originalKey);
-            if (translation != originalKey) return translation;
-
-            // If not successful, check for a base (parent) class
-            Type? baseType = obj.GetType().BaseType;
-            if (baseType != null && baseType != typeof(object))
+            if (objType.IsInterface)
             {
-                // Generate the translation key for the base class
-                string baseClassKey = $"{baseType.Name}_{propertyName}";
+                // Get the property information for the specified property name
+                PropertyInfo? property = objType.GetProperty(propertyName);
 
-                // Try to get the translation for the base class
-                string baseTranslation = Translator.GetTranslation(baseClassKey);
+                // Check if the property exists
+                if (property == null) return OriginalKey;
 
-                // If the translation was successful for the base class, return it
-                if (baseTranslation != baseClassKey) return baseTranslation;
+                // Check if the HebrewTranslationAttribute is applied to the property
+                HebrewTranslationAttribute? attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
+
+                return attribute?.Translation ?? OriginalKey;
             }
 
-            // if not successful, try IResource
-            translation = Translator.GetTranslation($"IResource_{propertyName}");
-            return (translation != originalKey) ? translation : originalKey;
+            Type[] interfaces = obj.GetType().GetInterfaces();
+
+            foreach (var inter in interfaces)
+            {
+                OriginalKey = $"{inter.Name}_{propertyName}";
+
+                // Get the property information for the specified property name
+                PropertyInfo? property = inter.GetProperty(propertyName);
+
+                // Check if the property exists
+                if (property != null)
+                {
+                    // Check if the HebrewTranslationAttribute is applied to the property
+                    HebrewTranslationAttribute? attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
+
+                    return attribute?.Translation ?? OriginalKey;
+                }
+            }
+
+            return OriginalKey;
         }
 
         public static List<DisplayedObject> ListObjects<T>(IEnumerable<T>? objects, List<string>? UnwantedCols = null)

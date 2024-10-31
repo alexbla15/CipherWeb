@@ -14,7 +14,7 @@
         <CipherAddProcessDefinitionBtn/>
         @if (SetView == View.Table)
         {
-            <CipherExcelButton FileName="@FileName" DataSource="@ProcTable.GetDataSource?.Invoke()" />
+            <CipherExcelButton FileName="@FileName" OnClickFunc="@(() => DisplayedObject.ToListDicts(ProcTable.ChosenObjects))" />
         }
         <CipherPDFButton FileName="@FileName" CipherType="typeof(IProcess)" />
     </Buttons>

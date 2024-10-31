@@ -28,7 +28,7 @@
     /// Data that will be exported.
     /// </summary>
     [Parameter]
-    public IEnumerable<IDictionary<string, object>>? DataSource { get; set; }
+    public IEnumerable<IDictionary<string, object?>>? DataSource { get; set; }
 
     /// <summary>
     /// Type that will be used to translate headers
@@ -37,7 +37,7 @@
     public Type CipherType { get; set; } = typeof(IResource);
 
     [Parameter]
-    public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
+    public Func<IEnumerable<IDictionary<string,object?>>>? OnClickFunc { get; set; }
 
     protected override void OnInitialized()
     {
@@ -51,7 +51,7 @@
     {
         if (OnClickFunc != null)
         {
-            DataSource = OnClickFunc.Invoke();
+            DataSource = DisplayedObject.ToListDicts(OnClickFunc.Invoke());
             TableToPDF.GeneratePdf(DataSource.ToList(), CipherType, FileName);
         }
     }

@@ -77,6 +77,25 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IEvent), nameof(Timestamp))]
         DateTime Timestamp { get; set; }
 
+        public Dictionary<string, object?> ToDictionary()
+        {
+            return new()
+            {
+                [nameof(Id)] = Id,
+                [nameof(EventType)] = EventType,
+                [nameof(ProcessId)] = ProcessId,
+                [nameof(AcceptingPackage)] = AcceptingPackage?.Item1.Id,
+                [nameof(DonatingPackage)] = DonatingPackage?.Item1.Id,
+                [nameof(AcceptingSystem)] = AcceptingSystem?.Name,
+                [nameof(DonatingSystem)] = DonatingSystem?.Name,
+                [nameof(EventMass)] = EventMass,
+                [nameof(Status)] = Status == 0 ? "מחכה לאישור" : Status > 0 ? "תנועה מאושרת" : "תנועה נדחתה",
+                [nameof(Timestamp)] = Timestamp,
+                [nameof(Worker)] = Worker,
+                [nameof(Comments)] = Comments,
+            };
+        }
+
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);

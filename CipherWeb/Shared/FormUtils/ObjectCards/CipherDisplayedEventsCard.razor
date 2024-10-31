@@ -108,8 +108,8 @@
             <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
         }
 
-        <CipherExcelButton DataSource="@(DisplayedObject.ToListDicts(DisplayedObject.ListObjects(DisplayedEvents)))"/>
-        <CipherPDFButton DataSource="@(DisplayedObject.ToListDicts(DisplayedObject.ListObjects(DisplayedEvents)))" />
+        <CipherExcelButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))"/>
+        <CipherPDFButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))" />
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">
