@@ -73,6 +73,10 @@
     padding-bottom:;
 }
 
+.cipher_topnavbar{
+    padding-bottom: 20px;
+}
+
 .cipher_searchbtn_icon {
     border: 1px solid var(--rz-primary-darker); 
     padding-left:10px; 
@@ -259,6 +263,7 @@
     position: relative;
     transition: all 250ms;
     overflow: hidden;
+    margin-bottom:5px;
 }
 
     .CipherButton.Disabled {

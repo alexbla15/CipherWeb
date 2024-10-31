@@ -1,60 +1,20 @@
 ﻿@inherits RadzenStack
 
 <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center"
-             Style="@($"padding-bottom:{PaddingBottom}; padding-top:{PaddingTop}; padding-right:{PaddingRight}; padding-left:{PaddingLeft}")">
+             class="@Constants.Styles.TopNavBar">
     @foreach (CipherNavLink item in items)
     {
-        <CipherNavButton Icon="@item.Icon" Text="@item.Name" Width="@ButtonWidth()" Path="@item.Href" ColorShade="@ColorShade" ColorStyle="@ColorStyle" />
+        <CipherNavButton Icon="@item.Icon" Text="@item.Name" Width="@ButtonWidth()" Path="@item.Href"
+                         ColorShade="@Shade.Darker" ColorStyle="@ButtonStyle.Primary" />
     }
 </RadzenStack>
 
 @code {
     /// <summary>
-    /// Space outside the buttons, inside the component. (Bottom)
-    /// </summary>
-    [Parameter]
-    public string PaddingBottom { get; set; } = "20px";
-
-    /// <summary>
-    /// Space outside the buttons, inside the component. (Top)
-    /// </summary>
-    [Parameter]
-    public string? PaddingTop { get; set; }
-
-    /// <summary>
-    /// Space outside the buttons, inside the component. (Right)
-    /// </summary>
-    [Parameter]
-    public string? PaddingRight { get; set; }
-
-    /// <summary>
-    /// Space outside the buttons, inside the component. (Left)
-    /// </summary>
-    [Parameter]
-    public string? PaddingLeft { get; set; }
-
-    /// <summary>
-    /// Shade of buttons. Must be a Shade-enum.
-    /// </summary>
-    [Parameter]
-    public Shade ColorShade { get; set; } = Shade.Darker;
-
-    /// <summary>
-    /// Background-color scheme of buttons. Must be a ButtonStyle-enum.
-    /// </summary>
-    [Parameter]
-    public ButtonStyle ColorStyle { get; set; } = ButtonStyle.Primary;
-
-    /// <summary>
     /// Buttons' content.
     /// </summary>
     [Parameter]
-    public List<CipherNavLink> items { get; set; } = new()
-    {
-        new() { Name="סיכום", Icon=Icons.Cipher.Summary, Href=CipherNavLinks.ProcessesReport.Href },
-        new() { Name="חיפוש", Icon=Icons.SearchAndFilter.search, Href=CipherNavLinks.AdvancedSearch.Href },
-        new() { Name="דוחות", Icon=Icons.Documents.article, Href=CipherNavLinks.Reports.Href }
-    };
+    public List<CipherNavLink> items { get; set; } = new() { CipherNavLinks.Reports, CipherNavLinks.AdvancedSearch };
 
     /// <summary>
     /// Width of each button.

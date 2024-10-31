@@ -18,14 +18,9 @@
     /// </summary>
     /// <returns></returns>
     public string ButtonWidth() => $"{99M / AmountPerRow}%";
-
-    /// <summary>
-    /// Set card width.
-    /// </summary>
-    public string CardWidth() => "100%";
 }
 
-<CipherComponentCard Title=@Title Width="@CardWidth()">
+<CipherComponentCard Title=@Title Width="100%">
     @foreach (CipherNavLink myNavLink in CipherNavLinks.links)
     {
         if (myNavLink.Name == NavLinkType && myNavLink.SubLinks != null)
@@ -35,7 +30,7 @@
                 @if (mySubNavLink.Name != null)
                 {
                     <CipherNavButton Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
-                    Text="@mySubNavLink.Name" Path="@mySubNavLink.Href" MarginBottom="5px" />
+                    Text="@mySubNavLink.Name" Path="@mySubNavLink.Href" />
                 }
             }
         }

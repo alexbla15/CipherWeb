@@ -8,6 +8,7 @@ namespace CipherWeb.Data
     {
         public class Styles
         {
+            public static readonly string TopNavBar = "cipher_topnavbar";
             public static readonly string Body = "cipher_body";
             public static readonly string Icon = "cipher_icon";
             public static readonly string SearchButtonIcon = "cipher_searchbtn_icon";
