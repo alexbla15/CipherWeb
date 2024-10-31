@@ -1,4 +1,5 @@
-using CipherData;
+using CipherData.ApiMode;
+using CipherData.Interfaces;
 using QuestPDF.Infrastructure;
 using Radzen;
 using System.Globalization;
@@ -15,7 +16,6 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<ISqlDataAcess, SqlDataAcess>();
 builder.Services.AddTransient<ICipherInfo, CipherInfo>(); 
-builder.Services.AddScoped<ExcelService>();
 builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();

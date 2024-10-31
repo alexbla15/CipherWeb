@@ -2,25 +2,28 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="ICategory" Disabled="@Disabled" AllowClear="true"
-                            Data=@categories TextProperty="@(nameof(ICategory.Name))" @bind-Value="ChosenCategory"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
+                            Data=@AvailableCategories TextProperty="@(nameof(ICategory.Name))" @bind-Value="ChosenCategory"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(new Category().Translate(nameof(ICategory.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(new Category().Translate(nameof(ICategory.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(new Category().Translate(nameof(ICategory.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(ICategory.Translate(nameof(ICategory.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(ICategory.Translate(nameof(ICategory.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(ICategory.Translate(nameof(ICategory.MaterialType)))">
                 <Template>
-                    @((context as ICategory).MaterialType?.Name)
+                    @((context as ICategory)?.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.IdMask))" Title="@(new Category().Translate(nameof(ICategory.IdMask)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.IdMask))" Title="@(ICategory.Translate(nameof(ICategory.IdMask)))">
                 <Template>
-                    @(string.Join(", ", (context as ICategory).IdMask))
+                    @if (context is ICategory cat)
+                    {
+                        @(string.Join(", ", cat.IdMask))
+                    }
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as ICategory).Name)
+            <b>@Label:</b> @((context as ICategory)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -36,7 +39,7 @@
     /// All categories optional in the drop down.
     /// </summary>
     [Parameter]
-    public List<ICategory> categories { get; set; } = new();
+    public List<ICategory> AvailableCategories { get; set; } = new();
 
     /// <summary>
     /// Error response for data fetching
@@ -56,12 +59,11 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "בחירת קטגוריה";
         Icon ??= Icons.Symbols.category;
-        Width ??= "300px";
 
-        (categories, error) = CachedData.AllCategories;
+        (AvailableCategories, error) = await CachedData.AllCategories;
     }
 }

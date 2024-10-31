@@ -7,8 +7,7 @@
 <RadzenStack Orientation="Orientation.Vertical">
     <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnSave="@RefreshEvents" />
     <CipherJsonCheck JsonValue="@JsonRequest" />
-    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents"
-        WithRowButtons="true"/>
+    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents" WithRowButtons="true"/>
     <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-Events="@ApprovedEvents" />
     <CipherDisplayedEventsCard Title="תנועות דחויות" @bind-Events="@DeclinedEvents" />
 </RadzenStack>
@@ -53,40 +52,46 @@
     private CipherBooleanConditions EventsFilter = new();
     private CipherDisplayedEventsCard FilterableEvents = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= CipherNavLinks.Approval.Name;
 
-        (PendingEvents, Error) = Event.PendingEvents();
-        (ApprovedEvents, Error) = Event.ApprovedEvents();
-        (DeclinedEvents, Error) = Event.DeclinedEvents();
+        (PendingEvents, Error) = await Config.Event(false).PendingEvents();
+        (ApprovedEvents, Error) = await Config.Event(false).ApprovedEvents();
+        (DeclinedEvents, Error) = await Config.Event(false).DeclinedEvents();
     }
 
     public async Task RefreshEvents()
     {
         IGroupedBooleanCondition filterValue = EventsFilter.ChosenCondition;
-        ObjectFactory objectFactory = new();
+        IObjectFactory objectFactory = Config.ObjectFactory();
 
         // add to filter - only pending events
-        List<Condition> originalFilterValue = filterValue.Conditions.ToList();
-        originalFilterValue.Add(new BooleanCondition() { Attribute = $"[{nameof(Event)}].[{nameof(Event.Status)}]", AttributeRelation = AttributeRelation.Eq, Value = "0" });
+        List<ICondition> originalFilterValue = filterValue.Conditions.ToList();
+
+        var cond = Config.BooleanCondition();
+        cond.Attribute = $"[Event].[{nameof(IEvent.Status)}]";
+        cond.AttributeRelation = AttributeRelation.Eq;
+        cond.Value = "0";
+
+        originalFilterValue.Add(cond);
         filterValue.Conditions = originalFilterValue;
 
         objectFactory.Filter = filterValue;
 
         // order by time (1), and system-id (2)
-        objectFactory.AddOrderBy(new OrderedItem()
-            {
-                Attribute = $"[{nameof(Event)}].[{nameof(Event.Timestamp)}]",
-                Order = Order.desc
-            });
-        objectFactory.AddOrderBy(new OrderedItem()
-            {
-                Attribute = $"[{nameof(Event)}].[{nameof(Event.FinalStatePackages)}].[{nameof(Package.System)}].[{nameof(StorageSystem.Id)}]",
-                Order = Order.desc
-            });
 
-        var result = Config.QueryRequests.QueryObjects<Event>(objectFactory);
+        IOrderedItem orderedItem = Config.OrderedItem();
+        orderedItem.Attribute = $"[Event].[{nameof(IEvent.Timestamp)}]";
+        orderedItem.Order = Order.desc;
+        objectFactory.AddOrderBy(orderedItem);
+
+        orderedItem = Config.OrderedItem();
+        orderedItem.Attribute = $"[Event].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]";
+        orderedItem.Order = Order.desc;
+        objectFactory.AddOrderBy(orderedItem);
+        
+        var result = await Config.QueryRequests(false).QueryObjects<IEvent>(objectFactory);
         (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
 
         JsonRequest = objectFactory.ToJson();

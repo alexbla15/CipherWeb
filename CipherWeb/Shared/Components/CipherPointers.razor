@@ -2,28 +2,10 @@
 
 @code {
     /// <summary>
-    /// Width of the whole component. In {px}
-    /// </summary>
-    [Parameter]
-    public int componentWidth { get; set; } = 300;
-
-    /// <summary>
     /// Maximal amount of buttons per row.
     /// </summary>
     [Parameter]
     public int AmountPerRow { get; set; } = 4;
-
-    /// <summary>
-    /// Gap between the buttons in the component.
-    /// </summary>
-    [Parameter]
-    public string ButtonGap { get; set; } = "10px";
-
-    /// <summary>
-    /// Text alignment within each button.
-    /// </summary>
-    [Parameter]
-    public string ButtonTextAlign { get; set; } = "right";
 
     /// <summary>
     /// Name of button-type.
@@ -32,34 +14,23 @@
     public string NavLinkType { get; set; } = "הזנה";
 
     /// <summary>
-    /// Initial text to be added to each button name as header.
-    /// </summary>
-    [Parameter]
-    public string LabelInitialText { get; set; } = "הזנת";
-
-    /// <summary>
     /// Set button's width.
     /// </summary>
     /// <returns></returns>
     public string ButtonWidth() => $"{99M / AmountPerRow}%";
-
-    /// <summary>
-    /// Set card width.
-    /// </summary>
-    public string CardWidth() => "100%";
 }
 
-<CipherComponentCard Title=@Title Width="@CardWidth()">
-    @foreach (MyNavLink myNavLink in CipherNavLinks.links)
+<CipherComponentCard Title=@Title Width="100%">
+    @foreach (CipherNavLink myNavLink in CipherNavLinks.links)
     {
-        if (myNavLink.Name == NavLinkType)
+        if (myNavLink.Name == NavLinkType && myNavLink.SubLinks != null)
         {
-            @foreach (MySubNavLink mySubNavLink in myNavLink.SubLinks)
+            @foreach (CipherNavLink mySubNavLink in myNavLink.SubLinks)
             {
-                @if (!mySubNavLink.Name.Contains(LabelInitialText))
+                @if (mySubNavLink.Name != null)
                 {
-                    <CipherNavButton ButtonTextAlign="right" Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
-                                     Text="@($"{LabelInitialText} {mySubNavLink.Name}")" Path="@mySubNavLink.Href" MarginBottom="5px" />
+                    <CipherNavButton Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
+                    Text="@mySubNavLink.Name" Path="@mySubNavLink.Href" />
                 }
             }
         }

@@ -6,7 +6,7 @@ namespace CipherWeb.Shared.Components
 {
     public partial class CipherDayView : RadzenDayView
     {
-        public override string Icon => Icons.Time.Event;
+        public override string Icon => Icons.Time._event;
 
         /// <inheritdoc />
         [Parameter]
@@ -24,7 +24,7 @@ namespace CipherWeb.Shared.Components
 
     public partial class CipherMonthView : RadzenMonthView
     {
-        public override string Icon => Icons.Time.CalanderMonth;
+        public override string Icon => Icons.Time.calendar_month;
 
         /// <inheritdoc />
         [Parameter]
@@ -34,7 +34,7 @@ namespace CipherWeb.Shared.Components
 
     public partial class CipherYearPlannerView : RadzenYearPlannerView
     {
-        public override string Icon => Icons.Time.CalendarToday;
+        public override string Icon => Icons.Time.calendar_today;
 
         /// <inheritdoc />
         [Parameter]

@@ -1,3 +1,5 @@
 ﻿@page "/Searches/Process"
 
-<SearchResource NavLink="@CipherNavLinks.ProcessSearch" Cipher_TItem="ProcessDefinition" />
+@using CipherWeb.Pages.Forms
+
+<ResourceFormHandler NavLink="@CipherNavLinks.ProcessSearch" Cipher_TItem="IProcessDefinition" Mode="@FormMode.ReadOnly" />

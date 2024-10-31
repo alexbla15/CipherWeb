@@ -1,19 +1,20 @@
-﻿@inherits CipherAutoComplete
+﻿@inherits CipherMaskList
 
-<CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@Label"/>
+<CipherMaskList @ref=Masks AllowedRegex="^[0-9]+$" Icon="@Icon" PlaceHolder="@PlaceHolder" 
+SelectedTexts="@SelectedTexts" ValueChanged="@ValueChanged" Disabled="@Disabled"/>
 
 @code {
     private CipherMaskList Masks = new();
 
     protected override void OnInitialized()
     {
-        Label ??= new Category().Translate(nameof(Category.IdMask));
-        Icon ??= Icons.Security.password;
+        PlaceHolder = ICategory.Translate(nameof(ICategory.IdMask));
+        Icon = Icons.Security.password;
     }
 
     /// <summary>
     /// Get the value set within the mask. Resets the value if it doesn't fullfill the check function.
     /// </summary>
     /// <returns></returns>
-    public List<string> GetValue() => Masks.SelectedTexts.ToList();
+    public List<string>? GetValue() => Masks.SelectedTexts?.ToList();
 }

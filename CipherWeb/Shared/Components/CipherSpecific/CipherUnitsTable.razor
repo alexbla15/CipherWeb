@@ -1,10 +1,8 @@
 ﻿@inherits CipherResourceTable<IUnit>
 
-<CipherResourceTable Cipher_TItem="IUnit" ChosenObjects="@CachedData.AllUnits.Item1" PrefixFileTitle="units" Title="@Title" WithHeaderContent="false" />
+<CipherResourceTable Cipher_TItem="IUnit" ChosenObjects="@ChosenObjects"
+                     PrefixFileTitle="units" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    protected override void OnInitialized()
-    {
-        Title ??= Translator.GetTranslation("Units");
-    }
+    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Units");
 }

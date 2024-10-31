@@ -4,22 +4,23 @@
 @inject DialogService DialogService
 @inject NavigationManager NavigationManager
 
-<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceAround"
              AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
-                 AlignItems="AlignItems.Center" Gap="0" Style="@BlockWidth()">
+                 AlignItems="AlignItems.Center" Gap="0">
         @* -- LOGO BLOCK -- *@
         <RadzenLink Path=@CipherNavLinks.Home.Href Text="מסך הבית" Style="@($"width:{Logo_Width}")">
             <CipherLogo />
         </RadzenLink>
 
         @* -- SEARCH BLOCK -- *@
-        <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"></CipherSearchRow>
+        <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"/>
     </RadzenStack>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
                  AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
         @* -- CLASSIFCIATION BLOCK -- *@
-        <CipherRestriction />
+
+        <RadzenText Text="מוגבל" TextAlign="TextAlign.Center" class="@Constants.Styles.Restriction" />
     </RadzenStack>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
                  AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
@@ -28,15 +29,11 @@
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
                 <CipherAccountImage />
                 <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
-                    <CipherText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right" TextColor="var(--cipher-header-color)" TextStyle="TextStyle.H6" />
+                    <RadzenText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right"  Style="color: var(--cipher-header-color);" TextStyle="TextStyle.H6" />
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
                         <CipherButton Icon="@Icons.Social.SinglePerson.account_circle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
                                       Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
-                                      Width="100%" MaxWidth="180px" ButtonTextAlign="right" HelpTextPosition="TooltipPosition.Bottom" />
-
-                        @* -- FAST ACTIONS -- *@
-                        <CipherNavButton Icon="@Icons.Symbols.QuestionMark.question_mark" HelpText="הסברים ותמיכה" Size="ButtonSize.ExtraSmall" Variant="Variant.Outlined" ColorShade="Shade.Darker"
-                                         Path="@CipherNavLinks.Information.Href" HelpTextPosition="TooltipPosition.Bottom" />
+                                      Width="100%" HelpTextPosition="TooltipPosition.Bottom" />
                     </RadzenStack>
                 </RadzenStack>
             </RadzenStack>

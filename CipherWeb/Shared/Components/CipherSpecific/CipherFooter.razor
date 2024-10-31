@@ -1,17 +1,17 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Width="@Width" MaxWidth="@MaxWidth" Padding="@Padding" ContentPadding="0"
+<CipherComponentCard Width="@Width" MaxWidth="@MaxWidth" Padding="@Padding" ContentStyleClass="@Constants.Styles.ComponentFooterContent"
                      MarginLeft="@MarginLeft" MarginRight="@MarginRight" MarginTop="@MarginTop"
                      BackgroundColor="@BackgroundColor" Variant="Variant.Filled">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
                  JustifyContent="JustifyContent.Center" Gap="0">
 
-        <CipherLogo LogoPath="@LogoPath" Height="@LogoHeight"></CipherLogo>
+        <CipherLogo LogoPath="@LogoPath" Height="@LogoHeight"/>
         <RadzenStack Orientation="Orientation.Vertical">
-            <CipherText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
-                        Text="@DevelopedByText" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
-            <CipherText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
-                        Text="@ProgramVersionText" Wrap="@Wrap" TextAlign="TextAlign.Center"></CipherText>
+            <RadzenText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
+                        Text="@DevelopedByText" TextAlign="TextAlign.Center"/>
+            <RadzenText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
+                        Text="@ProgramVersionText" TextAlign="TextAlign.Center"/>
         </RadzenStack>
 
     </RadzenStack>
@@ -55,10 +55,4 @@
     /// </summary>
     [Parameter]
     public TextStyle FooterTextStyle { get; set; } = TextStyle.Body2;
-
-    /// <summary>
-    /// Is the footer-text wrappable.
-    /// </summary>
-    [Parameter]
-    public bool Wrap { get; set; } = true;
 }

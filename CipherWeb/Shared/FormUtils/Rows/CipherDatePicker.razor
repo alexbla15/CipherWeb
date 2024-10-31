@@ -8,12 +8,6 @@
     public string? DateFormat { get; set; }
 
     /// <summary>
-    /// Width of the component.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = "300px";
-
-    /// <summary>
     /// Label of the component.
     /// </summary>
     [Parameter]
@@ -23,19 +17,13 @@
     /// Icon aside the component.
     /// </summary>
     [Parameter]
-    public string Icon { get; set; } = Icons.Time.Event;
+    public string Icon { get; set; } = Icons.Time._event;
 
     /// <summary>
     /// Is the date-picker enabled.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
-
-    /// <summary>
-    /// Are the error-messages visible as popup or plain text.
-    /// </summary>
-    [Parameter]
-    public bool Popup { get; set; }
 
     /// <summary>
     /// Force user to enter a value for this component in a form.
@@ -101,7 +89,7 @@
         public DateTime value { get; set; } = DateTime.Now;
     }
 
-    private Model model = new Model();
+    private Model model = new();
     private RadzenRequiredValidator RequiredValidator = new();
 
     protected override void OnInitialized()
@@ -135,14 +123,15 @@
     <RadzenStack Orientation="Orientation.Vertical" Gap="0">
 
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
-            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")">
-                <RadzenDatePicker Name="value" @bind-Value="model.value" DateFormat="@DateFormat" ShowTime="@ShowTime"
+            <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth};")">
+                <RadzenDatePicker TValue="DateTime" Name="value" Value="@model.value" DateFormat="@DateFormat" ShowTime="@ShowTime" 
+                ValueChanged="@(args => {model.value=(DateTime)args; ValueChanged.InvokeAsync();})"
                                   Disabled="@Disabled" Min="@Min" Max="@Max" ShowTimeOkButton="@ShowTimeOkButton" TimeOnly="@TimeOnly"/>
             </RadzenFormField>
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Popup=@Popup Visible=@Required />
+            <RadzenRequiredValidator @ref="RequiredValidator" Component="value" Text="שדה חובה" Visible=@Required />
         </RadzenStack>
     </RadzenStack>
 </RadzenTemplateForm>

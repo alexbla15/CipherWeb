@@ -5,13 +5,13 @@
     /// Initial location.
     /// </summary>
     [Parameter]
-    public StorageSystem? InitialLocation { get; set; }
+    public IStorageSystem? InitialLocation { get; set; }
 
     /// <summary>
     /// Final location.
     /// </summary>
     [Parameter]
-    public StorageSystem? FinalLocation { get; set; }
+    public IStorageSystem? FinalLocation { get; set; }
 
     /// <summary>
     /// Label of initial location.
@@ -29,7 +29,7 @@
     /// Icon of initial location.
     /// </summary>
     [Parameter]
-    public string InitialLocationIcon { get; set; } = Icons.Travel.Navigation.MyLocation;
+    public string InitialLocationIcon { get; set; } = Icons.Travel.Navigation.my_location;
 
     /// <summary>
     /// Icon of final location.
@@ -40,7 +40,7 @@
     protected override void OnInitialized() => Title ??= "ציינו מיקום התחלתי וסופי";
 }
 
-<CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
     <CipherLocation Label="@InitialLocationText" Icon="@InitialLocationIcon" @bind-ChosenSystem=InitialLocation/>
     <CipherLocation Label="@FinalLocationText" Icon="@FinalLocationIcon" @bind-ChosenSystem=FinalLocation />
 </CipherComponentCard>

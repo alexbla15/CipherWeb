@@ -1,3 +1,5 @@
 ﻿@page "/Searches/Category"
 
-<SearchResource NavLink="@CipherNavLinks.CategorySearch" Cipher_TItem="Category" />
+@using CipherWeb.Pages.Forms
+
+<ResourceFormHandler NavLink="@CipherNavLinks.CategorySearch" Cipher_TItem="ICategory" Mode="@FormMode.ReadOnly" />

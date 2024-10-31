@@ -2,12 +2,6 @@
 
 @code {
     /// <summary>
-    /// Component width.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = "300px";
-
-    /// <summary>
     /// Component's label.
     /// </summary>
     [Parameter]
@@ -43,13 +37,13 @@
     [Parameter]
     public string AllowedRegex { get; set; } = "^[a-zA-Z0-9א-ת. \n?]+$";
 
-    private string _value = string.Empty;
+    private string? _value = string.Empty;
 
     /// <summary>
     /// Component's value.
     /// </summary>
     [Parameter]
-    public string Value
+    public string? Value
     {
         get => _value;
         set
@@ -67,12 +61,6 @@
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
-
-    /// <summary>
-    /// Is the error message a popup / regular underline text.
-    /// </summary>
-    [Parameter]
-    public bool Popup { get; set; }
 
     /// <summary>
     /// Is the value required for the form.
@@ -138,7 +126,7 @@
 
     class Model
     {
-        public string value = string.Empty;
+        public string? value = string.Empty;
     }
 
     Model model = new() { value = string.Empty };
@@ -244,24 +232,17 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
             @if (!string.IsNullOrEmpty(Icon))
             {
-                <style>
-                    .rz-messages-error {
-                        display: flex;
-                        font-size: small;
-                        padding-right: 2.5rem;
-                    }
-                </style>
-                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
             }
             @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Width};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
+                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Constants.StandartWidth};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                     Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
                                     Multiline="@Multiline"/>
             }
             else
             {
-                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width}; min-width: {Width}")">
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
                     <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
                                         Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
                                         Multiline="@Multiline" />
@@ -271,7 +252,7 @@
         <RadzenStack Orientation="Orientation.Vertical">
             @if (Required && ShowErrors)
             {
-                <RadzenRequiredValidator @ref="RequiredValidator" Component="setvalue" Text="שדה חובה" Popup=@Popup />
+                <RadzenRequiredValidator @ref="RequiredValidator" Component="setvalue" Text="שדה חובה" />
             }
             <RadzenLengthValidator @ref=LengthValidator Component="setvalue" Min="@MinLength" Max="@MaxLength" Text="@LengthValidatorText()"
                                    Visible="@(RequiredValidator.IsValid && ShowErrors)" />

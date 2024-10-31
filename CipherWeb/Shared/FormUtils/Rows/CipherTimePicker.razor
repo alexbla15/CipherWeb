@@ -19,9 +19,9 @@
     {
         Label ??= "שעה";
         DateFormat ??= "HH:mm";
-        Icon ??= Icons.Time.Clock.Schedule;
+        Icon ??= Icons.Time.Clock.schedule;
     }
 }
 
 <CipherDatePicker Icon="@Icon" Label="@Label" ShowTime="true" DateFormat="@DateFormat" Min="@MinTime" Max="@MaxTime" TimeOnly="true" ShowTimeOkButton="true"
-                  Width="@Width" Disabled="@Disabled" Popup="@Popup" Value="@DateTime.Now"/>
+                  Disabled="@Disabled" Value="@DateTime.Now"/>

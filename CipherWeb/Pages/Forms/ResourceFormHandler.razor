@@ -1,0 +1,654 @@
+﻿@using System.Reflection
+
+@inject NavigationManager Navigation
+
+@typeparam Cipher_TItem
+
+<ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
+    @RenderChosenCard()
+    @if (Mode != FormMode.ReadOnly)
+    {
+        <CipherJsonCheck JsonValue="@JsonRequest" Visible="@(!(Mode != FormMode.Create && ChosenObject is null))" />
+        <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(!(Mode != FormMode.Create && ChosenObject is null))" />
+    }
+</ResourceForm>
+
+@code {
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// form's mode of use
+    /// </summary>
+    [Parameter]
+    public FormMode Mode { get; set; } = FormMode.Update;
+
+    /// <summary>
+    /// Page nav link.
+    /// </summary>
+    [Parameter]
+    public CipherNavLink? NavLink { get; set; } = new();
+
+    /// <summary>
+    /// Json request that will be sent to the API server.
+    /// </summary>
+    [Parameter]
+    public string? JsonRequest { get; set; }
+
+    /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// API result to submission. Empty if the submission was unsuccessful.
+    /// </summary>
+    [Parameter]
+    public Cipher_TItem? Result { get; set; }
+
+    /// <summary>
+    /// API response to submission.
+    /// </summary>
+    [Parameter]
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Chosen object upon searching
+    /// </summary>
+    [Parameter]
+    public Cipher_TItem? ChosenObject { get; set; }
+
+    private CipherSubmit submission = new();
+    private ResourceForm ResourcePage = new();
+    private CipherPackageInfo PackInfo = new();
+    private CipherComments EventComments = new();
+    private CipherFormInfo FormInfo = new();
+    private CipherProcess EventProc = new();
+
+    private ICategory SetCategory = Config.Category();
+    private IPackage SetPackage = Config.Package();
+    private IProcessDefinition SetProc = Config.ProcessDefinition();
+    private IStorageSystem SetSystem = Config.StorageSystem();
+    private IUnit SetUnit = Config.Unit();
+    private IVessel SetVessel = Config.Vessel();
+
+    private IUnitRequest unitRequest = Config.UnitRequest();
+    private ICategoryRequest catRequest = Config.CategoryRequest();
+    private IVesselRequest vesRequest = Config.VesselRequest();
+    private IProcessDefinitionRequest procDefRequest = Config.ProcessDefinitionRequest();
+    private ISystemRequest sysRequest = Config.SystemRequest();
+    private ICreateEvent packRequest = Config.CreateEvent();
+
+    private CipherUnitCard unitCard = new();
+    private CipherVesselCard vesCard = new();
+    private CipherSystemCard sysCard = new();
+    private CipherPackageCard packCard = new();
+    private CipherProcessCard procCard = new();
+    private CipherCategoryCard catCard = new();
+
+    public class ResourceHandler
+    {
+        public Func<RenderFragment?>? GetCard { get; set; }
+        public Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>>? SendRequest { get; set; }
+        public Action? SetJson { get; set; }
+        public Func<Tuple<bool, string>>? Check { get; set; }
+        public Func<object?>? GetChosenObject { get; set; }
+        public Func<string, Task>? GetObjectFromUrl { get; set; }
+        public Func<Tuple<bool, string>>? HandleSubmissionRequest { get; set; }
+    }
+
+    private Dictionary<Type, ResourceHandler> ResourceHandlers = new();
+    private ResourceHandler SetAddResourceHandler = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        RegisterResourceHandlers();
+        SetAddResourceHandlerFunc();
+        if (Mode != FormMode.Create) await GetObjectFromUrl();
+    }
+    
+    // GENERAL METHODS
+
+    public void SetAddResourceHandlerFunc()
+    {
+        if (Mode == FormMode.Create)
+        {
+            if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+            {
+                SetAddResourceHandler = handler;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Handler not found for type {typeof(Cipher_TItem).Name}");
+            }
+        }
+    }
+
+    private void RegisterResourceHandlers()
+    {
+        ResourceHandlers.Add(typeof(ICategory), new ResourceHandler()
+                {
+                    GetCard = () => RenderCategoryCard(),
+                    Check = () => catRequest.Check(),
+                    SendRequest = () => SendCategoryRequest(),
+                    SetJson = SetCategoryJsonRequest,
+                    GetChosenObject = () => catCard.ChosenObject,
+                    HandleSubmissionRequest = () => HandleCategorySubmissionRequest(),
+                    GetObjectFromUrl = id => GetCategoryFromUrl(id)
+                });
+
+        ResourceHandlers.Add(typeof(IUnit), new ResourceHandler()
+                {
+                    GetCard = () => RenderUnitCard(),
+                    Check = () => unitRequest.Check(),
+                    SendRequest = () => SendUnitRequest(),
+                    SetJson = SetUnitJsonRequest,
+                    GetChosenObject = () => unitCard.ChosenObject,
+                    HandleSubmissionRequest = () => HandleUnitSubmissionRequest(),
+                    GetObjectFromUrl = id => GetUnitFromUrl(id)
+                });
+
+        ResourceHandlers.Add(typeof(IVessel), new ResourceHandler()
+                {
+                    GetCard = () => RenderVesselCard(),
+                    Check = () => vesRequest.Check(),
+                    SendRequest = () => SendVesselRequest(),
+                    SetJson = SetVesselJsonRequest,
+                    GetChosenObject = () => vesCard.ChosenObject,
+                    HandleSubmissionRequest = () => HandleVesselSubmissionRequest(),
+                    GetObjectFromUrl = id => GetVesselFromUrl(id)
+                });
+
+        ResourceHandlers.Add(typeof(IProcessDefinition), new ResourceHandler()
+                {
+                    GetCard = () => RenderProcessDefinitionCard(),
+                    Check = () => procDefRequest.Check(),
+                    SendRequest = () => SendProcessDefinitionRequest(),
+                    SetJson = SetProcessDefinitionJsonRequest,
+                    GetChosenObject = () => procCard.ChosenObject,
+                    HandleSubmissionRequest = () => HandleProcessDefinitionSubmissionRequest(),
+                    GetObjectFromUrl = id => GetProcessDefinitionFromUrl(id)
+                });
+
+        ResourceHandlers.Add(typeof(IStorageSystem), new ResourceHandler()
+                {
+                    GetCard = () => RenderStorageSystemCard(),
+                    Check = () => sysRequest.Check(),
+                    SendRequest = () => SendSystemRequest(),
+                    SetJson = SetSystemJsonRequest,
+                    GetChosenObject = () => sysCard.ChosenObject,
+                    HandleSubmissionRequest = () => HandleStorageSystemSubmissionRequest(),
+                    GetObjectFromUrl = id => GetStorageSystemFromUrl(id)
+                });
+
+        ResourceHandlers.Add(typeof(IPackage), new ResourceHandler()
+                {
+                    GetCard = () => RenderPackageCard(),
+                    Check = () => packRequest.Check(),
+                    SendRequest = () => SendPackageRequest(),
+                    SetJson = async () => await SetPackageJsonRequest(),
+                    GetChosenObject = () => packCard.ChosenObject,
+                    GetObjectFromUrl = id => GetPackageFromUrl(id)
+                });
+    }
+
+    /// <summary>
+    /// Retrieve the object's ID for URL changes.
+    /// </summary>
+    private string? GetObjectId(object? obj) => (obj as IResource)?.Id;
+
+    /// <summary>
+    /// Changes URL to include the chosen-package id, upon searching it within the page.
+    /// </summary>
+    public void ChangeUrl()
+    {
+        ChosenObject = GetChosenObject();
+        ResourcePage.ChangeUrl(Navigation, NavLink, GetObjectId(ChosenObject));
+    }
+
+    private async Task GetObjectFromUrl()
+    {
+        string? id = ResourcePage.GetIdFromUrl(Navigation);
+        if (!string.IsNullOrEmpty(id))
+        {
+            if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+            {
+                if (handler.GetObjectFromUrl != null)
+                {
+                    await handler.GetObjectFromUrl(id);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get the chosen object based on its type.
+    /// </summary>
+    private Cipher_TItem? GetChosenObject()
+        => ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler) ?
+        (Cipher_TItem?)handler.GetChosenObject?.Invoke() : default;
+
+    /// <summary>
+    /// Method to fill in the request and check it before submission.
+    /// </summary>
+    /// <returns></returns>
+    private Tuple<bool, string> HandleUpdateSubmissionRequest()
+    {
+        if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+        {
+            if (handler.HandleSubmissionRequest != null) return handler.HandleSubmissionRequest.Invoke();
+        }
+        return new Tuple<bool, string>(false, "שגיאת מערכת");
+    }
+
+    /// <summary>
+    /// Method to fill in the request and check it before submission.
+    /// </summary>
+    private Tuple<bool, string> HandleAddSubmissionRequest()
+    {
+        SetAddJsonRequest();
+        return SetAddResourceHandler.Check != null ?
+        SetAddResourceHandler.Check() : Tuple.Create(false, "שגיאת מערכת");
+    }
+
+    /// <summary>
+    /// Method for submitting checked request, or showing errors within the checking process.
+    /// </summary>
+    public async Task Submit()
+    {
+        Valid = true;
+
+        var requestCheck =
+        (Mode == FormMode.Update) ? HandleUpdateSubmissionRequest() : HandleAddSubmissionRequest();
+
+        if (!requestCheck.Item1)
+        {
+            Valid = false;
+            ErrorMessage = requestCheck.Item2;
+        }
+
+        await SendRequest();
+        UpdateSubmissionSummary();
+    }
+
+    public void SetError(string msg = "שגיאת מערכת")
+    {
+        Valid = false;
+        ErrorMessage = msg;
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public async Task SendAddRequest()
+    {
+        if (SetAddResourceHandler.SendRequest != null)
+        {
+            await HandleRequest(SetAddResourceHandler.SendRequest);
+        }
+        else SetError();
+    }
+
+    public async Task SendUpdateRequest()
+    {
+        if (!Valid) return;
+
+        if (ChosenObject is null)
+        {
+            SetError("לא נבחר אובייקט לעדכון.");
+            return;
+        }
+
+        if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+        {
+            if (handler.SendRequest != null) await HandleRequest(handler.SendRequest);
+        }
+        else SetError();
+    }
+
+    /// <summary>
+    /// Send request to API
+    /// </summary>
+    public async Task SendRequest()
+    {
+        if (Mode == FormMode.Create)
+        {
+            await SendAddRequest();
+        }
+        else
+        {
+            await SendUpdateRequest();
+        }
+
+        if (Error != ErrorResponse.Success)
+        {
+            Valid = false;
+            ErrorMessage = Error.Message;
+        }
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
+    }
+
+    /// <summary>
+    /// Method to check if there were changed in the object, and then sending its request to API.
+    /// </summary>
+    /// <param name="sendRequest">method to send the request to the API</param>
+    private async Task HandleRequest(Func<Task<Tuple<Cipher_TItem, ErrorResponse>?>> sendRequest)
+    {
+        var requestResult = await sendRequest();
+        if (requestResult != null) (Result, Error) = requestResult.ToValueTuple();
+    }
+
+    /// <summary>
+    /// Make form invalid if no difference was found between the original object and the request.
+    /// </summary>
+    /// <param name="different">Check result</param>
+    private bool FoundChanges(bool different)
+    {
+        if (!different) SetError("אין שינוי בפרמטרים");
+        return different;
+    }
+
+    private void SetAddJsonRequest()
+    {
+        if (SetAddResourceHandler.SetJson != null) SetAddResourceHandler.SetJson();
+        else JsonRequest = string.Empty;
+    }
+
+    private void SetUpdateJsonRequest()
+    {
+        if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+        {
+            if (handler.SetJson != null)
+            {
+                handler.SetJson();
+                return;
+            }
+        }
+
+        JsonRequest = string.Empty;
+    }
+
+    private void SetJsonRequest()
+    {
+        if (Mode == FormMode.Create) SetAddJsonRequest(); else SetUpdateJsonRequest();
+    }
+
+    /// <summary>
+    /// Method to get the appropriate object-card to the selected type
+    /// </summary>
+    private RenderFragment? RenderChosenCard()
+    {
+        if (Mode == FormMode.Create) return SetAddResourceHandler.GetCard?.Invoke();
+
+        if (ResourceHandlers.TryGetValue(typeof(Cipher_TItem), out var handler))
+        {
+            if (handler.GetCard != null) return handler.GetCard();
+        }
+        return null;
+    }
+
+    // TYPE SPECIFIC FUNCTIONS
+
+    private async Task GetUnitFromUrl(string id)
+    {
+        var result = await Config.Unit(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private async Task GetCategoryFromUrl(string id)
+    {
+        var result = await Config.Category(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private async Task GetVesselFromUrl(string id)
+    {
+        var result = await Config.Vessel(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private async Task GetStorageSystemFromUrl(string id)
+    {
+        var result = await Config.StorageSystem(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private async Task GetProcessDefinitionFromUrl(string id)
+    {
+        var result = await Config.ProcessDefinition(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private async Task GetPackageFromUrl(string id)
+    {
+        var result = await Config.Package(false).Get(id);
+        (ChosenObject, Error) = Tuple.Create((Cipher_TItem)result.Item1, result.Item2);
+    }
+
+    private Tuple<bool, string> HandleUnitSubmissionRequest()
+    {
+        unitRequest = unitCard.ChosenObject?.Request() ?? Config.UnitRequest();
+        return unitRequest.Check();
+    }
+
+    private Tuple<bool, string> HandleCategorySubmissionRequest()
+    {
+        catRequest = catCard.ChosenObject?.Request() ?? Config.CategoryRequest();
+        return catRequest.Check();
+    }
+
+    private Tuple<bool, string> HandleVesselSubmissionRequest()
+    {
+        vesRequest = vesCard.ChosenObject?.Request() ?? Config.VesselRequest();
+        return vesRequest.Check();
+    }
+
+    private Tuple<bool, string> HandleProcessDefinitionSubmissionRequest()
+    {
+        procDefRequest = procCard.ChosenObject?.Request() ?? Config.ProcessDefinitionRequest();
+        return procDefRequest.Check();
+    }
+
+    private Tuple<bool, string> HandleStorageSystemSubmissionRequest()
+    {
+        sysRequest = sysCard.ChosenObject?.Request() ?? Config.SystemRequest();
+        return sysRequest.Check();
+    }
+
+    public async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendUnitRequest()
+    {
+        var obj = Config.Unit(false);
+        var UpdateResult = obj.Update((ChosenObject as IUnit)?.Id, unitRequest).Result;
+        var AddResult = await obj.Create(unitRequest);
+        var Result = (Mode == FormMode.Create) ? AddResult : UpdateResult;
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Result;
+    }
+
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendCategoryRequest()
+    {
+        var obj = Config.Category(false);
+        var UpdateResult = obj.Update((ChosenObject as ICategory)?.Id, catRequest).Result;
+        var AddResult = await obj.Create(catRequest);
+        var Result = (Mode == FormMode.Create) ? AddResult : UpdateResult;
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Result;
+    }
+
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendVesselRequest()
+    {
+        var obj = Config.Vessel(false);
+        var UpdateResult = obj.Update((ChosenObject as IVessel)?.Id, vesRequest).Result;
+        var AddResult = await obj.Create(vesRequest);
+        var Result = (Mode == FormMode.Create) ? AddResult : UpdateResult;
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Result;
+    }
+
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendProcessDefinitionRequest()
+    {
+        var obj = Config.ProcessDefinition(false);
+        var UpdateResult = obj.Update((ChosenObject as IProcessDefinition)?.Id, procDefRequest).Result;
+        var AddResult = await obj.Create(procDefRequest);
+        var Result = (Mode == FormMode.Create) ? AddResult : UpdateResult;
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Result;
+    }
+
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendSystemRequest()
+    {
+        var obj = Config.StorageSystem(false);
+        var UpdateResult = obj.Update((ChosenObject as IStorageSystem)?.Id, sysRequest).Result;
+        var AddResult = await obj.Create(sysRequest);
+        var Result = (Mode == FormMode.Create) ? AddResult : UpdateResult;
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Result;
+    }
+
+    private async Task<Tuple<Cipher_TItem, ErrorResponse>?> SendPackageRequest()
+    {
+        Tuple<IEvent, ErrorResponse> evResult = await Config.Event(false).Create(packRequest);
+        IPackage pack = (evResult.Item1.FinalStatePackages.Count > 0) ? evResult.Item1.FinalStatePackages[0] : Config.Package();
+        return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(pack, evResult.Item2);
+    }
+
+    private async Task SetPackageJsonRequest()
+    {
+        List<IPackageRequest> ChangedPacks = await PackInfo.GetChangedPacks();
+        packRequest = Config.CreateEvent();
+        packRequest.Worker = FormInfo.ChosenWorker;
+        packRequest.ProcessId = EventProc.ChosenProcess?.Id;
+        packRequest.Timestamp = FormInfo.ChosenDate;
+        packRequest.EventType = 21;
+        packRequest.Actions = ChangedPacks;
+        packRequest.Comments = EventComments.GetValue();
+        JsonRequest = packRequest.ToJson();
+    }
+
+    private void SetUnitJsonRequest()
+    {
+        unitRequest = (Mode == FormMode.Create) ?
+        SetUnit.Request() : ((ChosenObject as IUnit)?.Request() ?? Config.UnitRequest());
+        JsonRequest = unitRequest.ToJson();
+    }
+
+    private void SetCategoryJsonRequest()
+    {
+        catRequest = (Mode == FormMode.Create) ?
+    catRequest = SetCategory.Request() : ((ChosenObject as ICategory)?.Request() ?? Config.CategoryRequest());
+        JsonRequest = catRequest.ToJson();
+    }
+
+    private void SetVesselJsonRequest()
+    {
+        vesRequest = (Mode == FormMode.Create) ?
+        SetVessel.Request() : ((ChosenObject as IVessel)?.Request() ?? Config.VesselRequest());
+        JsonRequest = GetObjectId(ChosenObject) + "\n\n" + vesRequest.ToJson();
+    }
+
+    private void SetProcessDefinitionJsonRequest()
+    {
+        procDefRequest = (Mode == FormMode.Create) ?
+    SetProc.Request() : ((ChosenObject as IProcessDefinition)?.Request() ?? Config.ProcessDefinitionRequest());
+        JsonRequest = procDefRequest.ToJson();
+    }
+
+    private void SetSystemJsonRequest()
+    {
+        sysRequest = (Mode == FormMode.Create) ?
+    SetSystem.Request() : ((ChosenObject as IStorageSystem)?.Request() ?? Config.SystemRequest());
+        JsonRequest = sysRequest.ToJson();
+    }
+
+    public RenderFragment RenderCategoryCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" SetMode="FormMode.Create"
+                                ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetCategory" />
+        }
+        else
+        {
+            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                                ChosenObject="@(ChosenObject as ICategory)" SetMode="@Mode" />
+        }
+    </div>;
+
+    public RenderFragment RenderUnitCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" SetMode="FormMode.Create"
+                            ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetUnit" />
+        }
+        else
+        {
+            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                            ChosenObject="@(ChosenObject as IUnit)" SetMode="@Mode" />
+        }
+    </div>;
+
+    public RenderFragment RenderVesselCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" SetMode="FormMode.Create"
+                              ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetVessel" />
+        }
+        else
+        {
+            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                              ChosenObject="@(ChosenObject as IVessel)" SetMode="@Mode" />
+        }
+    </div>;
+
+    public RenderFragment RenderProcessDefinitionCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherProcessCard Title="" WithCard="false" @ref="@procCard" SetMode="FormMode.Create"
+                               ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetProc" />
+        }
+        else
+        {
+            <CipherProcessCard Title="" WithCard="false" @ref="@procCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                               ChosenObject="@(ChosenObject as IProcessDefinition)" SetMode="@Mode" />
+        }
+    </div>;
+
+    public RenderFragment RenderStorageSystemCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="FormMode.Create"
+                              ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetSystem" />
+        }
+        else
+        {
+            <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" ChangeObject="ChangeUrl" ChangeDetails="@SetJsonRequest"
+                              ChosenObject="@(ChosenObject as IStorageSystem)" SetMode="@Mode" />
+        }
+    </div>;
+
+    public RenderFragment? RenderPackageCard() =>
+    @<div style="width:100%">
+        @if (Mode == FormMode.Create)
+        {
+            <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetAddJsonRequest" />
+            <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" ChangeDetails="@SetAddJsonRequest" />
+            <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+                <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" Change="@SetAddJsonRequest" />
+                <CipherComments @ref="EventComments" ValueChanged="@SetAddJsonRequest" />
+            </CipherComponentCard>
+        }
+        else
+        {
+            <CipherPackageCard Title="" WithCard="false" @ref="@packCard" ChangeObject="ChangeUrl"
+                               ChosenObject="@(ChosenObject as IPackage)" SetMode="@Mode" />
+        }
+    </div>;
+}

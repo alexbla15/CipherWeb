@@ -1,5 +1,5 @@
-﻿using CipherData.Models;
-using CipherWeb.Data;
+﻿using CipherWeb.Data;
+using CipherData.General;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,7 +12,6 @@ namespace CipherWeb.Shared.Components.Buttons
         public CipherAddBtn() : base()
         {
             Icon = Icons.Symbols.Plus.add;
-            Padding = "5px";
             Variant = Variant.Outlined;
         }
     }
@@ -77,7 +76,7 @@ namespace CipherWeb.Shared.Components.Buttons
         public string? ObjectId { get; set; }
 
         [Parameter]
-        public MySubNavLink? NavLink { get; set; }
+        public CipherNavLink? NavLink { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
@@ -206,15 +205,13 @@ namespace CipherWeb.Shared.Components.Buttons
             builder.AddAttribute(4, "HelpText", HelpText);
             builder.AddAttribute(5, "Size", Size);
             builder.AddAttribute(6, "Variant", Variant);
-            builder.AddAttribute(7, "ButtonTextAlign", ButtonTextAlign);
-            builder.AddAttribute(8, "HelpTextPosition", HelpTextPosition);
-            builder.AddAttribute(9, "Height", Height);
-            builder.AddAttribute(10, "MarginBottom", MarginBottom);
-            builder.AddAttribute(11, "ColorShade", ColorShade);
-            builder.AddAttribute(12, "ColorStyle", ColorStyle);
-            builder.AddAttribute(13, "Style", Style);
-            builder.AddAttribute(14, "Disabled", Disabled);
-            builder.AddAttribute(15, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
+            builder.AddAttribute(7, "HelpTextPosition", HelpTextPosition);
+            builder.AddAttribute(8, "Height", Height);
+            builder.AddAttribute(9, "ColorShade", ColorShade);
+            builder.AddAttribute(10, "ColorStyle", ColorStyle);
+            builder.AddAttribute(11, "Style", Style);
+            builder.AddAttribute(12, "Disabled", Disabled);
+            builder.AddAttribute(13, "Click", EventCallback.Factory.Create<MouseEventArgs>(this, NavigateToPath));
             builder.CloseComponent();
         }
     }

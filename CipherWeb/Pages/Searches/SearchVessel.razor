@@ -1,3 +1,5 @@
 ﻿@page "/Searches/Vessel"
 
-<SearchResource NavLink="@CipherNavLinks.VesselSearch" Cipher_TItem="Vessel" />
+@using CipherWeb.Pages.Forms
+
+<ResourceFormHandler NavLink="@CipherNavLinks.VesselSearch" Cipher_TItem="IVessel" Mode="@FormMode.ReadOnly" />

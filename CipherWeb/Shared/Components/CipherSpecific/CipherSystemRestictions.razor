@@ -7,9 +7,9 @@
     </Buttons>
 
     <ChildContent>
-        @if (restrictions.Count() == 0)
+        @if (!restrictions.Any())
         {
-            <CipherText Text="@HelpText" />
+            <RadzenText Text="@HelpText" />
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="restrictions" TItem="Restriction" AllowColumnResize="true" Visible="restrictions.Count() != 0">
             <Columns>

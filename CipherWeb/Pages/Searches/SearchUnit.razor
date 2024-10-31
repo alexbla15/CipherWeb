@@ -1,3 +1,5 @@
 ﻿@page "/Searches/Unit"
 
-<SearchResource NavLink="@CipherNavLinks.UnitSearch" Cipher_TItem="Unit"/>
+@using CipherWeb.Pages.Forms
+
+<ResourceFormHandler NavLink="@CipherNavLinks.UnitSearch" Cipher_TItem="IUnit" Mode="@FormMode.ReadOnly" />

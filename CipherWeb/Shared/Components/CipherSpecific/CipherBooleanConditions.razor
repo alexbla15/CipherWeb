@@ -1,25 +1,30 @@
-﻿@inherits CipherComponentCard
-
+﻿@using System.Text.Json;
+@using System.Text.Json.Serialization;
 @using System.Reflection;
+
+@inherits CipherComponentCard
 
 @code {
     [Parameter]
-    public bool WithSaveButton { get; set; } = true;
+    public bool Disabled { get; set; } = false;
 
     [Parameter]
-    public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
+    public bool WithSaveButton { get; set; } = true;
 
     /// <summary>
     /// All available attributes to set conditions on them
     /// </summary>
     [Parameter]
-    public List<CipherField> AvailableAttributes { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(Event));
+    public List<CipherField> AvailableAttributes { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(IEvent));
 
     /// <summary>
     /// All chosen conditions
     /// </summary>
     [Parameter]
-    public IGroupedBooleanCondition ChosenCondition { get; set; } = new GroupedBooleanCondition();
+    public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition();
+
+    [Parameter]
+    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
 
     /// <summary>
     /// Error response for fetching data
@@ -33,9 +38,6 @@
     [Parameter]
     public EventCallback<object> OnSave { get; set; }
 
-    [Parameter]
-    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
-
     /// <summary>
     /// Help text for save-button.
     /// </summary>
@@ -48,11 +50,17 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private RadzenDataFilter<CipherField> dataFilter = new();
 
-    public CompositeFilterDescriptor AddBooleanConditionFilter(BooleanCondition cond)
+    public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
     {
         CompositeFilterDescriptor new_filter = new();
+
+        if (cond is null) return new_filter;
+
         new_filter.Property = cond.Attribute;
         new_filter.FilterValue = cond.Value;
 
@@ -76,9 +84,12 @@
         return new_filter;
     }
 
-    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition cond)
+    public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition? cond)
     {
         CompositeFilterDescriptor new_filter = new();
+
+        if (cond is null) return new_filter;
+
         new_filter.LogicalFilterOperator = (cond.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
 
         if (cond.Conditions != null)
@@ -87,9 +98,9 @@
 
             foreach (var sub_cond in cond.Conditions)
             {
-                if (sub_cond is BooleanCondition)
+                if (sub_cond is IBooleanCondition)
                 {
-                    sub_conds.Add(AddBooleanConditionFilter(sub_cond as BooleanCondition));
+                    sub_conds.Add(AddBooleanConditionFilter(sub_cond as IBooleanCondition));
                 }
                 else if (sub_cond is IGroupedBooleanCondition)
                 {
@@ -107,14 +118,14 @@
     /// <summary>
     /// Filter is a Boolean condition (no sub filters)
     /// </summary>
-    public BooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
+    public IBooleanCondition SetBooleanCondition(CompositeFilterDescriptor filter)
     {
-        BooleanCondition cond = new();
+        IBooleanCondition cond = Config.BooleanCondition();
         cond.Attribute = filter.Property;
 
         if (filter.FilterValue != null)
         {
-            string filterVal = filter.FilterValue.ToString();
+            string filterVal = filter.FilterValue.ToString() ?? string.Empty;
 
             if (filterVal.Contains("##")) cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
             cond.Value = filterVal.Split("##")[0];
@@ -148,23 +159,16 @@
     /// <summary>
     /// Filter is a Grouped Boolean condition (no sub filters)
     /// </summary>
-    public GroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
+    public IGroupedBooleanCondition SetGroupedBooleanCondition(CompositeFilterDescriptor filter)
     {
-        GroupedBooleanCondition cond = new();
+        IGroupedBooleanCondition cond = Config.GroupedBooleanCondition();
         cond.Operator = (filter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
-        List<Condition> conditions = new();
+        List<ICondition> conditions = new();
 
         foreach (var sub_filter in filter.Filters)
         {
-            if (sub_filter.Filters is null)
-            {
-                conditions.Add(SetBooleanCondition(sub_filter));
-            }
-            else
-            {
-                conditions.Add(SetGroupedBooleanCondition(sub_filter));
-            }
+            conditions.Add(sub_filter.Filters is null ? SetBooleanCondition(sub_filter) : SetGroupedBooleanCondition(sub_filter));
         }
 
         cond.Conditions = conditions;
@@ -173,7 +177,7 @@
 
     public void Save(IQueryable<CipherField>? fields = null)
     {
-        List<Condition> conditions = new();
+        List<ICondition> conditions = new();
 
         ChosenCondition.Operator = (dataFilter.LogicalFilterOperator == LogicalFilterOperator.And) ? Operator.All : Operator.Any;
 
@@ -186,19 +190,11 @@
 
             // decide if it is a GroupedCondition or BooleanCondition
 
-            if (filter.Filters is null)
-            {
-                conditions.Add(SetBooleanCondition(filter));
-            }
-            else
-            {
-                conditions.Add(SetGroupedBooleanCondition(filter));
-            }
+            conditions.Add((filter.Filters is null) ? SetBooleanCondition(filter) : SetGroupedBooleanCondition(filter));
 
         }
 
         ChosenCondition.Conditions = conditions;
-        JsonRequest = (ChosenCondition as GroupedBooleanCondition).ToJson();
         OnSave.InvokeAsync();
     }
 
@@ -207,12 +203,12 @@
         //StateHasChanged();
         Save(fields);
         await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
+        await ValueChanged.InvokeAsync();
+
+        JsonRequest = ChosenCondition.ToJson();
     }
 
-    public async Task Clear()
-    {
-        await dataFilter.ClearFilters();
-    }
+    public async Task Clear() => await dataFilter.ClearFilters();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -229,13 +225,13 @@
 
             foreach (var cond in ChosenCondition.Conditions)
             {
-                if (cond is BooleanCondition)
+                if (cond is IBooleanCondition)
                 {
-                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as BooleanCondition));
+                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as IBooleanCondition));
                 }
-                else if (cond is GroupedBooleanCondition)
+                else if (cond is IGroupedBooleanCondition)
                 {
-                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as GroupedBooleanCondition));
+                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as IGroupedBooleanCondition));
                 }
             }
 
@@ -244,7 +240,7 @@
     }
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible">
+<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled)">
     <Buttons>
         @if (WithSaveButton)
         {
@@ -255,7 +251,7 @@
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
             <RadzenDataFilter @ref=dataFilter TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})"
-                              RemoveFilterText="הסרת מסנן"
+                              RemoveFilterText="הסרת מסנן" 
                               AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
                               AndOperatorText="וגם" OrOperatorText="או"
                               ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
@@ -274,11 +270,11 @@
                                     {
                                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
                                                      AlignItems="AlignItems.Center" Style="width:100%">
-                                            <RadzenTextBox Style="width: 100%"
+                                            <RadzenTextBox Style="width: 100%" Disabled="@Disabled" 
                                                            Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? context.FilterValue.ToString().Split("##")[0] : context.FilterValue.ToString()) : string.Empty)"
                                                            ValueChanged="@(async args => { context.FilterValue = (context.FilterValue != null) ? (context.FilterValue.ToString().Contains("##") ? (object)($"{args}##{context.FilterValue?.ToString().Split("##")[1]}") :  (object)($"{args}##{Operator.All.ToString()}")) : (object)($"{args}##{Operator.All.ToString()}"); await ParamsChanged(); })"/>
                                             <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" 
+                                            <RadzenDropDown Style="width: 100%" TValue="Operator" Disabled="@Disabled"
                                             Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? ((context.FilterValue.ToString().Split("##")[1] == "All") ? Operator.All : Operator.Any) : Operator.All) : Operator.All)" 
                                             ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
                                                 Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
@@ -307,7 +303,7 @@
                                     }
                                     else
                                     {
-                                        <RadzenTextBox Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
+                                        <RadzenTextBox Disabled="@Disabled" Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
                                     }
                                 }
                                 else
@@ -319,7 +315,10 @@
                     }
                 </Properties>
             </RadzenDataFilter>
-            <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
+            @if (!Disabled)
+            {
+                <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
+            }
         </RadzenStack>
     </ChildContent>
 </CipherComponentCard>

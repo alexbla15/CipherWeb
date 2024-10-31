@@ -2,12 +2,6 @@
 
 @code {
     /// <summary>
-    /// Component's width.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = "300px";
-
-    /// <summary>
     /// Place-holder text.
     /// </summary>
     [Parameter]
@@ -67,18 +61,18 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     @if (!string.IsNullOrEmpty(Icon))
     {
-        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
     }
     @if (string.IsNullOrEmpty(Label))
     {
-        <RadzenNumeric @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled" Style="@($"width:{Width};")"
+        <RadzenNumeric @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled" Style="@($"width:{Constants.StandartWidth};")"
                        Min="@Min" Max="Max" Visible="@Visible" />
     }
     else
     {
-        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Width};")" Visible="@Visible">
+        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth};")" Visible="@Visible">
             <RadzenNumeric Min="@Min" Max="Max" @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled"
-                           Style="@($"width:{Width};")"/>
+                           Style="@($"width:{Constants.StandartWidth};")" />
         </RadzenFormField>
     }
 </RadzenStack>

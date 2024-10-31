@@ -14,12 +14,6 @@
     public string? Label { get; set; }
 
     /// <summary>
-    /// Form field width.
-    /// </summary>
-    [Parameter]
-    public string Width { get; set; } = "300px";
-
-    /// <summary>
     /// Form field min width.
     /// </summary>
     [Parameter]
@@ -72,9 +66,9 @@
     else
     {
         <RadzenTemplateForm TItem="object">
-            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Width}; height: {Height}")" AllowFloatingLabel="true">
+            <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width: {Constants.StandartWidth}; height: {Height}")" AllowFloatingLabel="true">
                 <div style="@($@"padding-right:{PaddingHorizontal}; padding-left:{PaddingHorizontal}; padding-top:{PaddingTop}; padding-bottom:{PaddingBottom}; 
-                width: {Width}; min-width: {MinWidth}; max-width: {MaxWidth}")">
+                width: {Constants.StandartWidth}; min-width: {MinWidth}; max-width: {MaxWidth}")">
                     @ChildContent
                 </div>
             </RadzenFormField>

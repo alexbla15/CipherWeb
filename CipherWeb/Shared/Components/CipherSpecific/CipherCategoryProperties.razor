@@ -23,6 +23,12 @@
     public string DeleteAllText { get; set; } = "מחיקת תכונות";
 
     /// <summary>
+    /// Is component disabled (readonly).
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    /// <summary>
     /// All chosen category-properties
     /// </summary>
     [Parameter]
@@ -34,6 +40,9 @@
     [Parameter]
     public ErrorResponse error { get; set; } = ErrorResponse.Success;
 
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
     private RadzenDataGrid<ICategoryProperty> CustomDataGrid = new();
 
     protected override void OnInitialized() => Title ??= "תכונות הקטגוריה";
@@ -44,7 +53,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        ChosenProperties.Add(new CategoryProperty());
+        ChosenProperties.Add(Config.CategoryProperty());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -53,7 +62,7 @@
     /// Deletes a category-property from memory & view.
     /// </summary>
     /// <param name="prop">Property to delete</param>
-    async Task DeleteRow(CategoryProperty prop)
+    async Task DeleteRow(ICategoryProperty prop)
     {
         ChosenProperties.Remove(prop);
         await CustomDataGrid.RefreshDataAsync();
@@ -71,38 +80,42 @@
     }
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible">
+<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled)">
     <Buttons>
         <CipherAddBtn Click="@(args => AddComponent())" HelpText="@AddText" />
         <CipherDeleteAllButton Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (ChosenProperties.Count() == 0)
+        @if (!ChosenProperties.Any())
         {
-            <CipherText Text="@HelpText" />
+            <RadzenText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true" Visible="ChosenProperties.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenProperties" TItem="ICategoryProperty" AllowColumnResize="true"
+                        Visible="ChosenProperties.Any()" ValueChanged="@ValueChanged">
             <Columns>
-                <RadzenDataGridColumn Width="10%" TItem="CategoryProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
-                    <Template Context="prop">
+                @if (!Disabled)
+                {
+                    <RadzenDataGridColumn Width="10%" TItem="ICategoryProperty" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
+                        <Template Context="prop">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(prop))" @onclick:stopPropagation="true" />
                     </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(new CategoryProperty().Translate(nameof(CategoryProperty.Name)))" TextAlign="@TdTextAlign">
+                    </RadzenDataGridColumn>
+                }
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextBox @bind-Value="prop.Name" Style="width:100%"/>
+                        <RadzenTextBox @bind-Value="prop.Name" Style="width:100%" Change="@ValueChanged" Disabled="@Disabled"/>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(new CategoryProperty().Translate(nameof(CategoryProperty.Description)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
-                        <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" />
+                        <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" Change="@ValueChanged" Disabled="@Disabled" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(new CategoryProperty().Translate(nameof(CategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
-                                        Change="@(args=> prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null))"
-                                        Style="width: 100%">
+                                        Change="@(args=> {prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null); ValueChanged.InvokeAsync();})"
+                                        Style="width: 100%" Disabled="@Disabled">
                             <ValueTemplate>
                                 @if (prop.PropertyType == PropertyType.Text)
                                 {
@@ -134,23 +147,24 @@
                             </RadzenDropDown>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(new CategoryProperty().Translate(nameof(CategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {
-                            <RadzenTextBox @bind-Value="prop.DefaultValue" Style="width:100%" />
+                            <RadzenTextBox @bind-Value="prop.DefaultValue" Style="width:100%" Change="@ValueChanged" Disabled="@Disabled" />
                         }
                         else if (prop.PropertyType == PropertyType.Number)
                         {
-                            <CipherNumeric Amount="@(decimal.TryParse(prop.DefaultValue, out _) ? Convert.ToDecimal(prop.DefaultValue) : 0)" AmountChanged="@(args=> prop.DefaultValue = args.ToString())" Width="100%" />
+                            <CipherNumeric Amount="@(decimal.TryParse(prop.DefaultValue, out _) ? Convert.ToDecimal(prop.DefaultValue) : 0)" 
+                            AmountChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})"  Disabled="@Disabled"/>
                         }
                         else
                         {
-                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" AlignItems="AlignItems.Center" style="width:50%">
-                                <CipherText Text="כן" TextAlign="TextAlign.Center" Bold="true"/>
-                                <RadzenSwitch ValueChanged="@(args=> prop.DefaultValue = args.ToString())"/>
-                                <CipherText Text="לא" TextAlign="TextAlign.Center" Bold="true" />
-                            </RadzenStack>
+                            <RadzenToggleButton Value="@(prop.DefaultValue is null ? false : (bool.TryParse(prop.DefaultValue, out _) ? Convert.ToBoolean(prop.DefaultValue) : false))" 
+                            ValueChanged="@(args=> {prop.DefaultValue = args.ToString(); ValueChanged.InvokeAsync();})"
+                                Text="@(prop.DefaultValue?.ToString() == false.ToString() ? "לא" : "כן" )"
+                                                ButtonStyle="ButtonStyle.Danger" Disabled="@Disabled"
+                                ToggleButtonStyle="ButtonStyle.Success"  />
                         }
                     </Template>
                 </RadzenDataGridColumn>

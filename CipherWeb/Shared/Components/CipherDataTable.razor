@@ -51,7 +51,7 @@
 
     private IList<DisplayedObject>? selectedRow;
 
-    public string? GetFooter(int index) => (index == 0)? $"כמות שורות: {CustomDataGrid.View.Count()}" : null;
+    public string? GetFooter(int index) => (index == 0) ? $"כמות שורות: {CustomDataGrid.View.Count()}" : null;
 
     public async void Navigate(string path)
     {
@@ -111,16 +111,25 @@
         <Columns>
             @if (DataSource.First().Properties != null)
             {
-                @foreach (var prop in DataSource.First().Properties)
+                @if (DataSource.First().Properties is var properties)
                 {
-                    <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
-                        <Template>
-                            @context.Properties?.Where(x => x.Name == prop.Name).First().Value
-                        </Template>
-                        <FooterTemplate>
-                            @GetFooter(DataSource.First().Properties.IndexOf(prop))
-                        </FooterTemplate>
-                    </RadzenDataGridColumn>
+                    @if (properties != null)
+                    {
+                        @foreach (var prop in properties)
+                        {
+                            @if (prop != null)
+                            {
+                                <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
+                                    <Template>
+                                        @context.Properties?.Where(x => x.Name == prop.Name).First().Value
+                                    </Template>
+                                    <FooterTemplate>
+                                        @GetFooter(properties.IndexOf(prop))
+                                    </FooterTemplate>
+                                </RadzenDataGridColumn>
+                            }
+                        }
+                    }
                 }
             }
         </Columns>

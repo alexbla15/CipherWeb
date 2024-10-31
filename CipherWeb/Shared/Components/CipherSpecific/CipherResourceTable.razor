@@ -2,8 +2,8 @@
 
 @typeparam Cipher_TItem
 
-<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" GetDataSource="@GetDataSource" WithCard="@WithCard" WithButtons="@WithButtons"
-                 Sharable="@Sharable" Variant="@Variant" IsReport="@IsReport"
+<CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" WithCard="@WithCard" WithButtons="@WithButtons"
+                 Sharable="@Sharable" Variant="@Variant" IsReport="@IsReport" GetDataSource="@(() => DisplayedObject.ToListDicts(ChosenObjects))"
                  FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
     <HeaderContent>
         @if (WithHeaderContent)
@@ -14,8 +14,15 @@
         }
     </HeaderContent>
     <ComponentContent>
-        <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)"
+        @if (ChosenSystem.ChosenSystem != null && !ChosenObjects.Any())
+        {
+            <CipherLoadingCard/>
+        }
+        else
+        {
+            <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)"
                          GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+        }
     </ComponentContent>
 </CipherTableCard>
 
@@ -67,36 +74,95 @@
     [Parameter]
     public CipherDataTable DataGrid { get; set; } = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (!ChosenObjects.Any()) SearchFunc();
+        if (ChosenSystem.ChosenSystem != null) await SearchFunc();
         SetFileName();
-        GetDataSource = (() => DisplayedObject.ToListDicts(ChosenObjects));
     }
 
     /// <summary>
     /// Function taking place upon clicking Enter.
     /// </summary>
-    private void SearchFunc()
+    private async Task SearchFunc()
     {
-        if (ChosenSystem.ChosenSystem is null)
-        {
-            ChosenObjects = new List<Cipher_TItem>();
-        }
-        else
-        {
-            (ChosenObjects, Error) = GetSearchedValues();
-        }
+        if (ChosenSystem.ChosenSystem is null) ChosenObjects = new List<Cipher_TItem>();
+        else (ChosenObjects, Error) = await GetSearchedValues();
+        var res = DisplayedObject.ListObjects(ChosenObjects);
         SetFileName();
     }
 
-    private Tuple<List<Cipher_TItem>, ErrorResponse> GetSearchedValues()
+    private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetSearchedValues()
     {
-        if (typeof(Cipher_TItem) == typeof(IEvent)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Events();
-        if (typeof(Cipher_TItem) == typeof(IProcess)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Processes();
-        if (typeof(Cipher_TItem) == typeof(IPackage)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Packages();
-        if (typeof(Cipher_TItem) == typeof(IVessel)) return (Tuple<List<Cipher_TItem>, ErrorResponse>)(object)(ChosenSystem.ChosenSystem).Vessels();
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+
+        if (ChosenSystem.ChosenSystem != null)
+        {
+            if (typeof(Cipher_TItem) == typeof(IEvent))
+            {
+                var res = await Config.Event(false).All();
+                return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)res;
+            }
+            else if (typeof(Cipher_TItem) == typeof(IProcess))
+            {
+                var res = await Config.Process(false).All();
+                return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)res;
+            }
+            else if (typeof(Cipher_TItem) == typeof(IPackage))
+            {
+                var res = await Config.Package(false).All();
+                return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)res;
+            }
+            else if (typeof(Cipher_TItem) == typeof(IVessel))
+            {
+                var res = await Config.Vessel(false).All();
+                return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)res;
+            }
+            else if (typeof(Cipher_TItem) == typeof(IUnit))
+            {
+                var res = await Config.Unit(false).All();
+                return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)res;
+            }
+        }
+        else
+        {
+            if (typeof(Cipher_TItem) == typeof(IEvent)) return await GetEvents();
+            else if (typeof(Cipher_TItem) == typeof(IProcess)) return await GetProcesses();
+            else if (typeof(Cipher_TItem) == typeof(IPackage)) return await GetPackages();
+            else if (typeof(Cipher_TItem) == typeof(IVessel)) return await GetVessels();
+        }
         return Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.Success);
+    }
+
+    private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetEvents()
+    {
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+        Tuple<List<IEvent>, ErrorResponse>? result = await ChosenSystem.ChosenSystem.Events();
+        if (result is null) return badFetch;
+        else return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)result;
+    }
+
+    private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetProcesses()
+    {
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+        Tuple<List<IProcess>, ErrorResponse>? result = await ChosenSystem.ChosenSystem.Processes();
+        if (result is null) return badFetch;
+        else return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)result;
+    }
+
+    private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetPackages()
+    {
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+        Tuple<List<IPackage>, ErrorResponse>? result = await ChosenSystem.ChosenSystem.Packages();
+        if (result is null) return badFetch;
+        else return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)result;
+    }
+
+    private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetVessels()
+    {
+        var badFetch = Tuple.Create(new List<Cipher_TItem>(), ErrorResponse.BadRequest);
+        Tuple<List<IVessel>, ErrorResponse>? result = await ChosenSystem.ChosenSystem.Vessels();
+        if (result is null) return badFetch;
+        else return (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)result;
     }
 
     public void SetFileName() => FileTitle = ChosenSystem.ChosenSystem is null ? PrefixFileTitle : $"{PrefixFileTitle}_{ChosenSystem.ChosenSystem?.Id}";

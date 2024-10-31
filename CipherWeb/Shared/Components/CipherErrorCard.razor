@@ -22,12 +22,13 @@
                 <div style="width: 1px; height: 100px; background-color: var(--rz-danger-darker); margin: 0 10px;"></div>
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical">
-                <CipherText FontWeight="600">
+                <RadzenText>
                     <u>סוג שגיאה:</u> @ErrorType
-                </CipherText><CipherText FontWeight="600">
+                </RadzenText>
+                <RadzenText>
                     <u>מטרה:</u> @ErroredAction
-                </CipherText>
-                <CipherText Text="נסו שוב מאוחר יותר או פנו לתמיכה" FontWeight="bold" />
+                </RadzenText>
+                <RadzenText Text="נסו שוב מאוחר יותר או פנו לתמיכה" />
             </RadzenStack>
         </RadzenStack>
         <CipherButton Variant="Variant.Outlined" Icon="@Icons.Arrows.Rounded.refresh" Text="רענון" Click="Refresh"></CipherButton>

@@ -61,7 +61,7 @@
 }
 
 <RadzenDropDown Style="width: 100%" TValue="Method?" @bind-Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
-Placeholder="@((new AggregateItem()).Translate(nameof(AggregateItem.Method)))" Change="@Change">
+Placeholder="@(IAggregateItem.Translate(nameof(IAggregateItem.Method)))" Change="@Change">
     <ValueTemplate Context="met">
         @if (met != null)
         {

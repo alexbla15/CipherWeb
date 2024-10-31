@@ -23,19 +23,13 @@
     /// Component's Label.
     /// </summary>
     [Parameter]
-    public string? Label { get; set; } = new Package().Translate(nameof(IPackage.Id));
+    public string? Label { get; set; } = IPackage.Translate(nameof(IPackage.Id));
 
     /// <summary>
     /// Component's Label.
     /// </summary>
     [Parameter]
     public string? Icon { get; set; } = Icons.Cipher.Package;
-
-    /// <summary>
-    /// Component's width.
-    /// </summary>
-    [Parameter]
-    public string? Width { get; set; } = "300px";
 
     /// <summary>
     /// Component's chosen value.
@@ -51,7 +45,7 @@
 
     private CipherAutoComplete component = new CipherAutoComplete();
 
-    protected override void OnInitialized() => (AllPacks, Error) = CachedData.AllPackages;
+    protected override async Task OnInitializedAsync() => (AllPacks, Error) = await CachedData.AllPackages;
 
     public IPackage? GetValue() => ChosenPackage;
 }
@@ -59,27 +53,27 @@
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     @if (!string.IsNullOrEmpty(Icon))
     {
-        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" Style="font-size: xx-large;" />
+        <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IPackage" AllowClear="true"
                             Data=@AllPacks TextProperty="@(nameof(IPackage.Id))" AllowFilteringByAllStringColumns="true"
-                            Style="@($"width: {Width}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
+                            Style="@($"width: {Constants.StandartWidth}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(new Package().Translate(nameof(IPackage.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(new Category().Translate(nameof(ICategory.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(IPackage.Translate(nameof(IPackage.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(ICategory.Translate(nameof(ICategory.MaterialType)))">
                 <Template>
-                    @((context as IPackage).Category.MaterialType?.Name)
+                    @((context as IPackage)?.Category.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Category))" Title="@(new Package().Translate(nameof(IPackage.Category)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Category))" Title="@(IPackage.Translate(nameof(IPackage.Category)))">
                 <Template>
-                    @(string.Join(", ", (context as IPackage).Category.Name))
+                    @(string.Join(", ", (context as IPackage)?.Category.Name))
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as IPackage).Id)
+            <b>@Label:</b> @((context as IPackage)?.Id)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </RadzenStack>

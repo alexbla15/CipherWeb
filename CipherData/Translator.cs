@@ -11,14 +11,12 @@ namespace CipherData
 
         public static Dictionary<string, string> SetTranslationDictionary()
         {
-            string Translations = File.ReadAllText("F:\\Projects\\CipherWeb\\CipherWeb\\Data\\TranslationDictionary.json");
+            string TranslationsPath = Path.Combine(AppContext.BaseDirectory, "Data", "TranslationDictionary.json");
+            string Translations = File.ReadAllText(TranslationsPath);
             return JsonSerializer.Deserialize<Dictionary<string, string>>(Translations) ?? new();
         }
 
         public static string GetTranslation(string key)
-        {
-            if (TranslationsDictionary.ContainsKey(key)) return TranslationsDictionary[key];
-            return key;
-        }
+            => (TranslationsDictionary.ContainsKey(key)) ? TranslationsDictionary[key] : key;
     }
 }

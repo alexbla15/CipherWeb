@@ -58,6 +58,336 @@
     font-family: var(--rz-text-font-family);
 }
 
+/* ------------------ SELF MADE DESGINS ------------------ */
+
+.cipher_body {
+    background-color: var(--rz-primary-lighter);
+    right: 0px;
+    width: 100%;
+    min-height: 100%;
+    height:;
+    margin: 0;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-top: 1%;
+    padding-bottom:;
+}
+
+.cipher_topnavbar{
+    padding-bottom: 20px;
+}
+
+.cipher_searchbtn_icon {
+    border: 1px solid var(--rz-primary-darker); 
+    padding-left:10px; 
+    border-top-right-radius:0; 
+    border-bottom-right-radius:0;
+    text-align: right;
+    height:53px;
+}
+
+.cipher_icon {
+    font-size: xx-large;
+}
+
+.cipher_component_card_header {
+    display: flex;
+    justify-content: right;
+}
+
+.cipher_component_card_content {
+    padding: 5px 0;
+    justify-content: right;
+    column-gap: 100px;
+    row-gap: 10px;
+}
+    .cipher_component_card_content.footer {
+        padding: 0;
+    }
+
+    .cipher_component_card_content.resource_card {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+        .cipher_component_card_content.resource_card.centered {
+            align-items:center;
+        }
+
+.cipher-jsoncheck {
+    width: 100%;
+    direction: ltr;
+    height: 300px;
+}
+
+.cipher-chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.cipher-chip {
+    background-color: var(--rz-chip-background-color);
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.cipher-chip-close {
+    background-color: var(--rz-chip-background-color);
+    color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.cipher_datagrid_empty_text {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-secondary-light);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-size: larger;
+    line-height: unset;
+    margin: 0;
+}
+
+.cipher_datagrid_group_header {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-secondary-lighter);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: larger;
+    line-height: unset;
+    margin: 0;
+}
+
+.cipher_paragraph_header {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-primary-light);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: larger;
+    line-height: unset;
+    margin: 0;
+}
+
+.cipher_loading_text {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--rz-primary-light);
+    direction: rtl;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: xx-large;
+    line-height: unset;
+    margin: 0;
+    color: var(--rz-primary-darker);
+}
+
+.cipher_card_header {
+    padding-left: 20px;
+    direction: rtl;
+    text-wrap: nowrap;
+    font-weight: 600;
+    font-size: larger;
+}
+
+.cipher_restriction {
+    font-size: large;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: var(--rz-danger);
+}
+
+.cipher-comingsoon {
+    background-color: #AC6E35;
+    border-radius: 5px;
+    padding: 0px;
+    width: 100%;
+}
+
+.cipher-comingsoon-image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+    .cipher-comingsoon-image-container img {
+        filter: none;
+    }
+
+    .cipher-comingsoon-image-container:hover img {
+        filter: blur(5px); /* Adjust the blur amount as needed */
+        transition: filter 0.3s ease;
+    }
+
+.cipher-comingsoon-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 50px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: large;
+    display: none;
+    color: var(--rz-primary-darker)
+}
+
+.cipher-comingsoon-image-container:hover .cipher-comingsoon-overlay {
+    display: block;
+}
+
+.CipherButton {
+    border: unset;
+    z-index: 1;
+    position: relative;
+    transition: all 250ms;
+    overflow: hidden;
+    margin-bottom:5px;
+}
+
+    .CipherButton.Disabled {
+    }
+
+    .CipherButton::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 0; /*start the new-background width at 0, and enlarge it*/
+        z-index: -1;
+        transition: all 250ms
+    }
+
+    .CipherButton:hover::before {
+        width: 100%;
+    }
+
+    .CipherButton.PrimaryDarker::before {
+        background-color: var(--rz-primary-dark);
+    }
+
+    .CipherButton.PrimaryDark::before {
+        background-color: var(--rz-primary);
+    }
+
+    .CipherButton.PrimaryDefault::before {
+        background-color: var(--rz-primary-dark);
+    }
+
+    .CipherButton.PrimaryLight::before {
+        background-color: var(--rz-primary-lighter);
+    }
+
+    .CipherButton.PrimaryLighter::before {
+        background-color: var(--rz-primary-light);
+    }
+
+    .CipherButton.SuccessDarker::before {
+        background-color: var(--rz-success-dark);
+    }
+
+    .CipherButton.SuccessDark::before {
+        background-color: var(--rz-success);
+    }
+
+    .CipherButton.SuccessDefault::before {
+        background-color: var(--rz-success-light);
+    }
+
+    .CipherButton.SuccessLight::before {
+        background-color: var(--rz-success-lighter);
+    }
+
+    .CipherButton.SuccessLighter::before {
+        background-color: var(--rz-success-light);
+    }
+
+    .CipherButton.DangerDarker::before {
+        background-color: var(--rz-danger-dark);
+    }
+
+    .CipherButton.DangerDark::before {
+        background-color: var(--rz-danger);
+    }
+
+    .CipherButton.DangerDefault::before {
+        background-color: var(--rz-danger-light);
+    }
+
+    .CipherButton.DangerLight::before {
+        background-color: var(--rz-danger-lighter);
+    }
+
+    .CipherButton.DangerLighter::before {
+        background-color: var(--rz-danger-light);
+    }
+
+    .CipherButton.SecondaryDarker::before {
+        background-color: var(--rz-secondary-dark);
+    }
+
+    .CipherButton.SecondaryDark::before {
+        background-color: var(--rz-secondary);
+    }
+
+    .CipherButton.SecondaryDefault::before {
+        background-color: var(--rz-secondary-light);
+    }
+
+    .CipherButton.SecondaryLight::before {
+        background-color: var(--rz-secondary-lighter);
+    }
+
+    .CipherButton.WarningDarker::before {
+        background-color: var(--rz-warning-dark);
+    }
+
+    .CipherButton.WarningDark::before {
+        background-color: var(--rz-warning);
+    }
+
+    .CipherButton.WarningDefault::before {
+        background-color: var(--rz-warning-light);
+    }
+
+    .CipherButton.WarningLight::before {
+        background-color: var(--rz-warning);
+    }
+
+/* ------------------ PROGRESS BAR ------------------ */
+
+.rz-progressbar-circular-background {
+    stroke: var(--rz-primary-lightest);
+    stroke-width: 4px;
+}
+
+.rz-progressbar-indeterminate.rz-progressbar-primary .rz-progressbar-circular-value {
+    stroke: var(--rz-primary-darker);
+    stroke-width: 4px;
+}
+
 /* ------------------ DATA FILTER ------------------ */
 
 .rz-datafilter .rz-datafilter-group {
@@ -142,7 +472,7 @@
 
 .rz-button-text {
     padding-right: 5px;
-    text-wrap: nowrap;
+    text-wrap: wrap;
 }
 
 .rz-button.rz-light.rz-variant-flat {
@@ -299,7 +629,7 @@
     text-align: right;
 }
 
-.rz-datatable .rzi-chevron-circle-right, 
+.rz-datatable .rzi-chevron-circle-right,
 .rz-datatable .rzi-chevron-circle-down {
     vertical-align: middle;
     color: white;
@@ -326,7 +656,7 @@
         border-radius: 5px;
         background-color: var(--rz-primary-darker);
         padding: 3.5px;
-        margin: 1px;    
+        margin: 1px;
     }
 
     .rz-datatable .rzi-chevron-circle-down:before {
@@ -336,7 +666,7 @@
         border-radius: 5px;
         background-color: var(--rz-primary-lighter);
         padding: 3.5px;
-        margin:1px;
+        margin: 1px;
     }
 
 .rz-datatable .rz-col-icon {
@@ -786,7 +1116,7 @@
 .rz-event-content {
     font-size: 1rem;
     overflow-wrap: anywhere;
-    margin:5px;
+    margin: 5px;
 }
 
 /* ------------------ LAYOUT ------------------ */
@@ -809,7 +1139,7 @@
 }
 
 .rz-body {
-    background-color: var(--rz-primary-light);
+    background-color: var(--rz-primary-lighter);
 }
 
 /* ------------------ STEPS ------------------ */
@@ -960,19 +1290,18 @@ rz-multiselect-trigger,
     --cipher-shadow: none;
 }
 
-.rz-colorpicker, 
-.rz-spinner, 
-.rz-multiselect, 
-.mask, 
-.rz-textarea, 
+.rz-colorpicker,
+.rz-spinner,
+.rz-multiselect,
+.mask,
+.rz-textarea,
 .rz-textbox {
     padding: 0.5rem;
     min-height: 52px;
 }
 
-.rz-autocomplete-input
-{
-    min-height:52px
+.rz-autocomplete-input {
+    min-height: 52px
 }
 
 div:not(.rz-form-field-content) > .rz-colorpicker.rz-state-disabled,
@@ -993,20 +1322,20 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     opacity: 1;
 }
 
-    div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext{
-        color:black;
+    div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext {
+        color: black;
         opacity: 1;
     }
 
-    .rz-form-field-content > *,
-    .rz-form-field-content > .rz-autocomplete,
-    .rz-form-field-content input,
-    .rz-form-field-content .rz-inputtext {
-        background-color: white;
-        border-radius: var(--rz-border-radius);
-        display: flex;
-        align-items: center;
-    }
+.rz-form-field-content > *,
+.rz-form-field-content > .rz-autocomplete,
+.rz-form-field-content input,
+.rz-form-field-content .rz-inputtext {
+    background-color: white;
+    border-radius: var(--rz-border-radius);
+    display: flex;
+    align-items: center;
+}
 
 .rz-form-field:not(.rz-floating-label) .rz-form-field-label,
 .rz-textbox:focus ~ .rz-form-field-label,
@@ -1072,7 +1401,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
     padding: 0.5rem;
     padding-right: 0.7rem;
     padding-top: 1rem;
-    min-height:52px;
+    min-height: 52px;
 }
 
 .rz-datepicker-trigger {

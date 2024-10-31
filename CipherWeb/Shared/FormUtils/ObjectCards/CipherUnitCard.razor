@@ -1,33 +1,36 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
+<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
     <HeaderContent>
         @if (SetMode != FormMode.Create)
         {
             <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherUnitDropDown Label="@(new Unit().Translate(nameof(Unit.Name)))"
+                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Name)))"
                                       Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject"/>
             </RadzenStack>
         }
     </HeaderContent>
     <ChildContent>
-        <CipherComponentCard Title="תכונות" WithCard="true" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap" AlignCardItems="center">
-            <Buttons>
-                @if (SetMode == FormMode.ReadOnly)
-                {
-                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
-                }
-            </Buttons>
+        @if (!(SetMode != FormMode.Create && ChosenObject is null))
+        {
+            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+                <Buttons>
+                    @if (SetMode == FormMode.ReadOnly)
+                    {
+                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
+                    }
+                </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(new Unit().Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@(new Unit().Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description"
+                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description" ValueChanged="@ChangeDetail"
                                     Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@(new Unit().Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent />
+                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent Change="@ChangeDetail" />
             </ChildContent>
         </CipherComponentCard>
+        }
     </ChildContent>
 </CipherComponentCard>
 
@@ -51,6 +54,12 @@
     public EventCallback<object> ChangeObject { get; set; }
 
     /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
+    /// <summary>
     /// Error response for fetching data
     /// </summary>
     [Parameter]
@@ -64,25 +73,31 @@
     protected override void OnInitialized()
     {
         Title ??= "פרטי היחידה";
-
-        // DON'T DELETE - it made the form refresh with details from url
-        if (ChosenObject != null) StateHasChanged();
+        SetDetails();
     }
 
     public void Change()
     {
         ChosenObject = UnitId.ChosenUnit;
         ChangeObject.InvokeAsync();
-        StateHasChanged();
     }
 
-    public UnitRequest Value()
+    public void ChangeDetail()
     {
-        return new()
-        {
-            Name = UnitName.Value,
-            Description = UnitDescription.Value,
-            ParentId = UnitParent.ChosenUnit?.Id
-        };
+        if (ChosenObject is null) return;
+        ChosenObject.Name = UnitName.Value;
+        ChosenObject.Description = UnitDescription.Value;
+        ChosenObject.Parent = UnitParent.ChosenUnit;
+        ChangeDetails.InvokeAsync();
+    }
+
+    public void SetDetails()
+    {
+        if (ChosenObject is null) return;
+
+        UnitName.Value = ChosenObject.Name;
+        UnitDescription.Value = ChosenObject.Description;
+        UnitParent.ChosenUnit = ChosenObject.Parent;
+        ChangeDetails.InvokeAsync();
     }
 }

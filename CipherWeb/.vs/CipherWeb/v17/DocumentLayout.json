@@ -3,30 +3,115 @@
   "WorkspaceRootPath": "D:\\Projects\\CipherWeb\\CipherWeb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherdatatable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherdatatable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherspecific\\ciphervesselstable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherspecific\\ciphervesselstable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherdatagrid.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherdatagrid.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherspecific\\cipherprocessestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherspecific\\cipherprocessestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherspecific\\cipherpackagestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherspecific\\cipherpackagestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\cipherspecific\\cipherobjectchangestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\cipherspecific\\cipherobjectchangestable.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6ACBB4D-70B3-4B16-ABF9-17F1CAA0B33F}|..\\CipherData\\CipherData.csproj|d:\\projects\\cipherweb\\cipherdata\\models\\package\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\components\\buttons\\cipherexcelbutton.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\components\\buttons\\cipherexcelbutton.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\approval.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\approval.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\data\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:data\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\searches\\searches.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\searches\\searches.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6ACBB4D-70B3-4B16-ABF9-17F1CAA0B33F}|..\\CipherData\\CipherData.csproj|d:\\projects\\cipherweb\\cipherdata\\models\\displayedobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\reports\\events.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\reports\\events.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\reports\\categories.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\reports\\categories.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\reports\\addreport.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\reports\\addreport.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updatevessel.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updatevessel.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updateunit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updateunit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updatesystem.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updatesystem.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updateprocess.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updateprocess.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updatepackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updatepackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\updatecategory.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\updatecategory.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\transferamount.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\transferamount.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\resourceformhandler.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\resourceformhandler.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\resourceform.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\resourceform.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\relocation.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\relocation.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addvessel.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addvessel.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addunit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addunit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addsystem.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addsystem.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addprocess.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addprocess.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addpackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addpackage.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\pages\\forms\\addcategory.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:pages\\forms\\addcategory.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6ACBB4D-70B3-4B16-ABF9-17F1CAA0B33F}|..\\CipherData\\CipherData.csproj|d:\\projects\\cipherweb\\cipherdata\\apimode\\requests\\catgoriesrequests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\shared\\formutils\\objectcards\\cipherdisplayedeventscard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:shared\\formutils\\objectcards\\cipherdisplayedeventscard.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|d:\\projects\\cipherweb\\cipherweb\\wwwroot\\css\\cipherdesigns.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{599F1D55-05A1-4BB9-8D37-5C0CA8E8A7D1}|CipherWeb.csproj|solutionrelative:wwwroot\\css\\cipherdesigns.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -36,97 +121,371 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Constants.cs",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Data\\Constants.cs",
-              "RelativeDocumentMoniker": "Data\\Constants.cs",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Data\\Constants.cs",
-              "RelativeToolTip": "Data\\Constants.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAuAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T12:41:14.567Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CipherPackagesTable.razor",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherPackagesTable.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherSpecific\\CipherPackagesTable.razor",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherPackagesTable.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherSpecific\\CipherPackagesTable.razor",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAAADYAAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-08T11:28:48.753Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CipherDataGrid.razor",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherDataGrid.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherDataGrid.razor",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherDataGrid.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherDataGrid.razor",
-              "ViewState": "AQIAABABAAAAAAAAAAAAAHAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-08T11:13:27.217Z",
+              "DocumentIndex": 27,
+              "Title": "CipherDesigns.css",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\CipherDesigns.css",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
+              "RelativeToolTip": "wwwroot\\css\\CipherDesigns.css",
+              "ViewState": "AQIAAGMEAAAAAAAAAAAhwGwEAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-30T12:35:49.621Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CipherDataTable.razor",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherDataTable.razor",
-              "RelativeDocumentMoniker": "Shared\\Components\\CipherDataTable.razor",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherDataTable.razor",
-              "RelativeToolTip": "Shared\\Components\\CipherDataTable.razor",
-              "ViewState": "AQIAABEAAAAAAAAAAAAAACAAAAAfAAAA",
+              "Title": "CipherVesselsTable.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherVesselsTable.razor",
+              "RelativeDocumentMoniker": "Shared\\Components\\CipherSpecific\\CipherVesselsTable.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherVesselsTable.razor",
+              "RelativeToolTip": "Shared\\Components\\CipherSpecific\\CipherVesselsTable.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAABeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-08T11:13:36.668Z",
+              "WhenOpened": "2024-10-30T13:59:23.592Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.razor",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Index.razor",
-              "RelativeDocumentMoniker": "Pages\\Index.razor",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Index.razor",
-              "RelativeToolTip": "Pages\\Index.razor",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAB4AAAA",
+              "DocumentIndex": 1,
+              "Title": "CipherProcessesTable.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherProcessesTable.razor",
+              "RelativeDocumentMoniker": "Shared\\Components\\CipherSpecific\\CipherProcessesTable.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherProcessesTable.razor",
+              "RelativeToolTip": "Shared\\Components\\CipherSpecific\\CipherProcessesTable.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAABgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-08T05:12:10.355Z",
+              "WhenOpened": "2024-10-30T13:58:42.612Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CipherObjectChangesTable.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherObjectChangesTable.razor",
+              "RelativeDocumentMoniker": "Shared\\Components\\CipherSpecific\\CipherObjectChangesTable.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\CipherSpecific\\CipherObjectChangesTable.razor",
+              "RelativeToolTip": "Shared\\Components\\CipherSpecific\\CipherObjectChangesTable.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAABNAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:58:21.872Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Searches.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Searches\\Searches.razor",
+              "RelativeDocumentMoniker": "Pages\\Searches\\Searches.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Searches\\Searches.razor",
+              "RelativeToolTip": "Pages\\Searches\\Searches.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:33.462Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "DisplayedObject.cs",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherData\\Models\\DisplayedObject.cs",
-              "RelativeDocumentMoniker": "..\\CipherData\\Models\\DisplayedObject.cs",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherData\\Models\\DisplayedObject.cs",
-              "RelativeToolTip": "..\\CipherData\\Models\\DisplayedObject.cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAA0wDEAAAAZAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-07T10:55:07.476Z",
+              "Title": "Events.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\Events.razor",
+              "RelativeDocumentMoniker": "Pages\\Reports\\Events.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\Events.razor",
+              "RelativeToolTip": "Pages\\Reports\\Events.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:23.682Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Categories.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\Categories.razor",
+              "RelativeDocumentMoniker": "Pages\\Reports\\Categories.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\Categories.razor",
+              "RelativeToolTip": "Pages\\Reports\\Categories.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:21.467Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AddReport.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\AddReport.razor",
+              "RelativeDocumentMoniker": "Pages\\Reports\\AddReport.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Reports\\AddReport.razor",
+              "RelativeToolTip": "Pages\\Reports\\AddReport.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:19.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UpdateVessel.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateVessel.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdateVessel.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateVessel.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdateVessel.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:18.662Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Approval.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Approval.razor",
+              "RelativeDocumentMoniker": "Pages\\Approval.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Approval.razor",
+              "RelativeToolTip": "Pages\\Approval.razor",
+              "ViewState": "AQIAAFEAAAAAAAAAAAAAAEgAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T07:08:06.2Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Package.cs",
-              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherData\\Models\\Package\\Package.cs",
-              "RelativeDocumentMoniker": "..\\CipherData\\Models\\Package\\Package.cs",
-              "ToolTip": "D:\\Projects\\CipherWeb\\CipherData\\Models\\Package\\Package.cs",
-              "RelativeToolTip": "..\\CipherData\\Models\\Package\\Package.cs",
-              "ViewState": "AQIAAG4AAAAAAAAAAAAMwHIAAAAvAAAA",
+              "Title": "CipherExcelButton.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\Buttons\\CipherExcelButton.razor",
+              "RelativeDocumentMoniker": "Shared\\Components\\Buttons\\CipherExcelButton.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\Components\\Buttons\\CipherExcelButton.razor",
+              "RelativeToolTip": "Shared\\Components\\Buttons\\CipherExcelButton.razor",
+              "ViewState": "AQIAABUAAAAAAAAAAAAAABwAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:44:22.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UpdateUnit.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateUnit.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdateUnit.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateUnit.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdateUnit.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:17.859Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UpdateSystem.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateSystem.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdateSystem.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateSystem.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdateSystem.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:16.972Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UpdateProcess.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateProcess.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdateProcess.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateProcess.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdateProcess.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:15.613Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UpdatePackage.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdatePackage.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdatePackage.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdatePackage.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdatePackage.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:12.382Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UpdateCategory.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateCategory.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\UpdateCategory.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\UpdateCategory.razor",
+              "RelativeToolTip": "Pages\\Forms\\UpdateCategory.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:10.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "TransferAmount.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\TransferAmount.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\TransferAmount.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\TransferAmount.razor",
+              "RelativeToolTip": "Pages\\Forms\\TransferAmount.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:09.062Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ResourceFormHandler.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\ResourceFormHandler.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\ResourceFormHandler.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\ResourceFormHandler.razor",
+              "RelativeToolTip": "Pages\\Forms\\ResourceFormHandler.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:07.673Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ResourceForm.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\ResourceForm.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\ResourceForm.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\ResourceForm.razor",
+              "RelativeToolTip": "Pages\\Forms\\ResourceForm.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:05.882Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Relocation.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\Relocation.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\Relocation.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\Relocation.razor",
+              "RelativeToolTip": "Pages\\Forms\\Relocation.razor",
+              "ViewState": "AQIAAFQAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:56:00.702Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AddVessel.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddVessel.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddVessel.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddVessel.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddVessel.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:50.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AddUnit.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddUnit.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddUnit.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddUnit.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddUnit.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:49.942Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AddSystem.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddSystem.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddSystem.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddSystem.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddSystem.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:49.256Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "AddProcess.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddProcess.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddProcess.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddProcess.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddProcess.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:48.002Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "AddPackage.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddPackage.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddPackage.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddPackage.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddPackage.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:47.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AddCategory.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddCategory.razor",
+              "RelativeDocumentMoniker": "Pages\\Forms\\AddCategory.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Pages\\Forms\\AddCategory.razor",
+              "RelativeToolTip": "Pages\\Forms\\AddCategory.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:55:45.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "CipherDisplayedEventsCard.razor",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\FormUtils\\ObjectCards\\CipherDisplayedEventsCard.razor",
+              "RelativeDocumentMoniker": "Shared\\FormUtils\\ObjectCards\\CipherDisplayedEventsCard.razor",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherWeb\\Shared\\FormUtils\\ObjectCards\\CipherDisplayedEventsCard.razor",
+              "RelativeToolTip": "Shared\\FormUtils\\ObjectCards\\CipherDisplayedEventsCard.razor",
+              "ViewState": "AQIAAGMAAAAAAAAAAAAAAG4AAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T13:45:56.75Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "CatgoriesRequests.cs",
+              "DocumentMoniker": "D:\\Projects\\CipherWeb\\CipherData\\ApiMode\\Requests\\CatgoriesRequests.cs",
+              "RelativeDocumentMoniker": "..\\CipherData\\ApiMode\\Requests\\CatgoriesRequests.cs",
+              "ToolTip": "D:\\Projects\\CipherWeb\\CipherData\\ApiMode\\Requests\\CatgoriesRequests.cs",
+              "RelativeToolTip": "..\\CipherData\\ApiMode\\Requests\\CatgoriesRequests.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAA5wBgAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-07T10:03:24.414Z",
+              "WhenOpened": "2024-10-30T07:08:06.175Z",
               "EditorCaption": ""
             }
           ]

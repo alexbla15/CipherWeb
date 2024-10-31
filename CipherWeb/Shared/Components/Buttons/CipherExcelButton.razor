@@ -6,11 +6,10 @@
 @using OfficeOpenXml
 @using System.IO
 
-@inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
-<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark"
-              Click="@ClickFunc" Variant="Variant.Outlined" />
+<CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ButtonStyle.Success" ColorShade="@Shade.Dark"
+              Click="@ClickFunc" Variant="@Variant.Outlined" />
 
 @code
 {
@@ -24,16 +23,10 @@
     /// Data that will be exported to Excel.
     /// </summary>
     [Parameter]
-    public IEnumerable<object>? Data { get; set; }
-
-    /// <summary>
-    /// Data that will be exported to Excel.
-    /// </summary>
-    [Parameter]
-    public IEnumerable<IDictionary<string, object>>? DataSource { get; set; }
+    public IEnumerable<IDictionary<string, object?>>? DataSource { get; set; }
 
     [Parameter]
-    public Func<IEnumerable<IDictionary<string, object>>>? OnClickFunc { get; set; }
+    public Func<IEnumerable<IDictionary<string, object?>>>? OnClickFunc { get; set; }
 
     protected override void OnInitialized()
     {

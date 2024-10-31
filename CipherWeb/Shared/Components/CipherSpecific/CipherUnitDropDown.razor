@@ -3,19 +3,19 @@
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IUnit" Disabled="@Disabled" AllowClear="true"
                             Data=@OptionalUnits TextProperty="@(nameof(IUnit.Name))" @bind-Value="ChosenUnit"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Width}")"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Name))" Title="@(new Unit().Translate(nameof(IUnit.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Description))" Title="@(new Unit().Translate(nameof(IUnit.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Parent))" Title="@(new Unit().Translate(nameof(IUnit.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Name))" Title="@(IUnit.Translate(nameof(IUnit.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Description))" Title="@(IUnit.Translate(nameof(IUnit.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Parent))" Title="@(IUnit.Translate(nameof(IUnit.Parent)))">
                 <Template>
-                    @((context as Unit).Parent?.Name)
+                    @((context as IUnit).Parent?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as Unit).Name)
+            <b>@Label:</b> @((context as IUnit).Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -51,12 +51,11 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "יחידה";
         Icon ??= Icons.Cipher.Unit;
-        Width ??= "300px";
 
-        (OptionalUnits, Error) = CachedData.AllUnits;
+        (OptionalUnits, Error) = await CachedData.AllUnits;
     }
 } 

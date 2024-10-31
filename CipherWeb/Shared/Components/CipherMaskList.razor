@@ -2,21 +2,24 @@
 @using Radzen
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="newText" 
-AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
-@onkeydown="HandleKeyDown" Width="@Width" />
+    <CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText"
+                        AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
+                        @onkeydown="HandleKeyDown" />
 
-<div class="chip-container">
-    @foreach (var text in SelectedTexts)
-    {
-        <div class="chip">
-            @text
-            <span class="chip-close" @onclick="() => RemoveText(text)">
-                <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-            </span>
-        </div>
-    }
-</div>
+    <div class="cipher-chip-container">
+        @if (SelectedTexts != null)
+        {
+            @foreach (var text in SelectedTexts)
+            {
+                <div class="cipher-chip">
+                    @text
+                    <span class="cipher-chip-close" @onclick="() => RemoveText(text)">
+                        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+                    </span>
+                </div>
+            }
+        }
+    </div>
 </RadzenStack>
 
 @code {
@@ -27,9 +30,6 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
     public string PlaceHolder { get; set; } = "כתבו ולחצו אנטר להוספה";
 
     [Parameter]
-    public string Width { get; set; } = "300px";
-
-    [Parameter]
     public string Icon { get; set; } = string.Empty;
 
     [Parameter]
@@ -37,6 +37,9 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
 
     [Parameter]
     public bool Disabled { get; set; } = false;
+
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
 
     private CipherAutoComplete TextAdd = new();
     private string newText = string.Empty;
@@ -49,6 +52,7 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
             {
                 SelectedTexts.Add(newText);
                 newText = string.Empty;
+                ValueChanged.InvokeAsync();
             }
         }
     }
@@ -58,38 +62,12 @@ AllowedRegex="@AllowedRegex" Disabled="@Disabled" Required="false" @ref=TextAdd
         if (e.Key == "Enter") AddText();
     }
 
-    private void RemoveText(string text) => SelectedTexts.Remove(text);
+    private void RemoveText(string text)
+    {
+        if (!Disabled)
+        {
+            SelectedTexts.Remove(text);
+            ValueChanged.InvokeAsync();
+        }
+    }
 }
-
-<style>
-
-    .chip-container {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
-
-    .chip {
-        background-color: var(--rz-chip-background-color);
-        border-radius: 10px;
-        padding: 5px 10px;
-        margin: 5px;
-        display: flex;
-        align-items: center;
-    }
-
-    .chip-close {
-        background-color: var(--rz-chip-background-color);
-        color: black;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 8px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-
-</style>

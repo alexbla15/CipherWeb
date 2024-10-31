@@ -7,16 +7,16 @@
         <CipherLocation @ref="cipherLocation" WithIcon="false" Label="בחירת מיקום / תחום / מבנה" Change="SearchFunc"/>
     </HeaderContent>
     <Buttons>
-        <CipherButton Icon="@Icons.UiComponents.Table.TableView" HelpText="@TableViewText"
+        <CipherButton Icon="@Icons.UiComponents.Table.table_view" HelpText="@TableViewText"
                       Variant="Variant.Outlined" ColorShade="Shade.Darker" Click="@TableView" />
-        <CipherButton Icon="@Icons.Time.CalendarToday" HelpText="@CalendarViewText" Variant="Variant.Outlined"
+        <CipherButton Icon="@Icons.Time.calendar_today" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
         <CipherAddProcessDefinitionBtn/>
         @if (SetView == View.Table)
         {
-            <CipherExcelButton FileName="@FileName" DataSource="@ProcTable.GetDataSource?.Invoke()" />
+            <CipherExcelButton FileName="@FileName" OnClickFunc="@(() => DisplayedObject.ToListDicts(ProcTable.ChosenObjects))" />
         }
-        <CipherPDFButton FileName="@FileName" CipherType="typeof(Process)" />
+        <CipherPDFButton FileName="@FileName" CipherType="typeof(IProcess)" />
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
@@ -26,7 +26,7 @@
         }
         else
         {
-            <CipherScheduler Height="@ProcessHeight" SelectedSystem="@SelectedSystem" Processes="@ChosenProcesses" />
+            <CipherScheduler Height="@ProcessHeight" Processes="@ChosenProcesses" />
         }
     </ChildContent>
 </CipherComponentCard>
@@ -78,7 +78,7 @@
     /// System name for data fetching events
     /// </summary>
     [Parameter]
-    public string SelectedSystem { get; set; } = "S1";
+    public string? SelectedSystem { get; set; }
 
     private CipherLocation cipherLocation = new();
     private List<IProcess>? ChosenProcesses = new();
@@ -98,12 +98,17 @@
         Authorizer
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         SetView = (SetRole == Role.Manager) ? View.Calendar : View.Table;
 
-        var result = IStorageSystem.Processes(SelectedSystem);
-        (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
+        if (SelectedSystem != null)
+        {
+            var result = await Config.StorageSystem(false).Processes(SelectedSystem);
+            (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
+        }
+        else (ChosenProcesses, Error) = Tuple.Create(new List<IProcess>(), ErrorResponse.Success);
+
         SetFileName();
     }
 
@@ -116,11 +121,18 @@
     /// <summary>
     /// Function taking place upon clicking Enter.
     /// </summary>
-    private void SearchFunc()
+    private async Task SearchFunc()
     {
-        var result = IStorageSystem.Processes(SelectedSystem);
-        (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
-        SelectedSystem = (cipherLocation.ChosenSystem is null) ? SelectedSystem : cipherLocation.ChosenSystem.Name;
+        SelectedSystem = (cipherLocation.ChosenSystem is null) ? null : cipherLocation.ChosenSystem.Name;
+        if (SelectedSystem != null)
+        {
+            var result = await Config.StorageSystem(false).Processes(SelectedSystem);
+            (ChosenProcesses, Error) = Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
+        }
+        else
+        {
+            (ChosenProcesses, Error) = Tuple.Create(new List<IProcess>(), ErrorResponse.Success);
+        }
         SetFileName();
     }
 

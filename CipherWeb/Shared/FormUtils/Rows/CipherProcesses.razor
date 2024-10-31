@@ -1,12 +1,12 @@
 ﻿@inherits CipherFormRow
 
-<CipherFormRow Icon="@Icon" Label="@Label" Width="@Width" MinWidth="@MinWidth">
-    <RadzenDropDownDataGrid Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false
+<CipherFormRow Icon="@Icon" Label="@Label" MinWidth="@MinWidth">
+    <RadzenDropDownDataGrid Data=@Processes Multiple=true AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
                             AllowFiltering="true" MaxSelectedLabels="@MaxShownLabels" TextProperty="@(nameof(IProcessDefinition.Name))"
                             Chips=true Style="width: 100%;" @bind-Value="@ChosenProcesses" SearchTextPlaceholder="חיפוש ..." Disabled="@Disabled">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @context
@@ -48,17 +48,22 @@
     public List<IProcessDefinition>? ChosenProcesses { get; set; } = new();
 
     /// <summary>
+    /// Changed-value event
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> Change { get; set; }
+
+    /// <summary>
     /// Data fetching error
     /// </summary>
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Label ??= "תהליכים";
         Icon ??= Icons.Cipher.Process;
-        Width = "";
-        MinWidth ??= "300px";
+        MinWidth ??= Constants.StandartWidth;
 
-        if (Processes.Count() == 0) (Processes, Error) = CachedData.AllProcessDefinitions;
+        if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }
 }

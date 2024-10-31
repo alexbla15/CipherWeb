@@ -36,10 +36,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkUHJvY2Vzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddResource.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkUmVzb3VyY2UucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/AddSystem.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcQWRkU3lzdGVtLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -64,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVzb3VyY2VGb3JtLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/ResourceFormHandler.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVzb3VyY2VGb3JtSGFuZGxlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/TransferAmount.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVHJhbnNmZXJBbW91bnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -80,10 +80,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUHJvY2Vzcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateResource.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlUmVzb3VyY2UucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Pages/Forms/UpdateSystem.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcVXBkYXRlU3lzdGVtLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -98,10 +94,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/Projects/CipherWeb/CipherWeb/Pages/Information.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5mb3JtYXRpb24ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Reports/AddReport.razor]
@@ -154,10 +146,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchProcess.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUHJvY2Vzcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchResource.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoZXNcU2VhcmNoUmVzb3VyY2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Pages/Searches/SearchSystem.razor]
@@ -226,6 +214,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherJsonCheck.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVySnNvbkNoZWNrLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherLoadingCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyTG9hZGluZ0NhcmQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherMaskList.razor]
@@ -328,10 +320,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzb3VyY2VUYWJsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherRestriction.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyUmVzdHJpY3Rpb24ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherSystemRestictions.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyU3lzdGVtUmVzdGljdGlvbnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -356,20 +344,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyVmVzc2Vsc1RhYmxlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherStepDescription.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcERlc2NyaXB0aW9uLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSteps.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3RlcHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherTableCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGFibGVDYXJkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherText.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyVGV4dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherTopNavBar.razor]

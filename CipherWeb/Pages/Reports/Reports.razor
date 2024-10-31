@@ -2,15 +2,22 @@
 
 <PageTitle>דוחות</PageTitle>
 
-<CipherPointers Title="דוחות שמורים" LabelInitialText="דוח" NavLinkType="דוחות"></CipherPointers>
+<CipherPointers Title="דוחות שמורים" NavLinkType="דוחות"/>
 
 <CipherTableCard Title="חיפוש דוח" GetDataSource="@GetDataSource" FileTitle="reports">
     <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@CipherNavLinks.AddReport.Href"/>
+        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@CipherNavLinks.AddReport.Href" />
     </AdditionalButtons>
     <ComponentContent>
-        <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
-                         GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
+        @if (!AllReports.Any())
+        {
+            <CipherLoadingCard />
+        }
+        else
+        {
+            <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
+                             GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
+        }
     </ComponentContent>
 </CipherTableCard>
 
@@ -32,7 +39,7 @@
     /// Function to retrieve the DataSource for the DataTable
     /// </summary>
     [Parameter]
-    public Func<List<Dictionary<string, object?>>>? GetDataSource { get; set; }
+    public Func<List<Dictionary<string,object?>>>? GetDataSource { get; set; }
 
     protected override void OnInitialized() => GetDataSource = (() => DisplayedObject.ToListDicts(AllReports));
 }

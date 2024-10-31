@@ -1,13 +1,13 @@
 ﻿@page "/Forms/TransferAmount"
 
 <ResourceForm Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" />
-    <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherPackageId Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-        <CipherPackageId Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-        <CipherAmount Label="@RequestedEvent.Translate(nameof(CreateTranserAmountEvent.Amount))" @ref=DeltaM />
-        <CipherProcess @ref=EventProc />
-        <CipherComments @ref="EventComments" Width="300px" />
+    <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
+    <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+        <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
+        <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+        <CipherAmount AmountChanged="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.Amount))" @ref=DeltaM />
+        <CipherProcess Change="@SetJsonRequest" @ref=EventProc />
+        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -20,7 +20,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink NavLink { get; set; } = CipherNavLinks.TransferAmount;
+    public CipherNavLink NavLink { get; set; } = CipherNavLinks.TransferAmount;
 
     /// <summary>
     /// Is form valid for submission.
@@ -60,40 +60,43 @@
     private CipherComments EventComments = new();
     private CipherProcess EventProc = new();
 
-    private CreateTranserAmountEvent RequestedEvent = new();
+    private ICreateTranserAmountEvent RequestedEvent = Config.CreateTranserAmountEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
-    public void Submit()
+    public async Task Submit()
     {
-        RequestedEvent = new CreateTranserAmountEvent()
-        {
-            Amount = DeltaM.Amount,
-            DonatingPackage = DonatingPack.ChosenPackage,
-            AcceptingPackage = AcceptingPack.ChosenPackage,
-            Worker = FormInfo.GetWorker(),
-            Timestamp = FormInfo.GetDateTime(),
-            ProcessId = EventProc.ChosenProcess?.Id,
-            Comments = EventComments.Comments
-        };
-
         (Valid, ErrorMessage) = RequestedEvent.Check();
 
-        SendRequest();
+        await SendRequest();
+    }
 
+    public void SetJsonRequest()
+    {
+        RequestedEvent = Config.CreateTranserAmountEvent();
+        RequestedEvent.Amount = DeltaM.Amount;
+        RequestedEvent.DonatingPackage = DonatingPack.ChosenPackage;
+        RequestedEvent.AcceptingPackage = AcceptingPack.ChosenPackage;
+        RequestedEvent.Worker = FormInfo.ChosenWorker;
+        RequestedEvent.Timestamp = FormInfo.ChosenDate;
+        RequestedEvent.ProcessId = EventProc.ChosenProcess?.Id;
+        RequestedEvent.Comments = EventComments.Comments;
+
+        ICreateEvent ev = RequestedEvent.Create();
+        JsonRequest = ev.ToJson();
     }
 
     /// <summary>
     /// Send request to API
     /// </summary>
-    public void SendRequest()
+    public async Task SendRequest()
     {
         if (Valid)
         {
-            CreateEvent ev = RequestedEvent.Create();
-            JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
+            SetJsonRequest();
+            ICreateEvent ev = RequestedEvent.Create();
+            (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;
@@ -106,7 +109,7 @@
 
     private void UpdateSubmissionSummary()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 }

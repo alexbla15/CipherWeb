@@ -1,20 +1,28 @@
-﻿using CipherData.Models;
+﻿using CipherData.General;
 
 namespace CipherWeb.Data
 {
     public class CipherNavLinks
     {
-        public static readonly MyNavLink Home = new() { Href = "", Icon = Icons.Home.home, Name = "מסך הבית" };
+        public static readonly CipherNavLink Home = new() { Href = "", Icon = Icons.Home.home, Name = "מסך הבית" };
         
-        public static readonly MySubNavLink AddPackage = new() { Href = $"{nameof(Forms)}/{nameof(AddPackage)}", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.add_circle_outline };
-        public static readonly MySubNavLink TransferAmount = new() { Href = $"{nameof(Forms)}/{nameof(TransferAmount)}", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
-        public static readonly MySubNavLink Relocation = new() { Href = $"{nameof(Forms)}/{nameof(Relocation)}", Name = "העברת מיקום", Icon = Icons.Cipher.Location };
-        public static readonly MySubNavLink AddCategory = new() { Href = $"{nameof(Forms)}/{nameof(AddCategory)}", Name = "קטגוריה חדשה", Icon = Icons.Symbols.category };
-        public static readonly MySubNavLink AddProcessDefinition = new() { Href = $"{nameof(Forms)}/{nameof(AddProcessDefinition)}", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
-        public static readonly MySubNavLink AddVessel = new() { Href = $"{nameof(Forms)}/{nameof(AddVessel)}", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink AddStorageSystem = new() { Href = $"{nameof(Forms)}/{nameof(AddStorageSystem)}", Name = "מערכת חדשה", Icon = Icons.Documents.inventory };
-        public static readonly MySubNavLink AddUnit = new() { Href = $"{nameof(Forms)}/{nameof(AddUnit)}", Name = "יחידה חדשה", Icon = Icons.Cipher.Unit };
-        public static readonly MyNavLink Forms = new()
+        public static readonly CipherNavLink AddPackage = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddPackage)}", Name = "תעודה חדשה", Icon = Icons.Symbols.Plus.add_circle_outline };
+        public static readonly CipherNavLink TransferAmount = 
+            new() { Href = $"{nameof(Forms)}/{nameof(TransferAmount)}", Name = "העברת כמות", Icon = Icons.Cipher.Transfer };
+        public static readonly CipherNavLink Relocation = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Relocation)}", Name = "העברת מיקום", Icon = Icons.Cipher.Location };
+        public static readonly CipherNavLink AddCategory = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddCategory)}", Name = "קטגוריה חדשה", Icon = Icons.Symbols.category };
+        public static readonly CipherNavLink AddProcessDefinition = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddProcessDefinition)}", Name = "תהליך חדש", Icon = Icons.Cipher.Process };
+        public static readonly CipherNavLink AddVessel = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddVessel)}", Name = "כלי חדש", Icon = Icons.Cipher.Vessel };
+        public static readonly CipherNavLink AddStorageSystem = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddStorageSystem)}", Name = "מערכת חדשה", Icon = Icons.Documents.inventory };
+        public static readonly CipherNavLink AddUnit = 
+            new() { Href = $"{nameof(Forms)}/{nameof(AddUnit)}", Name = "יחידה חדשה", Icon = Icons.Cipher.Unit };
+        public static readonly CipherNavLink Forms = new()
         {
             Href = nameof(Forms),
             Icon = Icons.Documents.Edit.edit,
@@ -24,14 +32,20 @@ namespace CipherWeb.Data
                 AddCategory, AddProcessDefinition, AddVessel, AddStorageSystem, AddUnit }
         };
 
-        public static readonly MySubNavLink UpdateCategory = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Category", Name = "קטגוריה", Icon = Icons.Symbols.category };
-        public static readonly MySubNavLink UpdatePackage = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
-        public static readonly MySubNavLink UpdateUnit = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
-        public static readonly MySubNavLink UpdateVessel = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink UpdateSystem = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/System", Name = "מערכת", Icon = Icons.Cipher.Location };
-        public static readonly MySubNavLink UpdateProcess = new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Process", Name = "תהליך", Icon = Icons.Cipher.Process };
+        public static readonly CipherNavLink UpdateCategory = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Category", Name = "עריכת קטגוריה", Icon = Icons.Symbols.category };
+        public static readonly CipherNavLink UpdatePackage = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Package", Name = "עריכת תעודה", Icon = Icons.Cipher.Package };
+        public static readonly CipherNavLink UpdateUnit = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Unit", Name = "עריכת יחידה", Icon = Icons.Cipher.Unit };
+        public static readonly CipherNavLink UpdateVessel = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Vessel", Name = "עריכת כלי", Icon = Icons.Cipher.Vessel };
+        public static readonly CipherNavLink UpdateSystem = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/System", Name = "עריכת מערכת", Icon = Icons.Cipher.Location };
+        public static readonly CipherNavLink UpdateProcess = 
+            new() { Href = $"{nameof(Forms)}/{nameof(Updates)}/Process", Name = "עריכת תהליך", Icon = Icons.Cipher.Process };
 
-        public static readonly MyNavLink Updates = new()
+        public static readonly CipherNavLink Updates = new()
         {
             Href = $"{nameof(Forms)}/{nameof(Updates)}",
             Icon = Icons.Design.rebase_edit,
@@ -39,19 +53,29 @@ namespace CipherWeb.Data
             SubLinks = new() { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
         };
 
-        public static readonly MyNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.done, Name = "אישור תנועות" };
+        public static readonly CipherNavLink Approval = new() { Href = "Approval", Icon = Icons.Symbols.V.done, Name = "אישור תנועות" };
 
-        public static readonly MySubNavLink AddReport = new() { Href = $"{nameof(Reports)}/{nameof(AddReport)}", Name = "יצירת דוח", Icon = Icons.Documents.assignment_add};
-        public static readonly MySubNavLink UpdateReport = new() { Href = $"{nameof(Reports)}/{nameof(UpdateReport)}", Name = "עריכת דוח", Icon = Icons.Documents.Edit.edit_document};
-        public static readonly MySubNavLink PackagesReport = new() { Href = $"{nameof(Reports)}/Packages", Name = "תעודות", Icon = Icons.Cipher.Package };
-        public static readonly MySubNavLink CategoriesReport = new() { Href = $"{nameof(Reports)}/Categories", Name = "סוגים", Icon = Icons.Symbols.category };
-        public static readonly MySubNavLink EventsReport = new() { Href = $"{nameof(Reports)}/Events", Name = "תנועות", Icon = Icons.Data.device_hub };
-        public static readonly MySubNavLink DepartmentsReport = new() { Href = $"{nameof(Reports)}/Departments", Name = "תחומים", Icon = Icons.Cipher.Department };
-        public static readonly MySubNavLink UnitsReport = new() { Href = $"{nameof(Reports)}/Units", Name = "יחידות", Icon = Icons.Cipher.Unit };
-        public static readonly MySubNavLink LocationsReport = new() { Href = $"{nameof(Reports)}/Locations", Name = "מיקומים", Icon = Icons.Cipher.Location };
-        public static readonly MySubNavLink LinesReport = new() { Href = $"{nameof(Reports)}/Lines", Name = "קוים", Icon = Icons.Cipher.Line };
-        public static readonly MySubNavLink ProcessesReport = new() { Href = $"{nameof(Reports)}/ProcessSummary", Name = "תהליכים", Icon = Icons.Cipher.Process };
-        public static readonly MyNavLink Reports = new()
+        public static readonly CipherNavLink AddReport = 
+            new() { Href = $"{nameof(Reports)}/{nameof(AddReport)}", Name = "יצירת דוח", Icon = Icons.Documents.assignment_add};
+        public static readonly CipherNavLink UpdateReport = 
+            new() { Href = $"{nameof(Reports)}/{nameof(UpdateReport)}", Name = "עריכת דוח", Icon = Icons.Documents.Edit.edit_document};
+        public static readonly CipherNavLink PackagesReport = 
+            new() { Href = $"{nameof(Reports)}/Packages", Name = "תעודות", Icon = Icons.Cipher.Package };
+        public static readonly CipherNavLink CategoriesReport = 
+            new() { Href = $"{nameof(Reports)}/Categories", Name = "סוגים", Icon = Icons.Symbols.category };
+        public static readonly CipherNavLink EventsReport = 
+            new() { Href = $"{nameof(Reports)}/Events", Name = "תנועות", Icon = Icons.Data.device_hub };
+        public static readonly CipherNavLink DepartmentsReport = 
+            new() { Href = $"{nameof(Reports)}/Departments", Name = "תחומים", Icon = Icons.Cipher.Department };
+        public static readonly CipherNavLink UnitsReport = 
+            new() { Href = $"{nameof(Reports)}/Units", Name = "יחידות", Icon = Icons.Cipher.Unit };
+        public static readonly CipherNavLink LocationsReport = 
+            new() { Href = $"{nameof(Reports)}/Locations", Name = "מיקומים", Icon = Icons.Cipher.Location };
+        public static readonly CipherNavLink LinesReport = 
+            new() { Href = $"{nameof(Reports)}/Lines", Name = "קוים", Icon = Icons.Cipher.Line };
+        public static readonly CipherNavLink ProcessesReport = 
+            new() { Href = $"{nameof(Reports)}/ProcessSummary", Name = "תהליכים", Icon = Icons.Cipher.Process };
+        public static readonly CipherNavLink Reports = new()
         {
             Href = nameof(Reports),
             Icon = Icons.Cipher.Summary,
@@ -60,15 +84,23 @@ namespace CipherWeb.Data
                 { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, DepartmentsReport, UnitsReport, LocationsReport, LinesReport, ProcessesReport }
         };
 
-        public static readonly MySubNavLink FreeSearch = new() { Href = $"{nameof(Searches)}/{nameof(FreeSearch)}", Name = "טקסט חופשי", Icon = Icons.Cipher.Id };
-        public static readonly MySubNavLink AdvancedSearch = new() { Href = $"{nameof(Searches)}/Advanced", Name = "מתקדם", Icon = Icons.Cipher.Advanced };
-        public static readonly MySubNavLink CategorySearch = new() { Href = $"{nameof(Searches)}/Category", Name = "קטגוריה", Icon = Icons.Symbols.category };
-        public static readonly MySubNavLink PackageSearch = new() { Href = $"{nameof(Searches)}/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
-        public static readonly MySubNavLink VesselSearch = new() { Href = $"{nameof(Searches)}/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
-        public static readonly MySubNavLink SystemSearch = new() { Href = $"{nameof(Searches)}/System", Name = "מיקום", Icon = Icons.Cipher.Location };
-        public static readonly MySubNavLink UnitSearch = new() { Href = $"{nameof(Searches)}/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
-        public static readonly MySubNavLink ProcessSearch = new() { Href = $"{nameof(Searches)}/Process", Name = "תהליך", Icon = Icons.Cipher.Process };
-        public static readonly MyNavLink Searches = new()
+        public static readonly CipherNavLink FreeSearch = 
+            new() { Href = $"{nameof(Searches)}/{nameof(FreeSearch)}", Name = "טקסט חופשי", Icon = Icons.Cipher.Id };
+        public static readonly CipherNavLink AdvancedSearch = 
+            new() { Href = $"{nameof(Searches)}/Advanced", Name = "מתקדם", Icon = Icons.Cipher.Advanced };
+        public static readonly CipherNavLink CategorySearch = 
+            new() { Href = $"{nameof(Searches)}/Category", Name = "קטגוריה", Icon = Icons.Symbols.category };
+        public static readonly CipherNavLink PackageSearch = 
+            new() { Href = $"{nameof(Searches)}/Package", Name = "תעודה", Icon = Icons.Cipher.Package };
+        public static readonly CipherNavLink VesselSearch = 
+            new() { Href = $"{nameof(Searches)}/Vessel", Name = "כלי", Icon = Icons.Cipher.Vessel };
+        public static readonly CipherNavLink SystemSearch = 
+            new() { Href = $"{nameof(Searches)}/System", Name = "מיקום", Icon = Icons.Cipher.Location };
+        public static readonly CipherNavLink UnitSearch = 
+            new() { Href = $"{nameof(Searches)}/Unit", Name = "יחידה", Icon = Icons.Cipher.Unit };
+        public static readonly CipherNavLink ProcessSearch = 
+            new() { Href = $"{nameof(Searches)}/Process", Name = "תהליך", Icon = Icons.Cipher.Process };
+        public static readonly CipherNavLink Searches = new()
         {
             Href = nameof(Searches),
             Icon = Icons.SearchAndFilter.search,
@@ -77,8 +109,7 @@ namespace CipherWeb.Data
                 { FreeSearch, AdvancedSearch, CategorySearch, PackageSearch, VesselSearch, SystemSearch, UnitSearch, ProcessSearch }
         };
 
-        public static readonly MyNavLink Information = new() { Href = nameof(Information), Icon = Icons.Communication.Chat.question_answer, Name = "הסברים ותמיכה" };
-
-        public static readonly List<MyNavLink> links = new() { Home, Forms, Updates, Approval, Reports, Searches, Information };
+        public static readonly List<CipherNavLink> links = 
+            new() { Home, Forms, Updates, Approval, Reports, Searches };
     }
 }

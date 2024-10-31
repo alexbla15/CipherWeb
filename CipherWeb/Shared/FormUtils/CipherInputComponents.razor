@@ -40,15 +40,21 @@
     /// Error response for fetching data
     /// </summary>
     [Parameter]
-    public ErrorResponse error { get; set; } = ErrorResponse.Success;
+    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    /// <summary>
+    /// Changed-value event
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
 
     private RadzenDataGrid<IPackage> CustomDataGrid = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Title ??= "תעודות מוסרות";
 
-        (allPacks, error) = CachedData.AllPackages;
+        (allPacks, Error) = await CachedData.AllPackages;
     }
 
     /// <summary>
@@ -57,7 +63,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(new Package() { Id = "" });
+        chosenPacks.Add(Config.Package());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -87,6 +93,19 @@
         chosenPacks.Clear();
         await CustomDataGrid.RefreshDataAsync();
     }
+
+    private async Task<decimal> FetchMaxBrutMassAsync(IPackage pack)
+    {
+        if (!string.IsNullOrEmpty(pack.Id))
+        {
+            var result = await Config.Package(false).Get(pack.Id);
+            if (result.Item1 != null)
+            {
+                return result.Item1.BrutMass;
+            }
+        }
+        return 0;
+    }
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
@@ -95,37 +114,43 @@
         <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (chosenPacks.Count() == 0)
+        @if (!chosenPacks.Any())
         {
-            <CipherText Text="@HelpText" />
+            <RadzenText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="IPackage" AllowColumnResize="true" Visible="chosenPacks.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="IPackage" 
+            AllowColumnResize="true" Visible="chosenPacks.Count() != 0" ValueChanged="@ChangeDetails">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="IPackage" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackage" Title="@(new Package().Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         @if (string.IsNullOrEmpty(pack.Id))
                         {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null" Change="@(args=>pack.Id = ((IPackage)args).Id)" />
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null"
+                                             Change="@(args=>{pack.Id = ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />
                         }
                         else
                         {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack" Change="@(args=>pack.Id = (args is null) ? string.Empty : ((IPackage)args).Id)" />
+                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack"
+                                             Change="@(args=>{pack.Id = (args is null) ? string.Empty : ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Package" Title="@(new Package().Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Width="100%" Amount="Package.Get(pack.Id).Item1.BrutMass" Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric Amount="@FetchMaxBrutMassAsync(pack).Result" 
+                        Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" AmountChanged="@ChangeDetails"/>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric @bind-Amount="pack.BrutMass" Width="100%" Max="Package.Get(pack.Id).Item1.BrutMass" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        <CipherNumeric Amount="pack.BrutMass" 
+                        AmountChanged="@(args => {pack.BrutMass = args; ChangeDetails.InvokeAsync();})"
+                        Max="@FetchMaxBrutMassAsync(pack).Result" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

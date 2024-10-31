@@ -8,11 +8,11 @@
         @AdditionalButtons
         @if (ExcelExport)
         {
-            <CipherExcelButton FileName="@FileTitle" OnClickFunc="DataFetch" DataSource="@GetDataSource?.Invoke()" />
+            <CipherExcelButton FileName="@FileTitle" OnClickFunc="@GetDataSource" />
         }
         @if (PDFExport)
         {
-            <CipherPDFButton FileName="@FileTitle" OnClickFunc="DataFetch" />
+            <CipherPDFButton FileName="@FileTitle" OnClickFunc="@GetDataSource" />
         }
         @if (!string.IsNullOrEmpty(ExpandPath))
         {
@@ -99,10 +99,13 @@
     /// Needed datagrid.
     /// </summary>
     [Parameter]
-    public RadzenDataGrid<Process> grid { get; set; } = new();
+    public RadzenDataGrid<IProcess> grid { get; set; } = new();
 
+    /// <summary>
+    /// All events for scheduler
+    /// </summary>
     [Parameter]
-    public Func<IEnumerable<IDictionary<string, object>>> DataFetch { get; set; }
+    public IEnumerable<DisplayedObject>? ChosenData { get; set; }
 
     public void Toggle() => IsFavourite = !IsFavourite;
 }

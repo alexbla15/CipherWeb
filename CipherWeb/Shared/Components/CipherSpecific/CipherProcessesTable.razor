@@ -4,8 +4,5 @@
     WithButtons="@WithButtons" PrefixFileTitle="processes" Title="@Title" ChosenObjects="@ChosenObjects"/>
 
 @code {
-    protected override void OnInitialized()
-    {
-        Title ??= Translator.GetTranslation("Processes");
-    }
+    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Processes");
 }

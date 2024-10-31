@@ -1,12 +1,12 @@
 ﻿@page "/Forms/Relocation"
 
 <ResourceForm Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" />
+    <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
 
-    <CipherComponentCard Title="פרטי תנועה" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-        <CipherLocation Label="@RequestedEvent.Translate(nameof(CreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Label="@RequestedEvent.Translate(nameof(CreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
-        <CipherComments @ref="EventComments" Width="300px" />
+    <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+        <CipherLocation Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+        <CipherPackagesPicking Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
     </CipherComponentCard>
     
     <CipherJsonCheck JsonValue="@JsonRequest"/>
@@ -19,7 +19,7 @@
     /// Page nav link.
     /// </summary>
     [Parameter]
-    public MySubNavLink NavLink { get; set; } = CipherNavLinks.Relocation;
+    public CipherNavLink NavLink { get; set; } = CipherNavLinks.Relocation;
 
     /// <summary>
     /// Is form valid for submission.
@@ -57,39 +57,40 @@
     private CipherPackagesPicking RelocatedPacks = new();
     private CipherComments EventComments = new();
 
-    private CreateRelocationEvent RequestedEvent = new();
+    private ICreateRelocationEvent RequestedEvent = Config.CreateRelocationEvent();
 
     /// <summary>
     /// Fill all needed details for new event based on the form details.
     /// </summary>
-    public void Submit()
+    public async Task Submit()
     {
-        Valid = true;
-
-        RequestedEvent = new CreateRelocationEvent()
-        {
-            Worker = FormInfo.GetWorker(),
-            Timestamp = FormInfo.GetDateTime(),
-            TargetSystem = FinalLocation.ChosenSystem,
-            Packages = RelocatedPacks.SelectedPackages,
-            Comments = EventComments.Comments
-        };
-
         (Valid, ErrorMessage) = RequestedEvent.Check();
+        await SendRequest();
+    }
 
-        SendRequest();
+    public void SetJsonRequest()
+    {
+        RequestedEvent = Config.CreateRelocationEvent();
+        RequestedEvent.Worker = FormInfo.ChosenWorker;
+        RequestedEvent.Timestamp = FormInfo.ChosenDate;
+        RequestedEvent.TargetSystem = FinalLocation.ChosenSystem;
+        RequestedEvent.Packages = RelocatedPacks.SelectedPackages;
+        RequestedEvent.Comments = EventComments.Comments;
+
+        ICreateEvent ev = RequestedEvent.Create();
+        JsonRequest = ev.ToJson();
     }
 
     /// <summary>
     /// Send request to API
     /// </summary>
-    public void SendRequest()
+    public async Task SendRequest()
     {
         if (Valid)
         {
-            CreateEvent ev = RequestedEvent.Create();
-            JsonRequest = ev.ToJson();
-            (ResultEvent, Error) = Config.EventsRequests.CreateEvent(ev);
+            SetJsonRequest();
+            ICreateEvent ev = RequestedEvent.Create();
+            (ResultEvent, Error) = await Config.Event(false).Create(ev);
             if (Error != ErrorResponse.Success)
             {
                 Valid = false;
@@ -102,7 +103,7 @@
 
     private void UpdateSubmissionSummary()
     {
-        submission.Valid = Valid;
-        submission.ErrorMessage = ErrorMessage;
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 }

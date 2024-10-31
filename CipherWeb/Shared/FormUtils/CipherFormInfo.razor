@@ -1,17 +1,36 @@
 ﻿@inherits CipherComponentCard
 
-<CipherComponentCard Title="@Title" ContentDisplay="flex" ContentJustify="flex-start" ContentFlexWrap="wrap">
-    <CipherWorker @ref=Worker />
-    <CipherDatePicker ShowTime="true" TimeOnly="false" @ref=DatePicker/>
+<CipherComponentCard Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+    <CipherWorker @ref=Worker ValueChanged="@ChangeDetail"/>
+    <CipherDatePicker ShowTime="true" TimeOnly="false" @ref=DatePicker ValueChanged="@ChangeDetail" />
 </CipherComponentCard>
 
 @code {
+    /// <summary>
+    /// Event that takes place upon changing a detail of the object.
+    /// </summary>
+    [Parameter]
+    public EventCallback ChangeDetails { get; set; }
+
+    [Parameter]
+    public string? ChosenWorker { get; set; }
+
+    [Parameter]
+    public DateTime ChosenDate { get; set; }
+
     private CipherWorker Worker = new();
     private CipherDatePicker DatePicker = new();
 
-    protected override void OnInitialized() => Title ??= "פרטי ההזנה";
+    protected override void OnInitialized()
+    {
+        Title ??= "פרטי ההזנה";
+        ChangeDetail();
+    }
 
-    public DateTime GetDateTime() => DatePicker.GetDateTime();
-
-    public string GetWorker() => Worker.GetWorker();
+    public void ChangeDetail()
+    {
+        ChosenWorker = Worker.ChosenWorker;
+        ChosenDate = DatePicker.GetDateTime();
+        ChangeDetails.InvokeAsync();
+    }
 }

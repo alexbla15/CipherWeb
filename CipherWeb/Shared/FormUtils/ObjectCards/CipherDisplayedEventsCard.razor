@@ -2,7 +2,7 @@
 
 @code {
 
-    private List<DisplayedEvent> DisplayedEvents = new();
+    private List<IDisplayedEvent> DisplayedEvents = new();
 
     private List<IEvent> _Events = new();
 
@@ -44,47 +44,47 @@
     [Parameter]
     public string JsonRequest { get; set; } = string.Empty;
 
-    private RadzenDataGrid<DisplayedEvent> CustomDataGrid = new();
+    private RadzenDataGrid<IDisplayedEvent> CustomDataGrid = new();
 
-    public void OnRender(DataGridRenderEventArgs<DisplayedEvent> args)
+    public void OnRender(DataGridRenderEventArgs<IDisplayedEvent> args)
     {
         if (args.FirstRender)
         {
             args.Grid.Groups.Add(new GroupDescriptor()
                 {
-                    Title = new DisplayedEvent().Translate(nameof(DisplayedEvent.Id)),
-                    Property = nameof(DisplayedEvent.Id),
+                    Title = IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id)),
+                    Property = nameof(IDisplayedEvent.Id),
                     SortOrder = SortOrder.Descending
                 });
             StateHasChanged();
         }
     }
 
-    public void ForSingleEvent(Func<UpdateEvent> singleFunc, IEvent ev)
+    public async Task ForSingleEvent(Func<IUpdateEvent> singleFunc, IEvent ev)
     {
-        UpdateEvent setUpdate = singleFunc();
-        (Result, Error) = ev.Update(setUpdate);
+        IUpdateEvent setUpdate = singleFunc();
+        (Result, Error) = await ev.Update(ev.Id, setUpdate);
         JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
     }
 
-    public void ApproveEvent(IEvent ev) => ForSingleEvent(UpdateEvent.ApprovedEvent, ev);
+    public async Task ApproveEvent(IEvent ev) => await ForSingleEvent(IUpdateEvent.ApprovedEvent, ev);
 
-    public void DeclineEvent(IEvent ev) => ForSingleEvent(UpdateEvent.DeclinedEvent, ev);
+    public async Task DeclineEvent(IEvent ev) => await ForSingleEvent(IUpdateEvent.DeclinedEvent, ev);
 
-    public void ForAllEvents(Action<Event> singleFunc)
+    public async Task ForAllEvents(Func<IEvent, Task> singleFunc)
     {
         string NewJsonRequest = string.Empty;
-        foreach (Event ev in Events)
+        foreach (IEvent ev in Events)
         {
-            singleFunc(ev);
+            await singleFunc(ev);
             NewJsonRequest += JsonRequest + "\n\n";
         }
         JsonRequest = NewJsonRequest;
     }
 
-    public void ApproveAllEvents() => ForAllEvents(ApproveEvent);
+    public async Task ApproveAllEvents() => await ForAllEvents(ApproveEvent);
 
-    public void DeclineAllEvents() => ForAllEvents(DeclineEvent);
+    public async Task DeclineAllEvents() => await ForAllEvents(DeclineEvent);
 
     public async Task ChangeEvents(List<IEvent> newEvents)
     {
@@ -107,63 +107,76 @@
             <CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
             <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
         }
-        <CipherExcelButton Data="@DisplayedEvents"></CipherExcelButton>
-        <CipherPDFButton />
+
+        <CipherExcelButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))"/>
+        <CipherPDFButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))" />
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenDataGrid TItem="DisplayedEvent"  @ref=CustomDataGrid
-                            FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
-                            AllowSorting="true" HideGroupedColumn="true"
-                            AllGroupsExpanded="true" Render="@OnRender"
-                            Data="@DisplayedEvents">
-                <GroupHeaderTemplate>
-                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="10px">
-                        @if (WithRowButtons)
-                        {
-                            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-                                <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.check"
-                                              Variant="Variant.Flat" ColorShade="Shade.Default"
-                                              Size="ButtonSize.Medium" Click="@(args => ApproveEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
-                                <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
-                                              Variant="Variant.Flat" ColorShade="Shade.Default"
-                                              Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
-                            </RadzenStack>
-                        }
-                        <CipherText Text="@($@"{new DisplayedEvent().Translate(nameof(DisplayedEvent.Id))} : {context.Data.Key},
-                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.EventType))} : {context.Data.Items.Cast<DisplayedEvent>().First().EventType},
-                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.ProcessId))} : {context.Data.Items.Cast<DisplayedEvent>().First().ProcessId},
-                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.Timestamp))} : {context.Data.Items.Cast<DisplayedEvent>().First().Timestamp},
-                                 {new DisplayedEvent().Translate(nameof(DisplayedEvent.Comments))} : {context.Data.Items.Cast<DisplayedEvent>().First().Comments}
-                                ")" Bold="true" MarginTop="3px" MarginBottom="3px" />
-                    </RadzenStack>
-                </GroupHeaderTemplate>
-                <Columns>
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.Id))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.Id)))" MinWidth="20px" />
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.DonatingPackage))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.DonatingPackage)))">
-                        <Template>
-                            @context.DonatingPackage?.Item1.Id
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.DonatingSystem))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.DonatingSystem)))">
-                        <Template>
-                            @context.DonatingSystem?.Name
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.AcceptingPackage))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.AcceptingPackage)))">
-                        <Template>
-                            @context.AcceptingPackage?.Item1.Id
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.AcceptingSystem))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.AcceptingSystem)))">
-                        <Template>
-                            @context.AcceptingSystem?.Name
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="DisplayedEvent" Property="@(nameof(DisplayedEvent.EventMass))" Title="@(new DisplayedEvent().Translate(nameof(DisplayedEvent.EventMass)))" />
-                </Columns>
-            </RadzenDataGrid>
-
+            @if (DisplayedEvents.Any())
+            {
+                <RadzenDataGrid TItem="IDisplayedEvent" @ref=CustomDataGrid
+                                FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
+                                AllowSorting="true" HideGroupedColumn="true"
+                                AllGroupsExpanded="true" Render="@OnRender"
+                                Data="@DisplayedEvents">
+                    <GroupHeaderTemplate>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="10px">
+                            @if (WithRowButtons)
+                            {
+                                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+                                    <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.check"
+                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
+                                                  Size="ButtonSize.Medium" Click="@(args => ApproveEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
+                                    <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
+                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
+                                                  Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
+                                </RadzenStack>
+                            }
+                            <RadzenText class="@Constants.Styles.GroupHeader" Text="@($@"{IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventType))} : {context.Data.Items.Cast<IDisplayedEvent>().First().EventType},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.ProcessId))} : {context.Data.Items.Cast<IDisplayedEvent>().First().ProcessId},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Timestamp))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Timestamp},
+                                 {IDisplayedEvent.Translate(nameof(IDisplayedEvent.Comments))} : {context.Data.Items.Cast<IDisplayedEvent>().First().Comments}
+                                ")" />
+                        </RadzenStack>
+                    </GroupHeaderTemplate>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.Id))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.Id)))" MinWidth="20px" />
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingPackage))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingPackage)))">
+                            <Template>
+                                @context.DonatingPackage?.Item1.Id
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingSystem))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.DonatingSystem)))">
+                            <Template>
+                                @context.DonatingSystem?.Name
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingPackage))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingPackage)))">
+                            <Template>
+                                @context.AcceptingPackage?.Item1.Id
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.AcceptingSystem))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.AcceptingSystem)))">
+                            <Template>
+                                @context.AcceptingSystem?.Name
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.EventMass))"
+                                              Title="@(IDisplayedEvent.Translate(nameof(IDisplayedEvent.EventMass)))" />
+                    </Columns>
+                </RadzenDataGrid>
+            }
+            else
+            {
+                <RadzenText Text="לא נמצאו תנועות" class="@Constants.Styles.DataGridEmpty" />
+            }
 
             @if (WithRowButtons)
             {

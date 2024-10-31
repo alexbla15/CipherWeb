@@ -2,13 +2,13 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid TValue="IProcessDefinition" Data=@Processes AllowClear=true Placeholder="@PlaceHolder" AllowSorting=false Change="@Change"
-                            Style="@($"width: {Width}; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
+                            Style="@($"width: 100%; min-width: {MinWidth}")" AllowFiltering="true" TextProperty="@(nameof(IProcessDefinition.Name))" @bind-Value="@ChosenProcess" SearchTextPlaceholder="חיפוש ...">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(new ProcessDefinition().Translate(nameof(IProcessDefinition.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Name))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IProcessDefinition.Description))" Title="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" />
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as IProcessDefinition).Name)
+            <b>@Label:</b> @((context as IProcessDefinition)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
@@ -44,13 +44,12 @@
     [Parameter]
     public EventCallback<object> Change { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Label ??= new ProcessDefinition().Translate(nameof(ProcessDefinition.Name));
+        Label ??= IProcessDefinition.Translate(nameof(IProcessDefinition.Name));
         Icon ??= Icons.Cipher.Process;
-        Width ??= "100%";
-        MinWidth ??= "300px";
+        MinWidth ??= Constants.StandartWidth;
 
-        if (Processes.Count() == 0) (Processes, Error) = CachedData.AllProcessDefinitions;
+        if (Processes.Count() == 0) (Processes, Error) = await CachedData.AllProcessDefinitions;
     }
 }

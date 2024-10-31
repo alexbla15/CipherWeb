@@ -2,10 +2,10 @@
 
 <CipherFormCard MaxWidth="@MaxWidth" Width="@Width">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-        <CipherText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5" />
-        <CipherButton Icon="@Icons.UiComponents.Layout.CalendarViewDay" HelpText="@DayViewText" Size="@ButtonsSize" Variant="@DayVariant"
+        <RadzenText Text="@SummaryTitle" TextAlign="TextAlign.Right" TextStyle="TextStyle.H5" />
+        <CipherButton Icon="@Icons.UiComponents.Layout.calendar_view_day" HelpText="@DayViewText" Size="@ButtonsSize" Variant="@DayVariant"
                       ColorShade="Shade.Darker" Click="@DayView" />
-        <CipherButton Icon="@Icons.UiComponents.Table.CalendarViewMonth" HelpText="@MonthViewText" Size="@ButtonsSize" Variant="@MonthVariant"
+        <CipherButton Icon="@Icons.UiComponents.Table.calendar_view_month" HelpText="@MonthViewText" Size="@ButtonsSize" Variant="@MonthVariant"
                       ColorShade="Shade.Darker" Click="@MonthView" />
         <CipherButton Icon="@Icons.Cipher.Year" HelpText="@YearViewText" Size="@ButtonsSize" Variant="@YearVariant"
                       ColorShade="Shade.Darker" Click="@YearView" />
@@ -19,8 +19,8 @@
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="0.5rem">
                         <CipherButton Size="ButtonSize.Large" Width="50px" Icon="@Icons.Cipher.Material" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary"></CipherButton>
                         <RadzenStack Gap="0">
-                            <CipherText TextAlign="TextAlign.Right" TextColor="@Colors.PrimaryDark" Text="@CountProcesses()[key].ToString()" />
-                            <CipherText Wrap="true" TextStyle="TextStyle.Overline" StyleClass="TextStyle.Overline" Text="@key" TextAlign="TextAlign.Right" />
+                            <RadzenText TextAlign="TextAlign.Right" Text="@CountProcesses()[key].ToString()" />
+                            <RadzenText TextStyle="TextStyle.Overline" Text="@key" TextAlign="TextAlign.Right" />
                         </RadzenStack>
                     </RadzenStack>
                 </CipherFormCard>
@@ -72,11 +72,12 @@
     private Variant MonthVariant;
     private Variant YearVariant;
 
-    List<IEvent> events = new();
+    List<IEvent> ChosenEvents = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        events = CachedData.AllEvents.Item1;
+        var result = await CachedData.AllEvents;
+        ChosenEvents = result.Item1;
         MonthView();
     }
 
@@ -84,7 +85,7 @@
     {
         Dictionary<string, int> ProcessCounter = new Dictionary<string, int>();
 
-        foreach (Event ev in events)
+        foreach (IEvent ev in ChosenEvents)
         {
             if (AddProcess(ev))
             {
@@ -92,16 +93,13 @@
                 {
                     ProcessCounter[ev.ProcessId.ToString()] += 1;
                 }
-                else
-                {
-                    ProcessCounter[ev.ProcessId.ToString()] = 1;
-                }
+                else ProcessCounter[ev.ProcessId.ToString()] = 1;
             }
         }
         return ProcessCounter;
     }
 
-    private bool AddProcess(Event ev)
+    private bool AddProcess(IEvent ev)
     {
         return View switch
         {

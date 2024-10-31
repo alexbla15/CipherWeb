@@ -1,10 +1,8 @@
 ﻿@inherits CipherResourceTable<IEvent>
 
-<CipherResourceTable Cipher_TItem="IEvent" ChosenObjects="@ChosenObjects" WithHeaderContent="@WithHeaderContent" PrefixFileTitle="events" Title="@Title" />
+<CipherResourceTable Cipher_TItem="IEvent" ChosenObjects="@ChosenObjects" WithHeaderContent="@WithHeaderContent" 
+    PrefixFileTitle="events" Title="@Title" />
 
 @code {
-    protected override void OnInitialized()
-    {
-        Title ??= "דוח תנועות";
-    }
+    protected override void OnInitialized() => Title ??= "דוח תנועות";
 }
