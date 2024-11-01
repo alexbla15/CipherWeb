@@ -52,6 +52,8 @@
         if (ChosenSteps == null) ChosenSteps = new();
     }
 
+    private string GetLabel(string property) => IProcessStepDefinition.Translate(property);
+
     /// <summary>
     /// Add a step to the memory.
     /// </summary>
@@ -127,12 +129,17 @@
                         </Template>
                     </RadzenDataGridColumn>
                     }
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="@(GetLabel(nameof(IProcessStepDefinition.Id)))" TextAlign="@TdTextAlign">
+                        <Template Context="step">
+                            <CipherButton Text="@(ChosenSteps?.IndexOf(step).ToString())" Disabled="true" ColorStyle="@ButtonStyle.Primary"/>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(GetLabel(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextBox @bind-Value="@step.Name" Style="width: 100%" Change="@ValueChanged" Disabled="@Disabled"/>
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(IProcessStepDefinition.Translate(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
+                    <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(GetLabel(nameof(IProcessStepDefinition.Description)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
                             <RadzenTextArea @bind-Value="@step.Description" Style="width: 100%" Change="@ValueChanged" Disabled="@Disabled" />
                         </Template>

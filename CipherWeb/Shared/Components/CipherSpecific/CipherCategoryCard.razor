@@ -1,69 +1,33 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherResourceCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-    <HeaderContent>
-        @if (SetMode != FormMode.Create)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherCategoryDropDown Change="@Change" @ref="CatId" ChosenCategory="@ChosenObject" />
-            </RadzenStack>
-        }
-    </HeaderContent>
+<CipherResourceCard SetMode="@SetMode" Title="@Title">
+    <ObjectPicker>
+        <CipherCategoryDropDown Change="@Change" @ref="CatId" ChosenCategory="@ChosenObject" />
+    </ObjectPicker>
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" 
-            ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+            <CipherComponentCard Title="תכונות" WithCard="true" WithButtons="@(SetMode == FormMode.ReadOnly)"
+                                 ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
-                    }
+                    <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
                 </Buttons>
                 <ChildContent>
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Name)))" 
-                                        Icon="@Icons.Symbols.category" @ref=CatName 
-                                        ValueChanged="@ChangeDetail"
-                                        Disabled="@ReadonlyFields()"
-                                        Value="@ChosenObject?.Name" />
-                    <CipherAutoComplete Label="@(ICategory.Translate(nameof(ICategory.Description)))" 
-                                        Icon="@Icons.Documents.Page.description" 
-                                        Multiline="true" 
-                                        ValueChanged="@ChangeDetail"
-                                        @ref=CatDescription
-                                        Disabled="@ReadonlyFields()"
-                                        Value="@ChosenObject?.Description" />
-                    <CipherCategoryDropDown 
-                        Label="@(ICategory.Translate(nameof(ICategory.Parent)))" 
-                        @ref=ParentCat 
-                        Change="@(args => ChangedParent((ICategory?)args))"
-                                            Disabled="@ReadonlyFields()"
-                                            ChosenCategory="@ChosenObject?.Parent" />
-                    <CipherProcesses 
-                        Icon="@Icons.Arrows.Squared.input" 
-                        Label="@(ICategory.Translate(nameof(ICategory.CreatingProcesses)))" 
-                        @ref=InProcs 
-                        Change="@ChangeDetail"
-                                     Disabled="@ReadonlyFields()" ChosenProcesses="@ChosenObject?.CreatingProcesses" />
-                    <CipherProcesses Icon="@Icons.Arrows.Squared.output" Label="@(ICategory.Translate(nameof(ICategory.ConsumingProcesses)))" @ref=OutProcs Change="@ChangeDetail"
-                                     Disabled="@ReadonlyFields()" ChosenProcesses="@ChosenObject?.ConsumingProcesses" />
-                    <CipherMask @ref=CatMask Disabled="@ReadonlyFields()"
-                                SelectedTexts="@ChosenObject?.IdMask.ToHashSet()" ValueChanged="@ChangeDetail" />
+                    @CategoryName()
+                    @CategoryDescription()
+                    @CategoryParent()
+                    @CategoryCreatingProcesses()
+                    @CategoryConsumingProcesses()
+                    @CategoryMasks()
                 </ChildContent>
             </CipherComponentCard>
             <CipherCategoryProperties @ref=CatProperties ValueChanged="@ChangeDetail" Disabled="@ReadonlyFields()"
                                       ChosenProperties="@SetProperties()" />
         }
     </ChildContent>
-</CipherComponentCard>
+</CipherResourceCard>
 
 @code {
-    /// <summary>
-    /// Define the usage of this object-card
-    /// </summary>
-    [Parameter]
-    public FormMode SetMode { get; set; } = FormMode.Create;
-
     /// <summary>
     /// Chosen category within the card
     /// </summary>
@@ -113,8 +77,7 @@
         return ParentProps ?? result;
     }
 
-    public bool ReadonlyFields()
-        => SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
+    public bool ReadonlyFields() => SetMode == FormMode.Update && ChosenObject is null;
 
     public void Change()
     {
@@ -162,5 +125,114 @@
         if (parent != null && parent.Properties != null) ParentProps = parent.Properties;
 
         ChangeDetail();
+    }
+
+    private string GetLabel(string property) => ICategory.Translate(property);
+
+    private string? GetValue(string? value)
+        => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+
+    private RenderFragment CategoryName()
+    {
+        string? value = GetValue(ChosenObject?.Name);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(ICategory.Name)))"
+                        Icon="@Icons.Symbols.category" @ref=CatName
+                        ValueChanged="@ChangeDetail"
+                        Disabled="@ReadonlyFields()"
+                        Value="@value" />
+        ;
+    }
+
+    private RenderFragment CategoryDescription()
+    {
+        string? value = GetValue(ChosenObject?.Description);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(ICategory.Description)))"
+                        Icon="@Icons.Documents.Page.description"
+                        Multiline="true"
+                        ValueChanged="@ChangeDetail"
+                        @ref=CatDescription
+                        Disabled="@ReadonlyFields()"
+        Value="@value" />
+    ;
+    }
+
+    private RenderFragment CategoryParent()
+    {
+        string label = GetLabel(nameof(ICategory.Parent));
+        ICategory? chosenParent = ChosenObject?.Parent;
+        string? value = GetValue(chosenParent?.Name);
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Parent"
+                        Disabled="true"
+                        Value="@value" />;
+
+        return
+        @<CipherCategoryDropDown Label="@label" @ref=ParentCat
+                            Change="@(args => ChangedParent((ICategory?)args))"
+        Disabled="@ReadonlyFields()" ChosenCategory="@chosenParent" />
+    ;
+    }
+
+    private RenderFragment CategoryMasks()
+    {
+        string label = GetLabel(nameof(ICategory.IdMask));
+        HashSet<string> idMasks = ChosenObject?.IdMask?.ToHashSet() ?? new();
+        string? value = GetValue(string.Join(", ", idMasks));
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Security.password"
+                        Disabled="true" Value="@value" />;
+
+        return
+        @<CipherMask @ref=CatMask Disabled="@ReadonlyFields()"
+                SelectedTexts="@idMasks" ValueChanged="@ChangeDetail" />
+    ;
+    }
+
+    private RenderFragment CategoryCreatingProcesses()
+    {
+        string icon = Icons.Arrows.Squared.input;
+        List<IProcessDefinition>? procs = ChosenObject?.CreatingProcesses;
+        string label = GetLabel(nameof(ICategory.CreatingProcesses));
+        string? value = (procs != null && procs.Any()) ? 
+        string.Join(", ", procs.Select(x => x.Name).ToList()) : "אין נתונים";
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label" Icon="@icon"
+                        Disabled="true" Value="@value" />;
+
+        return
+        @<CipherProcesses Icon="@icon"
+                     Label="@label" @ref=InProcs Change="@ChangeDetail"
+                     Disabled="@ReadonlyFields()" ChosenProcesses="@procs" />;
+    }
+
+    private RenderFragment CategoryConsumingProcesses()
+    {
+        string icon = Icons.Arrows.Squared.output;
+        List<IProcessDefinition>? procs = ChosenObject?.ConsumingProcesses;
+        string label = GetLabel(nameof(ICategory.ConsumingProcesses));
+        string? value = (procs != null && procs.Any()) ? 
+        string.Join(", ", procs.Select(x=>x.Name).ToList()) : "אין נתונים";
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label" Icon="@icon"
+                        Disabled="true" Value="@value" />;
+
+        return
+        @<CipherProcesses Icon="@icon"
+                     Label="@label" @ref=OutProcs Change="@ChangeDetail"
+                     Disabled="@ReadonlyFields()" ChosenProcesses="@procs" />;
     }
 }

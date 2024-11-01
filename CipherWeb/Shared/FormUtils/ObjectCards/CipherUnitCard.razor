@@ -1,46 +1,30 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherResourceCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-    <HeaderContent>
-        @if (SetMode != FormMode.Create)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Name)))"
-                                      Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject"/>
-            </RadzenStack>
-        }
-    </HeaderContent>
+<CipherResourceCard SetMode="@SetMode" Title="@Title">
+    <ObjectPicker>
+        <CipherUnitDropDown Label="@(GetLabel(nameof(IUnit.Name)))"
+                            Change="@Change" @ref="UnitId" ChosenUnit="@ChosenObject" />
+    </ObjectPicker>
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+            <CipherComponentCard Title="תכונות" WithCard="true" WithButtons="@(SetMode == FormMode.ReadOnly)"
+            ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
-                    }
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                    Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateUnit.Href}?Id={ChosenObject?.Id}")" />
                 </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit" ValueChanged="@ChangeDetail"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Name" @ref=UnitName/>
-                <CipherAutoComplete Label="@(IUnit.Translate(nameof(IUnit.Description)))" Icon="@Icons.Documents.Page.description" ValueChanged="@ChangeDetail"
-                                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Description" @ref=UnitDescription />
-                <CipherUnitDropDown Label="@(IUnit.Translate(nameof(IUnit.Parent)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                    ChosenUnit="@ChosenObject?.Parent" @ref=UnitParent Change="@ChangeDetail" />
+                @_UnitName()
+                @_UnitDescription()
+                @_UnitParent()
             </ChildContent>
         </CipherComponentCard>
         }
     </ChildContent>
-</CipherComponentCard>
+</CipherResourceCard>
 
 @code {
-    /// <summary>
-    /// Define the usage of this object-card
-    /// </summary>
-    [Parameter]
-    public FormMode SetMode { get; set; } = FormMode.Create;
-
     /// <summary>
     /// Chosen vessel within the card
     /// </summary>
@@ -99,5 +83,53 @@
         UnitDescription.Value = ChosenObject.Description;
         UnitParent.ChosenUnit = ChosenObject.Parent;
         ChangeDetails.InvokeAsync();
+    }
+
+    private string GetLabel(string property) => IUnit.Translate(property);
+
+    private string? GetValue(string? value)
+    => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+
+    private bool IsDisabled() => 
+    SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
+
+    private RenderFragment _UnitName()
+    {
+        string? value = GetValue(ChosenObject?.Name);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IUnit.Name)))" Icon="@Icons.Cipher.Unit" ValueChanged="@ChangeDetail"
+                        Disabled="@IsDisabled()" Value="@value" @ref=UnitName />
+    ;
+    }
+
+    private RenderFragment _UnitDescription()
+    {
+        string? value = GetValue(ChosenObject?.Description);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IUnit.Description)))" 
+        Icon="@Icons.Documents.Page.description" ValueChanged="@ChangeDetail"
+                        Disabled="@IsDisabled()" Value="@value" @ref=UnitDescription />
+    ;
+    }
+
+    private RenderFragment _UnitParent()
+    {
+        string label = GetLabel(nameof(IUnit.Parent));
+        IUnit? chosenParent = ChosenObject?.Parent;
+        string? value = GetValue(chosenParent?.Name);
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Parent"
+                        Disabled="true"
+                        Value="@value" />;
+
+        return
+        @<CipherUnitDropDown Label="@label" Disabled="@IsDisabled()"
+                        ChosenUnit="@chosenParent" @ref=UnitParent Change="@ChangeDetail" />
+        ;
     }
 }

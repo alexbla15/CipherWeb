@@ -1,45 +1,29 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherResourceCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-    <HeaderContent>
-        @if (SetMode != FormMode.Create)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherProcess @ref=SetProc Icon="@Icons.Cipher.Process" Change="@Change" ChosenProcess="@ChosenObject" />
-            </RadzenStack>
-        }
-    </HeaderContent>
+<CipherResourceCard SetMode="@SetMode" Title="@Title">
+    <ObjectPicker>
+        <CipherProcess @ref=SetProc Icon="@Icons.Cipher.Process" Change="@Change" ChosenProcess="@ChosenObject" />
+    </ObjectPicker>
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="פרטי התהליך" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+            <CipherComponentCard Title="פרטי התהליך" WithButtons="@(SetMode == FormMode.ReadOnly)"
+                                 ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <Buttons>
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
-                    }
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                    Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
                 </Buttons>
                 <ChildContent>
-                    <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Name)))" Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
-                    Disabled="@DisabledFields()" Value="@ChosenObject?.Name" />
-                    <CipherAutoComplete Label="@(IProcessDefinition.Translate(nameof(IProcessDefinition.Description)))" Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
-                    Disabled="@DisabledFields()" Value="@ChosenObject?.Description"
-                    ValueChanged="@ChangeDetail" />
+                    @ProcessName()
+                    @ProcessDescription()
                 </ChildContent>
             </CipherComponentCard>
             <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" Disabled="@DisabledFields()" />
         }
     </ChildContent>
-</CipherComponentCard>
+</CipherResourceCard>
 
 @code {
-    /// <summary>
-    /// Define the usage of this object-card
-    /// </summary>
-    [Parameter]
-    public FormMode SetMode { get; set; } = FormMode.Create;
-
     /// <summary>
     /// Chosen object to view within card.
     /// </summary>
@@ -98,5 +82,32 @@
         ProcName.Value = ChosenObject.Name;
         ProcDescription.Value = ChosenObject.Description;
         ProcSteps.ChosenSteps = ChosenObject.Steps;
+    }
+
+    private string GetLabel(string property) => IProcessDefinition.Translate(property);
+
+    private string? GetValue(string? value)
+        => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+
+    public RenderFragment ProcessName()
+    {
+        string? value = GetValue(ChosenObject?.Name);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Name)))" 
+        Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
+                        Disabled="@DisabledFields()" Value="@value" />
+    ;
+    }
+
+    public RenderFragment ProcessDescription()
+    {
+        string? value = GetValue(ChosenObject?.Description);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Description)))" 
+        Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
+                        Disabled="@DisabledFields()" Value="@value" ValueChanged="@ChangeDetail" />
+    ;
     }
 }

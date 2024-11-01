@@ -1,47 +1,30 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherResourceCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-    <HeaderContent>
-        @if (SetMode != FormMode.Create)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherLocation Change="Change" @ref="SysId" ChosenSystem="@ChosenObject" />
-            </RadzenStack>
-        }
-    </HeaderContent>
+<CipherResourceCard SetMode="@SetMode" Title="@Title">
+    <ObjectPicker>
+        <CipherLocation Change="Change" @ref="SysId" ChosenSystem="@ChosenObject" />
+    </ObjectPicker>
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+            <CipherComponentCard Title="תכונות" WithCard="true" WithButtons="@(SetMode == FormMode.ReadOnly)"
+            ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                        Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateSystem.Href}?Id={ChosenObject?.Id}")" />
-                    }
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                    Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateSystem.Href}?Id={ChosenObject?.Id}")" />
                 </Buttons>
             <ChildContent>
-                <CipherAutoComplete Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Name)))" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                    Icon="@Icons.Cipher.Location" @ref=SysName Value="@ChosenObject?.Name" ValueChanged="@ChangeDetail" />
-                <CipherComments @ref="SysDescription" Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
-                                Icon="@Icons.Documents.Page.description" Comments="@ChosenObject?.Description" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
-                <CipherLocation @ref="SysParent" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                                Label="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))" ChosenSystem="@ChosenObject?.Parent" Change="@ChangeDetail" />
-                <CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"
-                                    ChosenUnit="@ChosenObject?.Unit" Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" />
+                    @SystemName()
+                    @SystemDescription()
+                    @SystemParent()
+                    @SystemUnit()
             </ChildContent>
         </CipherComponentCard>
         }
     </ChildContent>
-</CipherComponentCard>
+</CipherResourceCard>
 
 @code {
-    /// <summary>
-    /// Define the usage of this object-card
-    /// </summary>
-    [Parameter]
-    public FormMode SetMode { get; set; } = FormMode.Create;
-
     /// <summary>
     /// Chosen vessel within the card
     /// </summary>
@@ -98,5 +81,71 @@
         SysParent.ChosenSystem = ChosenObject.Parent;
         SysUnit.ChosenUnit = ChosenObject.Unit;
         ChangeDetails.InvokeAsync();
+    }
+
+    private string GetLabel(string property) => IStorageSystem.Translate(property);
+
+    private string? GetValue(string? value)
+        => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+
+    private bool IsDisabled() =>
+        SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
+
+    private RenderFragment SystemName()
+    {
+        string? value = GetValue(ChosenObject?.Name);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IStorageSystem.Name)))" Disabled="@IsDisabled()"
+                        Icon="@Icons.Cipher.Location" @ref=SysName Value="@value" ValueChanged="@ChangeDetail" />
+        ;
+    }
+
+    private RenderFragment SystemDescription()
+    {
+        string? value = GetValue(ChosenObject?.Description);
+
+        return
+        @<CipherComments @ref="SysDescription" Label="@(GetLabel(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
+                    Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
+        ;
+    }
+
+    private RenderFragment SystemParent()
+    {
+        string label = GetLabel(nameof(IStorageSystem.Parent));
+        IStorageSystem? chosenParent = ChosenObject?.Parent;
+        string? value = GetValue(chosenParent?.Name);
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Parent"
+                        Disabled="true"
+                        Value="@value" />;
+
+        return
+        @<CipherLocation @ref="SysParent" Disabled="@IsDisabled()"
+                    Label="@label" ChosenSystem="@chosenParent" Change="@ChangeDetail" />
+        ;
+    }
+
+    private RenderFragment SystemUnit()
+    {
+        string label = GetLabel(nameof(IStorageSystem.Unit));
+        IUnit? unit = ChosenObject?.Unit;
+        string? value = GetValue(unit?.Name);
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Unit"
+                        Disabled="true"
+                        Value="@value" />;
+
+        return
+        @<CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"
+                        ChosenUnit="@unit" Disabled="@IsDisabled()" />
+        ;
     }
 }

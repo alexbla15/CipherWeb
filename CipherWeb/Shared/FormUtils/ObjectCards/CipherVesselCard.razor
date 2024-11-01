@@ -1,54 +1,30 @@
-﻿@inherits CipherComponentCard
+﻿@inherits CipherResourceCard
 
-<CipherComponentCard WithCard="false" Title="@Title" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-    <HeaderContent>
-        @if (SetMode != FormMode.Create)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-                <CipherVesselDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="VesId" ChosenVessel="@ChosenObject" />
-            </RadzenStack>
-        }
-    </HeaderContent>
+<CipherResourceCard SetMode="@SetMode" Title="@Title">
+    <ObjectPicker>
+        <CipherVesselDropDown Icon="@Icons.Cipher.Id" Change="@Change" @ref="VesId" ChosenVessel="@ChosenObject" />
+    </ObjectPicker>
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+            <CipherComponentCard Title="תכונות" WithCard="true" WithButtons="@(SetMode == FormMode.ReadOnly)"
+            ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
+                    <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
                         Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateVessel.Href}?Id={ChosenObject?.Id}")" />
-                    }
                 </Buttons>
                 <ChildContent>
-                    <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
-                                        ValueChanged="@(args => ChangeName(args))"
-                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" 
-                    Value="@ChosenObject?.Name" @ref=VesName />
-                    <CipherAutoComplete Label="@(IVessel.Translate(nameof(IVessel.Type)))" Icon="@Icons.Symbols.category"
-                                        ValueChanged="@(args => ChangeType(args))"
-                    Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))" Value="@ChosenObject?.Type" @ref=VesType />
-                    <CipherLocation Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                    ChosenSystem="@ChosenObject?.System" @ref=VesSys
-                                    Change="@(args => ChangeSystem((IStorageSystem?)args))" />
-
-                    @if (SetMode == FormMode.ReadOnly)
-                    {
-                        <CipherPackagesPicking SelectedPackages="@ChosenObject?.ContainingPackages?.Select(x=>x as IPackage).ToList()" Change="@ChangeDetail" />
-                    }
+                    @VesselName()
+                    @VesselType()
+                    @VesselLocation()
+                    @VesselPackages()
                 </ChildContent>
         </CipherComponentCard>
         }
     </ChildContent>
-</CipherComponentCard>
+</CipherResourceCard>
 
 @code {
-    /// <summary>
-    /// Define the usage of this object-card
-    /// </summary>
-    [Parameter]
-    public FormMode SetMode { get; set; } = FormMode.Create;
-
     /// <summary>
     /// Chosen vessel within the card
     /// </summary>
@@ -116,5 +92,71 @@
         VesName.Value = ChosenObject.Name;
         VesType.Value = ChosenObject.Type;
         VesSys.ChosenSystem = ChosenObject.System;
+    }
+
+    private string GetLabel(string property) => IVessel.Translate(property);
+
+    private string? GetValue(string? value)
+    => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+
+    public RenderFragment VesselName()
+    {
+        string? value = GetValue(ChosenObject?.Name);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
+                        ValueChanged="@(args => ChangeName(args))"
+                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                        Value="@value" @ref=VesName />
+        ;
+    }
+
+    public RenderFragment VesselType()
+    {
+        string? value = GetValue(ChosenObject?.Type);
+
+        return
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
+                        ValueChanged="@(args => ChangeName(args))"
+                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                        Value="@value" @ref=VesName />
+        ;
+    }
+
+    private RenderFragment VesselLocation()
+    {
+        string label = GetLabel(nameof(IVessel.System));
+        IStorageSystem? sys = ChosenObject?.System;
+        string? value = GetValue(sys?.Name);
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Location"
+                        Disabled="true"
+                        Value="@value" />;
+
+        return
+        @<CipherLocation Disabled="@(SetMode == FormMode.Update && ChosenObject is null)"
+                    ChosenSystem="@sys" @ref=VesSys
+                    Change="@(args => ChangeSystem((IStorageSystem?)args))" />
+        ;
+    }
+
+    private RenderFragment? VesselPackages()
+    {
+        string icon = Icons.Cipher.Package;
+        List<IPackage>? packs = ChosenObject?.ContainingPackages;
+        string label = GetLabel(nameof(IVessel.ContainingPackages));
+        string? value = (packs != null && packs.Any()) ?
+        string.Join(", ", packs.Select(x => x.Id).ToList()) : "אין נתונים";
+
+        if (SetMode == FormMode.ReadOnly)
+            return
+            @<CipherAutoComplete Label="@label" Icon="@icon"
+            Disabled="true" Value="@value" />
+        ;
+        
+        return null;
     }
 }

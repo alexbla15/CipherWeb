@@ -2365,6 +2365,7 @@
             public const string Account_Old = Social.SinglePerson.person_outline;
             public const string Advanced = Documents.wysiwyg;
             public const string Analysis = Professions.Construction.architecture;
+            public const string Children = Data.device_hub;
             public const string Department = Home.other_houses;
             public const string Excel = UiComponents.Table.grid_on;
             public const string Id = Symbols.Notifications.info;
@@ -2373,6 +2374,7 @@
             public const string Material = Professions.Medical.science;
             public const string Package = Documents.sticky_note_2;
             public const string PackageCombine = Symbols.group_work;
+            public const string Parent = Data.account_tree;
             public const string Process = Data.LineChart.timeline;
             public const string Properties = Home.Facilities.window;
             public const string Rule = "rule";
