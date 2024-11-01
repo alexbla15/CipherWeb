@@ -18,6 +18,12 @@
     public FilterMode GridFilterMode { get; set; } = FilterMode.SimpleWithMenu;
 
     /// <summary>
+    /// Columns that will be presented in the datatable
+    /// </summary>
+    [Parameter]
+    public List<string>? SelectedColumns { get; set; }
+
+    /// <summary>
     /// Is filteration allowed.
     /// </summary>
     [Parameter]
@@ -53,12 +59,9 @@
 
     public string? GetFooter(int index) => (index == 0) ? $"כמות שורות: {CustomDataGrid.View.Count()}" : null;
 
-    public async void Navigate(string path)
-    {
+    public async void Navigate(string path) => 
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
-    }
 }
-
 
 @if (DataSource != null && DataSource.Any())
 {
@@ -81,7 +84,7 @@
                     AllowGrouping="@AllowGroup"
                     HideGroupedColumn="@HideGroupedColumn"
                     Density="@Density.Compact"
-                    Style="text-align: right; background-color: transparent"
+                    class="@Constants.Styles.DataTable"
                     AndOperatorText="וגם"
                     OrOperatorText="או"
                     ClearFilterText="ביטול"
@@ -105,8 +108,7 @@
                     ColumnsShowingText="עמודות מוצגות"
                     GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם">
         <EmptyTemplate>
-            <p style="color: lightgrey; font-size: 24px;
-            text-align: center; margin: 2rem;">לא נמצאו נתונים</p>
+            <RadzenText Text="לא נמצאו נתונים" class="@Constants.Styles.DataGridEmpty"/>
         </EmptyTemplate>
         <Columns>
             @if (DataSource.First().Properties != null)
@@ -119,14 +121,17 @@
                         {
                             @if (prop != null)
                             {
-                                <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
-                                    <Template>
+                                @if (SelectedColumns != null && SelectedColumns.Contains(prop.Name))
+                                {
+                                    <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
+                                        <Template>
                                         @context.Properties?.Where(x => x.Name == prop.Name).First().Value
                                     </Template>
                                     <FooterTemplate>
                                         @GetFooter(properties.IndexOf(prop))
                                     </FooterTemplate>
-                                </RadzenDataGridColumn>
+                                    </RadzenDataGridColumn>
+                                }
                             }
                         }
                     }

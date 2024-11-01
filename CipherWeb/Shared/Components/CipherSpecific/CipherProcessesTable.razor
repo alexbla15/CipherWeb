@@ -1,8 +1,19 @@
 ﻿@inherits CipherResourceTable<IProcess>
 
 <CipherResourceTable Cipher_TItem="IProcess" WithHeaderContent="@WithHeaderContent" WithCard="@WithCard"
-    WithButtons="@WithButtons" PrefixFileTitle="processes" Title="@Title" ChosenObjects="@ChosenObjects"/>
+    WithButtons="@WithButtons" PrefixFileTitle="processes" Title="@Title" ChosenObjects="@ChosenObjects"
+                     SelectedColumns="@SelectedColumns" />
 
 @code {
-    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Processes");
+    protected override void OnInitialized()
+    {
+        Title ??= Translator.GetTranslation("Processes");
+
+        SelectedColumns = new List<string>() {
+            nameof(IProcess.Id),
+            nameof(IProcess.Definition),
+            nameof(IProcess.Start),
+            nameof(IProcess.End),
+        };
+    }
 }

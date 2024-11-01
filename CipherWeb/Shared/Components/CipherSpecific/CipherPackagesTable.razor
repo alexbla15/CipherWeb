@@ -1,8 +1,20 @@
 ﻿@inherits CipherResourceTable<IPackage>
 
 <CipherResourceTable Cipher_TItem="IPackage" WithHeaderContent="@WithHeaderContent" 
-    ChosenObjects="@ChosenObjects" PrefixFileTitle="packages" Title="@Title"/>
+    ChosenObjects="@ChosenObjects" PrefixFileTitle="packages" Title="@Title" SelectedColumns="@SelectedColumns"/>
 
 @code{
-    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Packages");
+    protected override void OnInitialized()
+    {
+        Title ??= Translator.GetTranslation("Packages");
+        SelectedColumns = new List<string>() { 
+            nameof(IPackage.Id), 
+            nameof(IPackage.Description), 
+            nameof(IPackage.BrutMass), 
+            nameof(IPackage.Category),
+            nameof(IPackage.CreatedAt),
+            nameof(IPackage.Vessel),
+            nameof(IPackage.System),
+        };
+    }
 }

@@ -1,8 +1,18 @@
 ﻿@inherits CipherResourceTable<IStorageSystem>
 
-<CipherResourceTable Cipher_TItem="IStorageSystem" ChosenObjects="@ChosenObjects"
+<CipherResourceTable Cipher_TItem="IStorageSystem" ChosenObjects="@ChosenObjects" SelectedColumns="@SelectedColumns"
                      PrefixFileTitle="systems" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Systems");
+    protected override void OnInitialized()
+    {
+        Title ??= Translator.GetTranslation("Systems");
+
+        SelectedColumns = new List<string>() {
+            nameof(IStorageSystem.Id),
+            nameof(IStorageSystem.Name),
+            nameof(IStorageSystem.Unit),
+            nameof(IStorageSystem.Description),
+        };
+    }
 }

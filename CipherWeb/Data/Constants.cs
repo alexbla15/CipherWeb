@@ -9,19 +9,31 @@ namespace CipherWeb.Data
         public class Styles
         {
             public static readonly string TopNavBar = "cipher_topnavbar";
+
             public static readonly string Body = "cipher_body";
+
             public static readonly string Icon = "cipher_icon";
             public static readonly string SearchButtonIcon = "cipher_searchbtn_icon";
+
             public static readonly string ParagraphTitle = "cipher_paragraph_header";
+
             public static readonly string GroupHeader = "cipher_datagrid_group_header";
+
             public static readonly string CardTitle = "cipher_card_header";
+
             public static readonly string Restriction = "cipher_restriction";
+
             public static readonly string ComingSoon = "cipher-comingsoon";
             public static readonly string ComingSoonImage = "cipher-comingsoon-image-container";
             public static readonly string ComingSoonOverlay = "cipher-comingsoon-overlay";
+
             public static readonly string JsonCheck = "cipher-jsoncheck";
+
+            public static readonly string DataTable = "cipher_datatable";
             public static readonly string DataGridEmpty = "cipher_datagrid_empty_text";
+
             public static readonly string LoadingText = "cipher_loading_text";
+
             public static readonly string ComponentCardContent = "cipher_component_card_content";
             public static readonly string ComponentCardHeader = "cipher_component_card_header";
             public static readonly string ComponentFooterContent = "cipher_component_card_content footer";

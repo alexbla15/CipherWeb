@@ -1,8 +1,21 @@
 ﻿@inherits CipherResourceTable<IEvent>
 
-<CipherResourceTable Cipher_TItem="IEvent" ChosenObjects="@ChosenObjects" WithHeaderContent="@WithHeaderContent" 
-    PrefixFileTitle="events" Title="@Title" />
+<CipherResourceTable Cipher_TItem="IEvent" ChosenObjects="@ChosenObjects" WithHeaderContent="@WithHeaderContent"
+                     PrefixFileTitle="events" Title="@Title" SelectedColumns="@SelectedColumns" />
 
 @code {
-    protected override void OnInitialized() => Title ??= "דוח תנועות";
+    protected override void OnInitialized()
+    {
+        Title ??= "דוח תנועות";
+
+        SelectedColumns = new List<string>() {
+            nameof(IEvent.Id),
+            nameof(IEvent.Comments),
+            nameof(IEvent.EventType),
+            nameof(IEvent.ProcessId),
+            nameof(IEvent.Timestamp),
+            nameof(IEvent.Status),
+            nameof(IEvent.Worker),
+        };
+    }
 }

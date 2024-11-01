@@ -150,6 +150,11 @@
     font-size: 12px;
 }
 
+.cipher_datatable {
+    text-align: right;
+    background-color: transparent;
+}
+
 .cipher_datagrid_empty_text {
     padding-left: 10px;
     padding-right: 10px;

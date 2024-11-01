@@ -1,8 +1,17 @@
 ﻿@inherits CipherResourceTable<IUnit>
 
-<CipherResourceTable Cipher_TItem="IUnit" ChosenObjects="@ChosenObjects"
+<CipherResourceTable Cipher_TItem="IUnit" ChosenObjects="@ChosenObjects" SelectedColumns="@SelectedColumns"
                      PrefixFileTitle="units" Title="@Title" WithHeaderContent="false" />
 
 @code {
-    protected override void OnInitialized() => Title ??= Translator.GetTranslation("Units");
+    protected override void OnInitialized()
+    {
+        Title ??= Translator.GetTranslation("Units");
+
+        SelectedColumns = new List<string>() {
+            nameof(IUnit.Id),
+            nameof(IUnit.Name),
+            nameof(IUnit.Description),
+        };
+    }
 }
