@@ -99,13 +99,12 @@
         if (!string.IsNullOrEmpty(pack.Id))
         {
             var result = await Config.Package(false).Get(pack.Id);
-            if (result.Item1 != null)
-            {
-                return result.Item1.BrutMass;
-            }
+            if (result.Item1 != null) return result.Item1.BrutMass;
         }
         return 0;
     }
+
+    private string GetLabel(string property) => IPackage.Translate(property);
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
@@ -119,14 +118,14 @@
             <RadzenText Text="@HelpText" />
         }
         <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="IPackage" 
-            AllowColumnResize="true" Visible="chosenPacks.Count() != 0" ValueChanged="@ChangeDetails">
+            AllowColumnResize="true" Visible="chosenPacks.Any()" ValueChanged="@ChangeDetails">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="IPackage" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(pack))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(GetLabel(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         @if (string.IsNullOrEmpty(pack.Id))
                         {
@@ -140,7 +139,7 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IPackage" Title="@(IPackage.Translate(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="IPackage" Title="@(GetLabel(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
                         <CipherNumeric Amount="@FetchMaxBrutMassAsync(pack).Result" 
                         Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" AmountChanged="@ChangeDetails"/>

@@ -8,7 +8,10 @@
     /// Chosen type dictates which fields can be visible
     /// </summary>
     [Parameter]
-    public Type ChosenType { get => _ChosenType; set { _ChosenType = value; _AllFields = CommonFuncs.GetCipherTypeFields(value); } }
+    public Type ChosenType { 
+        get => _ChosenType; 
+        set { _ChosenType = value; _AllFields = CommonFuncs.GetCipherTypeFields(value); } 
+    }
 
     /// <summary>
     /// Text shown in case no rows were added.
@@ -51,6 +54,8 @@
     private CipherMethodDropDown AggMethod = new();
 
     private bool typeIncompatibleAlertVisible = false;
+
+    private string GetLabel(string property) => IAggregateItem.Translate(property);
 
     /// <summary>
     /// Add an aggregation row.
@@ -97,10 +102,7 @@
     /// <summary>
     /// Close the shown alert.
     /// </summary>
-    private void CloseAlert()
-    {
-        typeIncompatibleAlertVisible = false;
-    }
+    private void CloseAlert() => typeIncompatibleAlertVisible = false;
 
     /// <summary>
     /// Get list of all chosen aggregates.
@@ -128,9 +130,7 @@
 
 
     async Task ParamsChanged()
-    {
-        await ChosenAggregatesChanged.InvokeAsync(ChosenAggregates); // Trigger change event
-    }
+    => await ChosenAggregatesChanged.InvokeAsync(ChosenAggregates); // Trigger change event
 }
 
 <CipherComponentCard Title="@Title">
@@ -140,7 +140,7 @@
     </Buttons>
 
     <ChildContent>
-        @if (ChosenAggregates.Count() == 0)
+        @if (!ChosenAggregates.Any())
         {
             <RadzenText Text="@HelpText" />
         }
@@ -151,20 +151,21 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)" 
-                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.Attribute)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)"
+                                      Title="@(GetLabel(nameof(IAggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
+                        <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" 
+                            ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.As)" 
-                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.As)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.As)"
+                                      Title="@(GetLabel(nameof(IAggregateItem.As)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Method)" 
-                Title="@(IAggregateItem.Translate(nameof(IAggregateItem.Method)))" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Method)"
+                                      Title="@(GetLabel(nameof(IAggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
                         <CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
                         Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))" 

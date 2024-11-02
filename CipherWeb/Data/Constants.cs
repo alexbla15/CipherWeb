@@ -8,6 +8,14 @@ namespace CipherWeb.Data
     {
         public class Styles
         {
+            public class Chips
+            {
+                public static readonly string Chip = "cipher-chip";
+                public static readonly string CloseAll = "cipher-close";
+                public static readonly string CloseItem = "cipher-close chip";
+                public static readonly string Container = "cipher-chip-container";
+            }
+
             public static readonly string TopNavBar = "cipher_topnavbar";
 
             public static readonly string Body = "cipher_body";

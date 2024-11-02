@@ -16,6 +16,7 @@
                     @CategoryName()
                     @CategoryDescription()
                     @CategoryParent()
+                    @CategoryMaterialType()
                     @CategoryCreatingProcesses()
                     @CategoryConsumingProcesses()
                     @CategoryMasks()
@@ -77,7 +78,8 @@
         return ParentProps ?? result;
     }
 
-    public bool ReadonlyFields() => SetMode == FormMode.Update && ChosenObject is null;
+    public bool ReadonlyFields() => 
+    SetMode==FormMode.ReadOnly || SetMode == FormMode.Update && ChosenObject is null;
 
     public void Change()
     {
@@ -178,6 +180,19 @@
                             Change="@(args => ChangedParent((ICategory?)args))"
         Disabled="@ReadonlyFields()" ChosenCategory="@chosenParent" />
     ;
+    }
+
+    private RenderFragment CategoryMaterialType()
+    {
+        string label = GetLabel(nameof(ICategory.MaterialType));
+        ICategory? materialType = ChosenObject?.MaterialType;
+        string? value = GetValue(materialType?.Name);
+
+        return
+            @<CipherAutoComplete Label="@label"
+                        Icon="@Icons.Cipher.Material"
+                        Disabled="true"
+                        Value="@value" />;
     }
 
     private RenderFragment CategoryMasks()

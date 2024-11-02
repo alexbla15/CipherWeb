@@ -4,8 +4,8 @@
     <RadzenDropDownDataGrid Placeholder="@Label" TValue="ICategory" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
                             Style="@($"width:{Constants.StandartWidth}")" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(ICategory.Translate(nameof(ICategory.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(ICategory.Translate(nameof(ICategory.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(GetLabel(nameof(ICategory.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(GetLabel(nameof(ICategory.Name)))" />
         </Columns>
         <ValueTemplate>
             <b>@Label:</b> @((context as ICategory)?.Name)
@@ -39,4 +39,6 @@
         // filter only material types
         categories = categories.Where(x => x.Parent == null).ToList();
     }
+
+    private string GetLabel(string property) => ICategory.Translate(property);
 }

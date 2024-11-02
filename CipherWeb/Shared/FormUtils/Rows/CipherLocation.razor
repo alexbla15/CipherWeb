@@ -9,14 +9,14 @@
                             Placeholder="@Label" SearchTextPlaceholder="חיפוש..." AllowClear="true" AllowSorting=false
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")" Disabled="@Disabled" Change="@Change">
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Name))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Description))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Description)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Parent))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Parent)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Name))" Title="@(GetLabel(nameof(IStorageSystem.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Description))" Title="@(GetLabel(nameof(IStorageSystem.Description)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Parent))" Title="@(GetLabel(nameof(IStorageSystem.Parent)))">
                 <Template>
                     @((context as IStorageSystem)?.Parent?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Unit))" Title="@(IStorageSystem.Translate(nameof(IStorageSystem.Unit)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(IStorageSystem.Unit))" Title="@(GetLabel(nameof(IStorageSystem.Unit)))">
                 <Template>
                     @((context as IStorageSystem)?.Unit?.Description)
                 </Template>
@@ -77,9 +77,11 @@
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
+    private string GetLabel(string property) => IStorageSystem.Translate(property);
+
     protected override async Task OnInitializedAsync()
     {
-        Label ??= IStorageSystem.Translate(nameof(IStorageSystem.Name));
+        Label ??= GetLabel(nameof(IStorageSystem.Name));
         Icon ??= Icons.Cipher.Location;
 
         (AvailableSystems, Error) = await CachedData.AllSystems;

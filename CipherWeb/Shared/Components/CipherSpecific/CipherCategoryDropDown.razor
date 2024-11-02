@@ -6,16 +6,16 @@
                             AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(ICategory.Translate(nameof(ICategory.Id)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(ICategory.Translate(nameof(ICategory.Name)))" />
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(ICategory.Translate(nameof(ICategory.MaterialType)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(GetLabel(nameof(ICategory.Id)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(GetLabel(nameof(ICategory.Name)))" />
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.MaterialType))" Title="@(GetLabel(nameof(ICategory.MaterialType)))">
                 <Template>
                     @((context as ICategory)?.MaterialType?.Name)
                 </Template>
             </RadzenDropDownDataGridColumn>
-            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.IdMask))" Title="@(ICategory.Translate(nameof(ICategory.IdMask)))">
+            <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.IdMask))" Title="@(GetLabel(nameof(ICategory.IdMask)))">
                 <Template>
-                    @if (context is ICategory cat)
+                    @if (context is ICategory cat && cat.IdMask != null)
                     {
                         @(string.Join(", ", cat.IdMask))
                     }
@@ -58,6 +58,8 @@
     /// </summary>
     [Parameter]
     public EventCallback<object> Change { get; set; }
+
+    private string GetLabel(string property) => ICategory.Translate(property);
 
     protected override async Task OnInitializedAsync()
     {

@@ -47,6 +47,8 @@
 
     protected override void OnInitialized() => Title ??= "תכונות הקטגוריה";
 
+    private string GetLabel(string property) => ICategoryProperty.Translate(property);
+
     /// <summary>
     /// Add a component to the memory.
     /// </summary>
@@ -101,17 +103,17 @@
                     </Template>
                     </RadzenDataGridColumn>
                 }
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(GetLabel(nameof(ICategoryProperty.Name)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextBox @bind-Value="prop.Name" Style="width:100%" Change="@ValueChanged" Disabled="@Disabled"/>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(GetLabel(nameof(ICategoryProperty.Description)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenTextArea @bind-Value="prop.Description" Style="width:100%" Change="@ValueChanged" Disabled="@Disabled" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(GetLabel(nameof(ICategoryProperty.PropertyType)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         <RadzenDropDown @bind-Value="prop.PropertyType" TValue="PropertyType" Data="@(new List<PropertyType>() {PropertyType.Text, PropertyType.Boolean, PropertyType.Number})"
                                         Change="@(args=> {prop.DefaultValue = (prop.PropertyType == PropertyType.Boolean) ?  "False" : ((prop.PropertyType ==PropertyType.Number ) ? "0" : null); ValueChanged.InvokeAsync();})"
@@ -147,7 +149,7 @@
                             </RadzenDropDown>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(ICategoryProperty.Translate(nameof(ICategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
+                <RadzenDataGridColumn TItem="ICategoryProperty" Title="@(GetLabel(nameof(ICategoryProperty.DefaultValue)))" TextAlign="@TdTextAlign">
                     <Template Context="prop">
                         @if (prop.PropertyType == PropertyType.Text)
                         {

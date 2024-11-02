@@ -121,10 +121,31 @@
     height: 300px;
 }
 
+.cipher-close {
+    color: black;
+    opacity: 0.4;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+    .cipher-close :hover {
+        color:var(--rz-primary-dark);
+    }
+
 .cipher-chip-container {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 4px;
+    border: 1px solid var(--rz-primary-light);
 }
 
 .cipher-chip {
@@ -136,18 +157,8 @@
     align-items: center;
 }
 
-.cipher-chip-close {
+.cipher-close .chip {
     background-color: var(--rz-chip-background-color);
-    color: black;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 8px;
-    cursor: pointer;
-    font-size: 12px;
 }
 
 .cipher_datatable {

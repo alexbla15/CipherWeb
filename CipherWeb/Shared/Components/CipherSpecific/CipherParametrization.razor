@@ -81,7 +81,7 @@
         {
             <RadzenText Text="@HelpText"/>
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="ChosenParameters" TItem="ReportParameter" AllowColumnResize="true" Visible="ChosenParameters.Count() != 0">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="ChosenParameters" TItem="ReportParameter" AllowColumnResize="true" Visible="ChosenParameters.Any()">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="ReportParameter" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="param">
