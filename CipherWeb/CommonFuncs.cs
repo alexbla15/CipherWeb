@@ -3,6 +3,10 @@ using System.Reflection;
 using CipherData.General;
 using CipherData.ApiMode;
 using CipherData;
+using Microsoft.AspNetCore.Components;
+using CipherWeb.Data;
+using CipherWeb.Shared.Components;
+using System.Reflection.Emit;
 
 namespace CipherWeb
 {
@@ -136,5 +140,8 @@ namespace CipherWeb
 
             return fields.DistinctBy(x => x.Path).OrderBy(x => x.Translation).ToList();
         }
+
+        public static List<Tuple<string, string>>? GetChip(string? text, string? id) 
+            => (text is null || id is null) ? null : new() { Tuple.Create(text, id) };
     }
 }

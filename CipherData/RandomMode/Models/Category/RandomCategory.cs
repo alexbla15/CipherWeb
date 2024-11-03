@@ -22,7 +22,7 @@
         /// Get a random new object of Material type category.
         /// </summary>
         /// <param name="name">name of material type</param>
-        public static Category RandomMaterialType(string name) => new() { Name = name };
+        public static Category RandomMaterialType(string name) => new() { Id=GetNextId(), Name = name };
 
         /// <summary>
         /// Counts how many packages were created.

@@ -94,6 +94,9 @@
         VesSys.ChosenSystem = ChosenObject.System;
     }
 
+    private bool IsDisabled()
+        => (SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null));
+
     private string GetLabel(string property) => IVessel.Translate(property);
 
     private string? GetValue(string? value)
@@ -106,7 +109,7 @@
         return
         @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
                         ValueChanged="@(args => ChangeName(args))"
-                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
+                        Disabled="@IsDisabled()"
                         Value="@value" @ref=VesName />
         ;
     }
@@ -118,29 +121,27 @@
         return
         @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
                         ValueChanged="@(args => ChangeName(args))"
-                        Disabled="@(SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null))"
-                        Value="@value" @ref=VesName />
-        ;
+                        Disabled="@IsDisabled()"
+        Value="@value" @ref=VesName />
+    ;
     }
 
     private RenderFragment VesselLocation()
     {
         string label = GetLabel(nameof(IVessel.System));
         IStorageSystem? sys = ChosenObject?.System;
-        string? value = GetValue(sys?.Name);
 
         if (SetMode == FormMode.ReadOnly)
-            return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Location"
-                        Disabled="true"
-                        Value="@value" />;
+            return 
+    @<CipherChips Icon="@Icons.Cipher.Location"
+                 SelectedChips="@CommonFuncs.GetChip(sys?.Name, sys?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.SystemSearch" />;
 
         return
         @<CipherLocation Disabled="@(SetMode == FormMode.Update && ChosenObject is null)"
                     ChosenSystem="@sys" @ref=VesSys
-                    Change="@(args => ChangeSystem((IStorageSystem?)args))" />
-        ;
+        Change="@(args => ChangeSystem((IStorageSystem?)args))" />
+    ;
     }
 
     private RenderFragment? VesselPackages()
@@ -148,13 +149,15 @@
         string icon = Icons.Cipher.Package;
         List<IPackage>? packs = ChosenObject?.ContainingPackages;
         string label = GetLabel(nameof(IVessel.ContainingPackages));
-        string? value = (packs != null && packs.Any()) ?
-        string.Join(", ", packs.Select(x => x.Id).ToList()) : "אין נתונים";
+
+        List<Tuple<string, string>>? chips = 
+        packs?.Where(x=>!string.IsNullOrEmpty(x.Id)).Select(x => Tuple.Create(x.Id, x.Id)).ToList();
 
         if (SetMode == FormMode.ReadOnly)
-            return
-            @<CipherAutoComplete Label="@label" Icon="@icon"
-            Disabled="true" Value="@value" />
+            return 
+    @<CipherChips Icon="@icon"
+                 SelectedChips="@chips" Label="@label"
+                 NavigationLink="@CipherNavLinks.PackageSearch" />;
         ;
         
         return null;

@@ -107,25 +107,23 @@
 
         return
         @<CipherComments @ref="SysDescription" Label="@(GetLabel(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
-                    Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
-        ;
+        Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
+    ;
     }
 
     private RenderFragment SystemParent()
     {
+        string icon = Icons.Cipher.Parent;
         string label = GetLabel(nameof(IStorageSystem.Parent));
         IStorageSystem? chosenParent = ChosenObject?.Parent;
-        string? value = GetValue(chosenParent?.Name);
 
         if (SetMode == FormMode.ReadOnly)
-            return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Parent"
-                        Disabled="true"
-                        Value="@value" />;
+            return @<CipherChips Icon="@icon"
+                 SelectedChips="@CommonFuncs.GetChip(chosenParent?.Name, chosenParent?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.SystemSearch" />;
 
         return
-        @<CipherLocation @ref="SysParent" Disabled="@IsDisabled()"
+        @<CipherLocation Icon="@icon" @ref="SysParent" Disabled="@IsDisabled()"
                     Label="@label" ChosenSystem="@chosenParent" Change="@ChangeDetail" />
         ;
     }
@@ -134,14 +132,11 @@
     {
         string label = GetLabel(nameof(IStorageSystem.Unit));
         IUnit? unit = ChosenObject?.Unit;
-        string? value = GetValue(unit?.Name);
 
         if (SetMode == FormMode.ReadOnly)
-            return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Unit"
-                        Disabled="true"
-                        Value="@value" />;
+            return @<CipherChips Icon="@Icons.Cipher.Unit"
+                 SelectedChips="@CommonFuncs.GetChip(unit?.Name, unit?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.UnitSearch" />;
 
         return
         @<CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"

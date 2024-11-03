@@ -225,27 +225,37 @@
             model.value = newValue; // Synchronize model's value with the new parameter value
         }
     }
+
+    private RenderFragment? FieldIcon()
+    {
+        if (string.IsNullOrEmpty(Icon)) return null;
+
+        return @<RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />;
+    }
+
+    private RenderFragment AutoComplete(bool withFormField)
+    {
+        string? style = (withFormField) ? Style : $"{Style}; width: {Constants.StandartWidth};";
+
+        return
+    @<RadzenAutoComplete class="testAB" @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@style" Disabled="@Disabled" onkeydown="@OnKeyDown"
+    Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
+                            Multiline="@Multiline" />;
+    }
 }
 
 <RadzenTemplateForm TItem="Model" Data=@model Style="display:flex">
     <RadzenStack Orientation="Orientation.Vertical" Gap="0" JustifyContent="JustifyContent.Center" Style="width:100%">
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
-            @if (!string.IsNullOrEmpty(Icon))
-            {
-                <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
-            }
+            @FieldIcon()
             @if (string.IsNullOrEmpty(Label))
             {
-                <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@($"{Style}; width: {Constants.StandartWidth};")" Disabled="@Disabled" onkeydown="@OnKeyDown"
-                                    Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))" 
-                                    Multiline="@Multiline"/>
+                @AutoComplete(false)
             }
             else
             {
                 <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
-                    <RadzenAutoComplete @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@Style" Disabled="@Disabled" onkeydown="@OnKeyDown"
-                                        Data="@Data" TextProperty="@TextProperty" Change="@(EventCallback.Factory.Create(this, OnValueChanged))"
-                                        Multiline="@Multiline" />
+                    @AutoComplete(true)
                 </RadzenFormField>
             }
         </RadzenStack>

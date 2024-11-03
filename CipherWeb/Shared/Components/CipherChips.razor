@@ -1,0 +1,52 @@
+﻿@using System.Collections.Generic
+@using Radzen
+
+@inject IJSRuntime JS
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
+    <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
+    <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
+
+        <RadzenStack Gap="0px" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="margin-top:20px">
+            @if (SelectedChips != null && SelectedChips.Any())
+            {
+                @foreach (var chip in SelectedChips)
+                    {
+                    <div class="@Constants.Styles.Chips.Chip" @onclick="@(() => ChangeUrl(NavigationLink, chip.Item2))">
+                        <RadzenText Text="@chip.Item1"  class=""/>
+                    </div>
+                    }
+                }
+            else
+            {
+                <RadzenText Text="לא נמצאו נתונים" Style="margin:5px"/>
+            }
+        </RadzenStack>
+                </RadzenFormField>
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public CipherNavLink? NavigationLink { get; set; } = new();
+
+    /// <summary>
+    /// Item 1 - chip's text
+    /// Item 2 - chip's Id
+    /// </summary>
+    [Parameter]
+    public List<Tuple<string,string>>? SelectedChips { get; set; } = new();
+
+    [Parameter]
+    public string Icon { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    private async Task ChangeUrl(CipherNavLink? NavHref, string NavId)
+    {
+        if (NavHref != null)
+        {
+            await JS.InvokeVoidAsync("openInNewTab", $"{NavHref.Href}?Id={NavId}");   
+        }
+    }
+}

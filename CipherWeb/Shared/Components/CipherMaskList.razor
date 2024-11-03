@@ -8,6 +8,7 @@
     @if (SelectedTexts != null && SelectedTexts.Any())
     {
         <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />
+
         <div class="@Constants.Styles.Chips.Container">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
                 @foreach (var text in SelectedTexts)
@@ -26,7 +27,6 @@
                 </span>
             </RadzenStack>
         </div>
-
     }
 </RadzenStack>
 

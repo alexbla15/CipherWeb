@@ -110,7 +110,7 @@
         return
         @<CipherAutoComplete Label="@(GetLabel(nameof(IUnit.Description)))" 
         Icon="@Icons.Documents.Page.description" ValueChanged="@ChangeDetail"
-                        Disabled="@IsDisabled()" Value="@value" @ref=UnitDescription />
+        Disabled="@IsDisabled()" Value="@value" @ref=UnitDescription />
     ;
     }
 
@@ -118,14 +118,11 @@
     {
         string label = GetLabel(nameof(IUnit.Parent));
         IUnit? chosenParent = ChosenObject?.Parent;
-        string? value = GetValue(chosenParent?.Name);
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Parent"
-                        Disabled="true"
-                        Value="@value" />;
+            @<CipherChips Icon="@Icons.Cipher.Unit" SelectedChips="@CommonFuncs.GetChip(chosenParent?.Name, chosenParent?.Id)" 
+            Label="@label" NavigationLink="@CipherNavLinks.UnitSearch" />;
 
         return
         @<CipherUnitDropDown Label="@label" Disabled="@IsDisabled()"

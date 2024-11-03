@@ -184,6 +184,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyQXV0b0NvbXBsZXRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherChips.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyQ2hpcHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherComponentCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyQ29tcG9uZW50Q2FyZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

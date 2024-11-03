@@ -119,25 +119,23 @@
 
         return
         @<CipherComments Label="@(GetLabel(nameof(IPackage.Description)))"
-                    Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
-        ;
+        Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
+    ;
     }
 
     private RenderFragment PackageParent()
     {
         string label = GetLabel(nameof(IPackage.Parent));
         IPackage? chosenParent = ChosenObject?.Parent;
-        string? value = GetValue(chosenParent?.Id);
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Parent"
-                        Disabled="true"
-                        Value="@value" />;
+            @<CipherChips Icon="@Icons.Cipher.Parent"
+                 SelectedChips="@CommonFuncs.GetChip(chosenParent?.Id, chosenParent?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.PackageSearch" />;
 
         return
-        @<CipherPackageId ChosenPackage="@chosenParent" Disabled="@IsDisabled()" Label="@label" />
+        @<CipherPackageId Icon="@Icons.Cipher.Parent" ChosenPackage="@chosenParent" Disabled="@IsDisabled()" Label="@label" />
     ;
     }
 
@@ -145,14 +143,12 @@
     {
         string label = GetLabel(nameof(IPackage.Category));
         ICategory? cat = ChosenObject?.Category;
-        string? value = GetValue(cat?.Name);
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Symbols.category"
-                        Disabled="true"
-                        Value="@value" />;
+            @<CipherChips Icon="@Icons.Symbols.category"
+                 SelectedChips="@CommonFuncs.GetChip(cat?.Name, cat?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.CategorySearch" />;
 
         return
         @<CipherCategoryDropDown ChosenCategory="@cat" Disabled="@IsDisabled()" />
@@ -163,14 +159,12 @@
     {
         string label = GetLabel(nameof(IPackage.Vessel));
         IVessel? ves = ChosenObject?.Vessel;
-        string? value = GetValue(ves?.Name);
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Vessel"
-                        Disabled="true"
-                        Value="@value" />;
+            @<CipherChips Icon="@Icons.Cipher.Vessel"
+                 SelectedChips="@CommonFuncs.GetChip(ves?.Name, ves?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.VesselSearch" />;
 
         return
         @<CipherVesselDropDown ChosenVessel="@ves" Disabled="@IsDisabled()" />
@@ -181,14 +175,12 @@
     {
         string label = GetLabel(nameof(IPackage.System));
         IStorageSystem? sys = ChosenObject?.System;
-        string? value = GetValue(sys?.Name);
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label"
-                        Icon="@Icons.Cipher.Location"
-                        Disabled="true"
-                        Value="@value" />;
+            @<CipherChips Icon="@Icons.Cipher.Location"
+                 SelectedChips="@CommonFuncs.GetChip(sys?.Name, sys?.Id)" Label="@label"
+                 NavigationLink="@CipherNavLinks.SystemSearch" />;
 
         return
         @<CipherLocation ChosenSystem = "@sys" Disabled = "@IsDisabled()" />
@@ -257,13 +249,14 @@
         string icon = Icons.Arrows.Squared.input;
         List<IProcessDefinition>? procs = ChosenObject?.DestinationProcesses;
         string label = GetLabel(nameof(IPackage.DestinationProcesses));
-        string? value = (procs != null && procs.Any()) ?
-        string.Join(", ", procs.Select(x => x.Name).ToList()) : "אין נתונים";
+        List<Tuple<string,string>>? chips = procs?.Where(x=>!string.IsNullOrEmpty(x.Name) && !string.IsNullOrEmpty(x.Id)).
+        Select(x => Tuple.Create(x.Name, x.Id)).ToList();
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label" Icon="@icon"
-                        Disabled="true" Value="@value" />;
+            @<CipherChips Icon="@icon"
+                 SelectedChips="@chips" Label="@label"
+                 NavigationLink="@CipherNavLinks.ProcessSearch" />;
 
         return
         @<CipherProcesses ChosenProcesses="@procs?.ToList()" Disabled="@IsDisabled()"
@@ -275,13 +268,13 @@
         string icon = Icons.Cipher.Children;
         List<IPackage>? packs = ChosenObject?.Children;
         string label = GetLabel(nameof(IPackage.Children));
-        string? value = (packs != null && packs.Any()) ?
-        string.Join(", ", packs.Select(x => x.Id).ToList()) : "אין נתונים";
+        List<Tuple<string, string?>>? chips = packs?.Where(x=>!string.IsNullOrEmpty(x.Id)).Select(x => Tuple.Create(x.Id, x.Id)).ToList();
 
         if (SetMode == FormMode.ReadOnly)
             return
-            @<CipherAutoComplete Label="@label" Icon="@icon"
-                        Disabled="true" Value="@value" />;
+            @<CipherChips Icon="@icon"
+                 SelectedChips="@chips" Label="@label"
+                 NavigationLink="@CipherNavLinks.PackageSearch" />;
 
         return
         @<CipherPackagesPicking SelectedPackages="@packs?.ToList()"

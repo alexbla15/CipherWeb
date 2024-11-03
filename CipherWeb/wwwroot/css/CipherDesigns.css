@@ -157,6 +157,11 @@
     align-items: center;
 }
 
+.cipher-chip:hover{
+    background-color: var(--rz-primary-light);
+    cursor:pointer;
+}
+
 .cipher-close .chip {
     background-color: var(--rz-chip-background-color);
 }
@@ -1335,7 +1340,8 @@ div:not(.rz-form-field-content) > .rz-spinner:disabled,
 div:not(.rz-form-field-content) > .rz-dropdown:disabled, div:not(.rz-form-field-content) > .mask:disabled,
 div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-content) > .rz-textbox:disabled {
     background-color: white;
-    opacity: 1;
+    color:black;
+    opacity: 0.9;
 }
 
     div:not(.rz-form-field-content) > .rz-spinner.rz-state-disabled .rz-inputtext {
@@ -1467,7 +1473,7 @@ div:not(.rz-form-field-content) > .rz-textarea:disabled, div:not(.rz-form-field-
 .rz-messages-error {
     display: flex;
     font-size: small;
-    padding-right: 0rem;
+    padding-right: 2.5rem;
 }
 
 .valid.modified:not([type=checkbox]) {
