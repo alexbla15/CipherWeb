@@ -260,13 +260,17 @@
 
         return
         @<CipherProcesses ChosenProcesses="@procs?.ToList()" Disabled="@IsDisabled()"
-                     Label="@label" />;
+        Label="@label" />
+    ;
     }
 
-    private RenderFragment PackageChildren()
+    private RenderFragment? PackageChildren()
     {
         string icon = Icons.Cipher.Children;
         List<IPackage>? packs = ChosenObject?.Children;
+
+        if (packs is null) return null;
+
         string label = GetLabel(nameof(IPackage.Children));
         List<Tuple<string, string?>>? chips = packs?.Where(x=>!string.IsNullOrEmpty(x.Id)).Select(x => Tuple.Create(x.Id, x.Id)).ToList();
 

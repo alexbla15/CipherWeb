@@ -2,7 +2,7 @@
 {
     public class RandomFuncs
     {
-        public static T RandomItem<T>(List<T> values) => values[new Random().Next(0, values.Count-1)];
+        public static T RandomItem<T>(List<T> values) => values[new Random().Next(0, values.Count)];
 
         public static DateTime RandomDateTime()
         {
@@ -14,9 +14,6 @@
 
             return randomDate.AddHours(-random.Next(0, 24)).AddMinutes(-random.Next(0, 60)).AddSeconds(-random.Next(0, 60));
         }
-
-        public static List<T> FillRandomObjects<T>(int amount, Func<string?, T> randomFunc) =>
-            Enumerable.Range(0, amount).Select(_ => randomFunc(null)).ToList();
 
         public static List<T> FillRandomObjects<T>(int amount, Func<T> randomFunc) =>
             Enumerable.Range(0, amount).Select(_ => randomFunc()).ToList();

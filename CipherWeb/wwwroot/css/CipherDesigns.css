@@ -60,6 +60,25 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
+.cipher_datacell {
+    font-style:italic;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+    .cipher_datacell:hover {
+        font-weight:bold;
+    }
+
+        .cipher_datacell:hover::before {
+            content: "\2190 "; /* Unicode for a right arrow */
+            display: inline;
+            color: inherit; /* Use the text color */
+            font-size: 1em; /* Adjust the size if needed */
+            margin-left: 5px; /* Space between arrow and the text */
+        }
+
 .cipher_body {
     background-color: var(--rz-primary-lighter);
     right: 0px;
@@ -655,13 +674,10 @@
     vertical-align: middle;
     color: white;
     font-size: x-large;
-    /*border: 3px solid var(--rz-primary-darker);*/
     border-radius: 5px;
-    /*padding: 15px;*/
     display: flex;
     justify-content: end;
     align-items: center;
-    /*background-color: var(--rz-primary-darker);*/
 }
 
     .rz-datatable .rzi-chevron-circle-right:hover,

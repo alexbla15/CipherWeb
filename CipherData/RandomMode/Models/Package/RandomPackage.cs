@@ -17,7 +17,14 @@
 
             CreatedAt = RandomFuncs.RandomDateTime();
             Parent = RandomFuncs.RandomItem(new List<Package>() { new() { Id = "PP1" }, new() { Id = "PP2" }, new() { Id = "PP3" } });
-            Children = new() { new Package() { Id = "PC1" }, new Package() { Id = "PC2" }, new Package() { Id = "PC3" } };
+            Children = RandomFuncs.RandomItem(new List<List<IPackage>?>()
+                { 
+                    new () { new Package() { Id = "PP1" }, new Package() { Id = "PP2" }, new Package() { Id = "PP3" } },
+                    new () { new Package() { Id = "PP1" }, new Package() { Id = "PP2" } },
+                    new () { new Package() { Id = "PP1" }},
+                    null,
+                }
+            );
             DestinationProcesses = new List<IProcessDefinition>();
         }
 

@@ -73,12 +73,83 @@
 
     public async void Navigate(string path) => 
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
+
+    private bool IsClickable(string? prop)
+    {
+        if (string.IsNullOrEmpty(prop)) return false;
+
+        List<string> PackageKeys = new() { nameof(IPackage.Vessel), nameof(IPackage.System), nameof(IPackage.Category), nameof(IPackage.Parent) };
+        List<string> SysKeys = new() { nameof(IStorageSystem.Parent), nameof(IStorageSystem.Unit) };
+        List<string> EventKeys = new() { nameof(IEvent.ProcessId) };
+
+        List<string> ClickableWords = new();
+        ClickableWords.AddRange(PackageKeys.Select(x => IPackage.Translate(x)).ToList());
+        ClickableWords.AddRange(SysKeys.Select(x => IStorageSystem.Translate(x)).ToList());
+
+        return ClickableWords.Contains(prop);
+    }
+
+    private static Dictionary<Type, CipherNavLink> pathMap = SetPathMap();
+
+    private static Dictionary<Type, CipherNavLink> SetPathMap()
+    {
+        Dictionary<Type, CipherNavLink> pathMap = new();
+        pathMap.Add(typeof(ICategory), CipherNavLinks.CategorySearch);
+        pathMap.Add(typeof(IPackage), CipherNavLinks.PackageSearch);
+        pathMap.Add(typeof(IProcess), CipherNavLinks.ProcessSearch);
+        pathMap.Add(typeof(IStorageSystem), CipherNavLinks.SystemSearch);
+        pathMap.Add(typeof(IUnit), CipherNavLinks.UnitSearch);
+        pathMap.Add(typeof(IVessel), CipherNavLinks.VesselSearch);
+        return pathMap;
+    }
+
+    private bool ReferencedCellClicked = false;
+
+    private void OnCellDoubleClick(DisplayedObject data, string prop)
+    {
+        object obj = data.OriginalObject;
+
+        // Get the property information of the selected property
+        PropertyInfo? objProp = obj.GetType().GetProperty(prop);
+
+        // the property must be a IResource for this method to work
+        IResource? res = objProp?.GetValue(obj) as IResource;
+        string? id = res?.Id;
+
+        if (string.IsNullOrEmpty(id)) return;
+
+        foreach (Type resType in pathMap.Keys)
+        {
+            if (resType.IsAssignableFrom(objProp?.PropertyType)) 
+                Navigate($"{pathMap[resType].Href}?Id={id}");
+        }
+
+        ReferencedCellClicked = true;
+    }
+
+    private void OnRowDoubleClick(DataGridRowMouseEventArgs<DisplayedObject> row)
+    {
+        if (!ReferencedCellClicked)
+        {
+            object originalObj = row.Data.OriginalObject;
+            IResource? obj = originalObj as IResource;
+            string? id = obj?.Id;
+
+            foreach (Type resType in pathMap.Keys)
+            {
+                if (resType.IsAssignableFrom(originalObj.GetType()))
+                    Navigate($"{pathMap[resType].Href}?Id={id}");
+            }
+        }
+        ReferencedCellClicked = false;
+    }
 }
 
 @if (DataSource != null && DataSource.Any())
 {
     <RadzenDataGrid @ref="CustomDataGrid" @bind-Value=@selectedRow
-                    Visible="@Visible"
+                    Visible="@Visible" 
+                    RowDoubleClick="@(args => OnRowDoubleClick(args))"
                     TItem="DisplayedObject"
                     Data="@DataSource"
                     LoadData="LoadData"
@@ -133,12 +204,21 @@
                         {
                             @if (prop != null)
                             {
-                                @if (SelectedColumns != null && SelectedColumns.Contains(prop.Name))
+                                @if (SelectedColumns != null && prop?.Name != null && SelectedColumns.Contains(prop.Name))
                                 {
                                     <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
-                                        <Template>
-                                        @context.Properties?.Where(x => x.Name == prop.Name).First().Value
-                                    </Template>
+                                        <Template Context="data" >
+                                            @if (IsClickable(prop.Translation))
+                                            {
+                                                <span @ondblclick="() => OnCellDoubleClick(data, prop.Name)" class="cipher_datacell">
+                                                    @data.Properties?.Where(x => x.Name == prop.Name).First().Value
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @data.Properties?.Where(x => x.Name == prop.Name).First().Value
+                                            }
+                                        </Template>
                                     <FooterTemplate>
                                         @GetFooter(properties.IndexOf(prop))
                                     </FooterTemplate>

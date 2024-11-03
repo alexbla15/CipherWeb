@@ -9,10 +9,13 @@ namespace CipherData.General
         public string? Translation { get; set; }
         public object? Value { get; set; }
         public int? Order { get; set; }
+
     }
 
     public class DisplayedObject
     {
+        public object OriginalObject { get; set; }
+
         /// <summary>
         /// All the properties of the selected object
         /// </summary>
@@ -26,6 +29,8 @@ namespace CipherData.General
         /// <returns></returns>
         public DisplayedObject(object obj, List<string>? UnwantedProperties = null)
         {
+            OriginalObject = obj;
+
             UnwantedPropertiesNames = UnwantedProperties ?? new();
 
             Properties = new();

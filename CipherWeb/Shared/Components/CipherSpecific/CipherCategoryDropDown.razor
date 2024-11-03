@@ -23,7 +23,7 @@
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@Label:</b> @((context as ICategory)?.Name)
+            <b>@ICategory.Translate(nameof(ICategory.Name)):</b> @((context as ICategory)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
