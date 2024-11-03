@@ -57,7 +57,19 @@
 
     private IList<DisplayedObject>? selectedRow;
 
-    public string? GetFooter(int index) => (index == 0) ? $"כמות שורות: {CustomDataGrid.View.Count()}" : null;
+    public string? GetFooter(int index)
+    {
+        if (index != 0) return null;
+
+        int pageSize = CustomDataGrid.PageSize;
+        int currentPage = CustomDataGrid.CurrentPage;
+        int totalRows = CustomDataGrid.View.Count();
+
+        int startRow = (currentPage * pageSize) + 1;
+        int endRow = Math.Min(startRow + pageSize - 1, totalRows);
+
+        return $"שורות {startRow}-{endRow} מתוך {totalRows}";
+    }
 
     public async void Navigate(string path) => 
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
