@@ -1,5 +1,12 @@
 ﻿@page "/Searches"
 
-<PageTitle>@CipherNavLinks.Searches.Name</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherPointers Title="@CipherNavLinks.Searches.Name" NavLinkType="חיפוש"/>
+    <CipherPointers Title="@navLink.Name" SelectedLinks="@navLink.SubLinks" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.Searches;
+}

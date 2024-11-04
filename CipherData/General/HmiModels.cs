@@ -31,6 +31,11 @@ namespace CipherData.General
         public string? Href { get; set; }
         public string? Icon { get; set; }
         public List<CipherNavLink>? SubLinks { get; set; } = new();
+
+        /// <summary>
+        /// Minimal group level to be able to view the page
+        /// </summary>
+        public int RestrictionLevel { get; set; } = 0;
     }
 
     [HebrewTranslation(nameof(CipherField))]

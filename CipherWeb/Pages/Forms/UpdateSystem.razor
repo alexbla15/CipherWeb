@@ -1,3 +1,10 @@
 ﻿@page "/Forms/Updates/System"
 
-<ResourceFormHandler Cipher_TItem="IStorageSystem" NavLink="CipherNavLinks.UpdateSystem" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IStorageSystem" NavLink="@navLink" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UpdateSystem;
+}

@@ -4,46 +4,49 @@
 
 @inject NavigationManager Navigation
 
-<PageTitle>@Title</PageTitle>
+@if (CommonFuncs.CanView(NavLink))
+{
+    <PageTitle>@NavLink.Name</PageTitle>
 
-<ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" />
+    <ResourceForm @ref="ResourcePage" Title="@NavLink?.Name">
+        <CipherFormInfo @ref="FormInfo" />
 
-    <CipherComponentCard Title="בחירת תעודה">
-        <CipherPackageId @ref=OriginalPackage Change="Change" ChosenPackage="ChosenPackage"/>
-    </CipherComponentCard>
+        <CipherComponentCard Title="בחירת תעודה">
+            <CipherPackageId @ref=OriginalPackage Change="Change" ChosenPackage="ChosenPackage" />
+        </CipherComponentCard>
 
-    @if (ChosenPackage != null)
-    {
-        <CipherComponentCard Title="שינוי פרמטרים" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-            <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)"/>
-            <CipherComments @ref=PackDescription Label="@(IPackage.Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
-            Icon="@Icons.Documents.Page.description" Comments="@ChosenPackage?.Description" />
-            <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((IPackage.Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
-            <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((IPackage.Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+        @if (ChosenPackage != null)
+        {
+            <CipherComponentCard Title="שינוי פרמטרים" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+                <CipherAutoComplete Label="מספר תעודה חדש" Icon="@Icons.Cipher.Package" Value="@ChosenPackage?.Id" @ref=newId Disabled="@(ChosenPackage == null)" />
+                <CipherComments @ref=PackDescription Label="@(IPackage.Translate(nameof(IPackage.Description)))" Disabled="@(ChosenPackage == null)"
+                                Icon="@Icons.Documents.Page.description" Comments="@ChosenPackage?.Description" />
+                <CipherNumeric @ref=SetBrutMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.BrutMass)" Label="@((IPackage.Translate(nameof(IPackage.BrutMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
+                <CipherNumeric @ref=SetNetMass Amount="@((ChosenPackage == null) ? 0 : ChosenPackage.NetMass)" Label="@((IPackage.Translate(nameof(IPackage.NetMass))))" Icon="@Icons.Professions.Construction.scale" Disabled="@(ChosenPackage == null)" />
 
-            <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" Disabled="@(ChosenPackage == null)"/>
-            <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" Disabled="@(ChosenPackage == null)"/>
-            <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" Disabled="@(ChosenPackage == null)" />
+                <CipherCategoryDropDown @ref=SetCategory ChosenCategory="@ChosenPackage?.Category" Disabled="@(ChosenPackage == null)" />
+                <CipherVesselDropDown @ref=SetVessel ChosenVessel="@ChosenPackage?.Vessel" Disabled="@(ChosenPackage == null)" />
+                <CipherLocation @ref=SetSystem ChosenSystem="@ChosenPackage?.System" Disabled="@(ChosenPackage == null)" />
 
-            <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" Disabled="@(ChosenPackage == null)"/>
-            <CipherPackageId @ref=ParentPack ChosenPackage="@(ChosenPackage?.Parent)" Label="@((IPackage.Translate(nameof(IPackage.Parent))))" Disabled="@(ChosenPackage == null)" />
-            <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@((IPackage.Translate(nameof(IPackage.Children))))" Disabled="@(ChosenPackage == null)"/>
+                <CipherProcesses @ref=Destinations ChosenProcesses="@ChosenPackage?.DestinationProcesses?.ToList()" Label="@(IPackage.Translate(nameof(IPackage.DestinationProcesses)))" Disabled="@(ChosenPackage == null)" />
+                <CipherPackageId @ref=ParentPack ChosenPackage="@(ChosenPackage?.Parent)" Label="@((IPackage.Translate(nameof(IPackage.Parent))))" Disabled="@(ChosenPackage == null)" />
+                <CipherPackagesPicking @ref=SetChildren SelectedPackages="@ChosenPackage?.Children?.ToList()" Label="@((IPackage.Translate(nameof(IPackage.Children))))" Disabled="@(ChosenPackage == null)" />
 
-    </CipherComponentCard>
+            </CipherComponentCard>
 
-        <CipherPackageProperties @ref="PackProps" ChosenProperties="@(NewProps ?? new())" ChangeDetails="@ChangeNewProps" />
+            <CipherPackageProperties @ref="PackProps" ChosenProperties="@(NewProps ?? new())" ChangeDetails="@ChangeNewProps" />
 
-        <CipherComponentCard Title="הערות עבור עדכון" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-        <CipherComments @ref="EventComments" Disabled="@(ChosenPackage == null)" />
-    </CipherComponentCard>
+            <CipherComponentCard Title="הערות עבור עדכון" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+                <CipherComments @ref="EventComments" Disabled="@(ChosenPackage == null)" />
+            </CipherComponentCard>
 
-    <CipherJsonCheck JsonValue="@UpdatePackJsonRequest"/>
-    <CipherJsonCheck JsonValue="@CreateEventJsonRequest"/>
-    }
+            <CipherJsonCheck JsonValue="@UpdatePackJsonRequest" />
+            <CipherJsonCheck JsonValue="@CreateEventJsonRequest" />
+        }
 
-    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenPackage != null)"/>
-</ResourceForm>
+        <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission Visible="@(ChosenPackage != null)" />
+    </ResourceForm>
+}
 
 @code
 {
@@ -64,12 +67,6 @@
     /// </summary>
     [Parameter]
     public string? PackId { get; set; }
-
-    /// <summary>
-    /// Page title.
-    /// </summary>
-    [Parameter]
-    public string Title { get; set; } = "עדכון תעודה";
 
     /// <summary>
     /// Json request that will be sent to the API server. (Specific for update package request)
@@ -264,7 +261,7 @@
             UpdatePackEvent.Comments = EventComments.GetValue();
             UpdatePackEvent.Actions.Add(NewPack.Request());
 
-            Tuple<bool,string> CheckResult = UpdatePackEvent.Check();
+            Tuple<bool, string> CheckResult = UpdatePackEvent.Check();
             (Valid, ErrorMessage) = (CheckResult.Item1, $"שגיאה ב{CheckResult.Item2}");
         }
     }
@@ -350,7 +347,7 @@
             different = true;
         }
 
-        
+
         if ((OriginalPack.Children != null) && (NewPack.Children != null))
         {
             different |= !OriginalPack.Children.Select(x => x.Id).ToHashSet().SetEquals(NewPack.Children.Select(x => x.Id));

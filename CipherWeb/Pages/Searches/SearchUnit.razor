@@ -1,5 +1,12 @@
-﻿@page "/Searches/Unit"
+﻿@page "/Searches/UnitSearch"
 
 @using CipherWeb.Pages.Forms
 
-<ResourceFormHandler NavLink="@CipherNavLinks.UnitSearch" Cipher_TItem="IUnit" Mode="@FormMode.ReadOnly" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler NavLink="@navLink" Cipher_TItem="IUnit" Mode="@FormMode.ReadOnly" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UnitSearch;
+}

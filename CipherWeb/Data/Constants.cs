@@ -57,7 +57,7 @@ namespace CipherWeb.Data
 
         public static readonly bool CheckJsons = true;
 
-        public static readonly IWorker SetUser = new Worker() { Name = "אלכס בלחמן" };
+        public static readonly IWorker SetUser = new Worker() { Name = "אלכס בלחמן", Group=WorkerGroup.Manager};
 
         public static readonly string CompanyName = "היחידה להנדסת תהליך";
         public static readonly string DeveloperNames = "אלכס בלחמן ושחר פייט";

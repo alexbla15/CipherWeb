@@ -1,3 +1,10 @@
 ﻿@page "/Forms/Updates/Vessel"
 
-<ResourceFormHandler Cipher_TItem="IVessel" NavLink="CipherNavLinks.UpdateVessel" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IVessel" NavLink="@navLink" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UpdateVessel;
+}

@@ -2,16 +2,18 @@
 using System.Reflection;
 using CipherData.General;
 using CipherData.ApiMode;
-using CipherData;
-using Microsoft.AspNetCore.Components;
 using CipherWeb.Data;
-using CipherWeb.Shared.Components;
-using System.Reflection.Emit;
 
 namespace CipherWeb
 {
     public class CommonFuncs
     {
+        /// <summary>
+        /// Method to check if user's classification is enough to view page
+        /// </summary>
+        public static bool CanView(CipherNavLink link)
+            => Constants.SetUser.CanView(link);
+
         /// <summary>
         /// Get a list of all available field within a Cipher data model.
         /// </summary>

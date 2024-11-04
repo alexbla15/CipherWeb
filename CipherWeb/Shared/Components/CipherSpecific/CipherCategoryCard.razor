@@ -7,7 +7,8 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="תכונות" WithCard="true" WithButtons="@(SetMode == FormMode.ReadOnly)"
+            <CipherComponentCard Title="תכונות" WithCard="true" 
+            WithButtons="@(SetMode == FormMode.ReadOnly && CommonFuncs.CanView(CipherNavLinks.UpdateCategory))"
                                  ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
                     <CipherUpdateCategoryBtn ObjectId="@ChosenObject?.Id" />
@@ -174,7 +175,7 @@
             NavigationLink="@CipherNavLinks.CategorySearch"/>;
 
         return
-        @<CipherCategoryDropDown Label="@label" @ref=ParentCat Icon="@icon"
+        @<CipherCategoryDropDown Label="@label" @ref=ParentCat Icon="@icon" Prefix="@label"
                             Change="@(args => ChangedParent((ICategory?)args))"
         Disabled="@ReadonlyFields()" ChosenCategory="@chosenParent" />
     ;

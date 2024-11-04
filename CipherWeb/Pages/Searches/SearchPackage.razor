@@ -1,5 +1,12 @@
-﻿@page "/Searches/Package"
+﻿@page "/Searches/PackageSearch"
 
 @using CipherWeb.Pages.Forms
 
-<ResourceFormHandler NavLink="@CipherNavLinks.PackageSearch" Cipher_TItem="IPackage" Mode="@FormMode.ReadOnly" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler NavLink="@navLink" Cipher_TItem="IPackage" Mode="@FormMode.ReadOnly" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.PackageSearch;
+}

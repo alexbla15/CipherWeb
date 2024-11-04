@@ -1,3 +1,10 @@
 ﻿@page "/forms/AddPackage"
 
-<ResourceFormHandler Cipher_TItem="IPackage" NavLink="@CipherNavLinks.AddPackage" Mode="@FormMode.Create" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IPackage" NavLink="@navLink" Mode="@FormMode.Create" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.AddPackage;
+}

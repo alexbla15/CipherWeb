@@ -1,3 +1,10 @@
 ﻿@page "/forms/AddUnit"
 
-<ResourceFormHandler Cipher_TItem="IUnit" NavLink="@CipherNavLinks.AddUnit" Mode="@FormMode.Create" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IUnit" NavLink="@navLink" Mode="@FormMode.Create" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.AddUnit;
+}

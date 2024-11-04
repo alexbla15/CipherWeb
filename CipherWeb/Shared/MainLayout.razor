@@ -22,22 +22,28 @@
 
             @foreach (CipherNavLink myLink in CipherNavLinks.links)
             {
-                <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
-                    @if (myLink.SubLinks != null)
-                    {
-                        @if (myLink.SubLinks.Any())
+                @if (CommonFuncs.CanView(myLink))
+                {
+                    <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
+                        @if (myLink.SubLinks != null)
                         {
-                            @foreach (CipherNavLink mySubLink in myLink.SubLinks)
+                            @if (myLink.SubLinks.Any())
                             {
-                                <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
+                                @foreach (CipherNavLink mySubLink in myLink.SubLinks)
+                                {
+                                    @if (CommonFuncs.CanView(mySubLink))
+                                    {
+                                        <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
+                                    }
+                                }
                             }
                         }
-                    }
-                </RadzenPanelMenuItem>
+                    </RadzenPanelMenuItem>
+                }
             }
 
             <RadzenStack Style="position:relative; padding-top:20px" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
-                <CipherFooter Padding=0 MaxWidth="80%" LogoHeight="5vh" BackgroundColor="@Colors.PrimaryLighter"/>
+                <CipherFooter Padding=0 MaxWidth="80%" LogoHeight="5vh" BackgroundColor="@Colors.PrimaryLighter" />
             </RadzenStack>
 
         </RadzenPanelMenu>

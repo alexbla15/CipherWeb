@@ -22,6 +22,6 @@
 		<ProjectReference Include="..\CipherData\CipherData.csproj" />
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" wwwroot_4css_4bootstrap_4bootstrap_1min_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

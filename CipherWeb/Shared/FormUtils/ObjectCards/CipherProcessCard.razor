@@ -7,7 +7,8 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="פרטי התהליך" WithButtons="@(SetMode == FormMode.ReadOnly)"
+            <CipherComponentCard Title="פרטי התהליך" 
+            WithButtons="@(SetMode == FormMode.ReadOnly && CommonFuncs.CanView(CipherNavLinks.UpdateProcess))"
                                  ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <Buttons>
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"

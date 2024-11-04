@@ -1,18 +1,21 @@
 ﻿@page "/Forms/Relocation"
 
-<ResourceForm Title="@NavLink?.Name">
-    <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
+@if (CommonFuncs.CanView(NavLink))
+{
+    <ResourceForm Title="@NavLink?.Name">
+        <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
 
-    <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-        <CipherLocation Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
-        <CipherPackagesPicking Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
-        <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
-    </CipherComponentCard>
-    
-    <CipherJsonCheck JsonValue="@JsonRequest"/>
+        <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
+            <CipherLocation Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.TargetSystem))" @ref=FinalLocation />
+            <CipherPackagesPicking Change="@SetJsonRequest" Label="@ICreateRelocationEvent.Translate(nameof(ICreateRelocationEvent.Packages))" @ref="RelocatedPacks" />
+            <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
+        </CipherComponentCard>
 
-    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
-</ResourceForm>
+        <CipherJsonCheck JsonValue="@JsonRequest" />
+
+        <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
+    </ResourceForm>
+}
 
 @code {
     /// <summary>

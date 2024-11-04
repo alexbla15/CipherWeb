@@ -1,3 +1,10 @@
 ﻿@page "/Forms/Updates/Category"
 
-<ResourceFormHandler Cipher_TItem="ICategory" NavLink="CipherNavLinks.UpdateCategory" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="ICategory" NavLink="@navLink" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UpdateCategory;
+}

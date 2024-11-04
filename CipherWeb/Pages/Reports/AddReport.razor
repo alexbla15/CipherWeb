@@ -1,5 +1,12 @@
-﻿@page "/Reports/AddReport"
+﻿@page "/Reports/Add"
 
-<PageTitle>@CipherNavLinks.AddReport.Name</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherReportWizard />
+    <CipherReportWizard />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.AddReport;
+}

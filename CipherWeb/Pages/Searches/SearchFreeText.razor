@@ -3,7 +3,9 @@
 @inject DialogService DialogService
 @inject NavigationManager navigationManager
 
-<PageTitle>חיפוש חופשי</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+<PageTitle>@navLink.Name</PageTitle>
 
 <CipherComponentCard Title="תוצאות חיפוש עבור" MaxHeigth="100%">
     <HeaderContent>
@@ -25,6 +27,7 @@
         </RadzenAccordion>
     </ChildContent>
 </CipherComponentCard>
+}
 
 @code {
     /// <summary>
@@ -50,6 +53,8 @@
     /// </summary>
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    private CipherNavLink navLink = CipherNavLinks.FreeText;
 
     private static List<IPackage>? packs = new();
     private static List<IVessel>? vessels = new();

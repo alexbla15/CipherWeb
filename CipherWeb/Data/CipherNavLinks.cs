@@ -1,6 +1,5 @@
 ﻿using CipherData;
 using CipherData.General;
-using CipherWeb.Pages.Reports;
 
 namespace CipherWeb.Data
 {
@@ -37,55 +36,64 @@ namespace CipherWeb.Data
             new() { 
                 Href = FormHref(nameof(AddPackage)), 
                 Name = FormName(nameof(AddPackage)), 
-                Icon = Icons.Symbols.Plus.add_circle_outline 
+                Icon = Icons.Symbols.Plus.add_circle_outline,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink TransferAmount = 
             new() { 
                 Href = FormHref(nameof(TransferAmount)), 
                 Name = FormName(nameof(TransferAmount)), 
-                Icon = Icons.Cipher.Transfer 
+                Icon = Icons.Cipher.Transfer,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink Relocation = 
             new() { 
                 Href = FormHref(nameof(Relocation)), 
                 Name = FormName(nameof(Relocation)), 
-                Icon = Icons.Cipher.Location 
+                Icon = Icons.Cipher.Location,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink AddCategory = 
             new() { 
                 Href = FormHref(nameof(AddCategory)), 
                 Name = FormName(nameof(AddCategory)), 
-                Icon = Icons.Symbols.category 
+                Icon = Icons.Symbols.category,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink AddProcessDefinition = 
             new() { 
                 Href = FormHref(nameof(AddProcessDefinition)), 
                 Name = FormName(nameof(AddProcessDefinition)), 
-                Icon = Icons.Cipher.Process 
+                Icon = Icons.Cipher.Process,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink AddVessel = 
             new() { 
                 Href = FormHref(nameof(AddVessel)),
                 Name = FormName(nameof(AddVessel)),
-                Icon = Icons.Cipher.Vessel 
+                Icon = Icons.Cipher.Vessel,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink AddStorageSystem = 
             new() { 
                 Href = FormHref(nameof(AddStorageSystem)),
                 Name = FormName(nameof(AddStorageSystem)),
-                Icon = Icons.Documents.inventory };
+                Icon = Icons.Documents.inventory,
+                RestrictionLevel = 1
+            };
 
         public static readonly CipherNavLink AddUnit = 
             new() { 
                 Href = FormHref(nameof(AddUnit)),
                 Name = FormName(nameof(AddUnit)),
-                Icon = Icons.Cipher.Unit 
+                Icon = Icons.Cipher.Unit,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink Forms = new()
@@ -93,6 +101,7 @@ namespace CipherWeb.Data
             Href = FormHref(),
             Icon = Icons.Documents.Edit.edit,
             Name = Translate(nameof(Forms)),
+            RestrictionLevel = 1,
             SubLinks = new()
                 { AddPackage, TransferAmount, Relocation,
                 AddCategory, AddProcessDefinition, AddVessel, AddStorageSystem, AddUnit }
@@ -103,7 +112,8 @@ namespace CipherWeb.Data
             { 
                 Href = UpdateHref(nameof(UpdateCategory)),
                 Name = UpdateName(nameof(UpdateCategory)), 
-                Icon = Icons.Symbols.category 
+                Icon = Icons.Symbols.category,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdatePackage = 
@@ -111,7 +121,8 @@ namespace CipherWeb.Data
             { 
                 Href = UpdateHref(nameof(UpdatePackage)),
                 Name = UpdateName(nameof(UpdatePackage)),
-                Icon = Icons.Cipher.Package 
+                Icon = Icons.Cipher.Package,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdateUnit = 
@@ -119,7 +130,8 @@ namespace CipherWeb.Data
             {
                 Href = UpdateHref(nameof(UpdateUnit)),
                 Name = UpdateName(nameof(UpdateUnit)),
-                Icon = Icons.Cipher.Unit 
+                Icon = Icons.Cipher.Unit,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdateVessel = 
@@ -127,7 +139,8 @@ namespace CipherWeb.Data
             { 
                 Href = UpdateHref(nameof(UpdateVessel)),
                 Name = UpdateName(nameof(UpdateVessel)),
-                Icon = Icons.Cipher.Vessel 
+                Icon = Icons.Cipher.Vessel,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdateSystem = 
@@ -135,7 +148,8 @@ namespace CipherWeb.Data
             { 
                 Href = UpdateHref(nameof(UpdateSystem)),
                 Name = UpdateName(nameof(UpdateSystem)),
-                Icon = Icons.Cipher.Location 
+                Icon = Icons.Cipher.Location,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdateProcess = 
@@ -143,7 +157,8 @@ namespace CipherWeb.Data
             { 
                 Href = UpdateHref(nameof(UpdateProcess)),
                 Name = UpdateName(nameof(UpdateProcess)),
-                Icon = Icons.Cipher.Process 
+                Icon = Icons.Cipher.Process,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink Updates = new()
@@ -151,27 +166,32 @@ namespace CipherWeb.Data
             Href = UpdateHref(),
             Icon = Icons.Design.rebase_edit,
             Name = Translate(nameof(Updates)),
-            SubLinks = new() { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess}
+            SubLinks = new() { UpdateCategory, UpdatePackage, UpdateUnit, UpdateVessel, UpdateSystem, UpdateProcess},
+            RestrictionLevel = 1
         };
 
         public static readonly CipherNavLink Approval = new() { 
             Href = "Approval", 
             Icon = Icons.Symbols.V.done, 
-            Name = Translate(nameof(Approval)) 
+            Name = Translate(nameof(Approval)),
+            RestrictionLevel = 1
         };
 
         public static readonly CipherNavLink AddReport = 
             new() { 
                 Href = ReportHref(nameof(AddReport)),
                 Name = ReportName(nameof(AddReport)), 
-                Icon = Icons.Documents.assignment_add
+                Icon = Icons.Documents.assignment_add,
+                RestrictionLevel = 1
             };
 
         public static readonly CipherNavLink UpdateReport = 
             new() { 
                 Href = ReportHref(nameof(UpdateReport)),
                 Name = ReportName(nameof(UpdateReport)),
-                Icon = Icons.Documents.Edit.edit_document};
+                Icon = Icons.Documents.Edit.edit_document,
+                RestrictionLevel = 1
+            };
 
         public static readonly CipherNavLink PackagesReport = 
             new() { 
@@ -194,20 +214,6 @@ namespace CipherWeb.Data
                 Icon = Icons.Data.device_hub 
             };
 
-        public static readonly CipherNavLink UnitsReport = 
-            new() { 
-                Href = ReportHref(nameof(UnitsReport)),
-                Name = ReportName(nameof(UnitsReport)),
-                Icon = Icons.Cipher.Unit 
-            };
-
-        public static readonly CipherNavLink LocationsReport = 
-            new() { 
-                Href = ReportHref(nameof(LocationsReport)),
-                Name = ReportName(nameof(LocationsReport)),
-                Icon = Icons.Cipher.Location 
-            };
-
         public static readonly CipherNavLink ProcessesReport = 
             new() { 
                 Href = ReportHref(nameof(ProcessesReport)),
@@ -221,7 +227,7 @@ namespace CipherWeb.Data
             Icon = Icons.Cipher.Summary,
             Name = Translate(nameof(Reports)),
             SubLinks = new()
-                { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, UnitsReport, LocationsReport, ProcessesReport }
+                { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, ProcessesReport }
         };
 
         public static readonly CipherNavLink FreeText = 

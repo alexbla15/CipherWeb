@@ -23,12 +23,18 @@
             </RadzenDropDownDataGridColumn>
         </Columns>
         <ValueTemplate>
-            <b>@ICategory.Translate(nameof(ICategory.Name)):</b> @((context as ICategory)?.Name)
+            <b>@Prefix:</b> @((context as ICategory)?.Name)
         </ValueTemplate>
     </RadzenDropDownDataGrid>
 </CipherFormRow>
 
 @code {
+    /// <summary>
+    /// Prefix to text once value is selected
+    /// </summary>
+    [Parameter]
+    public string Prefix { get; set; } = ICategory.Translate(nameof(ICategory.Name));
+
     /// <summary>
     /// Is the drop down disabled.
     /// </summary>

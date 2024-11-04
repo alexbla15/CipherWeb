@@ -2,12 +2,19 @@
 
 @inject TooltipService tooltipService
 
-<PageTitle>מסך פתיחה</PageTitle>
-
-<CipherTopNavBar />
-<CipherProcessesScheduler />
-
-@if (Roles.CurrnetRole == Roles.SysManager)
+@if (CommonFuncs.CanView(navLink))
 {
-    <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" />
+    <PageTitle>@navLink.Name</PageTitle>
+
+    <CipherTopNavBar />
+    <CipherProcessesScheduler />
+
+    @if (Constants.SetUser.Group == WorkerGroup.Manager)
+    {
+        <CipherPackagesTable AllowFilter="false" AllowGroup="false" Title="סיכום חומרים" />
+    }
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.Home;
 }

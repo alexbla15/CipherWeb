@@ -1,4 +1,4 @@
-﻿@page "/Reports/UpdateReport"
+﻿@page "/Reports/Update"
 
 @inject NavigationManager NavigationManager
 
@@ -7,12 +7,15 @@
 @using CipherWeb.Pages.Forms
 @using Microsoft.AspNetCore.WebUtilities;
 
-<ResourceForm @ref=ResForm Title="@NavLink.Name">
+@if (CommonFuncs.CanView(NavLink))
+{
+    <ResourceForm @ref=ResForm Title="@NavLink.Name">
     <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
     <br/>
     <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
     OriginalReport="@(ChosenReport is null ? new () : ICipherClass.Copy(ChosenReport))" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
 </ResourceForm>
+}
 
 @code {
     [Parameter]

@@ -1,5 +1,12 @@
-﻿@page "/Searches/Advanced"
+﻿@page "/Searches/AdvancedSearch"
 
-<PageTitle>@CipherNavLinks.AdvancedSearch.Name</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherFilterObjects />
+    <CipherFilterObjects />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.AdvancedSearch;
+}

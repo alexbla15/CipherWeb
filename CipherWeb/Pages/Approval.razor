@@ -2,11 +2,13 @@
 
 @using System.Reflection
 
-<PageTitle>@Title</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
 <RadzenStack Orientation="Orientation.Vertical">
     <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnSave="@RefreshEvents" />
-    <CipherDisplayedEventsCard Title="@Title" @bind-AllEvents="@PendingEvents" @ref="PendingEventsCard"
+    <CipherDisplayedEventsCard Title="@navLink.Name" @bind-AllEvents="@PendingEvents" @ref="PendingEventsCard"
                                WithApproveButton="true" WithDeclineButton="true" UponApproval="@UponApproval" UponDecline="@UponDecline" />
     <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-AllEvents="@ApprovedEvents" @ref="ApprovedEventsCard"
                                WithDeclineButton="true" UponDecline="@CancelApproval" DeclineAllText="ביטול כל האישורים"/>
@@ -15,6 +17,7 @@
     <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
     <CipherJsonCheck JsonValue="@JsonRequest" />
 </RadzenStack>
+}
 
 @code {
     /// <summary>
@@ -34,12 +37,6 @@
     /// </summary>
     [Parameter]
     public List<IEvent> DeclinedEvents { get; set; } = new();
-
-    /// <summary>
-    /// Page Title.
-    /// </summary>
-    [Parameter]
-    public string? Title { get; set; }
 
     /// <summary>
     /// Json request that will be sent to the API server.
@@ -77,12 +74,10 @@
     private CipherDisplayedEventsCard DeclinedEventsCard = new();
     private CipherSubmit submission = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        Title ??= CipherNavLinks.Approval.Name;
+    private CipherNavLink navLink = CipherNavLinks.Approval;
 
-        (PendingEvents, Error) = await Config.Event(false).PendingEvents();
-    }
+    protected override async Task OnInitializedAsync()
+        => (PendingEvents, Error) = await Config.Event(false).PendingEvents();
 
     public void UponApproval()
     {

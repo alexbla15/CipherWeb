@@ -20,31 +20,6 @@
 
     public string NewRole = string.Empty;
 
-    public async Task ChangeRole()
-    {
-        var result = await DialogService.OpenAsync("", ds =>
-    @<RadzenStack Gap="1rem" Style="text-align:right;" dir="rtl" AlignItems="AlignItems.Center">
-        <CipherAutoComplete Icon="@Icons.Cipher.Account_Old" Label="תצוגה נוכחית" Value="@Roles.CurrnetRole" Style="width: 200px" Disabled="true" />
-        <CipherAutoComplete Icon="@Icons.Cipher.Account_New" Label="תצוגה חדשה" Style="width: 200px" @bind-Value=@NewRole Data="@Roles.Get()" />
-        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
-            <RadzenStack Orientation="Orientation.Horizontal">
-                <CipherButton Variant="Variant.Outlined" Icon="@Icons.Symbols.V.done" Text="אישור" Click="() => ds.Close(ChangeRoleView())" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Width="100px" />
-                <CipherButton Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Click="() => ds.Close(false)" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Dark" Width="100px" />
-            </RadzenStack>
-        </RadzenStack>
-    </RadzenStack>
-        );
-    }
-
-    /// <summary>
-    /// Set a different role, and close the dialog.
-    /// </summary>
-    public bool ChangeRoleView()
-    {
-        Roles.CurrnetRole = NewRole;
-        return true;
-    }
-
     /// <summary>
     /// Set the common-width of each block.
     /// </summary>
@@ -72,7 +47,7 @@
                 <RadzenText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right" Style="color: var(--cipher-header-color);" TextStyle="TextStyle.H6" />
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
                     <CipherButton Icon="@Icons.Social.SinglePerson.account_circle" Size="ButtonSize.Small" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker"
-                                  Click="@(args => ChangeRole())" Text="@Roles.CurrnetRole" Variant="Variant.Outlined"
+                                  Text="@Constants.SetUser.Group.Role" Variant="Variant.Outlined"
                                   Width="100%" HelpTextPosition="TooltipPosition.Bottom" Disabled="true" />
                 </RadzenStack>
             </RadzenStack>

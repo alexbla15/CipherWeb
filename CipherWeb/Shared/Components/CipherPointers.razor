@@ -1,17 +1,14 @@
 ﻿@inherits CipherComponentCard
 
 @code {
+    [Parameter]
+    public List<CipherNavLink> SelectedLinks { get; set; } = new();
+
     /// <summary>
     /// Maximal amount of buttons per row.
     /// </summary>
     [Parameter]
     public int AmountPerRow { get; set; } = 4;
-
-    /// <summary>
-    /// Name of button-type.
-    /// </summary>
-    [Parameter]
-    public string NavLinkType { get; set; } = "הזנה";
 
     /// <summary>
     /// Set button's width.
@@ -21,18 +18,12 @@
 }
 
 <CipherComponentCard Title=@Title Width="100%">
-    @foreach (CipherNavLink myNavLink in CipherNavLinks.links)
+    @foreach (CipherNavLink subLink in SelectedLinks)
     {
-        if (myNavLink.Name == NavLinkType && myNavLink.SubLinks != null)
+        @if (subLink.Name != null && CommonFuncs.CanView(subLink))
         {
-            @foreach (CipherNavLink mySubNavLink in myNavLink.SubLinks)
-            {
-                @if (mySubNavLink.Name != null)
-                {
-                    <CipherNavButton Width="@ButtonWidth()" Icon="@mySubNavLink.Icon" Size="ButtonSize.Large"
-                    Text="@mySubNavLink.Name" Path="@mySubNavLink.Href" />
-                }
-            }
+            <CipherNavButton Width="@ButtonWidth()" Icon="@subLink.Icon" Size="ButtonSize.Large"
+                             Text="@subLink.Name" Path="@subLink.Href" />
         }
     }
 </CipherComponentCard>

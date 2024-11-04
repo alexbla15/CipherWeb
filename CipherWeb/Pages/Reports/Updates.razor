@@ -1,5 +1,12 @@
 ﻿@page "/Forms/Updates"
 
-<PageTitle>@CipherNavLinks.Updates.Name</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherPointers Title="@CipherNavLinks.Updates.Name" NavLinkType="עריכת נתונים"/>
+    <CipherPointers Title="@navLink.Name" SelectedLinks="@navLink.SubLinks" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.Updates;
+}

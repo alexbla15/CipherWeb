@@ -1,5 +1,12 @@
-﻿@page "/Searches/Process"
+﻿@page "/Searches/ProcessSearch"
 
 @using CipherWeb.Pages.Forms
 
-<ResourceFormHandler NavLink="@CipherNavLinks.ProcessSearch" Cipher_TItem="IProcessDefinition" Mode="@FormMode.ReadOnly" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler NavLink="@navLink" Cipher_TItem="IProcessDefinition" Mode="@FormMode.ReadOnly" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.ProcessSearch;
+}

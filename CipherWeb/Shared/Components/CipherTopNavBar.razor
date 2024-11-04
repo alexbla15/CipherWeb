@@ -4,8 +4,11 @@
              class="@Constants.Styles.TopNavBar">
     @foreach (CipherNavLink item in items)
     {
+        @if (CommonFuncs.CanView(item))
+        {
         <CipherNavButton Icon="@item.Icon" Text="@item.Name" Width="@ButtonWidth()" Path="@item.Href"
                          ColorShade="@Shade.Darker" ColorStyle="@ButtonStyle.Primary" />
+        }
     }
 </RadzenStack>
 

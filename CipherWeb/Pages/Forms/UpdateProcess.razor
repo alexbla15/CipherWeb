@@ -1,3 +1,10 @@
 ﻿@page "/Forms/Updates/Process"
 
-<ResourceFormHandler Cipher_TItem="IProcessDefinition" NavLink="CipherNavLinks.UpdateProcess" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IProcessDefinition" NavLink="@navLink" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UpdateProcess;
+}

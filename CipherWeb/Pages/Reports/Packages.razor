@@ -1,5 +1,12 @@
 ﻿@page "/Reports/Packages"
 
-<PageTitle>דוח תעודות</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherPackagesTable Sharable="true" IsReport="true"/>
+    <CipherPackagesTable Sharable="true" IsReport="true" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.PackagesReport;
+}

@@ -1,8 +1,11 @@
 ﻿@page "/Forms"
 
-<PageTitle>@navLink.Name</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherPointers Title="@navLink.Name" NavLinkType="@Translator.GetTranslation(navLink.Name ?? string.Empty)" />
+    <CipherPointers Title="@navLink.Name" SelectedLinks="@navLink.SubLinks" />
+}
 
 @code 
 {

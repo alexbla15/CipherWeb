@@ -1,3 +1,10 @@
 ﻿@page "/forms/AddCategory"
 
-<ResourceFormHandler Cipher_TItem="ICategory" NavLink="@CipherNavLinks.AddCategory" Mode="@FormMode.Create" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="ICategory" NavLink="@navLink" Mode="@FormMode.Create" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.AddCategory;
+}

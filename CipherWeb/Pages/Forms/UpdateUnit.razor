@@ -1,3 +1,10 @@
 ﻿@page "/Forms/Updates/Unit"
 
-<ResourceFormHandler Cipher_TItem="IUnit" NavLink="CipherNavLinks.UpdateUnit" />
+@if (CommonFuncs.CanView(navLink))
+{
+    <ResourceFormHandler Cipher_TItem="IUnit" NavLink="@navLink" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.UpdateUnit;
+}

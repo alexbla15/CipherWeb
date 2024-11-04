@@ -1,27 +1,32 @@
 ﻿@page "/Reports"
 
-<PageTitle>דוחות</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherPointers Title="דוחות שמורים" NavLinkType="דוחות"/>
+    <CipherPointers Title="דוחות שמורים" SelectedLinks="@navLink.SubLinks" />
 
-<CipherTableCard Title="חיפוש דוח" GetDataSource="@GetDataSource" FileTitle="reports">
-    <AdditionalButtons>
-        <CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline" Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@CipherNavLinks.AddReport.Href" />
-    </AdditionalButtons>
-    <ComponentContent>
-        @if (!AllReports.Any())
-        {
-            <CipherLoadingCard />
-        }
-        else
-        {
-            <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
-                             GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
-        }
-    </ComponentContent>
-</CipherTableCard>
+    <CipherTableCard Title="חיפוש דוח" GetDataSource="@GetDataSource" FileTitle="reports">
+        <AdditionalButtons>
+            @AddReportBtn()
+        </AdditionalButtons>
+        <ComponentContent>
+            @if (!AllReports.Any())
+            {
+                <CipherLoadingCard />
+            }
+            else
+            {
+                <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
+                                 GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
+            }
+        </ComponentContent>
+    </CipherTableCard>
+}
 
 @code {
+    private CipherNavLink navLink = CipherNavLinks.Reports;
+
     [Parameter]
     public TextAlign TdTextAlign { get; set; } = TextAlign.Right;
 
@@ -39,7 +44,20 @@
     /// Function to retrieve the DataSource for the DataTable
     /// </summary>
     [Parameter]
-    public Func<List<Dictionary<string,object?>>>? GetDataSource { get; set; }
+    public Func<List<Dictionary<string, object?>>>? GetDataSource { get; set; }
 
     protected override void OnInitialized() => GetDataSource = (() => DisplayedObject.ToListDicts(AllReports));
+
+    private RenderFragment? AddReportBtn()
+    {
+        CipherNavLink link = CipherNavLinks.AddReport;
+
+        if (CommonFuncs.CanView(link))
+        {
+            return
+                @<CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline"
+                     Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@link.Href" />;
+        }
+        else return null;
+    }
 }

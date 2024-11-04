@@ -1,5 +1,13 @@
 ﻿@page "/Reports/Events"
 
-<PageTitle>דוח תנועות</PageTitle>
+@if (CommonFuncs.CanView(navLink))
+{
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherEventsTable Sharable="true" IsReport="true"/>
+    <CipherEventsTable Sharable="true" IsReport="true" />
+}
+
+@code {
+    private CipherNavLink navLink = CipherNavLinks.EventsReport;
+}
+

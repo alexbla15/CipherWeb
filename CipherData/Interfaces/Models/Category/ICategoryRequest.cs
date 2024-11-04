@@ -54,7 +54,7 @@ namespace CipherData.Interfaces
 
         public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
 
-        public CheckField CheckParentId() => CheckField.CheckString(ParentId, Translate(nameof(ParentId)));
+        public CheckField CheckParentId() => CheckField.Required(ParentId, Translate(nameof(ParentId)));
 
         /// <summary>
         /// Method to check if field is applicable for this request
