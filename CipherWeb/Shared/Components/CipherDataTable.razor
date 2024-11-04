@@ -47,12 +47,6 @@
     [Parameter]
     public bool AllowColumnPick { get; set; } = false;
 
-    /// <summary>
-    /// Maximal amount of rows per page of datagrid.
-    /// </summary>
-    [Parameter]
-    public int RowsPerPage { get; set; } = Constants.RowsPerPage;
-
     private RadzenDataGrid<DisplayedObject> CustomDataGrid = new();
 
     private IList<DisplayedObject>? selectedRow;
@@ -143,6 +137,8 @@
         }
         ReferencedCellClicked = false;
     }
+
+    private string Translate(string key) => Translator.GetTranslation(key);
 }
 
 @if (DataSource != null && DataSource.Any())
@@ -159,7 +155,7 @@
                     AllowColumnResize="true"
                     FilterPopupRenderMode="PopupRenderMode.OnDemand"
                     AllowPaging="true"
-                    PageSize="@RowsPerPage"
+                    PageSize="@Constants.RowsPerPage"
                     AllowSorting="@AllowSort"
                     SelectionMode="DataGridSelectionMode.Single"
                     AllowColumnPicking="@AllowColumnPick"
@@ -168,28 +164,28 @@
                     HideGroupedColumn="@HideGroupedColumn"
                     Density="@Density.Compact"
                     class="@Constants.Styles.DataTable"
-                    AndOperatorText="וגם"
-                    OrOperatorText="או"
-                    ClearFilterText="ביטול"
-                    IsNullText="חסר"
-                    IsNotNullText="לא חסר"
-                    StartsWithText="מתחיל ב"
-                    EndsWithText="מסתיים ב"
-                    IsEmptyText="ריק"
-                    IsNotEmptyText="לא ריק"
-                    ContainsText="מכיל"
-                    DoesNotContainText="לא מכיל"
-                    EqualsText="זהה ל"
-                    NotEqualsText="שונה מ"
-                    LessThanOrEqualsText="קטן / שווה ל"
-                    LessThanText="קטן מ"
-                    GreaterThanOrEqualsText="גדול / שווה ל"
-                    GreaterThanText="גדול מ"
-                    AllColumnsText="הכל"
-                    FilterText="סינון"
-                    ApplyFilterText="סינון"
-                    ColumnsShowingText="עמודות מוצגות"
-                    GroupPanelText="גרור עמודה לכאן כדי לקבץ את הנתונים בהתאם">
+                    AndOperatorText="@Translate("AndOperator")"
+                    OrOperatorText="@Translate("OrOperator")"
+                    ClearFilterText="@Translate("ClearFilter")"
+                    IsNullText="@Translate("IsNull")"
+                    IsNotNullText="@Translate("IsNotNull")"
+                    StartsWithText="@Translate("StartsWith")"
+                    EndsWithText="@Translate("EndsWith")"
+                    IsEmptyText="@Translate("IsEmpty")"
+                    IsNotEmptyText="@Translate("IsNotEmpty")"
+                    ContainsText="@Translate("Contains")"
+                    DoesNotContainText="@Translate("DoesNotContain")"
+                    EqualsText="@Translate("Equals")"
+                    NotEqualsText="@Translate("NotEquals")"
+                    LessThanOrEqualsText="@Translate("LessThanOrEquals")"
+                    LessThanText="@Translate("LessThan")"
+                    GreaterThanOrEqualsText="@Translate("GreaterThanOrEquals")"
+                    GreaterThanText="@Translate("GreaterThan")"
+                    AllColumnsText="@Translate("AllColumns")"
+                    FilterText="@Translate("Filter")"
+                    ApplyFilterText="@Translate("ApplyFilter")"
+                    ColumnsShowingText="@Translate("ColumnsShowing")"
+                    GroupPanelText="@Translate("GroupPanel")">
         <EmptyTemplate>
             <RadzenText Text="לא נמצאו נתונים" class="@Constants.Styles.DataGridEmpty"/>
         </EmptyTemplate>

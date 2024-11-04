@@ -706,6 +706,16 @@
         margin: 1px;
     }
 
+    .rz-datatable .rzi-chevron-circle-down:hover:before {
+        background-color: var(--rz-primary-light);
+        border: 3px solid var(--rz-primary-light);
+    }
+
+    .rz-datatable .rzi-chevron-circle-right:hover:before {
+        background-color: var(--rz-primary-dark);
+        border: 3px solid var(--rz-primary-dark);
+    }
+
 .rz-datatable .rz-col-icon {
     background-color: var(--rz-primary-light);
     width: 37px;

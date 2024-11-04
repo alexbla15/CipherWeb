@@ -24,7 +24,8 @@
 
         public static List<ICategory> GetRandomCategories(int amount = 20) => GetRandomObjects<ICategory, RandomCategory>(amount);
         public static List<ICategoryProperty> GetRandomCategoryProperties(int amount = 3) => GetRandomObjects<ICategoryProperty, RandomCategoryProperty>(amount);
-        public static List<IEvent> GetRandomEvents(int amount = 20) => GetRandomObjects<IEvent, RandomEvent>(amount);
+        public static List<IEvent> GetRandomEvents(int amount = 20) => 
+            new Random().Next(2) == 0 ? GetRandomObjects<IEvent, RandomRelocationEvent>(amount) : GetRandomObjects<IEvent, RandomTransferAmountEvent>(amount);
         public static List<IPackage> GetRandomPackages(int amount = 20) => GetRandomObjects<IPackage, RandomPackage>(amount);
         public static List<IProcess> GetRandomProcesses(int amount = 20) => GetRandomObjects<IProcess, RandomProcess>(amount);
         public static List<IProcessDefinition> GetRandomProcessDefinitions(int amount = 20) => GetRandomObjects<IProcessDefinition, RandomProcessDefinition>(amount);

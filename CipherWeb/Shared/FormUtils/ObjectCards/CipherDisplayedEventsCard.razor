@@ -4,47 +4,69 @@
 
     private List<IDisplayedEvent> DisplayedEvents = new();
 
-    private List<IEvent> _Events = new();
-
     /// <summary>
     /// All events
     /// </summary>
     [Parameter]
-    public List<IEvent> Events
-    {
-        get => _Events;
-        set
-        {
-            _Events = value;
-            foreach (IEvent ev in _Events)
-            {
-                DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
-            }
-        }
-    }
+    public List<IEvent> AllEvents { get; set; } = new();
 
     /// <summary>
-    /// Update result, send from the api
+    /// All events that were approved
     /// </summary>
     [Parameter]
-    public IEvent? Result { get; set; }
+    public List<IEvent> ApprovedEvents { get; set; } = new();
 
     /// <summary>
-    /// API response to submission.
+    /// All events that were declined events
     /// </summary>
     [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    [Parameter]
-    public bool WithRowButtons { get; set; } = false;
+    public List<IEvent> DeclinedEvents { get; set; } = new();
 
     /// <summary>
-    /// Json request that will be sent to the API server.
+    /// All events that were declined events
     /// </summary>
     [Parameter]
-    public string JsonRequest { get; set; } = string.Empty;
+    public List<IEvent> PendingEvents { get; set; } = new();
+
+    [Parameter]
+    public bool WithApproveButton { get; set; } = false;
+
+    [Parameter]
+    public bool WithDeclineButton { get; set; } = false;
+
+    [Parameter]
+    public string ApproveAllText { get; set; } = "אישור כל התנועות";
+
+    [Parameter]
+    public string DeclineAllText { get; set; } = "דחיית כל התנועות";
+
+    [Parameter] 
+    public EventCallback UponApproval {get;set;}
+
+    [Parameter] 
+    public EventCallback UponDecline {get;set;}
 
     private RadzenDataGrid<IDisplayedEvent> CustomDataGrid = new();
+
+    protected override void OnInitialized()
+    {
+        Title ??= "תנועות";
+        SetDisplayedEvents();
+    }
+
+    private void SetDisplayedEvents()
+    {
+        PendingEvents = AllEvents.ToList();
+        ApprovedEvents = new();
+        DeclinedEvents = new();
+
+        DisplayedEvents = new();
+
+        foreach (IEvent ev in AllEvents)
+        {
+            DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
+        }
+    }
 
     public void OnRender(DataGridRenderEventArgs<IDisplayedEvent> args)
     {
@@ -60,57 +82,76 @@
         }
     }
 
-    public async Task ForSingleEvent(Func<IUpdateEvent> singleFunc, IEvent ev)
+    public async Task ForSingleEvent(IEvent ev, bool approved = true)
     {
-        IUpdateEvent setUpdate = singleFunc();
-        (Result, Error) = await ev.Update(ev.Id, setUpdate);
-        JsonRequest = ev.Id + "\n___\n\n" + setUpdate.ToJson();
+        if (approved)
+        {
+            PendingEvents.Remove(ev);
+            ApprovedEvents.Add(ev);
+            await UponApproval.InvokeAsync();
+        }
+        else
+        {
+            PendingEvents.Remove(ev);
+            DeclinedEvents.Add(ev);
+            await UponDecline.InvokeAsync();
+        }
     }
 
-    public async Task ApproveEvent(IEvent ev) => await ForSingleEvent(IUpdateEvent.ApprovedEvent, ev);
+    public async Task ApproveEvent(IEvent ev) => await ForSingleEvent(ev);
 
-    public async Task DeclineEvent(IEvent ev) => await ForSingleEvent(IUpdateEvent.DeclinedEvent, ev);
+    public async Task DeclineEvent(IEvent ev) => await ForSingleEvent(ev, false);
 
     public async Task ForAllEvents(Func<IEvent, Task> singleFunc)
     {
-        string NewJsonRequest = string.Empty;
-        foreach (IEvent ev in Events)
+        foreach (IEvent ev in AllEvents)
         {
             await singleFunc(ev);
-            NewJsonRequest += JsonRequest + "\n\n";
         }
-        JsonRequest = NewJsonRequest;
     }
 
     public async Task ApproveAllEvents() => await ForAllEvents(ApproveEvent);
 
     public async Task DeclineAllEvents() => await ForAllEvents(DeclineEvent);
 
-    public async Task ChangeEvents(List<IEvent> newEvents)
+    public void ChangeEvents(List<IEvent> newEvents)
     {
-        _Events = newEvents;
-        DisplayedEvents = new();
-        foreach (IEvent ev in _Events)
-        {
-            DisplayedEvents.AddRange(ev.TransformToDisplayedEvents());
-        }
+        AllEvents = newEvents;
+        SetDisplayedEvents();
         StateHasChanged();
-        await CustomDataGrid.RefreshDataAsync();
     }
 
     private string GetLabel(string property) => IDisplayedEvent.Translate(property);
+
+    private RenderFragment? EventAction(Group context, bool Approve = true)
+    {
+        if (!WithApproveButton && Approve) return null;
+        if (!WithDeclineButton && !Approve) return null;
+
+        ButtonStyle colorStyle = Approve ? ButtonStyle.Success : ButtonStyle.Danger;
+        string icon = Approve ? Icons.Symbols.V.check : Icons.Documents.Delete.cancel;
+        IEvent selectedEv = AllEvents.Where(x => x.Id == context.Data.Key).First();
+
+        return 
+    @<CipherButton ColorStyle="@colorStyle" Icon="@icon"
+        Variant="Variant.Flat" ColorShade="Shade.Dark" Style="margin:0px"
+        Size="ButtonSize.Medium" Click="@(args => Approve ? ApproveEvent(selectedEv) : DeclineEvent(selectedEv))" />;
+    }
 }
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        @if (WithRowButtons)
+        @if (WithApproveButton)
         {
-            <CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="אישור כל התנועות" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
-            <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="דחיית כל התנועות" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
+            <CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="@ApproveAllText" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
+        }
+        @if (WithDeclineButton)
+        {
+            <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="@DeclineAllText" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
         }
 
-        <CipherExcelButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))"/>
-        <CipherPDFButton OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))" />
+        <CipherExcelButton FileName="events" OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))"/>
+        <CipherPDFButton FileName="events" OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))" />
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">
@@ -118,20 +159,17 @@
             {
                 <RadzenDataGrid TItem="IDisplayedEvent" @ref=CustomDataGrid
                                 FilterMode="FilterMode.Simple" AllowFiltering="false" AllowGrouping="false"
-                                AllowSorting="true" HideGroupedColumn="true"
+                                AllowSorting="true" HideGroupedColumn="true" AllowPaging="true"
+                                PageSize="@Constants.RowsPerPage"
                                 AllGroupsExpanded="true" Render="@OnRender"
                                 Data="@DisplayedEvents">
                     <GroupHeaderTemplate>
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right" AlignItems="AlignItems.Center" Gap="10px">
-                            @if (WithRowButtons)
+                            @if (WithApproveButton || WithDeclineButton)
                             {
                                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-                                    <CipherButton ColorStyle="ButtonStyle.Success" Icon="@Icons.Symbols.V.check"
-                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
-                                                  Size="ButtonSize.Medium" Click="@(args => ApproveEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
-                                    <CipherButton ColorStyle="ButtonStyle.Danger" Icon="@Icons.Documents.Delete.cancel"
-                                                  Variant="Variant.Flat" ColorShade="Shade.Default"
-                                                  Size="ButtonSize.Medium" Click="@(args => DeclineEvent(Events.Where(x=>x.Id == context.Data.Key).First()))" />
+                                    @EventAction(context)
+                                    @EventAction(context, false)
                                 </RadzenStack>
                             }
                             <RadzenText class="@Constants.Styles.GroupHeader" Text="@($@"{GetLabel(nameof(IDisplayedEvent.Id))} : {context.Data.Key},
@@ -143,8 +181,9 @@
                         </RadzenStack>
                     </GroupHeaderTemplate>
                     <Columns>
-                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.Id))"
-                                              Title="@(GetLabel(nameof(IDisplayedEvent.Id)))" MinWidth="20px" />
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.Id))" 
+                                              Title="@(GetLabel(nameof(IDisplayedEvent.Id)))" MinWidth="10px" />
+                        <RadzenDataGridColumn TItem="IDisplayedEvent" Width="100px" Filterable="false" Sortable="false"/> 
                         <RadzenDataGridColumn TItem="IDisplayedEvent" Property="@(nameof(IDisplayedEvent.DonatingPackage))"
                                               Title="@(GetLabel(nameof(IDisplayedEvent.DonatingPackage)))">
                             <Template>
@@ -177,11 +216,6 @@
             else
             {
                 <RadzenText Text="לא נמצאו תנועות" class="@Constants.Styles.DataGridEmpty" />
-            }
-
-            @if (WithRowButtons)
-            {
-                <CipherJsonCheck JsonValue="@JsonRequest" />
             }
         </RadzenStack>
     </ChildContent>

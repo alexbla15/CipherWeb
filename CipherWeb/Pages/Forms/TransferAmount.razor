@@ -68,7 +68,6 @@
     public async Task Submit()
     {
         (Valid, ErrorMessage) = RequestedEvent.Check();
-
         await SendRequest();
     }
 

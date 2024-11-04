@@ -1,47 +1,32 @@
-﻿@typeparam Cipher_TItem
-
-@inherits RadzenDataFilter<Cipher_TItem>
+﻿@inherits RadzenDataFilter<CipherField>
 
 @code {
-    /// <summary>
-    /// Filter Properties content
-    /// </summary>
-    [Parameter]
-    public RenderFragment? FilterProperties { get; set; }
-
-    private RadzenDataFilter<Cipher_TItem> datafilter = new();
-
-    public List<CompositeFilterDescriptor> GetFilters() => datafilter.Filters.ToList();
-
-    public LogicalFilterOperator GetLogicalFieldOperator() => datafilter.LogicalFilterOperator;
-
-    public void AddCipherFilter(CompositeFilterDescriptor filter)
-    {
-        List<CompositeFilterDescriptor> oldFilters = datafilter.Filters.ToList();
-        oldFilters.Add(filter);
-        datafilter.Filters = oldFilters;
-    }
-
-    public async Task Clear() 
-    {
-        await datafilter.ClearFilters();
-        StateHasChanged();
-    }
+    private string Translate(string key) => Translator.GetTranslation(key);
 }
 
-<RadzenDataFilter Auto=true ViewChanged=@ViewChanged @ref=datafilter 
-                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                TItem="Cipher_TItem"
-                Data="@Data" Style="text-align: right" RemoveFilterText="הסרת מסנן"
-                AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
-                AndOperatorText="וגם" OrOperatorText="או" 
-                ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
-                StartsWithText="מתחיל ב" EndsWithText="מסתיים ב" IsEmptyText="ריק" IsNotEmptyText="לא ריק"
-                FilterText="סינון" ApplyFilterText="סינון"
-                ContainsText="מכיל" DoesNotContainText="לא מכיל" EqualsText="זהה ל" NotEqualsText="שונה מ"
-                LessThanOrEqualsText="קטן מ / שווה ל" LessThanText="קטן מ" GreaterThanOrEqualsText="גדול / שווה ל" GreaterThanText="גדול מ" 
-                >
-    <Properties>
-        @FilterProperties
-    </Properties>
+<RadzenDataFilter TItem="CipherField" Data="@Data" ViewChanged="@ViewChanged"
+                  Auto="false"
+                  RemoveFilterText="@Translate("RemoveFilter")"
+                  AddFilterText="@Translate("AddFilter")"
+                  AddFilterGroupText="@Translate("AddFilterGroup")"
+                  ClearFilterText="@Translate("ClearFilter")"
+                  ApplyFilterText="@Translate("ApplyFilter")"
+                  FilterText="@Translate("Filter")"
+                  AndOperatorText="@Translate("AndOperator")"
+                  OrOperatorText="@Translate("OrOperator")"
+                  IsNullText="@Translate("IsNull")"
+                  IsNotNullText="@Translate("IsNotNull")"
+                  StartsWithText="@Translate("StartsWith")"
+                  EndsWithText="@Translate("EndsWith")"
+                  IsEmptyText="@Translate("IsEmpty")"
+                  IsNotEmptyText="@Translate("IsNotEmpty")"
+                  ContainsText="@Translate("Contains")"
+                  DoesNotContainText="@Translate("DoesNotContain")"
+                  EqualsText="@Translate("Equals")"
+                  NotEqualsText="@Translate("NotEquals")"
+                  LessThanText="@Translate("LessThan")"
+                  LessThanOrEqualsText="@Translate("LessThanOrEquals")"
+                  GreaterThanText="@Translate("GreaterThan")"
+                  GreaterThanOrEqualsText="@Translate("GreaterThanOrEquals")">
+    @Properties
 </RadzenDataFilter>

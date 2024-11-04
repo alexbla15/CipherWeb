@@ -1,4 +1,4 @@
-﻿@page "/Searches/FreeSearch/"
+﻿@page "/Searches/FreeText/"
 
 @inject DialogService DialogService
 @inject NavigationManager navigationManager
@@ -37,7 +37,7 @@
     /// Path to be searched in case on Enter pressed.
     /// </summary>
     [Parameter]
-    public string? SearchPath { get; set; } = CipherNavLinks.FreeSearch.Href;
+    public string? SearchPath { get; set; } = CipherNavLinks.FreeText.Href;
 
     /// <summary>
     /// Event in case a key was pressed within AutoComplete box.

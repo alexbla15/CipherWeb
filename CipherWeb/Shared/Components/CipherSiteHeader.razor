@@ -5,74 +5,18 @@
 @inject NavigationManager NavigationManager
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceAround"
-             AlignItems="AlignItems.Center" Gap="1rem" Style="@($"width:{Header_Width}")">
+             AlignItems="AlignItems.Center" Gap="1rem" Style="width:100%">
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
                  AlignItems="AlignItems.Center" Gap="0">
-        @* -- LOGO BLOCK -- *@
-        <RadzenLink Path=@CipherNavLinks.Home.Href Text="מסך הבית" Style="@($"width:{Logo_Width}")">
-            <CipherLogo />
-        </RadzenLink>
-
-        @* -- SEARCH BLOCK -- *@
-        <CipherSearchRow LabelText="חיפוש" Width="@Search_Width"/>
+        @LogoBlock()
+        @SearchBlock()
     </RadzenStack>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
-                 AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
-        @* -- CLASSIFCIATION BLOCK -- *@
-
-        <RadzenText Text="מוגבל" TextAlign="TextAlign.Center" class="@Constants.Styles.Restriction" />
-    </RadzenStack>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
-                 AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
-        @* -- ACCOUNT BLOCK --*@
-        <RadzenCard Variant="Variant.Text" Style="@($"{AccountStyle()}; width:{Account_Width};")">
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                <CipherAccountImage />
-                <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
-                    <RadzenText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right"  Style="color: var(--cipher-header-color);" TextStyle="TextStyle.H6" />
-                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
-                        <CipherButton Icon="@Icons.Social.SinglePerson.account_circle" Size="ButtonSize.ExtraSmall" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker" HelpText="שינוי תצוגה"
-                                      Click="@(args => ChangeRole())" Text="@($"מוצג כמסך של {Roles.CurrnetRole}")" Variant="Variant.Outlined"
-                                      Width="100%" HelpTextPosition="TooltipPosition.Bottom" />
-                    </RadzenStack>
-                </RadzenStack>
-            </RadzenStack>
-        </RadzenCard>
-    </RadzenStack>
+    @RestrictionBlock()
+    @AccountBlock()
 </RadzenStack>
 
 @code {
-    /// <summary>
-    /// Total width of site header.
-    /// </summary>
-    [Parameter]
-    public string Header_Width { get; set; } = "100%";
-
-    /// <summary>
-    /// Width of logo within the header.
-    /// </summary>
-    [Parameter]
-    public string? Logo_Width { get; set; }
-
     // ACCOUNT PROPERTIES
-
-    /// <summary>
-    /// Width of account-block within header.
-    /// </summary>
-    [Parameter]
-    public string? Account_Width { get; set; }
-
-    /// <summary>
-    /// Space outside content within account-block.
-    /// </summary>
-    [Parameter]
-    public string Account_Padding { get; set; } = "0";
-
-    /// <summary>
-    /// Width of seach-row.
-    /// </summary>
-    [Parameter]
-    public string? Search_Width { get; set; }
 
     public string NewRole = string.Empty;
 
@@ -89,7 +33,7 @@
             </RadzenStack>
         </RadzenStack>
     </RadzenStack>
-    );
+        );
     }
 
     /// <summary>
@@ -102,18 +46,36 @@
     }
 
     /// <summary>
-    /// Set the style for account-block.
-    /// </summary>
-    public string AccountStyle()
-    {
-        return $@"
-                padding: {Account_Padding};
-                width: {Account_Width};
-                ";
-    }
-
-    /// <summary>
     /// Set the common-width of each block.
     /// </summary>
     public string BlockWidth() => $"width:{100 / 3}% ";
+
+    private RenderFragment LogoBlock()
+    =>
+    @<RadzenLink Path=@CipherNavLinks.Home.Href Text="מסך הבית" Style="width:50%">
+        <CipherLogo />
+    </RadzenLink>;
+
+    private RenderFragment SearchBlock() => @<CipherSearchRow LabelText="חיפוש" Style="width:50%"/>;
+
+    private RenderFragment RestrictionBlock() =>
+    @<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly"
+                      AlignItems="AlignItems.Center" Gap="1rem" Style="@BlockWidth()">
+        <RadzenText Text="מוגבל" TextAlign="TextAlign.Center" class="@Constants.Styles.Restriction" />
+    </RadzenStack>;
+
+    private RenderFragment AccountBlock()
+    => @<RadzenCard Variant="Variant.Text" Style="@($"padding: 0; width:;{BlockWidth()};")">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
+            <CipherAccountImage />
+            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Center" Gap="0.2rem">
+                <RadzenText Text="@Constants.SetUser.Name" TextAlign="TextAlign.Right" Style="color: var(--cipher-header-color);" TextStyle="TextStyle.H6" />
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0.3rem">
+                    <CipherButton Icon="@Icons.Social.SinglePerson.account_circle" Size="ButtonSize.Small" ColorStyle="ButtonStyle.Primary" ColorShade="Shade.Darker"
+                                  Click="@(args => ChangeRole())" Text="@Roles.CurrnetRole" Variant="Variant.Outlined"
+                                  Width="100%" HelpTextPosition="TooltipPosition.Bottom" Disabled="true" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>;
 }

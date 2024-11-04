@@ -32,8 +32,7 @@
 
         // API RELATED FUNCTIONS
 
-        public override async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status)
-            => await new RandomRelocationEvent().StatusEvents(status);
+        public override async Task<Tuple<List<IEvent>, ErrorResponse>> StatusEvents(int status) => await All();
 
         protected override IEventsRequests GetRequests() => new RandomEventsRequests();
 

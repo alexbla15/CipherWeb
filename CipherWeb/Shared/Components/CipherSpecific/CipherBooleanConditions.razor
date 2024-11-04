@@ -53,7 +53,7 @@
     [Parameter]
     public EventCallback ValueChanged { get; set; }
 
-    private RadzenDataFilter<CipherField> dataFilter = new();
+    private CipherDataFilter dataFilter = new();
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
     {
@@ -238,33 +238,35 @@
             StateHasChanged();
         }
     }
+
+    private string Translate(string key) => Translator.GetTranslation(key);
+
+    private RenderFragment TemplateAsTextBox(CompositeFilterDescriptor context, bool checkDisabled=true)
+    {
+        bool disabled = checkDisabled ? Disabled : true;
+
+        return 
+        @<RadzenTextBox Disabled="@disabled" Style="width: 100%"
+        Value="@(context.FilterValue?.ToString() ?? string.Empty)" 
+        ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />;
+    }
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled)">
+<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled && WithSaveButton)">
     <Buttons>
-        @if (WithSaveButton)
-        {
-            <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined"
-                          Click="@(async args => {await ParamsChanged();})" HelpText="@SaveConditionsText" />
-        }
+        <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined"
+                        Click="@(async args => {await ParamsChanged();})" HelpText="@SaveConditionsText" />
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
-            <RadzenDataFilter @ref=dataFilter TItem="CipherField" Data="@AvailableAttributes" ViewChanged="@(async args => {await ParamsChanged(args);})"
-                              RemoveFilterText="הסרת מסנן" 
-                              AddFilterText="הוספת מסנן" AddFilterGroupText="הוספת קבוצת סינון"
-                              AndOperatorText="וגם" OrOperatorText="או"
-                              ClearFilterText="ביטול" IsNullText="חסר" IsNotNullText="לא חסר"
-                              StartsWithText="מתחיל ב" EndsWithText="מסתיים ב" IsEmptyText="ריק" IsNotEmptyText="לא ריק"
-                              FilterText="סינון" ApplyFilterText="סינון"
-                              ContainsText="מכיל" DoesNotContainText="לא מכיל" EqualsText="זהה ל" NotEqualsText="שונה מ"
-                              LessThanOrEqualsText="קטן מ / שווה ל" LessThanText="קטן מ" GreaterThanOrEqualsText="גדול / שווה ל" GreaterThanText="גדול מ">
+            <CipherDataFilter @ref=dataFilter Data="@(new List<CipherField>())" 
+                ViewChanged="@(async args => {await ParamsChanged(args);})">
                 <Properties>
                     @foreach (CipherField field in AvailableAttributes)
                     {
                         <RadzenDataFilterProperty TItem="CipherField" Property="@field.Path" Title="@field.Translation">
                             <FilterTemplate>
-                                @if (context.FilterOperator != FilterOperator.IsNull && context.FilterOperator != FilterOperator.IsNotNull)
+                                @if (context != null && context.FilterValue != null && context.FilterOperator != FilterOperator.IsNull && context.FilterOperator != FilterOperator.IsNotNull)
                                 {
                                     @if (field.IsList)
                                     {
@@ -303,18 +305,18 @@
                                     }
                                     else
                                     {
-                                        <RadzenTextBox Disabled="@Disabled" Style="width: 100%" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
+                                        @TemplateAsTextBox(context)
                                     }
                                 }
                                 else
                                 {
-                                    <RadzenTextBox Style="width: 100%" Disabled="true" Value="@(context.FilterValue?.ToString() ?? string.Empty)" ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />
+                                    @TemplateAsTextBox(context, false)
                                 }
                             </FilterTemplate>
                         </RadzenDataFilterProperty>
                     }
                 </Properties>
-            </RadzenDataFilter>
+            </CipherDataFilter>
             @if (!Disabled)
             {
                 <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />

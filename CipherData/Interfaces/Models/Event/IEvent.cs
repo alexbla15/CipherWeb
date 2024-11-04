@@ -189,9 +189,10 @@ namespace CipherData.Interfaces
                     ProcessId = ProcessId,
                     Comments = Comments,
                     DonatingPackage = Tuple.Create(iPack, fPack),
+                    EventMass = fPack.BrutMass,
                     DonatingSystem = iPack.System,
                     AcceptingSystem = fPack.System
-                }).Select(x => x as IDisplayedEvent).ToList();
+                }).Select(x => x as IDisplayedEvent).Distinct().ToList();
 
         public List<IDisplayedEvent> GetTransferAmountEvent()
         {
@@ -211,27 +212,50 @@ namespace CipherData.Interfaces
                 if (iMass < fMass) AcceptingPacks.Add(Tuple.Create(InitialStatePackages[indexer], FinalStatePackages[indexer]));
             }
 
-            DisplayedEvent ev = new()
-            {
-                Id = Id,
-                Worker = Worker,
-                Status = Status,
-                Comments = Comments,
-                ProcessId = ProcessId,
-                Timestamp = Timestamp,
-                EventType = EventType
-            };
-
             // 1 - only one donating package, as it should be
             if (DonatingPacks.Count == 1 && AcceptingPacks.Any())
             {
                 foreach (Tuple<IPackage, IPackage> acceptingPack in AcceptingPacks)
                 {
-                    ev.DonatingPackage = DonatingPacks[0];
-                    ev.AcceptingPackage = acceptingPack;
-                    ev.DonatingSystem = acceptingPack.Item1.System;
-                    ev.AcceptingSystem = acceptingPack.Item1.System;
-                    ev.EventMass = acceptingPack.Item2.BrutMass - acceptingPack.Item1.BrutMass;
+                    var donating = DonatingPacks[0];
+                    var sys = acceptingPack.Item1.System;
+                    var delta_m = acceptingPack.Item2.BrutMass - acceptingPack.Item1.BrutMass;
+
+                    // donating step
+                    IDisplayedEvent ev = new DisplayedEvent()
+                    {
+                        Id = Id,
+                        Worker = Worker,
+                        Status = Status,
+                        Comments = Comments,
+                        ProcessId = ProcessId,
+                        Timestamp = Timestamp,
+                        EventType = EventType,
+                        DonatingPackage = donating,
+                        AcceptingPackage = acceptingPack,
+                        DonatingSystem = sys,
+                        AcceptingSystem = sys,
+                        EventMass = -delta_m
+                    };
+                    results.Add(ev);
+
+                    // accepting step
+                    ev = new DisplayedEvent()
+                    {
+                        Id = Id,
+                        Worker = Worker,
+                        Status = Status,
+                        Comments = Comments,
+                        ProcessId = ProcessId,
+                        Timestamp = Timestamp,
+                        EventType = EventType,
+                        DonatingPackage = acceptingPack,
+                        AcceptingPackage = donating,
+                        DonatingSystem = sys,
+                        AcceptingSystem = sys,
+                        EventMass = delta_m
+                    };
+
                     results.Add(ev);
                 }
             }
@@ -241,20 +265,47 @@ namespace CipherData.Interfaces
             {
                 foreach (Tuple<IPackage, IPackage> acceptingPack in AcceptingPacks)
                 {
-                    ev.DonatingPackage = null;
-                    ev.AcceptingPackage = acceptingPack;
-                    ev.DonatingSystem = acceptingPack.Item1.System;
-                    ev.AcceptingSystem = acceptingPack.Item1.System;
-                    ev.EventMass = acceptingPack.Item2.BrutMass - acceptingPack.Item1.BrutMass;
+                    var sys = acceptingPack.Item1.System;
+                    var delta_m = acceptingPack.Item2.BrutMass - acceptingPack.Item1.BrutMass;
+
+                    IDisplayedEvent ev = new DisplayedEvent()
+                    {
+                        Id = Id,
+                        Worker = Worker,
+                        Status = Status,
+                        Comments = Comments,
+                        ProcessId = ProcessId,
+                        Timestamp = Timestamp,
+                        EventType = EventType,
+                        DonatingPackage = null,
+                        AcceptingPackage = acceptingPack,
+                        DonatingSystem = sys,
+                        AcceptingSystem = sys,
+                        EventMass = delta_m
+                    };
                     results.Add(ev);
                 }
                 foreach (Tuple<IPackage, IPackage> donatingPack in DonatingPacks)
                 {
-                    ev.AcceptingPackage = null;
-                    ev.DonatingPackage = donatingPack;
-                    ev.DonatingSystem = donatingPack.Item1.System;
-                    ev.AcceptingSystem = donatingPack.Item1.System;
-                    ev.EventMass = donatingPack.Item2.BrutMass - donatingPack.Item1.BrutMass;
+                    var sys = donatingPack.Item1.System;
+                    var delta_m = donatingPack.Item2.BrutMass - donatingPack.Item1.BrutMass;
+
+                    IDisplayedEvent ev = new DisplayedEvent()
+                    {
+                        Id = Id,
+                        Worker = Worker,
+                        Status = Status,
+                        Comments = Comments,
+                        ProcessId = ProcessId,
+                        Timestamp = Timestamp,
+                        EventType = EventType,
+                        DonatingPackage = donatingPack,
+                        AcceptingPackage = null,
+                        DonatingSystem = sys,
+                        AcceptingSystem = sys,
+                        EventMass = delta_m
+                    };
+
                     results.Add(ev);
                 }
             }
@@ -268,6 +319,16 @@ namespace CipherData.Interfaces
             if (IsTransferAmountEvent()) return GetTransferAmountEvent();
             return new();
         }
+
+        // STATIC METHODS 
+
+        public static IBooleanCondition PendingCondition()
+            => new BooleanCondition()
+            {
+                Attribute = $"[Event].[{nameof(IEvent.Status)}]",
+                AttributeRelation = AttributeRelation.Eq,
+                Value = "0"
+            };
 
         // API-RELATED FUNCTIONS
 

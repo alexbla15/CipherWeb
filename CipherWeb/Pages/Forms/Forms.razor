@@ -1,5 +1,10 @@
 ﻿@page "/Forms"
 
-<PageTitle>@CipherNavLinks.Forms.Name</PageTitle>
+<PageTitle>@navLink.Name</PageTitle>
 
-<CipherPointers Title="@CipherNavLinks.Forms.Name" NavLinkType="הזנה" />
+<CipherPointers Title="@navLink.Name" NavLinkType="@Translator.GetTranslation(navLink.Name ?? string.Empty)" />
+
+@code 
+{
+    private CipherNavLink navLink = CipherNavLinks.Forms;
+}

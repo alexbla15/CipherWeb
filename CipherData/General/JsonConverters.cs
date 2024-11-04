@@ -75,12 +75,12 @@ namespace CipherData.General
             if (root.TryGetProperty("Attribute", out _))
             {
                 // This is likely a BooleanCondition
-                return JsonSerializer.Deserialize<IBooleanCondition>(root.GetRawText(), options);
+                return JsonSerializer.Deserialize<BooleanCondition>(root.GetRawText(), options);
             }
             else if (root.TryGetProperty("Conditions", out _))
             {
                 // This is likely a GroupedBooleanCondition
-                return JsonSerializer.Deserialize<IGroupedBooleanCondition>(root.GetRawText(), options);
+                return JsonSerializer.Deserialize<GroupedBooleanCondition>(root.GetRawText(), options);
             }
             else
             {

@@ -6,10 +6,14 @@
 
 <RadzenStack Orientation="Orientation.Vertical">
     <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnSave="@RefreshEvents" />
+    <CipherDisplayedEventsCard Title="@Title" @bind-AllEvents="@PendingEvents" @ref="PendingEventsCard"
+                               WithApproveButton="true" WithDeclineButton="true" UponApproval="@UponApproval" UponDecline="@UponDecline" />
+    <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-AllEvents="@ApprovedEvents" @ref="ApprovedEventsCard"
+                               WithDeclineButton="true" UponDecline="@CancelApproval" DeclineAllText="ביטול כל האישורים"/>
+    <CipherDisplayedEventsCard Title="תנועות דחויות" @bind-AllEvents="@DeclinedEvents" @ref="DeclinedEventsCard"
+                               WithDeclineButton="true" UponDecline="@CancelDecline" DeclineAllText="ביטול כל הדחיות"/>
+    <CipherSubmit Click="Submit" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission />
     <CipherJsonCheck JsonValue="@JsonRequest" />
-    <CipherDisplayedEventsCard Title="@Title" @bind-Events="@PendingEvents" @ref="FilterableEvents" WithRowButtons="true"/>
-    <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-Events="@ApprovedEvents" />
-    <CipherDisplayedEventsCard Title="תנועות דחויות" @bind-Events="@DeclinedEvents" />
 </RadzenStack>
 
 @code {
@@ -44,21 +48,76 @@
     public string JsonRequest { get; set; } = string.Empty;
 
     /// <summary>
+    /// Error message upon improper submission.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Is form valid for submission.
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Update result, send from the api
+    /// </summary>
+    [Parameter]
+    public IEvent? Result { get; set; }
+
+    /// <summary>
     /// API response to submission.
     /// </summary>
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
     private CipherBooleanConditions EventsFilter = new();
-    private CipherDisplayedEventsCard FilterableEvents = new();
+    private CipherDisplayedEventsCard PendingEventsCard = new();
+    private CipherDisplayedEventsCard ApprovedEventsCard = new();
+    private CipherDisplayedEventsCard DeclinedEventsCard = new();
+    private CipherSubmit submission = new();
 
     protected override async Task OnInitializedAsync()
     {
         Title ??= CipherNavLinks.Approval.Name;
 
         (PendingEvents, Error) = await Config.Event(false).PendingEvents();
-        (ApprovedEvents, Error) = await Config.Event(false).ApprovedEvents();
-        (DeclinedEvents, Error) = await Config.Event(false).DeclinedEvents();
+    }
+
+    public void UponApproval()
+    {
+        PendingEvents = PendingEventsCard.PendingEvents;
+        ApprovedEvents.AddRange(PendingEventsCard.ApprovedEvents);
+
+        ApprovedEventsCard.ChangeEvents(ApprovedEvents);
+        PendingEventsCard.ChangeEvents(PendingEvents);
+    }
+
+    public void UponDecline()
+    {
+        PendingEvents = PendingEventsCard.PendingEvents;
+        DeclinedEvents.AddRange(PendingEventsCard.DeclinedEvents);
+
+        DeclinedEventsCard.ChangeEvents(DeclinedEvents);
+        PendingEventsCard.ChangeEvents(PendingEvents);
+    }
+
+    public void CancelApproval()
+    {
+        ApprovedEvents = ApprovedEventsCard.PendingEvents;
+        PendingEvents.AddRange(ApprovedEventsCard.DeclinedEvents);
+
+        ApprovedEventsCard.ChangeEvents(ApprovedEvents);
+        PendingEventsCard.ChangeEvents(PendingEvents);
+    }
+
+    public void CancelDecline()
+    {
+        DeclinedEvents = DeclinedEventsCard.PendingEvents;
+        PendingEvents.AddRange(DeclinedEventsCard.DeclinedEvents);
+
+        DeclinedEventsCard.ChangeEvents(DeclinedEvents);
+        PendingEventsCard.ChangeEvents(PendingEvents);
     }
 
     public async Task RefreshEvents()
@@ -69,12 +128,7 @@
         // add to filter - only pending events
         List<ICondition> originalFilterValue = filterValue.Conditions.ToList();
 
-        var cond = Config.BooleanCondition();
-        cond.Attribute = $"[Event].[{nameof(IEvent.Status)}]";
-        cond.AttributeRelation = AttributeRelation.Eq;
-        cond.Value = "0";
-
-        originalFilterValue.Add(cond);
+        originalFilterValue.Add(IEvent.PendingCondition());
         filterValue.Conditions = originalFilterValue;
 
         objectFactory.Filter = filterValue;
@@ -90,11 +144,48 @@
         orderedItem.Attribute = $"[Event].[{nameof(IEvent.FinalStatePackages)}].[{nameof(IPackage.System)}].[{nameof(IStorageSystem.Id)}]";
         orderedItem.Order = Order.desc;
         objectFactory.AddOrderBy(orderedItem);
-        
+
         var result = await Config.QueryRequests(false).QueryObjects<IEvent>(objectFactory);
         (PendingEvents, Error) = Tuple.Create(result.Item1.Cast<IEvent>().ToList(), result.Item2);
 
         JsonRequest = objectFactory.ToJson();
-        await FilterableEvents.ChangeEvents(PendingEvents);
+        PendingEventsCard.ChangeEvents(PendingEvents);
+    }
+
+    /// <summary>
+    /// Fill all needed details for new event based on the form details.
+    /// </summary>
+    public async Task Submit()
+    {
+        foreach (var ev in ApprovedEvents)
+        {
+            IUpdateEvent updateEv = IUpdateEvent.ApprovedEvent();
+            (Result, Error) = await ev.Update(ev.Id, updateEv);
+
+            JsonRequest += ev.Id + "\n___\n\n" + updateEv.ToJson() + "\n\n-----------------\n\n";
+
+            if (Error != ErrorResponse.Success)
+                (Valid, ErrorMessage) = Tuple.Create(false, $"פעולת האישור של {ev.Id} נכשלה");
+        }
+
+        foreach (var ev in DeclinedEvents)
+        {
+            IUpdateEvent updateEv = IUpdateEvent.DeclinedEvent();
+            (Result, Error) = await ev.Update(ev.Id, updateEv);
+
+            JsonRequest += ev.Id + "\n___\n\n" + updateEv.ToJson() + "\n\n-----------------\n\n";
+
+            if (Error != ErrorResponse.Success)
+                (Valid, ErrorMessage) = Tuple.Create(false, $"פעולת הדחייה של {ev.Id} נכשלה");
+        }
+
+        (Valid, ErrorMessage) = Tuple.Create(true, "");
+        UpdateSubmissionSummary();
+    }
+
+    private void UpdateSubmissionSummary()
+    {
+        submission.SetValid(Valid);
+        submission.SetErrorMessage(ErrorMessage);
     }
 }
