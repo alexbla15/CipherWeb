@@ -36,10 +36,11 @@
 
     /// <summary>
     /// item 1 => string => the current path
+    /// item 2 => CipherField => full details on this field
     /// item 2 => bool => is the type a IEnumerable?
     /// </summary>
     [Parameter]
-    public EventCallback<Tuple<string, CipherField>> PathChanged { get; set; }
+    public EventCallback<Tuple<string, CipherField, bool>> PathChanged { get; set; }
 
     [Parameter]
     public string Path { get; set; } = string.Empty;
@@ -84,8 +85,8 @@
 
     private void ChangeFound()
     {
-        Tuple<string, CipherField> curr_path = SelectedChips.Any() ? 
-        Tuple.Create(GetPath(), SelectedChips.Last()) : Tuple.Create(string.Empty, new CipherField());
+        Tuple<string, CipherField, bool> curr_path = SelectedChips.Any() ? 
+        Tuple.Create(GetPath(), SelectedChips.Last(), SelectedChips.Any(x=>x.IsList())) : Tuple.Create(string.Empty, new CipherField(), false);
 
         PathChanged.InvokeAsync(curr_path);
         ValueChanged.InvokeAsync();

@@ -81,13 +81,13 @@ namespace CipherData.Interfaces
         /// Expected relation between attribute and a value.
         /// </summary>
         [HebrewTranslation(typeof(IBooleanCondition), nameof(AttributeRelation))]
-        AttributeRelation AttributeRelation { get; set; }
+        AttributeRelation? AttributeRelation { get; set; }
 
         /// <summary>
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
         [HebrewTranslation(typeof(IBooleanCondition), nameof(Operator))]
-        Operator Operator { get; set; }
+        Operator? Operator { get; set; }
 
         /// <summary>
         /// Method to check if field is applicable for this request

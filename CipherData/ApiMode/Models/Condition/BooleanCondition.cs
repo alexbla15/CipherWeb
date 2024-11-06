@@ -15,8 +15,8 @@
 
         public string? Value { get => _Value; set => _Value = value?.Trim(); }
 
-        public AttributeRelation AttributeRelation { get; set; } = AttributeRelation.Eq;
+        public AttributeRelation? AttributeRelation { get; set; }
 
-        public Operator Operator { get; set; }
+        public Operator? Operator { get; set; }
     }
 }
