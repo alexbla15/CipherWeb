@@ -6,28 +6,9 @@
     </HeaderContent>
     <Buttons>
         @AdditionalButtons
-        @if (ExcelExport)
-        {
-            <CipherExcelButton FileName="@FileTitle" OnClickFunc="@GetDataSource" />
-        }
-        @if (PDFExport)
-        {
-            <CipherPDFButton FileName="@FileTitle" OnClickFunc="@GetDataSource" />
-        }
-        @if (!string.IsNullOrEmpty(ExpandPath))
-        {
-            <CipherNavButton Icon="@Icons.Arrows.Squared.open_in_new" Variant="Variant.Outlined" HelpText="הרחבה" Path="@ExpandPath" />
-        }
-        @if (Sharable)
-        {
-            <CipherButton Icon="@Icons.Communication.Mail.mail" HelpText="שיתוף" Variant="Variant.Outlined" />
-        }
-        @if (IsReport)
-        {
-            <CipherButton @bind-Value=@IsFavourite Variant="@(IsFavourite ? Variant.Filled : Variant.Outlined)" 
-            ColorStyle="@(IsFavourite ? ButtonStyle.Primary : ButtonStyle.Danger)" ColorShade=Shade.Default
-                          Icon="@Icons.Awards.star" HelpText="@(IsFavourite ? "הסרה ממועדפים" : "הוספה למועדפים" )" Click="@Toggle" />
-        }
+        @ExportButtons()
+        @ExpandBtn()
+        @MarkSavedBtn()
     </Buttons>
     <ChildContent>
         @ComponentContent
@@ -89,23 +70,49 @@
     [Parameter]
     public bool IsFavourite { get; set; } = false;
 
+    [Parameter]
+    public bool DisableExport { get; set; } = true;
+
     /// <summary>
     /// More buttons for table card
     /// </summary>
     [Parameter]
     public RenderFragment? AdditionalButtons { get; set; }
 
-    /// <summary>
-    /// Needed datagrid.
-    /// </summary>
     [Parameter]
-    public RadzenDataGrid<IProcess> grid { get; set; } = new();
-
-    /// <summary>
-    /// All events for scheduler
-    /// </summary>
-    [Parameter]
-    public IEnumerable<DisplayedObject>? ChosenData { get; set; }
+    public Type? DataType { get; set; }
 
     public void Toggle() => IsFavourite = !IsFavourite;
+
+    private RenderFragment? ExportButtons()
+    {
+        return@<div>
+        @if (ExcelExport)
+    {
+        <CipherExcelButton FileName="@FileTitle" OnClickFunc="@GetDataSource" Disabled="@DisableExport"/>
+    }
+        @if (PDFExport)
+    {
+        <CipherPDFButton FileName="@FileTitle" OnClickFunc="@GetDataSource" Disabled="@DisableExport" />
+    }
+    </div>
+    ;
+    }
+
+    private RenderFragment? ExpandBtn()
+    {
+        if (string.IsNullOrEmpty(ExpandPath)) return null;
+        
+        return@<CipherNavButton Icon="@Icons.Arrows.Squared.open_in_new" Variant="Variant.Outlined" 
+        HelpText="הרחבה" Path="@ExpandPath" />;    
+    }
+
+    private RenderFragment? MarkSavedBtn()
+    {
+        if (!IsReport) return null;
+
+        return @<CipherButton @bind-Value=@IsFavourite Variant="@(IsFavourite ? Variant.Filled : Variant.Outlined)"
+                          ColorStyle="@(IsFavourite ? ButtonStyle.Primary : ButtonStyle.Danger)" ColorShade=Shade.Default
+                          Icon="@Icons.Awards.star" HelpText="@(IsFavourite ? "הסרה ממועדפים" : "הוספה למועדפים" )" Click="@Toggle" />;
+    }
 }

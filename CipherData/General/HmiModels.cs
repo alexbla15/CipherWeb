@@ -47,13 +47,14 @@ namespace CipherData.General
         [HebrewTranslation(typeof(CipherField), nameof(Translation))]
         public string Translation { get; set; } = string.Empty;
 
-        [HebrewTranslation(typeof(CipherField), nameof(IsList))]
-        public bool IsList { get; set; } = false;
-
         [JsonIgnore]
         [HebrewTranslation(typeof(CipherField), nameof(FieldType))]
         public Type FieldType { get; set; } = typeof(object);
-        
+
+        public bool IsList() => FieldType.GenericTypeArguments.Any();
+
+        public Type ItemType() => IsList() ? FieldType.GenericTypeArguments[0] : FieldType;
+
         public CheckField CheckPath()
         {
             CheckField result = CheckField.Required(Path, Translate(nameof(Path)), AllowedRegex: @"^[a-zA-Z0-9.\[\] \n?]+$");

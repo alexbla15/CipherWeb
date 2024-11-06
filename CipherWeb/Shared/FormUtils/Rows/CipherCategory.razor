@@ -16,7 +16,7 @@
 <CipherFormRow Icon="@Icon" >
     <RadzenDropDown Placeholder="@Label" Data="@subCategories" Multiple="false"
                     TextProperty="@(nameof(ICategory.Name))" ValueProperty="@(nameof(ICategory.Name))"
-                    AllowClear="true" TValue="string" Style="@($"width: {Constants.StandartWidth}")">
+                    AllowClear="true" TValue="string" Style="@($"width: {Constants.StandardWidth}")">
         <ValueTemplate>
             <b>@Label:</b> @((context as ICategory)?.Name)
         </ValueTemplate>

@@ -3,7 +3,7 @@
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IUnit" Disabled="@Disabled" AllowClear="true"
                             Data=@OptionalUnits TextProperty="@(nameof(IUnit.Name))" @bind-Value="ChosenUnit"
-                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandartWidth}")"
+                            AllowColumnResize="true" AllowFilteringByAllStringColumns="true" Style="@($"width: {Constants.StandardWidth}")"
                             Change="@Change" AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(IUnit.Name))" Title="@(IUnit.Translate(nameof(IUnit.Name)))" />

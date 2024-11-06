@@ -4,14 +4,10 @@
 
 <CipherTableCard Title="@Title" MaxWidth="@MaxWidth" Width="@Width" WithCard="@WithCard" WithButtons="@WithButtons"
                  Sharable="@Sharable" Variant="@Variant" IsReport="@IsReport" GetDataSource="@(() => DisplayedObject.ToListDicts(ChosenObjects))"
-                 FileTitle="@FileTitle" ExcelExport=@ExcelExport PDFExport=@PDFExport ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom">
+                 FileTitle="@FileTitle" ExpandPath="@ExpandPath" Height="@Height" MarginBottom="@MarginBottom"
+                 ExcelExport=@ExcelExport PDFExport=@PDFExport DisableExport="@(!ChosenObjects.Any())">
     <HeaderContent>
-        @if (WithHeaderContent)
-        {
-            <RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
-                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem/>
-            </RadzenStack>
-        }
+        @GetHeaderContent()
     </HeaderContent>
     <ComponentContent>
         @if (ChosenSystem.ChosenSystem != null && !ChosenObjects.Any())
@@ -20,8 +16,7 @@
         }
         else
         {
-            <CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)" SelectedColumns="@SelectedColumns"
-                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />
+            @DataTable()
         }
     </ComponentContent>
 </CipherTableCard>
@@ -139,6 +134,20 @@
 
         return result is null ? badFetch : (Tuple<List<Cipher_TItem>, ErrorResponse>?)(object?)result;
     }
-    
+
     public void SetFileName() => FileTitle = ChosenSystem.ChosenSystem is null ? PrefixFileTitle : $"{PrefixFileTitle}_{ChosenSystem.ChosenSystem?.Id}";
+
+    private RenderFragment? GetHeaderContent()
+    {
+        if (!WithHeaderContent) return null;
+
+        return @<RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+                <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem />
+            </RadzenStack>
+    ;
+    }
+
+    private RenderFragment DataTable()
+    =>@<CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)" SelectedColumns="@SelectedColumns"
+                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />;
 }

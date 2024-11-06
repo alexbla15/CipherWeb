@@ -65,14 +65,14 @@
     }
     @if (string.IsNullOrEmpty(Label))
     {
-        <RadzenNumeric @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled" Style="@($"width:{Constants.StandartWidth};")"
+        <RadzenNumeric @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled" Style="@($"width:{Constants.StandardWidth};")"
                        Min="@Min" Max="Max" Visible="@Visible" />
     }
     else
     {
-        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth};")" Visible="@Visible">
+        <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandardWidth};")" Visible="@Visible">
             <RadzenNumeric Min="@Min" Max="Max" @bind-Value=@Amount Change="AmountChanged" Format="@Style" Disabled="@Disabled"
-                           Style="@($"width:{Constants.StandartWidth};")" />
+                           Style="@($"width:{Constants.StandardWidth};")" />
         </RadzenFormField>
     }
 </RadzenStack>

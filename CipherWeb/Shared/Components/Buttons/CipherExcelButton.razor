@@ -9,7 +9,7 @@
 @inject IJSRuntime JSRuntime
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ButtonStyle.Success" ColorShade="@Shade.Dark"
-              Click="@ClickFunc" Variant="@Variant.Outlined" />
+              Click="@ClickFunc" Variant="@Variant.Outlined" Disabled="@Disabled" />
 
 @code
 {
@@ -17,7 +17,7 @@
     /// Name of output file.
     /// </summary>
     [Parameter]
-    public string? FileName { get; set; }
+    public string? FileName { get; set; } = "export_data";
 
     /// <summary>
     /// Data that will be exported to Excel.

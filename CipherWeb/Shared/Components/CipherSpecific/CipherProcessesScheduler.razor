@@ -12,11 +12,7 @@
         <CipherButton Icon="@Icons.Time.calendar_today" HelpText="@CalendarViewText" Variant="Variant.Outlined"
                       Click="@CalendarView" />
         <CipherAddProcessDefinitionBtn/>
-        @if (SetView == View.Table)
-        {
-            <CipherExcelButton FileName="@FileName" OnClickFunc="@(() => DisplayedObject.ToListDicts(ProcTable.ChosenObjects))" />
-        }
-        <CipherPDFButton FileName="@FileName" CipherType="typeof(IProcess)" />
+        @ExportButtons()
     </Buttons>
     <ChildContent>
         @if (SetView == View.Table)
@@ -134,6 +130,21 @@
             (ChosenProcesses, Error) = Tuple.Create(new List<IProcess>(), ErrorResponse.Success);
         }
         SetFileName();
+    }
+
+    private RenderFragment? ExportButtons()
+    {
+        @if (SetView == View.Table)
+        {
+            Func<IEnumerable<IDictionary<string, object?>>>? GetData = () => DisplayedObject.ToListDicts(ProcTable.ChosenObjects);
+
+            return@<div>
+        <CipherExcelButton FileName="@FileName" OnClickFunc="@GetData" Disabled="@(!ProcTable.ChosenObjects.Any())" />
+        <CipherPDFButton FileName="@FileName" OnClickFunc="@GetData" Disabled="@(!ProcTable.ChosenObjects.Any())" />
+            </div>;
+        }
+        // Exports buttons should be visible only when the table is shown
+        return null;
     }
 
     async Task ShowError()

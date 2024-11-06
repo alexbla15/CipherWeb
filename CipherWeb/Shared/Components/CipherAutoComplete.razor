@@ -235,7 +235,7 @@
 
     private RenderFragment AutoComplete(bool withFormField)
     {
-        string? style = (withFormField) ? Style : $"{Style}; width: {Constants.StandartWidth};";
+        string? style = (withFormField) ? Style : $"{Style}; width: {Constants.StandardWidth};";
 
         return
     @<RadzenAutoComplete class="testAB" @bind-Value=@model.value Name="setvalue" Placeholder="@Placeholder" Style="@style" Disabled="@Disabled" onkeydown="@OnKeyDown"
@@ -254,7 +254,7 @@
             }
             else
             {
-                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
+                <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandardWidth}; min-width: {Constants.StandardWidth}")">
                     @AutoComplete(true)
                 </RadzenFormField>
             }

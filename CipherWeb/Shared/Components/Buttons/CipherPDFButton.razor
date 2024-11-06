@@ -14,7 +14,7 @@
 @inject IJSRuntime JS
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ButtonStyle.Danger" ColorShade="@Shade.Dark"
-              Click="@ClickFunc" Variant="@Variant.Outlined" />
+              Click="@ClickFunc" Variant="@Variant.Outlined" Disabled="@Disabled"/>
 
 @code
 {
@@ -30,18 +30,12 @@
     [Parameter]
     public IEnumerable<IDictionary<string, object?>>? DataSource { get; set; }
 
-    /// <summary>
-    /// Type that will be used to translate headers
-    /// </summary>
     [Parameter]
-    public Type CipherType { get; set; } = typeof(IResource);
-
-    [Parameter]
-    public Func<IEnumerable<IDictionary<string,object?>>>? OnClickFunc { get; set; }
+    public Func<IEnumerable<IDictionary<string, object?>>>? OnClickFunc { get; set; }
 
     protected override void OnInitialized()
     {
-        HelpText ??= "ייצוא ל-PDF";
+        if (string.IsNullOrEmpty(HelpText)) HelpText = "ייצוא ל-PDF";
         Icon ??= Icons.Documents.picture_as_pdf;
     }
 
@@ -51,20 +45,18 @@
     {
         if (OnClickFunc != null)
         {
-            DataSource = DisplayedObject.ToListDicts(OnClickFunc.Invoke());
-            TableToPDF.GeneratePdf(DataSource.ToList(), CipherType, FileName);
+            DataSource = OnClickFunc.Invoke();
+            TableToPDF.GeneratePdf(DataSource.ToList(), FileName);
         }
     }
 
     public class TableToPDF : IDocument
     {
-        private IEnumerable<IDictionary<string, object>>? _data { get; set; }
+        private IEnumerable<IDictionary<string, object?>>? _data { get; set; }
 
         public string FileName { get; set; } = "test.pdf";
         public string Worker { get; set; } = Constants.SetUser.Name;
         public string? Classification { get; set; } = "מוגבל";
-
-        public Type CipherType { get; set; } = typeof(IResource);
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
 
@@ -95,60 +87,51 @@
                 row.RelativeColumn().AlignCenter().Text(Classification?.ToString(),
                 QuestPDF.Infrastructure.TextStyle.Default.FontColor(QuestPDF.Helpers.Colors.Red.Accent1).Bold().Size(12).DirectionFromRightToLeft());
 
-                row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:MMMM dd, yyyy}", HeaderTextStyle);
+                row.RelativeColumn().AlignCenter().Text($"{DateTime.Now:dd/MM/yyyy hh:mm}", HeaderTextStyle);
 
             });
         }
 
+        public List<string> Headers() => _data?.FirstOrDefault()?.Keys.ToList() ?? new();
+
         void ComposeContent(IContainer container)
         {
-            container.PaddingVertical(10).Table(table =>
-        {
-            // Define columns dynamically based on the properties of the generic type
-            var properties = CipherType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            List<string>? headers = _data?.FirstOrDefault()?.Keys.ToList();
 
-            table.ColumnsDefinition(columns =>
-            {
-                foreach (var _ in properties)
+            if (headers is null) return;
+
+            container.PaddingVertical(10).Table(table =>
                 {
-                    columns.RelativeColumn(); // Create a column for each property
+                    table.ColumnsDefinition(columns =>
+                    {
+                        foreach (var _ in Headers())
+                    {
+                       columns.RelativeColumn(); // Create a column for each property
+                    }
                 }
-            });
+            );
 
             // Add a header row with the property names
             table.Header(header =>
             {
-                foreach (var property in properties)
+                    foreach (var property in Headers())
                 {
-                    string eng_translation = $"{CipherType.Name}_{property.Name}";
-                    string heb_translation = Translator.GetTranslation(eng_translation);
-                    if (heb_translation == eng_translation)
-                    {
-                        eng_translation = property.Name;
-                        heb_translation = Translator.GetTranslation(eng_translation);
-                    }
-
-                    header.Cell().Element(HeaderCellStyle).Text(heb_translation);
+                    header.Cell().Element(HeaderCellStyle).Text(property);
 
                     static IContainer HeaderCellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Border(1).Padding(5);
                 }
             });
-
-            var headers = _data?.FirstOrDefault()?.Keys;
 
             // Add rows for the data
             if (_data != null)
             {
                 foreach (var item in _data)
                 {
-                    if (headers != null)
+                    foreach (var column in Headers())
                     {
-                        foreach (var column in headers)
-                        {
-                            // Get the value from the dictionary by the key
-                            var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
-                            table.Cell().Element(CellStyle).Text(value);
-                        }
+                        // Get the value from the dictionary by the key
+                        var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
+                        table.Cell().Element(CellStyle).Text(value);
                     }
                     static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
                 }
@@ -168,16 +151,17 @@
 
             // Create a container for the image
             row.RelativeItem().AlignCenter().Width(100).Height(100).Element(imageContainer =>
-            {
-                imageContainer.Image(imageBytes).FitWidth();
-            });
-        }
-    });
+                {
+                    imageContainer.Image(imageBytes).FitWidth();
+                });
+                }
+                }
+            );
         }
 
-        public static void GeneratePdf(List<IDictionary<string, object>>? Data, Type type, string? FileName)
+        public static void GeneratePdf(List<IDictionary<string, object?>>? Data, string? FileName)
         {
-            var document = new TableToPDF() { _data = Data, CipherType = type, FileName = $"{FileName}.pdf" };
+            var document = new TableToPDF() { _data = Data, FileName = $"{FileName}.pdf" };
             document.GeneratePdf(document.FileName);
         }
     }

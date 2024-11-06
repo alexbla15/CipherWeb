@@ -11,13 +11,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Any of BooleanCondition / GroupedBooleadCondition
         /// </summary>
-        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Conditions))]
+        [HebrewTranslation(typeof(IGroupedBooleanCondition), nameof(Conditions))]
         IEnumerable<ICondition> Conditions { get; set; }
 
         /// <summary>
         /// Operator used to resolve the multiple condition results to a single boolean.
         /// </summary>
-        [HebrewTranslation(typeof(GroupedBooleanCondition), nameof(Operator))]
+        [HebrewTranslation(typeof(IGroupedBooleanCondition), nameof(Operator))]
         Operator Operator { get; set; }
 
         /// <summary>

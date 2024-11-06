@@ -135,23 +135,46 @@
         return 
     @<CipherButton ColorStyle="@colorStyle" Icon="@icon"
         Variant="Variant.Flat" ColorShade="Shade.Dark" Style="margin:0px"
-        Size="ButtonSize.Medium" Click="@(args => Approve ? ApproveEvent(selectedEv) : DeclineEvent(selectedEv))" />;
+        Size="ButtonSize.Medium" Click="@(args => Approve ? ApproveEvent(selectedEv) : DeclineEvent(selectedEv))" />
+    ;
+    }
+
+
+    private RenderFragment? ApproveAllBtn()
+    {
+        if (!WithApproveButton) return null;
+
+        return
+        @<CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="@ApproveAllText" 
+        Variant="Variant.Outlined" Click="@ApproveAllEvents" />;
+    }
+
+    private RenderFragment? DeclineAllBtn()
+    {
+        if (!WithDeclineButton) return null;
+
+        return
+        @<CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="@DeclineAllText" 
+        Variant="Variant.Outlined" Click="@DeclineAllEvents" />;
+    }
+
+    private RenderFragment? ExportButtons()
+    {
+            string fileName = "events";
+            Func<IEnumerable<IDictionary<string, object?>>>? GetData = () => DisplayedObject.ToListDicts(DisplayedEvents);
+
+            return@<div>
+        <CipherExcelButton FileName="@fileName" OnClickFunc="@GetData" Disabled="@(!DisplayedEvents.Any())"/>
+        <CipherPDFButton FileName="@fileName" OnClickFunc="@GetData" Disabled="@(!DisplayedEvents.Any())"/>
+    </div>;
     }
 }
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        @if (WithApproveButton)
-        {
-            <CipherButton Icon="@Icons.Symbols.V.done_all" HelpText="@ApproveAllText" Variant="Variant.Outlined" Click="@ApproveAllEvents" />
-        }
-        @if (WithDeclineButton)
-        {
-            <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" HelpText="@DeclineAllText" Variant="Variant.Outlined" Click="@DeclineAllEvents" />
-        }
-
-        <CipherExcelButton FileName="events" OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))"/>
-        <CipherPDFButton FileName="events" OnClickFunc="@(() => DisplayedObject.ToListDicts(DisplayedEvents))" />
+        @ApproveAllBtn()
+        @DeclineAllBtn()
+        @ExportButtons()
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical">

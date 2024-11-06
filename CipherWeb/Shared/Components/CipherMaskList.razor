@@ -2,29 +2,18 @@
 @using Radzen
 
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-    <CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText"
-                        AllowedRegex="@AllowedRegex" Required="false" @ref=TextAdd
-    @onkeydown="HandleKeyDown" />
+    @UserTextBox()
     @if (SelectedTexts != null && SelectedTexts.Any())
     {
-        <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />
-
+        @ArrowIcon()
         <div class="@Constants.Styles.Chips.Container">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
                 @foreach (var text in SelectedTexts)
                 {
-                    <div class="@Constants.Styles.Chips.Chip">
-                        <span>XXX</span>
-                        <span style="@($"color: {Colors.Danger}")">@text</span>
-                        <span class="@Constants.Styles.Chips.CloseItem" @onclick="() => RemoveText(text)">
-                            <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-                        </span>
-                    </div>
+                    @Chip(text)
                 }
 
-                <span class="@Constants.Styles.Chips.CloseAll" @onclick="RemoveAll">
-                    <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-                </span>
+                @CloseAll()
             </RadzenStack>
         </div>
     }
@@ -43,10 +32,26 @@
     [Parameter]
     public string AllowedRegex { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Text that will be added to the chip, prior to user-selected text
+    /// </summary>
+    [Parameter]
+    public string Prefix { get; set; } = "XXX";
+
+    /// <summary>
+    /// Chiptext color
+    /// </summary>
+    [Parameter]
+    public string Color { get; set; } = Colors.Danger;
+
     [Parameter]
     public EventCallback ValueChanged { get; set; }
 
+    [Parameter]
+    public bool WithPrefix { get; set; } = true;
+
     private CipherAutoComplete TextAdd = new();
+
     private string newText = string.Empty;
 
     private void AddText()
@@ -78,4 +83,42 @@
         SelectedTexts.Clear();
         ValueChanged.InvokeAsync();
     }
+
+    private RenderFragment? UserTextBox()
+    =>
+    @<CipherAutoComplete Label="@PlaceHolder" Icon="@Icon" MaxLength="3" @bind-Value="@newText"
+    AllowedRegex="@AllowedRegex" Required="false" @ref=TextAdd
+        @onkeydown="HandleKeyDown" />;
+
+    private RenderFragment? ArrowIcon()
+    => @<RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />;
+
+    private RenderFragment? Chip(string text)
+    =>
+    @<div class="@Constants.Styles.Chips.Chip">
+        @ChipText(text)
+        @CloseItem(text)
+    </div>;
+
+    private RenderFragment? ChipText(string text)
+        =>
+        @<div>
+        @if (WithPrefix)
+            {
+                <span>@Prefix</span>
+            }
+            <span style="@(WithPrefix ? $"color: {Colors.Danger}" : "")">@text</span>
+    </div>;
+
+    private RenderFragment? CloseItem(string text)
+        =>
+    @<span class="@Constants.Styles.Chips.CloseItem" @onclick="() => RemoveText(text)">
+        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+    </span>;
+
+    private RenderFragment? CloseAll()
+    =>
+    @<span class="@Constants.Styles.Chips.CloseAll" @onclick="RemoveAll">
+        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+    </span>;
 }

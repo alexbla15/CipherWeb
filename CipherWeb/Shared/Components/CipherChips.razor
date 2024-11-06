@@ -5,7 +5,7 @@
 
 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="5px">
     <RadzenIcon Icon="@Icon" IconColor="@Colors.PrimaryDark" class="@Constants.Styles.Icon" />
-    <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandartWidth}; min-width: {Constants.StandartWidth}")">
+    <RadzenFormField Variant=Variant.Flat Text="@Label" Style="@($"width:{Constants.StandardWidth}; min-width: {Constants.StandardWidth}")">
 
         <RadzenStack Gap="0px" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start" Style="margin-top:20px">
             @if (SelectedChips != null && SelectedChips.Any())

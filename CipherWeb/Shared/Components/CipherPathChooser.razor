@@ -1,0 +1,155 @@
+﻿@using System.Collections.Generic
+@using Radzen
+@using System.Reflection
+
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Right">
+    @UserAttributeChooser()
+    @if (SelectedChips != null && SelectedChips.Any())
+    {
+        @ArrowIcon()
+        <div class="@Constants.Styles.Chips.Container" style="@($"min-width:{Constants.StandardWidth}")">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center"
+            Wrap="FlexWrap.Wrap">
+                @for (int i=0; i < SelectedChips.Count ; i++)
+                {
+                    @Chip(SelectedChips[i], i)
+                    @if (SelectedChips.Count-1 != i)
+                    {
+                        <RadzenText Text="/"/>
+                    }
+                }
+                @CloseAll()
+            </RadzenStack>
+        </div>
+    }
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public List<CipherField> AvailableFields { get; set; } = new();
+
+    [Parameter]
+    public List<CipherField> SelectedChips { get; set; } = new();
+
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
+    /// <summary>
+    /// item 1 => string => the current path
+    /// item 2 => bool => is the type a IEnumerable?
+    /// </summary>
+    [Parameter]
+    public EventCallback<Tuple<string, CipherField>> PathChanged { get; set; }
+
+    [Parameter]
+    public string Path { get; set; } = string.Empty;
+
+    private CipherAutoComplete TextAdd = new();
+
+    private CipherField ChosenAttribute = new();
+
+    protected override void OnInitialized() => ResetFields();
+
+    private void SetPath() => Path = GetPath();
+
+    private void AddChip(CipherField field)
+    {
+        Type fieldType = field.ItemType();
+
+        SelectedChips.Add(field);
+
+        ChosenAttribute = new();
+
+        SetFields(fieldType);
+
+        ChangeFound();
+    }
+
+    private void RemoveChip(int index)
+    {
+        SelectedChips.RemoveRange(index, SelectedChips.Count - index);
+
+        if (SelectedChips.Any())
+        {
+            SetFields(SelectedChips[index - 1].FieldType);
+        }
+        else
+        {
+            ResetFields();
+        }
+
+        ChosenAttribute = new();
+        ChangeFound();
+    }
+
+    private void ChangeFound()
+    {
+        Tuple<string, CipherField> curr_path = SelectedChips.Any() ? 
+        Tuple.Create(GetPath(), SelectedChips.Last()) : Tuple.Create(string.Empty, new CipherField());
+
+        PathChanged.InvokeAsync(curr_path);
+        ValueChanged.InvokeAsync();
+    }
+
+    private void RemoveAll() => RemoveChip(0);
+
+    private void ResetFields()
+    {
+        AvailableFields = CommonFuncs.GetResourceClasses().Select(
+    x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
+    Select(y => new CipherField() { Path=y.Name ,Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
+    }
+
+    private void SetFields(Type fieldType)
+    {
+        if (fieldType.GenericTypeArguments.Any())
+        {
+            fieldType = fieldType.GenericTypeArguments[0];
+        }
+
+        List<PropertyInfo> fields = fieldType.GetProperties().Where(x => x.GetCustomAttribute<HebrewTranslationAttribute>() != null).ToList();
+
+        AvailableFields = fields.Select(x => new CipherField()
+                {
+                    Path = x.Name,
+                    FieldType = x.PropertyType,
+                    Translation = x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation
+                }).ToList();
+
+        SetPath();
+    }
+
+    public string GetPath() =>
+        string.Join(".", SelectedChips.Select(x => $"[{x.Path}]"));
+
+    public string GetTranslationPath() =>
+    string.Join(".", SelectedChips.Select(x => $"[{x.Translation}]"));
+
+    private RenderFragment? UserAttributeChooser()
+    =>
+    @<RadzenDropDown TValue="CipherField" Data="@AvailableFields" TextProperty="Translation"
+                  Change="@(args => AddChip((CipherField)args))" Value="@ChosenAttribute"
+                    Style="@($"min-width:{Constants.StandardWidth}")" />;
+
+    private RenderFragment? ArrowIcon()
+    => @<RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />;
+
+    private RenderFragment? Chip(CipherField chip, int index)
+    =>
+    @<div class="@Constants.Styles.Chips.Chip">
+        <span>@chip.Translation</span>
+        @CloseItem(chip, index)
+    </div>;
+
+    private RenderFragment? CloseItem(CipherField chip, int index)
+        =>
+    @<span class="@Constants.Styles.Chips.CloseItem" @onclick="() => RemoveChip(index)">
+        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+    </span>;
+
+    private RenderFragment? CloseAll()
+    =>
+    @<span class="@Constants.Styles.Chips.CloseAll" @onclick="RemoveAll">
+        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+    </span>;
+}

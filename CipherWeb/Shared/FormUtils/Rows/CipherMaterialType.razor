@@ -2,7 +2,7 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDownDataGrid Placeholder="@Label" TValue="ICategory" AllowFiltering="true" Disabled="@Disabled" @bind-value="ChosenMaterialType"
-                            Style="@($"width:{Constants.StandartWidth}")" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
+                            Style="@($"width:{Constants.StandardWidth}")" Data=@categories SearchTextPlaceholder="חיפוש..." AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Id))" Title="@(GetLabel(nameof(ICategory.Id)))" />
             <RadzenDropDownDataGridColumn Property="@(nameof(ICategory.Name))" Title="@(GetLabel(nameof(ICategory.Name)))" />

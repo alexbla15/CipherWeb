@@ -12,7 +12,8 @@
                 </Items>
             </RadzenSelectBar>
         </CipherComponentCard>
-        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
+        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" 
+            AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
     }
     @if (RenderedTable != null)
     {
@@ -37,7 +38,7 @@
     public List<string> objectTypes { get; set; } = new() {
         Translator.GetTranslation("Packages"),
         Translator.GetTranslation("Vessels"),
-        Translator.GetTranslation("Systems"),
+        Translator.GetTranslation("StorageSystems"),
         Translator.GetTranslation("Events"),
         Translator.GetTranslation("Processes"),
         Translator.GetTranslation("Categories"),
@@ -126,6 +127,7 @@
                 builder.OpenComponent<CipherPackagesTable>(0);
                 builder.AddAttribute(1, "ChosenObjects", Packages);
                 builder.AddAttribute(2, "WithButtons", WithButtons);
+                builder.AddAttribute(3, "WithHeaderContent", false);
                 builder.CloseComponent();
             }
             ,
@@ -133,6 +135,7 @@
             {
                 builder.OpenComponent<CipherVesselsTable>(0);
                 builder.AddAttribute(1, "ChosenObjects", Vessels);
+                builder.AddAttribute(2, "WithHeaderContent", false);
                 builder.CloseComponent();
             }
             ,
@@ -147,6 +150,7 @@
             {
                 builder.OpenComponent<CipherEventsTable>(0);
                 builder.AddAttribute(1, "ChosenObjects", Events);
+                builder.AddAttribute(2, "WithHeaderContent", false);
                 builder.CloseComponent();
             }
             ,
@@ -154,6 +158,7 @@
             {
                 builder.OpenComponent<CipherProcessesTable>(0);
                 builder.AddAttribute(1, "ChosenObjects", Processes);
+                builder.AddAttribute(2, "WithHeaderContent", false);
                 builder.CloseComponent();
             }
             ,
@@ -173,7 +178,7 @@
             ,
             _ => builder =>
             {
-                builder.AddContent(0, "No matching table found.");
+                builder.AddContent(0, "לא נמצאה טבלה מתאימה.");
             }
         };
     }

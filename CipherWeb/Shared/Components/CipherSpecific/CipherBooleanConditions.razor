@@ -12,31 +12,10 @@
     public bool WithSaveButton { get; set; } = true;
 
     /// <summary>
-    /// All available attributes to set conditions on them
-    /// </summary>
-    [Parameter]
-    public List<CipherField> AvailableAttributes { get; set; } = CommonFuncs.GetCipherTypeFields(typeof(IEvent));
-
-    /// <summary>
     /// All chosen conditions
     /// </summary>
     [Parameter]
     public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition();
-
-    [Parameter]
-    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
-
-    /// <summary>
-    /// Error response for fetching data
-    /// </summary>
-    [Parameter]
-    public ErrorResponse Error { get; set; } = ErrorResponse.Success;
-
-    /// <summary>
-    /// Function that occurs upon saving the conditions
-    /// </summary>
-    [Parameter]
-    public EventCallback<object> OnSave { get; set; }
 
     /// <summary>
     /// Help text for save-button.
@@ -53,7 +32,46 @@
     [Parameter]
     public EventCallback ValueChanged { get; set; }
 
-    private CipherDataFilter dataFilter = new();
+    [Parameter]
+    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
+
+    /// <summary>
+    /// Function that occurs upon saving the conditions
+    /// </summary>
+    [Parameter]
+    public EventCallback<object> OnSave { get; set; }
+
+    private RadzenDataFilter<CipherField> dataFilter = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (string.IsNullOrEmpty(Title)) Title = "תנאים נבחרים";
+
+        if (firstRender)
+        {
+            await Clear();
+
+            dataFilter.LogicalFilterOperator = (ChosenCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
+
+            List<CompositeFilterDescriptor> newFilters = new();
+
+            foreach (var cond in ChosenCondition.Conditions)
+            {
+                if (cond is IBooleanCondition)
+                {
+                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as IBooleanCondition));
+                }
+                else if (cond is IGroupedBooleanCondition)
+                {
+                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as IGroupedBooleanCondition));
+                }
+            }
+
+            StateHasChanged();
+        }
+    }
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
     {
@@ -127,30 +145,29 @@
         {
             string filterVal = filter.FilterValue.ToString() ?? string.Empty;
 
-            if (filterVal.Contains("##")) cond.Operator = (filterVal.Split("##")[1] == nameof(Operator.Any)) ? Operator.Any : Operator.All;
-            cond.Value = filterVal.Split("##")[0];
-        }
+            cond.Attribute = GetName(filter);
+            cond.Value = GetValue(filter);
+            cond.Operator = GetOperator(filter);
 
-        FilterOperator? filterOperator = filter.FilterOperator;
+            string? filterRelation = GetRelation(filter);
 
-        if (filterOperator != null)
-        {
-            cond.AttributeRelation = filterOperator switch
+            if (filterRelation != null)
             {
-                FilterOperator.Equals => AttributeRelation.Eq,
-                FilterOperator.NotEquals => AttributeRelation.Ne,
-                FilterOperator.GreaterThan => AttributeRelation.Gt,
-                FilterOperator.GreaterThanOrEquals => AttributeRelation.Ge,
-                FilterOperator.LessThan => AttributeRelation.Lt,
-                FilterOperator.LessThanOrEquals => AttributeRelation.Le,
-                FilterOperator.Contains => AttributeRelation.Contains,
-                FilterOperator.DoesNotContain => AttributeRelation.NotContains,
-                FilterOperator.IsEmpty => AttributeRelation.IsEmpty,
-                FilterOperator.IsNotEmpty => AttributeRelation.IsNotEmpty,
-                FilterOperator.IsNull => AttributeRelation.IsNull,
-                FilterOperator.IsNotNull => AttributeRelation.IsNotNull,
-                _ => AttributeRelation.Eq
-            };
+                if (filterRelation == Translate(nameof(AttributeRelation.Eq))) cond.AttributeRelation = AttributeRelation.Eq;
+                if (filterRelation == Translate(nameof(AttributeRelation.Ne))) cond.AttributeRelation = AttributeRelation.Ne;
+                if (filterRelation == Translate(nameof(AttributeRelation.Gt))) cond.AttributeRelation = AttributeRelation.Gt;
+                if (filterRelation == Translate(nameof(AttributeRelation.Ge))) cond.AttributeRelation = AttributeRelation.Ge;
+                if (filterRelation == Translate(nameof(AttributeRelation.Lt))) cond.AttributeRelation = AttributeRelation.Lt;
+                if (filterRelation == Translate(nameof(AttributeRelation.Le))) cond.AttributeRelation = AttributeRelation.Le;
+                if (filterRelation == Translate(nameof(AttributeRelation.Contains))) cond.AttributeRelation = AttributeRelation.Contains;
+                if (filterRelation == Translate(nameof(AttributeRelation.NotContains))) cond.AttributeRelation = AttributeRelation.NotContains;
+                if (filterRelation == Translate(nameof(AttributeRelation.IsEmpty))) cond.AttributeRelation = AttributeRelation.IsEmpty;
+                if (filterRelation == Translate(nameof(AttributeRelation.IsNotEmpty))) cond.AttributeRelation = AttributeRelation.IsNotEmpty;
+                if (filterRelation == Translate(nameof(AttributeRelation.IsNull))) cond.AttributeRelation = AttributeRelation.IsNull;
+                if (filterRelation == Translate(nameof(AttributeRelation.IsNotNull))) cond.AttributeRelation = AttributeRelation.IsNotNull;
+                if (filterRelation == Translate(nameof(AttributeRelation.StartsWith))) cond.AttributeRelation = AttributeRelation.StartsWith;
+                if (filterRelation == Translate(nameof(AttributeRelation.EndsWith))) cond.AttributeRelation = AttributeRelation.EndsWith;
+            }
         }
 
         return cond;
@@ -183,15 +200,14 @@
 
         foreach (var filter in dataFilter.Filters)
         {
-            if (fields!=null)
-            {
-                filter.Property ??= fields.ToList()[dataFilter.Filters.ToList().IndexOf(filter)].Path;
-            }
+            //if (fields!=null)
+            //{
+            //    filter.Property ??= fields.ToList()[dataFilter.Filters.ToList().IndexOf(filter)].Path;
+            //}
 
             // decide if it is a GroupedCondition or BooleanCondition
 
             conditions.Add((filter.Filters is null) ? SetBooleanCondition(filter) : SetGroupedBooleanCondition(filter));
-
         }
 
         ChosenCondition.Conditions = conditions;
@@ -200,127 +216,209 @@
 
     async Task ParamsChanged(IQueryable<CipherField>? fields = null)
     {
-        //StateHasChanged();
         Save(fields);
         await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
         await ValueChanged.InvokeAsync();
-
-        JsonRequest = ChosenCondition.ToJson();
+        SetJson();
     }
 
-    public async Task Clear() => await dataFilter.ClearFilters();
+    public void SetJson() => JsonRequest = ChosenCondition.ToJson();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    /// <summary>
+    /// Clears all fields in the filter, and resets set-condition and json
+    /// </summary>
+    /// <returns></returns>
+    public async Task Clear()
     {
-        await base.OnAfterRenderAsync(firstRender);
+        ChosenCondition = Config.GroupedBooleanCondition();
+        SetJson();
+        await dataFilter.ClearFilters();
+    }
 
-        Title ??= "תנאים נבחרים";
-        if (firstRender)
+    private static string Translate(string key) => Translator.GetTranslation(key);
+
+    ///  <summary>
+    /// Method to control the including all data of a filter within its value
+    /// </summary>
+    /// <param name="prop">a filter description which will contain all the data</param>
+    /// <param name="update_name">should the name be updated?</param>
+    /// <param name="update_value">should the value be updated?</param>
+    /// <param name="update_relation">should the relation be updated?</param>
+    /// <param name="changeParams">should activate changed-params function after this method?</param>
+    /// <param name="update_islist">should update isList?</param>
+    /// <param name="update_operator">should update operator?</param>
+    /// <param name="name">value to be set as name upon update</param>
+    /// <param name="value">value to be set as value upon update</param>
+    /// <param name="relation">value to be set as relation upon update</param>
+    /// <param name="isList">value to be set as isList upon update</param>
+    /// <param name="_operator">value to be set as operator upon update</param>
+    private async void ChangeProperty(CompositeFilterDescriptor prop,
+        bool update_name = false, bool update_value = false, bool update_relation = false,
+        bool changeParams = true, bool update_islist = false, bool update_operator = false,
+        string? name = null, string? value = null, string? relation = null, bool isList = false, Operator _operator = Operator.Any)
+    {
+        string? newName = update_name ? name : GetName(prop);
+        string? newVal = update_value ? value : GetValue(prop);
+        string? newRel = update_relation ? relation : GetRelation(prop);
+        bool newIsList = update_islist ? isList : IsList(prop);
+        Operator newOperator = update_operator ? _operator : GetOperator(prop);
+
+        if (IsCheckingNullOrEmpty(newRel)) newVal = null;
+
+        prop.FilterValue = $"{newName}###{newVal ?? " "}###{newRel ?? " "}###{newIsList}###{newOperator}";
+
+        if (changeParams) await ParamsChanged();
+    }
+
+    private string? GetName(CompositeFilterDescriptor prop) => prop.FilterValue?.ToString()?.Split("###")[0];
+
+    private string? GetValue(CompositeFilterDescriptor prop) => prop.FilterValue?.ToString()?.Split("###")[1];
+
+    private string? GetRelation(CompositeFilterDescriptor prop) => prop.FilterValue?.ToString()?.Split("###")[2];
+
+    private bool IsList(CompositeFilterDescriptor prop)
+    {
+        var res = prop.FilterValue?.ToString()?.Split("###")[3];
+        return Convert.ToBoolean(res);
+    }
+
+    private Operator GetOperator(CompositeFilterDescriptor prop)
+    => prop.FilterValue?.ToString()?.Split("###")[4] == "All" ? Operator.All : Operator.Any;
+
+    private bool IsCheckingNullOrEmpty(string rel) =>
+    (new List<string> { "IsNull", "IsNotNull", "IsEmpty", "IsNotEmpty" }).Select(x => Translate(x)).Contains(rel);
+
+    private bool IsCheckingNullOrEmpty(CompositeFilterDescriptor prop) =>
+    IsCheckingNullOrEmpty(GetRelation(prop));
+
+    private RenderFragment? RefreshBtn()
+    => (!Disabled && WithSaveButton) ?
+    @<CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined"
+                  Click="@(async args => {await ParamsChanged();})" HelpText="@SaveConditionsText" /> : null;
+
+    private RenderFragment? JsonBox()
+    => Disabled ? null : @<CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />;
+
+    private List<string> AllFilters = new() { 
+        nameof(AttributeRelation.IsNull), 
+        nameof(AttributeRelation.IsNotNull),
+        nameof(AttributeRelation.StartsWith),
+        nameof(AttributeRelation.EndsWith),
+        nameof(AttributeRelation.IsEmpty),
+        nameof(AttributeRelation.IsNotEmpty),
+        nameof(AttributeRelation.NotContains),
+        nameof(AttributeRelation.Contains),
+        nameof(AttributeRelation.Ne),
+        nameof(AttributeRelation.Eq),
+        nameof(AttributeRelation.Le),
+        nameof(AttributeRelation.Lt),
+        nameof(AttributeRelation.Ge),
+        nameof(AttributeRelation.Gt),};
+
+    private RenderFragment AttributeDropDown(CompositeFilterDescriptor context)
+    {
+        return
+    @<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+                                             AlignItems="AlignItems.Center">
+        <div style="width:100%">
+            <CipherPathChooser Path="@GetName(context)"
+            PathChanged="@(value => {
+                CipherField field = value.Item2;
+                ChangeProperty(context, update_name:true, update_islist: true, name: value.Item1, isList: field.IsList());})" />
+        </div>
+        @RelationDropDown(context)
+        @if (!IsCheckingNullOrEmpty(context))
         {
-            if (dataFilter.Filters.Any()) await Clear();
-
-            dataFilter.LogicalFilterOperator = (ChosenCondition.Operator == Operator.All) ? LogicalFilterOperator.And : LogicalFilterOperator.Or;
-
-            List<CompositeFilterDescriptor> newFilters = new();
-
-            foreach (var cond in ChosenCondition.Conditions)
-            {
-                if (cond is IBooleanCondition)
-                {
-                    await dataFilter.AddFilter(AddBooleanConditionFilter(cond as IBooleanCondition));
-                }
-                else if (cond is IGroupedBooleanCondition)
-                {
-                    await dataFilter.AddFilter(AddGroupedBooleanConditionFilter(cond as IGroupedBooleanCondition));
-                }
-            }
-
-            StateHasChanged();
+            @ValueFiller(context)
         }
+    </RadzenStack>
+    ;
     }
 
-    private string Translate(string key) => Translator.GetTranslation(key);
-
-    private RenderFragment TemplateAsTextBox(CompositeFilterDescriptor context, bool checkDisabled=true)
+    private RenderFragment RelationDropDown(CompositeFilterDescriptor context)
     {
-        bool disabled = checkDisabled ? Disabled : true;
+        List<string> filters = AllFilters.Select(x => Translate(x)).ToList();
 
-        return 
-        @<RadzenTextBox Disabled="@disabled" Style="width: 100%"
-        Value="@(context.FilterValue?.ToString() ?? string.Empty)" 
-        ValueChanged="@(async args => {context.FilterValue=(object)args; await ParamsChanged();})" />;
+        // SET DEFAULT VALUE
+        string defaultValue = GetRelation(context) ?? Translate("Equals");
+        ChangeProperty(context, update_relation: true, relation: defaultValue, changeParams: false);
+
+        return
+    @<RadzenDropDown TValue=string Data="@filters" Value="@defaultValue" Style="@($"min-width:{Constants.StandardWidth}; max-width:{Constants.StandardWidth}")"
+        Change="@(args=> ChangeProperty(context, update_relation:true, relation:args.ToString()))" />
+    ;
     }
+
+    private RenderFragment ValueFiller(CompositeFilterDescriptor context)
+    => @<RadzenTextBox Disabled="@Disabled" Style="@($"width:100%; min-width:{Constants.StandardWidth}")"
+                           Value="@GetValue(context)"
+                           ValueChanged="@(value => ChangeProperty(context, update_value:true,value:value))" />;
+
+    private string FixedWidth() =>
+    $"width:{Constants.StandardWidth}; min-width:{Constants.StandardWidth}; max-width:{Constants.StandardWidth}";
 }
 
-<CipherComponentCard Title="@Title" Visible="@Visible" WithButtons="@(!Disabled && WithSaveButton)">
+<CipherComponentCard Title="@Title" Visible="@Visible">
     <Buttons>
-        <CipherButton Icon="@Icons.Arrows.Rounded.refresh" Variant="Variant.Outlined"
-                        Click="@(async args => {await ParamsChanged();})" HelpText="@SaveConditionsText" />
+        @RefreshBtn()
     </Buttons>
     <ChildContent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="10px">
-            <CipherDataFilter @ref=dataFilter Data="@(new List<CipherField>())" 
-                ViewChanged="@(async args => {await ParamsChanged(args);})">
+            <RadzenDataFilter TItem="CipherField" @ref=dataFilter Data="@(new List<CipherField>())"
+                              ViewChanged="@(async args => {await ParamsChanged(args);})" Auto=true
+                              RemoveFilterText="@Translate("RemoveFilter")"
+                              AddFilterText="@Translate("AddFilter")"
+                              AddFilterGroupText="@Translate("AddFilterGroup")"
+                              ClearFilterText="@Translate("ClearFilter")"
+                              ApplyFilterText="@Translate("ApplyFilter")"
+                              FilterText="@Translate("Filter")"
+                              AndOperatorText="@Translate("AndOperator")"
+                              OrOperatorText="@Translate("OrOperator")">
                 <Properties>
-                    @foreach (CipherField field in AvailableAttributes)
-                    {
-                        <RadzenDataFilterProperty TItem="CipherField" Property="@field.Path" Title="@field.Translation">
-                            <FilterTemplate>
-                                @if (context != null && context.FilterValue != null && context.FilterOperator != FilterOperator.IsNull && context.FilterOperator != FilterOperator.IsNotNull)
-                                {
-                                    @if (field.IsList)
+                    <RadzenDataFilterProperty TItem="CipherField" Property="" Title="">
+                        <FilterTemplate>
+                            @if (context != null && context.FilterOperator != FilterOperator.IsNull && context.FilterOperator != FilterOperator.IsNotNull)
+                            {
+
+                                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Right"
+                                             AlignItems="AlignItems.Center" Style="width:100%">
+                                    @AttributeDropDown(context)
+                                    @if (IsList(context))
                                     {
-                                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
-                                                     AlignItems="AlignItems.Center" Style="width:100%">
-                                            <RadzenTextBox Style="width: 100%" Disabled="@Disabled" 
-                                                           Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? context.FilterValue.ToString().Split("##")[0] : context.FilterValue.ToString()) : string.Empty)"
-                                                           ValueChanged="@(async args => { context.FilterValue = (context.FilterValue != null) ? (context.FilterValue.ToString().Contains("##") ? (object)($"{args}##{context.FilterValue?.ToString().Split("##")[1]}") :  (object)($"{args}##{Operator.All.ToString()}")) : (object)($"{args}##{Operator.All.ToString()}"); await ParamsChanged(); })"/>
-                                            <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" />
-                                            <RadzenDropDown Style="width: 100%" TValue="Operator" Disabled="@Disabled"
-                                            Value="@(context.FilterValue != null ? (context.FilterValue.ToString().Contains("##") ? ((context.FilterValue.ToString().Split("##")[1] == "All") ? Operator.All : Operator.Any) : Operator.All) : Operator.All)" 
-                                            ValueChanged="@(async args=> {context.FilterValue=(object)($"{context.FilterValue?.ToString().Split("##")[0]}##{args}"); await ParamsChanged();})"
-                                                Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
-                                                <ValueTemplate Context="operator_value_context">
-                                                    @if (operator_value_context == Operator.All)
-                                                    {
-                                                        @("כל האיברים")
-                                                    }
-                                                    else
-                                                    {
-                                                        @("לפחות אחד")
-                                                    }
-                                                </ValueTemplate>
-                                                <Template Context="operator_context">
-                                                    @if (operator_context == Operator.All)
-                                                    {
-                                                        @("כל האיברים")
-                                                    }
-                                                    else
-                                                    {
-                                                        @("לפחות אחד")
-                                                    }
-                                                </Template>
-                                            </RadzenDropDown>
-                                        </RadzenStack>
+                                        <RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />
+                                        <RadzenDropDown Style="@FixedWidth()" TValue="Operator" Disabled="@Disabled"
+                                                        Value="@(GetOperator(context))"
+                                                        ValueChanged="@(value => ChangeProperty(context, update_operator:true, _operator:value))"
+                                                        Data="@(new List<Operator>() {Operator.Any, Operator.All})" Placeholder="אופרטור">
+                                            <ValueTemplate Context="operator_value_context">
+                                                @if (operator_value_context == Operator.All)
+                                                {
+                                                    @("כל האיברים")
+                                                }
+                                                else
+                                                {
+                                                    @("לפחות אחד")
+                                                }
+                                            </ValueTemplate>
+                                            <Template Context="operator_context">
+                                                @if (operator_context == Operator.All)
+                                                {
+                                                    @("כל האיברים")
+                                                }
+                                                else
+                                                {
+                                                    @("לפחות אחד")
+                                                }
+                                            </Template>
+                                        </RadzenDropDown>
                                     }
-                                    else
-                                    {
-                                        @TemplateAsTextBox(context)
-                                    }
-                                }
-                                else
-                                {
-                                    @TemplateAsTextBox(context, false)
-                                }
-                            </FilterTemplate>
-                        </RadzenDataFilterProperty>
-                    }
+                                </RadzenStack>
+                            }
+                        </FilterTemplate>
+                    </RadzenDataFilterProperty>
                 </Properties>
-            </CipherDataFilter>
-            @if (!Disabled)
-            {
-                <CipherJsonCheck JsonValue="@JsonRequest" Visible="@Constants.CheckJsons" />
-            }
+            </RadzenDataFilter>
+            @JsonBox()
         </RadzenStack>
     </ChildContent>
 </CipherComponentCard>

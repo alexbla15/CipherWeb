@@ -57,7 +57,7 @@
     }
     <RadzenDropDownDataGrid Placeholder="@Label" SearchTextPlaceholder="חיפוש..." TValue="IPackage" AllowClear="true"
                             Data=@AllPacks TextProperty="@(nameof(IPackage.Id))" AllowFilteringByAllStringColumns="true"
-                            Style="@($"width: {Constants.StandartWidth}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
+                            Style="@($"width: {Constants.StandardWidth}; min-height:;")" @bind-Value="ChosenPackage" Disabled="@Disabled"
                             Change="@Change" AllowSorting=false>
         <Columns>
             <RadzenDropDownDataGridColumn Property="@(nameof(IPackage.Id))" Title="@(IPackage.Translate(nameof(IPackage.Id)))" />

@@ -2,7 +2,7 @@
 
 <CipherFormRow Icon="@Icon">
     <RadzenDropDown TValue="string" Placeholder="@Label" Data="@(AvailableVessels.Select(x=>x.Type).Distinct())" FilterAsYouType="true" 
-        Style="@($"width: {Constants.StandartWidth}")">
+        Style="@($"width: {Constants.StandardWidth}")">
         <ValueTemplate>
             <b>@Label:</b> @context
         </ValueTemplate>

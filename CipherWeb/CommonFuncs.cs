@@ -69,8 +69,7 @@ namespace CipherWeb
 
                 Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]" : 
                 $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]",
-                Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]",
-                IsList = x.PropertyType.IsGenericType
+                Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]"
             }).ToList();
         }
 
@@ -93,14 +92,10 @@ namespace CipherWeb
                         new_fields.AddRange(GetCipherTypeFields(setType, mainPath: $"{field.Path}",
                         mainTranslation: $"{field.Translation}", curr_depth + 1));
                     }
-                    else if (field.IsList)
+                    else if (field.IsList())
                     {
                         List<CipherField> addition_fields = GetCipherTypeFields(field.FieldType.GetGenericArguments()[0], mainPath: $"{field.Path}",
                         mainTranslation: $"{field.Translation}", curr_depth + 1);
-                        foreach (CipherField addition in addition_fields)
-                        {
-                            addition.IsList = true;
-                        }
                         new_fields.AddRange(addition_fields);
                     }
                 }

@@ -60,8 +60,12 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
+/*.rz-dropdown.rz-datafilter-property, .rz-dropdown.rz-datafilter-operator {
+    display: none;
+}*/
+
 .cipher_datacell {
-    font-style:italic;
+    font-style: italic;
     cursor: pointer;
     padding: 5px;
     border-radius: 20px;
@@ -429,6 +433,11 @@
 }
 
 /* ------------------ DATA FILTER ------------------ */
+
+.rz-dropdown.rz-datafilter-property, .rz-dropdown.rz-datafilter-operator {
+    /* make this disappear to not interfer with other parts of CipherDataFilter */
+    display: none;
+}
 
 .rz-datafilter .rz-datafilter-group {
     display: block;
@@ -1098,6 +1107,10 @@
 
 .rz-scheduler {
     border-width: 0;
+}
+
+.rz-scheduler-nav-views {
+    flex-direction: row-reverse;
 }
 
 .rz-scheduler-nav-prev-next .rz-button.rz-today {
