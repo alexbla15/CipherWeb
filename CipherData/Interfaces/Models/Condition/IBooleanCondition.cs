@@ -98,6 +98,18 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
+        public CheckField CheckAttributeRelation() =>
+            CheckField.Required(AttributeRelation, $"{Translate(nameof(AttributeRelation))} עבור {CipherField.TranslatePath(Attribute)}");
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
+        public CheckField CheckOperator() =>
+            CheckField.Required(Operator, Translate(nameof(Operator)));
+
+        /// <summary>
+        /// Method to check if field is applicable for this request
+        /// </summary>
         public CheckField CheckValue() => 
             CheckField.CheckString(Value, CipherField.TranslatePath(Attribute) ?? Translate(nameof(Value)),
                 @"^[a-zA-Z0-9א-ת.:,\]\[ \n?]+$");
@@ -110,7 +122,9 @@ namespace CipherData.Interfaces
         {
             CheckClass result = new();
             result.Fields.Add(CheckAttribute());
+            result.Fields.Add(CheckAttributeRelation());
             result.Fields.Add(CheckValue());
+            result.Fields.Add(CheckOperator());
 
             return result.Check();
         }
