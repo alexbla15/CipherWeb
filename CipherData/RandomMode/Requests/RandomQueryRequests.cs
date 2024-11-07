@@ -5,11 +5,9 @@
         public async Task<Tuple<List<T>, ErrorResponse>> QueryObjects<T>(IObjectFactory obj, bool canFail = false) where T : IResource
         {
             // Get the type of T
-            Type type = typeof(T);
+            Type InterfaceType = typeof(T);
 
-            string RandomTypeName = $"CipherData.RandomMode.{type.Name}";
-
-            Type? InterfaceType = type.GetInterfaces().Where(x => x.Name != "IResource").First();
+            string RandomTypeName = $"CipherData.RandomMode.{InterfaceType.Name.Replace("I", "Random")}";
             Type? randomType = Type.GetType(RandomTypeName);
 
             if (randomType != null && InterfaceType != null)

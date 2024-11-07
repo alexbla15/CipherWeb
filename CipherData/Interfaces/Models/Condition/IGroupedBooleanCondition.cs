@@ -25,24 +25,18 @@ namespace CipherData.Interfaces
         /// </summary>
         public CheckField CheckConditions()
         {
-            if (Conditions.Any())
+            foreach (var cond in Conditions)
             {
-                foreach (var cond in Conditions)
+                var result = cond switch
                 {
-                    Tuple<bool, string> result = Tuple.Create(true, string.Empty);
-                    if (cond is BooleanCondition)
-                    {
-                        result = (cond as IBooleanCondition)?.Check() ?? Tuple.Create(false, "שגיאת מערכת");
-                    }
-                    else if (cond is GroupedBooleanCondition)
-                    {
-                        result = (cond as IGroupedBooleanCondition)?.Check() ?? Tuple.Create(false, "שגיאת מערכת"); ;
-                    }
-                    return new CheckField(result.Item1, result.Item2);
-                }
+                    IBooleanCondition singleCond => singleCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
+                    IGroupedBooleanCondition groupCond => groupCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
+                    _ => Tuple.Create(true, string.Empty)
+                };
+
+                if (!result.Item1) return new CheckField(result.Item1, result.Item2);
             }
             return new CheckField();
-
         }
 
         /// <summary>

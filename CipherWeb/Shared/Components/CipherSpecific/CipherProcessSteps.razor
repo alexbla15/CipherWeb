@@ -163,7 +163,7 @@
             <ChildContent>
                 @if (SelectedStep != null)
                 {
-                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnSave="@OnSave" ChosenCondition="@SelectedCondition" Disabled="@Disabled"/>
+                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnFilter="@OnSave" ChosenCondition="@SelectedCondition" Disabled="@Disabled"/>
                 }
             </ChildContent>
         </CipherComponentCard>

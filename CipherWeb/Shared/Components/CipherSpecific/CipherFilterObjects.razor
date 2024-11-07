@@ -1,20 +1,19 @@
 ﻿<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-    @if (WithFilter)
-    {
-        <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
-            <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int"
-                             Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ParamsChanged();})">
-                <Items>
-                    @foreach (string objType in objectTypes)
-                    {
-                        <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
-                    }
-                </Items>
-            </RadzenSelectBar>
-        </CipherComponentCard>
-        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition"
-                                 InitialType="@GetReportType()" ChosenConditionChanged="@ParamsChanged" />
-    }
+    <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
+        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int"
+                         Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ChangeType();})">
+            <Items>
+                @foreach (string objType in objectTypes)
+                {
+                    <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
+                }
+            </Items>
+        </RadzenSelectBar>
+    </CipherComponentCard>
+    <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnFilter="@RefreshDataByFilter"
+                                InitialType="@GetReportType()" />
+    @SubmissionAlert()
+
     @if (RenderedTable != null)
     {
         @RenderedTable
@@ -28,7 +27,6 @@
 @code {
     private Type _ChosenType = typeof(IPackage);
     private int _ChosenId = 0;
-
     private RenderFragment? RenderedTable { get; set; }
 
     [Parameter]
@@ -45,14 +43,29 @@
         Translator.GetTranslation("Units"),
                 };
 
-    [Parameter]
-    public bool WithFilter { get; set; } = true;
-
     /// <summary>
     /// Controls visibility of buttons within the datagridtable component
     /// </summary>
     [Parameter]
     public bool WithButtons { get; set; } = true;
+
+    /// <summary>
+    /// Is the condition valid for request?
+    /// </summary>
+    [Parameter]
+    public bool Valid { get; set; } = true;
+
+    /// <summary>
+    /// Is alert visible under submission button.
+    /// </summary>
+    [Parameter]
+    public bool alertVisible { get; set; }
+
+    /// <summary>
+    /// Message received after checking of the condition. Implies the first-found error.
+    /// </summary>
+    [Parameter]
+    public string ErrorMessage { get; set; } = string.Empty;
 
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
@@ -73,9 +86,9 @@
     private List<ICategory>? Categories;
     private List<IUnit>? Units;
 
-    protected override async Task OnInitializedAsync() => await UpdateRenderedTable();
+    protected override void OnInitialized() => UpdateRenderedTable();
 
-    private async Task UpdateRenderedTable() => RenderedTable = await RenderCipherDataTable();
+    private void UpdateRenderedTable() => RenderedTable = RenderCipherDataTable();
 
     public int GetTypeId(Type t)
     => t switch
@@ -104,20 +117,9 @@
         _ => typeof(ICipherClass)
     };
 
-    public async Task PreloadDataAsync()
+    public RenderFragment? RenderCipherDataTable(int id)
     {
-        Packages = await GetFilteredObjects<IPackage>();
-        Vessels = await GetFilteredObjects<IVessel>();
-        Systems = await GetFilteredObjects<IStorageSystem>();
-        Events = await GetFilteredObjects<IEvent>();
-        Processes = await GetFilteredObjects<IProcess>();
-        Categories = await GetFilteredObjects<ICategory>();
-        Units = await GetFilteredObjects<IUnit>();
-    }
-
-    public async Task<RenderFragment?> RenderCipherDataTable(int id)
-    {
-        await PreloadDataAsync();
+        ResetDataObjects();
 
         // Define the RenderFragment based on the id
         return id switch
@@ -178,27 +180,17 @@
             ,
             _ => builder =>
             {
-                builder.AddContent(0, "לא נמצאה טבלה מתאימה.");
             }
         };
     }
 
-    public async Task<RenderFragment?> RenderCipherDataTable(Type type)
+    public RenderFragment? RenderCipherDataTable(Type type)
     {
         int id = GetTypeId(type);
-        return await RenderCipherDataTable(id);
+        return RenderCipherDataTable(id);
     }
 
-    public async Task<RenderFragment?> RenderCipherDataTable() => await RenderCipherDataTable(_ChosenId);
-
-    public async Task<List<T>> GetFilteredObjects<T>() where T : IResource
-    {
-        List<T> objects = new();
-        IObjectFactory obj = Config.ObjectFactory();
-        obj.Filter = ChosenCondition;
-        (objects, Error) = await Config.QueryRequests(false).QueryObjects<T>(obj);
-        return objects;
-    }
+    public RenderFragment? RenderCipherDataTable() => RenderCipherDataTable(_ChosenId);
 
     /// <summary>
     /// Method to set the chosen condition accourding to DataFilter data
@@ -206,22 +198,81 @@
     public void SetCondition() => ChosenCondition = DataFilter.ChosenCondition;
 
 
-    /// <summary>
-    /// Events that occurs once something in the component changes.
-    /// </summary>
-    /// <returns></returns>
-    async Task ParamsChanged()
+    public IObjectFactory CreateObjectFactory()
     {
-        await UpdateRenderedTable();
+        IObjectFactory fact = Config.ObjectFactory();
+        fact.Filter = ChosenCondition;
+        return fact;
+    }
 
+    public void ResetDataObjects()
+    {
+        Packages = new();
+        Vessels = new();
+        Categories = new();
+        Systems = new();
+        Units = new();
+        Events = new();
+        Processes = new();
+
+        StateHasChanged();
+    }
+
+    public async Task SetDataObjects()
+    {
+        Packages = await SendRequest<IPackage>();
+        Vessels = await SendRequest<IVessel>();
+        Categories =await SendRequest<ICategory>();
+        Systems = await SendRequest<IStorageSystem>();
+        Units = await SendRequest<IUnit>();
+        Events = await SendRequest<IEvent>();
+        Processes = await SendRequest<IProcess>();
+
+        StateHasChanged();
+    }
+
+    public async Task<List<T>> SendRequest<T>() where T: IResource
+    {
+        IObjectFactory obj = CreateObjectFactory();
+        IQueryRequests req = Config.QueryRequests(false);
+        List<T> objects = new();
+        if (GetReportType() == typeof(T)) (objects, Error) = await req.QueryObjects<T>(obj);
+        return objects;
+    }
+
+    async Task ChangeType()
+    {
         Type oldChosenType = ChosenType;
         ChosenType = GetReportType();
-
         if (oldChosenType != ChosenType)
         {
             ChosenCondition = Config.GroupedBooleanCondition();
             await DataFilter.Clear();
         }
-        await ChosenConditionChanged.InvokeAsync(Tuple.Create(ChosenCondition, ChosenType)); // Trigger change event
+        UpdateRenderedTable();
     }
+
+    /// <summary>
+    /// Events that occurs once user activates filteration
+    /// </summary>
+    async Task RefreshDataByFilter()
+    {
+        SetCondition();
+
+        (Valid, ErrorMessage) = ChosenCondition.Check();
+        alertVisible = true;
+
+        if (Valid) await SetDataObjects();
+        else ResetDataObjects();
+    }
+
+    /// <summary>
+    /// Close the shown alert.
+    /// </summary>
+    private void CloseAlert() => alertVisible = false;
+
+    public RenderFragment? SubmissionAlert() =>
+        Valid ? null : 
+    @<RadzenAlert Visible="@alertVisible" Text="@ErrorMessage" AlertStyle="@AlertStyle.Danger" Style="width:100%"
+                 Close="@CloseAlert" />;
 }

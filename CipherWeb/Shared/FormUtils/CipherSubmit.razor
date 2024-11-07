@@ -81,14 +81,24 @@
     public void SetValid(bool value) => Valid = value;
 
     public void SetErrorMessage(string? msg) => ErrorMessage = msg ?? string.Empty;
+
+    private RenderFragment SubmissionButton()
+        =>@<CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />;
+
+    private RenderFragment CancelButton()
+        =>@<CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" 
+        Path="@CancelPath" Size="ButtonSize.Medium" />;
+
+    public RenderFragment SubmissionAlert() =>
+    @<RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" Close="@CloseAlert" />;
 }
 
 <CipherComponentCard Title="@Title" WithCard="@WithCard" ButtonsGap="10px" ContentStyleClass="@Constants.Styles.ComponentFooterContent" Visible="@Visible">
     <Buttons>
         @if (string.IsNullOrEmpty(ActionText))
         {
-            <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
-            <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
+            @SubmissionButton()
+            @CancelButton()
         }
     </Buttons>
     <ChildContent>
@@ -96,8 +106,8 @@
         {
             <RadzenText TextStyle="TextStyle.Subtitle1" Text="@ActionText"/>
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
-                <CipherSubmitButton Click=@(args => Save()) Size="ButtonSize.Medium" />
-                <CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" Path="@CancelPath" Size="ButtonSize.Medium" />
+                @SubmissionButton()
+                @CancelButton()
             </RadzenStack>
         }
         <RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" Close="@CloseAlert" />

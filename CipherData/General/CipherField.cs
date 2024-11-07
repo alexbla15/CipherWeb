@@ -17,9 +17,9 @@ namespace CipherData.General
         [HebrewTranslation(typeof(CipherField), nameof(FieldType))]
         public Type FieldType { get; set; } = typeof(object);
 
-        public bool IsList() => FieldType.GenericTypeArguments.Any();
+        public bool IsList() => IsList(FieldType);
 
-        public Type ItemType() => IsList() ? FieldType.GenericTypeArguments[0] : FieldType;
+        public Type ItemType() => ItemType(FieldType);
 
         public CheckField CheckPath()
         {
@@ -124,8 +124,58 @@ namespace CipherData.General
 
         // STATIC METHODS
 
+        public static bool IsList(Type type) => type.GenericTypeArguments.Any();
+
+        public static Type ItemType(Type type) => IsList(type) ? type.GenericTypeArguments[0] : type;
+
         public static string Translate(string text) => ICipherClass.Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
-        
-        
+
+        public static string? TranslatePartPath(Type? currType, string prop)
+        {
+            PropertyInfo? propInfo = currType?.GetProperty(prop);
+            if (propInfo != null)
+            {
+                HebrewTranslationAttribute? hebAtt = propInfo.GetCustomAttribute<HebrewTranslationAttribute>();
+                if (hebAtt != null) return hebAtt.Translation;
+            }
+
+            return prop;
+        }
+
+        public static Type? GetPartPathType(Type? currType, string prop)
+        {
+            PropertyInfo? propInfo = currType?.GetProperty(prop);
+            Type? res = propInfo?.PropertyType;
+            return res != null &&  IsList(res) ? ItemType(res) : res;
+        }
+
+        /// <summary>
+        /// Method to get the translation of a property-path with a specific scheme [Root].[Prop].[]...
+        /// </summary>
+        public static string? TranslatePath(string? path)
+        {
+            if (path is null) return null;
+
+            // remove start and end of the attribute, and split by splitters
+            List<string> parts = path.Trim('[', ']').Split("].[").ToList();
+
+            if (parts.Any())
+            {
+                Type? rootType = Type.GetType($"CipherData.Interfaces.{parts[0]}");
+                if (rootType is null) return null;
+
+                string translation = $"[{Translator.GetTranslation(rootType.Name)}]";
+
+                foreach (var part in parts.GetRange(1, parts.Count-1))
+                {
+                    translation += $".[{TranslatePartPath(rootType, part)}]";
+                    rootType = GetPartPathType(rootType, part);
+                }
+
+                return translation;
+            }
+
+            return null;
+        }
     }
 }

@@ -98,7 +98,9 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckValue() => CheckField.CheckString(Value, Translate(nameof(Value)));
+        public CheckField CheckValue() => 
+            CheckField.CheckString(Value, CipherField.TranslatePath(Attribute) ?? Translate(nameof(Value)),
+                @"^[a-zA-Z0-9א-ת.:,\]\[ \n?]+$");
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

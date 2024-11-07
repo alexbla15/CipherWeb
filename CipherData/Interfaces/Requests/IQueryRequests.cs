@@ -7,6 +7,6 @@
         /// Can Be Any array of resources. 
         /// Path: POST /query
         /// </summary>
-        Task<Tuple<List<T>, ErrorResponse>> QueryObjects<T>(IObjectFactory obj, bool canFail = false) where T: IResource;
+        Task<Tuple<List<T>, ErrorResponse>> QueryObjects<T>(IObjectFactory obj, bool canFail=false) where T: IResource;
     }
 }
