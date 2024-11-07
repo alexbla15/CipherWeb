@@ -41,6 +41,9 @@
     [Parameter]
     public EventCallback<object> OnSave { get; set; }
 
+    [Parameter]
+    public Type? InitialType { get; set; }
+
     private RadzenDataFilter<CipherField> dataFilter = new();
 
     public enum FilterType
@@ -264,12 +267,15 @@
     FilterType filterType = FilterType.Other)
     {
         string? newName = update_name ? name : GetName(prop);
-        string? newVal = update_value ? value : GetValue(prop);
         string? newRel = update_relation ? relation : GetRelation(prop);
+        string? newVal = update_value ? value : GetValue(prop);
         bool newIsList = update_islist ? isList : GetIsList(prop);
         Operator? newOperator = update_operator ? _operator : GetOperator(prop);
         FilterType newType = update_type ? filterType : GetFilterType(prop);
 
+        // make value initially null / 0 / false / now
+        if (string.IsNullOrEmpty(newVal)) newVal = GetDefaultValue(newType);
+        // make value null if checking for IsNull or something that doesn't require a value
         if (IsCheckingNullOrEmpty(newRel)) newVal = null;
 
         prop.FilterValue = $"{newName}###{newVal ?? " "}###{newRel ?? " "}###{newIsList}###{newOperator?.ToString() ?? " "}###{newType}";
@@ -342,18 +348,26 @@
         else return FilterType.Other;
     }
 
+    private string? GetDefaultValue(FilterType type)
+    {
+        if (type == FilterType.Text) return null;
+        if (type == FilterType.Date) return DateTime.Now.ToString();
+        if (type == FilterType.Condition) return false.ToString();
+        if (type == FilterType.Number) return "0";
+        return null;
+    }
+
     private RenderFragment AttributeDropDown(CompositeFilterDescriptor context)
     {
         return
     @<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
                       AlignItems="AlignItems.Center">
         <div style="width:100%">
-            <CipherPathChooser Path="@GetName(context)"
+            <CipherPathChooser Path="@GetName(context)" InitialType="@InitialType"
                                PathChanged="@(value => {
                 CipherField field = value.Item2;
                 ChangeProperty(context, update_name:true, update_value: true, update_islist: true, update_type: true, update_operator:true,
-                    update_relation: true, name: value.Item1, isList: value.Item3,  filterType: GetFilterType(field),
-                    value: null);})" />
+                    update_relation: true, name: value.Item1, isList: value.Item3,  filterType: GetFilterType(field));})" />
         </div>
         @RelationDropDown(context)
         @if (!IsCheckingNullOrEmpty(context))
@@ -403,16 +417,17 @@
         DateTime? date = DateTime.TryParse(val, out _) ? DateTime.Parse(val) : null;
         return
         @<RadzenDatePicker TValue="DateTime" Value="@date" Style="@($"width:100%; min-width:{Constants.StandardWidth}")"
-                      ValueChanged="@(value => ChangeProperty(context, update_value:true, value: value.ToString()))" ShowTime="true" ShowTimeOkButton="true" />
-        ;
+        ValueChanged="@(value => ChangeProperty(context, update_value:true, value: value.ToString()))" ShowTime="true" ShowTimeOkButton="true" />
+    ;
     }
 
     private RenderFragment ConditionFiller(CompositeFilterDescriptor context)
     {
         string val = GetValue(context) ?? string.Empty;
         if (string.IsNullOrEmpty(val)) val = false.ToString();
+
         return
-    @<RadzenToggleButton Value="@(bool.Parse(val))"
+        @<RadzenToggleButton Value="@(bool.Parse(val))" Style="display:flex; justify-content:end"
                         ValueChanged="@(value => ChangeProperty(context, update_value:true, value: value.ToString()))"
                         Text="@(val == false.ToString() ? "לא" : "כן" )"
                         ButtonStyle="ButtonStyle.Danger" Disabled="@Disabled"

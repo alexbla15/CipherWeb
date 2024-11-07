@@ -32,6 +32,9 @@
     public List<CipherField> SelectedChips { get; set; } = new();
 
     [Parameter]
+    public Type? InitialType { get; set; }
+
+    [Parameter]
     public EventCallback ValueChanged { get; set; }
 
     /// <summary>
@@ -96,9 +99,22 @@
 
     private void ResetFields()
     {
-        AvailableFields = CommonFuncs.GetResourceClasses().Select(
-    x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
-    Select(y => new CipherField() { Path=y.Name ,Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
+        if (InitialType is null)
+        {
+            AvailableFields = CommonFuncs.GetResourceClasses().Select(
+        x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
+        Select(y => new CipherField() { Path=y.Name ,Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
+        }
+        else
+        {
+            SelectedChips.Add(new CipherField()
+                {
+                    Path = InitialType.Name,
+                    Translation = Translator.GetTranslation(InitialType.Name),
+                    FieldType = InitialType
+                });
+            SetFields(InitialType);
+        }
     }
 
     private void SetFields(Type fieldType)

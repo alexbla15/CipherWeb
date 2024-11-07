@@ -12,8 +12,8 @@
                 </Items>
             </RadzenSelectBar>
         </CipherComponentCard>
-        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition" 
-            AvailableAttributes="@(CommonFuncs.GetCipherTypeFields(GetReportType()))" ChosenConditionChanged="@ParamsChanged" />
+        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnSave="@SetCondition"
+                                 InitialType="@GetReportType()" ChosenConditionChanged="@ParamsChanged" />
     }
     @if (RenderedTable != null)
     {
