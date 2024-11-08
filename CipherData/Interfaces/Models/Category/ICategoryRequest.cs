@@ -12,36 +12,42 @@ namespace CipherData.Interfaces
         /// Name of the category
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the category
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.Description))]
+        [Check(CheckRequirement.Required)]
         string? Description { get; set; }
 
         /// <summary>
         /// Parent-category (ID) containing this one. Not necessarily Material-type.
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.Parent))]
+        [Check(CheckRequirement.Required)]
         string? ParentId { get; set; }
 
         /// <summary>
         /// List of ID masks to identify the category from the package ID
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.IdMask))]
+        [Check(CheckRequirement.List, full:true)]
         List<string>? IdMask { get; set; }
 
         /// <summary>
         /// List of processes definition IDs consuming this category
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.ConsumingProcesses))]
+        [Check(CheckRequirement.List, full: true, distinct: true)]
         List<string?>? ConsumingProcesses { get; set; }
 
         /// <summary>
         /// List of processes definition IDs creating this category
         /// </summary>
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.CreatingProcesses))]
+        [Check(CheckRequirement.List, full: true, distinct: true)]
         List<string?>? CreatingProcesses { get; set; }
 
         /// <summary>
@@ -50,33 +56,18 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(ICategory), nameof(ICategory.Properties))]
         List<ICategoryProperty>? Properties { get; set; }
 
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckProperty(this, nameof(Description));
 
-        public CheckField CheckParentId() => CheckField.Required(ParentId, Translate(nameof(ParentId)));
+        public CheckField CheckParentId() => CheckProperty(this, nameof(ParentId));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckIdMask() => CheckField.FullList(IdMask, Translate(nameof(IdMask)));
+        public CheckField CheckIdMask() => CheckProperty(this, nameof(IdMask));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckCreatingProcesses() =>
-            CheckField.CheckList(CreatingProcesses, Translate(nameof(CreatingProcesses)), isFull: true, isDistinct: true);
+        public CheckField CheckCreatingProcesses() => CheckProperty(this, nameof(CreatingProcesses));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckConsumingProcesses() =>
-            CheckField.CheckList(ConsumingProcesses, Translate(nameof(ConsumingProcesses)), isFull: true, isDistinct: true);
+        public CheckField CheckConsumingProcesses() => CheckProperty(this, nameof(ConsumingProcesses));
 
-
-        /// <summary>
-        /// Method to check if properties is applicable for this request
-        /// </summary>
         public CheckField CheckProperties()
         {
             CheckField result = new();

@@ -12,34 +12,28 @@ namespace CipherData.Interfaces
         /// Name of vessel
         /// </summary>
         [HebrewTranslation(typeof(IVessel), nameof(Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
         /// Id of system containing vessel
         /// </summary>
         [HebrewTranslation(typeof(IVessel), nameof(IVessel.System))]
+        [Check(CheckRequirement.Required)]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Vessel type (bottle / pot / ...)
         /// </summary>
         [HebrewTranslation(typeof(IVessel), nameof(Type))]
+        [Check(CheckRequirement.Required)]
         string? Type { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckType() => CheckField.Required(Type, Translate(nameof(Type)));
+        public CheckField CheckType() => CheckProperty(this, nameof(Type));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckSystemId() => CheckField.Required(SystemId, Translate(nameof(SystemId)));
+        public CheckField CheckSystemId() => CheckProperty(this, nameof(SystemId));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

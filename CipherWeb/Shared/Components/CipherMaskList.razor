@@ -102,12 +102,12 @@
 
     private RenderFragment? ChipText(string text)
         =>
-        @<div>
+    @<div>
+        <span style="@(WithPrefix ? $"color: {Colors.Danger}" : "")">@text</span>
         @if (WithPrefix)
-            {
-                <span>@Prefix</span>
-            }
-            <span style="@(WithPrefix ? $"color: {Colors.Danger}" : "")">@text</span>
+        {
+            <span>@Prefix</span>
+        }
     </div>;
 
     private RenderFragment? CloseItem(string text)

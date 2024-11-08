@@ -74,5 +74,7 @@ namespace CipherWeb.Data
         public static readonly string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
 
         public static readonly string StandardWidth = "300px";
+
+        public static readonly int ForcedDelayTime = 1000;
     }
 }

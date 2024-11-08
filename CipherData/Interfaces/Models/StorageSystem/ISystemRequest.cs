@@ -11,48 +11,41 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Description of system
         /// </summary>
-        [HebrewTranslation($"ISystem_{nameof(Description)}")]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Description))]
+        [Check(CheckRequirement.Required)]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the system
         /// </summary>
-        [HebrewTranslation($"ISystem_{nameof(Name)}")]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
         /// ID of unit responsible for this system.
         /// </summary>
-        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Unit)}")]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Unit))]
+        [Check(CheckRequirement.Required)]
         string? UnitId { get; set; }
 
         /// <summary>
         /// ID of parent system containing this one
         /// </summary>
-        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Parent)}")]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Parent))]
         string? ParentId { get; set; }
 
         /// <summary>
         /// JSON-like additional properties of the system
         /// </summary>
-        [HebrewTranslation($"ISystem_{nameof(IStorageSystem.Properties)}")]
+        [HebrewTranslation(typeof(IStorageSystem), nameof(IStorageSystem.Properties))]
         Dictionary<string, string>? Properties { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckDescription() =>
-            CheckField.Required(Description, Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckProperty(this, nameof(Description));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckUnitId() => CheckField.Required(UnitId, Translate(nameof(UnitId)));
+        public CheckField CheckUnitId() => CheckProperty(this, nameof(UnitId));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -61,10 +54,10 @@ namespace CipherData.Interfaces
         /// <returns></returns>
         public Tuple<bool, string> Check()
         {
-            CheckClass result = new();
-            result.Fields.Add(CheckName());
-            result.Fields.Add(CheckDescription());
-            result.Fields.Add(CheckUnitId());
+            CheckClass result = new()
+            {
+                Fields = new() { CheckName(), CheckDescription(), CheckUnitId() }
+            };
 
             return result.Check();
         }
@@ -74,10 +67,10 @@ namespace CipherData.Interfaces
             {
                 Id = id,
                 Description = Description,
-                Unit = new Unit() { Id = UnitId },
+                Unit = UnitId is null ? null : new Unit() { Id = UnitId },
                 Name = Name,
                 Properties = Properties,
-                Parent = new StorageSystem() { Id = ParentId },
+                Parent = ParentId is null ? null : new StorageSystem() { Id = ParentId },
             };
 
         // STATIC METHODS

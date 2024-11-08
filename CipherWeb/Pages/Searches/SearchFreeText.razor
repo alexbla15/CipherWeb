@@ -5,31 +5,40 @@
 
 @if (CommonFuncs.CanView(navLink))
 {
-<PageTitle>@navLink.Name</PageTitle>
+    <PageTitle>@navLink.Name</PageTitle>
 
-<CipherComponentCard Title="תוצאות חיפוש עבור" MaxHeigth="100%">
-    <HeaderContent>
-        <RadzenTextBox @bind-Value="SearchText" @onkeydown="@EnteredSearchFunc" />
-    </HeaderContent>
-    <ChildContent>
-        <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
-            <Items>
-                @foreach (var key in AllData.Keys)
-                {
-                    if (AllData[key].Any())
-                    {
-                        <RadzenAccordionItem Text="@($"{key.Item2} ({AllData[key].Count()})")">
-                            @RenderTable(key, AllData[key])
-                        </RadzenAccordionItem>
-                    }
-                }
-            </Items>
-        </RadzenAccordion>
-    </ChildContent>
-</CipherComponentCard>
+    <CipherComponentCard Title="תוצאות חיפוש עבור" MaxHeigth="100%">
+        <HeaderContent>
+            <RadzenTextBox @bind-Value="SearchText" @onkeydown="@EnteredSearchFunc" />
+        </HeaderContent>
+        <ChildContent>
+            @if (RequestComplete)
+            {
+                <RadzenAccordion Style="@($"background-color: {CipherColors.PrimaryLightest};")" Multiple="true">
+                    <Items>
+                        @foreach (var key in AllData.Keys)
+                        {
+                            if (AllData[key].Any())
+                            {
+                                <RadzenAccordionItem Text="@($"{key.Item2} ({AllData[key].Count()})")">
+                                    @RenderTable(key, AllData[key])
+                                </RadzenAccordionItem>
+                            }
+                        }
+                    </Items>
+                </RadzenAccordion>
+            }
+            else
+            {
+                <CipherLoadingCard />
+            }
+        </ChildContent>
+    </CipherComponentCard>
 }
 
 @code {
+    private bool RequestComplete = true;
+
     /// <summary>
     /// Searched text within autocomplete box
     /// </summary>
@@ -76,7 +85,7 @@
         { typeof(IVessel), items => @<CipherVesselsTable ChosenObjects="@vessels" WithHeaderContent="false" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(IUnit), items => @<CipherUnitsTable ChosenObjects="@units" WithButtons="false" WithCard="false" Title="" /> },
         { typeof(ICategory), items => @<CipherCategoriesTable ChosenObjects="@categories" WithButtons="false" WithCard="false" Title="" /> }
-        };
+            };
 
     private RenderFragment RenderTable(Tuple<Type, string> itemType, IEnumerable<IResource>? items)
     {
@@ -86,6 +95,8 @@
 
     private async Task GetAllData()
     {
+        RequestComplete = false;
+
         if (!string.IsNullOrEmpty(SearchText))
         {
             (packs, Error) = await Config.Package(false).Containing(SearchText);
@@ -105,6 +116,9 @@
         AllData[Tuple.Create(typeof(IProcess), "תהליכים")] = processes;
         AllData[Tuple.Create(typeof(IVessel), "כלים")] = vessels;
         AllData[Tuple.Create(typeof(ICategory), "קטגוריות")] = categories;
+
+        await Task.Delay(Constants.ForcedDelayTime);
+        RequestComplete = true;
     }
 
     protected override async Task OnParametersSetAsync()
@@ -167,7 +181,7 @@
     async Task ShowError()
     {
         await DialogService.OpenAsync("שגיאת מערכת",
-        ds =>
+    ds =>
         @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SearchText" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
         ,
         new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });

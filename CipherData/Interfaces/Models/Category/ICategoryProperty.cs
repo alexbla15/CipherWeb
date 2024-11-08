@@ -20,12 +20,14 @@ namespace CipherData.Interfaces
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(ICategoryProperty), nameof(Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
         /// Free-text description of the property
         /// </summary>
         [HebrewTranslation(typeof(ICategoryProperty), nameof(Description))]
+        [Check(CheckRequirement.Required)]
         string? Description { get; set; }
 
         /// <summary>
@@ -40,9 +42,9 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(ICategoryProperty), nameof(PropertyType))]
         PropertyType PropertyType { get; set; }
 
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckProperty(this, nameof(Description));
 
         public CheckField CheckDefaultValue()
         {
@@ -57,10 +59,14 @@ namespace CipherData.Interfaces
 
         public Tuple<bool, string> Check()
         {
-            CheckClass result = new();
-            result.Fields.Add(CheckName());
-            result.Fields.Add(CheckDescription());
-            result.Fields.Add(CheckDefaultValue());
+            CheckClass result = new()
+            {
+                Fields = new() {
+                    CheckName(),
+                    CheckDescription(),
+                    CheckDefaultValue()
+                }
+            };
 
             return result.Check();
         }

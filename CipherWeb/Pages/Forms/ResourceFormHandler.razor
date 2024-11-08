@@ -89,6 +89,8 @@
     private CipherPackageCard packCard = new();
     private CipherProcessCard procCard = new();
     private CipherCategoryCard catCard = new();
+    private Dictionary<Type, ResourceHandler> ResourceHandlers = new();
+    private ResourceHandler SetAddResourceHandler = new();
 
     public class ResourceHandler
     {
@@ -101,16 +103,13 @@
         public Func<Tuple<bool, string>>? HandleSubmissionRequest { get; set; }
     }
 
-    private Dictionary<Type, ResourceHandler> ResourceHandlers = new();
-    private ResourceHandler SetAddResourceHandler = new();
-
     protected override async Task OnInitializedAsync()
     {
         RegisterResourceHandlers();
         SetAddResourceHandlerFunc();
         if (Mode != FormMode.Create) await GetObjectFromUrl();
     }
-    
+
     // GENERAL METHODS
 
     public void SetAddResourceHandlerFunc()
@@ -190,7 +189,7 @@
                     GetCard = () => RenderPackageCard(),
                     Check = () => packRequest.Check(),
                     SendRequest = () => SendPackageRequest(),
-                    SetJson = async () => await SetPackageJsonRequest(),
+                    SetJson = () => SetPackageJsonRequest(),
                     GetChosenObject = () => packCard.ChosenObject,
                     GetObjectFromUrl = id => GetPackageFromUrl(id)
                 });
@@ -516,9 +515,12 @@
         return (Tuple<Cipher_TItem, ErrorResponse>)(object)Tuple.Create(pack, evResult.Item2);
     }
 
-    private async Task SetPackageJsonRequest()
+    private void SetJson<T>(T obj) where T : ICipherClass => 
+    JsonRequest = (Mode == FormMode.Create ? string.Empty : GetObjectId(ChosenObject)) + obj.ToJson();
+
+    private void SetPackageJsonRequest()
     {
-        List<IPackageRequest> ChangedPacks = await PackInfo.GetChangedPacks();
+        List<IPackageRequest> ChangedPacks = PackInfo.GetChangedPacks();
         packRequest = Config.CreateEvent();
         packRequest.Worker = FormInfo.ChosenWorker;
         packRequest.ProcessId = EventProc.ChosenProcess?.Id;
@@ -526,49 +528,49 @@
         packRequest.EventType = 21;
         packRequest.Actions = ChangedPacks;
         packRequest.Comments = EventComments.GetValue();
-        JsonRequest = packRequest.ToJson();
+        SetJson(packRequest);
     }
 
     private void SetUnitJsonRequest()
     {
         unitRequest = (Mode == FormMode.Create) ?
         SetUnit.Request() : ((ChosenObject as IUnit)?.Request() ?? Config.UnitRequest());
-        JsonRequest = unitRequest.ToJson();
+        SetJson(unitRequest);
     }
 
     private void SetCategoryJsonRequest()
     {
         catRequest = (Mode == FormMode.Create) ?
     catRequest = SetCategory.Request() : ((ChosenObject as ICategory)?.Request() ?? Config.CategoryRequest());
-        JsonRequest = catRequest.ToJson();
+        SetJson(catRequest);
     }
 
     private void SetVesselJsonRequest()
     {
         vesRequest = (Mode == FormMode.Create) ?
         SetVessel.Request() : ((ChosenObject as IVessel)?.Request() ?? Config.VesselRequest());
-        JsonRequest = GetObjectId(ChosenObject) + "\n\n" + vesRequest.ToJson();
+        SetJson(vesRequest);
     }
 
     private void SetProcessDefinitionJsonRequest()
     {
         procDefRequest = (Mode == FormMode.Create) ?
     SetProc.Request() : ((ChosenObject as IProcessDefinition)?.Request() ?? Config.ProcessDefinitionRequest());
-        JsonRequest = procDefRequest.ToJson();
+        SetJson(procDefRequest);
     }
 
     private void SetSystemJsonRequest()
     {
         sysRequest = (Mode == FormMode.Create) ?
     SetSystem.Request() : ((ChosenObject as IStorageSystem)?.Request() ?? Config.SystemRequest());
-        JsonRequest = sysRequest.ToJson();
+        SetJson(sysRequest);
     }
 
     public RenderFragment RenderCategoryCard() =>
     @<div style="width:100%">
         @if (Mode == FormMode.Create)
         {
-            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" SetMode="FormMode.Create"
+            <CipherCategoryCard Title="" WithCard="false" @ref="@catCard" SetMode="@Mode"
                                 ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetCategory" />
         }
         else
@@ -582,7 +584,7 @@
     @<div style="width:100%">
         @if (Mode == FormMode.Create)
         {
-            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" SetMode="FormMode.Create"
+            <CipherUnitCard Title="" WithCard="false" @ref="@unitCard" SetMode="@Mode"
                             ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetUnit" />
         }
         else
@@ -596,7 +598,7 @@
     @<div style="width:100%">
         @if (Mode == FormMode.Create)
         {
-            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" SetMode="FormMode.Create"
+            <CipherVesselCard Title="" WithCard="false" @ref="@vesCard" SetMode="@Mode"
                               ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetVessel" />
         }
         else
@@ -610,7 +612,7 @@
     @<div style="width:100%">
         @if (Mode == FormMode.Create)
         {
-            <CipherProcessCard Title="" WithCard="false" @ref="@procCard" SetMode="FormMode.Create"
+            <CipherProcessCard Title="" WithCard="false" @ref="@procCard" SetMode="@Mode"
                                ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetProc" />
         }
         else
@@ -624,7 +626,7 @@
     @<div style="width:100%">
         @if (Mode == FormMode.Create)
         {
-            <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="FormMode.Create"
+            <CipherSystemCard Title="" WithCard="false" @ref="@sysCard" SetMode="@Mode"
                               ChangeDetails="@SetAddJsonRequest" @bind-ChosenObject="@SetSystem" />
         }
         else
@@ -641,7 +643,7 @@
             <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetAddJsonRequest" />
             <CipherPackageInfo IsNew="true" Title="פרטי התעודה החדשה" @ref="PackInfo" ChangeDetails="@SetAddJsonRequest" />
             <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-                <CipherProcess @ref=EventProc Label="תהליך שיצר את התעודה" Change="@SetAddJsonRequest" />
+                <CipherProcess @ref=EventProc Label="תהליך יוצר" Change="@SetAddJsonRequest" />
                 <CipherComments @ref="EventComments" ValueChanged="@SetAddJsonRequest" />
             </CipherComponentCard>
         }

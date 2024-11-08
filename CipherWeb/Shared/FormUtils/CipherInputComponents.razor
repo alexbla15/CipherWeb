@@ -26,13 +26,13 @@
     /// All packages available
     /// </summary>
     [Parameter]
-    public List<IPackage> allPacks { get; set; } = new();
+    public List<IPackage> AvailablePacks { get; set; } = new();
 
     /// <summary>
     /// All chosen packeges
     /// </summary>
     [Parameter]
-    public List<IPackage> chosenPacks { get; set; } = new();
+    public List<IPackage> ChosenPacks { get; set; } = new();
 
     /// <summary>
     /// Error response for fetching data
@@ -52,7 +52,7 @@
     {
         Title ??= "תעודות מוסרות";
 
-        (allPacks, Error) = await CachedData.AllPackages;
+        (AvailablePacks, Error) = await CachedData.AllPackages;
     }
 
     /// <summary>
@@ -61,7 +61,7 @@
     async Task AddComponent()
     {
         // Add the new restriction to the existing list
-        chosenPacks.Add(Config.Package());
+        ChosenPacks.Add(Config.Package());
         StateHasChanged();
         await CustomDataGrid.RefreshDataAsync();
     }
@@ -69,7 +69,7 @@
     /// <summary>
     /// Get total sum of masses of package-components.
     /// </summary>
-    public decimal GetTotal() => chosenPacks.Sum(pack => pack.BrutMass);
+    public decimal GetTotal() => ChosenPacks.Sum(pack => pack.BrutMass);
 
     /// <summary>
     /// Deletes a package-component from memory & view.
@@ -77,7 +77,7 @@
     /// <param name="pack">Package to delete</param>
     async Task DeleteRow(IPackage pack)
     {
-        chosenPacks.Remove(pack);
+        ChosenPacks.Remove(pack);
         await CustomDataGrid.RefreshDataAsync();
         StateHasChanged();
     }
@@ -88,21 +88,51 @@
     /// <returns></returns>
     async Task DeleteAll()
     {
-        chosenPacks.Clear();
+        ChosenPacks.Clear();
         await CustomDataGrid.RefreshDataAsync();
     }
 
-    private async Task<decimal> FetchMaxBrutMassAsync(IPackage pack)
+    public IPackage FindPack(string? packId)
+    => string.IsNullOrEmpty(packId) ? Config.Package() : AvailablePacks.Where(x => x.Id == packId).First();
+
+    private decimal FetchMaxBrutMassAsync(IPackage pack)
     {
         if (!string.IsNullOrEmpty(pack.Id))
         {
-            var result = await Config.Package(false).Get(pack.Id);
-            if (result.Item1 != null) return result.Item1.BrutMass;
+            return AvailablePacks.Where(x => x.Id == pack.Id).First().BrutMass;
         }
         return 0;
     }
 
     private string GetLabel(string property) => IPackage.Translate(property);
+
+    private RenderFragment ChoosePackage(IPackage pack)
+    {
+        if (string.IsNullOrEmpty(pack.Id))
+        {
+            return
+    @<CipherPackageId AllPacks="@AvailablePacks" ChosenPackage="null"
+                     Change="@(args=>{pack.Id = ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />
+        ;
+        }
+        else
+        {
+            return
+    @<CipherPackageId AllPacks="@AvailablePacks" ChosenPackage="pack"
+                     Change="@(args=>{pack.Id = (args is null) ? string.Empty : ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />;
+        }
+    }
+
+    private RenderFragment MaxMass(IPackage pack)
+    =>
+    @<CipherNumeric Amount="@FetchMaxBrutMassAsync(pack)"
+                   Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" AmountChanged="@ChangeDetails" />;
+
+    private RenderFragment TakenMass(IPackage pack)
+        =>
+    @<CipherNumeric Amount="pack.BrutMass"
+                   AmountChanged="@(args => {pack.BrutMass = args; ChangeDetails.InvokeAsync();})"
+                   Max="@FetchMaxBrutMassAsync(pack)" Visible="@(!string.IsNullOrEmpty(pack.Id))" />;
 }
 
 <CipherComponentCard Title="@Title" Visible="@Visible">
@@ -111,12 +141,12 @@
         <CipherButton Icon="@Icons.Documents.Delete.delete_sweep" Variant="Variant.Outlined" Click="@(args => DeleteAll())" HelpText="@DeleteAllText" />
     </Buttons>
     <ChildContent>
-        @if (!chosenPacks.Any())
+        @if (!ChosenPacks.Any())
         {
             <RadzenText Text="@HelpText" />
         }
-        <RadzenDataGrid @ref="CustomDataGrid" Data="@chosenPacks" TItem="IPackage" 
-            AllowColumnResize="true" Visible="chosenPacks.Any()" ValueChanged="@ChangeDetails">
+        <RadzenDataGrid @ref="CustomDataGrid" Data="@ChosenPacks" TItem="IPackage"
+                        AllowColumnResize="true" Visible="ChosenPacks.Any()" ValueChanged="@ChangeDetails">
             <Columns>
                 <RadzenDataGridColumn Width="10%" TItem="IPackage" Title="פעולות" Filterable="false" Sortable="false" TextAlign="@TdTextAlign">
                     <Template Context="pack">
@@ -125,29 +155,17 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="@(GetLabel(nameof(IPackage.Id)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        @if (string.IsNullOrEmpty(pack.Id))
-                        {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="null"
-                                             Change="@(args=>{pack.Id = ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />
-                        }
-                        else
-                        {
-                            <CipherPackageId AllPacks="@allPacks" ChosenPackage="pack"
-                                             Change="@(args=>{pack.Id = (args is null) ? string.Empty : ((IPackage)args).Id; ChangeDetails.InvokeAsync();})" />
-                        }
+                        @ChoosePackage(pack)
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="@(GetLabel(nameof(IPackage.BrutMass)))" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Amount="@FetchMaxBrutMassAsync(pack).Result" 
-                        Disabled="true" Visible="@(!string.IsNullOrEmpty(pack.Id))" AmountChanged="@ChangeDetails"/>
+                        @MaxMass(pack)
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IPackage" Title="מסה ברוטו מועברת [גר']" Width="40%" TextAlign="@TdTextAlign">
                     <Template Context="pack">
-                        <CipherNumeric Amount="pack.BrutMass" 
-                        AmountChanged="@(args => {pack.BrutMass = args; ChangeDetails.InvokeAsync();})"
-                        Max="@FetchMaxBrutMassAsync(pack).Result" Visible="@(!string.IsNullOrEmpty(pack.Id))" />
+                        @TakenMass(pack)
                     </Template>
                     <FooterTemplate>
                         מסה כוללת: @GetTotal()

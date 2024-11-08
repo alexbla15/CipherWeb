@@ -120,10 +120,10 @@
         string? value = GetValue(ChosenObject?.Type);
 
         return
-        @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Name)))" Icon="@Icons.Cipher.Vessel"
-                        ValueChanged="@(args => ChangeName(args))"
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IVessel.Type)))" Icon="@Icons.Cipher.Type"
+                        ValueChanged="@(args => ChangeType(args))"
                         Disabled="@IsDisabled()"
-        Value="@value" @ref=VesName />
+        Value="@value" @ref=VesType />
     ;
     }
 

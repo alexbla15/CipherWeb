@@ -15,6 +15,7 @@ namespace CipherData.Interfaces
         /// ID of the package
         /// </summary>
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.Id))]
+        [Check(CheckRequirement.Required)]
         string? Id { get; set; }
 
         /// <summary>
@@ -27,12 +28,14 @@ namespace CipherData.Interfaces
         /// Location (Id) which contains the package
         /// </summary>
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.System))]
+        [Check(CheckRequirement.Required)]
         string? SystemId { get; set; }
 
         /// <summary>
         /// Category (Id) of package
         /// </summary>
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.Category))]
+        [Check(CheckRequirement.Required)]
         string? CategoryId { get; set; }
 
         /// <summary>
@@ -45,12 +48,14 @@ namespace CipherData.Interfaces
         /// Total mass of the package
         /// </summary>
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.BrutMass))]
+        [Check(CheckRequirement.Ge, numericValue:0)]
         decimal BrutMass { get; set; }
 
         /// <summary>
         /// Net mass of the package
         /// </summary>
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.NetMass))]
+        [Check(CheckRequirement.Ge, numericValue: 0)]
         decimal NetMass { get; set; }
 
         /// <summary>
@@ -65,16 +70,11 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IPackage), nameof(IPackage.Children))]
         List<string?>? ChildrenIds { get; set; }
 
-        public CheckField CheckId() =>
-            CheckField.Required(Id, Translate(nameof(Id)));
-        public CheckField CheckCategoryId() =>
-            CheckField.Required(CategoryId, Translate(nameof(CategoryId)));
-        public CheckField CheckSystemId() =>
-            CheckField.Required(SystemId, Translate(nameof(SystemId)));
-        public CheckField CheckBrutMass() =>
-            CheckField.GreaterEqual(BrutMass, 0, Translate(nameof(BrutMass)));
-        public CheckField CheckNetMass() =>
-            CheckField.GreaterEqual(NetMass, 0, Translate(nameof(NetMass)));
+        public CheckField CheckId() => CheckProperty(this, nameof(Id));
+        public CheckField CheckCategoryId() => CheckProperty(this, nameof(CategoryId));
+        public CheckField CheckSystemId() => CheckProperty(this, nameof(SystemId));
+        public CheckField CheckBrutMass() => CheckProperty(this, nameof(BrutMass));
+        public CheckField CheckNetMass() => CheckProperty(this, nameof(NetMass));
 
         public CheckField CheckMass()
         {

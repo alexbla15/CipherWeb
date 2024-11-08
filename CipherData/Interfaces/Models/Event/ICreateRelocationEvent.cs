@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace CipherData.Interfaces
 {
@@ -24,6 +25,7 @@ namespace CipherData.Interfaces
         /// System to which the packages are relocated.
         /// </summary>
         [HebrewTranslation(typeof(ICreateRelocationEvent), nameof(TargetSystem))]
+        [Check(CheckRequirement.Required)]
         IStorageSystem? TargetSystem { get; set; }
 
         /// <summary>
@@ -37,23 +39,17 @@ namespace CipherData.Interfaces
         /// </summary>
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.Worker))]
         string? Worker { get; set; }
+        
+        public CheckField CheckPackages()
+        {
+            CheckField result = CheckField.CheckList(Packages,
+                Translate(nameof(Packages)), isFull: true, isRequired: true);
+            return result.Succeeded ? CheckField.Distinct(Packages?.Select(x => x.Id).ToList(),
+                Translate(nameof(Packages))) : result;
+        }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckPackages() =>
-            CheckField.CheckList(Packages, Translate(nameof(Packages)),
-                isRequired: true, isDistinct: true, isFull: true);
+        public CheckField CheckTargetSystem() => CheckProperty(this, nameof(TargetSystem));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckTargetSystem() => CheckField.Required(TargetSystem,
-            Translate(nameof(TargetSystem)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckTargetSystemDifferent()
         {
             if (Packages is null) return CheckPackages();

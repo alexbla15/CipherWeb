@@ -19,6 +19,7 @@ namespace CipherData.Interfaces
         /// Attribute to order by
         /// </summary>
         [HebrewTranslation(typeof(IOrderedItem), nameof(Attribute))]
+        [Check(CheckRequirement.Required)]
         string Attribute { get; set; }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IOrderedItem), nameof(Order))]
         Order Order { get; set; }
 
-        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
+        public CheckField CheckAttribute() => CheckProperty(this, nameof(Attribute));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -35,8 +36,10 @@ namespace CipherData.Interfaces
         /// </summary>
         public Tuple<bool, string> Check()
         {
-            CheckClass result = new();
-            result.Fields.Add(CheckAttribute());
+            CheckClass result = new()
+            {
+                Fields = new() { CheckAttribute() }
+            };
 
             return result.Check();
         }
@@ -54,12 +57,14 @@ namespace CipherData.Interfaces
         /// if null, name is auto generated
         /// </summary>
         [HebrewTranslation(typeof(IAggregateItem), nameof(As))]
+        [Check(CheckRequirement.Text)]
         string? As { get; set; }
 
         /// <summary>
         /// Attribute path to aggregate on
         /// </summary>
         [HebrewTranslation(typeof(IAggregateItem), nameof(Attribute))]
+        [Check(CheckRequirement.Required)]
         string? Attribute { get; set; }
 
         /// <summary>
@@ -68,9 +73,9 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IAggregateItem), nameof(Method))]
         Method? Method { get; set; }
 
-        public CheckField CheckAttribute() => CheckField.Required(Attribute, Translate(nameof(Attribute)));
+        public CheckField CheckAttribute() => CheckProperty(this, nameof(Attribute));
 
-        public CheckField CheckAs() => CheckField.CheckString(As, Translate(nameof(As)));
+        public CheckField CheckAs() => CheckProperty(this, nameof(As));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
@@ -102,6 +107,7 @@ namespace CipherData.Interfaces
         ///  exist. If null, returns the filtered objects
         /// </summary>
         [HebrewTranslation(typeof(IObjectFactory), nameof(Aggregate))]
+        [Check(CheckRequirement.List, distinct:true, checkItems:true)]
         List<IAggregateItem>? Aggregate { get; set; }
 
         /// <summary>
@@ -159,14 +165,7 @@ namespace CipherData.Interfaces
             return result;
         }
 
-        public CheckField CheckAggregate()
-        {
-            CheckField result = new();
-            if (Aggregate is null) return new();
-            if (Aggregate.Any()) result = CheckField.Distinct(Aggregate.Select(x => x.Attribute).ToList(), Translate(nameof(Aggregate)));
-            if (result.Succeeded) result = CheckField.ListItems(Aggregate, Translate(nameof(Aggregate)));
-            return result;
-        }
+        public CheckField CheckAggregate() => CheckProperty(this, nameof(Aggregate));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

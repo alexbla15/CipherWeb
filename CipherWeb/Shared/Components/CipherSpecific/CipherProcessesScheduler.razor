@@ -15,19 +15,13 @@
         @ExportButtons()
     </Buttons>
     <ChildContent>
-        @if (SetView == View.Table)
-        {
-            <CipherProcessesTable @ref=ProcTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
-                               WithHeaderContent="false" ChosenObjects="@ChosenProcesses" />
-        }
-        else
-        {
-            <CipherScheduler Height="@ProcessHeight" Processes="@ChosenProcesses" />
-        }
+        @ProcessView()
     </ChildContent>
 </CipherComponentCard>
 
 @code {
+    private bool RequestComplete = true;
+
     /// <summary>
     /// Error result of processes fetching.
     /// </summary>
@@ -119,6 +113,8 @@
     /// </summary>
     private async Task SearchFunc()
     {
+        RequestComplete = false;
+
         SelectedSystem = (cipherLocation.ChosenSystem is null) ? null : cipherLocation.ChosenSystem.Name;
         if (SelectedSystem != null)
         {
@@ -130,6 +126,20 @@
             (ChosenProcesses, Error) = Tuple.Create(new List<IProcess>(), ErrorResponse.Success);
         }
         SetFileName();
+
+        await Task.Delay(Constants.ForcedDelayTime);
+        RequestComplete = true;
+    }
+
+    async Task ShowError()
+    {
+        await DialogService.OpenAsync("שגיאת מערכת",
+
+        ds =>
+    @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SelectedSystem" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
+
+,
+        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
     }
 
     private RenderFragment? ExportButtons()
@@ -147,14 +157,12 @@
         return null;
     }
 
-    async Task ShowError()
+    private RenderFragment ProcessView()
     {
-        await DialogService.OpenAsync("שגיאת מערכת",
-
-    ds =>
-    @<CipherErrorCard ErrorType="@Error.Message" ErroredAction="@SelectedSystem" Visible=@(Error != ErrorResponse.Success) MarginTop="10px" MarginBottom="10px" />
-  
-,
-        new DialogOptions() { Width = "800px", Height = "250px", Resizable = true, Draggable = true });
+        if (!RequestComplete) return @<CipherLoadingCard />;
+        if (SetView == View.Table) return
+    @<CipherProcessesTable @ref=ProcTable Title="" AllowFilter="false" AllowGroup="false" WithCard="false" WithButtons="false"
+        WithHeaderContent="false" ChosenObjects="@ChosenProcesses" /> ;
+        else return @<CipherScheduler Height="@ProcessHeight" Processes="@ChosenProcesses" /> ;
     }
 }

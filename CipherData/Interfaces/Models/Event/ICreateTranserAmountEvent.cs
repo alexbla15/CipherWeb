@@ -12,6 +12,7 @@ namespace CipherData.Interfaces
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(ICreateTranserAmountEvent), nameof(AcceptingPackage))]
+        [Check(CheckRequirement.Required)]
         IPackage? AcceptingPackage { get; set; }
 
         /// <summary>
@@ -24,6 +25,7 @@ namespace CipherData.Interfaces
         /// Package that accepts mass.
         /// </summary>
         [HebrewTranslation(typeof(ICreateTranserAmountEvent), nameof(Amount))]
+        [Check(CheckRequirement.Gt, numericValue:0)]
         decimal Amount { get; set; }
 
         /// <summary>
@@ -50,9 +52,6 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.Timestamp))]
         DateTime Timestamp { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDonatingPackage()
         {
             CheckField result = CheckField.Required(DonatingPackage, Translate(nameof(DonatingPackage)));
@@ -61,21 +60,10 @@ namespace CipherData.Interfaces
             return result;
         }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckAcceptingPackage() =>
-            CheckField.Required(AcceptingPackage, Translate(nameof(AcceptingPackage)));
+        public CheckField CheckAcceptingPackage() => CheckProperty(this, nameof(AcceptingPackage));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckAmount() =>
-            CheckField.Greater(Amount, 0, Translate(nameof(Amount)));
+        public CheckField CheckAmount() => CheckProperty(this, nameof(Amount));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckDonatingDifferentFromAccepting()
             => CheckField.NotEq(AcceptingPackage?.Id, DonatingPackage?.Id,
                 Translate(nameof(AcceptingPackage)));

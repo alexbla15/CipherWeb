@@ -1,5 +1,5 @@
 ﻿<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-    <CipherComponentCard Title="נא לבחור אובייקטים לתצוגה" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
+    <CipherComponentCard Title="מה אתם מחפשים?" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
         <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int"
                          Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ChangeType();})">
             <Items>
@@ -14,7 +14,7 @@
                                 InitialType="@GetReportType()" />
     @SubmissionAlert()
 
-    @if (RenderedTable != null)
+    @if (RequestComplete)
     {
         @RenderedTable
     }
@@ -28,6 +28,7 @@
     private Type _ChosenType = typeof(IPackage);
     private int _ChosenId = 0;
     private RenderFragment? RenderedTable { get; set; }
+    private bool RequestComplete = true;
 
     [Parameter]
     public Type ChosenType { get => _ChosenType; set { _ChosenType = value; SetType(); } }
@@ -220,6 +221,8 @@
 
     public async Task SetDataObjects()
     {
+        RequestComplete = false;
+
         Packages = await SendRequest<IPackage>();
         Vessels = await SendRequest<IVessel>();
         Categories =await SendRequest<ICategory>();
@@ -228,6 +231,8 @@
         Events = await SendRequest<IEvent>();
         Processes = await SendRequest<IProcess>();
 
+        await Task.Delay(Constants.ForcedDelayTime);
+        RequestComplete = true;
         StateHasChanged();
     }
 

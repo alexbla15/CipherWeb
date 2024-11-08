@@ -11,7 +11,7 @@
         public async Task<Tuple<IPackage, ErrorResponse>> GetById(string? pack_id)
         {
             if (string.IsNullOrEmpty(pack_id)) 
-                return Tuple.Create(new Package() { Id=pack_id} as IPackage, ErrorResponse.BadRequest);
+                return Tuple.Create(new Package() as IPackage, ErrorResponse.BadRequest);
             IPackage res = new RandomPackage() { Id=pack_id};
             return await new RandomGenericRequests().Request(res, canBadRequest: false, canBeNotFound: true);
         }

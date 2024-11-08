@@ -81,7 +81,6 @@
     /// <summary>
     /// Clears all steps from memory & view.
     /// </summary>
-    /// <returns></returns>
     async Task DeleteAllSteps()
     {
         ChosenSteps.Clear();
@@ -103,7 +102,6 @@
         StepCondition.Save();
         var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
         SelectedCondition = ChosenStep?.Condition ?? Config.GroupedBooleanCondition();
-        //await StepCondition.FillDataFilter();
     }
 }
 
@@ -131,7 +129,7 @@
                     }
                     <RadzenDataGridColumn Width="10%" TItem="IProcessStepDefinition" Title="@(GetLabel(nameof(IProcessStepDefinition.Id)))" TextAlign="@TdTextAlign">
                         <Template Context="step">
-                            <CipherButton Text="@(ChosenSteps?.IndexOf(step).ToString())" Disabled="true" ColorStyle="@ButtonStyle.Primary"/>
+                            <RadzenText Text="@((ChosenSteps?.IndexOf(step)+1).ToString())"/>
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="IProcessStepDefinition" Title="@(GetLabel(nameof(IProcessStepDefinition.Name)))" TextAlign="@TdTextAlign">
@@ -163,7 +161,8 @@
             <ChildContent>
                 @if (SelectedStep != null)
                 {
-                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnFilter="@OnSave" ChosenCondition="@SelectedCondition" Disabled="@Disabled"/>
+                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnFilter="@OnSave" 
+                        ChosenCondition="@SelectedCondition" Disabled="@Disabled" InitialType="@typeof(IProcessStepDefinition)"/>
                 }
             </ChildContent>
         </CipherComponentCard>

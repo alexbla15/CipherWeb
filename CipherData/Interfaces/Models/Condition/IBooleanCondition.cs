@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Xml.Linq;
 
 namespace CipherData.Interfaces
 {
@@ -67,6 +68,7 @@ namespace CipherData.Interfaces
         /// example: obj.eventType, obj.system.id, obj.packages.category
         /// </summary>
         [HebrewTranslation(typeof(IBooleanCondition), nameof(Attribute))]
+        [Check(CheckRequirement.Required, allowedRegex: @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$")]
         string? Attribute { get; set; }
 
         /// <summary>
@@ -87,29 +89,16 @@ namespace CipherData.Interfaces
         /// Operator used in case the attribute contains multiple values.
         /// </summary>
         [HebrewTranslation(typeof(IBooleanCondition), nameof(Operator))]
+        [Check(CheckRequirement.Required)]
         Operator? Operator { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckAttribute() => 
-            CheckField.Required(Attribute, Translate(nameof(Attribute)), @"^[a-zA-Z0-9א-ת.,\]\[ \n?]+$");
+        public CheckField CheckOperator() => CheckProperty(this, nameof(Operator));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
+        public CheckField CheckAttribute() => CheckProperty(this, nameof(Attribute));
+
         public CheckField CheckAttributeRelation() =>
             CheckField.Required(AttributeRelation, $"{Translate(nameof(AttributeRelation))} עבור {CipherField.TranslatePath(Attribute)}");
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckOperator() =>
-            CheckField.Required(Operator, Translate(nameof(Operator)));
-
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckValue() => 
             CheckField.CheckString(Value, CipherField.TranslatePath(Attribute) ?? Translate(nameof(Value)),
                 @"^[a-zA-Z0-9א-ת.:,\]\[ \n?]+$");
@@ -120,11 +109,14 @@ namespace CipherData.Interfaces
         /// </summary>
         public Tuple<bool, string> Check()
         {
-            CheckClass result = new();
-            result.Fields.Add(CheckAttribute());
-            result.Fields.Add(CheckAttributeRelation());
-            result.Fields.Add(CheckValue());
-            result.Fields.Add(CheckOperator());
+            CheckClass result = new()
+            {
+                Fields = new()
+                {
+                    CheckAttributeRelation(), CheckValue(), CheckOperator(),
+                    CheckAttribute()
+                }
+            };
 
             return result.Check();
         }

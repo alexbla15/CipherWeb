@@ -213,8 +213,6 @@
             //    filter.Property ??= fields.ToList()[dataFilter.Filters.ToList().IndexOf(filter)].Path;
             //}
 
-            // decide if it is a GroupedCondition or BooleanCondition
-
             conditions.Add((filter.Filters is null) ? SetBooleanCondition(filter) : SetGroupedBooleanCondition(filter));
         }
 

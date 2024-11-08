@@ -19,23 +19,19 @@ namespace CipherData.Interfaces
         /// Description of process
         /// </summary>
         [HebrewTranslation(typeof(IProcessDefinition), nameof(Description))]
+        [Check(CheckRequirement.Required)]
         string Description { get; set; }
 
         /// <summary>
         /// Name of the process
         /// </summary>
         [HebrewTranslation(typeof(IProcessDefinition), nameof(Name))]
+        [Check(CheckRequirement.Required)]
         string Name { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckProperty(this, nameof(Description));
 
         /// <summary>
         /// Method to check if field is applicable for this request

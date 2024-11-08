@@ -18,18 +18,21 @@ namespace CipherData.Interfaces
         /// Free-text comments on the event
         /// </summary>
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.Comments))]
+        [Check(CheckRequirement.Required)]
         string? Comments { get; set; }
 
         /// <summary>
         /// Type of event. Required
         /// </summary>
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.EventType))]
+        [Check(CheckRequirement.Ne, numericValue:0)]
         int EventType { get; set; }
 
         /// <summary>
         /// Process ID of process containing to this even. If null, tries to estimate it from event details
         /// </summary>
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.ProcessId))]
+        [Check(CheckRequirement.Text)]
         string? ProcessId { get; set; }
 
         /// <summary>
@@ -42,24 +45,17 @@ namespace CipherData.Interfaces
         /// Name of worker that fulfilled the form
         /// </summary>
         [HebrewTranslation(typeof(IEvent), nameof(IEvent.Worker))]
+        [Check(CheckRequirement.Required, allowedRegex: "^[ א-ת]+$")]
         string? Worker { get; set; }
 
-        public CheckField CheckWorker() => CheckField.Required(Worker, Translate(nameof(Worker)), "^[ א-ת]+$");
+        public CheckField CheckWorker() => CheckProperty(this, nameof(Worker));
 
-        public CheckField CheckComments() => CheckField.Required(Comments, Translate(nameof(Comments)));
+        public CheckField CheckComments() => CheckProperty(this, nameof(Comments));
 
-        public CheckField CheckProcessId()
-            => !string.IsNullOrEmpty(ProcessId) ?
-            CheckField.CheckString(ProcessId, Translate(nameof(ProcessId))) : new();
+        public CheckField CheckProcessId() => CheckProperty(this, nameof(ProcessId));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckEventType() => CheckField.NotEq(EventType, 0, Translate(nameof(EventType)));
+        public CheckField CheckEventType() => CheckProperty(this, nameof(EventType));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckTimeStamp()
         {
             CheckField result = CheckField.Required(Timestamp, Translate(nameof(Timestamp)));
@@ -69,13 +65,10 @@ namespace CipherData.Interfaces
             return result;
         }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
         public CheckField CheckActions()
         {
             CheckField result = CheckField.CheckList(Actions,
-                Translate(nameof(Actions)), isFull: true, isCheckItems: true);
+                Translate(nameof(Actions)), isFull: true, isCheckItems: true, isDistinct: true);
             return result.Succeeded ? CheckField.Distinct(Actions.Select(x => x.Id).ToList(),
                 Translate(nameof(Actions))) : result;
         }

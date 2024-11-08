@@ -10,18 +10,12 @@
         @GetHeaderContent()
     </HeaderContent>
     <ComponentContent>
-        @if (ChosenSystem.ChosenSystem != null && !ChosenObjects.Any())
-        {
-            <CipherLoadingCard/>
-        }
-        else
-        {
-            @DataTable()
-        }
+        @DataTable()
     </ComponentContent>
 </CipherTableCard>
 
 @code {
+    private bool RequestComplete = true;
     private CipherLocation ChosenSystem = new();
 
     /// <summary>
@@ -86,10 +80,15 @@
     /// </summary>
     private async Task SearchFunc()
     {
+        RequestComplete = false;
+
         if (ChosenSystem.ChosenSystem is null) ChosenObjects = new List<Cipher_TItem>();
         else (ChosenObjects, Error) = await GetSearchedValues();
         var res = DisplayedObject.ListObjects(ChosenObjects);
         SetFileName();
+
+        await Task.Delay(Constants.ForcedDelayTime);
+        RequestComplete = true;
     }
 
     private async Task<Tuple<List<Cipher_TItem>, ErrorResponse>> GetConfigValues<T>(
@@ -141,13 +140,16 @@
     {
         if (!WithHeaderContent) return null;
 
-        return @<RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
+        return 
+    @<RadzenStack AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Stretch">
                 <CipherLocation WithIcon=false Label="בחירת מערכת" Change="SearchFunc" @ref=ChosenSystem />
             </RadzenStack>
     ;
     }
 
-    private RenderFragment DataTable()
-    =>@<CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)" SelectedColumns="@SelectedColumns"
-                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" />;
+    private RenderFragment? DataTable()
+    {
+        return RequestComplete ? @<CipherDataTable @ref=DataGrid DataSource="@DisplayedObject.ListObjects(ChosenObjects)" SelectedColumns="@SelectedColumns"
+                         GridFilterMode="@GridFilterMode" AllowFilter="@AllowFilter" AllowGroup="@AllowGroup" /> : @<CipherLoadingCard/>;
+    }
 }

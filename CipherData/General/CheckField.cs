@@ -166,12 +166,13 @@ namespace CipherData.General
                 {
                     if (result.Succeeded) result = CheckString(x, field_name);
                 }
+                return result;
             }
 
             if (result.Succeeded)
             {
                 // Find the Check method in the item's type
-                MethodInfo checkMethod = type.GetMethod("Check");
+                MethodInfo? checkMethod = ICipherClass.GetMethodInfo(type, "Check");
 
                 if (checkMethod == null)
                 {

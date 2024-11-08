@@ -12,16 +12,18 @@ namespace CipherData.Interfaces
         /// Name of the property
         /// </summary>
         [HebrewTranslation(typeof(IPackageProperty), nameof(Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
         /// Property value.
         /// </summary>
         [HebrewTranslation(typeof(IPackageProperty), nameof(Value))]
+        [Check(CheckRequirement.Required)]
         string? Value { get; set; }
 
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
-        public CheckField CheckValue() => CheckField.Required(Value, Translate(nameof(Value)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
+        public CheckField CheckValue() => CheckProperty(this, nameof(Value));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

@@ -12,12 +12,14 @@ namespace CipherData.Interfaces
         /// Description of Unit
         /// </summary>
         [HebrewTranslation(typeof(IUnit), nameof(Description))]
+        [Check(CheckRequirement.Required)]
         string? Description { get; set; }
 
         /// <summary>
         /// Name of the Unit
         /// </summary>
         [HebrewTranslation(typeof(IUnit), nameof(Name))]
+        [Check(CheckRequirement.Required)]
         string? Name { get; set; }
 
         /// <summary>
@@ -38,15 +40,9 @@ namespace CipherData.Interfaces
         [HebrewTranslation(typeof(IUnit), nameof(IUnit.Conditions))]
         IGroupedBooleanCondition? Conditions { get; set; }
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckName() => CheckField.Required(Name, Translate(nameof(Name)));
+        public CheckField CheckName() => CheckProperty(this, nameof(Name));
 
-        /// <summary>
-        /// Method to check if field is applicable for this request
-        /// </summary>
-        public CheckField CheckDescription() => CheckField.Required(Description, Translate(nameof(Description)));
+        public CheckField CheckDescription() => CheckProperty(this, nameof(Description));
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.

@@ -163,7 +163,7 @@
     /// <param name="pack">Relevant package</param>
     public decimal GetBrutMass(IPackage pack)
     {
-        List<IPackage>? RelevantPackages = AssemblyOfPackages ? pack.Children?.ToList() : InputPacks.chosenPacks;
+        List<IPackage>? RelevantPackages = AssemblyOfPackages ? pack.Children?.ToList() : InputPacks.ChosenPacks;
         return RelevantPackages?.Select(x => x.BrutMass).Sum() ?? 0;
     }
 
@@ -179,7 +179,7 @@
     /// <summary>
     /// Get all the package requests of packages that were changed in this event.
     /// </summary>
-    public async Task<List<IPackageRequest>> GetChangedPacks()
+    public List<IPackageRequest> GetChangedPacks()
     {
         SetNewPackage();
 
@@ -187,10 +187,9 @@
 
         if (!AssemblyOfPackages)
         {
-            foreach (IPackage inputPack in InputPacks.chosenPacks)
+            foreach (IPackage inputPack in InputPacks.ChosenPacks)
             {
-                var PrevStatusResult = await Config.Package(false).Get(inputPack.Id);
-                IPackage PreviousStatus = PrevStatusResult.Item1;
+                IPackage PreviousStatus = InputPacks.FindPack(inputPack.Id);
 
                 IPackageRequest packageRequest = PreviousStatus.Request();
                 // removing the amount that was transfered from the original amount
