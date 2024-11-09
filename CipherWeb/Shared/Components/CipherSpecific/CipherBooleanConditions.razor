@@ -117,13 +117,26 @@
     }
 
     public CompositeFilterDescriptor AddBooleanConditionFilter(IBooleanCondition? cond)
-        => (cond is null) ? new() : new CompositeFilterDescriptor
+    {
+        if (cond is null) return new();
+
+        string? newName = cond.Attribute;
+        string newValue = cond.Value ?? " ";
+        string newRelation = cond.AttributeRelation.ToString() ?? " ";
+        string newOperator = cond.Operator.ToString() ?? " ";
+
+        Type newType = CipherField.GetPartPathType(InitialType, cond.Attribute);
+        FilterType newFilterType = FilterType.Text;
+
+        bool newIsList = false;
+
+        string filterValue = $"{newName}###{newValue}###{newRelation}###{newIsList}###{newOperator}###{newFilterType}";
+
+        return new()
                 {
-                    Property = cond.Attribute,
-                    FilterValue = cond.Value,
-                    FilterOperator = RelationOperatorMapping.TryGetValue(cond.AttributeRelation ?? AttributeRelation.Eq, out var relation)
-                    ? relation : FilterOperator.In
+                    FilterValue = filterValue
                 };
+    }
 
     public CompositeFilterDescriptor AddGroupedBooleanConditionFilter(IGroupedBooleanCondition? cond)
     {

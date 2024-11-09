@@ -149,6 +149,8 @@ namespace CipherData.General
             return res != null &&  IsList(res) ? ItemType(res) : res;
         }
 
+        public static Type? GetInterfaceType(string typeName) => Type.GetType($"CipherData.Interfaces.{typeName}");
+
         /// <summary>
         /// Method to get the translation of a property-path with a specific scheme [Root].[Prop].[]...
         /// </summary>
@@ -161,7 +163,7 @@ namespace CipherData.General
 
             if (parts.Any())
             {
-                Type? rootType = Type.GetType($"CipherData.Interfaces.{parts[0]}");
+                Type? rootType = GetInterfaceType(parts[0]);
                 if (rootType is null) return null;
 
                 string translation = $"[{Translator.GetTranslation(rootType.Name)}]";

@@ -52,7 +52,34 @@
 
     private CipherField ChosenAttribute = new();
 
-    protected override void OnInitialized() => ResetFields();
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(Path)) 
+        {
+            ResetFields();
+        }
+        else
+        {
+
+            string translatedPath = CipherField.TranslatePath(Path);
+
+            // Split the original and translated paths into parts
+            string[] pathParts = Path.Trim('[', ']').Split("].[");
+            string[] translatedParts = translatedPath.Trim('[', ']').Split("].[");
+
+            // Ensure both arrays are the same length to avoid index out of range issues
+            int minLength = Math.Min(pathParts.Length, translatedParts.Length);
+            for (int i = 0; i < minLength; i++)
+            {
+                SelectedChips.Add(new CipherField()
+                        {
+                            Path = pathParts[i],
+                            Translation = translatedParts[i],
+                            FieldType = typeof(string)
+                        });
+            }
+        }
+    }
 
     private void SetPath() => Path = GetPath();
 
