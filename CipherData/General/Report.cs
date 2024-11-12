@@ -23,8 +23,8 @@ namespace CipherData.General
 
         public CheckField CheckValue()
         {
-            CheckField result = CheckField.CheckString(Value, Translate(nameof(Value)));
-            if (result.Succeeded && !string.IsNullOrEmpty(Value) && ParamType != null)
+            CheckField result = new();
+            if (!string.IsNullOrEmpty(Value) && ParamType != null)
             {
                 try
                 {
@@ -86,12 +86,14 @@ namespace CipherData.General
         /// Report title, as will be shown to user.
         /// </summary>
         [HebrewTranslation(typeof(Report), nameof(Title))]
+        [Check(CheckRequirement.Required)]
         public string? Title { get; set; }
 
         /// <summary>
         /// Report creator name.
         /// </summary>
         [HebrewTranslation(typeof(Report), nameof(Creator))]
+        [Check(CheckRequirement.Required)]
         public string Creator { get; set; } = string.Empty;
 
         /// <summary>
@@ -112,11 +114,11 @@ namespace CipherData.General
         [JsonIgnore]
         public Type ObjectType { get; set; } = typeof(IPackage);
 
-        public string Path() => $"Reports/{Id}";
+        public string Path() => $"/Reports?Id={Id}";
 
-        public CheckField CheckTitle() => CheckField.Required(Title, Translate(nameof(Title)));
+        public CheckField CheckTitle() => ICipherClass.CheckProperty(this, nameof(Title));
 
-        public CheckField CheckCreator() => CheckField.Required(Creator, Translate(nameof(Creator)));
+        public CheckField CheckCreator() => ICipherClass.CheckProperty(this, nameof(Creator));
 
         public CheckField CheckCreationDate() => CheckField.Between(CreationDate, DateTime.MinValue, DateTime.Now, Translate(nameof(Creator)));
 
@@ -161,7 +163,6 @@ namespace CipherData.General
             bool exists_by_id = await db.ExistsInDb(this, CheckTitle:false);
 
             if (exists_by_title && !ShouldExist) return Tuple.Create(false, $"דוח בשם {Title} כבר קיים. נא להחליף שם או לעדכן גרסה של הדוח בעמוד הייעודי לכך.");
-
             if (!exists_by_id && ShouldExist) return Tuple.Create(false, $"דוח מספר {Id} לא קיים.");
 
             return Tuple.Create(true, string.Empty);
@@ -169,17 +170,10 @@ namespace CipherData.General
 
         public bool Different(Report? otherReport)
         {
-            if (otherReport == null) return true;
-            if (Id != otherReport.Id) return true;
-            if (Title != otherReport.Title) return true;
-            if (Creator != otherReport.Creator) return true;
+            if (otherReport == null || Id != otherReport.Id || Title != otherReport.Title || 
+                Creator != otherReport.Creator || !Parameters.SequenceEqual(otherReport.Parameters)) return true;
 
-            if (!Parameters.SequenceEqual(otherReport.Parameters)) return true;
-
-            if (otherReport.ObjectFactory is ObjectFactory obj)
-            {
-                if (!ObjectFactory.Equals(obj)) return true;
-            }
+            if (otherReport.ObjectFactory is ObjectFactory obj && !ObjectFactory.Equals(obj)) return true;
 
             return false;
         }
@@ -207,8 +201,7 @@ namespace CipherData.General
         }
 
         public Report Export()
-        {
-            Report? newItem = new()
+            => new()
             {
                 CreationDate = CreationDate,
                 Creator = Creator,
@@ -219,9 +212,6 @@ namespace CipherData.General
                 ObjectType = ObjectType,
                 ObjectFactory = ObjectFactory.Export()
             };
-
-            return newItem;
-        }
 
         public new string ToJson()
             => JsonSerializer.Serialize(Export(), typeof(Report), ICipherClass.JsonOptions);

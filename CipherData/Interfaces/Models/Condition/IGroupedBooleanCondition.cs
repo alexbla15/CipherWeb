@@ -24,14 +24,14 @@ namespace CipherData.Interfaces
         /// <summary>
         /// Method to check if field is applicable for this request
         /// </summary>
-        public CheckField CheckConditions()
+        public CheckField CheckConditions(bool allRegex = false)
         {
             foreach (var condition in Conditions)
             {
                 var result = condition switch
                 {
-                    IBooleanCondition singleCond => singleCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
-                    IGroupedBooleanCondition groupCond => groupCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
+                    IBooleanCondition singleCond => singleCond.Check(allRegex) ?? Tuple.Create(false, "שגיאת מערכת"),
+                    IGroupedBooleanCondition groupCond => groupCond.Check(allRegex) ?? Tuple.Create(false, "שגיאת מערכת"),
                     _ => Tuple.Create(true, string.Empty)
                 };
 
@@ -45,10 +45,10 @@ namespace CipherData.Interfaces
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
         /// <returns></returns>
-        public Tuple<bool, string> Check()
+        public Tuple<bool, string> Check(bool allRegex= false)
         {
             CheckClass result = new();
-            result.Fields.Add(CheckConditions());
+            result.Fields.Add(CheckConditions(allRegex));
             return result.Check();
         }
 

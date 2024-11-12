@@ -111,21 +111,21 @@ namespace CipherData.Interfaces
         public CheckField CheckAttributeRelation() =>
             CheckField.Required(AttributeRelation, $"{Translate(nameof(AttributeRelation))} עבור {CipherField.TranslatePath(Attribute)}");
 
-        public CheckField CheckValue() => 
-            CheckField.CheckString(Value, CipherField.TranslatePath(Attribute) ?? Translate(nameof(Value)),
+        public CheckField CheckValue(bool allRegex = false) => 
+            allRegex? new() : CheckField.CheckString(Value, CipherField.TranslatePath(Attribute) ?? Translate(nameof(Value)),
                 @"^[a-zA-Z0-9א-ת.:,\]\[ \n?]+$");
 
         /// <summary>
         /// Check if all required values are within the request, before sending it to the api.
         /// Item1 is the validity answer, Item2 is the problematic attribute.
         /// </summary>
-        public Tuple<bool, string> Check()
+        public Tuple<bool, string> Check(bool allRegex = false)
         {
             CheckClass result = new()
             {
                 Fields = new()
                 {
-                    CheckAttributeRelation(), CheckValue(), CheckOperator(),
+                    CheckAttributeRelation(), CheckValue(allRegex), CheckOperator(),
                     CheckAttribute()
                 }
             };

@@ -137,9 +137,9 @@ namespace CipherData.Interfaces
             OrderBy.Add(nextOrder);
         }
 
-        public CheckField CheckFilter()
+        public CheckField CheckFilter(bool allRegex = false)
         {
-            Tuple<bool, string> result = Filter.Check();
+            Tuple<bool, string> result = Filter.Check(allRegex);
             return new() { Succeeded = result.Item1, Message = result.Item2 };
         }
 
@@ -175,7 +175,7 @@ namespace CipherData.Interfaces
         public Tuple<bool, string> Check()
         {
             CheckClass result = new();
-            result.Fields.Add(CheckFilter());
+            result.Fields.Add(CheckFilter(allRegex: true));
             result.Fields.Add(CheckOrderBy());
             result.Fields.Add(CheckGroupBy());
             result.Fields.Add(CheckAggregate());
@@ -201,5 +201,10 @@ namespace CipherData.Interfaces
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+
+        // API - related methods
+
+        public async Task<Tuple<List<T>, ErrorResponse>> GetObjects<T>() where T: IResource
+            => await Config.QueryRequests(false).QueryObjects<T>(this);
     }
 }

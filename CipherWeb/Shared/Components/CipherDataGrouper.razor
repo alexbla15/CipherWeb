@@ -1,19 +1,8 @@
 ﻿@inherits CipherComponentCard
 
 @code {
-    private Type _ComponentType = typeof(ICipherClass);
-    private List<CipherField> _GroupFields = new();
-
     [Parameter]
-    public Type ComponentType
-    {
-        get => _ComponentType;
-        set
-        {
-            _ComponentType = value;
-            _GroupFields = CipherField.GetFields(value);
-        }
-    }
+    public Type? ComponentType { get;set;}
 
     /// <summary>
     /// Max amount of grouping levels.
@@ -162,7 +151,7 @@
                     int Index = i;
                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="20px">
                         <CipherFormRow Icon="@($"filter_{Index+1}")">
-                            <CipherPathChooser InitialType="@ComponentType" PathChanged="@(args=> ChangedValue(Index, args.Item1))" />
+                            <CipherPathChooser InitialType="@ComponentType" Path="@ChosenGroups[Index]" PathChanged="@(args=> ChangedValue(Index, args.Item1))" />
                         </CipherFormRow>
                         @if (Index+1 == ChosenGroups.Count)
                         {

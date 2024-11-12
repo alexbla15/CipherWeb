@@ -18,6 +18,9 @@ namespace CipherData.General
         }
     }
 
+    public class JsonIAggregateItemConverter : 
+        JsonInterfaceConverter<IAggregateItem, AggregateItem, AggregateItem> { }
+    
     public class JsonICategoryConverter : JsonInterfaceConverter<ICategory, Category, RandomCategory> { }
 
     public class JsonICategoryPropertyConverter : 
@@ -25,6 +28,10 @@ namespace CipherData.General
 
     public class JsonIGroupedBooleanConditionConverter : 
         JsonInterfaceConverter<IGroupedBooleanCondition, GroupedBooleanCondition, RandomGroupedBooleanCondition> { }
+
+    public class JsonIObjectFactoryConverter :
+        JsonInterfaceConverter<IObjectFactory, ObjectFactory, ObjectFactory>
+    { }
 
     public class JsonIPackageConverter : JsonInterfaceConverter<IPackage, Package, RandomPackage> { }
 

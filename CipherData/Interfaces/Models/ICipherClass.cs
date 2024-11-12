@@ -13,11 +13,13 @@ namespace CipherData.Interfaces
                 WriteIndented = true, // Pretty print
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Ensure special characters are preserved
                 Converters = {
+                    new JsonIAggregateItemConverter(),
                     new JsonDateTimeConverter(),
                     new JsonIConditionConverter(),
                     new JsonICategoryConverter(),
                     new JsonICategoryPropertyConverter(),
                     new JsonIGroupedBooleanConditionConverter(),
+                    new JsonIObjectFactoryConverter(),
                     new JsonIPackageConverter(),
                     new JsonIPackagePropertyConverter(),
                     new JsonIProcessDefinitionConverter(),

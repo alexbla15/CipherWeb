@@ -31,7 +31,7 @@
     /// Path to go to when user cancels the form.
     /// </summary>
     [Parameter]
-    public string? CancelPath { get; set; } = CipherNavLinks.Forms.Href;
+    public CipherNavLink? CancelPath { get; set; } = CipherNavLinks.Home;
 
     /// <summary>
     /// Message that will be showen when submitting the succesfuly.
@@ -95,7 +95,7 @@
 
     private RenderFragment CancelButton()
         =>@<CipherNavButton ColorStyle="ButtonStyle.Danger" Variant="Variant.Outlined" Icon="@Icons.Documents.Delete.cancel" Text="ביטול" 
-        Path="@CancelPath" Size="ButtonSize.Medium" />;
+        Path="@CancelPath?.Href" Size="ButtonSize.Medium" />;
 
     public RenderFragment SubmissionAlert() =>
     @<RadzenAlert Visible="@alertVisible" Text="@alertText" AlertStyle="@alertStyle" Style="width:100%" Close="@CloseAlert" />;

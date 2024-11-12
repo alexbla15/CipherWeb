@@ -13,7 +13,7 @@
     <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
     <br/>
     <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
-    OriginalReport="@(ChosenReport is null ? new () : ICipherClass.Copy(ChosenReport))" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
+    OriginalReportJson="@(ChosenReport?.ToJson())" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
 </ResourceForm>
 }
 
@@ -27,10 +27,8 @@
     private CipherReportDropDown ReportId = new();
     private ResourceForm ResForm = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        ChosenReport = await GetObjectFromUrl();
-    }
+    protected override async Task OnInitializedAsync() 
+    => ChosenReport = await GetObjectFromUrl();
 
     /// <summary>
     /// Method to change url once the form is related to a certain id
@@ -43,7 +41,6 @@
         ChosenReport = ReportId.ChosenReport;
         ResForm.ChangeUrl(NavigationManager, NavLink, ChosenReport?.Id.ToString());
     }
-
 
     /// <summary>
     /// Method to deduce the package id from the url.

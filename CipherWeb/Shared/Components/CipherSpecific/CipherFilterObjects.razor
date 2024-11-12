@@ -22,8 +22,8 @@
 
 @code {
     private int _ChosenId = 0;
-    private RenderFragment? RenderedTable { get; set; }
     private bool RequestComplete = true;
+    private RenderFragment? RenderedTable { get; set; }
 
     [Parameter]
     public bool WithParameters { get; set; } = false;
@@ -97,7 +97,11 @@
     private List<ICategory>? Categories;
     private List<IUnit>? Units;
 
-    protected override void OnInitialized() => UpdateRenderedTable();
+    protected override void OnInitialized()
+    {
+        _ChosenId = GetTypeId(ChosenType);
+        UpdateRenderedTable();
+    }
 
     private void UpdateRenderedTable() => RenderedTable = RenderCipherDataTable();
 
@@ -197,8 +201,8 @@
 
     public RenderFragment? RenderCipherDataTable(Type type)
     {
-        int id = GetTypeId(type);
-        return RenderCipherDataTable(id);
+        _ChosenId = GetTypeId(type);
+        return RenderCipherDataTable(_ChosenId);
     }
 
     public RenderFragment? RenderCipherDataTable() => RenderCipherDataTable(_ChosenId);
@@ -249,9 +253,8 @@
     public async Task<List<T>> SendRequest<T>() where T : IResource
     {
         IObjectFactory obj = CreateObjectFactory();
-        IQueryRequests req = Config.QueryRequests(false);
         List<T> objects = new();
-        if (GetReportType() == typeof(T)) (objects, Error) = await req.QueryObjects<T>(obj);
+        if (GetReportType() == typeof(T)) (objects, Error) = await obj.GetObjects<T>();
         return objects;
     }
 

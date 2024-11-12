@@ -81,23 +81,12 @@ namespace CipherData.ApiMode
 
         public Task InsertReport(Report new_report)
         {
-            string sql = "INSERT INTO Reports (Id, Title, Creator, CreationDate, ObjectFactory, ObjectType, Path, Parameters, Version) " +
-                "VALUES (@Id, @Title, @Creator, @CreationDate, @ObjectFactory , @ObjectType, @Path, @Parameters, @Version)";
+            string sql = @$"INSERT INTO Reports (Id, Title, Creator, CreationDate, ObjectFactory, ObjectType, Path, Parameters, Version) 
+                VALUES ({new_report.Id}, N'{new_report.Title}', N'{new_report.Creator}', '{new_report.CreationDate}', 
+                N'{new_report.ObjectFactory.ToJson()}' , N'{new_report.ObjectType.Name}', N'{new_report.Path()}', 
+                N'{JsonSerializer.Serialize(new_report.Parameters)}', {new_report.Version})";
 
-            var parameters = new
-            {
-                new_report.Id,
-                new_report.Title,
-                new_report.Creator,
-                new_report.CreationDate,
-                ObjectFactory = new_report.ObjectFactory.ToJson(),
-                ObjectType = new_report.ObjectType.Name,
-                Path = new_report.Path(),
-                Parameters = JsonSerializer.Serialize(new_report.Parameters),
-                new_report.Version
-            };
-
-            return _db.SaveData(sql, parameters);
+            return _db.SaveData(sql, new { });
         }
 
         public Task<bool> ExistsInDb(Report new_report, bool CheckTitle = true)

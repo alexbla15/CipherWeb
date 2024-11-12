@@ -78,8 +78,7 @@ namespace CipherData.Interfaces
         DateTime Timestamp { get; set; }
 
         public Dictionary<string, object?> ToDictionary()
-        {
-            return new()
+            => new()
             {
                 [nameof(Id)] = Id,
                 [nameof(EventType)] = EventType,
@@ -94,7 +93,6 @@ namespace CipherData.Interfaces
                 [nameof(Worker)] = Worker,
                 [nameof(Comments)] = Comments,
             };
-        }
 
         // STATIC METHODS
 
@@ -157,8 +155,7 @@ namespace CipherData.Interfaces
         DateTime Timestamp { get; set; }
 
         public new Dictionary<string, object?> ToDictionary()
-        {
-            return new()
+            => new()
             {
                 [nameof(Id)] = Id,
                 [nameof(EventType)] = EventType,
@@ -169,7 +166,6 @@ namespace CipherData.Interfaces
                 [nameof(Worker)] = Worker,
                 [nameof(Comments)] = Comments,
             };
-        }
 
         public bool IsRelocationEvent() =>
             InitialStatePackages.Zip(FinalStatePackages,
@@ -327,7 +323,7 @@ namespace CipherData.Interfaces
         public static IBooleanCondition PendingCondition()
             => new BooleanCondition()
             {
-                Attribute = $"[Event].[{nameof(IEvent.Status)}]",
+                Attribute = $"[Event].[{nameof(Status)}]",
                 AttributeRelation = AttributeRelation.Eq,
                 Value = "0"
             };

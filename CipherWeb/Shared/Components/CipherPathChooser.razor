@@ -147,6 +147,8 @@
 
     private void SetFields(Type fieldType)
     {
+        if (fieldType is null) return;
+
         if (fieldType.GenericTypeArguments.Any())
         {
             fieldType = fieldType.GenericTypeArguments[0];
