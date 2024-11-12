@@ -7,12 +7,23 @@
         public static DateTime RandomDateTime()
         {
             Random random = new();
+
+            DateTime randomDate = RandomDate();
+
+            return randomDate.AddHours(-random.Next(0, 24)).AddMinutes(-random.Next(0, 60)).AddSeconds(-random.Next(0, 60));
+        }
+
+        /// <summary>
+        /// Fixed time, but changing date
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime RandomDate()
+        {
+            Random random = new();
             int range = 20;  // Calculate the total number of days between the two dates
 
             // Generate a random date
-            DateTime randomDate = DateTime.Now.AddDays(-random.Next(range));
-
-            return randomDate.AddHours(-random.Next(0, 24)).AddMinutes(-random.Next(0, 60)).AddSeconds(-random.Next(0, 60));
+            return DateTime.Today.AddDays(-random.Next(range));
         }
 
         public static List<T> FillRandomObjects<T>(int amount, Func<T> randomFunc) =>

@@ -87,15 +87,21 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ReportParameter" Property="Id" Title="#" TextAlign="@TdTextAlign" Width="5%" />
+                
+                <RadzenDataGridColumn TItem="ReportParameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
+                    <Template Context="param">
+                        <CipherPathChooser PathChanged="@(async args => {
+                                param.ParamType = new ();
+                                param.ParamType.FieldType = args.Item2.FieldType;
+                                param.ParamType.Path = args.Item1;
+                                param.ParamType.Translation = CipherField.TranslatePath(args.Item1);
+                                await ParamsChanged();})" />
+                    </Template>
+                </RadzenDataGridColumn>
+
                 <RadzenDataGridColumn TItem="ReportParameter" Property="Name" Title="שם" TextAlign="@TdTextAlign" Width="40%">
                     <Template Context="param">
                         <RadzenTextBox @bind-Value="@param.Name" Style="width: 100%" Change="@ParamsChanged" />
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ReportParameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
-                    <Template Context="param">
-                        <RadzenDropDown @bind-Value=@param.ParamType Data=@OptionalTypes TextProperty="Translation" Change="@ParamsChanged"
-                                                Placeholder="חיפוש פרמטר" AllowClear="true" AllowFiltering="true" Style="width: 100%"/>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

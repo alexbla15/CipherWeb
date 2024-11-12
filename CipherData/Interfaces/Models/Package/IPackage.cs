@@ -5,9 +5,6 @@ namespace CipherData.Interfaces
     [HebrewTranslation(nameof(IPackage))]
     public interface IPackage : IResource
     {
-        [HebrewTranslation(typeof(IPackage), nameof(test))]
-        bool test { get; set; }
-
         /// <summary>
         /// Description of the package
         /// </summary>
@@ -101,7 +98,7 @@ namespace CipherData.Interfaces
         }
 
         /// <summary>
-        /// Transfrom package object to a PackageRequest object
+        /// Transform package object to a PackageRequest object
         /// </summary>
         public IPackageRequest Request() =>
             new PackageRequest()
@@ -202,8 +199,6 @@ namespace CipherData.Interfaces
         public List<IProcessDefinition>? DestinationProcesses { get; set; } = new();
 
         public decimal Concentration => BrutMass > 0 ? NetMass / BrutMass : 0;
-
-        public bool test { get; set; }
 
         public void AddBrutMass(decimal brutMass)
         {

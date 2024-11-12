@@ -13,7 +13,7 @@
         
             <CipherComponentCard Title="בחירת שם לדוח" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <CipherAutoComplete Value="@(ChosenReport?.Id.ToString())" Label="@Report.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
-                <CipherAmount @ref="CurrVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" 
+                <CipherAmount @ref="CurrentVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)" 
                 Label="@Report.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
                 <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@Report.Translate(nameof(Report.Title))" Icon="@Icons.Documents.assignment" @ref="ReportName" />
         </CipherComponentCard>
@@ -22,14 +22,16 @@
 
     <RadzenStepsItem Text="אובייקטים לתצוגה">
         <CipherFilterObjects @ref=ReportFilter ChosenType="@ChosenReport?.ObjectType" ChosenCondition="@ChosenReport?.ObjectFactory.Filter" 
-        ChosenConditionChanged="@OnFilterChanged" />
+        ChosenConditionChanged="@OnFilterChanged" WithParameters="true" AvailableParameters="@ChosenReport?.Parameters"/>
     </RadzenStepsItem>
 
     <RadzenStepsItem Text="בניית תצוגה">
         <CipherDataGrouper ComponentType="@ChosenReport?.ObjectType"
-                           Title="@(IObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))" @ref=dataGrouper ChosenGroupsChanged="@OnGroupsChanged" ChosenGroups="@ChosenReport.ObjectFactory.GroupBy" />
+                           Title="@(IObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))" @ref=dataGrouper 
+                           ChosenGroupsChanged="@OnGroupsChanged" 
+                           ChosenGroups="@(ChosenReport?.ObjectFactory.GroupBy ?? new())" />
 
-        <CipherDataAggregater @ref=dataAggregater Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
+        <CipherDataAggregater @ref=dataAggregator Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
                               AggregationFields="@ChosenReport.ObjectFactory.GroupBy" ChosenAggregates="@(ChosenReport.ObjectFactory.Aggregate ?? new())"
                               ChosenAggregatesChanged="@OnAggregatesChanged" />
     </RadzenStepsItem>
@@ -45,27 +47,27 @@
                         {
                             if (param.ParamType?.FieldType == typeof(DateTime))
                             {
-                                <CipherDatePicker @ref=cipherDate Label="@param.Name" ValueChanged="@(args=> param.Value = cipherDate.Value.ToString())" />
+                                <CipherDatePicker @ref=cipherDate Label="@param.Name" ValueChanged="@(()=> param.Value = cipherDate.Value.ToString())" />
                             }
                             else if (param.ParamType?.FieldType == typeof(IUnit))
                             {
-                                <CipherUnitDropDown @ref=cipherUnit Label="@param.Name" Change="@(args=>param.Value =cipherUnit.ChosenUnit?.Id)" />
+                                    <CipherUnitDropDown @ref=cipherUnit Label="@param.Name" Change="@(()=>param.Value =cipherUnit.ChosenUnit?.Id)" />
                             }
                             else if (param.ParamType?.FieldType == typeof(IVessel))
                             {
-                                <CipherVesselDropDown @ref=cipherVes Label="@param.Name" Change="@(args=>param.Value =cipherVes.ChosenVessel?.Id)" />
+                                    <CipherVesselDropDown @ref=cipherVes Label="@param.Name" Change="@(()=>param.Value =cipherVes.ChosenVessel?.Id)" />
                             }
                             else if (param.ParamType?.FieldType == typeof(IStorageSystem))
                             {
-                                <CipherLocation @ref=cipherSys Label="@param.Name" Change="@(args=>param.Value = cipherSys.ChosenSystem?.Id)" />
+                                    <CipherLocation @ref=cipherSys Label="@param.Name" Change="@(()=>param.Value = cipherSys.ChosenSystem?.Id)" />
                             }
                             else if (param.ParamType?.FieldType == typeof(decimal))
                             {
-                                <CipherNumeric @ref=cipherNumber Label="@param.Name" AmountChanged="@(args=>param.Value = cipherNumber.Amount.ToString())" />
+                                    <CipherNumeric @ref=cipherNumber Label="@param.Name" AmountChanged="@(()=>param.Value = cipherNumber.Amount.ToString())" />
                             }
                             else
                             {
-                                <CipherAutoComplete @ref=cipherText Label="@param.Name" Change="@(args=>param.Value = cipherText.Value)" ShowErrors="false" />
+                                    <CipherAutoComplete @ref=cipherText Label="@param.Name" Change="@(()=>param.Value = cipherText.Value)" ShowErrors="false" />
                             }
                         }
                     </CipherComponentCard>
@@ -135,7 +137,7 @@
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper dataGrouper = new();
-    private CipherDataAggregater dataAggregater = new();
+    private CipherDataAggregater dataAggregator = new();
     private CipherFilterObjects ReportFilter = new();
 
     private CipherDatePicker cipherDate = new();
@@ -144,7 +146,7 @@
     private CipherLocation cipherSys = new();
     private CipherNumeric cipherNumber = new();
     private CipherAutoComplete cipherText = new();
-    private CipherAmount CurrVersion = new();
+    private CipherAmount CurrentVersion = new();
     private CipherSubmit submission = new();
 
     protected override async Task OnInitializedAsync() 
@@ -154,13 +156,10 @@
         if (!UpdateMode) ChosenReport.Id = await _db.GetLastReportId() + 1;
     }
 
-    private void OnFilterChanged(Tuple<IGroupedBooleanCondition, Type> newFilter)
+    private void OnFilterChanged(IGroupedBooleanCondition newFilter)
     {
         if (ChosenReport != null)
-        {
-            ChosenReport.ObjectFactory.Filter = newFilter.Item1;
-            ChosenReport.ObjectType = newFilter.Item2;
-        }
+            ChosenReport.ObjectFactory.Filter = newFilter;
     }
 
     private void OnParametersChanged(List<ReportParameter> newParameters)
@@ -190,7 +189,7 @@
         ChosenReport.Title = ReportName.Value;
         ChosenReport.CreationDate = DateTime.Now;
         ChosenReport.Creator = Constants.SetUser.Name;
-        ChosenReport.Version = (int)CurrVersion.GetAmount();
+        ChosenReport.Version = (int)CurrentVersion.GetAmount();
 
         if (Valid) (Valid, ErrorMessage) = ChosenReport.Check();
 
@@ -239,6 +238,8 @@
 
     public async Task SubmitReport()
     {
+        if (ChosenReport is null) return;
+
         JsonRequest = ChosenReport.ToJson();
         await _db.InsertReport(ChosenReport);
         Submitted = true;

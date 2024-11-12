@@ -31,7 +31,7 @@ namespace CipherData.Interfaces
             };
 
         /// <summary>
-        /// Transfrom this object to JSON, readable by API
+        /// Transform this object to JSON, readable by API
         /// </summary>
         /// <returns></returns>
         public string ToJson();

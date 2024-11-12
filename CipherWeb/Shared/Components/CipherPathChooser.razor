@@ -9,13 +9,13 @@
         @ArrowIcon()
         <div class="@Constants.Styles.Chips.Container" style="@($"min-width:{Constants.StandardWidth}")">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center"
-            Wrap="FlexWrap.Wrap">
-                @for (int i=0; i < SelectedChips.Count ; i++)
+                         Wrap="FlexWrap.Wrap">
+                @for (int i = 0; i < SelectedChips.Count; i++)
                 {
                     @Chip(SelectedChips[i], i)
-                    @if (SelectedChips.Count-1 != i)
+                    @if (SelectedChips.Count - 1 != i)
                     {
-                        <RadzenText Text="/"/>
+                        <RadzenText Text="/" />
                     }
                 }
                 @CloseAll()
@@ -25,6 +25,9 @@
 </RadzenStack>
 
 @code {
+    [Parameter]
+    public bool Disabled { get; set; } = new();
+
     [Parameter]
     public List<CipherField> AvailableFields { get; set; } = new();
 
@@ -54,13 +57,12 @@
 
     protected override void OnInitialized()
     {
-        if (string.IsNullOrEmpty(Path)) 
+        if (string.IsNullOrEmpty(Path))
         {
             ResetFields();
         }
         else
         {
-
             string translatedPath = CipherField.TranslatePath(Path);
 
             // Split the original and translated paths into parts
@@ -71,11 +73,14 @@
             int minLength = Math.Min(pathParts.Length, translatedParts.Length);
             for (int i = 0; i < minLength; i++)
             {
+                string currentPath = string.Join("].[", pathParts.ToList().GetRange(0, i + 1));
+                currentPath = $"[{currentPath}]";
+
                 SelectedChips.Add(new CipherField()
                         {
                             Path = pathParts[i],
                             Translation = translatedParts[i],
-                            FieldType = typeof(string)
+                            FieldType = CipherField.GetPathType(InitialType, currentPath)
                         });
             }
         }
@@ -115,8 +120,8 @@
 
     private void ChangeFound()
     {
-        Tuple<string, CipherField, bool> curr_path = SelectedChips.Any() ? 
-        Tuple.Create(GetPath(), SelectedChips.Last(), SelectedChips.Any(x=>x.IsList())) : Tuple.Create(string.Empty, new CipherField(), false);
+        Tuple<string, CipherField, bool> curr_path = SelectedChips.Any() ?
+    Tuple.Create(GetPath(), SelectedChips.Last(), SelectedChips.Any(x => x.IsList())) : Tuple.Create(string.Empty, new CipherField(), false);
 
         PathChanged.InvokeAsync(curr_path);
         ValueChanged.InvokeAsync();
@@ -129,17 +134,17 @@
         if (InitialType is null)
         {
             AvailableFields = CommonFuncs.GetResourceClasses().Select(
-        x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
-        Select(y => new CipherField() { Path=y.Name ,Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
+    x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
+    Select(y => new CipherField() { Path = y.Name, Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
         }
         else
         {
             SelectedChips.Add(new CipherField()
-                {
-                    Path = InitialType.Name,
-                    Translation = Translator.GetTranslation(InitialType.Name),
-                    FieldType = InitialType
-                });
+                    {
+                        Path = InitialType.Name,
+                        Translation = Translator.GetTranslation(InitialType.Name),
+                        FieldType = InitialType
+                    });
             SetFields(InitialType);
         }
     }
@@ -164,36 +169,44 @@
     }
 
     public string GetPath() =>
-        string.Join(".", SelectedChips.Select(x => $"[{x.Path}]"));
+    string.Join(".", SelectedChips.Select(x => $"[{x.Path}]"));
 
     public string GetTranslationPath() =>
-    string.Join(".", SelectedChips.Select(x => $"[{x.Translation}]"));
+        string.Join(".", SelectedChips.Select(x => $"[{x.Translation}]"));
 
     private RenderFragment? UserAttributeChooser()
-    =>
+        =>
     @<RadzenDropDown TValue="CipherField" Data="@AvailableFields" TextProperty="Translation"
-                  Change="@(args => AddChip((CipherField)args))" Value="@ChosenAttribute"
-                    Style="@($"min-width:{Constants.StandardWidth}")" />;
+                    Change="@(args => AddChip((CipherField)args))" Value="@ChosenAttribute"
+                    Style="@($"min-width:{Constants.StandardWidth}")" Disabled="@Disabled"/>;
 
     private RenderFragment? ArrowIcon()
-    => @<RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />;
+        => @<RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />;
 
     private RenderFragment? Chip(CipherField chip, int index)
-    =>
-    @<div class="@Constants.Styles.Chips.Chip">
+        =>
+    @<div class="@(Disabled? Constants.Styles.Chips.ChipDisabled : Constants.Styles.Chips.Chip)">
         <span>@chip.Translation</span>
         @CloseItem(chip, index)
-    </div>;
+    </div>
+    ;
 
     private RenderFragment? CloseItem(CipherField chip, int index)
-        =>
-    @<span class="@Constants.Styles.Chips.CloseItem" @onclick="() => RemoveChip(index)">
-        <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-    </span>;
+    {
+        if (Disabled) return null;
+        return @<span class="@Constants.Styles.Chips.CloseItem
+        " @onclick="() => RemoveChip(index)">
+            <RadzenIcon Icon="@Icons.Documents.Delete.close" />
+        </span>
+    ;
+    }
 
     private RenderFragment? CloseAll()
-    =>
+    {
+        if (Disabled) return null;
+        return
     @<span class="@Constants.Styles.Chips.CloseAll" @onclick="RemoveAll">
         <RadzenIcon Icon="@Icons.Documents.Delete.close" />
     </span>;
+    }
 }

@@ -78,8 +78,10 @@
             set
             {
                 _Events = value;
-                Start = Events.Select(x => x.Timestamp).Min();
-                End = Events.Select(x => x.Timestamp).Max();
+                List<DateTime> dates = Events.Select(x => x.Timestamp).ToList();
+                Start = dates.Min();
+                IEvent lastEvent = Events.Where(x => x.Timestamp == dates.Max()).First();
+                End = lastEvent.Status == 1 ? lastEvent.Timestamp : DateTime.Now;
             }
         }
 

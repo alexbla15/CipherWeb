@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using CipherData.Interfaces;
+using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace CipherData.General
 {
@@ -100,7 +103,7 @@ namespace CipherData.General
         public DateTime CreationDate { get; set; }
 
         /// <summary>
-        /// All user-set parameters (changable by user)
+        /// All user-set parameters (changeable by user)
         /// </summary>
         [HebrewTranslation(typeof(Report), nameof(Parameters))]
         public List<ReportParameter> Parameters { get; set; } = new();
@@ -109,7 +112,7 @@ namespace CipherData.General
         public IObjectFactory ObjectFactory { get; set; } = new ObjectFactory();
 
         [JsonIgnore]
-        public Type ObjectType { get; set; } = typeof(Package);
+        public Type ObjectType { get; set; } = typeof(IPackage);
 
         public string Path() => $"Reports/{Id}";
 
@@ -194,6 +197,26 @@ namespace CipherData.General
                 [nameof(CreationDate)] = CreationDate,
             };
         }
+
+        public Report Export()
+        {
+            Report? newItem = new()
+            {
+                CreationDate = CreationDate,
+                Creator = Creator,
+                Parameters = Parameters,
+                Id = Id,
+                Title = Title,
+                Version = Version,
+                ObjectType = ObjectType,
+                ObjectFactory = ObjectFactory.Export()
+            };
+
+            return newItem;
+        }
+
+        public new string ToJson()
+            => JsonSerializer.Serialize(Export(), typeof(Report), ICipherClass.JsonOptions);
 
         // STATIC METHODS
 

@@ -102,7 +102,7 @@ namespace CipherData.Interfaces
     }
 
     /// <summary>
-    /// Event consists of several classicaly defined events (called LegacyEvent)
+    /// Event consists of several classically defined events (called LegacyEvent)
     /// Each event can include many sub events of mass-transfer, and relocation.
     /// </summary>
     [HebrewTranslation(nameof(IEvent))]
@@ -141,11 +141,13 @@ namespace CipherData.Interfaces
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package before the event
         /// </summary>
+        [HebrewTranslation(typeof(IEvent), nameof(InitialStatePackages))]
         List<IPackage> InitialStatePackages { get; set; }
 
         /// <summary>
         /// List of affected packages from actions, the items present the state of each package after the event
         /// </summary>
+        [HebrewTranslation(typeof(IEvent), nameof(FinalStatePackages))]
         List<IPackage> FinalStatePackages { get; set; }
 
         /// <summary>

@@ -106,13 +106,13 @@
     protected override async Task OnInitializedAsync()
     {
         RegisterResourceHandlers();
-        SetAddResourceHandlerFunc();
+        SetAddResourceHandlerFunction();
         if (Mode != FormMode.Create) await GetObjectFromUrl();
     }
 
     // GENERAL METHODS
 
-    public void SetAddResourceHandlerFunc()
+    public void SetAddResourceHandlerFunction()
     {
         if (Mode == FormMode.Create)
         {
@@ -516,7 +516,7 @@
     }
 
     private void SetJson<T>(T obj) where T : ICipherClass => 
-    JsonRequest = (Mode == FormMode.Create ? string.Empty : GetObjectId(ChosenObject)) + obj.ToJson();
+    JsonRequest = (Mode == FormMode.Create ? string.Empty : GetObjectId(ChosenObject)) + "\n----\n" + obj.ToJson();
 
     private void SetPackageJsonRequest()
     {

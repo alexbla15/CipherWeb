@@ -185,6 +185,11 @@
     cursor:pointer;
 }
 
+    .cipher-chip.Disabled:hover {
+        background-color: var(--rz-chip-background-color);
+        cursor: default;
+    }
+
 .cipher-close .chip {
     background-color: var(--rz-chip-background-color);
 }
@@ -454,6 +459,8 @@
         border-left: none;
         border-bottom: 2px solid var(--rz-primary-dark);
         border-bottom-right-radius: 5px;
+        top:auto;
+        height:10px;
     }
 
     .rz-datafilter .rz-datafilter-item:before {
@@ -474,6 +481,8 @@
 
     .rz-datafilter .rz-datafilter-bar:after {
         border-bottom-left-radius: 0;
+        top: 0;
+        height: 20px;
     }
 
 .rz-splitbutton .rz-button.rz-splitbutton-menubutton, .rz-splitbutton .rz-button:not(.rz-splitbutton-menubutton) {

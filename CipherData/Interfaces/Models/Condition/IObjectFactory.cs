@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.Json;
 
 namespace CipherData.Interfaces
 {
@@ -181,6 +182,21 @@ namespace CipherData.Interfaces
 
             return result.Check();
         }
+        
+        public IObjectFactory Export()
+        {
+            IObjectFactory? newItem = Config.ObjectFactory();
+
+            newItem.Aggregate = Aggregate;
+            newItem.GroupBy = GroupBy;
+            newItem.OrderBy = OrderBy;
+            newItem.Filter = Filter.Export();
+
+            return newItem;
+        }
+
+        public new string ToJson()
+            => JsonSerializer.Serialize(Export(), typeof(IObjectFactory), JsonOptions);
 
         // STATIC METHODS
 

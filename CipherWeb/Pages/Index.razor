@@ -7,8 +7,9 @@
 @if (CommonFuncs.CanView(navLink))
 {
     <PageTitle>@navLink.Name</PageTitle>
-
+    
     <CipherTopNavBar />
+
     <CipherProcessesScheduler />
 
     @if (Constants.SetUser.Group == WorkerGroup.Manager)

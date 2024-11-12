@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Xml.Linq;
 
 namespace CipherData.Interfaces
 {
@@ -37,6 +36,19 @@ namespace CipherData.Interfaces
         IsNotNull,
         IsEmpty,
         IsNotEmpty,
+
+        // NOW FOR RELATIONS THAT MUST HAVE A PARAMETER
+
+        EqParam,
+        NeParam,
+        GtParam,
+        GeParam,
+        LtParam,
+        LeParam,
+        StartsWithParam,
+        EndsWithParam,
+        ContainsParam,
+        NotContainsParam
     }
 
     public enum Operator
@@ -72,7 +84,7 @@ namespace CipherData.Interfaces
         string? Attribute { get; set; }
 
         /// <summary>
-        /// Target value for comparision. 
+        /// Target value for comparison. 
         /// If null, the attributes are compared to 
         /// themselves (all equal, any equal etc.)
         /// </summary>
@@ -121,8 +133,50 @@ namespace CipherData.Interfaces
             return result.Check();
         }
 
+        /// <summary>
+        /// Method to export the object to an api-appropriate form
+        /// 1 - exchange AttributeRelation only to 
+        /// </summary>
+        public IBooleanCondition Export()
+        {
+            Dictionary<AttributeRelation, AttributeRelation> ParameterToRegularRelation = new()
+            {
+                [Interfaces.AttributeRelation.EqParam] = Interfaces.AttributeRelation.Eq,
+                [Interfaces.AttributeRelation.NeParam] = Interfaces.AttributeRelation.Ne,
+                [Interfaces.AttributeRelation.LeParam] = Interfaces.AttributeRelation.Le,
+                [Interfaces.AttributeRelation.LtParam] = Interfaces.AttributeRelation.Lt,
+                [Interfaces.AttributeRelation.GeParam] = Interfaces.AttributeRelation.Ge,
+                [Interfaces.AttributeRelation.GtParam] = Interfaces.AttributeRelation.Gt,
+                [Interfaces.AttributeRelation.EndsWithParam] = Interfaces.AttributeRelation.EndsWith,
+                [Interfaces.AttributeRelation.StartsWithParam] = Interfaces.AttributeRelation.StartsWith,
+                [Interfaces.AttributeRelation.NotContainsParam] = Interfaces.AttributeRelation.NotContains,
+                [Interfaces.AttributeRelation.ContainsParam] = Interfaces.AttributeRelation.Contains,
+            };
+
+            IBooleanCondition copyItem = Config.BooleanCondition();
+
+            copyItem.Attribute = Attribute is null ? null : 
+                $"[{string.Join("].[", Attribute.Trim('[',']').Split("].[").Select(x=>x.Trim('I')))}]";
+
+            copyItem.AttributeRelation = AttributeRelation is null ?
+                null : (ParameterToRegularRelation.ContainsKey((AttributeRelation)AttributeRelation) ?
+                ParameterToRegularRelation[(AttributeRelation)AttributeRelation] : AttributeRelation);
+            copyItem.Operator = Operator;
+            copyItem.Value = Value;
+
+            return copyItem;
+        }
+
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
+    }
+
+    public abstract class BaseBooleanCondition: Condition, IBooleanCondition
+    {
+        public string? Attribute { get; set; }
+        public string? Value { get; set; }
+        public AttributeRelation? AttributeRelation { get; set; }
+        public Operator? Operator { get; set; }
     }
 }

@@ -45,8 +45,6 @@
 
     private IGroupedBooleanCondition SelectedCondition = Config.GroupedBooleanCondition();
 
-    private string? SelectedStep;
-
     protected override void OnInitialized()
     {
         if (ChosenSteps == null) ChosenSteps = new();
@@ -88,20 +86,10 @@
         await ValueChanged.InvokeAsync();
     }
 
-    public void OnSave()
+    async Task ChangedStep()
     {
-        if (SelectedStep != null)
-        {
-            var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
-            ChosenStep.Condition = SelectedCondition;
-        }
-    }
 
-    public void RefreshSelectedStep()
-    {
-        StepCondition.Save();
-        var ChosenStep = ChosenSteps.Where(x => x.Name == SelectedStep).First();
-        SelectedCondition = ChosenStep?.Condition ?? Config.GroupedBooleanCondition();
+        await ValueChanged.InvokeAsync();
     }
 }
 
@@ -150,20 +138,18 @@
     @if (ChosenSteps != null && ChosenSteps.Any())
     {
         <CipherComponentCard Title="אפיון שלבים">
-            <HeaderContent>
-                <RadzenDropDown Placeholder="בחירת שלב" TextProperty="Name" ValueProperty="Name" Data="@ChosenSteps" TValue="string" 
-                @bind-Value="SelectedStep" Style="margin-bottom:10px" Change="@RefreshSelectedStep">
-                    <ValueTemplate>
-                        <b>שלב נבחר:</b> @context.Name
-                    </ValueTemplate>
-                </RadzenDropDown>
-            </HeaderContent>
             <ChildContent>
-                @if (SelectedStep != null)
+                <RadzenAccordion >
+                    <Items>
+                @foreach (var step in ChosenSteps)
                 {
-                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged" @ref="StepCondition" OnFilter="@OnSave" 
-                        ChosenCondition="@SelectedCondition" Disabled="@Disabled" InitialType="@typeof(IProcessStepDefinition)"/>
+                    <RadzenAccordionItem Text="@step.Name">
+                    <CipherBooleanConditions ChosenConditionChanged="@ValueChanged"
+                    ChosenCondition="@step.Condition" Disabled="@Disabled" InitialType="@typeof(IEvent)"/>
+                            </RadzenAccordionItem>
                 }
+                    </Items>
+                </RadzenAccordion>
             </ChildContent>
         </CipherComponentCard>
     }

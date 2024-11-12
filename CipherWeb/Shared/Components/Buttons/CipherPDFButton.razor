@@ -14,7 +14,7 @@
 @inject IJSRuntime JS
 
 <CipherButton HelpText="@HelpText" Icon="@Icon" ColorStyle="@ButtonStyle.Danger" ColorShade="@Shade.Dark"
-              Click="@ClickFunc" Variant="@Variant.Outlined" Disabled="@Disabled"/>
+              Click="@ClickFunction" Variant="@Variant.Outlined" Disabled="@Disabled" />
 
 @code
 {
@@ -41,7 +41,7 @@
 
     private string GetFilePath() => $"{FileName}.csv";
 
-    public void ClickFunc()
+    public void ClickFunction()
     {
         if (OnClickFunc != null)
         {
@@ -105,38 +105,38 @@
                     table.ColumnsDefinition(columns =>
                     {
                         foreach (var _ in Headers())
-                    {
-                       columns.RelativeColumn(); // Create a column for each property
+                        {
+                            columns.RelativeColumn(); // Create a column for each property
+                        }
                     }
-                }
             );
 
-            // Add a header row with the property names
-            table.Header(header =>
-            {
+                    // Add a header row with the property names
+                    table.Header(header =>
+                {
                     foreach (var property in Headers())
-                {
-                    header.Cell().Element(HeaderCellStyle).Text(property);
-
-                    static IContainer HeaderCellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Border(1).Padding(5);
-                }
-            });
-
-            // Add rows for the data
-            if (_data != null)
-            {
-                foreach (var item in _data)
-                {
-                    foreach (var column in Headers())
                     {
-                        // Get the value from the dictionary by the key
-                        var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
-                        table.Cell().Element(CellStyle).Text(value);
+                        header.Cell().Element(HeaderCellStyle).Text(property);
+
+                        static IContainer HeaderCellStyle(IContainer container) => container.DefaultTextStyle(x => x.Bold().FontSize(8)).Border(1).Padding(5);
                     }
-                    static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
-                }
-            }
-        });
+                });
+
+                    // Add rows for the data
+                    if (_data != null)
+                    {
+                        foreach (var item in _data)
+                        {
+                            foreach (var column in Headers())
+                            {
+                                // Get the value from the dictionary by the key
+                                var value = item.ContainsKey(column) ? item[column]?.ToString() ?? string.Empty : string.Empty;
+                                table.Cell().Element(CellStyle).Text(value);
+                            }
+                            static IContainer CellStyle(IContainer container) => container.DefaultTextStyle(x => x.FontSize(8)).Border(1).Padding(5);
+                        }
+                    }
+                });
         }
 
         void ComposeFooter(IContainer container)
@@ -154,8 +154,8 @@
                 {
                     imageContainer.Image(imageBytes).FitWidth();
                 });
-                }
-                }
+        }
+    }
             );
         }
 

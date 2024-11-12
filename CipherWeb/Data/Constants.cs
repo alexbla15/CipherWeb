@@ -11,6 +11,7 @@ namespace CipherWeb.Data
             public class Chips
             {
                 public static readonly string Chip = "cipher-chip";
+                public static readonly string ChipDisabled = "cipher-chip Disabled";
                 public static readonly string CloseAll = "cipher-close";
                 public static readonly string CloseItem = "cipher-close chip";
                 public static readonly string Container = "cipher-chip-container";

@@ -7,12 +7,14 @@
     {
         public RandomTransferAmountEvent()
         {
+            RandomEvent ev = new();
+
             EventType = 23;
-            Status = 0;
-            Worker = new RandomWorker().Name;
-            ProcessId = new Random().Next(1, 20).ToString();
-            Comments = "תנועה לדוגמה";
-            Timestamp = RandomFuncs.RandomDateTime();
+            Status = ev.Status;
+            Worker = ev.Worker;
+            ProcessId = ev.ProcessId;
+            Comments = ev.Comments;
+            Timestamp = ev.Timestamp;
 
             Tuple<List<IPackage>, List<IPackage>> PacksStatuses = GetPacks();
 

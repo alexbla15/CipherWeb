@@ -11,7 +11,8 @@
         </RadzenSelectBar>
     </CipherComponentCard>
     <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnFilter="@RefreshDataByFilter"
-                                InitialType="@GetReportType()" />
+                             InitialType="@GetReportType()" ChosenConditionChanged="@ChosenConditionChanged" 
+                             WithParameters="@WithParameters" AvailableParameters="@AvailableParameters" />
     @SubmissionAlert()
 
     @if (RequestComplete)
@@ -25,13 +26,15 @@
 </RadzenStack>
 
 @code {
-    private Type _ChosenType = typeof(IPackage);
     private int _ChosenId = 0;
     private RenderFragment? RenderedTable { get; set; }
     private bool RequestComplete = true;
 
     [Parameter]
-    public Type ChosenType { get => _ChosenType; set { _ChosenType = value; SetType(); } }
+    public bool WithParameters { get; set; } = false;
+
+    [Parameter]
+    public Type ChosenType { get; set; } = typeof(IPackage);
 
     [Parameter]
     public List<string> objectTypes { get; set; } = new() {
@@ -75,7 +78,10 @@
     public IGroupedBooleanCondition ChosenCondition { get; set; } = Config.GroupedBooleanCondition();
 
     [Parameter]
-    public EventCallback<Tuple<IGroupedBooleanCondition, Type>> ChosenConditionChanged { get; set; }
+    public List<ReportParameter>? AvailableParameters { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<IGroupedBooleanCondition> ChosenConditionChanged { get; set; }
 
     private CipherBooleanConditions DataFilter = new();
 
@@ -194,7 +200,7 @@
     public RenderFragment? RenderCipherDataTable() => RenderCipherDataTable(_ChosenId);
 
     /// <summary>
-    /// Method to set the chosen condition accourding to DataFilter data
+    /// Method to set the chosen condition according to DataFilter data
     /// </summary>
     public void SetCondition() => ChosenCondition = DataFilter.ChosenCondition;
 
@@ -255,10 +261,11 @@
             await DataFilter.Clear();
         }
         UpdateRenderedTable();
+        SetType();
     }
 
     /// <summary>
-    /// Events that occurs once user activates filteration
+    /// Events that occurs once user activates filtration
     /// </summary>
     async Task RefreshDataByFilter()
     {

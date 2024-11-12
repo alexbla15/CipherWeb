@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.Json;
 
 namespace CipherData.Interfaces
 {
@@ -9,7 +10,7 @@ namespace CipherData.Interfaces
     public interface IGroupedBooleanCondition : ICondition
     {
         /// <summary>
-        /// Any of BooleanCondition / GroupedBooleadCondition
+        /// Any of BooleanCondition / GroupedBooleanCondition
         /// </summary>
         [HebrewTranslation(typeof(IGroupedBooleanCondition), nameof(Conditions))]
         IEnumerable<ICondition> Conditions { get; set; }
@@ -25,9 +26,9 @@ namespace CipherData.Interfaces
         /// </summary>
         public CheckField CheckConditions()
         {
-            foreach (var cond in Conditions)
+            foreach (var condition in Conditions)
             {
-                var result = cond switch
+                var result = condition switch
                 {
                     IBooleanCondition singleCond => singleCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
                     IGroupedBooleanCondition groupCond => groupCond.Check() ?? Tuple.Create(false, "שגיאת מערכת"),
@@ -51,12 +52,21 @@ namespace CipherData.Interfaces
             return result.Check();
         }
 
+        public IGroupedBooleanCondition Export()
+        {
+            IGroupedBooleanCondition copyItem = Config.GroupedBooleanCondition();
+            copyItem.Conditions = Conditions.Select(x => (x is IBooleanCondition singleX) ?
+            singleX.Export() : x).ToList();
+            copyItem.Operator = Operator;
+            return copyItem;
+        }
+
         // STATIC METHODS
 
         public static string Translate(string text) => Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
     }
 
-    public abstract class BaseGroupedBooleanCondition : CipherClass, IGroupedBooleanCondition
+    public abstract class BaseGroupedBooleanCondition : Condition, IGroupedBooleanCondition
     {
         public IEnumerable<ICondition> Conditions { get; set; } = new List<Condition>();
 
