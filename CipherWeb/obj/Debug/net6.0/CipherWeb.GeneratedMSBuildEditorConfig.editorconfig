@@ -244,10 +244,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU2l0ZUhlYWRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherAttributeDropDown.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyQXR0cmlidXRlRHJvcERvd24ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [F:/Projects/CipherWeb/CipherWeb/Shared/Components/CipherSpecific/CipherBooleanConditions.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ2lwaGVyU3BlY2lmaWNcQ2lwaGVyQm9vbGVhbkNvbmRpdGlvbnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

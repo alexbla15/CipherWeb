@@ -1,28 +1,23 @@
 ﻿<RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-    <CipherComponentCard Title="מה אתם מחפשים?" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
-        <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int"
-                         Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ChangeType();})">
-            <Items>
-                @foreach (string objType in objectTypes)
-                {
-                    <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
-                }
-            </Items>
-        </RadzenSelectBar>
-    </CipherComponentCard>
-    <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnFilter="@RefreshDataByFilter"
-                             InitialType="@GetReportType()" ChosenConditionChanged="@ChosenConditionChanged" 
-                             WithParameters="@WithParameters" AvailableParameters="@AvailableParameters" />
-    @SubmissionAlert()
-
-    @if (RequestComplete)
+    @if (WithFilter)
     {
-        @RenderedTable
+        <CipherComponentCard Title="מה אתם מחפשים?" Style="@Constants.Styles.ComponentResourceCardContent_Centered">
+            <RadzenSelectBar @bind-Value="@_ChosenId" Multiple="false" TValue="int"
+            Change="@(async args => {ChosenCondition = Config.GroupedBooleanCondition() ; await ChangeType();})">
+                <Items>
+                    @foreach (string objType in objectTypes)
+                    {
+                        <RadzenSelectBarItem Text="@objType" Value="@objectTypes.IndexOf(objType)" />
+                    }
+                </Items>
+            </RadzenSelectBar>
+        </CipherComponentCard>
+        <CipherBooleanConditions @ref="DataFilter" ChosenCondition="@ChosenCondition" OnFilter="@RefreshDataByFilter"
+        InitialType="@GetReportType()" ChosenConditionChanged="@ChosenConditionChanged"
+        WithParameters="@WithParameters" AvailableParameters="@AvailableParameters" WithFilterButton="@WithFilterButton"/>
+        @SubmissionAlert()
     }
-    else
-    {
-        <CipherLoadingCard />
-    }
+    @Table()
 </RadzenStack>
 
 @code {
@@ -32,6 +27,15 @@
 
     [Parameter]
     public bool WithParameters { get; set; } = false;
+
+    [Parameter]
+    public bool WithFilter { get; set; } = true;
+
+    [Parameter]
+    public bool WithFilterButton { get; set; } = true;
+
+    [Parameter]
+    public bool WithTable { get; set; } = true;
 
     [Parameter]
     public Type ChosenType { get; set; } = typeof(IPackage);
@@ -45,7 +49,7 @@
         Translator.GetTranslation("Processes"),
         Translator.GetTranslation("Categories"),
         Translator.GetTranslation("Units"),
-                };
+                    };
 
     /// <summary>
     /// Controls visibility of buttons within the datagridtable component
@@ -98,17 +102,17 @@
     private void UpdateRenderedTable() => RenderedTable = RenderCipherDataTable();
 
     public int GetTypeId(Type t)
-    => t switch
-    {
-        _ when t == typeof(IPackage) => 0,
-        _ when t == typeof(IVessel) => 1,
-        _ when t == typeof(IStorageSystem) => 2,
-        _ when t == typeof(IEvent) => 3,
-        _ when t == typeof(IProcess) => 4,
-        _ when t == typeof(ICategory) => 5,
-        _ when t == typeof(IUnit) => 6,
-        _ => 0
-    };
+        => t switch
+        {
+    _ when t == typeof(IPackage) => 0,
+    _ when t == typeof(IVessel) => 1,
+    _ when t == typeof(IStorageSystem) => 2,
+    _ when t == typeof(IEvent) => 3,
+    _ when t == typeof(IProcess) => 4,
+    _ when t == typeof(ICategory) => 5,
+    _ when t == typeof(IUnit) => 6,
+    _ => 0
+        };
 
     public void SetType() => _ChosenId = GetTypeId(ChosenType);
 
@@ -132,62 +136,62 @@
         return id switch
         {
             0 => builder =>
-            {
-                builder.OpenComponent<CipherPackagesTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Packages);
-                builder.AddAttribute(2, "WithButtons", WithButtons);
-                builder.AddAttribute(3, "WithHeaderContent", false);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherPackagesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Packages);
+            builder.AddAttribute(2, "WithButtons", WithButtons);
+            builder.AddAttribute(3, "WithHeaderContent", false);
+            builder.CloseComponent();
+        }
             ,
             1 => builder =>
-            {
-                builder.OpenComponent<CipherVesselsTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Vessels);
-                builder.AddAttribute(2, "WithHeaderContent", false);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherVesselsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Vessels);
+            builder.AddAttribute(2, "WithHeaderContent", false);
+            builder.CloseComponent();
+        }
             ,
             2 => builder =>
-            {
-                builder.OpenComponent<CipherSystemsTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Systems);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherSystemsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Systems);
+            builder.CloseComponent();
+        }
             ,
             3 => builder =>
-            {
-                builder.OpenComponent<CipherEventsTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Events);
-                builder.AddAttribute(2, "WithHeaderContent", false);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherEventsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Events);
+            builder.AddAttribute(2, "WithHeaderContent", false);
+            builder.CloseComponent();
+        }
             ,
             4 => builder =>
-            {
-                builder.OpenComponent<CipherProcessesTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Processes);
-                builder.AddAttribute(2, "WithHeaderContent", false);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherProcessesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Processes);
+            builder.AddAttribute(2, "WithHeaderContent", false);
+            builder.CloseComponent();
+        }
             ,
             5 => builder =>
-            {
-                builder.OpenComponent<CipherCategoriesTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Categories);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherCategoriesTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Categories);
+            builder.CloseComponent();
+        }
             ,
             6 => builder =>
-            {
-                builder.OpenComponent<CipherUnitsTable>(0);
-                builder.AddAttribute(1, "ChosenObjects", Units);
-                builder.CloseComponent();
-            }
+        {
+            builder.OpenComponent<CipherUnitsTable>(0);
+            builder.AddAttribute(1, "ChosenObjects", Units);
+            builder.CloseComponent();
+        }
             ,
             _ => builder =>
-            {
-            }
+        {
+        }
         };
     }
 
@@ -231,7 +235,7 @@
 
         Packages = await SendRequest<IPackage>();
         Vessels = await SendRequest<IVessel>();
-        Categories =await SendRequest<ICategory>();
+        Categories = await SendRequest<ICategory>();
         Systems = await SendRequest<IStorageSystem>();
         Units = await SendRequest<IUnit>();
         Events = await SendRequest<IEvent>();
@@ -242,7 +246,7 @@
         StateHasChanged();
     }
 
-    public async Task<List<T>> SendRequest<T>() where T: IResource
+    public async Task<List<T>> SendRequest<T>() where T : IResource
     {
         IObjectFactory obj = CreateObjectFactory();
         IQueryRequests req = Config.QueryRequests(false);
@@ -284,7 +288,15 @@
     private void CloseAlert() => alertVisible = false;
 
     public RenderFragment? SubmissionAlert() =>
-        Valid ? null : 
+    Valid ? null :
     @<RadzenAlert Visible="@alertVisible" Text="@ErrorMessage" AlertStyle="@AlertStyle.Danger" Style="width:100%"
-                 Close="@CloseAlert" />;
+        Close="@CloseAlert" />
+    ;
+
+    private RenderFragment? Table()
+    {
+        if (!WithTable) return null;
+        if (RequestComplete) return RenderedTable;
+        return @<CipherLoadingCard />;
+    }
 }

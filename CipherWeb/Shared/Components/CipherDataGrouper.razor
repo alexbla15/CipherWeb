@@ -11,7 +11,7 @@
         set
         {
             _ComponentType = value;
-            _GroupFields = CommonFuncs.GetCipherTypeFields(value);
+            _GroupFields = CipherField.GetFields(value);
         }
     }
 
@@ -58,15 +58,11 @@
     private bool duplicityAlertVisible = false;
     private string? limitedGroupsAlertText;
 
-    protected override void OnInitialized()
-    {
-        limitedGroupsAlertText = GetLimitedGroupsAlertText();
-    }
+    protected override void OnInitialized() => limitedGroupsAlertText = GetLimitedGroupsAlertText();
 
     /// <summary>
     /// Alert-text for reached limit of groups
     /// </summary>
-    /// <returns></returns>
     private string GetLimitedGroupsAlertText() => "ניתן לקבוע עד " + maxGroupLevels.ToString() + " מקבצים";
 
     /// <summary>
@@ -74,45 +70,48 @@
     /// </summary>
     private async Task AddGroup()
     {
-        if (!ChosenGroups.Where(x => ChosenGroups.IndexOf(x) < ChosenGroups.Count).Any(x => string.IsNullOrEmpty(x)))
+        if (!CheckForEmptyGroups())
         {
-            if (ChosenGroups.Count < maxGroupLevels)
+            if (!CheckMaxLevels())
             {
-                ChosenGroups.Add(string.Empty);
-                StateHasChanged();
+                if (!CheckDuplicity())
+                {
+                    ChosenGroups.Add(string.Empty);
+                    StateHasChanged();
+                }
             }
-            else
-            {
-                limitedGroupsAlertVisible = true;
-            }
-        }
-        else
-        {
-            emptyGroupsAlertVisible = true;
         }
 
         await GroupsChanged();
     }
 
+    private bool CheckMaxLevels()
+    {
+        bool cond = ChosenGroups.Count >= maxGroupLevels;
+        if (cond) limitedGroupsAlertVisible = true;
+        return cond;
+    }
+
+    private bool CheckForEmptyGroups()
+    {
+        bool cond = ChosenGroups.Where(x => ChosenGroups.IndexOf(x) < ChosenGroups.Count).Any(x => string.IsNullOrEmpty(x));
+        if (cond) emptyGroupsAlertVisible = true;
+        return cond;
+    }
+
     /// <summary>
     /// Validate if there are two identical groups.
     /// </summary>
-    /// <param name="index"></param>
-    private async Task CheckDuplicity(int index)
+    private bool CheckDuplicity()
     {
         bool cond = ChosenGroups.Distinct().Count() != ChosenGroups.Count;
-
-        if (cond)
-        {
-            await DeleteGroup();
-            duplicityAlertVisible = true;
-        }
+        if (cond) duplicityAlertVisible = true;
+        return cond;
     }
 
     private async Task ChangedValue(int index, string? val)
     {
         ChosenGroups[index] = val ?? string.Empty;
-        await CheckDuplicity(index);
         await GroupsChanged();
     }
 
@@ -139,34 +138,48 @@
         duplicityAlertVisible = false;
     }
 
-    async Task GroupsChanged()
-    {
-        await ChosenGroupsChanged.InvokeAsync(ChosenGroups); // Trigger change event
-    }
+    async Task GroupsChanged() => await ChosenGroupsChanged.InvokeAsync(ChosenGroups); // Trigger change event
+
+    private RenderFragment ControlButtons()
+    =>
+    @<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="5px">
+        <CipherAddBtn Height="10px" Variant="Variant.Outlined" HelpText="@AddGroupText" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" />
+        <CipherDeleteButton Height="10px" Variant="Variant.Outlined" HelpText="@DeleteGroupText" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" />
+        </RadzenStack>
+    ;
+
+    private RenderFragment Alert(bool Visible, string? Text)
+    =>
+    @<RadzenAlert Visible="@Visible" Text="@Text" AlertStyle="AlertStyle.Danger" Close="@CloseAlert" />;
 }
 
 <CipherComponentCard Title="@Title">
     <ChildContent>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Wrap="FlexWrap.NoWrap" Style="padding-bottom:20px;" Gap="20px">
-            <RadzenStack Orientation="Orientation.Vertical">
-                @foreach (string gr in ChosenGroups)
+            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+                @for (int i = 0 ; i< ChosenGroups.Count ; i++)
                 {
-                    <CipherFormRow Icon="@($"filter_{ChosenGroups.IndexOf(gr)+1}")">
-
-                        <CipherPathChooser InitialType="@ComponentType" PathChanged="@(args=> ChangedValue(ChosenGroups.IndexOf(gr), args.Item1))" />
-
-                    </CipherFormRow>
+                    int Index = i;
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="20px">
+                        <CipherFormRow Icon="@($"filter_{Index+1}")">
+                            <CipherPathChooser InitialType="@ComponentType" PathChanged="@(args=> ChangedValue(Index, args.Item1))" />
+                        </CipherFormRow>
+                        @if (Index+1 == ChosenGroups.Count)
+                        {
+                            @ControlButtons()
+                            ;
+                        }
+                    </RadzenStack>
                 }
-            </RadzenStack>
-            <RadzenStack Orientation="Orientation.Horizontal" Gap="5px">
-                <CipherAddBtn Height="10px" Variant="Variant.Outlined" HelpText="@AddGroupText" Click="@AddGroup" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" />
-                <CipherDeleteButton Height="10px" Variant="Variant.Outlined" HelpText="@DeleteGroupText" Click="@DeleteGroup" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" />
+                @if (!ChosenGroups.Any())
+                {
+                    @ControlButtons()
+                }
             </RadzenStack>
         </RadzenStack>
 
-        <RadzenAlert Visible="@emptyGroupsAlertVisible" Text="@EmptyGroupAlertText" AlertStyle="AlertStyle.Danger"
-                     Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
-        <RadzenAlert Visible="@limitedGroupsAlertVisible" Text="@limitedGroupsAlertText" AlertStyle="AlertStyle.Danger" Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
-        <RadzenAlert Visible="@duplicityAlertVisible" Text="@DuplicityGroupsAlertText" AlertStyle="AlertStyle.Danger" Style="width:98%; padding:5px; margin: 1rem 5px" Close="@CloseAlert" />
+        @Alert(emptyGroupsAlertVisible, EmptyGroupAlertText)
+        @Alert(limitedGroupsAlertVisible, limitedGroupsAlertText)
+        @Alert(duplicityAlertVisible, DuplicityGroupsAlertText)
     </ChildContent>
 </CipherComponentCard>

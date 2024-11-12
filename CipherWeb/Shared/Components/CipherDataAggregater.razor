@@ -1,17 +1,11 @@
 ﻿@inherits CipherComponentCard
 
 @code {
-    private Type _ChosenType = typeof(ICipherClass);
-    private List<CipherField> _AllFields = new();
-
     /// <summary>
     /// Chosen type dictates which fields can be visible
     /// </summary>
     [Parameter]
-    public Type ChosenType { 
-        get => _ChosenType; 
-        set { _ChosenType = value; _AllFields = CommonFuncs.GetCipherTypeFields(value); } 
-    }
+    public Type ChosenType { get; set; }
 
     /// <summary>
     /// Text shown in case no rows were added.
@@ -50,7 +44,6 @@
     public EventCallback<List<IAggregateItem>> ChosenAggregatesChanged { get; set; }
 
     private RadzenDataGrid<IAggregateItem> CustomDataGrid = new();
-    private CipherAttributeDropDown AttDropDown = new();
     private CipherMethodDropDown AggMethod = new();
 
     private bool typeIncompatibleAlertVisible = false;
@@ -113,30 +106,46 @@
     public bool IsDate(IAggregateItem agg)
     {
         if (string.IsNullOrEmpty(agg.Attribute)) return false;
-        Type t = _AllFields.Where(x => x.Path == agg.Attribute).First().FieldType;
-        return (t == typeof(DateTime));
+        return CipherField.IsDateTime(CipherField.GetPathType(ChosenType, agg.Attribute));
 
     }
 
     public bool IsNumeric(IAggregateItem agg)
     {
-        if (!string.IsNullOrEmpty(agg.Attribute))
-        {
-            Type t = _AllFields.Where(x => x.Path == agg.Attribute).First().FieldType;
-            return (t == typeof(decimal) || t == typeof(int));
-        }
-        return false;
+        if (string.IsNullOrEmpty(agg.Attribute)) return false;
+        return CipherField.IsNumber(CipherField.GetPathType(ChosenType, agg.Attribute));
     }
 
 
     async Task ParamsChanged()
-    => await ChosenAggregatesChanged.InvokeAsync(ChosenAggregates); // Trigger change event
+        => await ChosenAggregatesChanged.InvokeAsync(ChosenAggregates); // Trigger change event
+
+    private RenderFragment AttributeFiller(IAggregateItem agg)
+    =>
+    @<CipherPathChooser InitialType="@ChosenType" PathChanged="@(async args => {
+                                agg.Attribute = args.Item1;
+                                agg.Method = null;
+                                await ParamsChanged();})" />
+    ;
+
+    private RenderFragment AsFiller(IAggregateItem agg)
+        =>@<RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />;
+
+    private RenderFragment MethodFiller(IAggregateItem agg)
+        =>@<CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
+                          Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))"
+                          IsDate="@IsDate(agg)" IsNumeric="@IsNumeric(agg)"
+                          Change="@(async args =>
+                            {
+                            agg.Method=args;
+                            await ParamsChanged();
+                            })" />;
 }
 
 <CipherComponentCard Title="@Title">
     <Buttons>
-        <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined"/>
-        <CipherDeleteAllButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined"/>
+        <CipherAddBtn HelpText="@AddAggregateText" Click="@AddRow" ColorStyle="ButtonStyle.Success" ColorShade="Shade.Dark" Variant="Variant.Outlined" />
+        <CipherDeleteAllButton HelpText="@DeleteAllAggregatesText" Click="@DeleteAggregation" ColorStyle="ButtonStyle.Danger" ColorShade="Shade.Default" Variant="Variant.Outlined" />
     </Buttons>
 
     <ChildContent>
@@ -151,26 +160,22 @@
                         <CipherDeleteButton Variant=Variant.Outlined Click="@(args => DeleteRow(agg))" @onclick:stopPropagation="true" />
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)"
+                <RadzenDataGridColumn Width="700px" MinWidth="700px" TItem="IAggregateItem" Property="@nameof(IAggregateItem.Attribute)"
                                       Title="@(GetLabel(nameof(IAggregateItem.Attribute)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherAttributeDropDown @ref=AttDropDown AggregationFields="@_AllFields" 
-                            ChosenAttribute="@agg.Attribute" Change="@(async args => {agg.Attribute=AttDropDown.ChosenAttribute; await ParamsChanged();})" />
+                        @AttributeFiller(agg)
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.As)"
                                       Title="@(GetLabel(nameof(IAggregateItem.As)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <RadzenTextBox @bind-Value="@agg.As" Style="width:100%" Change="@(async args => {await ParamsChanged();})" />
+                        @AsFiller(agg)
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="IAggregateItem" Property="@nameof(IAggregateItem.Method)"
                                       Title="@(GetLabel(nameof(IAggregateItem.Method)))" TextAlign="TextAlign.Center">
                     <Template Context="agg">
-                        <CipherMethodDropDown ChosenMethod="@agg.Method" @ref=AggMethod
-                        Visible="@(!string.IsNullOrEmpty(agg.Attribute) || AggregationFields.Any(x=>x == agg.Attribute))" 
-                                              IsDate="@IsDate(agg)" IsNumeric="@IsNumeric(agg)" 
-                                              Change="@(async args => {agg.Method=AggMethod.ChosenMethod; await ParamsChanged();})" />
+                        @MethodFiller(agg)
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

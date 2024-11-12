@@ -70,6 +70,7 @@ namespace CipherData.General
 
             return result.Check();
         }
+
         public FilterType GetFilterType() => GetFilterType(this);
 
         public bool IsBool() => IsBool(FieldType);
@@ -97,6 +98,18 @@ namespace CipherData.General
         AttributeRelation.Ge,
         AttributeRelation.Gt,};
 
+        public static readonly List<AttributeRelation> AllParameterAttributeRelations = new() {
+        AttributeRelation.StartsWithParam,
+        AttributeRelation.EndsWithParam,
+        AttributeRelation.NotContainsParam,
+        AttributeRelation.ContainsParam,
+        AttributeRelation.NeParam,
+        AttributeRelation.EqParam,
+        AttributeRelation.LeParam,
+        AttributeRelation.LtParam,
+        AttributeRelation.GeParam,
+        AttributeRelation.GtParam,};
+
         public static readonly List<AttributeRelation> DateAttributeRelations = new() {
         AttributeRelation.IsNull,
         AttributeRelation.IsNotNull,
@@ -106,6 +119,14 @@ namespace CipherData.General
         AttributeRelation.Lt,
         AttributeRelation.Ge,
         AttributeRelation.Gt,};
+
+        public static readonly List<AttributeRelation> DateParameterAttributeRelations = new() {
+        AttributeRelation.NeParam,
+        AttributeRelation.EqParam,
+        AttributeRelation.LeParam,
+        AttributeRelation.LtParam,
+        AttributeRelation.GeParam,
+        AttributeRelation.GtParam,};
 
         public static readonly List<AttributeRelation> NumberAttributeRelations = new() {
         AttributeRelation.IsNull,
@@ -117,11 +138,22 @@ namespace CipherData.General
         AttributeRelation.Ge,
         AttributeRelation.Gt,};
 
+        public static readonly List<AttributeRelation> NumberParameterAttributeRelations = new() {
+        AttributeRelation.NeParam,
+        AttributeRelation.EqParam,
+        AttributeRelation.LeParam,
+        AttributeRelation.LtParam,
+        AttributeRelation.GeParam,
+        AttributeRelation.GtParam,};
+
         public static readonly List<AttributeRelation> BoolAttributeRelations = new() {
         AttributeRelation.IsNull,
         AttributeRelation.IsNotNull,
         AttributeRelation.Ne,
         AttributeRelation.Eq,};
+
+        public static readonly List<AttributeRelation> BoolParameterAttributeRelations = new() {
+        AttributeRelation.NeParam, AttributeRelation.EqParam,};
 
         public static readonly List<AttributeRelation> TextAttributeRelations = new() {
         AttributeRelation.IsNull,
@@ -135,56 +167,18 @@ namespace CipherData.General
         AttributeRelation.Ne,
         AttributeRelation.Eq,};
 
-        public static readonly List<AttributeRelation> ParameterAttributeRelations = new() {
+        public static readonly List<AttributeRelation> TextParameterAttributeRelations = new() {
         AttributeRelation.StartsWithParam,
         AttributeRelation.EndsWithParam,
         AttributeRelation.NotContainsParam,
         AttributeRelation.ContainsParam,
         AttributeRelation.NeParam,
-        AttributeRelation.EqParam,
-        AttributeRelation.LeParam,
-        AttributeRelation.LtParam,
-        AttributeRelation.GeParam,
-        AttributeRelation.GtParam,};
+        AttributeRelation.EqParam,};
 
-        public static readonly List<string> AllFilters = 
-            AllAttributeRelations.Select(x=>x.ToString()).ToList();
-
-        public static readonly List<string> DateFilters =
-            DateAttributeRelations.Select(x => x.ToString()).ToList();
-
-        public static readonly List<string> NumberFilters =
-            NumberAttributeRelations.Select(x => x.ToString()).ToList();
-
-        public static readonly List<string> BoolFilters =
-            BoolAttributeRelations.Select(x => x.ToString()).ToList();
-
-        public static readonly List<string> TextFilters =
-            TextAttributeRelations.Select(x => x.ToString()).ToList();
-
-        public static readonly List<string> ParameterFilters =
-            ParameterAttributeRelations.Select(x => x.ToString()).ToList();
+        private static List<string> GetFilters(List<AttributeRelation> relations) 
+            => relations.Select(x => x.ToString()).ToList();
 
         // STATIC METHODS
-
-        public static Dictionary<string, AttributeRelation> RelationTranslationMapping(bool WithParameters = false)
-        {
-            var selectedAttributes = WithParameters ? AllAttributeRelations.Concat(ParameterAttributeRelations) : AllAttributeRelations;
-
-            return selectedAttributes.Select(x => KeyValuePair.Create(Translator.GetTranslation(x.ToString()), x))
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
-        }
-
-        public static Dictionary<FilterType, List<string>> FilterAttributeRelations(bool WithParameters = false)
-        {
-            return new()
-            {
-                [FilterType.Number] = WithParameters ? NumberFilters.Concat(ParameterFilters).ToList() : NumberFilters,
-                [FilterType.Text] = WithParameters ? TextFilters.Concat(ParameterFilters).ToList() : TextFilters,
-                [FilterType.Date] = WithParameters ? DateFilters.Concat(ParameterFilters).ToList() : DateFilters,
-                [FilterType.Condition] = WithParameters ? BoolFilters.Concat(ParameterFilters).ToList() : BoolFilters,
-            };
-        }
 
         public static bool IsBool(Type type) => typeof(bool?).IsAssignableFrom(type);
 
@@ -194,58 +188,9 @@ namespace CipherData.General
 
         public static bool IsText(Type type) => typeof(string).IsAssignableFrom(type);
 
-        public static FilterType GetFilterType(CipherField field)
-        {
-            if (field.IsDateTime()) return FilterType.Date;
-            if (field.IsBool()) return FilterType.Condition;
-            if (field.IsNumber()) return FilterType.Number;
-            if (field.IsText()) return FilterType.Text;
-            if (field.IsList()) return GetFilterType(new CipherField() { FieldType = field.ItemType() });
-            return FilterType.Other;
-        }
-
-        public static bool IsList(Type type) => (type is null) ? false : type.GenericTypeArguments.Any();
-
-        public static Type ItemType(Type type) => IsList(type) ? type.GenericTypeArguments[0] : type;
+        public static bool IsList(Type type) => type is not null && type.GenericTypeArguments.Any();
 
         public static string Translate(string text) => ICipherClass.Translate(MethodBase.GetCurrentMethod()?.DeclaringType, text);
-
-        public static string? TranslatePartPath(Type? currType, string prop)
-        {
-            PropertyInfo? propInfo = currType?.GetProperty(prop);
-            if (propInfo != null)
-            {
-                HebrewTranslationAttribute? hebAtt = propInfo.GetCustomAttribute<HebrewTranslationAttribute>();
-                if (hebAtt != null) return hebAtt.Translation;
-            }
-
-            return prop;
-        }
-
-        public static Type? GetPathType(Type? rootType, string path)
-        {
-            Type res = rootType;
-            var parts = path.Trim('[', ']').Split("].[");
-
-            if (parts.Length > 1)
-            {
-                res = GetPartPathType(rootType, parts[1]);
-                if (res == null) return null;
-                if (IsText(res) || IsNumber(res) || IsDateTime(res) || IsDateTime(res)) 
-                    return res;
-                return GetPathType(res, string.Join("].[", parts.ToList().GetRange(1, parts.Count() - 1)));
-            }
-            return res;
-        }
-
-        public static Type? GetPartPathType(Type? currType, string prop)
-        {
-            PropertyInfo? propInfo = currType?.GetProperty(prop);
-            Type? res = propInfo?.PropertyType;
-            return res != null &&  IsList(res) ? ItemType(res) : res;
-        }
-
-        public static Type? GetInterfaceType(string typeName) => Type.GetType($"CipherData.Interfaces.{typeName}");
 
         /// <summary>
         /// Method to get the translation of a property-path with a specific scheme [Root].[Prop].[]...
@@ -276,6 +221,52 @@ namespace CipherData.General
             return null;
         }
 
+        public static string? TranslatePartPath(Type? currType, string prop)
+        {
+            PropertyInfo? propInfo = currType?.GetProperty(prop);
+            if (propInfo != null)
+            {
+                HebrewTranslationAttribute? hebAtt = propInfo.GetCustomAttribute<HebrewTranslationAttribute>();
+                if (hebAtt != null) return hebAtt.Translation;
+            }
+
+            return prop;
+        }
+
+        public static Dictionary<string, AttributeRelation> RelationTranslationMapping(bool WithParameters = false)
+        {
+            var selectedAttributes = WithParameters ? AllAttributeRelations.Concat(AllParameterAttributeRelations) : AllAttributeRelations;
+
+            return selectedAttributes.Select(x => KeyValuePair.Create(Translator.GetTranslation(x.ToString()), x))
+            .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        private static List<string> SpecificAttributeRelations(
+            List<AttributeRelation> regRelations, List<AttributeRelation> paramRelations, bool WithParameters = false)
+            => WithParameters ?
+                GetFilters(regRelations).Concat(GetFilters(paramRelations)).ToList() : GetFilters(regRelations);
+
+        public static Dictionary<FilterType, List<string>> FilterAttributeRelations(bool WithParameters = false)
+        {
+            return new()
+            {
+                [FilterType.Number] = SpecificAttributeRelations(NumberAttributeRelations, NumberParameterAttributeRelations, WithParameters),
+                [FilterType.Text] = SpecificAttributeRelations(TextAttributeRelations, TextParameterAttributeRelations, WithParameters),
+                [FilterType.Date] = SpecificAttributeRelations(DateAttributeRelations, DateParameterAttributeRelations, WithParameters),
+                [FilterType.Condition] = SpecificAttributeRelations(BoolAttributeRelations, BoolParameterAttributeRelations, WithParameters)
+            };
+        }
+
+        public static FilterType GetFilterType(CipherField field)
+        {
+            if (field.IsDateTime()) return FilterType.Date;
+            if (field.IsBool()) return FilterType.Condition;
+            if (field.IsNumber()) return FilterType.Number;
+            if (field.IsText()) return FilterType.Text;
+            if (field.IsList()) return GetFilterType(new CipherField() { FieldType = field.ItemType() });
+            return FilterType.Other;
+        }
+
         public static List<AttributeRelation> GetFilters(CipherField field)
         {
             if (typeof(bool?).IsAssignableFrom(field.FieldType)) return BoolAttributeRelations;
@@ -285,6 +276,33 @@ namespace CipherData.General
             if (field.IsList()) return GetFilters(new CipherField() { FieldType = field.ItemType() });
             else return AllAttributeRelations;
         }
+
+        public static Type ItemType(Type type) => IsList(type) ? type.GenericTypeArguments[0] : type;
+
+        public static Type? GetPathType(Type? rootType, string path)
+        {
+            Type? res = rootType;
+            var parts = path.Trim('[', ']').Split("].[");
+
+            if (parts.Length > 1)
+            {
+                res = GetPartPathType(rootType, parts[1]);
+                if (res == null) return null;
+                if (IsText(res) || IsNumber(res) || IsDateTime(res) || IsDateTime(res)) 
+                    return res;
+                return GetPathType(res, string.Join("].[", parts.ToList().GetRange(1, parts.Count() - 1)));
+            }
+            return res;
+        }
+
+        public static Type? GetPartPathType(Type? currType, string prop)
+        {
+            PropertyInfo? propInfo = currType?.GetProperty(prop);
+            Type? res = propInfo?.PropertyType;
+            return res != null &&  IsList(res) ? ItemType(res) : res;
+        }
+
+        public static Type? GetInterfaceType(string typeName) => Type.GetType($"CipherData.Interfaces.{typeName}");
 
         public static List<Type> InterfaceChildren(Type mainInterface)
         {
@@ -298,6 +316,76 @@ namespace CipherData.General
             }
 
             return children;
+        }
+
+        /// <summary>
+        /// retrieves all types from the assembly containing the Resource class that directly inherit from Resource
+        /// </summary>
+        public static List<Type> GetSubClasses(Type type)
+            => type.Assembly.GetTypes().Where(x => x.BaseType?.Name == type.Name).ToList();
+
+        /// <summary>
+        /// Create a CipherField out of a type
+        /// </summary>
+        /// <param name="type"></param>
+        public static CipherField Create(Type type) => 
+            new() { Path = type.Name, Translation = Translator.GetTranslation(type.Name), FieldType = type };
+
+        /// <summary>
+        /// Get all cipher field of the first layer of some type 
+        /// (without going into deeper layers, e.g. Package -> Package.Category but not Package.Category.Id)
+        /// </summary>
+        /// <param name="type">desired type for field-search</param>
+        /// <param name="mainPath">tree-path to the desired field</param>
+        /// <param name="mainTranslation">translation of tree-path</param>
+        public static List<CipherField> GetFields_SingleLayer(Type type, string? mainPath = null, string? mainTranslation = null)
+        {
+            List<PropertyInfo> fields = type.GetProperties().Where(x => x.GetCustomAttribute<HebrewTranslationAttribute>() != null).ToList();
+
+            string? type_translation = type.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation;
+
+            return fields.Select(x => new CipherField()
+            {
+                FieldType = x.PropertyType,
+
+                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]" :
+                $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]",
+                Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]"
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Get a translation list (english,hebrew) of all available field of a Cipher data model.
+        /// </summary>
+        public static List<CipherField> GetFields(Type setType, string? mainPath = null, string? mainTranslation = null, int curr_depth = 0)
+        {
+            int max_depth = 2;
+
+            List<CipherField> fields = GetFields_SingleLayer(setType, mainPath, mainTranslation);
+            List<CipherField> new_fields = new();
+
+            if (curr_depth <= max_depth)
+            {
+                foreach (CipherField field in fields)
+                {
+                    var types = GetSubClasses(typeof(ICipherClass));
+
+                    if (types.Contains(field.FieldType))
+                    {
+                        new_fields.AddRange(GetFields(setType, mainPath: $"{field.Path}",
+                        mainTranslation: $"{field.Translation}", curr_depth + 1));
+                    }
+                    else if (field.IsList())
+                    {
+                        List<CipherField> addition_fields = GetFields(field.FieldType.GetGenericArguments()[0], mainPath: $"{field.Path}",
+                        mainTranslation: $"{field.Translation}", curr_depth + 1);
+                        new_fields.AddRange(addition_fields);
+                    }
+                }
+            }
+
+            fields.AddRange(new_fields);
+            return fields;
         }
     }
 }

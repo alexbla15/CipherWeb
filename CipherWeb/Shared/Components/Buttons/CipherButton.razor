@@ -8,13 +8,13 @@
     /// Background of color. Must be a ButtonStyle-enum.
     /// </summary>
     [Parameter]
-    public ButtonStyle ColorStyle { get; set; } = Constants.Button.Color;
+    public ButtonStyle ColorStyle { get; set; } = ButtonStyle.Primary;
 
     /// <summary>
     /// Background color shade. Must be a Shade-enum.
     /// </summary>
     [Parameter]
-    public Shade ColorShade { get; set; } = Constants.Button.Shade;
+    public Shade ColorShade { get; set; } = Shade.Darker;
 
     /// <summary>
     /// Help text position. Must be a TooltipPosition-enum. Defaults to top.

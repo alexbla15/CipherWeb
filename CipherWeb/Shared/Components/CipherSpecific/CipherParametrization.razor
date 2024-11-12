@@ -23,7 +23,6 @@
 
     private RadzenDataGrid<ReportParameter> CustomDataGrid = new();
 
-    private List<CipherField> OptionalTypes = CommonFuncs.GetAllResourceFields();
     private ReportParameter old_param = new();
 
     protected override void OnInitialized() => Title ??= "פרמטרי משתמש";
@@ -90,7 +89,7 @@
                 
                 <RadzenDataGridColumn TItem="ReportParameter" Property="pType" Title="סוג" TextAlign="@TdTextAlign" Width="45%">
                     <Template Context="param">
-                        <CipherPathChooser PathChanged="@(async args => {
+                        <CipherPathChooser Path="@param.ParamType?.Path" PathChanged="@(async args => {
                                 param.ParamType = new ();
                                 param.ParamType.FieldType = args.Item2.FieldType;
                                 param.ParamType.Path = args.Item1;

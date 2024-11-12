@@ -15,6 +15,6 @@ namespace CipherWeb
         public static readonly Task<Tuple<List<IVessel>, ErrorResponse>> AllVessels = Config.Vessel(false).All();
         public static readonly Task<Tuple<List<IUnit>, ErrorResponse>> AllUnits = Config.Unit(false).All();
 
-        public static readonly List<Type> CipherTypes = CommonFuncs.GetCipherClasses();
+        public static readonly List<Type> CipherTypes = CipherField.GetSubClasses(typeof(ICipherClass));
     }
 }

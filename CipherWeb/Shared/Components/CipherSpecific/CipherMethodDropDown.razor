@@ -24,7 +24,7 @@
     public bool Visible { get; set; } = true;
 
     [Parameter]
-    public EventCallback<object> Change { get; set; }
+    public EventCallback<Method?> Change { get; set; }
 
     /// <summary>
     /// All available options in this component.
@@ -36,32 +36,18 @@
     public List<Method> DateOptions = new() { Method.first, Method.last, Method.count, Method.max, Method.min };
     public List<Method> GeneralOptions = new() { Method.first, Method.last, Method.count };
 
-    public Dictionary<Method, string> MethodTranslations = new()
-    {
-        {Method.count, "כמות" },
-        {Method.avg, "ממוצע" },
-        {Method.sum, "סכום" },
-        {Method.max, "מקסימום" },
-        {Method.min, "מינימום" },
-        {Method.first, "ראשון" },
-        {Method.last, "אחרון" },
-    };
-
     // Use OnParametersSet instead of OnInitialized to handle changes in IsNumeric or IsDate
-    protected override void OnParametersSet()
-    {
-        Options = IsNumeric ? NumericOptions : (IsDate ? DateOptions : GeneralOptions);
-    }
+    protected override void OnParametersSet() => Options = IsNumeric ? NumericOptions : (IsDate ? DateOptions : GeneralOptions);
 
     private string GetMethodTranslation(Method? method)
     {
-        if (method != null) return MethodTranslations[(Method)method];
+        if (method != null) return Translator.GetTranslation(method.ToString());
         return "לא ידוע"; // Default translation when not found
     }
 }
 
-<RadzenDropDown Style="width: 100%" TValue="Method?" @bind-Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
-Placeholder="@(IAggregateItem.Translate(nameof(IAggregateItem.Method)))" Change="@Change">
+<RadzenDropDown Style="width: 100%" TValue="Method?" Value="@ChosenMethod" AllowClear="true" Data="@Options" Visible="@Visible"
+Placeholder="@(IAggregateItem.Translate(nameof(IAggregateItem.Method)))" ValueChanged="@Change">
     <ValueTemplate Context="met">
         @if (met != null)
         {

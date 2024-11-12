@@ -268,5 +268,13 @@
   "Updates_UpdateProcess": "עריכת תהליך",
   "Updates_UpdateSystem": "עריכת מערכת",
   "Updates_UpdateUnit": "עריכת יחידה",
-  "Updates_UpdateVessel": "עריכת כלי"
+  "Updates_UpdateVessel": "עריכת כלי",
+
+  "count": "כמות",
+  "avg": "ממוצע",
+  "sum": "סכום",
+  "max": "מקסימום",
+  "min": "מינימום",
+  "first": "ראשון",
+  "last": "אחרון"
 }

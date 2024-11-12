@@ -1,8 +1,6 @@
-﻿using CipherData.Interfaces;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 namespace CipherData.General
 {
@@ -187,8 +185,7 @@ namespace CipherData.General
         }
 
         public Dictionary<string, object?> ToDictionary()
-        {
-            return new()
+            => new()
             {
                 [nameof(Id)] = Id,
                 [nameof(Version)] = Version,
@@ -196,6 +193,17 @@ namespace CipherData.General
                 [nameof(Creator)] = Creator,
                 [nameof(CreationDate)] = CreationDate,
             };
+
+        public string FillInParametersJson()
+        {
+            string currJson = Export().ObjectFactory.ToJson();
+
+            foreach (var param in Parameters)
+            {
+                currJson = currJson.Replace($"$$${param.Name}$$$", param.Value);
+            }
+
+            return currJson;
         }
 
         public Report Export()

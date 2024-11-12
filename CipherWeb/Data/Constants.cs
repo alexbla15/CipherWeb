@@ -48,14 +48,21 @@ namespace CipherWeb.Data
             public static readonly string ComponentFooterContent = "cipher_component_card_content footer";
             public static readonly string ComponentResourceCardContent = "cipher_component_card_content resource_card";
             public static readonly string ComponentResourceCardContent_Centered = "cipher_component_card_content resource_card centered";
+
+            public static readonly string PathChooser = "cipher_pathchooser";
+
         }
 
-        public class Button
-        {
-            public static readonly ButtonStyle Color = ButtonStyle.Primary;
-            public static readonly Shade Shade = Shade.Darker;
-        }
+        public static readonly DialogOptions SetDialogOptions = new() { Width = "800px", Height = "500px", Resizable = true, Draggable = true };
 
+        /// <summary>
+        /// Unallowed words for user
+        /// </summary>
+        public static readonly string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
+
+        /// <summary>
+        /// Decide if you want to see all jsons that are created, before sending them to API
+        /// </summary>
         public static readonly bool CheckJsons = true;
 
         public static readonly IWorker SetUser = new Worker() { Name = "אלכס בלחמן", Group=WorkerGroup.Manager};
@@ -63,19 +70,29 @@ namespace CipherWeb.Data
         public static readonly string CompanyName = "היחידה להנדסת תהליך";
         public static readonly string DeveloperNames = "אלכס בלחמן ושחר פייט";
 
+        /// <summary>
+        /// Max amount of rows per table, above  that, you must see paging of the component
+        /// </summary>
         public static readonly int RowsPerPage = 12;
 
-        public static readonly DialogOptions SetDialogOptions = new() { Width = "800px", Height = "500px", Resizable = true, Draggable = true };
-
-        public static readonly List<string> Lines = new() { "קו א", "קו ב", "קו ג" };
-        public static readonly List<string> Processes = new() { "תהליך א", "תהליך ב", "תהליך ג" };
-        public static readonly List<string> Reactants = new() { "מגיב א", "מגיב ב", "מגיב ג" };
-        public static readonly List<string> Products = new() { "תוצר א", "תוצר ב", "תוצר ג" };
-
-        public static readonly string[] UnallowedWords = { "SELECT", "INSERT", "UPDATE", "DELETE", "PUT", "POST", "GET" };
-
+        /// <summary>
+        /// Standard width unit for the HMI
+        /// </summary>
         public static readonly string StandardWidth = "300px";
 
+        /// <summary>
+        /// This forces the HMI to delay any request time by this amount of seconds
+        /// </summary>
         public static readonly int ForcedDelayTime = 1000;
+
+        public static readonly List<Type> FilterableTypes = new() {
+            typeof(ICategory),
+            typeof(IEvent),
+            typeof(IPackage),
+            typeof(IProcess),
+            typeof(IStorageSystem),
+            typeof(IUnit),
+            typeof(IVessel),
+        };
     }
 }

@@ -167,6 +167,40 @@
         return condition;
     }
 
+    public void BuildChosenCondition()
+    {
+        List<ICondition> conditions = new();
+
+        foreach (var filter in dataFilter.Filters)
+        {
+            if (filter.Filters is null)
+            {
+                conditions.Add(SetBooleanCondition(filter));
+            }
+            else
+            {
+                conditions.Add(SetGroupedBooleanCondition(filter));
+            }
+        }
+
+        ChosenCondition.Conditions = conditions;
+    }
+
+    public void SetJson()
+    {
+        IGroupedBooleanCondition copyCondition = Config.GroupedBooleanCondition();
+        copyCondition.Conditions = ChosenCondition.Conditions.Select(x => (x is IBooleanCondition singleX) ? 
+        singleX.Export() : x).ToList();
+        copyCondition.Operator = ChosenCondition.Operator;
+
+        JsonRequest = copyCondition.ToJson();
+    }
+
+    private static string Translate(string key) => Translator.GetTranslation(key);
+
+    private string FixedWidth() =>
+    $"width:{Constants.StandardWidth}; min-width:{Constants.StandardWidth}; max-width:{Constants.StandardWidth}";
+
     public async Task RebuildFilter(IQueryable<CipherField>? fields = null)
     {
         await Clear();
@@ -189,41 +223,12 @@
         StateHasChanged();
     }
 
-    public void BuildChosenCondition()
-    {
-        List<ICondition> conditions = new();
-
-        foreach (var filter in dataFilter.Filters)
-        {
-            if (filter.Filters is null)
-            {
-                conditions.Add(SetBooleanCondition(filter));
-            }
-            else
-            {
-                conditions.Add(SetGroupedBooleanCondition(filter));
-            }
-        }
-
-        ChosenCondition.Conditions = conditions;
-    }
-
     public async Task ParamsChanged(IQueryable<CipherField>? fields = null)
     {
         BuildChosenCondition();
         await ChosenConditionChanged.InvokeAsync(ChosenCondition); // Trigger change event
         await ValueChanged.InvokeAsync();
         SetJson();
-    }
-
-    public void SetJson()
-    {
-        IGroupedBooleanCondition copyCondition = Config.GroupedBooleanCondition();
-        copyCondition.Conditions = ChosenCondition.Conditions.Select(x => (x is IBooleanCondition singleX) ? 
-        singleX.Export() : x).ToList();
-        copyCondition.Operator = ChosenCondition.Operator;
-
-        JsonRequest = copyCondition.ToJson();
     }
 
     /// <summary>
@@ -235,8 +240,6 @@
         SetJson();
         await dataFilter.ClearFilters();
     }
-
-    private static string Translate(string key) => Translator.GetTranslation(key);
 
     ///  <summary>
     /// Method to control the including all data of a filter within its value
@@ -253,7 +256,7 @@
     /// <param name="relation">value to be set as relation upon update</param>
     /// <param name="isList">value to be set as isList upon update</param>
     /// <param name="_operator">value to be set as operator upon update</param>
-    private async void ChangeProperty(CompositeFilterDescriptor prop,
+    private async Task ChangeProperty(CompositeFilterDescriptor prop,
     bool update_name = false, bool update_value = false, bool update_relation = false,
     bool changeParams = true, bool update_isList = false, bool update_operator = false, bool update_type = false,
     string? name = null, string? value = null, string? relation = null, bool isList = false, Operator? _operator = null,
@@ -317,9 +320,6 @@
 
     private bool IsCheckingNullOrEmpty(CompositeFilterDescriptor prop) =>
         IsCheckingNullOrEmpty(ParseFilter(prop).Relation);
-
-    private string FixedWidth() =>
-        $"width:{Constants.StandardWidth}; min-width:{Constants.StandardWidth}; max-width:{Constants.StandardWidth}";
 
     private RenderFragment? FilterBtn()
         => (!Disabled && WithFilterButton) ?
@@ -434,11 +434,15 @@
         return
     @<RadzenDropDown TValue="ReportParameter" Disabled="@Disabled" Style="@($"width:100%; min-width:{Constants.StandardWidth}")"
                     Value="@param" Data="@specificAvailableParameters" TextProperty="Name"
-                   ValueChanged="@(value => ChangeProperty(filter, update_value:true,value: value?.Name))" 
-                   AllowClear=true/>
-        ;
+                   ValueChanged="@(value => ChangeProperty(filter, update_value:true,value: value?.Name is null ? null : $"$$${value?.Name}$$$"))" 
+        AllowClear=true/>
+    ;
     }
 
+    /// <summary>
+    /// Controls the value of a certain filter. 
+    /// This component changes according to the FilterType.
+    /// </summary>
     private RenderFragment? ValueFiller(CompositeFilterDescriptor filter)
     {
         FilterType filterType = ParseFilter(filter).Type;
@@ -446,8 +450,8 @@
 
         if (relation != null)
         {
-            if (WithParameters && CipherField.ParameterAttributeRelations.Any(x=>Translator.GetTranslation(x.ToString()) == relation)) 
-            return ParameterFiller(filter);
+            if (WithParameters && CipherField.AllParameterAttributeRelations.Any(x=>Translator.GetTranslation(x.ToString()) == relation)) 
+                return ParameterFiller(filter);
         }
 
         if (filterType == FilterType.Number) return NumberFiller(filter);
@@ -458,10 +462,14 @@
         return null;
     }
 
+    /// <summary>
+    /// Controls the chosen operator for a specific filter
+    /// </summary>
     private RenderFragment? OperatorDropDown(CompositeFilterDescriptor filter)
     {
         var ParsedFilter = ParseFilter(filter);
 
+        // this component is available only if the property is a list, with a specific type
         if (!ParsedFilter.IsList || ParsedFilter.Type == FilterType.Other) return null;
 
         return

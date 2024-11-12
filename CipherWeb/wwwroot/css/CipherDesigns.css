@@ -60,9 +60,11 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
-/*.rz-dropdown.rz-datafilter-property, .rz-dropdown.rz-datafilter-operator {
-    display: none;
-}*/
+.cipher_pathchooser
+{
+    color: var(--rz-secondary-light);
+}
+
 
 .cipher_datacell {
     font-style: italic;

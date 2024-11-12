@@ -13,10 +13,7 @@
                 @for (int i = 0; i < SelectedChips.Count; i++)
                 {
                     @Chip(SelectedChips[i], i)
-                    @if (SelectedChips.Count - 1 != i)
-                    {
-                        <RadzenText Text="/" />
-                    }
+                    @ChipSeperator(i)
                 }
                 @CloseAll()
             </RadzenStack>
@@ -53,7 +50,7 @@
 
     private CipherAutoComplete TextAdd = new();
 
-    private CipherField ChosenAttribute = new();
+    private CipherField? ChosenAttribute = new();
 
     protected override void OnInitialized()
     {
@@ -69,6 +66,8 @@
             string[] pathParts = Path.Trim('[', ']').Split("].[");
             string[] translatedParts = translatedPath.Trim('[', ']').Split("].[");
 
+            Type? rootType = InitialType ?? CipherField.GetInterfaceType(pathParts[0]);
+
             // Ensure both arrays are the same length to avoid index out of range issues
             int minLength = Math.Min(pathParts.Length, translatedParts.Length);
             for (int i = 0; i < minLength; i++)
@@ -80,13 +79,18 @@
                         {
                             Path = pathParts[i],
                             Translation = translatedParts[i],
-                            FieldType = CipherField.GetPathType(InitialType, currentPath)
+                            FieldType = CipherField.GetPathType(rootType, currentPath)
                         });
             }
+            SetFields(SelectedChips.Last().FieldType);
         }
+        ResetChosenAttribute();
     }
 
     private void SetPath() => Path = GetPath();
+
+    private void ResetChosenAttribute() =>
+    ChosenAttribute = new() { Translation = "בחירת פרמטר" };
 
     private void AddChip(CipherField field)
     {
@@ -94,8 +98,7 @@
 
         SelectedChips.Add(field);
 
-        ChosenAttribute = new();
-
+        ResetChosenAttribute();
         SetFields(fieldType);
 
         ChangeFound();
@@ -114,7 +117,7 @@
             ResetFields();
         }
 
-        ChosenAttribute = new();
+        ResetChosenAttribute();
         ChangeFound();
     }
 
@@ -133,18 +136,11 @@
     {
         if (InitialType is null)
         {
-            AvailableFields = CommonFuncs.GetResourceClasses().Select(
-    x => x.GetInterfaces().Where(x => x != typeof(IResource) && x != typeof(ICipherClass)).First()).
-    Select(y => new CipherField() { Path = y.Name, Translation = Translator.GetTranslation(y.Name), FieldType = y }).ToList();
+            AvailableFields = Constants.FilterableTypes.Select(y => CipherField.Create(y)).ToList();
         }
         else
         {
-            SelectedChips.Add(new CipherField()
-                    {
-                        Path = InitialType.Name,
-                        Translation = Translator.GetTranslation(InitialType.Name),
-                        FieldType = InitialType
-                    });
+            SelectedChips.Add(CipherField.Create(InitialType));
             SetFields(InitialType);
         }
     }
@@ -178,7 +174,8 @@
         =>
     @<RadzenDropDown TValue="CipherField" Data="@AvailableFields" TextProperty="Translation"
                     Change="@(args => AddChip((CipherField)args))" Value="@ChosenAttribute"
-                    Style="@($"min-width:{Constants.StandardWidth}")" Disabled="@Disabled"/>;
+                    Style="@($"min-width:{Constants.StandardWidth}")" Disabled="@Disabled"
+                    Placeholder="בחירת פרמטר" class="@Constants.Styles.PathChooser"/>;
 
     private RenderFragment? ArrowIcon()
         => @<RadzenIcon Icon="@Icons.Arrows.Circled.arrow_circle_left" IconColor="@Colors.PrimaryDark" />;
@@ -207,6 +204,10 @@
         return
     @<span class="@Constants.Styles.Chips.CloseAll" @onclick="RemoveAll">
         <RadzenIcon Icon="@Icons.Documents.Delete.close" />
-    </span>;
+        </span>
+    ;
     }
+
+    private RenderFragment? ChipSeperator(int i)
+    => (SelectedChips.Count - 1 != i) ?  @<RadzenText Text="/" /> : null;
 }
