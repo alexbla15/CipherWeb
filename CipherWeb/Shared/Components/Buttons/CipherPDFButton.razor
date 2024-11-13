@@ -2,6 +2,7 @@
 
 @using System.Text
 @using System.Collections
+@using System.Security.Cryptography
 
 @using OfficeOpenXml
 @using System.IO
@@ -19,12 +20,6 @@
 @code
 {
     /// <summary>
-    /// Name of output file.
-    /// </summary>
-    [Parameter]
-    public string? FileName { get; set; } = "export_data";
-
-    /// <summary>
     /// Data that will be exported.
     /// </summary>
     [Parameter]
@@ -39,14 +34,43 @@
         Icon ??= Icons.Documents.picture_as_pdf;
     }
 
-    private string GetFilePath() => $"{FileName}.csv";
+    public string GenerateFileName()
+    {
+        // Generate a random string (e.g., based on timestamp and random characters)
+        string randomString = $"{DateTime.UtcNow:yyyyMMddHHmmssfff}-{Guid.NewGuid()}";
 
-    public void ClickFunction()
+        // Use SHA256 to hash the random string
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(randomString));
+
+            // Convert the byte array to a hexadecimal string
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        }
+    }
+
+    public async Task ClickFunction()
     {
         if (OnClickFunc != null)
         {
             DataSource = OnClickFunc.Invoke();
-            TableToPDF.GeneratePdf(DataSource.ToList(), FileName);
+            string tempFilePath = TableToPDF.GeneratePdf(DataSource.ToList(), GenerateFileName());
+
+            // Construct a correct relative URL to the file in wwwroot/tempfiles
+            var fileUri = $"/tempfiles/{Path.GetFileName(tempFilePath)}";  // Ensure this is the relative path from wwwroot
+
+            // Open the file in a new tab
+            await JS.InvokeVoidAsync("open", fileUri, "_blank");
+
+            // Schedule deletion of the temp file after a delay (e.g., 5 seconds)
+            Task.Run(() =>
+            {
+                Thread.Sleep(5000); // Wait 5 seconds before deleting
+                if (File.Exists(tempFilePath))
+                {
+                    File.Delete(tempFilePath);
+                }
+            });
         }
     }
 
@@ -159,10 +183,21 @@
             );
         }
 
-        public static void GeneratePdf(List<IDictionary<string, object?>>? Data, string? FileName)
+        public static string GeneratePdf(List<IDictionary<string, object?>>? Data, string? fileName)
         {
-            var document = new TableToPDF() { _data = Data, FileName = $"{FileName}.pdf" };
-            document.GeneratePdf(document.FileName);
+            var document = new TableToPDF() { _data = Data, FileName = $"{fileName}.pdf" };
+
+            // Create the file in the wwwroot/tempfiles directory
+            var tempFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "tempfiles");
+            if (!Directory.Exists(tempFolderPath))
+            {
+                Directory.CreateDirectory(tempFolderPath);
+            }
+
+            var tempFilePath = Path.Combine(tempFolderPath, document.FileName);
+            document.GeneratePdf(tempFilePath);
+
+            return tempFilePath;
         }
     }
 }
