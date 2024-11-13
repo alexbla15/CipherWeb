@@ -9,7 +9,6 @@ namespace CipherData.General
         public string? Translation { get; set; }
         public object? Value { get; set; }
         public int? Order { get; set; }
-
     }
 
     public class DisplayedObject
@@ -26,7 +25,6 @@ namespace CipherData.General
         /// <summary>
         /// Method to get all properties of a class in a specified tuple
         /// </summary>
-        /// <returns></returns>
         public DisplayedObject(object obj, List<string>? UnwantedProperties = null)
         {
             OriginalObject = obj;
@@ -35,13 +33,12 @@ namespace CipherData.General
 
             Properties = new();
 
-            string interfaceName = obj.GetType().Name.Replace("Random", "I");
-            if (!interfaceName.StartsWith("I")) interfaceName = $"I{interfaceName}";
-            Type? interfaceType = Type.GetType($"CipherData.Interfaces.{interfaceName}");
+            string originalName = obj.GetType().Name;
+            Type? ChosenType = CipherField.GetType(originalName);
 
-            if (interfaceType != null)
+            if (ChosenType != null)
             {
-                MethodInfo? getDict = interfaceType.GetMethod("ToDictionary");
+                MethodInfo? getDict = ChosenType.GetMethod("ToDictionary");
                 Dictionary<string, object?>? values = getDict != null ? (Dictionary<string, object?>)getDict.Invoke(obj, null) : null;
 
                 // Iterate through all the properties of the object
@@ -49,8 +46,8 @@ namespace CipherData.General
                 {
                     foreach (string propertyName in values.Keys)
                     {
-                        string propertyPath = GetPropertyPath(obj, propertyName);
-                        string hebrewTranslation = GetHebrewTranslation(obj, propertyName);
+                        string propertyPath = GetPropertyPath(ChosenType, propertyName);
+                        string? hebrewTranslation = CipherField.TranslatePropertyFromPath(propertyPath);
 
                         if (!UnwantedPropertiesNames.Contains(propertyName))
                         {
@@ -65,63 +62,10 @@ namespace CipherData.General
             }
         }
 
-        public void SetOrder(string PropName, int Order)
-        {
-            if (Properties!=null)
-            {
-                foreach (var prop in Properties)
-                {
-                    if (prop.Name == PropName) prop.Order = Order;
-                }
-            }
-        }
-
         // STATIC METHODS
 
-        private static string GetPropertyPath(object obj, string propertyName) => $"[{obj.GetType().Name}].[{propertyName}]";
-
-        private static string GetHebrewTranslation(object obj, string propertyName)
-        {
-            // Retrieve the type of the provided object
-            Type objType = obj.GetType();
-
-            string OriginalKey = $"{objType.Name}_{propertyName}";
-
-            if (objType.IsInterface)
-            {
-                // Get the property information for the specified property name
-                PropertyInfo? property = objType.GetProperty(propertyName);
-
-                // Check if the property exists
-                if (property == null) return OriginalKey;
-
-                // Check if the HebrewTranslationAttribute is applied to the property
-                HebrewTranslationAttribute? attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
-
-                return attribute?.Translation ?? OriginalKey;
-            }
-
-            Type[] interfaces = obj.GetType().GetInterfaces();
-
-            foreach (var inter in interfaces)
-            {
-                OriginalKey = $"{inter.Name}_{propertyName}";
-
-                // Get the property information for the specified property name
-                PropertyInfo? property = inter.GetProperty(propertyName);
-
-                // Check if the property exists
-                if (property != null)
-                {
-                    // Check if the HebrewTranslationAttribute is applied to the property
-                    HebrewTranslationAttribute? attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
-
-                    return attribute?.Translation ?? OriginalKey;
-                }
-            }
-
-            return OriginalKey;
-        }
+        private static string GetPropertyPath(Type type, string propertyName) => 
+            $"[{type.Name}].[{propertyName}]";
 
         public static List<DisplayedObject> ListObjects<T>(IEnumerable<T>? objects, List<string>? UnwantedCols = null)
         {

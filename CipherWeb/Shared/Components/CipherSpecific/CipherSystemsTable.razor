@@ -6,7 +6,7 @@
 @code {
     protected override void OnInitialized()
     {
-        Title ??= Translator.GetTranslation("Systems");
+        Title ??= Translator.TranslateText("Systems");
 
         SelectedColumns = new List<string>() {
             nameof(IStorageSystem.Id),

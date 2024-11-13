@@ -94,6 +94,7 @@
         pathMap.Add(typeof(IStorageSystem), CipherNavLinks.SystemSearch);
         pathMap.Add(typeof(IUnit), CipherNavLinks.UnitSearch);
         pathMap.Add(typeof(IVessel), CipherNavLinks.VesselSearch);
+        pathMap.Add(typeof(Report), CipherNavLinks.ViewReport);
         return pathMap;
     }
 
@@ -129,6 +130,13 @@
             IResource? obj = originalObj as IResource;
             string? id = obj?.Id;
 
+            // One exception is a report
+            if (id is null)
+            {
+                Report? rep = originalObj as Report;
+                id = rep?.Id.ToString();
+            }
+
             foreach (Type resType in pathMap.Keys)
             {
                 if (resType.IsAssignableFrom(originalObj.GetType()))
@@ -138,7 +146,7 @@
         ReferencedCellClicked = false;
     }
 
-    private string Translate(string key) => Translator.GetTranslation(key);
+    private string Translate(string key) => Translator.TranslateText(key);
 }
 
 @if (DataSource != null && DataSource.Any())

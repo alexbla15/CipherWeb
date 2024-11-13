@@ -67,22 +67,16 @@
         }
     }
 
-
-    /// <summary>
-    /// Declaration of name of a property as the api sees it
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Interface)]
-    public class ApiName : Attribute
-    {
-        public string? Name { get; set; } = string.Empty;
-
-        public ApiName(string name) => Name=name;
-    }
-
-
     public class CipherNavLink
     {
+        /// <summary>
+        /// Name of the navigation link will be presented as a page-title / Header
+        /// </summary>
         public string? Name { get; set; }
+
+        /// <summary>
+        /// A valid URL path to the link
+        /// </summary>
         public string? Href { get; set; }
         public string? Icon { get; set; }
         public List<CipherNavLink>? SubLinks { get; set; } = new();

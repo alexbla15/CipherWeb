@@ -1,0 +1,11 @@
+﻿@page "/Reports/View"
+
+@if (CommonFuncs.CanView(NavLink))
+{
+    <UpdateReport Mode="@FormMode.ReadOnly" NavLink="@NavLink"/>
+}
+
+@code {
+    [Parameter]
+    public CipherNavLink NavLink { get; set; } = CipherNavLinks.ViewReport;
+}

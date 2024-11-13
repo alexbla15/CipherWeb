@@ -154,13 +154,13 @@
             fieldType = fieldType.GenericTypeArguments[0];
         }
 
-        List<PropertyInfo> fields = fieldType.GetProperties().Where(x => x.GetCustomAttribute<HebrewTranslationAttribute>() != null).ToList();
+        List<PropertyInfo> fields = fieldType.GetProperties().Where(x => Translator.HasHebrewTranslator(x)).ToList();
 
         AvailableFields = fields.Select(x => new CipherField()
                 {
                     Path = x.Name,
                     FieldType = x.PropertyType,
-                    Translation = x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation
+                    Translation = Translator.TranslateProperty(x)
                 }).ToList();
 
         SetPath();

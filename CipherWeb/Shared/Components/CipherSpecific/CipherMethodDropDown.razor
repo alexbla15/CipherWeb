@@ -41,7 +41,7 @@
 
     private string GetMethodTranslation(Method? method)
     {
-        if (method != null) return Translator.GetTranslation(method.ToString());
+        if (method != null) return Translator.TranslateText(method.ToString());
         return "לא ידוע"; // Default translation when not found
     }
 }

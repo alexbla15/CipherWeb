@@ -6,7 +6,7 @@
 @code {
     protected override void OnInitialized()
     {
-        Title ??= Translator.GetTranslation("Vessels");
+        Title ??= Translator.TranslateText("Vessels");
 
         SelectedColumns = new List<string>() {
             nameof(IVessel.Id),

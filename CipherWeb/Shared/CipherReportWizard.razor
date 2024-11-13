@@ -6,7 +6,7 @@
 @using CipherWeb.Pages.Forms
 @using System.Reflection;
 
-@if (Visible)
+@if (Visible && Mode != FormMode.ReadOnly)
 {
     <CipherSteps>
         <RadzenStepsItem Text="קביעת פרמטרים">
@@ -29,6 +29,10 @@
     </CipherSteps>
     <CipherJsonCheck JsonValue="@ChosenReport?.ToJson()" />
 }
+else
+{
+    @Preview()
+}
 
 @code {
     /// <summary>
@@ -41,7 +45,7 @@
     /// Is wizard used on update mode
     /// </summary>
     [Parameter]
-    public bool UpdateMode { get; set; } = false;
+    public FormMode Mode { get; set; } = FormMode.Create;
 
     /// <summary>
     /// Is report submitted to db.
@@ -68,7 +72,7 @@
     public string? ErrorMessage { get; set; }
 
     [Parameter]
-    public Report? ChosenReport { get; set; } = new();
+    public Report? ChosenReport { get; set; }
 
     [Parameter]
     public string? OriginalReportJson { get; set; }
@@ -98,8 +102,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ChosenReport ??= new();
-        if (!UpdateMode) ChosenReport.Id = await _db.GetLastReportId() + 1;
+        ChosenReport ??= new() { CreationDate = DateTime.Now};
+
+        if (Mode == FormMode.Create) ChosenReport.Id = await _db.GetLastReportId() + 1;
     }
 
     private void OnFilterChanged(IGroupedBooleanCondition newFilter)
@@ -152,7 +157,7 @@
         }
         else
         {
-            (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db, UpdateMode);
+            (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db, Mode == FormMode.Update);
         }
 
         if (Valid && CheckForm()) await SubmitReport();
@@ -222,7 +227,7 @@
     =>
     @<CipherComponentCard Title="בחירת שם לדוח" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
         <CipherAutoComplete Value="@(ChosenReport?.Id.ToString())" Label="@Report.Translate(nameof(Report.Id))" Icon="@Icons.Cipher.Id" Disabled="true" />
-        <CipherAmount @ref="CurrentVersion" Disabled="true" Amount="@(UpdateMode ? ChosenReport.Version + 1 : ChosenReport.Version)"
+        <CipherAmount @ref="CurrentVersion" Disabled="true" Amount="@(Mode==FormMode.Update ? ChosenReport.Version + 1 : ChosenReport.Version)"
                       Label="@Report.Translate(nameof(Report.Version))" Icon="@Icons.Documents.Edit.edit" />
         <CipherAutoComplete @bind-Value="ChosenReport.Title" Label="@Report.Translate(nameof(Report.Title))" Icon="@Icons.Documents.assignment" @ref="ReportName" />
     </CipherComponentCard>
@@ -317,7 +322,7 @@
         return
     @<CipherComponentCard BackgroundColor="@Colors.PrimaryLight">
         <RadzenStack Orientation="Orientation.Vertical">
-            @if (Valid && ChosenReport != null)
+            @if (Valid)
             {
                 @ParameterFiller()
                 @Filter(false)

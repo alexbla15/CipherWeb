@@ -12,8 +12,13 @@ namespace CipherData.General
     [HebrewTranslation(nameof(CipherField))]
     public class CipherField : CipherClass, ICipherClass
     {
+        private string _Path { get; set; } = string.Empty;
+
         [HebrewTranslation(typeof(CipherField), nameof(Path))]
-        public string Path { get; set; } = string.Empty;
+        public string Path {
+            get => _Path;
+            set { _Path = value; FieldType = GetPathType(value) ?? typeof(object); }
+        }
 
         [HebrewTranslation(typeof(CipherField), nameof(Translation))]
         public string Translation { get; set; } = string.Empty;
@@ -204,14 +209,14 @@ namespace CipherData.General
 
             if (parts.Any())
             {
-                Type? rootType = GetInterfaceType(parts[0]);
+                Type? rootType = GetType(parts[0]);
                 if (rootType is null) return null;
 
-                string translation = $"[{Translator.GetTranslation(rootType.Name)}]";
+                string translation = $"[{Translator.TranslateText(rootType.Name)}]";
 
                 foreach (var part in parts.GetRange(1, parts.Count-1))
                 {
-                    translation += $".[{TranslatePartPath(rootType, part)}]";
+                    translation += $".[{Translator.TranslateProperty(rootType, part)}]";
                     rootType = GetPartPathType(rootType, part);
                 }
 
@@ -221,23 +226,23 @@ namespace CipherData.General
             return null;
         }
 
-        public static string? TranslatePartPath(Type? currType, string prop)
-        {
-            PropertyInfo? propInfo = currType?.GetProperty(prop);
-            if (propInfo != null)
-            {
-                HebrewTranslationAttribute? hebAtt = propInfo.GetCustomAttribute<HebrewTranslationAttribute>();
-                if (hebAtt != null) return hebAtt.Translation;
-            }
+        /// <summary>
+        /// Method to translate the path, and take only the property's translation
+        /// </summary>
+        public static string? TranslatePropertyFromPath(string? path)
+            => TranslatePath(path)?.Trim('[', ']').Split("].[").Last();
 
-            return prop;
-        }
+        public static PropertyInfo? GetPropertyInfo(Type? type, string prop)
+            => type?.GetInterfaces() // Get all interfaces that this type inherits
+                    .Append(type) // Include this type itself
+                    .Select(i => i.GetProperty(prop)) // Check each interface for the property name
+                    .FirstOrDefault(p => p != null); // Find the first non-null result
 
         public static Dictionary<string, AttributeRelation> RelationTranslationMapping(bool WithParameters = false)
         {
             var selectedAttributes = WithParameters ? AllAttributeRelations.Concat(AllParameterAttributeRelations) : AllAttributeRelations;
 
-            return selectedAttributes.Select(x => KeyValuePair.Create(Translator.GetTranslation(x.ToString()), x))
+            return selectedAttributes.Select(x => KeyValuePair.Create(Translator.TranslateText(x.ToString()), x))
             .ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
@@ -247,15 +252,13 @@ namespace CipherData.General
                 GetFilters(regRelations).Concat(GetFilters(paramRelations)).ToList() : GetFilters(regRelations);
 
         public static Dictionary<FilterType, List<string>> FilterAttributeRelations(bool WithParameters = false)
-        {
-            return new()
+            => new()
             {
                 [FilterType.Number] = SpecificAttributeRelations(NumberAttributeRelations, NumberParameterAttributeRelations, WithParameters),
                 [FilterType.Text] = SpecificAttributeRelations(TextAttributeRelations, TextParameterAttributeRelations, WithParameters),
                 [FilterType.Date] = SpecificAttributeRelations(DateAttributeRelations, DateParameterAttributeRelations, WithParameters),
                 [FilterType.Condition] = SpecificAttributeRelations(BoolAttributeRelations, BoolParameterAttributeRelations, WithParameters)
             };
-        }
 
         public static FilterType GetFilterType(CipherField field)
         {
@@ -295,6 +298,13 @@ namespace CipherData.General
             return res;
         }
 
+        public static Type? GetPathType(string path)
+        {
+            var parts = path.Trim('[', ']').Split("].[");
+            Type? rootType = GetType(parts[0]);
+            return GetPathType(rootType, path);
+        }
+
         public static Type? GetPartPathType(Type? currType, string prop)
         {
             PropertyInfo? propInfo = currType?.GetProperty(prop);
@@ -302,7 +312,20 @@ namespace CipherData.General
             return res != null &&  IsList(res) ? ItemType(res) : res;
         }
 
+        /// <summary>
+        /// Method to get a type in Cipher-context using its name
+        /// Transforms Random-types / api-types to interfaces.
+        /// </summary>
+        public static Type? GetType(string typeName)
+        {
+            string interfaceName = typeName.Replace("Random", "I");
+            if (!interfaceName.StartsWith("I")) interfaceName = $"I{interfaceName}";
+            return GetInterfaceType(interfaceName) ?? GetGeneralType(typeName);
+        }
+
         public static Type? GetInterfaceType(string typeName) => Type.GetType($"CipherData.Interfaces.{typeName}");
+
+        public static Type? GetGeneralType(string typeName) => Type.GetType($"CipherData.General.{typeName}");
 
         public static List<Type> InterfaceChildren(Type mainInterface)
         {
@@ -329,7 +352,7 @@ namespace CipherData.General
         /// </summary>
         /// <param name="type"></param>
         public static CipherField Create(Type type) => 
-            new() { Path = type.Name, Translation = Translator.GetTranslation(type.Name), FieldType = type };
+            new() { Path = type.Name, Translation = Translator.TranslateText(type.Name), FieldType = type };
 
         /// <summary>
         /// Get all cipher field of the first layer of some type 
@@ -340,16 +363,14 @@ namespace CipherData.General
         /// <param name="mainTranslation">translation of tree-path</param>
         public static List<CipherField> GetFields_SingleLayer(Type type, string? mainPath = null, string? mainTranslation = null)
         {
-            List<PropertyInfo> fields = type.GetProperties().Where(x => x.GetCustomAttribute<HebrewTranslationAttribute>() != null).ToList();
-
-            string? type_translation = type.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation;
+            List<PropertyInfo> fields = type.GetProperties().Where(x => Translator.HasHebrewTranslator(x)).ToList();
 
             return fields.Select(x => new CipherField()
             {
                 FieldType = x.PropertyType,
 
-                Translation = mainTranslation != null ? $"{mainTranslation}.[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]" :
-                $"[{type_translation}].[{x.GetCustomAttribute<HebrewTranslationAttribute>()?.Translation}]",
+                Translation = mainTranslation != null ? $"{mainTranslation}.[{Translator.TranslateProperty(x)}]" :
+                $"[{Translator.TranslateType(type)}].[{Translator.TranslateProperty(x)}]",
                 Path = mainPath != null ? $"{mainPath}.[{x.Name}]" : $"[{type.Name}].[{x.Name}]"
             }).ToList();
         }

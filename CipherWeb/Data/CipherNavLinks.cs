@@ -5,7 +5,7 @@ namespace CipherWeb.Data
 {
     public class CipherNavLinks
     {
-        private static string Translate(string key) => Translator.GetTranslation(key);
+        private static string Translate(string key) => Translator.TranslateText(key);
 
         private static string FormHref(string? specific_form = null) => 
             specific_form is null ? nameof(Forms) : $"{nameof(Forms)}/{specific_form}";
@@ -228,6 +228,12 @@ namespace CipherWeb.Data
             Name = Translate(nameof(Reports)),
             SubLinks = new()
                 { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, ProcessesReport }
+        };
+
+        public static readonly CipherNavLink ViewReport = new()
+        {
+            Href = ReportHref("View"),
+            Name = ReportName(nameof(ViewReport)),
         };
 
         public static readonly CipherNavLink FreeText = 

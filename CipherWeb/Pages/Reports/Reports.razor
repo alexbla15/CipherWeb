@@ -1,5 +1,7 @@
 ﻿@page "/Reports"
 
+@inject ICipherInfo _db
+
 @if (CommonFuncs.CanView(navLink))
 {
     <PageTitle>@navLink.Name</PageTitle>
@@ -7,24 +9,20 @@
     <CipherPointers Title="דוחות שמורים" SelectedLinks="@navLink.SubLinks" />
 
     <CipherTableCard Title="חיפוש דוח" GetDataSource="@GetDataSource" FileTitle="reports">
+        <HeaderContent>
+            <CipherAutoComplete Required="false" Label="טקסט לחיפוש" Placeholder="כאן ניתן לחפש טקסט" ValueChanged="@(args => SearchText(args))"/>
+        </HeaderContent>
         <AdditionalButtons>
             @AddReportBtn()
         </AdditionalButtons>
         <ComponentContent>
-            @if (!AllReports.Any())
-            {
-                <CipherLoadingCard />
-            }
-            else
-            {
-                <CipherDataTable DataSource="@DisplayedObject.ListObjects(AllReports)"
-                                 GridFilterMode="@FilterMode.Advanced" AllowFilter="true" />
-            }
+            @Table()
         </ComponentContent>
     </CipherTableCard>
 }
 
 @code {
+    private bool RequestDone = true;
     private CipherNavLink navLink = CipherNavLinks.Reports;
 
     [Parameter]
@@ -40,24 +38,60 @@
         new() {Id=5, Title="דוח מיקומים", Creator="אבי", CreationDate=DateTime.Today.AddDays(32)}
     };
 
+    [Parameter]
+    public List<Report> AvailableReports { get; set; } = new();
+
+    [Parameter]
+    public List<Report> SelectedReports { get; set; } = new();
+
     /// <summary>
     /// Function to retrieve the DataSource for the DataTable
     /// </summary>
     [Parameter]
     public Func<List<Dictionary<string, object?>>>? GetDataSource { get; set; }
 
-    protected override void OnInitialized() => GetDataSource = (() => DisplayedObject.ToListDicts(AllReports));
+    protected override async void OnInitialized()
+    {
+        GetDataSource = (() => DisplayedObject.ToListDicts(AllReports));
+        await LoadReports();
+    }
 
     private RenderFragment? AddReportBtn()
     {
         CipherNavLink link = CipherNavLinks.AddReport;
 
-        if (CommonFuncs.CanView(link))
-        {
-            return
-                @<CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline"
-                     Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@link.Href" />;
-        }
-        else return null;
+        return CommonFuncs.CanView(link)? @<CipherNavButton Icon="@Icons.Symbols.Plus.add_circle_outline"
+        Variant="Variant.Outlined" HelpText="יצירת דוח" Path="@link.Href" />
+        : null;
     }
+
+    private async Task LoadReports()
+    {
+        RequestDone = false;
+        AvailableReports = await Report.All(_db);
+        SelectedReports = AvailableReports.ToList();
+        var res = DisplayedObject.ListObjects(SelectedReports);
+        RequestDone = true;
+        StateHasChanged();
+    }
+
+    private List<string> SelectedColumns = new() {
+        nameof(Report.Id),
+        nameof(Report.Title),
+        nameof(Report.Creator),
+        nameof(Report.CreationDate),
+        nameof(Report.Version)
+    };
+
+    private void SearchText(string text)
+    {
+        RequestDone = false;
+        SelectedReports = AvailableReports.Where(x => x.Contains(text)).ToList();
+        RequestDone = true;
+    }
+
+    private RenderFragment Table()
+    => RequestDone ?
+    @<CipherDataTable DataSource="@DisplayedObject.ListObjects(SelectedReports)"
+                     SelectedColumns="@SelectedColumns"/> : @<CipherLoadingCard/>;
 }

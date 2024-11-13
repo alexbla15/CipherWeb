@@ -6,7 +6,7 @@
 @code{
     protected override void OnInitialized()
     {
-        Title ??= Translator.GetTranslation("Packages");
+        Title ??= Translator.TranslateText("Packages");
         SelectedColumns = new List<string>() { 
             nameof(IPackage.Id), 
             nameof(IPackage.Description), 

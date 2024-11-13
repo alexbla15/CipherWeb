@@ -5,9 +5,11 @@
     <ResourceForm Title="@NavLink?.Name">
         <CipherFormInfo @ref="FormInfo" ChangeDetails="@SetJsonRequest" />
         <CipherComponentCard Title="פרטי תנועה" ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
-            <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" Icon="@Icons.Arrows.Squared.input" @ref=DonatingPack />
-            <CipherPackageId Change="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
-            <CipherAmount AmountChanged="@SetJsonRequest" Label="@ICreateTranserAmountEvent.Translate(nameof(ICreateTranserAmountEvent.Amount))" @ref=DeltaM />
+            <CipherPackageId Change="@SetJsonRequest" Label="@Translate(nameof(ICreateTranserAmountEvent.DonatingPackage))" 
+            Icon="@Icons.Arrows.Squared.input.ToString()" @ref=DonatingPack />
+            <CipherPackageId Change="@SetJsonRequest" Label="@Translate(nameof(ICreateTranserAmountEvent.AcceptingPackage))" Icon="@Icons.Arrows.Squared.output" @ref=AcceptingPack />
+            <CipherAmount AmountChanged="@SetJsonRequest" Label="@Translate(nameof(ICreateTranserAmountEvent.Amount))" 
+            @ref=DeltaM />
             <CipherProcess Change="@SetJsonRequest" @ref=EventProc />
             <CipherComments ValueChanged="@SetJsonRequest" @ref="EventComments" />
         </CipherComponentCard>
@@ -114,4 +116,7 @@
         submission.SetValid(Valid);
         submission.SetErrorMessage(ErrorMessage);
     }
+
+    private string Translate(string key) => 
+    ICreateTranserAmountEvent.Translate(key);
 }

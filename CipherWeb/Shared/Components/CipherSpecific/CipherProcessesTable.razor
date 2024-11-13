@@ -7,7 +7,7 @@
 @code {
     protected override void OnInitialized()
     {
-        Title ??= Translator.GetTranslation("Processes");
+        Title ??= Translator.TranslateText("Processes");
 
         SelectedColumns = new List<string>() {
             nameof(IProcess.Id),

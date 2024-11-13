@@ -70,7 +70,7 @@
 
         string? newName = condition.Attribute;
         string newValue = condition.Value ?? " ";
-        string newRelation = Translator.GetTranslation(condition?.AttributeRelation?.ToString() ?? string.Empty) ?? " ";
+        string newRelation = Translator.TranslateText(condition?.AttributeRelation?.ToString() ?? string.Empty) ?? " ";
         string newOperator = condition?.Operator.ToString() ?? " ";
         
         FilterType newFilterType = FilterType.Text;
@@ -196,7 +196,7 @@
         JsonRequest = copyCondition.ToJson();
     }
 
-    private static string Translate(string key) => Translator.GetTranslation(key);
+    private static string Translate(string key) => Translator.TranslateText(key);
 
     private string FixedWidth() =>
     $"width:{Constants.StandardWidth}; min-width:{Constants.StandardWidth}; max-width:{Constants.StandardWidth}";
@@ -450,7 +450,7 @@
 
         if (relation != null)
         {
-            if (WithParameters && CipherField.AllParameterAttributeRelations.Any(x=>Translator.GetTranslation(x.ToString()) == relation)) 
+            if (WithParameters && CipherField.AllParameterAttributeRelations.Any(x=>Translator.TranslateText(x.ToString()) == relation)) 
                 return ParameterFiller(filter);
         }
 

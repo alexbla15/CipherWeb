@@ -114,7 +114,7 @@ namespace CipherData.General
         [JsonIgnore]
         public Type ObjectType { get; set; } = typeof(IPackage);
 
-        public string Path() => $"/Reports?Id={Id}";
+        public string Path() => $"/Reports/View?Id={Id}";
 
         public CheckField CheckTitle() => ICipherClass.CheckProperty(this, nameof(Title));
 
@@ -212,6 +212,11 @@ namespace CipherData.General
                 ObjectType = ObjectType,
                 ObjectFactory = ObjectFactory.Export()
             };
+
+        public bool Contains(string text)
+            => Id.ToString().Contains(text) || Version.ToString().Contains(text)
+                || CreationDate.ToString().Contains(text) || Creator.Contains(text)
+                || (Title != null && Title.Contains(text));
 
         public new string ToJson()
             => JsonSerializer.Serialize(Export(), typeof(Report), ICipherClass.JsonOptions);

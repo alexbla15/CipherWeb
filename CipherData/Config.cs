@@ -75,9 +75,6 @@
         public static TInterface GetObject<TInterface, TRandomClass, TApiClass>(bool newObject = true)
             where TRandomClass : class, TInterface, new()
             where TApiClass: class, TInterface, new()
-        {
-            if (RandomMode && !newObject) return new TRandomClass();
-            return new TApiClass();
-        }
+            => (RandomMode && !newObject) ? new TRandomClass() : new TApiClass();
     }
 }

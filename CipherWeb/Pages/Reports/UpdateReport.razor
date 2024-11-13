@@ -13,7 +13,7 @@
     <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
     <br/>
     <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
-    OriginalReportJson="@(ChosenReport?.ToJson())" ChosenReport="@(ChosenReport ?? new())" UpdateMode="true"/>
+    OriginalReportJson="@(ChosenReport?.ToJson())" ChosenReport="@(ChosenReport ?? new())" Mode="@Mode"/>
 </ResourceForm>
 }
 
@@ -23,6 +23,9 @@
 
     [Parameter]
     public Report? ChosenReport { get; set; }
+
+    [Parameter]
+    public FormMode Mode { get; set; } = FormMode.Update;
 
     private CipherReportDropDown ReportId = new();
     private ResourceForm ResForm = new();

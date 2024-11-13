@@ -85,9 +85,7 @@ namespace CipherData.Interfaces
             PropertyInfo? property = GetPropertyInfo(interfaceType, searchedAttribute);
             if (property == null) return searchedAttribute;
 
-            // Get the HebrewTranslationAttribute and return the translation
-            var attribute = property.GetCustomAttribute<HebrewTranslationAttribute>();
-            return attribute?.Translation ?? searchedAttribute;
+            return Translator.TranslateProperty(property) ?? searchedAttribute;
         }
 
         /// <summary>

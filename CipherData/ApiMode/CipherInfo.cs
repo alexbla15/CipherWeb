@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using CipherData.General;
+using System.Text.Json;
 
 namespace CipherData.ApiMode
 {
@@ -82,11 +83,13 @@ namespace CipherData.ApiMode
         public Task InsertReport(Report new_report)
         {
             string sql = @$"INSERT INTO Reports (Id, Title, Creator, CreationDate, ObjectFactory, ObjectType, Path, Parameters, Version) 
-                VALUES ({new_report.Id}, N'{new_report.Title}', N'{new_report.Creator}', '{new_report.CreationDate}', 
+                VALUES ({new_report.Id}, N'{new_report.Title}', N'{new_report.Creator}', @CreationDate, 
                 N'{new_report.ObjectFactory.ToJson()}' , N'{new_report.ObjectType.Name}', N'{new_report.Path()}', 
-                N'{JsonSerializer.Serialize(new_report.Parameters)}', {new_report.Version})";
+                N'{JsonSerializer.Serialize(new_report.Parameters, ICipherClass.JsonOptions)}', {new_report.Version})";
 
-            return _db.SaveData(sql, new { });
+            var parameters = new { new_report.CreationDate };
+
+            return _db.SaveData(sql, parameters);
         }
 
         public Task<bool> ExistsInDb(Report new_report, bool CheckTitle = true)

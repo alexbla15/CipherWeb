@@ -42,13 +42,13 @@
 
     [Parameter]
     public List<string> objectTypes { get; set; } = new() {
-        Translator.GetTranslation("Packages"),
-        Translator.GetTranslation("Vessels"),
-        Translator.GetTranslation("StorageSystems"),
-        Translator.GetTranslation("Events"),
-        Translator.GetTranslation("Processes"),
-        Translator.GetTranslation("Categories"),
-        Translator.GetTranslation("Units"),
+        Translator.TranslateText("Packages"),
+        Translator.TranslateText("Vessels"),
+        Translator.TranslateText("StorageSystems"),
+        Translator.TranslateText("Events"),
+        Translator.TranslateText("Processes"),
+        Translator.TranslateText("Categories"),
+        Translator.TranslateText("Units"),
                     };
 
     /// <summary>
