@@ -78,6 +78,16 @@ namespace CipherData.Interfaces
         /// Method to update object details 
         /// </summary>
         Task<Tuple<IVessel, ErrorResponse>> Update(string? id, IVesselRequest req);
+
+        /// <summary>
+        /// All packages that took place in a certain system
+        /// </summary>
+        Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedVessel);
+
+        /// <summary>
+        /// All packages that are located in this system
+        /// </summary>
+        public async Task<Tuple<List<IPackage>, ErrorResponse>> Packages() => await Packages(Id);
     }
 
     public abstract class BaseVessel: Resource, IVessel
@@ -95,10 +105,11 @@ namespace CipherData.Interfaces
 
         // ABSTRACT METHODS
 
-
         protected abstract IVesselsRequests GetRequests();
 
         public abstract Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedVessel);
 
         public abstract IVessel Copy();
 

@@ -43,5 +43,8 @@
 
         public override async Task<Tuple<List<IVessel>, ErrorResponse>> Containing(string? SearchText) =>
             await GetRequests().GetAll();
+
+        public override async Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedVessel)
+            => await new RandomPackage().All();
     }
 }

@@ -37,5 +37,8 @@
 
         public override async Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string? SearchText)
             => await All();
+
+        public override async Task<Tuple<List<IProcess>, ErrorResponse>> ByDefinition(string definition_id)
+            => await All();
     }
 }

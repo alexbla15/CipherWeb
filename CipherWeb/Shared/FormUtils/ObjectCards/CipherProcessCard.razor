@@ -7,12 +7,12 @@
     <ChildContent>
         @if (!(SetMode != FormMode.Create && ChosenObject is null))
         {
-            <CipherComponentCard Title="פרטי התהליך" 
-            WithButtons="@(SetMode == FormMode.ReadOnly && CommonFuncs.CanView(CipherNavLinks.UpdateProcess))"
+            <CipherComponentCard Title="פרטי התהליך"
+                                 WithButtons="@(SetMode == FormMode.ReadOnly && CommonFuncs.CanView(CipherNavLinks.UpdateProcess))"
                                  ContentStyleClass="@Constants.Styles.ComponentResourceCardContent">
                 <Buttons>
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                    Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateProcess.Href}?Id={ChosenObject?.Id}")" />
                 </Buttons>
                 <ChildContent>
                     @ProcessName()
@@ -20,6 +20,7 @@
                 </ChildContent>
             </CipherComponentCard>
             <CipherProcessSteps @ref="ProcSteps" ChosenSteps="@ChosenObject?.Steps" ValueChanged="@ChangeDetail" Disabled="@DisabledFields()" />
+            @Examples()
         }
     </ChildContent>
 </CipherResourceCard>
@@ -56,7 +57,7 @@
     }
 
     public bool DisabledFields()
-     => SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
+         => SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
 
     public void Change()
     {
@@ -88,17 +89,17 @@
     private string GetLabel(string property) => IProcessDefinition.Translate(property);
 
     private string? GetValue(string? value)
-        => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+    => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
 
     public RenderFragment ProcessName()
     {
         string? value = GetValue(ChosenObject?.Name);
 
         return
-        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Name)))" 
-        Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Name)))"
+                        Icon="@Icons.Cipher.Process" @ref=ProcName ValueChanged="@ChangeDetail"
                         Disabled="@DisabledFields()" Value="@value" />
-    ;
+        ;
     }
 
     public RenderFragment ProcessDescription()
@@ -106,9 +107,21 @@
         string? value = GetValue(ChosenObject?.Description);
 
         return
-        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Description)))" 
-        Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
+        @<CipherAutoComplete Label="@(GetLabel(nameof(IProcessDefinition.Description)))"
+                        Icon="@Icons.Communication.Chat.comment" @ref=ProcDescription
                         Disabled="@DisabledFields()" Value="@value" ValueChanged="@ChangeDetail" />
-    ;
+        ;
+    }
+
+    public RenderFragment? Examples()
+    {
+        if (ChosenObject != null && SetMode == FormMode.ReadOnly)
+        {
+            var result = ChosenObject.Processes().Result;
+            return @<CipherComponentCard Title="דוגמאות">
+        <CipherDataTable DataSource="@DisplayedObject.ListObjects(result.Item1)" />
+    </CipherComponentCard>;
+        }
+        return null;
     }
 }

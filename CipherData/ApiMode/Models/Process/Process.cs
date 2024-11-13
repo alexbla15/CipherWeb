@@ -21,5 +21,18 @@
 
             return Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
         }
+
+        public override async Task<Tuple<List<IProcess>, ErrorResponse>> ByDefinition(string definition_id)
+        {
+            var result = await GetObjects<Process>(definition_id, searchText => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>() {
+                new() {Attribute = $"{typeof(Process).Name}.{nameof(Definition)}.{nameof(ProcessDefinition.Name)}", Value = definition_id},
+            },
+                Operator = Operator.Any
+            });
+
+            return Tuple.Create(result.Item1.Select(x => x as IProcess).ToList(), result.Item2);
+        }
     }
 }

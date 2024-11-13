@@ -108,12 +108,12 @@ namespace CipherData.Interfaces
         public async Task<Tuple<List<IProcess>, ErrorResponse>> Processes() => await Processes(Id);
 
         /// <summary>
-        /// All packages that took place in this system
+        /// All packages that are located in this system
         /// </summary>
         public async Task<Tuple<List<IPackage>, ErrorResponse>> Packages() => await Packages(Id);
 
         /// <summary>
-        /// All vessels that took place in this system
+        /// All vessels that are located in this system
         /// </summary>
         public async Task<Tuple<List<IVessel>, ErrorResponse>> Vessels() => await Vessels(Id);
 

@@ -147,6 +147,10 @@
     }
 
     private string Translate(string key) => Translator.TranslateText(key);
+
+    private bool ViewColumn(string propName)
+    => (SelectedColumns != null && SelectedColumns.Any() && SelectedColumns.Contains(propName))
+        || SelectedColumns is null || !SelectedColumns.Any();
 }
 
 @if (DataSource != null && DataSource.Any())
@@ -208,7 +212,7 @@
                         {
                             @if (prop != null)
                             {
-                                @if (SelectedColumns != null && prop?.Name != null && SelectedColumns.Contains(prop.Name))
+                                @if (prop?.Name != null && ViewColumn(prop.Name))
                                 {
                                     <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
                                         <Template Context="data" >

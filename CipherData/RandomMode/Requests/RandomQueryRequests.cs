@@ -33,5 +33,13 @@
             // If the type doesn't have a Random method, return an empty list.
             return await new RandomGenericRequests().Request(new List<T>(), canBeNotFound: true, canFail: canFail);
         }
+
+        public async Task<Tuple<List<Dictionary<string,string?>>, ErrorResponse>> QueryObjects(IObjectFactory obj, bool canFail = false)
+        {
+            List<Dictionary<string,string?>> res = DisplayedObject.ToListDicts(RandomData.Packages).
+                Select(x=> x.ToDictionary(kvp => kvp.Key, kvp=>kvp.Value?.ToString())).ToList();
+
+            return await new RandomGenericRequests().Request(res, canBeNotFound: true, canFail: canFail);
+        }
     }
 }

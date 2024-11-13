@@ -4,7 +4,8 @@
     {
         private static readonly string path = "/query";
 
-        public async Task<Tuple<List<T>, ErrorResponse>> QueryObjects<T>(IObjectFactory obj, bool canFail = false) where T : IResource
+        public async Task<Tuple<List<T>, ErrorResponse>> QueryObjects<T>(IObjectFactory obj, bool canFail = false) 
+            where T : IResource
         {
             try
             {
@@ -21,6 +22,26 @@
                 // Log or handle the exception as necessary
                 // Return an empty list and an error response indicating the failure
                 return Tuple.Create(new List<T>(), ErrorResponse.BadRequest);
+            }
+        }
+
+        public async Task<Tuple<List<Dictionary<string,string?>>, ErrorResponse>> QueryObjects(IObjectFactory obj, bool canFail = false)
+        {
+            try
+            {
+                // Assuming GeneralAPIRequest.Post returns Tuple<List<Resource>, ErrorResponse>
+                var result = await GeneralAPIRequest.Post<List<Dictionary<string, string?>>>(path, obj);
+
+                // Use OfType<T>() to safely filter and cast the results
+                List<Dictionary<string, string?>> objs = result.Item1?.OfType<Dictionary<string, string?>>().ToList() ?? new();
+
+                return Tuple.Create(objs, result.Item2);
+            }
+            catch (Exception)
+            {
+                // Log or handle the exception as necessary
+                // Return an empty list and an error response indicating the failure
+                return Tuple.Create(new List<Dictionary<string, string?>>(), ErrorResponse.BadRequest);
             }
         }
     }

@@ -685,6 +685,11 @@
     background-color: var(--rz-primary-lightest);
 }
 
+.rz-datatable-tfoot td, .rz-grid-table tfoot td {
+    white-space: normal;
+    overflow: auto;
+}
+
 .rz-datatable-data td:last-child:not(.rz-composite-cell) .rz-cell-data {
     text-align: right;
 }

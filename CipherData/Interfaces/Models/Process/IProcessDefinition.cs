@@ -47,6 +47,11 @@ namespace CipherData.Interfaces
         /// </summary>
         Task<Tuple<List<IProcessDefinition>, ErrorResponse>> Containing(string? SearchText);
 
+        /// <summary>
+        /// Fetch all processes which have this definition
+        /// </summary>
+        Task<Tuple<List<IProcess>, ErrorResponse>> Processes();
+
         public IProcessDefinitionRequest Request() =>
             new ProcessDefinitionRequest()
             {
@@ -102,5 +107,8 @@ namespace CipherData.Interfaces
 
         public async Task<Tuple<IProcessDefinition, ErrorResponse>> Update(string? id, IProcessDefinitionRequest req)
             => await GetRequests().Update(id, req);
+
+        public async Task<Tuple<List<IProcess>, ErrorResponse>> Processes() =>
+            await Config.Process(false).ByDefinition(Id);
     }
 }

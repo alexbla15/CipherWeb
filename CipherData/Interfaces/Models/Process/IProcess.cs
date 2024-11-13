@@ -64,6 +64,11 @@
         /// Fetch all processes which contain the searched text
         /// </summary>
         Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string SearchText);
+
+        /// <summary>
+        /// Fetch all processes with a specific defition
+        /// </summary>
+        Task<Tuple<List<IProcess>, ErrorResponse>> ByDefinition(string definition_id);
     }
 
     public abstract class BaseProcess : Resource, IProcess
@@ -96,6 +101,8 @@
         protected abstract IProcessesRequests GetRequests();
 
         public abstract Task<Tuple<List<IProcess>, ErrorResponse>> Containing(string? SearchText);
+
+        public abstract Task<Tuple<List<IProcess>, ErrorResponse>> ByDefinition(string definition_id);
 
 
         // API RELATED FUNCTIONS

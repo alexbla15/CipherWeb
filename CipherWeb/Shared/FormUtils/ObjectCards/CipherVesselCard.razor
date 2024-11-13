@@ -20,7 +20,8 @@
                     @VesselLocation()
                     @VesselPackages()
                 </ChildContent>
-        </CipherComponentCard>
+            </CipherComponentCard>
+            @Packages()
         }
     </ChildContent>
 </CipherResourceCard>
@@ -161,6 +162,18 @@
                  NavigationLink="@CipherNavLinks.PackageSearch" />;
         ;
         
+        return null;
+    }
+
+    public RenderFragment? Packages()
+    {
+        if (ChosenObject != null && SetMode == FormMode.ReadOnly)
+        {
+            var result = ChosenObject.Packages().Result;
+            return @<CipherComponentCard Title="@Translator.TranslateText("Packages")">
+        <CipherDataTable DataSource="@DisplayedObject.ListObjects(result.Item1)" />
+    </CipherComponentCard>;
+        }
         return null;
     }
 }

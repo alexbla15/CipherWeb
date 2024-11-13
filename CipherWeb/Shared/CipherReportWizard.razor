@@ -6,10 +6,12 @@
 @using CipherWeb.Pages.Forms
 @using System.Reflection;
 
-@if (Visible && Mode != FormMode.ReadOnly)
+@if (Mode != FormMode.ReadOnly)
 {
-    <CipherSteps>
-        <RadzenStepsItem Text="קביעת פרמטרים">
+    @if (Visible)
+    {
+        <CipherSteps>
+            <RadzenStepsItem Text="קביעת פרמטרים">
             @BasicInfo()
             @Parametrize()
         </RadzenStepsItem>
@@ -28,6 +30,7 @@
         </RadzenStepsItem>
     </CipherSteps>
     <CipherJsonCheck JsonValue="@ChosenReport?.ToJson()" />
+    }
 }
 else
 {
@@ -72,16 +75,19 @@ else
     public string? ErrorMessage { get; set; }
 
     [Parameter]
-    public Report? ChosenReport { get; set; }
+    public string? OriginalReportJson { get; set; }
 
     [Parameter]
-    public string? OriginalReportJson { get; set; }
+    public Report? ChosenReport { get; set; }
 
     /// <summary>
     /// API response.
     /// </summary>
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
+
+    [Parameter]
+    public List<Dictionary<string, string?>> RequestResult { get; set; } = new();
 
     private CipherAutoComplete ReportName = new();
     private CipherDataGrouper dataGrouper = new();
@@ -102,6 +108,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Reset();
         ChosenReport ??= new() { CreationDate = DateTime.Now};
 
         if (Mode == FormMode.Create) ChosenReport.Id = await _db.GetLastReportId() + 1;
@@ -133,6 +140,7 @@ else
         Valid = true;
         ErrorMessage = string.Empty;
         Submitted = false;
+        RequestResult = new();
     }
 
     public bool CheckForm()
@@ -185,43 +193,23 @@ else
 
     private async Task SendRequest()
     {
+        if (ChosenReport is null) return;
+
         FilledJson = ChosenReport.FillInParametersJson();
 
-        IObjectFactory sentObj = ICipherClass.FromJson<IObjectFactory>(FilledJson);
+        IObjectFactory? sentObj = ICipherClass.FromJson<IObjectFactory>(FilledJson);
 
-        if (ChosenReport.ObjectType == typeof(IPackage)) 
-        {
-            var result = await sentObj.GetObjects<IPackage>();
-            List<IPackage> packs = result.Item1;
-        }
-        else if (ChosenReport.ObjectType == typeof(IVessel))
-        {
-            var result = await sentObj.GetObjects<IVessel>();
-            List<IVessel> packs = result.Item1;
-        }
-        else if (ChosenReport.ObjectType == typeof(IStorageSystem))
-        { 
-            var result = await sentObj.GetObjects<IStorageSystem>();
-            List<IStorageSystem> packs = result.Item1;
-        }
-        else if (ChosenReport.ObjectType == typeof(IUnit))
-        {
-            var result = await sentObj.GetObjects<IUnit>();
-            List<IUnit> packs = result.Item1;
-        }
-        else if (ChosenReport.ObjectType == typeof(ICategory))
-        {
-            var result = await sentObj.GetObjects<ICategory>();
-            List<ICategory> packs = result.Item1;
-        }
-        else if (ChosenReport.ObjectType == typeof(IProcess))
-        {
-            var result = await sentObj.GetObjects<IProcess>();
-            List<IProcess> packs = result.Item1;
-        }
-
-        throw new NotImplementedException("can't continue without throwing those into a table");
+        (RequestResult, Error) = sentObj is null ? 
+        Tuple.Create(new List<Dictionary<string,string?>>(), ErrorResponse.BadRequest) : await Config.QueryRequests(false).QueryObjects(sentObj);
     }
+
+    private List<DisplayedObject> DisplayedObjects(List<Dictionary<string,string?>> objects)
+    => objects.Select(x => new DisplayedObject(x)
+            {
+                Properties = x.Select(x => new DisplayedProperty() { 
+                    Name = x.Key, Value = x.Value, Translation = x.Key
+                }).ToList()
+            }).ToList();
 
     private RenderFragment BasicInfo()
     =>
@@ -238,7 +226,7 @@ else
 
     private RenderFragment? Filter(bool WithFilter = true)
         => ChosenReport is null ? null :
-    @<CipherFilterObjects @ref=ReportFilter ChosenType="@ChosenReport?.ObjectType" ChosenCondition="@ChosenReport.ObjectFactory.Filter"
+    @<CipherFilterObjects @ref=ReportFilter ChosenType="@ChosenReport?.ObjectType" ChosenCondition="@ChosenReport?.ObjectFactory.Filter"
                          ChosenConditionChanged="@OnFilterChanged" WithFilter="@WithFilter" WithFilterButton="false"
                          WithParameters="true" AvailableParameters="@ChosenReport?.Parameters" WithTable="false" />
     ;
@@ -313,6 +301,17 @@ else
     => Submitted ?
     @<CipherNavButton Path="@ChosenReport?.Path()" Text="קישור לדוח" Icon="@Icons.Arrows.Squared.open_in_new" Width="100%" /> : null;
 
+    private RenderFragment Table()
+    =>
+    @<CipherComponentCard Title="תוצאות">
+        <CipherDataTable DataSource="@DisplayedObjects(RequestResult)" />
+        </CipherComponentCard>
+    ;
+
+    private RenderFragment? Submit()
+    => (Mode == FormMode.ReadOnly) ? null :
+    @<CipherSubmit WithCard="false" Title="" Click="@OnSave" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission/>;
+
     private RenderFragment? Preview()
     {
         if (ChosenReport is null) return null;
@@ -326,8 +325,9 @@ else
             {
                 @ParameterFiller()
                 @Filter(false)
+                @Table()
             }
-            <CipherSubmit WithCard="false" Title="" Click="@OnSave" Valid="@Valid" ErrorMessage="@ErrorMessage" @ref=submission/>
+            @Submit()
             @ReportLink()
         </RadzenStack>
     </CipherComponentCard>;

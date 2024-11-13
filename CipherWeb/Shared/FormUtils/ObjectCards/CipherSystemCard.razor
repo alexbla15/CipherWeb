@@ -9,18 +9,20 @@
         {
             <CipherComponentCard Title="תכונות" WithCard="true"
                                  WithButtons="@(SetMode == FormMode.ReadOnly && CommonFuncs.CanView(CipherNavLinks.UpdateSystem))"
-            ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
+                                 ContentStyleClass="@Constants.Styles.ComponentResourceCardContent_Centered">
                 <Buttons>
                     <CipherNavButton Variant="Variant.Outlined" Icon="@Icons.Documents.Edit.edit" HelpText="עריכת נתונים"
-                    Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateSystem.Href}?Id={ChosenObject?.Id}")" />
+                                     Disabled="@(ChosenObject is null)" Path="@($"{CipherNavLinks.UpdateSystem.Href}?Id={ChosenObject?.Id}")" />
                 </Buttons>
-            <ChildContent>
+                <ChildContent>
                     @SystemName()
                     @SystemDescription()
                     @SystemParent()
                     @SystemUnit()
-            </ChildContent>
-        </CipherComponentCard>
+                </ChildContent>
+            </CipherComponentCard>
+            @Packages()
+            @Vessels()
         }
     </ChildContent>
 </CipherResourceCard>
@@ -87,10 +89,10 @@
     private string GetLabel(string property) => IStorageSystem.Translate(property);
 
     private string? GetValue(string? value)
-        => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
+    => (SetMode == FormMode.ReadOnly && string.IsNullOrEmpty(value)) ? "אין נתונים" : value;
 
     private bool IsDisabled() =>
-        SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
+    SetMode == FormMode.ReadOnly || (SetMode == FormMode.Update && ChosenObject is null);
 
     private RenderFragment SystemName()
     {
@@ -99,7 +101,7 @@
         return
         @<CipherAutoComplete Label="@(GetLabel(nameof(IStorageSystem.Name)))" Disabled="@IsDisabled()"
                         Icon="@Icons.Cipher.Location" @ref=SysName Value="@value" ValueChanged="@ChangeDetail" />
-        ;
+    ;
     }
 
     private RenderFragment SystemDescription()
@@ -108,8 +110,8 @@
 
         return
         @<CipherComments @ref="SysDescription" Label="@(GetLabel(nameof(IStorageSystem.Description)))" ValueChanged="@ChangeDetail"
-        Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
-    ;
+                    Icon="@Icons.Documents.Page.description" Comments="@value" Disabled="@IsDisabled()" />
+        ;
     }
 
     private RenderFragment SystemParent()
@@ -126,7 +128,7 @@
         return
         @<CipherLocation Icon="@icon" @ref="SysParent" Disabled="@IsDisabled()"
                     Label="@label" ChosenSystem="@chosenParent" Change="@ChangeDetail" />
-        ;
+    ;
     }
 
     private RenderFragment SystemUnit()
@@ -142,6 +144,30 @@
         return
         @<CipherUnitDropDown @ref="SysUnit" Change="@ChangeDetail"
                         ChosenUnit="@unit" Disabled="@IsDisabled()" />
-        ;
+    ;
+    }
+
+    public RenderFragment? Vessels()
+    {
+        if (ChosenObject != null && SetMode == FormMode.ReadOnly)
+        {
+            var result = ChosenObject.Vessels().Result;
+            return @<CipherComponentCard Title="@Translator.TranslateText("Vessels")">
+        <CipherDataTable DataSource="@DisplayedObject.ListObjects(result.Item1)" />
+    </CipherComponentCard>;
+        }
+        return null;
+    }
+
+    public RenderFragment? Packages()
+    {
+        if (ChosenObject != null && SetMode == FormMode.ReadOnly)
+        {
+            var result = ChosenObject.Packages().Result;
+            return @<CipherComponentCard Title="@Translator.TranslateText("Packages")">
+        <CipherDataTable DataSource="@DisplayedObject.ListObjects(result.Item1)" />
+    </CipherComponentCard>;
+        }
+        return null;
     }
 }

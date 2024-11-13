@@ -2,6 +2,7 @@ using CipherData.ApiMode;
 using CipherData.Interfaces;
 using QuestPDF.Infrastructure;
 using Radzen;
+
 using System.Globalization;
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("he-IL");

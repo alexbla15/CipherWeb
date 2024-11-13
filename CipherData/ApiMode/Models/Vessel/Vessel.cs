@@ -34,5 +34,22 @@
 
             return Tuple.Create(result.Item1.Select(x => x as IVessel).ToList(), result.Item2);
         }
+
+        public override async Task<Tuple<List<IPackage>, ErrorResponse>> Packages(string? SelectedVessel)
+        {
+            if (string.IsNullOrEmpty(SelectedVessel)) return Tuple.Create(new List<IPackage>(), ErrorResponse.BadRequest);
+
+            var result = await GetObjects<Package>(SelectedVessel, SelectedSystem => new GroupedBooleanCondition()
+            {
+                Conditions = new List<BooleanCondition>()
+            {
+                new() {Attribute = $"{typeof(Package).Name}.{nameof(IPackage.Vessel)}.{nameof(Id)}",
+                    AttributeRelation = AttributeRelation.Eq,
+                    Value = SelectedSystem}
+            },
+                Operator = Operator.Any
+            });
+            return Tuple.Create(result.Item1.Select(x => x as IPackage).ToList(), result.Item2);
+        }
     }
 }

@@ -206,5 +206,9 @@ namespace CipherData.Interfaces
 
         public async Task<Tuple<List<T>, ErrorResponse>> GetObjects<T>() where T: IResource
             => await Config.QueryRequests(false).QueryObjects<T>(this);
+
+
+        public async Task<Tuple<List<Dictionary<string,string?>>, ErrorResponse>> GetObjects()
+            => await Config.QueryRequests(false).QueryObjects(this);
     }
 }

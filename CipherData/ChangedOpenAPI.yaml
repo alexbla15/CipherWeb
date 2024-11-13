@@ -1378,6 +1378,9 @@ paths:
                     - $ref: "#/components/schemas/Process"
                     - $ref: "#/components/schemas/ProcessDefinition"
                     - $ref: "#/components/schemas/Vessel"
+                    - type: object
+                      description: JSON-like, represents the query results according to aggregation (should be a simple dictionary)
+                      additionalProperties: true
         '400':
           description: Bad request
           $ref: "#/components/responses/ErrorResponse"

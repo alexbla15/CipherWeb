@@ -12,7 +12,7 @@
     <ResourceForm @ref=ResForm Title="@NavLink.Name">
     <CipherReportDropDown ChosenReport="@(ChosenReport)" @ref=ReportId Change="@ChangeUrl" />
     <br/>
-    <CipherReportWizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
+    <CipherReportWizard @ref=Wizard Visible="@(ChosenReport != null && !ChosenReport.Equals(new()))" 
     OriginalReportJson="@(ChosenReport?.ToJson())" ChosenReport="@(ChosenReport ?? new())" Mode="@Mode"/>
 </ResourceForm>
 }
@@ -30,6 +30,8 @@
     private CipherReportDropDown ReportId = new();
     private ResourceForm ResForm = new();
 
+    private CipherReportWizard Wizard = new();
+
     protected override async Task OnInitializedAsync() 
     => ChosenReport = await GetObjectFromUrl();
 
@@ -43,6 +45,7 @@
     {
         ChosenReport = ReportId.ChosenReport;
         ResForm.ChangeUrl(NavigationManager, NavLink, ChosenReport?.Id.ToString());
+        Wizard.RequestResult = new();
     }
 
     /// <summary>
