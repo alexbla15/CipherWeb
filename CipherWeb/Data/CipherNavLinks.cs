@@ -15,7 +15,7 @@ namespace CipherWeb.Data
             $"{nameof(Forms)}/{nameof(Updates)}/{specific_form.Replace("Update","")}";
 
         private static string ReportHref(string? specific_form = null) =>
-            specific_form is null ? nameof(Reports) : $"{nameof(Reports)}/{specific_form.Replace("Report", "")}";
+            specific_form is null ? nameof(Reports) : $"/{nameof(Reports)}/{specific_form.Replace("Report", "")}";
 
         private static string SearchHref(string? specific_form = null) =>
             specific_form is null ? nameof(Searches) : $"{nameof(Searches)}/{specific_form}";
@@ -228,6 +228,12 @@ namespace CipherWeb.Data
             Name = Translate(nameof(Reports)),
             SubLinks = new()
                 { AddReport, UpdateReport, PackagesReport, CategoriesReport, EventsReport, ProcessesReport }
+        };
+
+        public static readonly CipherNavLink ReportNotFound = new()
+        {
+            Href = ReportHref(nameof(ReportNotFound)),
+            Name = ReportName(nameof(ReportNotFound)),
         };
 
         public static readonly CipherNavLink ViewReport = new()

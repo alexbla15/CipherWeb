@@ -17,6 +17,18 @@ namespace CipherWeb.Data
                 public static readonly string Container = "cipher-chip-container";
             }
 
+            public class Page
+            {
+                public static readonly string Footer = "cipher_page_footer";
+            }
+
+            public class Pics
+            {
+                public static readonly string ComingSoon = "cipher_comingsoon";
+                public static readonly string Logo = "cipher_logo";
+                public static readonly string LogoNavBar = "cipher_logo navbar";
+            }
+
             public static readonly string TopNavBar = "cipher_topnavbar";
 
             public static readonly string Body = "cipher_body";

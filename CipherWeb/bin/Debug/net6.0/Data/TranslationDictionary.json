@@ -37,7 +37,7 @@
   "ICreateTranserAmountEvent": "תנועה 23",
   "ICreateTranserAmountEvent_DonatingPackage": "תעודה מוסרת",
   "ICreateTranserAmountEvent_AcceptingPackage": "תעודה מקבלת",
-  "ICreateTranserAmountEvent_Amount": "מסה מועברת [גר']",
+  "ICreateTranserAmountEvent_Amount": "מסה מועברת (גרם(",
 
   "ICreateRelocationEvent": "תנועה 24",
   "ICreateRelocationEvent_TargetSystem": "מערכת יעד",
@@ -48,7 +48,7 @@
   "IDisplayedEvent_AcceptingSystem": "מערכת מקבלת",
   "IDisplayedEvent_DonatingPackage": "תעודה מוסרת",
   "IDisplayedEvent_DonatingSystem": "מערכת מוסרת",
-  "IDisplayedEvent_EventMass": "מסה מועברת [גר']",
+  "IDisplayedEvent_EventMass": "מסה מועברת (גרם(",
   "IDisplayedEvent_Id": "מספר תנועה",
 
   "Events": "תנועות",

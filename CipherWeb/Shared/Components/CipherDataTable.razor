@@ -65,7 +65,7 @@
         return $"שורות {startRow}-{endRow} מתוך {totalRows}";
     }
 
-    public async void Navigate(string path) => 
+    public async void Navigate(string path) =>
         await JSRuntime.InvokeAsync<object>("open", path, "_blank");
 
     private bool IsClickable(string? prop)
@@ -115,7 +115,7 @@
 
         foreach (Type resType in pathMap.Keys)
         {
-            if (resType.IsAssignableFrom(objProp?.PropertyType)) 
+            if (resType.IsAssignableFrom(objProp?.PropertyType))
                 Navigate($"{pathMap[resType].Href}?Id={id}");
         }
 
@@ -153,56 +153,62 @@
         || SelectedColumns is null || !SelectedColumns.Any();
 }
 
-@if (DataSource != null && DataSource.Any())
+@if (DataSource is null || !DataSource.Any())
 {
-    <RadzenDataGrid @ref="CustomDataGrid" @bind-Value=@selectedRow
-                    Visible="@Visible" 
-                    RowDoubleClick="@(args => OnRowDoubleClick(args))"
-                    TItem="DisplayedObject"
-                    Data="@DataSource"
-                    LoadData="LoadData"
-                    FilterMode="@GridFilterMode"
-                    AllowFiltering="@AllowFilter"
-                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                    AllowColumnResize="true"
-                    FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                    AllowPaging="true"
-                    PageSize="@Constants.RowsPerPage"
-                    AllowSorting="@AllowSort"
-                    SelectionMode="DataGridSelectionMode.Single"
-                    AllowColumnPicking="@AllowColumnPick"
-                    AllGroupsExpanded="@AllGroupsExpanded"
-                    AllowGrouping="@AllowGroup"
-                    HideGroupedColumn="@HideGroupedColumn"
-                    Density="@Density.Compact"
-                    class="@Constants.Styles.DataTable"
-                    AndOperatorText="@Translate("AndOperator")"
-                    OrOperatorText="@Translate("OrOperator")"
-                    ClearFilterText="@Translate("ClearFilter")"
-                    IsNullText="@Translate("IsNull")"
-                    IsNotNullText="@Translate("IsNotNull")"
-                    StartsWithText="@Translate("StartsWith")"
-                    EndsWithText="@Translate("EndsWith")"
-                    IsEmptyText="@Translate("IsEmpty")"
-                    IsNotEmptyText="@Translate("IsNotEmpty")"
-                    ContainsText="@Translate("Contains")"
-                    DoesNotContainText="@Translate("DoesNotContain")"
-                    EqualsText="@Translate("Equals")"
-                    NotEqualsText="@Translate("NotEquals")"
-                    LessThanOrEqualsText="@Translate("LessThanOrEquals")"
-                    LessThanText="@Translate("LessThan")"
-                    GreaterThanOrEqualsText="@Translate("GreaterThanOrEquals")"
-                    GreaterThanText="@Translate("GreaterThan")"
-                    AllColumnsText="@Translate("AllColumns")"
-                    FilterText="@Translate("Filter")"
-                    ApplyFilterText="@Translate("ApplyFilter")"
-                    ColumnsShowingText="@Translate("ColumnsShowing")"
-                    GroupPanelText="@Translate("GroupPanel")">
-        <EmptyTemplate>
-            <RadzenText Text="לא נמצאו נתונים" class="@Constants.Styles.DataGridEmpty"/>
-        </EmptyTemplate>
-        <Columns>
-            @if (DataSource.First().Properties != null)
+    <RadzenText Text="לא נמצאו נתונים" class="@Constants.Styles.DataGridEmpty"/>
+}
+else
+{
+<RadzenDataGrid @ref="CustomDataGrid" @bind-Value=@selectedRow
+                Visible="@Visible"
+                RowDoubleClick="@(args => OnRowDoubleClick(args))"
+                TItem="DisplayedObject"
+                Data="@DataSource"
+                LoadData="LoadData"
+                FilterMode="@GridFilterMode"
+                AllowFiltering="@AllowFilter"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowColumnResize="true"
+                FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                AllowPaging="true"
+                PageSize="@Constants.RowsPerPage"
+                AllowSorting="@AllowSort"
+                SelectionMode="DataGridSelectionMode.Single"
+                AllowColumnPicking="@AllowColumnPick"
+                AllGroupsExpanded="@AllGroupsExpanded"
+                AllowGrouping="@AllowGroup"
+                HideGroupedColumn="@HideGroupedColumn"
+                Density="@Density.Compact"
+                class="@Constants.Styles.DataTable"
+                AndOperatorText="@Translate("AndOperator")"
+                OrOperatorText="@Translate("OrOperator")"
+                ClearFilterText="@Translate("ClearFilter")"
+                IsNullText="@Translate("IsNull")"
+                IsNotNullText="@Translate("IsNotNull")"
+                StartsWithText="@Translate("StartsWith")"
+                EndsWithText="@Translate("EndsWith")"
+                IsEmptyText="@Translate("IsEmpty")"
+                IsNotEmptyText="@Translate("IsNotEmpty")"
+                ContainsText="@Translate("Contains")"
+                DoesNotContainText="@Translate("DoesNotContain")"
+                EqualsText="@Translate("Equals")"
+                NotEqualsText="@Translate("NotEquals")"
+                LessThanOrEqualsText="@Translate("LessThanOrEquals")"
+                LessThanText="@Translate("LessThan")"
+                GreaterThanOrEqualsText="@Translate("GreaterThanOrEquals")"
+                GreaterThanText="@Translate("GreaterThan")"
+                AllColumnsText="@Translate("AllColumns")"
+                FilterText="@Translate("Filter")"
+                ApplyFilterText="@Translate("ApplyFilter")"
+                ColumnsShowingText="@Translate("ColumnsShowing")"
+                GroupPanelText="@Translate("GroupPanel")">
+    <EmptyTemplate>
+        <RadzenText Text="לא נמצאו נתונים" class="@Constants.Styles.DataGridEmpty" />
+    </EmptyTemplate>
+    <Columns>
+        @if (DataSource != null && DataSource.Any())
+        {
+            @if (DataSource?.First().Properties != null)
             {
                 @if (DataSource.First().Properties is var properties)
                 {
@@ -215,7 +221,7 @@
                                 @if (prop?.Name != null && ViewColumn(prop.Name))
                                 {
                                     <RadzenDataGridColumn TItem="DisplayedObject" Property="@nameof(DisplayedObject.Properties)" Title="@prop.Translation" OrderIndex="@prop.Order">
-                                        <Template Context="data" >
+                                        <Template Context="data">
                                             @if (IsClickable(prop.Translation))
                                             {
                                                 <span @ondblclick="() => OnCellDoubleClick(data, prop.Name)" class="cipher_datacell">
@@ -227,9 +233,9 @@
                                                 @data.Properties?.Where(x => x.Name == prop.Name).First().Value
                                             }
                                         </Template>
-                                    <FooterTemplate>
-                                        @GetFooter(properties.IndexOf(prop))
-                                    </FooterTemplate>
+                                        <FooterTemplate>
+                                            @GetFooter(properties.IndexOf(prop))
+                                        </FooterTemplate>
                                     </RadzenDataGridColumn>
                                 }
                             }
@@ -237,6 +243,7 @@
                     }
                 }
             }
-        </Columns>
-    </RadzenDataGrid>
+        }
+    </Columns>
+</RadzenDataGrid>
 }

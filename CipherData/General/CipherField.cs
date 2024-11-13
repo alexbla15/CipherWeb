@@ -187,7 +187,13 @@ namespace CipherData.General
 
         public static bool IsBool(Type type) => typeof(bool?).IsAssignableFrom(type);
 
-        public static bool IsNumber(Type type) => typeof(decimal?).IsAssignableFrom(type);
+        public static bool IsNumber(Type type)
+            => type == typeof(decimal)
+            || type == typeof(decimal?)
+            || type == typeof(int)
+            || type == typeof(long)
+            || type == typeof(float)
+            || type == typeof(double);
 
         public static bool IsDateTime(Type type) => typeof(DateTime?).IsAssignableFrom(type);
 

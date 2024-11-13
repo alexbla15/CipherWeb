@@ -7,7 +7,7 @@
     <PageTitle>@navLink.Name</PageTitle>
 
 <RadzenStack Orientation="Orientation.Vertical">
-    <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnFilter="@RefreshEvents" />
+    <CipherBooleanConditions @ref="EventsFilter" Title="סינון תנועות לאישור" OnFilter="@RefreshEvents" InitialType="@typeof(IEvent)"/>
     <CipherDisplayedEventsCard Title="@navLink.Name" @bind-AllEvents="@PendingEvents" @ref="PendingEventsCard"
                                WithApproveButton="true" WithDeclineButton="true" UponApproval="@UponApproval" UponDecline="@UponDecline" />
     <CipherDisplayedEventsCard Title="תנועות מאושרות" @bind-AllEvents="@ApprovedEvents" @ref="ApprovedEventsCard"

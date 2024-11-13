@@ -523,3 +523,10 @@ F:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\refint\CipherWeb.dll
 F:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\CipherWeb.pdb
 F:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\CipherWeb.genruntimeconfig.cache
 F:\Projects\CipherWeb\CipherWeb\obj\Debug\net6.0\ref\CipherWeb.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.Bcl.TimeProvider.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+F:\Projects\CipherWeb\CipherWeb\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

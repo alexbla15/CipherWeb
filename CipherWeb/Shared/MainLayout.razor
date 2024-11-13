@@ -6,10 +6,6 @@
 
 <RadzenComponents />
 
-@code {
-    private bool sidebarExpanded = false;
-}
-
 <CipherLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Gap="0" dir="rtl">
@@ -19,30 +15,20 @@
     </RadzenHeader>
     <RadzenSidebar Responsive="false" @bind-Expanded="@sidebarExpanded">
         <RadzenPanelMenu dir="rtl">
-
-            @foreach (CipherNavLink myLink in CipherNavLinks.links)
+            @foreach (CipherNavLink myLink in CipherNavLinks.links.Where(x=>CommonFuncs.CanView(x)))
             {
-                @if (CommonFuncs.CanView(myLink))
-                {
-                    <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
-                        @if (myLink.SubLinks != null)
+                <RadzenPanelMenuItem Text="@myLink.Name" Icon="@myLink.Icon" Path="@myLink.Href">
+                    @if (myLink.SubLinks != null && myLink.SubLinks.Any())
+                    {
+                        @foreach (CipherNavLink mySubLink in myLink.SubLinks.Where(x => CommonFuncs.CanView(x)))
                         {
-                            @if (myLink.SubLinks.Any())
-                            {
-                                @foreach (CipherNavLink mySubLink in myLink.SubLinks)
-                                {
-                                    @if (CommonFuncs.CanView(mySubLink))
-                                    {
-                                        <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
-                                    }
-                                }
-                            }
+                            <RadzenPanelMenuItem Text="@mySubLink.Name" Path="@mySubLink.Href" />
                         }
-                    </RadzenPanelMenuItem>
-                }
+                    }
+                </RadzenPanelMenuItem>
             }
 
-            <RadzenStack Style="position:relative; padding-top:20px" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
+            <RadzenStack class="@Constants.Styles.Page.Footer" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center">
                 <CipherFooter Padding=0 MaxWidth="80%" LogoHeight="5vh" BackgroundColor="@Colors.PrimaryLighter" />
             </RadzenStack>
 
@@ -51,3 +37,7 @@
 
     <CipherBody Body="@Body" />
 </CipherLayout>
+
+@code {
+    private bool sidebarExpanded = false;
+}

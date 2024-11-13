@@ -86,19 +86,15 @@ else
     [Parameter]
     public ErrorResponse Error { get; set; } = ErrorResponse.Success;
 
+    /// <summary>
+    /// Result of the report-request-query from the API.
+    /// </summary>
     [Parameter]
     public List<Dictionary<string, string?>> RequestResult { get; set; } = new();
 
     private CipherAutoComplete ReportName = new();
-    private CipherDataGrouper dataGrouper = new();
-    private CipherDataAggregater dataAggregator = new();
     private CipherFilterObjects ReportFilter = new();
 
-    private CipherDatePicker cipherDate = new();
-    private CipherUnitDropDown cipherUnit = new();
-    private CipherVesselDropDown cipherVes = new();
-    private CipherLocation cipherSys = new();
-    private CipherNumeric cipherNumber = new();
     private CipherAutoComplete cipherText = new();
     private CipherAmount CurrentVersion = new();
     private CipherSubmit submission = new();
@@ -145,12 +141,19 @@ else
 
     public bool CheckForm()
     {
-        ChosenReport.Title = ReportName.Value;
-        ChosenReport.CreationDate = DateTime.Now;
-        ChosenReport.Creator = Constants.SetUser.Name;
-        ChosenReport.Version = (int)CurrentVersion.GetAmount();
+        if (ChosenReport is null)
+        {
+            (Valid, ErrorMessage) = Tuple.Create(false, "שגיאת מערכת");
+        }
+        else
+        {
+            ChosenReport.Title = ReportName.Value;
+            ChosenReport.CreationDate = DateTime.Now;
+            ChosenReport.Creator = Constants.SetUser.Name;
+            ChosenReport.Version = (int)CurrentVersion.GetAmount();
 
-        if (Valid) (Valid, ErrorMessage) = ChosenReport.Check();
+            if (Valid) (Valid, ErrorMessage) = ChosenReport.Check();
+        }
 
         return Valid;
     }
@@ -159,14 +162,8 @@ else
     {
         Reset();
 
-        if (ChosenReport is null)
-        {
-            (Valid, ErrorMessage) = Tuple.Create(false, "שגיאת מערכת");
-        }
-        else
-        {
-            (Valid, ErrorMessage) = await ChosenReport.ExistsInDb(_db, Mode == FormMode.Update);
-        }
+        (Valid, ErrorMessage) = (ChosenReport is null) ? 
+        Tuple.Create(false, "שגיאת מערכת") : await ChosenReport.ExistsInDb(_db, Mode == FormMode.Update);
 
         if (Valid && CheckForm()) await SubmitReport();
 
@@ -234,25 +231,25 @@ else
     private RenderFragment Group()
         =>
     @<CipherDataGrouper ComponentType="@ChosenReport?.ObjectType"
-                       Title="@(IObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))" @ref=dataGrouper
+                       Title="@(IObjectFactory.Translate(nameof(IObjectFactory.GroupBy)))"
                        ChosenGroupsChanged="@OnGroupsChanged"
                        ChosenGroups="@(ChosenReport?.ObjectFactory.GroupBy ?? new())" />
     ;
 
     private RenderFragment Aggregate()
     =>
-    @<CipherDataAggregater @ref=dataAggregator Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
+    @<CipherDataAggregater Title="בחירת שדות ופונקציות" ChosenType="@ChosenReport.ObjectType"
                           AggregationFields="@ChosenReport.ObjectFactory.GroupBy" ChosenAggregates="@(ChosenReport.ObjectFactory.Aggregate ?? new())"
                           ChosenAggregatesChanged="@OnAggregatesChanged" />
     ;
 
     private RenderFragment? DateTimeParameter(ReportParameter param)
     => param.ParamType is null || !param.ParamType.IsDateTime() ? null :
-    @<CipherDatePicker @ref=cipherDate Label="@param.Name" ValueChanged="@(value=> ChangeParamValue(param, value.ToString()))" />;
+    @<CipherDatePicker Label="@param.Name" ValueChanged="@(value=> ChangeParamValue(param, value.ToString()))" />;
 
     private RenderFragment? NumberParameter(ReportParameter param)
     => param.ParamType is null || !param.ParamType.IsNumber() ? null :
-    @<CipherNumeric @ref=cipherNumber Icon="@Icons.Data.numbers" Label="@param.Name" 
+    @<CipherNumeric Icon="@Icons.Data.numbers" Label="@param.Name" 
     AmountChanged="@(value=> ChangeParamValue(param, value.ToString()))" />;
 
     private RenderFragment? TextParameter(ReportParameter param)

@@ -200,4 +200,37 @@
             return tempFilePath;
         }
     }
+
+    public class TempFileMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly string _tempFilesDirectory;
+
+        public TempFileMiddleware(RequestDelegate next, IWebHostEnvironment env)
+        {
+            _next = next;
+            _tempFilesDirectory = Path.Combine(env.WebRootPath, "tempfiles");
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            var path = context.Request.Path.ToString();
+
+            // Check if the request is for a file in the /tempfiles directory
+            if (path.StartsWith("/tempfiles", StringComparison.OrdinalIgnoreCase))
+            {
+                var filePath = Path.Combine(_tempFilesDirectory, Path.GetFileName(path));
+
+                // If file does not exist, redirect to the "Oops" page
+                if (!File.Exists(filePath))
+                {
+                    context.Response.Redirect(CipherNavLinks.ReportNotFound.Href);
+                    return;
+                }
+            }
+
+            // Continue to the next middleware if the file exists
+            await _next(context);
+        }
+    }
 }

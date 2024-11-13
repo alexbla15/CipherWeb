@@ -4,6 +4,7 @@ using QuestPDF.Infrastructure;
 using Radzen;
 
 using System.Globalization;
+using static CipherWeb.Shared.Components.Buttons.CipherPDFButton;
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("he-IL");
 
@@ -32,6 +33,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+app.UseMiddleware<TempFileMiddleware>(); // Add custom middleware for /tempfiles
 
 app.UseRouting();
 

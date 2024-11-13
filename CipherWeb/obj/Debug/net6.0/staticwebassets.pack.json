@@ -37,6 +37,10 @@
       "PackagePath": "staticwebassets\\Images\\UserPic.jpg"
     },
     {
+      "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\reportNotFound.jpeg",
+      "PackagePath": "staticwebassets\\Images\\reportNotFound.jpeg"
+    },
+    {
       "Id": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\css\\CipherDesigns.css",
       "PackagePath": "staticwebassets\\css\\CipherDesigns.css"
     },

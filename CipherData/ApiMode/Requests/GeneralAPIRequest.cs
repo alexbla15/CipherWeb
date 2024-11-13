@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -6,12 +7,17 @@ namespace CipherData.ApiMode
 {
     public class GeneralAPIRequest
     {
+        private static string? JwtToken { get; set; }
+
         private static readonly HttpClient client = new();
 
         private static readonly string protocol = "https";
         private static readonly string domain = "CipherWeb.com";
 
         private static string GetUrl(string path) => $"{protocol}://{domain}/{path}";
+        
+        // Method to set the token
+        public static void SetJwtToken(string token) => JwtToken = token;
 
         public static Tuple<T?, ErrorResponse> TransfromResponse<T>(string responseBody, HttpStatusCode code)
         {
@@ -31,13 +37,61 @@ namespace CipherData.ApiMode
         /// </summary>
         public static async Task<Tuple<T?, ErrorResponse>> Get<T>(string path)
         {
-            string url = GetUrl(path); 
+            string url = GetUrl(path);
+
+            // Add the JWT to the Authorization header if available
+            if (!string.IsNullOrEmpty(JwtToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtToken);
+            }
 
             HttpResponseMessage response = await client.GetAsync(url);
             string responseBody = await response.Content.ReadAsStringAsync();
 
             return TransfromResponse<T>(responseBody, response.StatusCode);
         }
+
+        /// <summary>
+        /// General POST request
+        /// </summary>
+        public static async Task<Tuple<T?, ErrorResponse>> Post<T>(string path, ICipherClass newObject)
+        {
+            string url = GetUrl(path);
+            StringContent content = GetStringContent(newObject);
+
+            if (!string.IsNullOrEmpty(JwtToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtToken);
+            }
+
+            HttpResponseMessage response = await client.PostAsync(url, content);
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            return TransfromResponse<T>(responseBody, response.StatusCode);
+        }
+
+        /// <summary>
+        /// General PUT request
+        /// </summary>
+        public static async Task<Tuple<T?, ErrorResponse>> Put<T>(string path, ICipherClass newObject)
+        {
+            string url = GetUrl(path);
+            StringContent content = GetStringContent(newObject);
+
+            if (!string.IsNullOrEmpty(JwtToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtToken);
+            }
+
+            HttpResponseMessage response = await client.PutAsync(url, content);
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            return TransfromResponse<T>(responseBody, response.StatusCode);
+        }
+
+        // NON-PURE REQUESTS (USE OTHER REQUESTS)
 
         public static async Task<Tuple<List<TInterface>, ErrorResponse>> GetAll<TInterface, TClass>(string? path)
             where TClass : class, TInterface
@@ -55,36 +109,6 @@ namespace CipherData.ApiMode
             var result = await Get<TClass>($"{path}/{id}");
             TInterface objs = result.Item1 ?? new TClass();
             return Tuple.Create(objs, result.Item2);
-        }
-
-        /// <summary>
-        /// General POST request
-        /// </summary>
-        public static async Task<Tuple<T?, ErrorResponse>> Post<T>(string path, ICipherClass newObject)
-        {
-            string url = GetUrl(path);
-            StringContent content = GetStringContent(newObject);
-
-            HttpResponseMessage response = await client.PostAsync(url, content);
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return TransfromResponse<T>(responseBody, response.StatusCode);
-        }
-
-        /// <summary>
-        /// General PUT request
-        /// </summary>
-        public static async Task<Tuple<T?, ErrorResponse>> Put<T>(string path, ICipherClass newObject)
-        {
-            string url = GetUrl(path);
-            StringContent content = GetStringContent(newObject);
-
-            HttpResponseMessage response = await client.PutAsync(url, content);
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-
-            return TransfromResponse<T>(responseBody, response.StatusCode);
         }
     }
 }

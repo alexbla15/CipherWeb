@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "AChy9GxEB8k5D8SfymPPjWF4wsAtkV/P/R5YRFrF+uo=",
+  "Hash": "Urxb1u2yAbagegmTysqv5ZM+gUKGV+do2hpBFMMAHS0=",
   "Source": "CipherWeb",
   "BasePath": "_content/CipherWeb",
   "Mode": "Default",
@@ -1239,6 +1239,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Images\\HilatLogo.png"
+    },
+    {
+      "Identity": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\reportNotFound.jpeg",
+      "SourceId": "CipherWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\",
+      "BasePath": "_content/CipherWeb",
+      "RelativePath": "Images/reportNotFound.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\reportNotFound.jpeg"
     },
     {
       "Identity": "F:\\Projects\\CipherWeb\\CipherWeb\\wwwroot\\Images\\UserPic.jpg",

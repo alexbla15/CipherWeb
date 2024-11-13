@@ -6,12 +6,10 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
                  JustifyContent="JustifyContent.Center" Gap="0">
 
-        <CipherLogo LogoPath="@LogoPath" Height="@LogoHeight"/>
+        <CipherLogo LogoPath="@LogoPath" Class="@Constants.Styles.Pics.LogoNavBar"/>
         <RadzenStack Orientation="Orientation.Vertical">
-            <RadzenText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
-                        Text="@DevelopedByText" TextAlign="TextAlign.Center"/>
-            <RadzenText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
-                        Text="@ProgramVersionText" TextAlign="TextAlign.Center"/>
+            @Text(DevelopedByText)
+            @Text(ProgramVersionText)
         </RadzenStack>
 
     </RadzenStack>
@@ -45,14 +43,13 @@
     public string LogoPath { get; set; } = "Images/HilatLogo.png";
 
     /// <summary>
-    /// Logo's height. Must be in "vh" units.
-    /// </summary>
-    [Parameter]
-    public string LogoHeight { get; set; } = "8vh";
-
-    /// <summary>
     /// Text style of the footer. Must be a TextStyle-enum.
     /// </summary>
     [Parameter]
     public TextStyle FooterTextStyle { get; set; } = TextStyle.Body2;
+
+    private RenderFragment Text(string text)
+        =>
+    @<RadzenText TextStyle="@FooterTextStyle" Style="@($"color: {TextColor}")"
+    Text="@text" TextAlign="TextAlign.Center" />;
 }

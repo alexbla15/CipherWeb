@@ -1,0 +1,33 @@
+﻿@page "/Reports/NotFound"
+
+<PageTitle>קובץ לא נמצא</PageTitle>
+
+@code {
+    /// <summary>
+    /// Text that appears upon hovering on picture.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "חזרה לדוחות";
+
+    /// <summary>
+    /// Path to the picture of ComingSoon component.
+    /// </summary>
+    [Parameter]
+    public string PicPath { get; set; } = "Images/reportNotFound.jpeg";
+
+    private RenderFragment Message(string text)
+    =>@<RadzenText Text="@text" TextAlign="TextAlign.Center" class="@Constants.Styles.CardTitle"/>;
+}
+
+@Message("מצטערים. ניתן לגשת ל-PDF רק פעם אחת.")
+@Message("ניתן ליצור את הדוח שנית, ולשמור אותו לפי הצורך.")
+
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
+AlignItems="AlignItems.Center">
+        <a href="@CipherNavLinks.Reports.Href" title="@Title">
+            <div class="@Constants.Styles.ComingSoonImage">
+                <CipherLogo LogoPath="@PicPath" Class="@Constants.Styles.Pics.ComingSoon" />
+                <div class="@Constants.Styles.ComingSoonOverlay">@Title</div>
+            </div>
+        </a>
+</RadzenStack>

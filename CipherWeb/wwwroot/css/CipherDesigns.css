@@ -60,9 +60,35 @@
 
 /* ------------------ SELF MADE DESGINS ------------------ */
 
+.cipher_logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 13vh;
+    border-radius: 0px;
+}
+
+.cipher_logo.navbar {
+    height: 8vh;
+}
+
+.cipher_comingsoon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    width: 50%;
+    border-radius: 50px;
+}
+
 .cipher_pathchooser
 {
     color: var(--rz-secondary-light);
+}
+
+.cipher_page_footer {
+    position: relative;
+    padding-top: 20px;
 }
 
 

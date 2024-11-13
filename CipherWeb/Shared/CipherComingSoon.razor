@@ -1,19 +1,6 @@
 ﻿@inherits RadzenStack
 
 @code {
-
-    /// <summary>
-    /// Rounding the picture appearnce.
-    /// </summary>
-    [Parameter]
-    public string PictureBorderRadius { get; set; } = "50px";
-
-    /// <summary>
-    /// Picture size within component.
-    /// </summary>
-    [Parameter]
-    public string PictureSize { get; set; } = "50%";
-
     /// <summary>
     /// Text that appears upon hovering on picture.
     /// </summary>
@@ -31,7 +18,7 @@
     <div class="@Constants.Styles.ComingSoon">
         <a href="@CipherNavLinks.Home.Href" title="@Title">
             <div class="@Constants.Styles.ComingSoonImage">
-                <CipherLogo LogoPath="@PicPath" Height="@PictureSize" Width="@PictureSize" BorderRadius="@PictureBorderRadius"></CipherLogo>
+                <CipherLogo LogoPath="@PicPath" Class="@Constants.Styles.Pics.ComingSoon" />
                 <div class="@Constants.Styles.ComingSoonOverlay">@Title</div>
             </div>
         </a>
